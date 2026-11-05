@@ -1,5 +1,20 @@
 #!/usr/bin/env bash
-# curl PALSU untuk test infra: hanya mencatat argumen (stdin dibuang). Tidak ada koneksi jaringan.
+# curl PALSU untuk test infra: hanya mencatat argumen. Tidak ada koneksi jaringan.
+# M6 (FAKE_CURL_HTTP=1): model minimal dashboard ber-login di 10.99.0.2 —
+#   -w '%{http_code}': /api/settings tanpa -b -> 401, selain itu 200;
+#   POST /api/auth/login (--data-binary @-): stdin disalin ke $FAKE_STATE/curl-login.stdin;
+#   GET /api/settings dengan -b -> $FAKE_CURL_SETTINGS_BODY.
+# Tanpa FAKE_CURL_HTTP: stdin dibuang, tanpa keluaran (perilaku M4/M5).
 echo "curl $*" >> "$FAKE_LOG"
-cat >/dev/null 2>&1 || true
+if [[ "${FAKE_CURL_HTTP:-0}" != 1 ]]; then cat >/dev/null 2>&1 || true; exit 0; fi
+url="${*: -1}"; wcode=0; cookie=0; data=0
+for a in "$@"; do
+  case "$a" in -w) wcode=1 ;; -b) cookie=1 ;; @-) data=1 ;; esac
+done
+if ((data)); then cat > "${FAKE_STATE:?}/curl-login.stdin"; else cat >/dev/null 2>&1 || true; fi
+if ((wcode)); then
+  if [[ "$url" == */api/settings && $cookie == 0 ]]; then printf 401; else printf 200; fi
+elif [[ "$url" == */api/settings ]]; then
+  printf '%s\n' "${FAKE_CURL_SETTINGS_BODY:-}"
+fi
 exit 0

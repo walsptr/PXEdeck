@@ -7,6 +7,13 @@
 #
 # Env wajib: EXPECT_HOSTNAME EXPECT_IP EXPECT_PREFIX EXPECT_MAC EXPECT_GW EXPECT_DNS EXPECT_USER
 #            EXPECT_PUBKEY (satu baris public key OpenSSH)
+# M6-T7 (SR-4-6/SR-4-7): "target bebas token" — /proc/cmdline, /etc/default/grub,
+# /boot/grub*/grub.cfg, /boot/loader/entries/*.conf, /etc/kernel/cmdline, /root/anaconda-ks.cfg
+# tidak boleh memuat /boot/<mac>/<token 43>; yang dicetak hanya JUMLAH cocok per file (isi/token
+# tidak pernah dicetak). File root-only dibaca lewat `sudo -n cat` di node. Sisa SR-4-7(b)
+# (/var/log/installer) sengaja tidak diasersi (dicatat di infra/README.md).
+# Opsional (test infra): VERIFY_SCAN_ROOT=<dir> (prefix path, default "") dan
+# VERIFY_ONLY=token-scan (hanya bagian bebas token, tanpa env EXPECT_*).
 set -uo pipefail
 fails=0
 ok() { printf 'OK   %s\n' "$*"; }
@@ -14,6 +21,38 @@ bad() { printf 'FAIL %s\n' "$*"; fails=$((fails + 1)); }
 check() { # check <label> <cond-exit>
   if [[ "$2" == 0 ]]; then ok "$1"; else bad "$1"; fi
 }
+
+# --- target bebas token (M6) ---
+BOOTSEG_RE='/boot/[0-9a-fA-F:%-]{12,40}/[A-Za-z0-9_-]{43}([^A-Za-z0-9_-]|$)'
+BOOTSCAN_PATHS=(/proc/cmdline /etc/default/grub /etc/kernel/cmdline /root/anaconda-ks.cfg /boot)
+token_files() { # daftar file target (root-only dibaca/didaftar lewat sudo -n di node)
+  local root="$1" pre=()
+  [[ -z "$root" ]] && sudo -n true 2>/dev/null && pre=(sudo -n)
+  local starts=() p
+  for p in "${BOOTSCAN_PATHS[@]}"; do starts+=("$root$p"); done
+  "${pre[@]}" find "${starts[@]}" -maxdepth 4 -type f \( -path "$root/proc/cmdline" \
+    -o -path "$root/etc/default/grub" -o -path "$root/etc/kernel/cmdline" \
+    -o -path "$root/root/anaconda-ks.cfg" -o -path "$root/boot/grub*/grub.cfg" \
+    -o -path "$root/boot/efi/EFI/*/grub.cfg" -o -path "$root/boot/loader/entries/*.conf" \) 2>/dev/null | sort -u
+}
+token_scan() {
+  local root="${VERIFY_SCAN_ROOT:-}" f n total=0 nfiles=0 rd=(cat)
+  [[ -z "$root" ]] && sudo -n true 2>/dev/null && rd=(sudo -n cat)
+  while IFS= read -r f; do
+    [[ -n "$f" ]] || continue
+    n="$("${rd[@]}" "$f" 2>/dev/null | grep -Eoa "$BOOTSEG_RE" | wc -l)"
+    nfiles=$((nfiles + 1)); total=$((total + n))
+    [[ "$n" == 0 ]]; check "bebas token: ${f#"$root"} (cocok: $n)" $?
+  done < <(token_files "$root")
+  echo "# token-scan files=$nfiles matches=$total"
+  ((nfiles > 0)); check "token-scan memeriksa >= 1 file (/proc/cmdline dll.)" $?
+  [[ ! -e "$root/etc/pxe-callback" ]]; check "/etc/pxe-callback tidak ada" $?
+}
+if [[ "${VERIFY_ONLY:-}" == token-scan ]]; then
+  token_scan
+  echo "# verify-node fails=$fails"
+  exit "$fails"
+fi
 for v in EXPECT_HOSTNAME EXPECT_IP EXPECT_PREFIX EXPECT_MAC EXPECT_GW EXPECT_DNS EXPECT_USER EXPECT_PUBKEY; do
   [[ -n "${!v:-}" ]] || { echo "FAIL env $v kosong"; exit 99; }
 done
@@ -64,6 +103,9 @@ pa="$(sudo -n sshd -T 2>/dev/null | awk '$1 == "passwordauthentication" {print $
 # --- first-boot callback sudah membersihkan diri (token tidak tertinggal) ---
 [[ ! -e /etc/pxe-callback && ! -e /usr/local/sbin/pxe-callback-done ]]; check "unit first-boot & URL callback sudah dihapus" $?
 ! systemctl is-enabled pxe-callback-done.service >/dev/null 2>&1; check "pxe-callback-done.service tidak aktif lagi" $?
+
+# --- target bebas token (cmdline/bootloader/kickstart) ---
+token_scan
 
 # --- boot dari disk ---
 root_src="$(findmnt -no SOURCE / 2>/dev/null)"

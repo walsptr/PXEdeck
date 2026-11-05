@@ -53,6 +53,18 @@ scp_server "$INFRA_DIR/tftp/snponly.efi" "$INFRA_DIR/tftp/undionly.kpxe" /srv/px
 if [[ -f "$MEDIA_DIR/debian-netboot/linux" ]]; then
   scp_server "$MEDIA_DIR/debian-netboot/linux" "$MEDIA_DIR/debian-netboot/initrd.gz" /srv/pxe/media/debian-netboot/
 fi
+# O11-C / DEC-018 §2 (cadangan, hanya bila smoke membuktikan paket kurang): repo tambahan yang
+# sudah diunduh host dari mirror resmi + diverifikasi ke .agent/media/extra-<nama>/ disajikan
+# nginx sebagai http://10.99.0.2/media/extra-<nama>/ (node tetap tanpa NAT). Tidak ada = dilewati.
+shopt -s nullglob
+for xd in "$MEDIA_DIR"/extra-*/; do
+  xn="$(basename "$xd")"
+  [[ "$xn" =~ ^extra-[a-z0-9][a-z0-9.-]*$ ]] || die "nama repo tambahan '$xn' tidak valid"
+  ssh_root "install -d -o pxe -g pxe /srv/pxe/media/$xn"
+  run scp -r "${SSH_OPTS[@]}" "${xd%/}/." "$SERVER_USER@$SERVER_IP:/srv/pxe/media/$xn/"
+  log "repo tambahan $xn disajikan di http://$SERVER_IP/media/$xn/"
+done
+shopt -u nullglob
 ssh_root 'mount -a 2>/dev/null; exportfs -ra; systemctl restart dnsmasq' || true
 
 out="$RUNS_DIR/server-listen.txt"

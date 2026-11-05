@@ -1,5 +1,11 @@
 #!/usr/bin/env bash
-# ssh PALSU untuk test infra: hanya mencatat argumen (stdin dibuang). Tidak ada koneksi jaringan.
+# ssh PALSU untuk test infra: hanya mencatat argumen. Tidak ada koneksi jaringan.
+# M6: stdin ditambahkan ke $FAKE_SSH_STDIN_LOG bila diset (memeriksa data yang HANYA dikirim
+# lewat stdin, mis. overlay admin.env); selain itu stdin dibuang.
 echo "ssh $*" >> "$FAKE_LOG"
-cat >/dev/null 2>&1 || true
+if [[ -n "${FAKE_SSH_STDIN_LOG:-}" ]]; then
+  { echo "### ssh ${*: -1}"; cat; } >> "$FAKE_SSH_STDIN_LOG" 2>/dev/null || true
+else
+  cat >/dev/null 2>&1 || true
+fi
 exit 0

@@ -7,13 +7,20 @@
 #         symlink current, /etc/pxe-dashboard.env (server/dashboard.env), unit pxe-dashboard
 #         (user pxe, HOSTNAME=127.0.0.1 PORT=3000, DB /var/lib/pxe-dashboard), nginx
 #         10.99.0.2:80 (X-Real-IP, X-Forwarded-* dibuang), restart, cek listen 127.0.0.1:3000.
-#   host: tunggu GET http://10.99.0.2/api/settings 200 dengan cidr 10.99.0.0/24.
+#   host: tunggu dashboard menjawab (GET /login), lalu login admin (cookie jar sementara) dan
+#         GET /api/settings dengan sesi -> cidr 10.99.0.0/24 + adminConfigured.
+# Admin per run (M6-T7, DEC-017 §3): password di file 0600 ($PXE_ADMIN_PASS_FILE, default
+# .agent/keys/<run>-admin.pass, dibuat bila belum ada) -> hash scrypt di host (`npm run admin:hash`,
+# password lewat stdin) -> overlay env admin.env dikirim ke VM lewat STDIN ssh (bukan argv/scp)
+# -> install-dashboard.sh menyisipkan PXE_ADMIN_USERNAME/PXE_ADMIN_PASSWORD_HASH ke
+# /etc/pxe-dashboard.env (root:pxe 0640). Password & hash tidak pernah dicetak/di-log.
 # Bukti: <runs>/deploy-dashboard.txt. Env: SKIP_BUILD=1 (pakai build yang ada), INFRA_DRY_RUN=1,
-# PXE_ADMIN_ALLOW (IP/CIDR admin untuk UI + /api/** di nginx, default 10.99.0.1, DEC-015).
+# PXE_ADMIN_ALLOW (IP/CIDR admin untuk UI + /api/** di nginx, default 10.99.0.1, DEC-015),
+# PXE_ADMIN_USERNAME (default pxeadmin), PXE_ADMIN_PASS_FILE,
+# PXE_DEPLOY_BOOTING_TIMEOUT_MIN (opsional, 1-1440: override PXE_JOB_BOOTING_TIMEOUT_MIN, bulk O12).
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 
-DASH_DIR="$REPO_DIR/dashboard"
 EXPECT_CIDR="10.99.0.0/24"
 assert_name "$SERVER_NAME"
 ensure_dirs
@@ -28,6 +35,23 @@ if ! is_dry; then
   dom_running "$SERVER_NAME" || die "$SERVER_NAME belum berjalan (server-up.sh)"
   [[ -f "$SSH_KEY" ]] || die "key $SSH_KEY tidak ada (server-base.sh)"
 fi
+[[ "$ADMIN_USERNAME" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]] || die "PXE_ADMIN_USERNAME '$ADMIN_USERNAME' tidak valid"
+booting_min="${PXE_DEPLOY_BOOTING_TIMEOUT_MIN:-}"
+if [[ -n "$booting_min" ]]; then
+  [[ "$booting_min" =~ ^[0-9]{1,4}$ ]] && ((booting_min >= 1 && booting_min <= 1440)) \
+    || die "PXE_DEPLOY_BOOTING_TIMEOUT_MIN '$booting_min' harus 1-1440"
+fi
+# dashboard.env di repo tidak boleh memuat hash nyata (hanya placeholder; AC-6.53).
+! grep -qE 'scrypt\$[0-9]' "$INFRA_DIR/server/dashboard.env" || die "infra/server/dashboard.env memuat hash scrypt nyata"
+
+# --- password + hash admin (host) ---------------------------------------------------------
+admin_pass="${PXE_ADMIN_PASS_FILE:-$KEYS_DIR/$PXE_RUN-admin.pass}"
+if [[ ! -e "$admin_pass" ]]; then
+  log "membuat password admin acak per run -> $admin_pass (0600)"
+  admin_pass_new "$admin_pass"
+fi
+admin_pass_check "$admin_pass"
+admin_hash_val="$(admin_hash "$admin_pass")"
 
 # --- build di host -----------------------------------------------------------------------
 if [[ "${SKIP_BUILD:-0}" != 1 ]]; then
@@ -71,6 +95,13 @@ sed -i -E "s#^([[:space:]]*)allow [^;]+; \# PXE_ADMIN_ALLOW\$#\1allow $admin_all
 ssh_server "mkdir -m 700 '$remote_stage'"
 scp_server "$stage/release.tar.xz" "$stage/dashboard.env" "$stage/pxe-dashboard.service" \
   "$stage/nginx-pxe.conf" "$remote_stage/"
+# Overlay env admin: HANYA lewat stdin ssh (umask 077 di VM); argv cuma memuat path tujuan.
+{
+  printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+  printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+  [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+} | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
+unset admin_hash_val
 if is_dry; then
   ssh_root "RELEASE_TS=$ts STAGE=$remote_stage bash -s" < "$INFRA_DIR/server/install-dashboard.sh"
   exit 0
@@ -85,15 +116,29 @@ fi
 grep -q '^# install-dashboard exit=0$' "$out" || { tail -40 "$out" >&2; die "install di VM gagal (lihat $out)"; }
 
 # --- verifikasi dari host (lewat nginx 10.99.0.2:80) ---------------------------------------
-body=""
+# M6: semua API butuh sesi. Tunggu dashboard menjawab (/login), pastikan /api/settings tanpa sesi
+# ditolak 401, lalu login admin (cookie jar sementara 0600 di stage, dihapus trap) dan baca
+# settings dengan sesi. Hanya kode HTTP + body settings yang dicatat (tanpa cookie/password).
+code=000
 for _ in $(seq 1 60); do
-  if body="$(curl -fsS --max-time 5 "http://$SERVER_IP/api/settings")"; then break; fi
-  body=""; sleep 2
+  code="$(curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://$SERVER_IP/login" 2>/dev/null)" || code=000
+  [[ "$code" == 200 ]] && break
+  sleep 2
 done
-[[ -n "$body" ]] || die "GET http://$SERVER_IP/api/settings tidak 200"
+[[ "$code" == 200 ]] || die "GET http://$SERVER_IP/login tidak 200 (aktual $code)"
+noauth="$(curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://$SERVER_IP/api/settings" 2>/dev/null)" || noauth=000
+jar="$stage/session.jar"
+login_code="$(admin_login "$admin_pass" "$jar")" || die "login admin gagal (HTTP $login_code) — hash admin tidak diterima dashboard? (lihat $out)"
+body="$(curl -fsS --max-time 5 -b "$jar" "http://$SERVER_IP/api/settings" 2>/dev/null)" || body=""
+rm -f "$jar"
 {
-  echo "# host: GET http://$SERVER_IP/api/settings"
+  echo "# host: GET http://$SERVER_IP/login -> $code"
+  echo "# host: GET http://$SERVER_IP/api/settings tanpa sesi -> $noauth"
+  echo "# host: POST /api/auth/login (admin $ADMIN_USERNAME) -> $login_code"
+  echo "# host: GET http://$SERVER_IP/api/settings dengan sesi"
   echo "$body"
 } >> "$out"
+[[ "$noauth" == 401 ]] || die "GET /api/settings tanpa sesi harus 401 (aktual $noauth, lihat $out)"
 grep -q "\"cidr\":\"$EXPECT_CIDR\"" <<<"$body" || die "api/settings cidr bukan $EXPECT_CIDR (lihat $out)"
+grep -q '"adminConfigured":true' <<<"$body" || die "api/settings: adminConfigured bukan true (lihat $out)"
 log "dashboard aktif di http://$SERVER_IP (bukti $out)"
