@@ -65,6 +65,9 @@ for xd in "$MEDIA_DIR"/extra-*/; do
   log "repo tambahan $xn disajikan di http://$SERVER_IP/media/$xn/"
 done
 shopt -u nullglob
+# Ekspor NFS selalu diperbarui dari repo (base VM di-cache; DEC-020 menambah stage2 Rocky). Hanya
+# read-only + 10.99.0.0/24 (diasersi infra/test/m6.sh).
+ssh_root 'cat > /etc/exports.d/pxe.exports' < "$INFRA_DIR/server/exports"
 ssh_root 'mount -a 2>/dev/null; exportfs -ra; systemctl restart dnsmasq' || true
 
 out="$RUNS_DIR/server-listen.txt"

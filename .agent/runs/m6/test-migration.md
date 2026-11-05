@@ -145,3 +145,17 @@ Tidak ada test lama lain yang diubah. Perubahan perilaku yang berdampak pada E2E
 
 Test baru: `src/lib/m6-api-client.test.ts`, `src/lib/m6-jobs-head.test.ts`, `src/hooks/m6-hooks.test.ts`,
 `src/components/m6-components.test.tsx`. Audit mandiri lebar layar: `.agent/runs/m6/dev-audit/`.
+
+## T6b — perbaikan smoke (backend-dev; BUG-M6-3, BUG-M6-4/DEC-020, BUG-M6-5)
+
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `boot-script.test.ts` › "Rocky: …" (judul jadi "inst.stage2 NFS (DEC-020) + inst.ks + inst.cmdline") | `inst.repo=http://10.99.0.2/media/rocky-9 … inst.text` | `inst.stage2=nfs:10.99.0.2:/srv/pxe/media/rocky-9 … inst.cmdline` | DEC-020 (stage2 NFS, node 2 GB) + BUG-M6-5 (non-interaktif). Ekspektasi tetap persis (`toBe`). |
+| `app/boot/boot-routes.test.ts` › AC-4.16 snapshot Rocky | idem | idem (`<media-root>`) | Sama. |
+| `installers/installers.test.ts` › AC-4.20 "text, url, …" | `toContain("text")` | `toContain("cmdline")` + `not.toContain("text")` | BUG-M6-5. |
+| `installers/installers.test.ts` KCMD.kickstart (cmdline palsu turunan) | `inst.repo=http… inst.text` | `inst.stage2=nfs:… inst.cmdline` | Diselaraskan dengan installerScript; AC-5.20 (m5-te-hooks) tetap menurunkan cmdline dari script nyata dan lulus. |
+| `installers/m6-generator.test.ts` › Rocky tanpa `---` | diakhiri `inst.text console=…` | diakhiri `inst.cmdline console=…` | Sama. |
+| golden `debian-preseed.cfg`, `debian-late.sh`, `rocky-ks.cfg` | — | + country/locale `.UTF-8`/supported-locales/layoutcode/hw-detect/mirror protocol; late: hostname; ks: `cmdline`, tanpa `repo AppStream`, + `openssh-server`, `sudo` | Diperbarui (`-u`) setelah perubahan generator; isi ditinjau baris per baris. |
+
+Test baru: `installers/m6-smoke-fixes.test.ts` (12), `infra/test/m6-nfs.sh` (3, di-source `run.sh`).
+Mutasi: `.agent/runs/m6/mutation-dev-T6b.txt` (14 mutan, semua merah).

@@ -63,6 +63,11 @@ export function debianLateScript(ctx: InstallContext): string {
     )
   }
   lines.push(
+    // BUG-M6-3 (terkait): preseed diambil lewat jaringan SETELAH netcfg berjalan, sehingga
+    // `netcfg/get_hostname` di preseed terlambat (hostname target = DHCP/"debian"). Hostname host
+    // ditulis eksplisit di target.
+    `printf '%s\\n' ${shQuote(c.hostname)} > /etc/hostname`,
+    `sed -i '/^127\\.0\\.1\\.1[[:space:]]/d' /etc/hosts && printf '127.0.1.1\\t%s\\n' ${shQuote(c.hostname)} >> /etc/hosts`,
     ifaceLookup,
     // Interface management dari MAC; file interfaces utama hanya lo + include.
     b64write("/etc/network/interfaces", "644", "auto lo\niface lo inet loopback\n\nsource /etc/network/interfaces.d/*\n"),
@@ -74,6 +79,21 @@ export function debianLateScript(ctx: InstallContext): string {
   return `${lines.join("\n")}\n`
 }
 
+/**
+ * Baris locale d-i (BUG-M6-3): language + country + locale dipreseed bersama (country diturunkan dari
+ * locale host, mis. `id_ID.UTF-8` → `ID`), plus supported-locales agar locale target terpasang.
+ */
+export function localeLines(locale: string): string[] {
+  const m = /^([a-z]{2,3})_([A-Z]{2})\.UTF-8$/.exec(locale)
+  if (!m) throw new Error(`locale tidak valid: ${locale}`)
+  return [
+    di("debian-installer/language", "string", "en"),
+    di("debian-installer/country", "string", m[2]),
+    di("debian-installer/locale", "string", `${m[1]}_${m[2]}.UTF-8`),
+    di("localechooser/supported-locales", "multiselect", locale),
+  ]
+}
+
 export function debianPreseed(ctx: InstallContext): string {
   const c = validateContext(ctx)
   const media = new URL(`${c.mediaUrl}/${c.imageRepo}`)
@@ -81,14 +101,21 @@ export function debianPreseed(ctx: InstallContext): string {
   const out = [
     "# Preseed dibuat PXE dashboard (jangan edit manual)",
     di("preseed/early_command", "string", logCmd("preseed", c.mac, DEBIAN_LOG.start)),
-    di("debian-installer/locale", "string", c.locale.replace(".UTF-8", "")),
-    di("debian-installer/language", "string", "en"),
+    // BUG-M6-3: dengan `auto=true`, localechooser berjalan SETELAH preseed dimuat. Bila language/
+    // locale dipreseed terpisah, country WAJIB ikut (example-preseed Debian), kalau tidak d-i bertanya
+    // "Select your location" dan instalasi macet. Bahasa installer tetap English; locale target dari
+    // config host.
+    ...localeLines(c.locale),
     di("keyboard-configuration/xkb-keymap", "select", "us"),
+    di("keyboard-configuration/layoutcode", "string", "us"),
+    // Tanpa firmware non-free di media (offline): jangan tanya "load missing firmware".
+    di("hw-detect/load_firmware", "boolean", false),
     di("netcfg/choose_interface", "select", "auto"),
     di("netcfg/get_hostname", "string", c.hostname),
     di("netcfg/get_domain", "string", ""),
     di("netcfg/hostname", "string", c.hostname),
     di("mirror/country", "string", "manual"),
+    di("mirror/protocol", "string", "http"),
     di("mirror/http/hostname", "string", media.host),
     di("mirror/http/directory", "string", media.pathname),
     di("mirror/http/proxy", "string", ""),

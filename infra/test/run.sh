@@ -648,6 +648,8 @@ t "kvm-run.sh finish() memanggil redact-evidence (gagal = FAIL)"  test_kvm_run_c
 source "$(dirname "$0")/m5.sh"
 # M6 (M6-T7): test infra milestone 6.
 source "$(dirname "$0")/m6.sh"
+# M6 (DEC-020 / BUG-M6-4): ekspor NFS server test.
+source "$(dirname "$0")/m6-nfs.sh"
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"

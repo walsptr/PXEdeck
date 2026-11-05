@@ -57,9 +57,13 @@ export function rockyKickstart(ctx: InstallContext): string {
   const drives = c.storage.disk ? ` --drives=${c.storage.disk.replace(/^\/dev\//, "")}` : ""
   const out = [
     "# Kickstart dibuat PXE dashboard (jangan edit manual)",
-    "text",
+    // BUG-M6-5: mode `cmdline` (non-interaktif) — pengaturan wajib yang gagal (mis. sumber paket)
+    // membuat anaconda berhenti dengan error dan menjalankan %onerror (callback failed), bukan
+    // menunggu input di UI teks tty1 sampai timeout.
+    "cmdline",
+    // Satu sumber: root media; anaconda membaca `.treeinfo` (`repository = Minimal` pada ISO minimal
+    // 9.x). Tidak ada `repo --name=AppStream/BaseOS` — tidak ada di media minimal (404 → macet).
     `url --url=${repo}`,
-    `repo --name=AppStream --baseurl=${repo}/AppStream`,
     `lang ${c.locale}`,
     "keyboard --vckeymap=us --xlayouts=us",
     `timezone ${c.timezone} --utc`,
@@ -83,7 +87,9 @@ export function rockyKickstart(ctx: InstallContext): string {
     "",
     "%packages",
     "@^minimal-environment",
+    "openssh-server",
     "curl",
+    "sudo",
     "%end",
     "",
     "%post --log=/root/pxe-post.log",

@@ -1,2 +1,5 @@
-# /etc/exports.d/pxe.exports — root live Ubuntu (casper netboot=nfs), read-only, hanya pxe-test.
+# /etc/exports.d/pxe.exports — read-only, hanya subnet pxe-test (10.99.0.0/24).
+# Root live Ubuntu (casper netboot=nfs, DEC-009).
 /srv/pxe/media/ubuntu-24.04 10.99.0.0/24(ro,no_subtree_check,no_root_squash,fsid=1001)
+# Stage2 Rocky 9 (`inst.stage2=nfs:…`, DEC-020): install.img di-mount, bukan diunduh ke RAM node.
+/srv/pxe/media/rocky-9 10.99.0.0/24(ro,no_subtree_check,root_squash,fsid=1003)

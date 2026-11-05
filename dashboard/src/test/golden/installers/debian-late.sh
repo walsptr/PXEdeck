@@ -8,6 +8,8 @@ chown -R 'ops': /home/ops/.ssh
 printf %s 'b3BzIEFMTD0oQUxMKSBOT1BBU1NXRDpBTEwK' | base64 -d > /etc/sudoers.d/90-ops && chmod 440 /etc/sudoers.d/90-ops
 mkdir -p /etc/ssh/sshd_config.d
 printf %s 'IyBEaXBhc2FuZyBQWEUgZGFzaGJvYXJkOiBsb2dpbiBoYW55YSBkZW5nYW4ga2V5ClBhc3N3b3JkQXV0aGVudGljYXRpb24gbm8KS2JkSW50ZXJhY3RpdmVBdXRoZW50aWNhdGlvbiBubwo=' | base64 -d > /etc/ssh/sshd_config.d/60-pxe-no-password.conf && chmod 644 /etc/ssh/sshd_config.d/60-pxe-no-password.conf
+printf '%s\n' 'm4-node11' > /etc/hostname
+sed -i '/^127\.0\.1\.1[[:space:]]/d' /etc/hosts && printf '127.0.1.1\t%s\n' 'm4-node11' >> /etc/hosts
 IF=
 for d in /sys/class/net/*; do
   [ "$(cat "$d/address" 2>/dev/null)" = '52:54:00:99:00:11' ] && IF=$(basename "$d")

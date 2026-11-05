@@ -137,12 +137,15 @@ export function installerScript(i: InstallerScriptInput): string {
       )} ---`
       break
     case "kickstart":
+      // DEC-020 (BUG-M6-4): stage2 (`images/install.img` ±1,2 GB) di-mount lewat NFS read-only dari
+      // server (seperti root live Ubuntu, DEC-009), bukan diunduh dracut ke RAM (node 2 GB habis).
+      // Repo paket = `url` di kickstart (HTTP); kickstart tetap HTTP per-MAC (`inst.ks=`).
       cmdline = args(
         "initrd=initrd",
         "ip=dhcp",
-        `inst.repo=${m}/${repo}`,
+        `inst.stage2=nfs:${ipxeSafe(i.serverIp, "server IP")}:${ipxeSafe(i.mediaRoot, "media root")}/${repo}`,
         `inst.ks=${c}ks.cfg`,
-        "inst.text",
+        "inst.cmdline", // BUG-M6-5: non-interaktif (selaras `cmdline` di kickstart; mode boot diutamakan anaconda)
       )
       break
     default:

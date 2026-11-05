@@ -51,7 +51,7 @@ const CONFIG_PREFIX = CALLBACK.replace(/status$/, "")
 const KCMD = {
   autoinstall: `initrd=initrd ip=dhcp netboot=nfs nfsroot=10.99.0.2:/srv/pxe/media/ubuntu-24.04 autoinstall ds=nocloud-net;s=${CONFIG_PREFIX} cloud-config-url=/dev/null console=ttyS0,115200n8 ---`,
   preseed: `initrd=initrd auto=true priority=critical url=${CONFIG_PREFIX}preseed.cfg interface=auto netcfg/dhcp_timeout=60`,
-  kickstart: `initrd=initrd ip=dhcp inst.repo=http://10.99.0.2/media/rocky-9 inst.ks=${CONFIG_PREFIX}ks.cfg inst.text`,
+  kickstart: `initrd=initrd ip=dhcp inst.stage2=nfs:10.99.0.2:/srv/pxe/media/rocky-9 inst.ks=${CONFIG_PREFIX}ks.cfg inst.cmdline`,
 } as const
 /** Perintah firstboot penulis file URL callback. */
 const urlFileCmd = (cmds: string[]) => {
@@ -281,8 +281,9 @@ describe("AC-4.20 Rocky kickstart", () => {
   const ks = rockyKickstart(c)
   const lines = ks.trimEnd().split("\n")
 
-  it("text, url, rootpw --lock, user --iscrypted + wheel, sshkey per key, network statis, reboot", () => {
-    expect(lines).toContain("text")
+  it("cmdline (BUG-M6-5), url, rootpw --lock, user --iscrypted + wheel, sshkey per key, network statis, reboot", () => {
+    expect(lines).toContain("cmdline")
+    expect(lines).not.toContain("text")
     expect(lines).toContain("url --url=http://10.99.0.2/media/rocky-9")
     expect(lines).toContain("rootpw --lock")
     expect(lines).toContain(`user --name=ops --password=${FAKE_HASH} --iscrypted --groups=wheel`)
