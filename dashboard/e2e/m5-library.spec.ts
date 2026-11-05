@@ -103,12 +103,16 @@ test("AC-5.27 Daftarkan image: error per field, 409 id ganda, valid → baris ba
   await expect(newRow.getByTestId("img-used-by")).toContainText("0")
 
   // Hapus terpakai → 409 tampil di dialog.
+  const u24UsedBy = (await page.locator('[data-testid="os-image-row"][data-image-id="ubuntu-24.04"]').getByTestId("img-used-by").innerText()).trim()
+  const usedN = /^(\d+) host$/.exec(u24UsedBy)?.[1]
+  expect(usedN, `kolom usedBy: "${u24UsedBy}"`).toBe("1")
   await page.getByRole("button", { name: "Hapus ubuntu-24.04", exact: true }).click()
   const conf = page.getByRole("alertdialog")
   await conf.getByRole("button", { name: "Hapus" }).click()
-  // Pesan 409 dari server ("OS image dipakai N host/job"). Catatan: N dihitung imageUsage (host +
-  // config + job, bisa ganda per host) ≠ usedBy tabel — dicatat di .agent/runs/m5/bugs.md (BUG-M5-1).
+  // Pesan 409 dari server ("OS image dipakai N host/job"): N = usedBy di tabel (host unik;
+  // regresi BUG-M5-1 — sebelumnya host + config + job dijumlah sehingga satu host terhitung 2×).
   await expect(conf.getByTestId("delete-error")).toContainText(/OS image dipakai \d+ host/)
+  await expect(conf.getByTestId("delete-error")).toContainText(new RegExp(`OS image dipakai ${usedN} host/job`))
   await page.screenshot({ path: SHOTS(5, "ac-5.27-delete-409") })
   await conf.getByRole("button", { name: "Batal", exact: true }).click()
   await expect(page.locator('[data-testid="os-image-row"][data-image-id="ubuntu-24.04"]')).toBeVisible()

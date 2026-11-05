@@ -25,6 +25,11 @@ Kode produk TIDAK diubah oleh test-engineer. Setiap butir memuat repro; Orchestr
   `usedBy` di pesan, lalu tambahkan asersi angka = `usedBy` di test itu.
 - Asal: fungsi `imageUsage` sudah ada di M4 (`main`), tetapi baru terlihat di UI sejak halaman OS
   Images M5 menampilkan kedua angka berdampingan.
+- **Status: fixed in commit "fix(m5): BUG-M5-1 …" (hash: `git log --grep=BUG-M5-1 -1 --format=%h`)** (backend-dev): `imageUsage()` kini = `imageHostCount()`
+  (UNION host unik), sehingga N di 409 = `usedBy`. Regresi: `db.test.ts` › "imageUsage menghitung host
+  unik = imageHostCount/usedBy", `m4-api-routes.test.ts` › "409 hapus: N di pesan = usedBy …"
+  (keduanya merah pada kode lama: 6≠4 dan "dipakai 7"≠"dipakai 5"), dan `e2e/m5-library.spec.ts` ›
+  AC-5.27 mengasersikan angka 409 = kolom `usedBy` (test-migration #17).
 
 ## Catatan (bukan bug, info)
 

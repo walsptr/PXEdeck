@@ -41,7 +41,7 @@ import {
   updateJob,
   type Job,
 } from "./repos/jobs"
-import { getImage, imageAvailability, imageUsage, listImages } from "./repos/os-images"
+import { getImage, imageAvailability, imageHostCount, imageUsage, listImages } from "./repos/os-images"
 import { hostKeyIds, insertKey, keyUsage, listKeys, setHostKeyIds } from "./repos/ssh-keys"
 import { DEMO_HOSTS } from "./seed"
 
@@ -407,6 +407,22 @@ describe("repo jobs & ssh-keys", () => {
     insertJob(job("j1", LEGACY01))
     expect(imageUsage("ubuntu-24.04")).toBe(base + 1)
     expect(imageUsage("debian-12")).toBe(0)
+  })
+
+  it("imageUsage menghitung host unik = imageHostCount/usedBy (regresi BUG-M5-1)", () => {
+    const CTRL03 = "1418774a2c03" // demo: osAssigned ubuntu-24.04
+    const base = imageUsage("ubuntu-24.04")
+    expect(base).toBe(imageHostCount("ubuntu-24.04"))
+    // Host yang sama: os_assigned + config + job aktif untuk image yang sama → tetap dihitung 1×.
+    const os = { osImageId: "ubuntu-24.04", disk: "/dev/sda", partition: "lvm", timezone: "UTC", locale: "en_US.UTF-8" } as const
+    tx(() => saveConfig(CTRL03, { ...configOrDefault(getHost(CTRL03)!), os, updatedAt: T }))
+    insertJob(job("j-dup", CTRL03))
+    expect(imageUsage("ubuntu-24.04")).toBe(base)
+    expect(imageUsage("ubuntu-24.04")).toBe(imageHostCount("ubuntu-24.04"))
+    // Host lain hanya lewat config → +1.
+    tx(() => saveConfig(LEGACY01, { ...configOrDefault(getHost(LEGACY01)!), os, updatedAt: T }))
+    expect(imageUsage("ubuntu-24.04")).toBe(base + 1)
+    expect(imageUsage("ubuntu-24.04")).toBe(imageHostCount("ubuntu-24.04"))
   })
 
   it("imageAvailability: non-bootable/Windows, file media hilang, tersedia", () => {

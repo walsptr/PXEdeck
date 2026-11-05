@@ -93,18 +93,13 @@ export function deleteImage(id: string): boolean {
   return Number(getDb().prepare("DELETE FROM os_images WHERE id = ?").run(id).changes) > 0
 }
 
-/** Jumlah host/job yang masih mereferensikan image (assigned, config, job aktif). */
+/**
+ * Jumlah host unik yang masih mereferensikan image (assigned, config, job aktif) — dipakai untuk
+ * menolak hapus (409). Sama dengan `usedBy` (`imageHostCount`): satu host yang punya
+ * `os_assigned`, config, dan job aktif untuk image yang sama dihitung SATU kali (BUG-M5-1).
+ */
 export function imageUsage(id: string): number {
-  const r = getDb()
-    .prepare(
-      `SELECT
-        (SELECT count(*) FROM hosts WHERE os_assigned = ?1) +
-        (SELECT count(*) FROM host_configs WHERE json_extract(os_profile, '$.osImageId') = ?1) +
-        (SELECT count(*) FROM jobs WHERE os_image_id = ?1
-           AND status IN ('booting','installing','configuring')) AS n`,
-    )
-    .get(id) as { n: number }
-  return Number(r.n)
+  return imageHostCount(id)
 }
 
 /** Ketersediaan image terhadap media di `mediaRoot` (fungsi murni + fs). */

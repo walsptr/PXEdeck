@@ -28,6 +28,12 @@ Tidak ada asersi yang dihapus, di-skip, atau dilonggarkan. Perubahan semantik (b
 | 15 | `dashboard/e2e/m1-layout.spec.ts` (test "placeholder /os-images …" dan "placeholder /ssh-keys …") | Daftar `PLACEHOLDERS` dihapus seluruhnya; `/os-images` dan `/ssh-keys` masuk daftar `BUILT_PAGES` (lihat #14) dengan penanda `[data-testid="os-images-page"]` / `[data-testid="ssh-keys-page"]`, tanpa "dibangun di tahap". Komponen `PagePlaceholder` dihapus karena tidak dipakai lagi. | DR-4-7 + AC-5.32 + plan §2.8 (M5-T9: halaman OS Images & SSH Keys dibangun, placeholder hilang). **[semantik → test-engineer]** (AC-5.27/5.28 penuh = T13) | Ekspektasi diubah (UI disengaja) |
 | 16 | `dashboard/e2e/m4-settings.spec.ts` (AC-4.6, `toEqual` respons `GET /api/settings`) | Objek harapan + `jobTimeouts {60,120,60}`, `maxInstallerBoots: 3`, `insecureNoLeaseCheck: false` (nilai default server E2E). Pemeriksaan "tanpa path DB/seed/allowlist" dan semua asersi halaman Settings tetap. Padanan E2E dari #6 yang terlewat: test ini merah di HEAD `3a799d2` sebelum perubahan UI M5. | AC-5.1 / DEC-014: respons wajib memuat ketiga kunci itu. **[semantik → test-engineer]** (perluasan kontrak) | Ekspektasi diperluas |
 
+## Migrasi oleh backend-dev (perbaikan BUG-M5-1)
+
+| # | File | Perubahan | Dasar | Jenis |
+|---|---|---|---|---|
+| 17 | `dashboard/e2e/m5-library.spec.ts` (AC-5.27 "Daftarkan image…", hapus terpakai → 409) | Asersi lama `/OS image dipakai \d+ host/` **tetap**; ditambah: kolom `img-used-by` baris `ubuntu-24.04` dibaca sebelum hapus (= "1 host") dan pesan 409 wajib memuat `OS image dipakai <usedBy> host/job` (angka sama). Komentar "N ≠ usedBy (BUG-M5-1)" diganti keterangan regresi. Ditambah juga test baru (tanpa mengubah asersi lama): `src/lib/server/db/db.test.ts` › "imageUsage menghitung host unik = imageHostCount/usedBy (regresi BUG-M5-1)" dan `src/app/api/m4-api-routes.test.ts` › "409 hapus: N di pesan = usedBy …". Asersi `imageUsage` lama di `db.test.ts` (base = jumlah host demo `osAssigned`, +1 setelah job aktif host lain) tetap tanpa perubahan dan tetap lulus. | BUG-M5-1 (`.agent/runs/m5/bugs.md`); plan M5 §2.8 (409 "dipakai N host"). | Pengetatan (asersi ditambah) |
+
 ## Tinjauan test-engineer (M5-T12) — butir semantik
 
 Ditinjau terhadap `git diff main..HEAD` (bukan hanya deskripsi di atas), DEC-013/014/015, dan

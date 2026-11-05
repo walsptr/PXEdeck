@@ -198,6 +198,21 @@ describe("API os-images (GET/POST/DELETE)", () => {
     expect((await imageDELETE(jsonReq("/api/os-images/ubuntu-24.10", "DELETE"), idp("ubuntu-24.10"))).status).toBe(404)
     expect((await imageDELETE(new Request("http://evil.example/api/os-images/win-x", { method: "DELETE" }), idp("win-x"))).status).toBe(403)
   })
+  it("409 hapus: N di pesan = usedBy GET /api/os-images (host unik; regresi BUG-M5-1)", async () => {
+    const usedBy = async (id: string) =>
+      ((await (await imagesGET(getReq("/api/os-images"))).json()) as { id: string; usedBy: number }[]).find((i) => i.id === id)!.usedBy
+    const before = await usedBy("ubuntu-24.04")
+    // Satu host: config os ubuntu-24.04 + os_assigned + job aktif → tetap satu host.
+    const os = { osImageId: "ubuntu-24.04", disk: "", partition: "lvm", timezone: "UTC", locale: "en_US.UTF-8" }
+    expect((await patch(DISC1, { ...creds, ...sshNew, os })).status).toBe(200)
+    expect((await (await hostGET(jsonReq("/x", "GET"), ID(DISC1))).json()).osAssigned).toBe("ubuntu-24.04")
+    expect((await install(jsonReq("/x", "POST"), ID(DISC1))).status).toBe(200)
+    const n = await usedBy("ubuntu-24.04")
+    expect(n).toBe(before + 1)
+    const used = await imageDELETE(jsonReq("/api/os-images/ubuntu-24.04", "DELETE"), idp("ubuntu-24.04"))
+    expect(used.status).toBe(409)
+    expect((await used.json()).error).toBe(`OS image dipakai ${n} host/job`)
+  })
 })
 
 describe("AC-4.2 persistence & tanpa secret di response", () => {
