@@ -2,9 +2,17 @@
 // database + parser lease dnsmasq. Simulasi kecil supaya polling terlihat hidup:
 //  - host yang sedang provisioning maju ke tahap berikutnya seiring waktu
 //  - host baru "melakukan PXE boot" berkala (sampai batas tertentu)
+//
+// Seam test (DEC-005, tanpa endpoint HTTP):
+//  - `resetMockStore(seed?)` membangun ulang store (seed "default" | "empty")
+//  - env `PXE_MOCK_SIMULATION=off` (juga `0`/`false`): tanpa tick tahap,
+//    discovery, maupun perpanjangan lease acak → data deterministik
+//  - env `PXE_MOCK_DISCOVER_EVERY_MS`: interval discovery (default 40000)
+//  - env `PXE_MOCK_SEED=empty|default`: seed store awal (default "default")
 import type { HostConfig, SshKey } from "@/lib/host-config"
-import { MGMT_NETWORK, parseCidr } from "@/lib/net"
+import { parseCidr } from "@/lib/net"
 import { lookupVendor } from "@/lib/oui"
+import { getMgmtNetwork } from "@/lib/server/net-config"
 import type { Firmware, Host, ProvisionStatus } from "@/lib/types"
 
 const SEC = 1000
@@ -193,6 +201,38 @@ const DISCOVER_POOL = [
   "98:03:9b:44:1c:07",
 ]
 
+export type MockSeed = "default" | "empty"
+
+export type MockOptions = {
+  /** false = simulasi waktu, discovery, dan lease renew acak dimatikan. */
+  simulation: boolean
+  discoverEveryMs: number
+  seed: MockSeed
+}
+
+/**
+ * Baca opsi mock dari env (fungsi murni). Nilai tak dikenal memakai default:
+ * simulasi aktif, discovery 40 dtk, seed "default". Interval discovery harus
+ * bilangan bulat positif (ms).
+ */
+export function mockOptionsFromEnv(
+  env: Record<string, string | undefined>,
+): MockOptions {
+  const sim = env.PXE_MOCK_SIMULATION?.trim().toLowerCase()
+  const every = Number(env.PXE_MOCK_DISCOVER_EVERY_MS?.trim())
+  const seed = env.PXE_MOCK_SEED?.trim().toLowerCase()
+  return {
+    simulation: !(sim === "off" || sim === "0" || sim === "false"),
+    discoverEveryMs:
+      Number.isInteger(every) && every > 0 ? every : DISCOVER_EVERY,
+    seed: seed === "empty" ? "empty" : "default",
+  }
+}
+
+function mockOptions(): MockOptions {
+  return mockOptionsFromEnv(process.env)
+}
+
 export type Store = {
   hosts: Map<string, Host>
   startedAt: number
@@ -219,6 +259,7 @@ const LAB_PASSWORD_HASH =
 
 export function defaultConfig(h: Host): HostConfig {
   const installed = Boolean(h.osInstalled)
+  const net = getMgmtNetwork()
   return {
     os:
       h.osInstalled || h.osAssigned
@@ -238,9 +279,9 @@ export function defaultConfig(h: Host): HostConfig {
       ? {
           mode: "static",
           ip: h.mgmtIp,
-          prefix: parseCidr(MGMT_NETWORK.cidr).prefix,
-          gateway: MGMT_NETWORK.gateway,
-          dns: [...MGMT_NETWORK.dns],
+          prefix: parseCidr(net.cidr).prefix,
+          gateway: net.gateway,
+          dns: [...net.dns],
           vlan: null,
           iface: { by: "mac" },
         }
@@ -276,22 +317,34 @@ function fromSeed(s: Seed, now: number): Host {
 // Disimpan di globalThis agar tidak hilang saat hot reload di dev.
 const g = globalThis as typeof globalThis & { __pxeMockStore?: Store }
 
-function store(): Store {
-  if (!g.__pxeMockStore) {
-    const now = Date.now()
-    g.__pxeMockStore = {
-      hosts: new Map(SEED.map((s) => [hostId(s.mac), fromSeed(s, now)])),
-      startedAt: now,
-      discovered: 0,
-      configs: new Map(),
-      sshKeys: new Map(),
-    }
+function createStore(seed: MockSeed, now: number): Store {
+  const seeded = seed === "default"
+  return {
+    hosts: new Map(
+      (seeded ? SEED : []).map((s) => [hostId(s.mac), fromSeed(s, now)]),
+    ),
+    startedAt: now,
+    discovered: 0,
+    configs: new Map(),
+    sshKeys: new Map(seeded ? [[ADMIN_KEY.id, { ...ADMIN_KEY }]] : []),
   }
+}
+
+/**
+ * Bangun ulang store mock (seam test, DEC-005). `seed` default mengikuti env
+ * `PXE_MOCK_SEED`. "default" = 14 host seed + key admin di library;
+ * "empty" = tanpa host, konfigurasi, maupun key. Jam discovery mulai dari
+ * `Date.now()` saat reset.
+ */
+export function resetMockStore(seed: MockSeed = mockOptions().seed): Store {
+  g.__pxeMockStore = createStore(seed, Date.now())
+  return g.__pxeMockStore
+}
+
+function store(): Store {
   const s = g.__pxeMockStore
-  // Field yang ditambahkan belakangan (store lama bertahan lewat hot reload).
-  s.configs ??= new Map()
-  s.sshKeys ??= new Map()
-  if (s.sshKeys.size === 0) s.sshKeys.set(ADMIN_KEY.id, { ...ADMIN_KEY })
+  // Store lama dari hot reload tanpa field baru → bangun ulang.
+  if (!s || !s.configs || !s.sshKeys) return resetMockStore()
   return s
 }
 
@@ -321,6 +374,8 @@ export function startInstall(s: Store, h: Host, osImageId: string) {
 }
 
 function tick(s: Store, now: number) {
+  const opts = mockOptions()
+  if (!opts.simulation) return
   for (const h of s.hosts.values()) {
     const dur = STAGE_DURATION[h.status]
     const next = NEXT_STAGE[h.status]
@@ -346,7 +401,7 @@ function tick(s: Store, now: number) {
     }
   }
 
-  const due = Math.floor((now - s.startedAt) / DISCOVER_EVERY)
+  const due = Math.floor((now - s.startedAt) / opts.discoverEveryMs)
   while (s.discovered < Math.min(due, DISCOVER_MAX)) {
     const mac = DISCOVER_POOL[s.discovered]
     s.discovered++
@@ -382,14 +437,14 @@ export function getHost(id: string): Host | null {
 }
 
 export function deleteHost(id: string): boolean {
-  const s = store()
+  const s = mockDb()
   s.configs.delete(id)
   return s.hosts.delete(id)
 }
 
 /** Mock "Reboot ke PXE": host yang punya OS tugasan mulai dari tahap booting. */
 export function rebootToPxe(id: string): Host | null {
-  const s = store()
+  const s = mockDb()
   const h = s.hosts.get(id)
   if (!h) return null
   const now = new Date().toISOString()

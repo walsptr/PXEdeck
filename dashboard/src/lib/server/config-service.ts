@@ -1,5 +1,19 @@
 // Validasi semantik + penerapan konfigurasi host. Semua aturan dari form
 // diulang di sini: form hanya membantu, server yang memutuskan.
+//
+// Atomisitas (G3-2): satu-satunya kerja async (fingerprint SHA-256 key SSH
+// baru via Web Crypto) dikerjakan SEBELUM store dibaca (`prepareNewKeys`).
+// Validasi + penerapan (`applyConfigPrepared`) sepenuhnya sinkron, sehingga
+// dua request paralel tidak bisa sama-sama lolos cek IP/hostname bentrok.
+//
+// Aturan yang perlu diketahui klien:
+//  - Network statis (DEC-006): prefix wajib = prefix subnet management,
+//    IP & gateway wajib host di subnet management, DNS wajib IPv4.
+//  - Key SSH baru (G3-3): fingerprint yang sudah ada di library → 422
+//    "sudah ada di library sebagai …" (pilih key itu dari library via
+//    `keyIds`); dua key baru dengan fingerprint sama dalam satu request → 422.
+//    Berlaku baik untuk `saveToLibrary` true maupun false. `keyIds` duplikat
+//    disatukan.
 import { encrypt } from "unixcrypt"
 
 import {
@@ -18,12 +32,18 @@ import type {
   PublicHostConfig,
   SaveResult,
   SshKey,
+  SshSection,
 } from "@/lib/host-config"
 import { validateHostname } from "@/lib/hostname"
-import { isIpv4, validateIpAssignments, type IpUsage } from "@/lib/net"
+import {
+  validateIpAssignments,
+  validateStaticNetwork,
+  type IpUsage,
+} from "@/lib/net"
 import { OS_IMAGES } from "@/lib/os-images"
-import { parseSshKey, sshFingerprint } from "@/lib/ssh-key"
+import { parseSshKey, sshFingerprint, type ParsedSshKey } from "@/lib/ssh-key"
 import type { Host } from "@/lib/types"
+import { getMgmtNetwork } from "@/lib/server/net-config"
 import {
   getConfig,
   mockDb,
@@ -116,12 +136,53 @@ type Prepared = {
   generated?: SaveResult["generatedPasswords"]
 }
 
+export type ApplyResult =
+  { ok: true; result: SaveResult } | { ok: false; errors: ApiFieldError[] }
+
+/** Key SSH baru yang sudah di-parse + di-fingerprint (atau error parse). */
+export type PreparedNewKey =
+  | { ok: true; parsed: ParsedSshKey; fingerprint: string }
+  | { ok: false; error: string }
+
+/** Parse + fingerprint key baru (satu-satunya bagian async, tanpa akses store). */
+export async function prepareNewKeys(
+  newKeys: SshSection["newKeys"],
+): Promise<PreparedNewKey[]> {
+  return Promise.all(
+    newKeys.map(async (k): Promise<PreparedNewKey> => {
+      const parsed = parseSshKey(k.publicKey)
+      if ("error" in parsed) return { ok: false, error: parsed.error }
+      return {
+        ok: true,
+        parsed,
+        fingerprint: await sshFingerprint(parsed.blob),
+      }
+    }),
+  )
+}
+
+/** Validasi + terapkan konfigurasi secara atomik (semua host atau tidak sama sekali). */
 export async function applyConfig(
   hostIds: string[],
   p: ConfigPayload,
-): Promise<
-  { ok: true; result: SaveResult } | { ok: false; errors: ApiFieldError[] }
-> {
+): Promise<ApplyResult> {
+  const prepared = await prepareNewKeys(p.ssh?.newKeys ?? [])
+  // Tidak ada await setelah titik ini: validasi + apply satu bagian sinkron.
+  return applyConfigPrepared(hostIds, p, prepared)
+}
+
+/**
+ * Bagian sinkron `applyConfig`. `preparedKeys[i]` wajib hasil
+ * `prepareNewKeys(p.ssh.newKeys)` (urutan sama).
+ */
+export function applyConfigPrepared(
+  hostIds: string[],
+  p: ConfigPayload,
+  preparedKeys: PreparedNewKey[],
+): ApplyResult {
+  if (preparedKeys.length !== (p.ssh?.newKeys.length ?? 0)) {
+    throw new Error("preparedKeys tidak sesuai dengan ssh.newKeys")
+  }
   const s = mockDb()
   const errors: ApiFieldError[] = []
   const ids = [...new Set(hostIds)]
@@ -253,17 +314,19 @@ export async function applyConfig(
         },
       })
     } else {
-      if (!isIpv4(n.gateway))
-        errors.push({ section: "network", message: "Gateway tidak valid" })
-      for (const d of n.dns) {
-        if (!isIpv4(d))
-          errors.push({ section: "network", message: `DNS tidak valid: ${d}` })
+      const net = getMgmtNetwork()
+      for (const message of validateStaticNetwork(n, net)) {
+        errors.push({ section: "network", message })
       }
       const assignments = hosts.map((h) => ({
         hostId: h.id,
         ip: (n.assignments[h.id] ?? "").trim(),
       }))
-      const ipErrors = validateIpAssignments(assignments, ipUsage(s, batch))
+      const ipErrors = validateIpAssignments(
+        assignments,
+        ipUsage(s, batch),
+        net,
+      )
       for (const [hostId, message] of ipErrors) {
         errors.push({
           section: "network",
@@ -279,8 +342,8 @@ export async function applyConfig(
               mode: "static",
               ip,
               prefix: n.prefix,
-              gateway: n.gateway,
-              dns: n.dns,
+              gateway: n.gateway.trim(),
+              dns: n.dns.map((d) => d.trim()),
               vlan: n.vlan,
               iface: n.iface,
             }
@@ -325,7 +388,8 @@ export async function applyConfig(
   // ---- SSH keys ----
   if (p.ssh) {
     const ssh = p.ssh
-    for (const id of ssh.keyIds) {
+    const keyIds = [...new Set(ssh.keyIds)]
+    for (const id of keyIds) {
       if (!s.sshKeys.has(id))
         errors.push({
           section: "ssh",
@@ -338,15 +402,37 @@ export async function applyConfig(
     }
     const newLibrary: SshKey[] = []
     const extra: string[] = []
+    const libraryByFp = new Map(
+      [...s.sshKeys.values()].map((k) => [k.fingerprint, k]),
+    )
+    const newByFp = new Map<string, number>()
     for (const [i, k] of ssh.newKeys.entries()) {
-      const parsed = parseSshKey(k.publicKey)
-      if ("error" in parsed) {
+      const prep = preparedKeys[i]
+      if (!prep.ok) {
         errors.push({
           section: "ssh",
-          message: `Key baru #${i + 1}: ${parsed.error}`,
+          message: `Key baru #${i + 1}: ${prep.error}`,
         })
         continue
       }
+      const { parsed, fingerprint } = prep
+      const existing = libraryByFp.get(fingerprint)
+      if (existing) {
+        errors.push({
+          section: "ssh",
+          message: `Key baru #${i + 1}: sudah ada di library sebagai "${existing.name}" — pilih dari library`,
+        })
+        continue
+      }
+      const dupOf = newByFp.get(fingerprint)
+      if (dupOf !== undefined) {
+        errors.push({
+          section: "ssh",
+          message: `Key baru #${i + 1}: sama dengan key baru #${dupOf + 1}`,
+        })
+        continue
+      }
+      newByFp.set(fingerprint, i)
       if (k.saveToLibrary) {
         if (!k.name) {
           errors.push({
@@ -360,7 +446,7 @@ export async function applyConfig(
           name: k.name,
           type: parsed.type,
           publicKey: parsed.normalized,
-          fingerprint: await sshFingerprint(parsed.blob),
+          fingerprint,
           comment: parsed.comment,
           createdAt: new Date().toISOString(),
         })
@@ -368,7 +454,7 @@ export async function applyConfig(
         extra.push(parsed.normalized)
       }
     }
-    if (ssh.keyIds.length + ssh.newKeys.length === 0) {
+    if (keyIds.length + ssh.newKeys.length === 0) {
       errors.push({
         section: "ssh",
         message: "Pilih atau tambahkan minimal satu key",
@@ -379,7 +465,7 @@ export async function applyConfig(
         for (const k of newLibrary) s.sshKeys.set(k.id, k)
         for (const h of hosts) {
           const cfg = getConfig(s, h)
-          cfg.sshKeyIds = [...ssh.keyIds, ...newLibrary.map((k) => k.id)]
+          cfg.sshKeyIds = [...keyIds, ...newLibrary.map((k) => k.id)]
           cfg.extraKeys = extra
           cfg.sshUser = ssh.user.trim() || null
         }

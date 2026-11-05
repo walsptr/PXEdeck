@@ -1,13 +1,26 @@
 // Utilitas IPv4 + parameter jaringan management. Dipakai form (preview) dan
-// server (validasi). Nilai default mengikuti scripts/pxe-nodes; tahap 4
+// server (validasi). Modul ini murni (tanpa process.env) sehingga aman
+// di-import di browser. Nilai default mengikuti scripts/pxe-nodes; server
+// membaca override env lewat src/lib/server/net-config.ts (DEC-006), tahap 4
 // memindahkannya ke Settings.
 
-export const MGMT_NETWORK = {
+/** Parameter subnet management (satu sumber untuk validasi IP statis). */
+export type MgmtNetwork = {
+  /** CIDR ternormalisasi, mis. "10.10.10.0/24". */
+  cidr: string
+  gateway: string
+  dns: readonly string[]
+  pxeServer: string
+  /** Range DHCP dinamis dnsmasq: IP statis tidak boleh di sini. */
+  dynamicRange: readonly [string, string]
+}
+
+/** Default lab (scripts/pxe-nodes). Dipakai form di browser. */
+export const MGMT_NETWORK: MgmtNetwork = {
   cidr: "10.10.10.0/24",
   gateway: "10.10.10.1",
   dns: ["10.10.10.1"],
   pxeServer: "10.10.10.1",
-  /** Range DHCP dinamis dnsmasq: IP statis tidak boleh di sini. */
   dynamicRange: ["10.10.10.100", "10.10.10.200"] as const,
 }
 
@@ -45,6 +58,51 @@ export function inSubnet(ip: string, cidr: string): boolean {
   return n >= network && n <= broadcast
 }
 
+/** `a.b.c.d/p` dengan IPv4 valid dan prefix 0–32. */
+export function isCidr(s: string): boolean {
+  const m = /^([^/]+)\/(\d{1,2})$/.exec(s.trim())
+  return Boolean(m && isIpv4(m[1]) && Number(m[2]) <= 32)
+}
+
+/** Host usable (bukan network/broadcast) di dalam subnet. */
+export function isHostInSubnet(ip: string, cidr: string): boolean {
+  if (!isIpv4(ip) || !inSubnet(ip, cidr)) return false
+  const { network, broadcast } = subnetBounds(cidr)
+  const n = ipToInt(ip)
+  return n !== network && n !== broadcast
+}
+
+function resolveNet(net: string | MgmtNetwork | undefined): MgmtNetwork {
+  if (net === undefined) return MGMT_NETWORK
+  return typeof net === "string" ? { ...MGMT_NETWORK, cidr: net } : net
+}
+
+/**
+ * Validasi parameter jaringan statis bersama (DEC-006): prefix wajib sama
+ * dengan subnet management, gateway wajib IPv4 host di subnet management,
+ * DNS wajib IPv4 (boleh di luar subnet). Mengembalikan daftar pesan error.
+ */
+export function validateStaticNetwork(
+  v: { prefix: number; gateway: string; dns: readonly string[] },
+  net: MgmtNetwork = MGMT_NETWORK,
+): string[] {
+  const errors: string[] = []
+  const { prefix } = parseCidr(net.cidr)
+  if (v.prefix !== prefix) {
+    errors.push(
+      `Prefix /${v.prefix} tidak sesuai subnet management ${net.cidr} (harus /${prefix})`,
+    )
+  }
+  const gw = v.gateway.trim()
+  if (!isIpv4(gw)) errors.push("Gateway tidak valid")
+  else if (!isHostInSubnet(gw, net.cidr))
+    errors.push(`Gateway ${gw} di luar subnet management ${net.cidr}`)
+  for (const d of v.dns) {
+    if (!isIpv4(d)) errors.push(`DNS tidak valid: ${d}`)
+  }
+  return errors
+}
+
 export type IpUsage = {
   /** IP → label pemakai (hostname/MAC) untuk host di luar batch. */
   used: Map<string, string>
@@ -58,8 +116,11 @@ export type IpUsage = {
 export function validateStaticIp(
   ip: string,
   usage?: IpUsage,
-  cidr = MGMT_NETWORK.cidr,
+  /** CIDR (memakai gateway/range default) atau parameter subnet lengkap. */
+  subnet?: string | MgmtNetwork,
 ): string | null {
+  const net = resolveNet(subnet)
+  const cidr = net.cidr
   const v = ip.trim()
   if (!v) return "IP wajib diisi"
   if (!isIpv4(v)) return "Format IPv4 tidak valid"
@@ -67,10 +128,10 @@ export function validateStaticIp(
   const { network, broadcast } = subnetBounds(cidr)
   const n = ipToInt(v)
   if (n === network || n === broadcast) return "Alamat network/broadcast"
-  if (v === MGMT_NETWORK.gateway || v === MGMT_NETWORK.pxeServer) {
+  if (v === net.gateway || v === net.pxeServer) {
     return "Dipakai gateway/PXE server"
   }
-  const [lo, hi] = MGMT_NETWORK.dynamicRange
+  const [lo, hi] = net.dynamicRange
   if (n >= ipToInt(lo) && n <= ipToInt(hi)) {
     return `Di dalam range DHCP dinamis ${lo}–${hi}`
   }
@@ -98,6 +159,7 @@ export function planIps(
   spec: IpPlanSpec,
   usage: IpUsage,
   skipUsed: boolean,
+  net: MgmtNetwork = MGMT_NETWORK,
 ): IpPlanRow[] {
   if (!isIpv4(spec.start)) {
     return hostIds.map((hostId) => ({
@@ -119,7 +181,7 @@ export function planIps(
   }
   const step =
     spec.kind === "increment" ? Math.max(1, Math.floor(spec.step)) : 1
-  const { broadcast } = subnetBounds(MGMT_NETWORK.cidr)
+  const { broadcast } = subnetBounds(net.cidr)
   end = Math.min(end, broadcast)
 
   const rows: IpPlanRow[] = []
@@ -136,7 +198,7 @@ export function planIps(
       cur += step
       const err = taken.has(ip)
         ? "Duplikat dalam batch"
-        : validateStaticIp(ip, usage)
+        : validateStaticIp(ip, usage, net)
       if (!err) {
         assigned = { hostId, ip, error: null }
       } else if (!skipUsed) {
@@ -153,14 +215,88 @@ export function planIps(
 export function validateIpAssignments(
   assignments: { hostId: string; ip: string }[],
   usage: IpUsage,
+  net: MgmtNetwork = MGMT_NETWORK,
 ): Map<string, string> {
   const errors = new Map<string, string>()
   const seen = new Map<string, string>()
   for (const { hostId, ip } of assignments) {
-    const err = validateStaticIp(ip, usage)
+    const err = validateStaticIp(ip, usage, net)
     if (err) errors.set(hostId, err)
     else if (seen.has(ip)) errors.set(hostId, "Duplikat dalam batch")
     seen.set(ip, hostId)
   }
   return errors
+}
+
+export type MgmtNetworkEnv = {
+  PXE_MGMT_CIDR?: string
+  PXE_MGMT_GATEWAY?: string
+  PXE_MGMT_DNS?: string
+  PXE_DYNAMIC_RANGE?: string
+  PXE_SERVER_IP?: string
+}
+
+/**
+ * Bangun parameter subnet management dari nilai env (fungsi murni; pembacaan
+ * `process.env` ada di src/lib/server/net-config.ts). Variabel yang kosong
+ * memakai `base`. Bila `PXE_MGMT_CIDR` diubah tanpa gateway/DNS/range/PXE
+ * server, nilai turunan wajib diisi juga — kombinasi tidak konsisten
+ * melempar Error dengan pesan yang menyebut variabelnya.
+ *
+ * - `PXE_DYNAMIC_RANGE`: "a.b.c.d-a.b.c.e" (atau dipisah koma)
+ * - `PXE_MGMT_DNS`: daftar IPv4 dipisah koma (default: gateway bila
+ *   `PXE_MGMT_GATEWAY` diisi, selain itu default `base`)
+ */
+export function mgmtNetworkFromEnv(
+  env: MgmtNetworkEnv,
+  base: MgmtNetwork = MGMT_NETWORK,
+): MgmtNetwork {
+  const val = (k: keyof MgmtNetworkEnv) => env[k]?.trim() || undefined
+  const fail = (msg: string): never => {
+    throw new Error(`Konfigurasi jaringan management tidak valid: ${msg}`)
+  }
+
+  let cidr = base.cidr
+  const rawCidr = val("PXE_MGMT_CIDR")
+  if (rawCidr) {
+    if (!isCidr(rawCidr)) fail(`PXE_MGMT_CIDR "${rawCidr}" bukan CIDR IPv4`)
+    const { network, prefix } = parseCidr(rawCidr)
+    if (prefix < 8 || prefix > 30)
+      fail(`PXE_MGMT_CIDR prefix /${prefix} harus 8–30`)
+    cidr = `${intToIp(network)}/${prefix}`
+  }
+
+  const gateway = val("PXE_MGMT_GATEWAY") ?? base.gateway
+  const pxeServer = val("PXE_SERVER_IP") ?? base.pxeServer
+  const rawDns = val("PXE_MGMT_DNS")
+  const dns = rawDns
+    ? rawDns
+        .split(",")
+        .map((d) => d.trim())
+        .filter(Boolean)
+    : val("PXE_MGMT_GATEWAY")
+      ? [gateway]
+      : [...base.dns]
+  let dynamicRange = base.dynamicRange
+  const rawRange = val("PXE_DYNAMIC_RANGE")
+  if (rawRange) {
+    const parts = rawRange.split(/[-,]/).map((x) => x.trim())
+    if (parts.length !== 2 || !parts.every(isIpv4))
+      fail(`PXE_DYNAMIC_RANGE "${rawRange}" harus berbentuk awal-akhir`)
+    dynamicRange = [parts[0], parts[1]]
+  }
+
+  if (!isHostInSubnet(gateway, cidr))
+    fail(`gateway ${gateway} (PXE_MGMT_GATEWAY) di luar subnet ${cidr}`)
+  if (!isHostInSubnet(pxeServer, cidr))
+    fail(`PXE server ${pxeServer} (PXE_SERVER_IP) di luar subnet ${cidr}`)
+  if (dns.length === 0 || dns.length > 4 || !dns.every(isIpv4))
+    fail(`PXE_MGMT_DNS harus 1–4 IPv4`)
+  const [lo, hi] = dynamicRange
+  if (!isHostInSubnet(lo, cidr) || !isHostInSubnet(hi, cidr))
+    fail(`range dinamis ${lo}–${hi} (PXE_DYNAMIC_RANGE) di luar subnet ${cidr}`)
+  if (ipToInt(lo) > ipToInt(hi))
+    fail(`range dinamis ${lo}–${hi} (PXE_DYNAMIC_RANGE) terbalik`)
+
+  return { cidr, gateway, dns, pxeServer, dynamicRange }
 }
