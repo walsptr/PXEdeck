@@ -214,6 +214,16 @@ test_m6_deploy_admin_no_leak() {
   assert_match "$(cat "$PXE_RUNS_DIR/deploy-dashboard.txt")" "api/settings tanpa sesi -> 401"
   # Cookie jar sementara tidak tertinggal.
   assert_eq "$(ls -A "$TMPDIR")" ""
+  assert_match "$(cat "$PXE_RUNS_DIR/deploy-dashboard.txt")" "POST /api/auth/login \(admin pxeadmin\) -> 204"
+  assert_not_contains "$(cat "$PXE_RUNS_DIR/deploy-dashboard.txt")" "FAKESESSIONVALUE" "cookie sesi tercatat"
+  # Login 200 (bukan 204) atau 204 tanpa cookie pxe_session -> deploy gagal (AC-6.5).
+  FAKE_CURL_LOGIN_CODE=200 run_infra deploy-dashboard.sh
+  assert_ne "$RC" 0 "login 200 diterima"; assert_contains "$OUT" "HTTP 200, wajib 204"
+  FAKE_CURL_LOGIN_CODE=401 run_infra deploy-dashboard.sh
+  assert_ne "$RC" 0 "login 401 diterima"
+  FAKE_CURL_LOGIN_COOKIE=0 run_infra deploy-dashboard.sh
+  assert_ne "$RC" 0 "login 204 tanpa cookie diterima"
+  assert_eq "$(ls -A "$TMPDIR")" "" "cookie jar tertinggal setelah login gagal"
   # Mode file password != 0600 -> ditolak sebelum hash.
   chmod 644 "$pf"; : > "$FAKE_LOG"
   run_infra deploy-dashboard.sh

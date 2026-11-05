@@ -128,7 +128,8 @@ done
 [[ "$code" == 200 ]] || die "GET http://$SERVER_IP/login tidak 200 (aktual $code)"
 noauth="$(curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://$SERVER_IP/api/settings" 2>/dev/null)" || noauth=000
 jar="$stage/session.jar"
-login_code="$(admin_login "$admin_pass" "$jar")" || die "login admin gagal (HTTP $login_code) — hash admin tidak diterima dashboard? (lihat $out)"
+# Login sukses = 204 + Set-Cookie pxe_session (AC-6.5); status lain / tanpa cookie = gagal.
+login_code="$(admin_login "$admin_pass" "$jar")" || { rm -f "$jar"; die "login admin gagal (HTTP $login_code, wajib 204 + cookie pxe_session) — hash admin tidak diterima dashboard? (lihat $out)"; }
 body="$(curl -fsS --max-time 5 -b "$jar" "http://$SERVER_IP/api/settings" 2>/dev/null)" || body=""
 rm -f "$jar"
 {

@@ -221,7 +221,7 @@ admin_hash() {
 
 # admin_login <passfile> <cookie-jar>: POST /api/auth/login lewat nginx (10.99.0.2). Body JSON
 # disusun dengan printf builtin + stdin curl (--data-binary @-): password tidak pernah di argv.
-# Cetak kode HTTP; exit 0 hanya bila 200.
+# Cetak kode HTTP; exit 0 hanya bila 204 (AC-6.5) DAN cookie jar memuat `pxe_session`.
 admin_login() {
   local f="$1" jar="$2" code
   (umask 077 && : > "$jar")
@@ -230,5 +230,5 @@ admin_login() {
       -H 'Content-Type: application/json' -H "Origin: http://$SERVER_IP" -H 'Sec-Fetch-Site: same-origin' \
       --data-binary @- "http://$SERVER_IP/api/auth/login" 2>/dev/null)" || true
   printf '%s\n' "${code:-000}"
-  [[ "$code" == 200 ]]
+  [[ "$code" == 204 ]] && grep -qE $'(^|\t)pxe_session\t[^\t]+$' "$jar"
 }
