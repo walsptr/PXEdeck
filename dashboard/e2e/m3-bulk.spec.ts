@@ -6,6 +6,14 @@ import { expect, test, type Page, type Request } from "@playwright/test"
 
 import { DUMMY_PASSWORD } from "../src/test/fixtures"
 import { gotoHosts, ORANGE, rowByMac, SHOTS, waitForAnimations } from "./helpers"
+import { ensureAdminKey, readyLikeSeed } from "./support/seed-api"
+
+// M4: credentials & key host terpasang tidak lagi dari seed (SR-2-1) → disiapkan lewat API untuk
+// host yang di-install di file ini (nilai seperti seed M2/M3). Media image tersedia lewat
+// PXE_MEDIA_ROOT palsu (playwright.config.ts) agar install tidak ditolak "media tidak tersedia".
+test.beforeAll(async ({ request }) => {
+  await readyLikeSeed(request, ["1418774a2c02", "525400101011", "1418774a2c01"], await ensureAdminKey(request))
+})
 
 const BULK = ["b0:83:fe:5c:19:e2", "b0:83:fe:5c:19:e3", "a0:36:9f:0b:72:5d"]
 
@@ -189,7 +197,7 @@ test("AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password ac
 test("AC-3.15 Simpan & Install: dialog konfirmasi, Batal tanpa request, install → Booting", async ({ page }) => {
   const saves = trackSaves(page)
   await gotoHosts(page)
-  const row = rowByMac(page, "14:18:77:4a:2c:02") // ctrl-02, done, punya credentials
+  const row = rowByMac(page, "14:18:77:4a:2c:02") // ctrl-02, done, credentials dari beforeAll
   await expect(row.locator("[data-status]")).toHaveAttribute("data-status", "done")
   await page.getByRole("button", { name: "Aksi untuk ctrl-02" }).click()
   await page.getByRole("menuitem", { name: "Edit konfigurasi" }).click()

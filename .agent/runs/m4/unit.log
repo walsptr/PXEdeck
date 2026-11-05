@@ -1,0 +1,59 @@
+
+> dashboard@0.1.0 test
+> vitest run --coverage
+
+
+ RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard
+      Coverage enabled with v8
+
+(node:53753) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:53766) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:53769) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:53736) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:53747) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:53846) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+ ❯ |node| src/lib/server/installers/installers.test.ts (243 tests | 1 failed) 779ms
+   ❯ AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap (207)
+     × windows: hostname = "n1\r" 87ms
+(node:53910) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:53939) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:53963) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1\r"
+AssertionError: expected 'n1\n' to be 'n1\r' // Object.is equality
+
+- Expected
++ Received
+
+- n1
++ n1
++
+
+ ❯ src/lib/server/installers/installers.test.ts:420:43
+    418|           expect(g.structure(out)).toEqual(baseline)
+    419|           const back = readBack(g.name, out, field)
+    420|           if (back !== null) expect(back).toBe(value)
+       |                                           ^
+    421|         })
+    422|       }
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 29 passed (30)
+      Tests  1 failed | 761 passed (762)
+   Start at  18:50:42
+   Duration  5.69s (tests 40%, import 25%, environment 21%, setup 6%, worker 4%, transform 3%)
+
+exit=1

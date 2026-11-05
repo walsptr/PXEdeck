@@ -1,14 +1,14 @@
 // config-service langsung (DB di-reset, DEC-005): atomisitas G3-2, prepareNewKeys, toPublicConfig.
 import { describe, expect, it } from "vitest"
 
-import { useDb } from "@/test/db"
+import { withDb } from "@/test/db"
 import { SSH_ED25519 } from "@/test/fixtures"
 
 import { applyConfig, applyConfigPrepared, prepareNewKeys, toPublicConfig } from "./config-service"
 import { peekConfig } from "./db/repos/configs"
 import { getHost } from "./db/repos/hosts"
 
-useDb("demo")
+withDb("demo")
 
 describe("config-service", () => {
   it("toPublicConfig membuang passwordHash dan menambah hasPassword", () => {

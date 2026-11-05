@@ -16,7 +16,7 @@ vi.mock("next/server", () => ({ connection: vi.fn(async () => undefined) }))
 import { MGMT_NETWORK } from "@/lib/net"
 import { applyConfig } from "@/lib/server/config-service"
 import { peekConfig } from "@/lib/server/db/repos/configs"
-import { dbSnapshot, makeMediaRoot, tmpDir, useDb } from "@/test/db"
+import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { DUMMY_PASSWORD, SSH_ED25519 } from "@/test/fixtures"
 import { ctx, jsonReq } from "@/test/route"
 
@@ -32,7 +32,7 @@ import { DELETE, GET as oneGET, PATCH } from "./hosts/[id]/route"
 import { GET as sshKeys } from "./ssh-keys/route"
 
 const MEDIA = makeMediaRoot(tmpDir("media"))
-useDb("demo", { PXE_MEDIA_ROOT: MEDIA })
+withDb("demo", { PXE_MEDIA_ROOT: MEDIA })
 beforeEach(async () => {
   // NODE01 siap install (credentials eksplisit + key) — pengganti credentials seed M2/M3.
   const r = await applyConfig(["525400101011"], {

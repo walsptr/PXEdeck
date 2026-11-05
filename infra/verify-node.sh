@@ -1,0 +1,1 @@
+../dashboard/e2e-kvm/verify-node.sh

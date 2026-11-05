@@ -13,7 +13,7 @@ import { peekConfig } from "@/lib/server/db/repos/configs"
 import { updateHost } from "@/lib/server/db/repos/hosts"
 import { getActiveJob, listJobsForHost } from "@/lib/server/db/repos/jobs"
 import { createSshKey } from "@/lib/server/library-service"
-import { dbSnapshot, makeMediaRoot, tmpDir, useDb } from "@/test/db"
+import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ECDSA, SSH_ED25519, SSH_ED25519_B, SSH_RSA } from "@/test/fixtures"
 import { ctx, jsonReq } from "@/test/route"
 
@@ -26,7 +26,7 @@ import { GET as getHost, PATCH } from "./hosts/[id]/route"
 import { GET as sshKeys } from "./ssh-keys/route"
 
 const MEDIA = makeMediaRoot(tmpDir("media"))
-useDb("demo", { PXE_MEDIA_ROOT: MEDIA })
+withDb("demo", { PXE_MEDIA_ROOT: MEDIA })
 
 /** Key library "Admin workstation" (pengganti key seed `key-admin-wals` M2/M3). */
 let ADMIN_KEY = ""

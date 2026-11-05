@@ -2,7 +2,8 @@
 // env PXE_MGMT_* = subnet lab):
 //  - CR-3-6  dialog password sekali tampil tidak bisa ditutup sebelum unduh/konfirmasi.
 //  - CR-3-13 Sheet: error state + "Coba lagi" bila config host / parameter jaringan gagal dimuat.
-//  - CR-3-2  form & empty state memakai nilai dari GET /api/network (bukan konstanta lab).
+//  - CR-3-2  form & empty state memakai nilai dari server (bukan konstanta lab). M4-T8: klien kini
+//            membaca GET /api/settings (superset /api/network, AC-4.6); route test ikut pindah.
 //  - CR-2-4  pencarian MAC gaya Cisco; CR-2-3 host tanpa hostname di akhir saat sort.
 //  - DR-2-1/2-2 kontrol 36px; DR-3-2 radius Sheet 12px; DR-3-3 tombol kecil Sheet.
 import { readFileSync } from "node:fs"
@@ -144,8 +145,8 @@ test.describe("CR-3-13 Sheet error state + Coba lagi", () => {
     await expect(sheet.locator("#net-ip")).toHaveValue("10.10.10.11")
   })
 
-  test("GET /api/network gagal → alert 'Gagal memuat parameter jaringan'; Coba lagi → form dengan default subnet", async ({ page }) => {
-    await page.route("**/api/network", (r) => r.fulfill({ status: 500, json: { error: "PXE_MGMT_GATEWAY rusak (uji)" } }))
+  test("GET /api/settings gagal → alert 'Gagal memuat parameter jaringan'; Coba lagi → form dengan default subnet", async ({ page }) => {
+    await page.route("**/api/settings", (r) => r.fulfill({ status: 500, json: { error: "PXE_MGMT_GATEWAY rusak (uji)" } }))
     await gotoHosts(page)
     const bar = await select(page, BULK)
     await bar.getByRole("button", { name: "Set IP" }).click()
@@ -157,7 +158,7 @@ test.describe("CR-3-13 Sheet error state + Coba lagi", () => {
     await expect(sheet.getByRole("table", { name: "Preview IP baru" })).toHaveCount(0)
     await page.screenshot({ path: SHOTS(3, "iter2-sheet-network-error") })
 
-    await page.unroute("**/api/network")
+    await page.unroute("**/api/settings")
     await alert.getByRole("button", { name: "Coba lagi" }).click()
     await expect(sheet.getByRole("tab", { name: /^Network/ })).toHaveAttribute("aria-selected", "true")
     await expect(sheet.locator("#net-start")).toHaveValue("10.10.10.11")
@@ -165,7 +166,7 @@ test.describe("CR-3-13 Sheet error state + Coba lagi", () => {
   })
 })
 
-test.describe("CR-3-2 form & tampilan memakai GET /api/network", () => {
+test.describe("CR-3-2 form & tampilan memakai parameter jaringan dari server (GET /api/settings)", () => {
   const CUSTOM = {
     cidr: "192.168.50.0/24",
     prefix: 24,
@@ -173,6 +174,12 @@ test.describe("CR-3-2 form & tampilan memakai GET /api/network", () => {
     dns: ["192.168.50.53"],
     dynamicRange: ["192.168.50.100", "192.168.50.200"],
     pxeServer: "192.168.50.2",
+    interface: "eno9",
+    baseUrl: "http://192.168.50.2",
+    mediaUrl: "http://192.168.50.2/media",
+    tftpRoot: "/srv/pxe/tftp",
+    tokenTtlMin: 360,
+    unknownHostAction: "local",
   }
 
   test("server lab: /api/network = env PXE_MGMT_* lab; sidebar & empty state memakai nilainya", async ({ page }) => {
@@ -193,9 +200,9 @@ test.describe("CR-3-2 form & tampilan memakai GET /api/network", () => {
     await expect(page.locator('[data-slot="sidebar"]').getByText("10.10.10.1", { exact: true })).toBeVisible()
   })
 
-  test("respons /api/network lain → default range, gateway, DNS, preview IP, validasi, deskripsi, sidebar ikut", async ({ page }) => {
+  test("respons /api/settings lain → default range, gateway, DNS, preview IP, validasi, deskripsi, sidebar ikut", async ({ page }) => {
     const seen: string[] = []
-    await page.route("**/api/network", (r) => {
+    await page.route("**/api/settings", (r) => {
       seen.push(r.request().url())
       return r.fulfill({ json: CUSTOM, headers: { "cache-control": "no-store" } })
     })
@@ -213,7 +220,7 @@ test.describe("CR-3-2 form & tampilan memakai GET /api/network", () => {
     const ipRows = sheet.getByRole("table", { name: "Preview IP baru" }).locator("tbody tr")
     await expect(ipRows.locator("td:nth-child(3)")).toHaveText(["192.168.50.11", "192.168.50.12", "192.168.50.13"])
     await expect(sheet.getByRole("table", { name: "Preview IP baru" }).locator('tbody tr[data-state="ok"]')).toHaveCount(3)
-    // IP lab kini di luar subnet aktif (validasi klien ikut /api/network).
+    // IP lab kini di luar subnet aktif (validasi klien ikut parameter dari server).
     await sheet.getByRole("radio", { name: "IP awal + increment" }).click()
     await sheet.locator("#net-start").fill("10.10.10.11")
     await expect(ipRows.first()).toContainText("IP awal di luar subnet 192.168.50.0/24")
@@ -222,7 +229,7 @@ test.describe("CR-3-2 form & tampilan memakai GET /api/network", () => {
     await page.keyboard.press("Escape")
     await clearSelection(page)
 
-    // Single host: deskripsi subnet + range dinamis + placeholder dari /api/network.
+    // Single host: deskripsi subnet + range dinamis + placeholder dari parameter server.
     await page.getByRole("button", { name: "Aksi untuk node01" }).click()
     await page.getByRole("menuitem", { name: "Edit konfigurasi" }).click()
     const single = page.getByRole("dialog", { name: /Konfigurasi node01/ })

@@ -1,0 +1,69 @@
+# Coverage kode baru/berubah M4 (git diff --diff-filter=AM main...HEAD -- dashboard/src, non-test)
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/app/(dashboard)/settings/page.tsx
+100.00% lines 100.00% branches  dashboard/src/app/api/credentials/import/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/hosts/[id]/config/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/hosts/[id]/install/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/hosts/[id]/reboot/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/hosts/[id]/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/hosts/bulk/install/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/hosts/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/os-images/[id]/route.ts
+100.00% lines  83.33% branches  dashboard/src/app/api/os-images/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/server-status/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/settings/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/api/ssh-keys/[id]/route.ts
+100.00% lines  83.33% branches  dashboard/src/app/api/ssh-keys/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/boot/[name]/[token]/[file]/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/boot/[name]/[token]/status/route.ts
+100.00% lines 100.00% branches  dashboard/src/app/boot/[name]/route.ts
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/app-sidebar.tsx
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/host-config/config-sheet.tsx
+100.00% lines  99.46% branches  dashboard/src/components/host-config/form-state.ts
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/host-config/tab-os.tsx
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/hosts/host-actions.tsx
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/hosts/hosts-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/server-status.tsx
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/settings/settings-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/top-bar.tsx
+   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/ui/sonner.tsx
+100.00% lines 100.00% branches  dashboard/src/hooks/use-network-config.ts
+ 97.14% lines  89.47% branches  dashboard/src/hooks/use-now.ts
+100.00% lines 100.00% branches  dashboard/src/hooks/use-os-images.ts
+100.00% lines 100.00% branches  dashboard/src/hooks/use-server-status.ts
+100.00% lines 100.00% branches  dashboard/src/hooks/use-settings.ts
+100.00% lines  95.45% branches  dashboard/src/lib/net.ts
+100.00% lines 100.00% branches  dashboard/src/lib/os-images.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/boot-http.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/boot-script.ts
+ 97.88% lines  93.71% branches  dashboard/src/lib/server/config-service.ts
+ 95.74% lines  96.29% branches  dashboard/src/lib/server/db/index.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/db/migrations.ts
+100.00% lines  90.24% branches  dashboard/src/lib/server/db/repos/configs.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/db/repos/hosts.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/db/repos/jobs.ts
+100.00% lines  89.47% branches  dashboard/src/lib/server/db/repos/os-images.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/db/repos/ssh-keys.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/db/reset.ts
+100.00% lines  95.00% branches  dashboard/src/lib/server/db/seed.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/discovery.ts
+100.00% lines  98.00% branches  dashboard/src/lib/server/http.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/install-service.ts
+100.00% lines  98.95% branches  dashboard/src/lib/server/installers/context.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/installers/debian.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/installers/firstboot.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/installers/index.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/installers/lines.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/installers/rocky.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/installers/shell.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/installers/ubuntu.ts
+100.00% lines  90.90% branches  dashboard/src/lib/server/installers/windows.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/installers/xml.ts
+100.00% lines  97.43% branches  dashboard/src/lib/server/leases.ts
+ 93.33% lines  90.47% branches  dashboard/src/lib/server/library-service.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/net-config.ts
+ 95.94% lines  92.00% branches  dashboard/src/lib/server/provisioning.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/request-ip.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/server-status.ts
+100.00% lines  98.86% branches  dashboard/src/lib/server/settings.ts
+100.00% lines 100.00% branches  dashboard/src/lib/server/tokens.ts
+TOTAL M4 (file dalam include coverage): lines 99.08% (1502/1516), branches 96.82% (1309/1352)

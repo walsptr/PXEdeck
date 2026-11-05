@@ -11,13 +11,13 @@ import { resetDb } from "@/lib/server/db/reset"
 import { getHost } from "@/lib/server/db/repos/hosts"
 import { PROVISION_STATUSES } from "@/lib/types"
 import { ctx, jsonReq } from "@/test/route"
-import { dbSnapshot, useDb } from "@/test/db"
+import { dbSnapshot, withDb } from "@/test/db"
 
 import { GET as listGET } from "./route"
 import { DELETE, GET as oneGET } from "./[id]/route"
 import { POST as reboot } from "./[id]/reboot/route"
 
-useDb("demo")
+withDb("demo")
 
 const iso = z.string().refine((s) => !Number.isNaN(Date.parse(s)) && new Date(s).toISOString() === s)
 const ipOrNull = z.string().regex(/^\d+\.\d+\.\d+\.\d+$/).nullable()

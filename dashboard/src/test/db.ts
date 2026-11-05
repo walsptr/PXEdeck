@@ -2,10 +2,9 @@
 // Vitest memakai PXE_DB_PATH kosong → `:memory:` per worker; `resetDb` mengosongkan semua tabel
 // lalu menerapkan seed, sehingga setiap test mulai dari keadaan yang sama.
 import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from "node:fs"
-import os from "node:os"
 import path from "node:path"
 
-import { afterAll, beforeEach } from "vitest"
+import { afterAll, beforeEach, onTestFinished } from "vitest"
 
 import { getDb } from "@/lib/server/db"
 import { resetDb } from "@/lib/server/db/reset"
@@ -15,17 +14,32 @@ import type { SeedName } from "@/lib/server/settings"
 import { isolateEnv } from "./env"
 
 /** isolateEnv + resetDb(seed) sebelum tiap test. */
-export function useDb(seed: SeedName = "demo", env: Record<string, string> = {}) {
+export function withDb(seed: SeedName = "demo", env: Record<string, string> = {}) {
   isolateEnv(env)
   beforeEach(() => {
     resetDb(seed)
   })
 }
 
-/** Direktori sementara (dihapus di afterAll file test). */
+/**
+ * Root direktori sementara test: DI DALAM project (`dashboard/.test-tmp`, gitignored) — batas keras
+ * CLAUDE.md melarang menghapus file di luar direktori project.
+ */
+export const TEST_TMP_ROOT = path.resolve(__dirname, "../../.test-tmp")
+
+/**
+ * Direktori sementara. Dipanggil di level modul/describe → dihapus di afterAll file; dipanggil di
+ * dalam test → dihapus saat test selesai.
+ */
 export function tmpDir(prefix: string): string {
-  const d = mkdtempSync(path.join(os.tmpdir(), `pxe-test-${prefix}-`))
-  afterAll(() => rmSync(d, { recursive: true, force: true }))
+  mkdirSync(TEST_TMP_ROOT, { recursive: true })
+  const d = mkdtempSync(path.join(TEST_TMP_ROOT, `${prefix}-`))
+  const cleanup = () => rmSync(d, { recursive: true, force: true })
+  try {
+    onTestFinished(cleanup)
+  } catch {
+    afterAll(cleanup)
+  }
   return d
 }
 

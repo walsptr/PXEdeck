@@ -1,0 +1,41 @@
+infra/test/run.sh — 2026-11-05T11:47:50Z
+  ok   bash -n semua script infra
+  ok   set -euo pipefail di setiap script
+  ok   PATH test hanya berisi virsh/ssh palsu, tanpa sudo
+  ok   XML pxe-test tanpa forward/dhcp, dns off; pxe-test-nat NAT
+  ok   net-up dry-run: rencana define/start, tanpa mutasi
+  ok   net-up dua kali idempoten (virsh palsu ber-state)
+  ok   assert_name / assert_path_in_vms / assert_mac
+  ok   node.sh menolak nama terlindungi tanpa perintah virsh
+  ok   operasi disk VM selalu didahului assert_path_in_vms
+  ok   node.sh create dry-run UEFI/BIOS sesuai spesifikasi
+  ok   node.sh create/reset/destroy (palsu) idempoten
+  ok   cleanup.sh hanya resource run + snapshot
+  ok   cleanup.sh --server
+  ok   cleanup.sh dry-run tanpa mutasi
+    ASSERT: cleanup.sh 'default' harus ditolak (exit ≠ 0) expected not '0'
+    ASSERT: cleanup.sh 'default' memanggil virsh harus kosong, berisi: virsh -c qemu:///system list --all
+virsh -c qemu:///system net-list --all
+virsh -c qemu:///system list --all --name
+virsh -c qemu:///system list --all
+virsh -c qemu:///system net-list --all
+    ASSERT: cleanup.sh 'int' harus ditolak (exit ≠ 0) expected not '0'
+    ASSERT: cleanup.sh 'int' memanggil virsh harus kosong, berisi: virsh -c qemu:///system list --all
+virsh -c qemu:///system net-list --all
+virsh -c qemu:///system list --all --name
+virsh -c qemu:///system list --all
+virsh -c qemu:///system net-list --all
+  FAIL cleanup.sh menolak nama terlindungi (exit≠0, tanpa virsh)
+  ok   cleanup.sh opsi tak dikenal
+  ok   server-down dry-run & palsu
+  ok   net-down hanya pxe-test*
+  ok   kvm-run.sh m4 dry-run end-to-end (semua nama pxe-test-)
+  ok   kvm-run.sh argumen invalid ditolak tanpa mutasi
+  ok   kvm-run.sh node sisa run → batal tanpa menyentuh
+  ok   deploy-dashboard dry-run + dashboard.env tanpa secret
+  ok   dnsmasq.conf terikat pxe0 (bind-interfaces)
+  ok   tanpa sudo, ssh hanya dengan key, tanpa ~/.ssh
+  ok   verify-node.sh: symlink, gagal cepat tanpa env, cek AC-4.31
+hasil: 24 lulus, 1 gagal
+  gagal: cleanup.sh menolak nama terlindungi (exit≠0, tanpa virsh)
+exit=1

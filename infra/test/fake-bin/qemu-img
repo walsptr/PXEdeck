@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# qemu-img PALSU: catat; "create" membuat file kosong pada path (hanya di sandbox test).
+set -uo pipefail
+echo "qemu-img $*" >> "$FAKE_LOG"
+if [[ "${1:-}" == create ]]; then
+  for a in "$@"; do [[ "$a" == *.qcow2 ]] && { : > "$a"; break; }; done
+fi
+exit 0

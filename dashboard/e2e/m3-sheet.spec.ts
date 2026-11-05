@@ -2,10 +2,18 @@
 // CR-2-9: server sendiri (project "m3-sheet"), store segar dari seed.
 import { expect, test } from "@playwright/test"
 
-import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ED25519, SSH_RSA } from "../src/test/fixtures"
+import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ED25519, SSH_RSA, SSH_RSA_ADMIN } from "../src/test/fixtures"
 import { gotoHosts, rowByMac, SHOTS } from "./helpers"
+import { ensureAdminKey, readyLikeSeed } from "./support/seed-api"
 
-const ADMIN_FP = "SHA256:AqJ29VcE4jU7CEjFJVHo3nvu1EGE5EXwVAPnqIAwTmc"
+// M4: key "Admin workstation" & credentials `ubuntu` tidak lagi dari seed (SR-2-1) → disiapkan
+// lewat API sebelum test (nilai sama seperti seed M2/M3, key = fixture dummy).
+const ADMIN_FP = SSH_RSA_ADMIN.fingerprint
+let ADMIN_KEY_ID = ""
+test.beforeAll(async ({ request }) => {
+  ADMIN_KEY_ID = await ensureAdminKey(request)
+  await readyLikeSeed(request, ["9440c96e01aa", "525400101011"], ADMIN_KEY_ID)
+})
 
 test("AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toast + tabel ter-update", async ({ page }) => {
   await gotoHosts(page)
@@ -22,8 +30,9 @@ test("AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toas
   // ---- OS ----
   const images = sheet.locator('button[role="radio"][id^="os-"]')
   await expect(images).toHaveCount(5)
-  await expect(sheet.locator('[id="os-rocky-9.4"]')).toHaveAttribute("aria-checked", "true")
-  for (const name of ["Ubuntu Server 24.04.5 LTS", "Ubuntu Server 22.04.5 LTS", "Debian 12 (bookworm)", "Rocky Linux 9.4", "Windows Server 2022"])
+  // M4: id OS kanonik (rocky-9.4 → rocky-9, plan §2.2).
+  await expect(sheet.locator('[id="os-rocky-9"]')).toHaveAttribute("aria-checked", "true")
+  for (const name of ["Ubuntu Server 24.04.5 LTS", "Ubuntu Server 22.04.5 LTS", "Debian 12 (bookworm)", "Rocky Linux 9", "Windows Server 2022"])
     await expect(sheet).toContainText(name)
   await expect(sheet.getByLabel("Disk target")).toHaveAttribute("placeholder", "otomatis — disk terbesar")
   for (const p of ["Auto", "LVM", "Custom"]) await expect(sheet.getByRole("radio", { name: p, exact: true })).toBeVisible()
@@ -35,7 +44,7 @@ test("AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toas
   await expect(sheet.locator("#os-tz")).toHaveText("Asia/Jakarta")
   await expect(sheet.locator("#os-locale")).toHaveText("en_US.UTF-8")
   await expect(sheet).toContainText("Yang akan terjadi saat install")
-  await expect(sheet).toContainText("Host boot dari jaringan dan menjalankan installer Rocky Linux 9.4 via kickstart")
+  await expect(sheet).toContainText("Host boot dari jaringan dan menjalankan installer Rocky Linux 9 via kickstart")
   await page.screenshot({ path: SHOTS(3, "ac-3.12-tab-os") })
   // OS tidak ingin diubah: batalkan perubahan bagian OS.
   await sheet.getByRole("button", { name: "Batalkan perubahan OS" }).click()
@@ -170,7 +179,7 @@ test("AC-3.13 validasi UI per tab menonaktifkan simpan; 422 server tampil di tab
   await expect(save).toBeDisabled() // tidak ada perubahan
 
   // 422 dari server: key baru yang sudah ada di library (UI tidak mengecek duplikat fingerprint).
-  const admin = (await (await page.request.get("/api/ssh-keys")).json()).find((k: { id: string }) => k.id === "key-admin-wals")
+  const admin = (await (await page.request.get("/api/ssh-keys")).json()).find((k: { id: string }) => k.id === ADMIN_KEY_ID)
   await sheet.getByRole("tab", { name: /^SSH Keys/ }).click()
   await sheet.getByRole("button", { name: "Tempel / unggah key baru" }).click()
   await sheet.locator("#key-0").fill(admin.publicKey)

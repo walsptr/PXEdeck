@@ -32,3 +32,6 @@ test-results/
 
 # worktree agent
 .agent/wt-*/
+
+# sandbox test infra (M4-T12)
+.agent/tmp/

@@ -27,6 +27,17 @@ export const SSH_ECDSA = {
   comment: "fixture-ecdsa@test",
 }
 
+/**
+ * M4: pengganti key library seed `key-admin-wals` ("Admin workstation", ssh-rsa) — seed M4 tidak
+ * lagi membawa key (SR-2-1). E2E menambahkannya lewat API sebagai prasyarat. Public key dummy
+ * (`ssh-keygen -t rsa -b 2048`, private key langsung dihapus).
+ */
+export const SSH_RSA_ADMIN = {
+  publicKey: "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDilSRp1AWa97WqC/DoNQMd0sDRWz8tWQh1ZugsNAierPzag+ZZ3NOPENjtxm/PlUPsvaxJr9YGTgo6fqdZZRrY/P/H+KQQa9t9jHD509sxUmCiu3hyKtT9jU/oKoDDSO420CDLbRjpdstWUeJdIAJ6QBwBDE9K6Zq+DoUVsyg61WoX2ifSEspX+OSzfcInyqBhCfGLlj3UuKFCle+I6FRC44S4eUv+2savkLXiA5Ud6rpvo0pTD6yEVqVUbqVoZnpUvNMZZrYeMLo9CKa3yNXEu7Aiw9hgni2pi5VyXyTFIwGIM8wHhUUk7x5A29faTktM5iv/y2FaJWjYDAv7/hg1 fixture-rsa-admin@test",
+  fingerprint: "SHA256:NxK8TQbbExXCQShJPtJR1PDrdppzMOYRxP2DYnOUGYY",
+  comment: "fixture-rsa-admin@test",
+}
+
 /** Teks berbentuk private key (header saja, tanpa materi key asli). */
 export const FAKE_PRIVATE_KEY =
   "-----BEGIN OPENSSH PRIVATE KEY-----\nb3BlbnNzaC1rZXktdjEAAAAA\n-----END OPENSSH PRIVATE KEY-----"
