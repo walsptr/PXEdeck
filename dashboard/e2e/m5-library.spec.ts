@@ -138,6 +138,8 @@ test("DR-5-1 OS Images 375×812: kartu per image ≤ 200 px, path dipenggal di '
   await page.goto("/os-images")
   const rows = page.getByTestId("os-image-row")
   await expect(rows.first()).toBeVisible()
+  // CR-5-31: ukur setelah font (font-display: swap) termuat, pola e2e/helpers.ts gotoHosts.
+  await page.evaluate(() => document.fonts.ready)
   const n = await rows.count()
   expect(n).toBeGreaterThanOrEqual(5)
   const heights: number[] = []
@@ -180,6 +182,8 @@ test("DR-5-1 OS Images 1440×900: path Sumber tidak terpotong per karakter, tabe
   await page.goto("/os-images")
   const rows = page.getByTestId("os-image-row")
   await expect(rows.first()).toBeVisible()
+  // CR-5-31: ukur setelah font (font-display: swap) termuat, pola e2e/helpers.ts gotoHosts.
+  await page.evaluate(() => document.fonts.ready)
   for (let i = 0; i < (await rows.count()); i++)
     for (const { text, lines } of await sourceLineCounts(rows.nth(i)))
       expect(lines, `path "${text}" dipecah ${lines} baris`).toBeLessThanOrEqual(2)
@@ -379,6 +383,8 @@ test("DR-5-8 OS Images 375/414: ID 48 karakter + path panjang — ID, Dipakai, H
       await page.setViewportSize({ width, height })
       await page.goto("/os-images")
       for (const id of LONG_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toBeVisible()
+      // CR-5-31: ukur setelah font (font-display: swap) termuat, pola e2e/helpers.ts gotoHosts.
+      await page.evaluate(() => document.fonts.ready)
       const g = await rowGeometry(page)
       test.info().annotations.push({
         type: `dr-5-8-${width}`,
@@ -427,6 +433,8 @@ test("DR-5-9 OS Images 1280/1440: ID/nama/path panjang — tabel muat tanpa scro
       await page.setViewportSize({ width, height })
       await page.goto("/os-images")
       for (const id of LONG_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toBeVisible()
+      // CR-5-31: ukur setelah font (font-display: swap) termuat, pola e2e/helpers.ts gotoHosts.
+      await page.evaluate(() => document.fonts.ready)
       await expect(page.getByRole("columnheader", { name: "Dipakai" })).toBeVisible()
       const g = await rowGeometry(page)
       test.info().annotations.push({ type: `dr-5-9-${width}`, description: JSON.stringify({ scrollWidth: g.docScrollWidth, tableOverflow: g.tableOverflow, rowHeights: Object.fromEntries(g.rows.map((r) => [r.id, r.height])) }) })
@@ -472,6 +480,8 @@ test("DR-5-12 OS Images 1280/1440: ID 48 tanpa '-', nama ber-underscore/tanpa sp
       await page.setViewportSize({ width, height })
       await page.goto("/os-images")
       for (const id of STRESS_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toBeVisible()
+      // CR-5-31: ukur setelah font (font-display: swap) termuat, pola e2e/helpers.ts gotoHosts.
+      await page.evaluate(() => document.fonts.ready)
       await expect(page.getByRole("columnheader", { name: "Dipakai" })).toBeVisible()
       const g = await rowGeometry(page)
       const table = await page.getByTestId("os-images-table").evaluate((t) => Math.round(t.getBoundingClientRect().width))
@@ -523,6 +533,8 @@ test("DR-5-13 OS Images 375/414: nama tanpa spasi + segmen path tanpa titik peca
       await page.setViewportSize({ width, height })
       await page.goto("/os-images")
       for (const id of STRESS_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toBeVisible()
+      // CR-5-31: ukur setelah font (font-display: swap) termuat, pola e2e/helpers.ts gotoHosts.
+      await page.evaluate(() => document.fonts.ready)
       const g = await rowGeometry(page)
       const cont = await page.locator('[data-testid="os-images-page"] [data-slot="table-container"]').evaluate((c) => ({ scrollWidth: c.scrollWidth, clientWidth: c.clientWidth }))
       test.info().annotations.push({ type: `dr-5-13-${width}`, description: JSON.stringify({ container: cont, scrollWidth: g.docScrollWidth, cardHeights: Object.fromEntries(g.rows.map((r) => [r.id, r.height])) }) })

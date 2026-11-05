@@ -210,6 +210,10 @@ Mutasi cepat (backend-dev, test `m5-iter3` + `m5-iter2` + `m5-te-lifecycle-route
     prefiks `$6$`/`/boot/` lalu lolos di tahap berikutnya (contoh: `$6$salt ESC[0m salt$hash` →
     `$6$[REDACTED]salt$hash`), sehingga CR-5-18 akan regresi. Gabungan per karakter memenuhi syarat
     "secret yang terdeteksi di bentuk mana pun teredaksi di output" tanpa urutan antar-tahap.
+  - **Koreksi (test-engineer, CR-5-30):** gabungan per karakter hanya menjamin bahwa secret yang
+    *terdeteksi* di `plain` atau `bare` teredaksi. Itu **tidak** berarti semua sisa secret tertutup.
+    Docstring `job-events.ts:106` ("tidak lagi meloloskan sisa secret") terlalu luas; kode dibekukan,
+    jadi docstring dibiarkan dan sisa risiko yang akurat dicatat di "Sisa risiko (diketahui)" di bawah.
   - `redactSecrets` tidak berubah perilakunya; hanya placeholder kini disuntikkan (`redactWith`).
 - **SR-5-17 / CR-5-23** (`redact.ts` `redactOrphanKeyTail`/`isKeyBodyLine`): baris pendek (< 16)
   berbentuk kata kini ikut ditelan bila baris non-kosong di atasnya adalah baris isi key ≥ 16
@@ -244,6 +248,8 @@ lulus tanpa diubah.
 Semua kasus SR-5-16 (1)–(4) + `\x9b`, CR-5-24 (dua bentuk), CR-5-18 (`token=`, `$6$`, `BEGIN … ESC[0m
 PRIVATE KEY`, OSC 8), SR-5-12 (a/b/c), SR-5-17 (`AQID`/`BAUG`/`AQIDBAUG`/`Abcdef`/`AAAA`, dengan dan
 tanpa baris kosong), CR-5-19 (`Done`/`OK`/`Selesai`) menghasilkan output tanpa secret. AC-5.13 tetap.
+Catatan (CR-5-30): "output tanpa secret" berlaku untuk kasus yang diprobe di atas, bukan untuk semua
+kombinasi escape. Lihat sisa risiko di bawah.
 SR-5-11: 16 KB `cleanEventMessage` terbaik dari 5 = ±1 ms. Folder probe sementara
 (`dashboard/src/zz-probe-tmp/`) dihapus sebelum commit.
 
@@ -251,8 +257,23 @@ SR-5-11: 16 KB `cleanEventMessage` terbaik dari 5 = ±1 ms. Folder probe sementa
 - Over-redaksi: baris pendek berbentuk kata tepat di atas footer yatim ikut tertelan bila di atasnya
   ada baris base64 ≥ 16 karakter (mis. log yang kebetulan memuat blob base64 lalu `Done` lalu footer
   END yatim). Ini lebih aman daripada sebaliknya.
-- Deteksi digabung dari dua salinan saja (`plain`, `bare`); karakter tak terlihat di luar Cf
-  (SR-5-18) tetap untuk M6.
+- Deteksi digabung dari dua salinan saja (`plain`, `bare`). Secret yang dirusak di **kedua** salinan
+  sekaligus tetap lolos (dicatat test-engineer, CR-5-30; ditunda ke M6):
+  - **CR-5-30:** `token=` yang dipecah sekuens ANSI utuh (merusak `plain`, mis. `ESC[0m` di tengah
+    token) **sekaligus** memuat escape yang menelan satu karakter (alternatif ke-4 `ANSI_RE`
+    `\x1b[ -/]*[0-~]`, merusak `bare`). Contoh: `token=<20>ESC[0mESC<23>` tersimpan sebagai 43
+    karakter token yang hanya disela `[0m`; dengan secret kedua di body, 42/43 karakter tersimpan dari
+    `bare`. Bentuk path dan hash aman (pola parsial `{8,43}`).
+  - **SR-5-19:** secret yang dirusak di kedua view lewat escape pemakan karakter awal (`ESC$6`,
+    `ESC[t`, `ESC/b`, `ESC-`) yang dipasangkan dengan SGR di tengah secret yang sama: badan hash
+    `$6$`, token `token=`/path, dan isi key tanpa footer bisa tersimpan.
+  - **SR-5-18 / SR-5-20:** karakter tak terlihat di luar kategori Cf (U+034F CGJ, U+FE0F/selector
+    variasi, U+3164, lone surrogate) dan karakter Private Use (`\p{Co}`, termasuk sentinel) tidak
+    dibuang, sehingga bila disisipkan di tengah token, token tidak dikenali dan lolos utuh.
+  Semua butuh payload escape yang disusun sengaja oleh pemegang token yang sudah memegang secret itu,
+  dan log hanya terlihat admin. Target M6 (bersama CR-5-21/SR-5-13): batasi alternatif ke-4 `ANSI_RE`,
+  `TOKEN_KV_RE` parsial `{8,43}`, salinan ketiga khusus SGR/OSC 8, `\p{Default_Ignorable_Code_Point}`,
+  `[\uD800-\uDFFF]`, dan `\p{Co}`.
 
 ## Iterasi 3 — frontend-dev (DR-5-8, DR-5-9)
 
@@ -342,3 +363,14 @@ Mutasi:
 2. Hanya `wrap-anywhere` → `wrap-break-word`: DR-5-12 merah (1037 px).
 3. Hanya `max-xl:min-w-0` dihapus: DR-5-13 **tetap hijau**. `wrap-anywhere` sudah cukup untuk
    mengecilkan min-content item flex. `min-w-0` adalah pengaman tambahan, bukan satu-satunya perbaikan.
+
+## Iterasi 3 — test-engineer (bukti final)
+
+### Perubahan test (CR-5-31, pengetatan, bukan pelemahan)
+| File | Perubahan | Alasan |
+|---|---|---|
+| `dashboard/e2e/m5-library.spec.ts` › DR-5-1 375, DR-5-1 1440, DR-5-8, DR-5-9, DR-5-12, DR-5-13 | + `await page.evaluate(() => document.fonts.ready)` setelah baris image terlihat dan sebelum pengukuran geometri (6 tempat; pola `e2e/helpers.ts` `gotoHosts`). | Font memakai `font-display: swap`; mengukur sebelum font termuat bisa mengubah jumlah baris (margin DR-5-1 tinggal 1 px). Tidak ada batas, asersi, atau data yang diubah. |
+
+### Dokumentasi (CR-5-30)
+Klaim di bagian "Iterasi 3 — backend-dev (lanjutan)" dikoreksi dan sisa risiko CR-5-30, SR-5-19,
+SR-5-18/SR-5-20 dicatat secara akurat (ditunda ke M6). Kode produk dan docstring tidak diubah.
