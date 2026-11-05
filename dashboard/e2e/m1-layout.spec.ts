@@ -102,7 +102,6 @@ test.describe("AC-1.9 navigasi", () => {
   const PLACEHOLDERS = [
     ["/os-images", "OS Images — dibangun di tahap 4", /Daftar image installer/],
     ["/ssh-keys", "SSH Keys — dibangun di tahap 4", /Library public key dengan fingerprint SHA256/],
-    ["/jobs", "Provisioning Jobs — dibangun di tahap 5", /Riwayat job per host/],
   ] as const
   for (const [url, title, desc] of PLACEHOLDERS) {
     test(`placeholder ${url} menampilkan judul + deskripsi`, async ({ page }) => {
@@ -113,6 +112,19 @@ test.describe("AC-1.9 navigasi", () => {
       const d = empty.locator('[data-slot="empty-description"]')
       await expect(d).toHaveText(desc)
       expect(((await d.textContent()) ?? "").trim().length).toBeGreaterThan(10)
+    })
+  }
+
+  // M5 (DR-4-7, AC-5.32): halaman pendukung yang sudah dibangun bukan lagi placeholder — konten
+  // nyata (penanda halaman terlihat), tanpa empty state placeholder dan tanpa "dibangun di tahap".
+  const BUILT_PAGES = [["/jobs", '[data-testid="jobs-page"]']] as const
+  for (const [url, marker] of BUILT_PAGES) {
+    test(`${url}: konten nyata (bukan placeholder)`, async ({ page }) => {
+      await page.goto(url)
+      const content = page.locator(CONTENT)
+      await expect(content.locator(marker)).toBeVisible()
+      await expect(content).not.toContainText("dibangun di tahap")
+      await expect(content.locator('[data-slot="empty-title"]').filter({ hasText: /dibangun/ })).toHaveCount(0)
     })
   }
 
