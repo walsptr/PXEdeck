@@ -80,7 +80,7 @@ export function computeServerStatus(
   now: Date = new Date(),
 ): ServerStatusResponse {
   const dhcp = dnsmasqState(s.dnsmasqPidfile, probe)
-  const missing = TFTP_FILES.filter((f) => !probe.exists(path.join(s.tftpRoot, f)))
+  const missing = TFTP_FILES.filter((f) => !probe.exists(path.join(/*turbopackIgnore: true*/ s.tftpRoot, f)))
   const tftp: ServiceState = dhcp !== "online" ? dhcp : missing.length ? "offline" : "online"
   const http: ServiceState = !probe.exists(s.mediaRoot)
     ? "unknown"

@@ -149,6 +149,9 @@ export function validateStaticIp(
   return null
 }
 
+/** Batas kandidat IP yang diperiksa `planIps` per panggilan (CR-3-15). */
+export const MAX_PLAN_CANDIDATES = 65_536
+
 export type IpPlanSpec =
   | { kind: "range"; start: string; end: string }
   | { kind: "increment"; start: string; step: number }
@@ -206,8 +209,10 @@ export function planIps(
   const rows: IpPlanRow[] = []
   const taken = new Set<string>()
   let cur = ipToInt(spec.start)
-  // Batas keras: total kandidat yang diperiksa tidak melebihi ukuran subnet.
-  let budget = broadcast - network + 1
+  // Batas keras: total kandidat yang diperiksa tidak melebihi ukuran subnet
+  // maupun MAX_PLAN_CANDIDATES (CR-3-15: subnet env besar, mis. /8, tidak
+  // boleh membuat loop jutaan langkah di browser/server).
+  let budget = Math.min(broadcast - network + 1, MAX_PLAN_CANDIDATES)
   for (const hostId of hostIds) {
     let assigned: IpPlanRow | null = null
     while (!assigned) {
