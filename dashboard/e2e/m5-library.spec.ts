@@ -162,6 +162,8 @@ test("DR-5-1 OS Images 375×812: kartu per image ≤ 200 px, path dipenggal di '
       return c.scrollWidth - c.clientWidth
     })(),
   }))
+  // Ukuran terukur dicatat di laporan (bukti DR-5-1 untuk design-reviewer).
+  test.info().annotations.push({ type: "dr-5-1-375", description: JSON.stringify({ cardHeights: heights, ...doc }) })
   expect(doc.scrollWidth, "scroll horizontal di level halaman").toBeLessThanOrEqual(375)
   expect(doc.tableOverflow, "scroll horizontal di dalam tabel").toBeLessThanOrEqual(0)
   // iter1: 4.032 px untuk 5 image. Batas: header + intro (~300 px) + 200 px per image.
