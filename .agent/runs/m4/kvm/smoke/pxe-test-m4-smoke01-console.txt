@@ -1,0 +1,31 @@
+[=3h
+>>Start PXE over IPv4.
+  Station IP address is 10.99.0.168
+
+  Server IP address is 10.99.0.2
+  NBP filename is snponly.efi
+  NBP filesize is 238080 Bytes
+ Downloading NBP file...
+
+  NBP file downloaded successfully.
+BdsDxe: loading Boot0003 "UEFI PXEv4 (MAC:525400990001)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990001,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+BdsDxe: starting Boot0003 "UEFI PXEv4 (MAC:525400990001)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990001,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+iPXE initialising devices...ok
+
+
+
+iPXE 1.21.1+git-20220113.fbbdc3926-0ubuntu2 -- Open Source Network Boot Firmware -- https://ipxe.org
+Features: DNS HTTP HTTPS iSCSI NFS TFTP VLAN AoE EFI Menu
+
+Press Ctrl-B for the iPXE command line...                                         net0: 52:54:00:99:00:01 using SNP on SNP-0000:01:00.0 (Ethernet) [open]
+  [Link:up, TX:0 TXE:1 RX:0 RXE:0]
+  [TXE: 1 x "Network unreachable (https://ipxe.org/28086090)"]
+Configuring (net0 52:54:00:99:00:01)...... ok
+net0: 10.99.0.168/255.255.255.0 gw 10.99.0.1
+net0: fe80::5054:ff:fe99:1/64
+Next server: 10.99.0.2
+Filename: http://10.99.0.2/boot/52:54:00:99:00:01.ipxe?platform=efi
+http://10.99.0.2/boot/52:54:00:99:00:01.ipxe... ok
+52:54:00:99:00:01.ipxe : 304 bytes [script]
+PXE-SMOKE-BEGIN mac=52:54:00:99:00:01 ip=10.99.0.168 platform=efi buildarch=x86_64 next-server=10.99.0.2
+PXE-SMOKE-OK

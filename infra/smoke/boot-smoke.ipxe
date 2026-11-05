@@ -1,0 +1,6 @@
+#!ipxe
+# Script iPXE statis untuk smoke test rantai boot (M4 risiko R2). Disajikan nginx dari
+# /srv/pxe/boot/<mac>.ipxe; endpoint dashboard menggantikannya nanti.
+echo PXE-SMOKE-BEGIN mac=${mac} ip=${ip} platform=${platform} buildarch=${buildarch} next-server=${next-server}
+echo PXE-SMOKE-OK
+sleep 600

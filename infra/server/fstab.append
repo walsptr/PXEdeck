@@ -1,0 +1,4 @@
+# pxe-test: ISO media (CD-ROM read-only, DEC-009) — urutan CD-ROM: Ubuntu, Debian, Rocky
+/dev/sr0 /srv/pxe/media/ubuntu-24.04 iso9660 ro,nofail,x-systemd.device-timeout=15s 0 0
+/dev/sr1 /srv/pxe/media/debian-12 iso9660 ro,nofail,x-systemd.device-timeout=15s 0 0
+/dev/sr2 /srv/pxe/media/rocky-9 iso9660 ro,nofail,x-systemd.device-timeout=15s 0 0

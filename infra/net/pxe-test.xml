@@ -1,0 +1,8 @@
+<!-- Network PXE terisolasi: tanpa <forward>, tanpa dhcp, DNS libvirt mati.
+     DHCP/TFTP hanya disajikan dnsmasq di dalam VM pxe-test-server (10.99.0.2). -->
+<network>
+  <name>pxe-test</name>
+  <bridge name='virbr-pxe' stp='on' delay='0'/>
+  <dns enable='no'/>
+  <ip address='10.99.0.1' netmask='255.255.255.0'/>
+</network>

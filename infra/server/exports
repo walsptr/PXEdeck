@@ -1,0 +1,2 @@
+# /etc/exports.d/pxe.exports — root live Ubuntu (casper netboot=nfs), read-only, hanya pxe-test.
+/srv/pxe/media/ubuntu-24.04 10.99.0.0/24(ro,no_subtree_check,no_root_squash,fsid=1001)
