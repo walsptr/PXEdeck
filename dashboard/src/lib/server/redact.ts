@@ -70,17 +70,31 @@ function b64HasSecret(blob: string, depth: number): boolean {
 }
 
 /**
- * Apakah `line` berbentuk baris isi key (CR-5-19)? Base64 ≥ PKEY_BODY_MIN karakter. Baris tepat di
- * atas footer (`adjacent`) boleh lebih pendek (baris terakhir isi key; OpenSSH membungkus 70 kolom
- * sehingga panjangnya bebas) asalkan tidak berbentuk kata (`Done`, `done`, `OK`, `DONE`: huruf
- * kapital opsional + huruf kecil saja, atau kapital saja). Linear: `trim()` + pola tanpa kuantor
- * bertumpuk (SR-5-11).
+ * Apakah `line` berbentuk baris isi key (CR-5-19)? Base64 ≥ PKEY_BODY_MIN karakter. Baris pendek
+ * hanya boleh sebagai baris non-kosong pertama di atas footer (`adjacent`; baris kosong di antaranya
+ * diabaikan) — baris terakhir isi key, OpenSSH membungkus 70 kolom sehingga panjangnya bebas — dan
+ * hanya bila tidak berbentuk kata (`Done`, `OK`, `DONE`), KECUALI baris non-kosong di atasnya adalah
+ * baris isi key ≥ PKEY_BODY_MIN (`longAbove`, SR-5-17/CR-5-23: ekor RSA `AQID`, `AAAA`). Linear:
+ * `trim()` + pola tanpa kuantor bertumpuk (SR-5-11).
  */
-function isKeyBodyLine(line: string, adjacent: boolean): boolean {
+function isKeyBodyLine(line: string, adjacent: boolean, longAbove: () => boolean): boolean {
   const t = line.trim()
   if (!PKEY_BODY_LINE_RE.test(t)) return false
   if (t.length >= PKEY_BODY_MIN) return true
-  return adjacent && !WORD_RE.test(t)
+  if (!adjacent) return false
+  return !WORD_RE.test(t) || longAbove()
+}
+
+/** Apakah baris non-kosong pertama yang berakhir sebelum `end` (awal baris) adalah baris key ≥ 16? */
+function longKeyLineAbove(text: string, end: number): boolean {
+  let cursor = end
+  while (cursor > 0) {
+    const prevStart = cursor < 2 ? 0 : text.lastIndexOf("\n", cursor - 2) + 1
+    const t = text.slice(prevStart, cursor - 1).trim()
+    if (t !== "") return t.length >= PKEY_BODY_MIN && PKEY_BODY_LINE_RE.test(t)
+    cursor = prevStart
+  }
+  return false
 }
 
 /**
@@ -89,7 +103,7 @@ function isKeyBodyLine(line: string, adjacent: boolean): boolean {
  * diapit baris isi key / awal teks; baris kosong yang di atasnya teks biasa tidak ditelan (CR-5-19).
  * Dijalankan setelah `PKEY_BLOCK_RE`, jadi footer yang tersisa pasti tanpa BEGIN.
  */
-function redactOrphanKeyTail(text: string): string {
+function redactOrphanKeyTail(text: string, keyPh: (s: string) => string): string {
   let out = text
   for (let guard = 0; guard < 64; guard++) {
     const m = PKEY_END_RE.exec(out)
@@ -97,7 +111,8 @@ function redactOrphanKeyTail(text: string): string {
     const footerEnd = m.index + m[0].length
     let start = out.lastIndexOf("\n", m.index - 1) + 1
     // `cursor` = awal baris teratas yang sudah diperiksa; `start` hanya maju ke baris isi key (atau
-    // baris kosong yang di atasnya baris isi key / awal teks).
+    // baris kosong yang di atasnya baris isi key / awal teks). `adjacent` = belum ada baris
+    // non-kosong yang diperiksa (baris kosong tepat di atas footer tidak memutus adjacency).
     let cursor = start
     let adjacent = true
     while (cursor > 0) {
@@ -108,25 +123,70 @@ function redactOrphanKeyTail(text: string): string {
         cursor = prevStart
         continue
       }
-      if (!isKeyBodyLine(line, adjacent && cursor === start)) break
+      if (!isKeyBodyLine(line, adjacent, () => longKeyLineAbove(out, prevStart))) break
       adjacent = false
       cursor = prevStart
       start = prevStart
     }
-    out = out.slice(0, start) + REDACTED_KEY + out.slice(footerEnd)
+    out = out.slice(0, start) + keyPh(out.slice(start, footerEnd)) + out.slice(footerEnd)
   }
+  return out
+}
+
+/** Placeholder per jenis redaksi; `s` = teks yang disamarkan. */
+type Placeholders = {
+  key: (s: string) => string
+  /** Isi secret setelah prefiks yang dipertahankan (`token=`, `/boot/<mac>/`, `$6$`). */
+  plain: (s: string) => string
+  b64: (s: string) => string
+}
+
+const TEXT_PH: Placeholders = { key: () => REDACTED_KEY, plain: () => REDACTED, b64: () => REDACTED_B64 }
+
+/** Sentinel (Private Use Area) untuk `secretMarks`: satu karakter per karakter yang disamarkan. */
+export const MARK_PLAIN = "\uE000"
+export const MARK_KEY = "\uE001"
+export const MARK_B64 = "\uE002"
+const MARK_PH: Placeholders = {
+  key: (s) => MARK_KEY.repeat(s.length),
+  plain: (s) => MARK_PLAIN.repeat(s.length),
+  b64: (s) => MARK_B64.repeat(s.length),
+}
+
+function redactWith(text: string, ph: Placeholders): string {
+  const keep = (m: string, p1: string) => p1 + ph.plain(m.slice(p1.length))
+  const hash = (m: string) => "$6$" + ph.plain(m.slice(3))
+  let out = redactOrphanKeyTail(
+    text.replace(PKEY_BLOCK_RE, (m) => ph.key(m)),
+    ph.key,
+  )
+    .replace(TOKEN_PATH_RE, keep)
+    .replace(TOKEN_PATH_PARTIAL_RE, keep)
+    .replace(TOKEN_PATH_PCT_RE, keep)
+    .replace(TOKEN_KV_RE, keep)
+    .replace(HASH_RE, hash)
+    .replace(HASH_PARTIAL_RE, hash)
+  out = out.replace(B64_RUN_RE, (blob) => (b64HasSecret(blob, 2) ? ph.b64(blob) : blob))
   return out
 }
 
 /** Samarkan secret di `text` (lihat header). Teks tanpa secret dikembalikan identik. */
 export function redactSecrets(text: string): string {
-  let out = redactOrphanKeyTail(text.replace(PKEY_BLOCK_RE, REDACTED_KEY))
-    .replace(TOKEN_PATH_RE, `$1${REDACTED}`)
-    .replace(TOKEN_PATH_PARTIAL_RE, `$1${REDACTED}`)
-    .replace(TOKEN_PATH_PCT_RE, `$1${REDACTED}`)
-    .replace(TOKEN_KV_RE, `$1${REDACTED}`)
-    .replace(HASH_RE, () => HASH_REDACTED)
-    .replace(HASH_PARTIAL_RE, () => HASH_REDACTED)
-  out = out.replace(B64_RUN_RE, (blob) => (b64HasSecret(blob, 2) ? REDACTED_B64 : blob))
-  return out
+  return redactWith(text, TEXT_PH)
+}
+
+/**
+ * Deteksi yang sama dengan `redactSecrets`, tetapi setiap karakter yang akan disamarkan diganti
+ * SATU sentinel (`MARK_PLAIN`/`MARK_KEY`/`MARK_B64`) sehingga panjang dan posisi tetap: karakter ke-i
+ * disamarkan ⇔ `marks[i] !== text[i]`. Dipakai `cleanAndRedact` untuk menggabungkan deteksi dari
+ * beberapa salinan teks (SR-5-16). Sentinel dan `[REDACTED]` sama-sama bukan karakter token/base64,
+ * jadi urutan pencocokan pola identik dengan `redactSecrets`.
+ */
+export function secretMarks(text: string): string {
+  return redactWith(text, MARK_PH)
+}
+
+/** Placeholder teks untuk sentinel `secretMarks`. */
+export function markPlaceholder(mark: string): string {
+  return mark === MARK_KEY ? REDACTED_KEY : mark === MARK_B64 ? REDACTED_B64 : REDACTED
 }

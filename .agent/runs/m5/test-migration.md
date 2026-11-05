@@ -169,9 +169,12 @@ perubahan, termasuk:
 Perubahan perilaku (tanpa test lama terdampak):
 - CR-5-19: footer END yatim hanya menelan baris base64 ≥ 16 karakter. Baris pendek tepat di atas footer
   ikut tertelan bila tidak berbentuk kata (`^[A-Z]?[a-z]+$` / `^[A-Z]+$`). Baris kosong hanya ikut bila
-  di atasnya ada baris isi key atau awal teks. Sisa risiko: baris akhir key yang pendek (< 16) dan
+  di atasnya ada baris isi key atau awal teks. ~~Sisa risiko: baris akhir key yang pendek (< 16) dan
   hanya berisi huruf kapital (mis. `AQID`, byte padding OpenSSH) tidak teredaksi. Bagian itu adalah
-  padding/komentar, bukan material kunci.
+  padding/komentar, bukan material kunci.~~ **Koreksi (iterasi 3 lanjutan, CR-5-23/SR-5-17):
+  kalimat ini keliru.** Baris pendek berbentuk kata tepat di atas footer menghentikan pemindaian
+  (`break`), sehingga **seluruh** baris isi key 64/70 karakter di atasnya lolos, bukan hanya baris
+  pendek itu. Diperbaiki di bagian "Iterasi 3 — backend-dev (lanjutan)" di bawah.
 - SR-5-12: `CONTROL_RE`/`CONTROL_KEEP_NL_RE` kini juga membuang `\p{Cf}` (seluruh kategori, mencakup
   U+00AD, U+200B–U+200F, U+202A–U+202E, U+2060–U+2064, U+FEFF), sehingga ZWJ dalam emoji juga dibuang.
 
@@ -188,6 +191,68 @@ Mutasi cepat (backend-dev, test `m5-iter3` + `m5-iter2` + `m5-te-lifecycle-route
 - tanpa salinan ANSI-free → 41 merah;
 - tanpa normalisasi `\r` → 3 merah;
 - tanpa `\p{Cf}` → 18 merah.
+
+## Iterasi 3 — backend-dev (lanjutan: SR-5-16, SR-5-17, CR-5-23, CR-5-24, CR-5-25)
+
+### Perubahan kode
+- **SR-5-16 / CR-5-24** (`job-events.ts` `cleanAndRedact`): pemilihan salah satu salinan (bersih-ANSI
+  *atau* asli) diganti **gabungan deteksi per karakter**. Dua salinan dibuat dari teks mentah, masing-
+  masing dengan peta indeks ke teks mentah: `plain` (kontrol dibuang, termasuk byte ESC/`\x9b` saja)
+  dan `bare` (sekuens ANSI dibuang utuh, lalu kontrol). Secret dideteksi di keduanya lewat
+  `secretMarks` (`redact.ts`), yaitu deteksi yang sama dengan `redactSecrets` tetapi setiap karakter
+  yang disamarkan diganti satu sentinel Private Use sehingga posisi tetap. Karakter mentah yang
+  ditandai di salinan **mana pun** diganti placeholder (`[REDACTED]`, `[REDACTED PRIVATE KEY]`,
+  `[REDACTED-B64]`) di output. Output dirender dari `bare` bila `bare` memuat secret, dari `plain` bila
+  hanya `plain`, dan tanpa secret `plain` dikembalikan apa adanya.
+  - Alasan tidak memakai urutan "redaksi mentah dulu lalu `stripAnsi` → `stripControl` →
+    `redactSecrets`" seperti saran laporan: pola parsial (`HASH_PARTIAL_RE`, token path `{8,43}`) di
+    tahap mentah berhenti di ESC dan menyamarkan hanya potongan pertama. Potongan kedua kehilangan
+    prefiks `$6$`/`/boot/` lalu lolos di tahap berikutnya (contoh: `$6$salt ESC[0m salt$hash` →
+    `$6$[REDACTED]salt$hash`), sehingga CR-5-18 akan regresi. Gabungan per karakter memenuhi syarat
+    "secret yang terdeteksi di bentuk mana pun teredaksi di output" tanpa urutan antar-tahap.
+  - `redactSecrets` tidak berubah perilakunya; hanya placeholder kini disuntikkan (`redactWith`).
+- **SR-5-17 / CR-5-23** (`redact.ts` `redactOrphanKeyTail`/`isKeyBodyLine`): baris pendek (< 16)
+  berbentuk kata kini ikut ditelan bila baris non-kosong di atasnya adalah baris isi key ≥ 16
+  karakter (`longKeyLineAbove`). `break` hanya bila tidak. "Adjacent" = baris non-kosong pertama di
+  atas footer; baris kosong di antaranya tidak lagi memutus adjacency. CR-5-19 tetap: `Done`/`OK`/
+  `Selesai` (juga `AQID`) di atas teks biasa atau di atas baris pendek tetap utuh.
+
+### Ekspektasi lama
+**Tidak ada ekspektasi lama yang berubah.** AC-5.13 (`dua[31m merah\tkolom`, unit dan
+`handleLogPost`, `m5-te-lifecycle-routes.test.ts`, `m5-iter3-redact.test.ts`) tetap. Tanpa secret,
+output tetap salinan `plain` seperti iterasi 2. Semua test CR-5-18, SR-5-12, SR-5-11, dan CR-5-19
+lulus tanpa diubah.
+
+### Perubahan test lama (CR-5-25, pengetatan keandalan, bukan pelemahan)
+| File | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `m5-iter3-redact.test.ts` › SR-5-11 "16 KB lewat handleLogPost" | Satu pengukuran `post` < 50 ms | Terbaik dari 5 run `post` (detik berbeda, job sama; jauh di bawah `LOG_RATE_PER_MIN` = 60) < 50 ms; diasersikan tepat 5 run dan setiap run `ok: true`; asersi `REDACTED_KEY` tetap | Satu pengukuran ikut menghitung jitter transaksi SQLite/GC/fsync sehingga rawan flaky (CR-5-25). Batas 50 ms **tidak dinaikkan**. Pola lama 268–1072 ms tetap merah. Asersi linear murni tetap ditanggung test 20 ms. |
+
+### Test baru (`m5-iter3-redact.test.ts`, +60 test, total file 144)
+| Temuan | Test |
+|---|---|
+| SR-5-16 (1)–(4), CR-5-24 | 6 kasus × (`cleanEventMessage` + idempoten, `handleLogPost` → DB), masing-masing dengan secret kedua di body yang sama: `ESC/boot/<mac>/<43>` + hash, `\x9b/boot/…` + hash, `ESC[token=<43>` + hash, `token=<43> pw=ESC$6$…`, `token=<20>ESC<23>` + hash dipecah `ESC[0m`, path dipecah `ESC[0m` + `token=ESC<43>`. Kasus (1) `token=<43>` + `ESC-----BEGIN` tanpa footer + 6 baris key lewat `cleanAndRedact`, `cleanEventMessage`, dan `handleLogPost`. Asersi: output persis, tidak ada potongan token ≥ 8, `Q{8}`, `saltsalt`, maupun baris key di **semua** pesan DB. Kontrol: secret terpotong tanpa secret kedua tetap teredaksi. |
+| SR-5-17, CR-5-23 | `AQID`, `BAUG`, `AQIDBAUG`, `Abcdef`, `AAAA`, `QUJD`, `Ab` × baris key 64/70 karakter × baris kosong 0/1/2 di atas footer (42 test); baris kosong di antara baris key dan baris pendek; CR-5-19 tetap (`Done`/`OK`/`Selesai`/`AQID` di atas teks biasa, dengan/tanpa baris kosong, dan di atas baris pendek `ABCD1234`); `handleLogPost` dua request dengan ekor `AQID` + baris kosong. |
+
+### Mutasi (backend-dev, `m5-iter3-redact.test.ts`)
+- `cleanAndRedact` di-revert ke pemilihan salah satu salinan (`0c61ed8`) → **14 merah** (seluruh
+  kasus SR-5-16/CR-5-24 kecuali kontrol tanpa secret kedua).
+- `isKeyBodyLine` di-revert (tanpa `longAbove`, adjacency `cursor === start`) → **44 merah**; hanya
+  tanpa `longAbove` → 44 merah; hanya adjacency lama → 29 merah.
+
+### Probe ulang (sebelum commit)
+Semua kasus SR-5-16 (1)–(4) + `\x9b`, CR-5-24 (dua bentuk), CR-5-18 (`token=`, `$6$`, `BEGIN … ESC[0m
+PRIVATE KEY`, OSC 8), SR-5-12 (a/b/c), SR-5-17 (`AQID`/`BAUG`/`AQIDBAUG`/`Abcdef`/`AAAA`, dengan dan
+tanpa baris kosong), CR-5-19 (`Done`/`OK`/`Selesai`) menghasilkan output tanpa secret. AC-5.13 tetap.
+SR-5-11: 16 KB `cleanEventMessage` terbaik dari 5 = ±1 ms. Folder probe sementara
+(`dashboard/src/zz-probe-tmp/`) dihapus sebelum commit.
+
+### Sisa risiko (diketahui)
+- Over-redaksi: baris pendek berbentuk kata tepat di atas footer yatim ikut tertelan bila di atasnya
+  ada baris base64 ≥ 16 karakter (mis. log yang kebetulan memuat blob base64 lalu `Done` lalu footer
+  END yatim). Ini lebih aman daripada sebaliknya.
+- Deteksi digabung dari dua salinan saja (`plain`, `bare`); karakter tak terlihat di luar Cf
+  (SR-5-18) tetap untuk M6.
 
 ## Iterasi 3 — frontend-dev (DR-5-8, DR-5-9)
 

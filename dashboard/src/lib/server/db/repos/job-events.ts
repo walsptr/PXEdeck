@@ -3,13 +3,14 @@
 //    pemanggil sudah meredaksi. Urutan (SR-5-1): buang karakter kontrol → redaksi
 //    (`redactSecrets`) → potong panjang. Redaksi setelah pembersihan agar secret yang disisipi
 //    ESC/\x01 tidak lolos lalu "menyatu kembali" setelah karakter kontrolnya dibuang. Iterasi 3:
-//    sekuens ANSI utuh (CR-5-18) dan karakter format Unicode Cf (SR-5-12) juga diperhitungkan.
+//    sekuens ANSI utuh (CR-5-18) dan karakter format Unicode Cf (SR-5-12) juga diperhitungkan;
+//    deteksi dari salinan dengan dan tanpa sekuens ANSI digabung per karakter (SR-5-16/CR-5-24).
 //  - Penggabungan: event `system` identik (kind, level, source, message) dengan event terakhir job
 //    yang `at`-nya ≤ 60 dtk lalu → `repeat += 1` (seq tidak bertambah; `jobs.updated_at` berubah).
 //  - Cap `PXE_JOB_LOG_MAX_EVENTS`: setelah `event_seq` ≥ cap, event `installer` dibuang dan satu
 //    event `warn` "log dipotong" dicatat sekali; event `stage`/`system` tetap dicatat.
 // Semua fungsi sinkron; panggil di dalam `tx` bila digabung dengan perubahan lain.
-import { redactSecrets } from "@/lib/server/redact"
+import { markPlaceholder, secretMarks } from "@/lib/server/redact"
 
 import { getDb } from "../index"
 
@@ -71,17 +72,76 @@ export function stripAnsi(raw: string): string {
   return raw.replace(ANSI_RE, "")
 }
 
+/** Salinan teks + `map[i]` = indeks karakter ke-i salinan di teks mentah. */
+type View = { text: string; map: Int32Array }
+
+/** Hapus setiap kecocokan `re` dari `v`, sambil mempertahankan peta indeks ke teks mentah. */
+function dropMatches(v: View, re: RegExp): View {
+  const parts: string[] = []
+  const map = new Int32Array(v.text.length)
+  let n = 0
+  let last = 0
+  const keep = (from: number, to: number) => {
+    parts.push(v.text.slice(from, to))
+    map.set(v.map.subarray(from, to), n)
+    n += to - from
+  }
+  for (const m of v.text.matchAll(re)) {
+    keep(last, m.index)
+    last = m.index + m[0].length
+  }
+  keep(last, v.text.length)
+  return { text: parts.join(""), map: map.subarray(0, n) }
+}
+
 /**
- * Bersihkan lalu redaksi (CR-5-18). Redaksi dijalankan atas salinan yang sekuens ANSI-nya dibuang
- * utuh (`ESC[0m` di tengah token/hash tidak lagi memecah pola). Bila salinan itu memuat secret,
- * salinan bersih yang sudah diredaksi yang dipakai; bila tidak, teks asli (hanya karakter
- * kontrolnya dibuang, sisa sekuens seperti `[31m` tetap — AC-5.13) diredaksi seperti biasa.
+ * Bersihkan lalu redaksi (CR-5-18, SR-5-16, CR-5-24). Dua salinan dibuat dari teks mentah, masing-
+ * masing dengan peta indeks ke teks mentah:
+ *  - `plain` = karakter kontrol dibuang (termasuk byte ESC/\x9b saja; sisa `[31m` tetap — AC-5.13);
+ *  - `bare`  = sekuens ANSI dibuang utuh dulu, lalu karakter kontrol.
+ * Secret dideteksi di KEDUA salinan (`secretMarks`) dan ditandai per karakter mentah (gabungan).
+ * Tanpa secret → `plain` dikembalikan apa adanya. Bila `bare` memuat secret, output dirender dari
+ * `bare`; bila hanya `plain`, dari `plain`. Setiap karakter mentah yang ditandai di salinan mana pun
+ * diganti placeholder. Dengan begitu `stripAnsi` yang ikut menelan karakter awal secret (`ESC-----B`,
+ * `ESC$6`, `ESC/b`, `ESC[t`, `token=<20>ESC<23>`) tidak lagi meloloskan sisa secret: salinan `plain`
+ * tetap melihat secret utuh, dan tandanya terbawa ke output `bare`.
  */
 export function cleanAndRedact(raw: string, keepNewlines = false): string {
-  const bare = stripControl(stripAnsi(raw), keepNewlines)
-  const bareRedacted = redactSecrets(bare)
-  if (bareRedacted !== bare) return bareRedacted
-  return redactSecrets(stripControl(raw, keepNewlines))
+  const ctrl = keepNewlines ? CONTROL_KEEP_NL_RE : CONTROL_RE
+  const rawView: View = { text: raw, map: Int32Array.from({ length: raw.length }, (_, i) => i) }
+  const plain = dropMatches(rawView, ctrl)
+  const bare = dropMatches(dropMatches(rawView, ANSI_RE), ctrl)
+  // marked[j] = kode sentinel (0 = tidak disamarkan) untuk karakter mentah ke-j.
+  const marked = new Uint16Array(raw.length)
+  const mark = (v: View): boolean => {
+    const ms = secretMarks(v.text)
+    if (ms === v.text) return false
+    let found = false
+    for (let i = 0; i < ms.length; i++) {
+      if (ms.charCodeAt(i) !== v.text.charCodeAt(i)) {
+        marked[v.map[i]] = ms.charCodeAt(i)
+        found = true
+      }
+    }
+    return found
+  }
+  const inPlain = mark(plain)
+  const inBare = mark(bare)
+  if (!inPlain && !inBare) return plain.text
+  const base = inBare ? bare : plain
+  const out: string[] = []
+  let runStart = 0
+  let prev = 0
+  for (let i = 0; i <= base.text.length; i++) {
+    const k = i < base.text.length ? marked[base.map[i]] : 0
+    if (k === prev) continue
+    if (prev === 0) out.push(base.text.slice(runStart, i))
+    else out.push(markPlaceholder(String.fromCharCode(prev)))
+    runStart = i
+    prev = k
+  }
+  if (prev === 0) out.push(base.text.slice(runStart))
+  return out.join("")
 }
 
 function truncateMessage(s: string): string {
