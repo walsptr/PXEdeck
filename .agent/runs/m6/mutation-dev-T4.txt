@@ -1,0 +1,56 @@
+# Mutasi dev — M6-T4 (redaksi) & M6-T6 (generator)
+
+Penulis: backend-dev. Tanggal: 2026-11-06. Cara: skrip mutasi (scratchpad sesi, tidak di-commit) menerapkan
+satu penggantian string unik di kode produk, menjalankan set test di bawah, lalu memulihkan berkas
+(md5 `redact.ts`, `windows.ts`, `boot-script.ts` diverifikasi identik dengan sebelum mutasi; mutasi
+`job-events.ts` dipulihkan dengan penggantian balik karena berkas itu juga disunting agent lain).
+Kode final (setelah optimasi `matchView`/`mapMatches`). Baseline sebelum mutasi: 950/950 lulus.
+
+Set test: src/lib/server/m6-redact.test.ts, m5-iter2-redact-timeout.test.ts, m5-iter3-redact.test.ts,
+m5-te-unit.test.ts, db/m5-jobs-repo.test.ts, app/boot/m5-log-routes.test.ts, lib/server/installers/**,
+lib/server/boot-script.test.ts, app/boot/boot-routes.test.ts.
+
+Format: `<id> <mutasi>: <n> merah; contoh: [...]`
+
+T4-M1 CR-5-30 ANSI_RE alt-4 kembali tanpa wajib intermediate: 2 merah; contoh: ['alternatif ke-4 ANSI_RE wajib ber-intermediate: ESC+huruf/angka tidak menelan karakter', 'stripAnsi: membuang sekuens utuh, OSC tanpa terminator tidak menelan baris berikutnya']
+T4-M2 SR-5-19 salinan sgr tidak ditandai: 40 merah; contoh: ['(d) ESC-----BEGIN OPENSSH ESC[0mPRIVATE KEY----- tanpa footer + hash kedua → tak satu pun baris isi key', '(d) ESC-----BEGIN OPENSSH ESC[0mPRIVATE KEY----- tanpa footer + token path kedua → tak satu pun baris isi key', '(d) ESC-----BEGIN OPENSSH ESC[0mPRIVATE KEY----- tanpa footer sendiri → tak satu pun baris isi key', "cleanEventMessage: (a') ESC$6 + SGR warna + hash kedua → tanpa potongan secret, idempoten"]
+T4-M3 CR-5-21 TOKEN_KV_RE kembali {43}: 2 merah; contoh: ['`token=` parsial 8..43 tersamar; < 8 tetap', 'perilaku terdokumentasi: token= bukan token (≥ 8)']
+T4-M4 salinan greedy (ESC7) tidak ditandai: 6 merah; contoh: ['cleanEventMessage: ESC7 (tanpa intermediate) di token + hash kedua → tanpa potongan secret, idempoten', 'cleanEventMessage: ESC7 (tanpa intermediate) di token + token path kedua → tanpa potongan secret, idempoten', 'cleanEventMessage: ESC7 (tanpa intermediate) di token sendiri → tanpa potongan secret, idempoten', 'handleLogPost → DB: ESC7 (tanpa intermediate) di token + hash kedua']
+T4-M5a SR-5-18 tanpa Default_Ignorable di salinan pencocokan: 16 merah; contoh: ['U+115F dua karakter + ANSI → tersamar (cleanEventMessage + redactSecrets)', 'U+115F hash di prefiks $6$ → tersamar (cleanEventMessage + redactSecrets)', 'U+115F hash pos 4 → tersamar (cleanEventMessage + redactSecrets)', 'U+115F hash pos 40 → tersamar (cleanEventMessage + redactSecrets)']
+T4-M5b SR-5-20 tanpa \p{Co} di salinan pencocokan: 29 merah; contoh: ['U+E000 PUA (= MARK_PLAIN) dua karakter + ANSI → tersamar (cleanEventMessage + redactSecrets)', 'U+E000 PUA (= MARK_PLAIN) hash di prefiks $6$ → tersamar (cleanEventMessage + redactSecrets)', 'U+E000 PUA (= MARK_PLAIN) hash pos 4 → tersamar (cleanEventMessage + redactSecrets)', 'U+E000 PUA (= MARK_PLAIN) hash pos 40 → tersamar (cleanEventMessage + redactSecrets)']
+T4-M5c SR-5-18 tanpa surrogate tunggal (pencocokan + tampilan): 13 merah; contoh: ['\\uD800 surrogate tunggal hash di prefiks $6$ → tersamar (cleanEventMessage + redactSecrets)', '\\uD800 surrogate tunggal hash pos 4 → tersamar (cleanEventMessage + redactSecrets)', '\\uD800 surrogate tunggal hash pos 40 → tersamar (cleanEventMessage + redactSecrets)', '\\uD800 surrogate tunggal path pos 20 → tersamar (cleanEventMessage + redactSecrets)']
+T4-M5c' surrogate tunggal hanya dari tampilan dihapus: 1 merah; contoh: ['surrogate tunggal dibuang dari tampilan (tidak tersimpan sebagai teks UTF-16 rusak)']
+T4-M5d tanpa \p{Mn}\p{Me}: 14 merah; contoh: ['U+0301 tanda gabung dua karakter + ANSI → tersamar (cleanEventMessage + redactSecrets)', 'U+0301 tanda gabung hash di prefiks $6$ → tersamar (cleanEventMessage + redactSecrets)', 'U+0301 tanda gabung hash pos 4 → tersamar (cleanEventMessage + redactSecrets)', 'U+0301 tanda gabung hash pos 40 → tersamar (cleanEventMessage + redactSecrets)']
+T4-M5e tanpa kontrol C0/C1 di salinan pencocokan: 3 merah; contoh: ['cleanEventMessage: path token + \\x01', 'cleanEventMessage: token= + ESC', 'cleanEventMessage: token= + \\x01 berulang']
+T4-M6a SR-5-13 lapis persen pertama dimatikan: 5 merah; contoh: ['%25246%2524 (ganda) lewat handleLogPost → DB', '%25246%2524 (ganda) → tersamar, idempoten', 'matchView: peta indeks mencakup seluruh rentang mentah yang di-decode', 'token%253D (ganda) lewat handleLogPost → DB']
+T4-M6b lapis persen kedua dimatikan: 5 merah; contoh: ['%25246%2524 (ganda) lewat handleLogPost → DB', '%25246%2524 (ganda) → tersamar, idempoten', 'matchView: peta indeks mencakup seluruh rentang mentah yang di-decode', 'token%253D (ganda) lewat handleLogPost → DB']
+T4-M6c tanpa normalisasi backslash/JSON: 18 merah; contoh: ['JSON \\/boot\\/ lewat handleLogPost → DB', 'JSON \\/boot\\/ → tersamar, idempoten', 'JSON \\u002F lewat handleLogPost → DB', 'JSON \\u002F → tersamar, idempoten']
+T4-M6d tanpa $$ -> $: 4 merah; contoh: ['$$6$$ lewat handleLogPost → DB', '$$6$$ → tersamar, idempoten', 'hasil persis: tampilan mempertahankan encoding asli di luar secret', 'matchView: peta indeks mencakup seluruh rentang mentah yang di-decode']
+T4-M6e tanpa rangkaian tak terlihat (hanya persen di lintasan 1): 119 merah; contoh: ['U+0301 tanda gabung dua karakter + ANSI → tersamar (cleanEventMessage + redactSecrets)', 'U+0301 tanda gabung hash di prefiks $6$ → tersamar (cleanEventMessage + redactSecrets)', 'U+0301 tanda gabung hash pos 4 → tersamar (cleanEventMessage + redactSecrets)', 'U+0301 tanda gabung hash pos 40 → tersamar (cleanEventMessage + redactSecrets)']
+T4-M7 salinan pencocokan dimatikan (markBoth hanya salinan mentah): 151 merah; contoh: ['$$6$$ lewat handleLogPost → DB', '$$6$$ → tersamar, idempoten', '%246%24 lewat handleLogPost → DB', '%246%24 → tersamar, idempoten']
+T4-M8 tanpa pengisian celah markInto: 2 merah; contoh: ['hasil persis: tampilan mempertahankan encoding asli di luar secret', 'sentinel di teks tidak membuat karakter secret lolos (SR-5-20)']
+T4-M9 CR-5-20a prefiks log tidak dilepas: 24 merah; contoh: ['(a) baris teks biasa berprefiks di atas ekor key tidak tertelan', '(a) ekor key berprefiks "01:02:03,123 INF program: " + footer yatim → seluruh ekor tersamar', '(a) ekor key berprefiks "2026-11-06 01:02:03,123 DEBUG " + footer yatim → seluruh ekor tersamar', '(a) ekor key berprefiks "2026-11-06T01:02:03.123+07:00 " + footer yatim → seluruh ekor tersamar']
+T4-M10 CR-5-20b rangkaian isi key tanpa BEGIN/END dimatikan: 10 merah; contoh: ['(b) body hanya isi key 2 baris saja tanpa BEGIN/END → tersamar', '(b) body hanya isi key 64 kolom (PEM) tanpa BEGIN/END → tersamar', '(b) body hanya isi key 70 kolom (OpenSSH) tanpa BEGIN/END → tersamar', '(b) body hanya isi key berprefiks tanpa BEGIN/END → tersamar']
+T4-M11 CR-5-20c batas 64 footer dikembalikan: 1 merah; contoh: ['(c) 70 footer yatim dalam satu body → semua ekor tersamar (tanpa batas 64)']
+T4-M12 render dari plain saja (abaikan bare/sgr): 9 merah; contoh: ['cleanEventMessage: (2) ESC/boot path + hash', 'cleanEventMessage: (2) \\x9b/boot path + hash', 'cleanEventMessage: (3) ESC[token= + hash', 'cleanEventMessage: (4) token= + ESC$6$']
+T4-M13 sameView hanya membandingkan teks: 0 merah; contoh: []
+T4-M14 docstring job-events: klaim lama dikembalikan: 1 merah; contoh: ['docstring: header redact.ts memuat tabel & sisa risiko; job-events.ts tanpa klaim berlebih']
+T6-W1 callback ber-token dikembalikan di unattend: 9 merah; contoh: ['FirstLogonCommands diakhiri berurutan: hapus Panther/Sysprep → AutoLogon off → acak password → logoff', 'FirstLogonCommands: OpenSSH + administrators_authorized_keys berisi key + PasswordAuthentication no', 'Ubuntu/Debian/Rocky: token tidak muncul plaintext maupun di payload base64 (bertingkat)', 'dhcp: tidak memuat /boot/, token, maupun pola 43 karakter (semua lapisan dekode)']
+T6-W2 pembersihan Windows dihapus: 8 merah; contoh: ['FirstLogonCommands diakhiri berurutan: hapus Panther/Sysprep → AutoLogon off → acak password → logoff', 'FirstLogonCommands: OpenSSH + administrators_authorized_keys berisi key + PasswordAuthentication no', 'dhcp: tidak memuat /boot/, token, maupun pola 43 karakter (semua lapisan dekode)', 'golden file (password acak disamarkan)']
+T6-W3 urutan pembersihan: logoff sebelum acak password: 3 merah; contoh: ['FirstLogonCommands diakhiri berurutan: hapus Panther/Sysprep → AutoLogon off → acak password → logoff', 'FirstLogonCommands: OpenSSH + administrators_authorized_keys berisi key + PasswordAuthentication no', 'golden file (password acak disamarkan)']
+T6-W4 AutoAdminLogon tidak dimatikan: 3 merah; contoh: ['FirstLogonCommands diakhiri berurutan: hapus Panther/Sysprep → AutoLogon off → acak password → logoff', 'FirstLogonCommands: OpenSSH + administrators_authorized_keys berisi key + PasswordAuthentication no', 'golden file (password acak disamarkan)']
+T6-W5 SR-4-6 preseed tanpa ` ---`: 5 merah; contoh: ['Debian (preseed) dan Rocky (kickstart) sesuai §2.3 (snapshot)', 'Debian: netboot + preseed/url', 'preseed (extraArgs ""): diakhiri ` ---`, semua parameter (termasuk url=) sebelum `---`', 'preseed (extraArgs "console=ttyS0,115200n8 console=tty0"): diakhiri ` ---`, semua parameter (termasuk url=) sebelum `---`']
+T6-W6 SR-4-6 `---` sebelum url=: 5 merah; contoh: ['Debian (preseed) dan Rocky (kickstart) sesuai §2.3 (snapshot)', 'Debian: netboot + preseed/url', 'preseed (extraArgs ""): diakhiri ` ---`, semua parameter (termasuk url=) sebelum `---`', 'preseed (extraArgs "console=ttyS0,115200n8 console=tty0"): diakhiri ` ---`, semua parameter (termasuk url=) sebelum `---`']
+
+## Catatan
+- T4-M5c' (pembuangan surrogate tunggal dari salinan TAMPILAN): pada putaran pertama lolos (0 merah),
+  karena redaksinya sudah ditutup oleh salinan pencocokan. Test "surrogate tunggal dibuang dari tampilan"
+  ditambahkan; putaran final: 1 merah.
+- T4-M13 (lolos, mutan ekuivalen): `sameView` yang hanya membandingkan teks. Salinan `bare`/`sgr`/`greedy`
+  hanya membuang karakter mentah tambahan dibanding `plain`, sehingga teks yang sama berarti peta indeks
+  yang sama. Perbandingan peta tetap dipertahankan sebagai pengaman O(n), tetapi tidak bisa dibedakan dari
+  perilaku luar. Tidak ada test yang dilemahkan untuk itu.
+- T4-M6a/M6b: tiap lapis decode persen dibuang sendiri-sendiri; satu lapis yang tersisa masih menutup
+  `%2F`, sehingga yang merah hanya kasus dua lapis (`%252F`, `%2524`, `%253D`).
+- Mutan M5 (`cleanAndRedact` memilih satu salinan saja, `isKeyBodyLine` tanpa `longAbove`) tetap
+  tertangkap oleh test M5 yang ekspektasinya tidak diubah (lihat `test-migration.md` §T4).

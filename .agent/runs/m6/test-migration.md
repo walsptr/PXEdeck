@@ -60,3 +60,70 @@ atas = 0. Test baru M6 (bukan migrasi): `src/lib/server/auth/{password,session,r
 | sesi tanpa pemeriksaan sidik kredensial | `session.test` |
 | SR-5-8 hanya menolak `\p{Cc}` | `m6-carryover-api` SR-5-8 |
 | `logBootDenied` tanpa throttle (SR-5-3) | `m6-backend` SR-5-3 |
+
+## T4 — redaksi (backend-dev)
+
+Kode: `dashboard/src/lib/server/redact.ts` (pipeline pembersihan + redaksi dipindah dari
+`db/repos/job-events.ts`, yang kini hanya mengekspor ulang `stripControl`/`stripAnsi`/`cleanAndRedact`).
+Test baru: `dashboard/src/lib/server/m6-redact.test.ts` (AC-6.14..6.17), harness
+`dashboard/src/test/installer-logs.ts`, fixture template sintetis
+`dashboard/src/test/installer-logs/synthetic/*.log`. Mutasi: `.agent/runs/m6/mutation-dev-T4.txt`.
+
+### Perubahan test lama (semuanya pengetatan atau mengikuti perilaku yang diwajibkan plan §2.5)
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `m5-iter2-redact-timeout.test.ts` › "negatif: segmen 44 karakter, …, `token=` pendek …" | `"token=terlalu-pendek"` (17) diharapkan identik | `"token=pendek7"` (7) diharapkan identik; `"token=terlalu-pendek"` → `token=[REDACTED]` diasersikan di `m6-redact.test.ts` | Plan §2.5 butir 1 / AC-6.15: `TOKEN_KV_RE` parsial `{8,43}` (CR-5-21/CR-5-30). Batas negatif kini tepat di bawah ambang 8. |
+| `m5-te-unit.test.ts` › AC-5.14 "teks tanpa secret identik" | `"token=terlalu-pendek"` | `"token=pendek7"` | Sama seperti baris di atas. |
+| `m5-iter2-redact-timeout.test.ts` › SR-5-1 "cleanEventMessage: …" (7 kasus) | kontrol: `sanitizeMessage(redactSecrets(input))` ≠ hasil benar ("urutan lama bocor") | kontrol: `sanitizeMessage(<deteksi pola mentah secretMarks>)` ≠ hasil benar, ditambah `redactSecrets(input)` tidak memuat potongan token | `redactSecrets` sendiri kini membuang kontrol C0/C1 di salinan pencocokannya (SR-5-18), jadi tidak lagi bocor. Kontrolnya dipindah ke deteksi pola mentah agar tetap membuktikan urutan sanitasi; ekspektasi utama (`cleanEventMessage` = hasil benar) tidak berubah. |
+| `m5-iter3-redact.test.ts` › "stripAnsi: … OSC tanpa terminator …" | `stripAnsi("a ESC]0;tanpa-akhir\nbaris2")` = `"a0;tanpa-akhir\nbaris2"` | `stripAnsi(...)` = masukan apa adanya; `stripControl(stripAnsi(...), true)` = `"a]0;tanpa-akhir\nbaris2"` | Plan §2.5 butir 1 / gate M5: alternatif ke-4 `ANSI_RE` wajib ber-intermediate (`\x1b[ -/]+[0-~]`), sehingga `ESC]` tanpa terminator tidak lagi menelan `]`. Asersi inti (baris berikutnya utuh) tetap. |
+
+Tidak ada test yang dihapus, di-skip, atau dilonggarkan batasnya. Ekspektasi AC-5.13 (`dua[31m merah\tkolom`)
+tidak berubah. Batas performa SR-5-11 (≤ 20 ms / ≤ 50 ms, terbaik dari 5) tidak diubah; kasus 16 KB baru
+(persen, backslash, `$`, ESC+SGR, karakter tak terlihat, isi key, footer berulang) ditambahkan dengan batas
+yang sama.
+
+### Perilaku yang berubah (bukan test)
+- `cleanAndRedact`: empat salinan tampilan (`plain`, `bare`, `sgr`, `greedy`) + salinan pencocokan
+  ternormalisasi untuk masing-masing; tanda digabung per karakter mentah. Render dari `bare` → `sgr` →
+  `greedy` → `plain` (yang pertama memuat secret).
+- `greedy` (pola ANSI M5) ditambahkan karena pembatasan alternatif ke-4 (wajib plan) membuat `ESC7`/`ESCc`
+  di tengah token menyisakan satu karakter di semua salinan lain → token 44 karakter tidak dikenali. Probe
+  "ESC7 (tanpa intermediate) di token" menangkapnya (mutasi T4-M4: 6 merah).
+- `redactSecrets` = render dari tanda salinan mentah + salinan pencocokan (dulu: penggantian regex
+  berantai). Keluaran untuk semua kasus M5 identik (test M5 lulus tanpa perubahan ekspektasi selain di tabel).
+
+### Fixture log installer (AC-6.17)
+- Sekarang: template SINTETIS (`subiquity-server-debug`, `curtin-install`, `anaconda`, `program`,
+  `di-syslog`) dengan placeholder `{{TOKEN}}`/`{{HASH}}`/`{{KEY}}`/`{{KEY_BODY}}`/`{{MAC}}`/`{{ESC}}`. File
+  tidak memuat secret apa pun; secret sintetis diisi saat test.
+- **Menunggu fixture nyata** (T14, run KVM M6): ambil log dari run setelah `redact-evidence.sh`, ganti
+  token/hash/key yang sudah tersamar dengan placeholder yang sama, simpan ke direktori lain lalu tambahkan ke
+  `listFixtures(...)` di `m6-redact.test.ts` (harness `checkStored` sama).
+- Mode "potongan 7 baris" memisahkan baris akhir isi key (< 16 karakter) ke request berikutnya. Itu sisa
+  risiko yang terdokumentasi, sehingga `checkStored` mengizinkannya maksimal 1 kali, hanya untuk mode itu
+  dan hanya untuk fixture yang memuat `{{KEY_BODY}}`. Harness punya kontrol positif yang memastikan tanpa
+  izin itu kasus yang sama dianggap gagal.
+
+### Sisa risiko (terdokumentasi di header `redact.ts`, diuji sebagai "perilaku terdokumentasi")
+- Token/hash ter-wrap ke baris berikutnya; prefiks token 1–7 karakter; `<token>X` (rangkaian ≥ 44, sengaja
+  bukan token sejak AC-5.14).
+- Isi key yang hanya satu baris per request tanpa BEGIN/END (rangkaian < 2); baris akhir pendek isi key
+  yang terpisah ke request berikutnya.
+- Prefiks log di luar `LOG_PREFIX_RE`; homoglyph; encoding selain persen/JSON/backslash (base32, hex, HTML
+  entity).
+- Over-redaksi yang diterima: `awk '{print $6$7}'`, BEGIN tanpa footer, footer yatim, path BLS machine-id,
+  `token=<8+ karakter>` non-token, isi sertifikat PEM tanpa header (≥ 2 baris 64 kolom), emoji ber-ZWJ.
+
+## T6 — generator (backend-dev)
+
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `installers/installers.test.ts` › B-5 "Ubuntu/Debian/Rocky: token tidak muncul …" | kontrol positif: `containsSecret(windowsUnattend(ctx()), TOKEN)` = **true** | `= false`, ditambah kontrol positif sintetis: `-EncodedCommand` UTF-16LE berisi URL ber-token → `true` | DEC-017 §8 / O8: unattend tidak lagi memuat URL/token. Kontrol positif pemindai dipertahankan dengan input sintetis (pengetatan). |
+| `installers/installers.test.ts` › AC-4.21 "FirstLogonCommands: …" | perintah terakhir memuat `-Body 'stage=done' -Uri '<CALLBACK>'` | empat perintah terakhir = hapus Panther/Sysprep, `AutoAdminLogon '0'`, `Set-LocalUser 'pxeadmin'`, `logoff`; seluruh perintah tidak memuat CALLBACK | Sama (CR-4-7/SR-4-3). |
+| `installers/installers.test.ts` helper `psDecode` | `exec(...)!` (crash untuk perintah polos) | perintah tanpa `-EncodedCommand` (`logoff`) dikembalikan apa adanya | Perintah `logoff` bukan PowerShell ter-encode. |
+| `test/golden/installers/windows-unattend.xml` | 5 SynchronousCommand (terakhir callback) | 8 (callback dihapus; + 3 pembersihan ter-encode + `logoff`) | Golden diperbarui (plan §2.7). |
+| `boot-script.test.ts` › "Debian: netboot + preseed/url" | baris kernel tanpa ` ---` | diakhiri ` ---` | SR-4-6 (AC-6.28). |
+| `app/boot/boot-routes.test.ts` › AC-4.16 snapshot Debian | baris kernel tanpa ` ---` | diakhiri ` ---` | SR-4-6. Satu baris snapshot di file bersama; hunk lain di file itu milik agent auth. |
+
+Test baru: `installers/m6-generator.test.ts` (AC-6.28, AC-6.29; termasuk regresi `installHosts` Windows →
+gagal "hanya generator", tanpa job; `newOsImagePayload` unattend `bootable:true` ditolak).

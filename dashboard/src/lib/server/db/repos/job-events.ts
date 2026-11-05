@@ -5,13 +5,16 @@
 //    ESC/\x01 tidak lolos lalu "menyatu kembali" setelah karakter kontrolnya dibuang. Iterasi 3:
 //    sekuens ANSI utuh (CR-5-18) dan karakter format Unicode Cf (SR-5-12) juga diperhitungkan;
 //    deteksi dari salinan dengan dan tanpa sekuens ANSI digabung per karakter (SR-5-16/CR-5-24).
+//    M6: pipeline pembersihan + redaksi (`stripControl`, `stripAnsi`, `cleanAndRedact`) pindah ke
+//    `lib/server/redact.ts` (salinan ketiga `sgr`, salinan pencocokan ternormalisasi) dan diekspor
+//    ulang dari sini; perilaku, batasan, dan sisa risikonya didokumentasikan di header modul itu.
 //  - Penggabungan: event `system` identik (kind, level, source, message) dengan event terakhir job
 //    yang kemunculan terakhirnya (`last_at`, CR-5-7) ≤ 60 dtk lalu → `repeat += 1`, `last_at` = waktu
 //    event baru (seq tidak bertambah; `jobs.updated_at` berubah).
 //  - Cap `PXE_JOB_LOG_MAX_EVENTS`: setelah `event_seq` ≥ cap, event `installer` dibuang dan satu
 //    event `warn` "log dipotong" dicatat sekali; event `stage`/`system` tetap dicatat.
 // Semua fungsi sinkron; panggil di dalam `tx` bila digabung dengan perubahan lain.
-import { markPlaceholder, secretMarks } from "@/lib/server/redact"
+import { cleanAndRedact, stripControl } from "@/lib/server/redact"
 
 import { getDb } from "../index"
 
@@ -42,110 +45,9 @@ export const TRUNCATED_SUFFIX = "…[dipotong]"
 export const MERGE_WINDOW_MS = 60_000
 export const LOG_TRUNCATED_MESSAGE = "Log installer dipotong: batas event per job tercapai, baris berikutnya dibuang"
 
-// C0 (kecuali \t), DEL, C1, U+2028/U+2029 (pemisah baris), dan karakter format Unicode (kategori
-// Cf: U+00AD, U+200B–U+200F, U+202A–U+202E, U+2060–U+2064, U+FEFF, dst. — SR-5-12) yang tak terlihat
-// tetapi memecah pola secret. Ditulis dengan escape agar sumber tetap ASCII.
-const CONTROL_CLASS_BASE = "\\x0b\\x0c\\x0e-\\x1f\\x7f-\\x9f\\u2028\\u2029\\p{Cf}"
-const CONTROL_RE = new RegExp(`[\\x00-\\x08\\x0a\\x0d${CONTROL_CLASS_BASE}]`, "gu")
-// Sama dengan CONTROL_RE tetapi mempertahankan \n dan \r (untuk body log multi-baris).
-const CONTROL_KEEP_NL_RE = new RegExp(`[\\x00-\\x08${CONTROL_CLASS_BASE}]`, "gu")
-
-// Sekuens escape ANSI utuh (CR-5-18): CSI `ESC[ … final`, CSI 8-bit `\x9b … final`, OSC
-// `ESC] … BEL|ESC\` (tidak melewati baris), dan escape dua/tiga byte lain (`ESC(B`, `ESC=`, …).
-const ANSI_RE = new RegExp(
-  [
-    "\\x1b\\[[0-?]*[ -/]*[@-~]",
-    "\\x9b[0-?]*[ -/]*[@-~]",
-    "\\x1b\\][^\\x07\\x1b\\n]*(?:\\x07|\\x1b\\\\)",
-    "\\x1b[ -/]*[0-~]",
-  ].join("|"),
-  "g",
-)
-
-/**
- * Buang karakter kontrol & format (kecuali \t; `keepNewlines` juga mempertahankan \n/\r). Tanpa
- * pemotongan panjang.
- */
-export function stripControl(raw: string, keepNewlines = false): string {
-  return raw.replace(keepNewlines ? CONTROL_KEEP_NL_RE : CONTROL_RE, "")
-}
-
-/** Buang sekuens escape ANSI utuh (CSI/OSC/escape lain), tanpa menyentuh karakter lain. */
-export function stripAnsi(raw: string): string {
-  return raw.replace(ANSI_RE, "")
-}
-
-/** Salinan teks + `map[i]` = indeks karakter ke-i salinan di teks mentah. */
-type View = { text: string; map: Int32Array }
-
-/** Hapus setiap kecocokan `re` dari `v`, sambil mempertahankan peta indeks ke teks mentah. */
-function dropMatches(v: View, re: RegExp): View {
-  const parts: string[] = []
-  const map = new Int32Array(v.text.length)
-  let n = 0
-  let last = 0
-  const keep = (from: number, to: number) => {
-    parts.push(v.text.slice(from, to))
-    map.set(v.map.subarray(from, to), n)
-    n += to - from
-  }
-  for (const m of v.text.matchAll(re)) {
-    keep(last, m.index)
-    last = m.index + m[0].length
-  }
-  keep(last, v.text.length)
-  return { text: parts.join(""), map: map.subarray(0, n) }
-}
-
-/**
- * Bersihkan lalu redaksi (CR-5-18, SR-5-16, CR-5-24). Dua salinan dibuat dari teks mentah, masing-
- * masing dengan peta indeks ke teks mentah:
- *  - `plain` = karakter kontrol dibuang (termasuk byte ESC/\x9b saja; sisa `[31m` tetap — AC-5.13);
- *  - `bare`  = sekuens ANSI dibuang utuh dulu, lalu karakter kontrol.
- * Secret dideteksi di KEDUA salinan (`secretMarks`) dan ditandai per karakter mentah (gabungan).
- * Tanpa secret → `plain` dikembalikan apa adanya. Bila `bare` memuat secret, output dirender dari
- * `bare`; bila hanya `plain`, dari `plain`. Setiap karakter mentah yang ditandai di salinan mana pun
- * diganti placeholder. Dengan begitu `stripAnsi` yang ikut menelan karakter awal secret (`ESC-----B`,
- * `ESC$6`, `ESC/b`, `ESC[t`, `token=<20>ESC<23>`) tidak lagi meloloskan sisa secret: salinan `plain`
- * tetap melihat secret utuh, dan tandanya terbawa ke output `bare`.
- */
-export function cleanAndRedact(raw: string, keepNewlines = false): string {
-  const ctrl = keepNewlines ? CONTROL_KEEP_NL_RE : CONTROL_RE
-  const rawView: View = { text: raw, map: Int32Array.from({ length: raw.length }, (_, i) => i) }
-  const plain = dropMatches(rawView, ctrl)
-  const bare = dropMatches(dropMatches(rawView, ANSI_RE), ctrl)
-  // marked[j] = kode sentinel (0 = tidak disamarkan) untuk karakter mentah ke-j.
-  const marked = new Uint16Array(raw.length)
-  const mark = (v: View): boolean => {
-    const ms = secretMarks(v.text)
-    if (ms === v.text) return false
-    let found = false
-    for (let i = 0; i < ms.length; i++) {
-      if (ms.charCodeAt(i) !== v.text.charCodeAt(i)) {
-        marked[v.map[i]] = ms.charCodeAt(i)
-        found = true
-      }
-    }
-    return found
-  }
-  const inPlain = mark(plain)
-  const inBare = mark(bare)
-  if (!inPlain && !inBare) return plain.text
-  const base = inBare ? bare : plain
-  const out: string[] = []
-  let runStart = 0
-  let prev = 0
-  for (let i = 0; i <= base.text.length; i++) {
-    const k = i < base.text.length ? marked[base.map[i]] : 0
-    if (k === prev) continue
-    if (prev === 0) out.push(base.text.slice(runStart, i))
-    else out.push(markPlaceholder(String.fromCharCode(prev)))
-    runStart = i
-    prev = k
-  }
-  if (prev === 0) out.push(base.text.slice(runStart))
-  return out.join("")
-}
+// Pembersihan kontrol/ANSI + redaksi ada di `lib/server/redact.ts` (M6); diekspor ulang agar impor
+// lama (`provisioning.ts`, test M5) tetap berlaku.
+export { cleanAndRedact, stripAnsi, stripControl } from "@/lib/server/redact"
 
 function truncateMessage(s: string): string {
   return s.length > EVENT_MESSAGE_MAX ? s.slice(0, EVENT_MESSAGE_MAX) + TRUNCATED_SUFFIX : s

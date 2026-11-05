@@ -21,7 +21,7 @@ import { installHosts } from "@/lib/server/install-service"
 import { stageEnteredAt, sweepJobs, timeoutMessage } from "@/lib/server/job-lifecycle"
 import { clearLeaseCache } from "@/lib/server/leases"
 import { handleLogPost, serveConfigFile } from "@/lib/server/provisioning"
-import { HASH_REDACTED, REDACTED, REDACTED_KEY, redactSecrets } from "@/lib/server/redact"
+import { HASH_REDACTED, markPlaceholder, REDACTED, REDACTED_KEY, redactSecrets, secretMarks } from "@/lib/server/redact"
 import { stopWatchdog } from "@/lib/server/watchdog"
 import { makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { DUMMY_PASSWORD } from "@/test/fixtures"
@@ -92,8 +92,12 @@ describe("SR-5-1 sanitasi sebelum redaksi", () => {
   ]
   it.each(cases)("cleanEventMessage: %s", (_n, input, want) => {
     expect(cleanEventMessage(input)).toBe(want)
-    // Urutan lama (redaksi → sanitasi) memang bocor — bukti test ini menguji urutan.
-    expect(sanitizeMessage(redactSecrets(input))).not.toBe(want)
+    // Urutan lama (redaksi → sanitasi) memang bocor — bukti test ini menguji urutan. M6: kontrol
+    // memakai deteksi pola mentah (`secretMarks`, tanpa salinan pencocokan); `redactSecrets` sendiri
+    // kini membuang kontrol di salinan pencocokannya (SR-5-18) sehingga tidak lagi bocor.
+    const patternOnly = (t: string) => secretMarks(t).replace(/[\uE000-\uE002]+/g, (m) => markPlaceholder(m[0]))
+    expect(sanitizeMessage(patternOnly(input))).not.toBe(want)
+    expect(redactSecrets(input)).not.toContain(TOK.slice(25, 33))
   })
   it.each(cases)("appendEvent menyimpan pesan teredaksi: %s", (_n, input, want) => {
     getDb()
@@ -244,7 +248,7 @@ describe("CR-5-1 + SR-5-5(a) token parsial, percent-encoded, hash terpotong", ()
       `/boot/${MAC}/${TOK}x/status`,
       `/boot/${MAC}/abc/status`,
       `%2Fboot%2F${MAC}%2F${TOK}x`,
-      "token=terlalu-pendek",
+      "token=pendek7", // M6 (CR-5-21): `token=<8..43>` kini disamarkan; batas negatif = 7 karakter
       "$6$ tanpa hash lengkap",
       "/boot/52:54:00:99:00:11.ipxe?platform=efi",
     ]) {

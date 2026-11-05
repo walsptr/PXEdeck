@@ -1,0 +1,25 @@
+10:00:01,001 INF anaconda: 34.25.4.9-1.el9.rocky.0.1 started.
+10:00:01,002 INF anaconda: kernel command line: BOOT_IMAGE=vmlinuz initrd=initrd ip=dhcp inst.repo=http://10.99.0.2/media/rocky-9 inst.ks=http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/ks.cfg inst.text console=ttyS0,115200n8
+10:00:01,050 DBG anaconda.core.configuration.anaconda: Loading configuration file: /etc/anaconda/anaconda.conf
+10:00:01,051 DBG anaconda.core.configuration.anaconda: Loading configuration file: /etc/anaconda/product.d/rocky.conf
+10:00:01,200 INF anaconda.core.kickstart: Parsing kickstart: /run/install/ks.cfg
+10:00:01,201 DBG anaconda.core.kickstart: rootpw --lock
+10:00:01,202 DBG anaconda.core.kickstart: user --name=ops --groups=wheel --iscrypted --password={{HASH}}
+10:00:01,203 DBG anaconda.core.kickstart: network --bootproto=static --ip=10.99.0.31 --netmask=255.255.255.0 --gateway=10.99.0.1 --nameserver=10.99.0.2 --device={{MAC}} --hostname=m6-node13 --activate
+10:00:01,204 DBG anaconda.core.kickstart: url --url=http://10.99.0.2/media/rocky-9
+10:00:01,300 INF anaconda.modules.storage.disk_selection: Selected disks: vda
+10:00:01,301 INF anaconda.modules.storage.partitioning: autopart --type=lvm --nohome
+10:00:02,410 INF anaconda.threading: Thread Done: AnaInstallThread (140211542091520)
+10:00:03,001 INF anaconda.modules.payloads.payload.dnf: Downloading packages: 412/412 (100%)
+10:00:03,002 INF anaconda.modules.payloads.payload.dnf: Installing kernel-5.14.0-427.13.1.el9_4.x86_64 (238/412)
+10:00:03,003 INF anaconda.modules.payloads.payload.dnf: Configuring openssh-server.x86_64 (401/412)
+10:00:03,500 INF anaconda.modules.storage.bootloader.base: Bootloader: /boot/efi/EFI/rocky/grubx64.efi
+10:00:03,501 DBG anaconda.modules.storage.bootloader.base: BLS entry /boot/loader/entries/3c7b5b0e4f1a4d0e8a2b6c1d9e8f7a6b-5.14.0-427.13.1.el9_4.x86_64.conf
+10:00:03,502 DBG anaconda.modules.storage.bootloader.base: kernel args: ro crashkernel=1G-4G:192M,4G-64G:256M rd.lvm.lv=rl/root console=ttyS0,115200n8
+10:00:04,000 INF anaconda.modules.services.services: Enabling service sshd.service
+10:00:04,100 INF anaconda.core.util: Running in chroot '/mnt/sysroot'... /bin/sh /tmp/ks-script-pxepost
+10:00:04,101 DBG anaconda.core.util: ks-script: curl -fsS -m 10 -X POST -d stage=configuring http%3A%2F%2F10.99.0.2%2Fboot%2F{{MAC}}%2F{{TOKEN}}%2Fstatus
+10:00:04,102 DBG anaconda.core.util: ks-script: encoded twice %252Fboot%252F{{MAC}}%252F{{TOKEN}}%252Fstatus
+10:00:04,200 INF anaconda.core.util: ks-script: wrote /home/ops/.ssh/authorized_keys (2 keys)
+10:00:04,201 DBG anaconda.core.util: ks-script: sudoers drop-in /etc/sudoers.d/90-pxe-ops mode 0440
+10:00:04,300 INF anaconda: Installation complete, rebooting in 5 seconds
