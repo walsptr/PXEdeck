@@ -1,11 +1,13 @@
 import { connection } from "next/server"
 
 import { listKeys } from "@/lib/server/db/repos/ssh-keys"
-import { guardMutation, jsonNoStore, readJson } from "@/lib/server/http"
+import { guardMutation, guardRead, jsonNoStore, readJson } from "@/lib/server/http"
 import { createSshKey, newSshKeyPayload } from "@/lib/server/library-service"
 
 /** Library SSH key (public key saja). */
-export async function GET() {
+export async function GET(req: Request) {
+  const denied = guardRead(req)
+  if (denied) return denied
   await connection()
   return jsonNoStore(listKeys())
 }

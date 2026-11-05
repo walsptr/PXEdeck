@@ -15,7 +15,8 @@ import { getSettings } from "@/lib/server/settings"
 // Perlindungan request mutasi (SR-2-2, SR-3-2, SR-3-3) — sampai auth/CSRF M6:
 //  - SETIAP handler POST/PATCH/DELETE memanggil `guardMutation(req, mode)`
 //    sebagai langkah pertama:
-//      * header Host efektif (X-Forwarded-Host / Host) wajib ada di allowlist
+//      * header Host efektif (Host; X-Forwarded-Host HANYA bila
+//        PXE_TRUST_PROXY=1, CR-4-15) wajib ada di allowlist
 //        `PXE_ALLOWED_HOSTS` (default: localhost, 127.0.0.1, [::1], IP PXE
 //        server, host dari PXE_BASE_URL) — SR-3-5, menutup DNS rebinding
 //        (Origin = Host = domain penyerang) → 403 "Host tidak diizinkan".
@@ -38,7 +39,8 @@ import { getSettings } from "@/lib/server/settings"
 //    stream dibaca dan dihentikan begitu melewati batas → 413
 //    "Body melebihi batas 1 MB". Batas di atas batas zod terbesar (CSV 200 rb
 //    karakter, termasuk escape JSON/UTF-8).
-//  - Semua GET API mengirim `Cache-Control: no-store` (`NO_STORE`).
+//  - Semua GET API mengirim `Cache-Control: no-store` (`NO_STORE`) dan memanggil
+//    `guardRead(req)` (allowlist Host yang sama, DEC-015) sebagai langkah pertama.
 
 /** Batas ukuran body JSON request (byte). */
 export const MAX_JSON_BODY_BYTES = 1024 * 1024
@@ -61,8 +63,15 @@ function isJsonContentType(ct: string): boolean {
   return ct.split(";")[0].trim().toLowerCase() === "application/json"
 }
 
-function requestHost(req: Request): string {
-  const fwd = req.headers.get("x-forwarded-host")?.split(",")[0].trim()
+/**
+ * Host efektif request. `X-Forwarded-Host` hanya dibaca bila proxy dipercaya
+ * (`PXE_TRUST_PROXY=1`, CR-4-15/SR-4-9); tanpa itu klien bisa memalsukannya
+ * untuk melewati allowlist Host.
+ */
+export function requestHost(req: Request, trustProxy: boolean = getSettings().trustProxy): string {
+  const fwd = trustProxy
+    ? req.headers.get("x-forwarded-host")?.split(",")[0].trim()
+    : undefined
   return (fwd || req.headers.get("host") || new URL(req.url).host).toLowerCase()
 }
 
@@ -85,6 +94,26 @@ export function isHostAllowed(host: string, allowed: readonly string[]): boolean
 }
 
 /**
+ * Allowlist Host untuk request baca `GET /api/**` (DEC-015, O9): Host di luar
+ * `PXE_ALLOWED_HOSTS` → 403 "Host tidak diizinkan" (menutup DNS rebinding
+ * terhadap data host/job sebelum login M6). Panggil sebagai langkah pertama
+ * setiap handler GET API.
+ */
+export function guardRead(req: Request): Response | null {
+  let s
+  try {
+    s = getSettings()
+  } catch (e) {
+    // Env tidak valid → 500 yang menyebut variabelnya (konvensi M4), fail-closed.
+    return jsonNoStore({ error: (e as Error).message }, { status: 500 })
+  }
+  if (!isHostAllowed(requestHost(req, s.trustProxy), s.allowedHosts)) {
+    return errorResponse(403, "Host tidak diizinkan")
+  }
+  return null
+}
+
+/**
  * Pemeriksaan wajib request mutasi (lihat konvensi di atas). Mengembalikan
  * Response 403/415 bila ditolak, atau null bila boleh lanjut.
  */
@@ -92,18 +121,20 @@ export function guardMutation(
   req: Request,
   body: "json" | "none",
 ): Response | null {
-  if (!isHostAllowed(requestHost(req), getSettings().allowedHosts)) {
+  const s = getSettings()
+  const host = requestHost(req, s.trustProxy)
+  if (!isHostAllowed(host, s.allowedHosts)) {
     return errorResponse(403, "Host tidak diizinkan")
   }
   const origin = req.headers.get("origin")
   if (origin !== null) {
-    let host: string | null = null
+    let originHost: string | null = null
     try {
-      host = new URL(origin).host.toLowerCase()
+      originHost = new URL(origin).host.toLowerCase()
     } catch {
-      host = null // "null" atau nilai rusak
+      originHost = null // "null" atau nilai rusak
     }
-    if (host === null || host !== requestHost(req)) {
+    if (originHost === null || originHost !== host) {
       return errorResponse(403, "Request lintas-origin ditolak")
     }
   }

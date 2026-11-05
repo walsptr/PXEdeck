@@ -1,6 +1,6 @@
 import { connection } from "next/server"
 
-import { jsonNoStore } from "@/lib/server/http"
+import { guardRead, jsonNoStore } from "@/lib/server/http"
 import { getSettings, toSettingsResponse } from "@/lib/server/settings"
 
 /**
@@ -10,7 +10,9 @@ import { getSettings, toSettingsResponse } from "@/lib/server/settings"
  * `Cache-Control: no-store`. Env tidak valid → 500 `{error}` yang menyebut
  * nama variabel. `/api/network` tetap ada (subset, kontrak M3).
  */
-export async function GET() {
+export async function GET(req: Request) {
+  const denied = guardRead(req)
+  if (denied) return denied
   await connection()
   try {
     return jsonNoStore(toSettingsResponse(getSettings()))

@@ -1,6 +1,6 @@
 import { connection } from "next/server"
 
-import { jsonNoStore } from "@/lib/server/http"
+import { guardRead, jsonNoStore } from "@/lib/server/http"
 import { getServerStatus } from "@/lib/server/server-status"
 
 /**
@@ -8,7 +8,9 @@ import { getServerStatus } from "@/lib/server/server-status"
  * `state` online|offline|unknown (+ `online` boolean untuk komponen lama).
  * Env tidak valid → 500 `{error}`. Selalu no-store.
  */
-export async function GET() {
+export async function GET(req: Request) {
+  const denied = guardRead(req)
+  if (denied) return denied
   await connection()
   try {
     return jsonNoStore(getServerStatus())

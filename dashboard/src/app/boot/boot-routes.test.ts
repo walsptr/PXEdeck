@@ -18,6 +18,7 @@ import { hashToken } from "@/lib/server/tokens"
 import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { containsSecret, evalCallbackUrl } from "@/test/cmdline"
 import { DUMMY_PASSWORD, SSH_ED25519 } from "@/test/fixtures"
+import { getReq } from "@/test/route"
 
 import { GET as hostsGET } from "../api/hosts/route"
 import { DELETE as hostDELETE } from "../api/hosts/[id]/route"
@@ -39,6 +40,9 @@ const KVM_ENV = {
   PXE_BASE_URL: "http://10.99.0.2",
   PXE_MEDIA_ROOT: MEDIA,
   PXE_TRUST_PROXY: "1",
+  // DEC-013 (M5): trust proxy tanpa file lease wajib flag dev eksplisit; test yang memerlukan
+  // verifikasi lease menyetel fixture lease (`writeLeases`). Lihat .agent/runs/m5/test-migration.md.
+  PXE_INSECURE_NO_LEASE_CHECK: "1",
   PXE_KERNEL_EXTRA_ARGS: "console=ttyS0,115200n8 console=tty0",
 }
 withDb("empty", KVM_ENV)
@@ -232,19 +236,19 @@ describe("AC-4.11 sinkron lease saat GET /api/hosts", () => {
     const before = getHost(ID2)
     writeLeases([`${exp()} ${MAC} ${LEASE_IP} node11 *`, `${exp()} ${MAC2} 10.99.0.199 * *`, `${exp()} 52:54:00:99:00:13 10.99.0.170 * *`])
     vi.setSystemTime(new Date(T0.getTime() + 5_000))
-    const res = await hostsGET()
+    const res = await hostsGET(getReq("/api/hosts"))
     const hosts = (await res.json()).hosts as { mac: string; status: string; currentIp: string }[]
     expect(hosts.map((h) => h.mac)).toEqual([MAC, MAC2, "52:54:00:99:00:13"])
     expect(getHost(ID)).toMatchObject({ status: "discovered", currentIp: LEASE_IP, vendor: "QEMU/KVM", firmware: null, lastSeen: "2026-11-05T10:00:05.000Z" })
     expect(getHost(ID2)).toEqual(before)
     // Kedua kali: tidak ada duplikat.
-    await hostsGET()
+    await hostsGET(getReq("/api/hosts"))
     expect(getDb().prepare("SELECT count(*) AS n FROM hosts").get()).toEqual({ n: 3 })
   })
   it("tanpa file lease / file kosong → tidak ada host baru", async () => {
-    await hostsGET()
+    await hostsGET(getReq("/api/hosts"))
     writeLeases([])
-    await hostsGET()
+    await hostsGET(getReq("/api/hosts"))
     expect(getDb().prepare("SELECT count(*) AS n FROM hosts").get()).toEqual({ n: 0 })
   })
 })

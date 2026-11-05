@@ -1,7 +1,7 @@
 import { connection } from "next/server"
 
 import { toNetworkResponse } from "@/lib/net"
-import { jsonNoStore } from "@/lib/server/http"
+import { guardRead, jsonNoStore } from "@/lib/server/http"
 import { getMgmtNetwork } from "@/lib/server/net-config"
 
 /**
@@ -9,7 +9,9 @@ import { getMgmtNetwork } from "@/lib/server/net-config"
  * `PXE_MGMT_*` — sumber yang sama dengan validasi server (DEC-006, CR-3-2).
  * Selalu `Cache-Control: no-store`. Env tidak konsisten → 500 {error}.
  */
-export async function GET() {
+export async function GET(req: Request) {
+  const denied = guardRead(req)
+  if (denied) return denied
   await connection()
   try {
     return jsonNoStore(toNetworkResponse(getMgmtNetwork()))

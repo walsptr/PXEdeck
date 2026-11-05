@@ -18,7 +18,7 @@ import { applyConfig } from "@/lib/server/config-service"
 import { peekConfig } from "@/lib/server/db/repos/configs"
 import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { DUMMY_PASSWORD, SSH_ED25519 } from "@/test/fixtures"
-import { ctx, jsonReq } from "@/test/route"
+import { ctx, getReq, jsonReq } from "@/test/route"
 
 import { POST as csvImport } from "./credentials/import/route"
 import { GET as networkGET } from "./network/route"
@@ -68,7 +68,7 @@ const staticNet = (assignments: Record<string, string>, gateway = "10.10.10.1") 
 // ---------------------------------------------------------------------------------------------
 describe("iter2 CR-3-2 GET /api/network", () => {
   it("tanpa env → default lab {cidr,prefix,gateway,dns,dynamicRange,pxeServer} + no-store", async () => {
-    const res = await networkGET()
+    const res = await networkGET(getReq("/api/network"))
     expect(res.status).toBe(200)
     expect(res.headers.get("cache-control")).toBe("no-store")
     expect(await res.json()).toEqual({
@@ -87,7 +87,7 @@ describe("iter2 CR-3-2 GET /api/network", () => {
     process.env.PXE_MGMT_DNS = "10.99.0.1,1.1.1.1"
     process.env.PXE_SERVER_IP = "10.99.0.2"
     process.env.PXE_DYNAMIC_RANGE = "10.99.0.100-10.99.0.200"
-    const res = await networkGET()
+    const res = await networkGET(getReq("/api/network"))
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({
       cidr: "10.99.0.0/24",
@@ -104,12 +104,12 @@ describe("iter2 CR-3-2 GET /api/network", () => {
     process.env.PXE_MGMT_GATEWAY = "172.16.0.1"
     process.env.PXE_SERVER_IP = "172.16.0.2"
     process.env.PXE_DYNAMIC_RANGE = "172.16.200.1-172.16.200.254"
-    expect(await (await networkGET()).json()).toMatchObject({ cidr: "172.16.0.0/16", prefix: 16 })
+    expect(await (await networkGET(getReq("/api/network"))).json()).toMatchObject({ cidr: "172.16.0.0/16", prefix: 16 })
   })
 
   it("env tidak konsisten → 500 {error} yang menyebut variabelnya, tetap no-store", async () => {
     process.env.PXE_MGMT_CIDR = "10.99.0.0/24" // gateway default 10.10.10.1 di luar subnet
-    const res = await networkGET()
+    const res = await networkGET(getReq("/api/network"))
     expect(res.status).toBe(500)
     expect(res.headers.get("cache-control")).toBe("no-store")
     expect((await res.json()).error).toMatch(/PXE_MGMT_GATEWAY/)
@@ -120,7 +120,7 @@ describe("iter2 CR-3-2 GET /api/network", () => {
     process.env.PXE_MGMT_GATEWAY = "10.99.0.1"
     process.env.PXE_SERVER_IP = "10.99.0.2"
     process.env.PXE_DYNAMIC_RANGE = "10.99.0.100-10.99.0.200"
-    const net = await (await networkGET()).json()
+    const net = await (await networkGET(getReq("/api/network"))).json()
     const ok = await PATCH(
       jsonReq(`/api/hosts/${DISC1}`, "PATCH", {
         network: { ...staticNet({ [DISC1]: "10.99.0.11" }, net.gateway), prefix: net.prefix, dns: net.dns },
@@ -143,11 +143,11 @@ describe("iter2 CR-3-2 GET /api/network", () => {
 describe("iter2 CR-2-5 Cache-Control: no-store di semua GET API", () => {
   it("hosts, host/:id, host/:id 404, config, ssh-keys, network", async () => {
     const responses: [string, Response][] = [
-      ["GET /api/hosts", await listGET()],
+      ["GET /api/hosts", await listGET(getReq("/api/hosts"))],
       ["GET /api/hosts/:id", await oneGET(jsonReq("/x", "GET"), ctx(NODE01))],
       ["GET /api/hosts/:id/config", await getConfig(jsonReq("/x", "GET"), ctx(NODE01))],
-      ["GET /api/ssh-keys", await sshKeys()],
-      ["GET /api/network", await networkGET()],
+      ["GET /api/ssh-keys", await sshKeys(getReq("/api/ssh-keys"))],
+      ["GET /api/network", await networkGET(getReq("/api/network"))],
     ]
     for (const [name, res] of responses) {
       expect(res.status, name).toBe(200)
@@ -252,6 +252,10 @@ describe("iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek",
     expect(r1.status).toBe(200)
     // SR-3-5: pxe.lab.example harus ada di allowlist Host agar lolos guard.
     process.env.PXE_ALLOWED_HOSTS = "localhost,pxe.lab.example"
+    // CR-4-15 (M5): X-Forwarded-Host hanya dibaca di belakang proxy tepercaya (PXE_TRUST_PROXY=1,
+    // yang sejak DEC-013 mewajibkan file lease).
+    process.env.PXE_TRUST_PROXY = "1"
+    process.env.PXE_DNSMASQ_LEASES = "/var/lib/misc/dnsmasq.leases"
     const r2 = await reboot(
       rawReq(`/api/hosts/${LEGACY01}/reboot`, "POST", {
         origin: "https://pxe.lab.example",
@@ -287,6 +291,9 @@ describe("SR-3-5 guardMutation: header Host di luar allowlist → 403 tanpa efek
   }
   it("PXE_ALLOWED_HOSTS: entri tanpa port menerima port apa pun; host lain tetap 403", async () => {
     process.env.PXE_ALLOWED_HOSTS = "pxe.lab.example"
+    // CR-4-15 (M5): X-Forwarded-Host hanya dipercaya dengan PXE_TRUST_PROXY=1 (+ file lease, DEC-013).
+    process.env.PXE_TRUST_PROXY = "1"
+    process.env.PXE_DNSMASQ_LEASES = "/var/lib/misc/dnsmasq.leases"
     const ok = await PATCH(
       rawReq(`/api/hosts/${NODE01}`, "PATCH", { ...JSON_CT, "x-forwarded-host": "pxe.lab.example:8080", origin: "http://pxe.lab.example:8080" }, JSON.stringify({ network: { mode: "dhcp" } })),
       ctx(NODE01),

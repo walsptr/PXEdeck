@@ -71,7 +71,13 @@ const FILE_SERVERS = [
     testMatch: /m4-discovery\.spec\.ts/,
     env: { ...M4_ENV, ...dbEnv("m4-discovery", "empty"), PXE_DNSMASQ_LEASES: e2eLeaseFile("m4-discovery") },
   },
-  { name: "m4-settings", port: 3109, testMatch: /m4-settings\.spec\.ts/, env: { ...M4_ENV, ...dbEnv("m4-settings") } },
+  {
+    name: "m4-settings",
+    port: 3109,
+    testMatch: /m4-settings\.spec\.ts/,
+    // DEC-013 (M5): PXE_TRUST_PROXY=1 wajib disertai file lease (fail-closed) → fixture lease kosong.
+    env: { ...M4_ENV, ...dbEnv("m4-settings"), PXE_DNSMASQ_LEASES: e2eLeaseFile("m4-settings") },
+  },
 ] as const
 
 const chromium = { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }

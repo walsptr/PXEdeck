@@ -15,7 +15,7 @@ import { getActiveJob, listJobsForHost } from "@/lib/server/db/repos/jobs"
 import { createSshKey } from "@/lib/server/library-service"
 import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ECDSA, SSH_ED25519, SSH_ED25519_B, SSH_RSA } from "@/test/fixtures"
-import { ctx, jsonReq } from "@/test/route"
+import { ctx, getReq, jsonReq } from "@/test/route"
 
 import { POST as csvImport } from "./credentials/import/route"
 import { POST as bulk } from "./hosts/bulk/route"
@@ -398,7 +398,7 @@ describe("AC-3.10 hostname & SSH", () => {
   it("key valid + saveToLibrary → muncul di GET /api/ssh-keys dengan fingerprint benar", async () => {
     const res = await patch(NODE01, ssh([ADMIN_KEY, ADMIN_KEY], [{ name: "Laptop ops", publicKey: SSH_ED25519.publicKey, saveToLibrary: true }], "ops"))
     expect(res.status).toBe(200)
-    const keys = await (await sshKeys()).json()
+    const keys = await (await sshKeys(getReq("/api/ssh-keys"))).json()
     expect(keys.map((k: { name: string }) => k.name)).toEqual(["Admin workstation", "Laptop ops"])
     const k = keys[1]
     expect(k).toMatchObject({ type: "ssh-ed25519", fingerprint: SSH_ED25519.fingerprint, comment: SSH_ED25519.comment })
@@ -410,7 +410,7 @@ describe("AC-3.10 hostname & SSH", () => {
   it("key valid tanpa saveToLibrary → extraKeys, library tetap", async () => {
     expect((await patch(NODE01, ssh([], [{ name: "", publicKey: SSH_RSA.publicKey, saveToLibrary: false }]))).status).toBe(200)
     expect((await config(NODE01)).extraKeys).toEqual([SSH_RSA.publicKey])
-    expect(await (await sshKeys()).json()).toHaveLength(1)
+    expect(await (await sshKeys(getReq("/api/ssh-keys"))).json()).toHaveLength(1)
   })
   it("fingerprint duplikat (library / dalam request) → 422 (G3-3)", async () => {
     await patch(NODE01, ssh([], [{ name: "A", publicKey: SSH_ED25519.publicKey, saveToLibrary: true }]))

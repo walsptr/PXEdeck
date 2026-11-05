@@ -196,6 +196,8 @@ describe("request-ip (AC-4.9: PXE_TRUST_PROXY)", () => {
     const req = new Request("http://localhost/boot/x", { headers: { "x-real-ip": "10.99.0.150" } })
     expect(requestIp(req)).toBeNull()
     process.env.PXE_TRUST_PROXY = "1"
+    // DEC-013 (M5): trust proxy wajib file lease (fail-closed).
+    process.env.PXE_DNSMASQ_LEASES = "/var/lib/misc/dnsmasq.leases"
     expect(requestIp(req)).toBe("10.99.0.150")
   })
 })

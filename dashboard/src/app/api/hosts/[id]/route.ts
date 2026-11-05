@@ -2,6 +2,7 @@ import { configPayload } from "@/lib/host-config"
 import { applyConfig } from "@/lib/server/config-service"
 import {
   guardMutation,
+  guardRead,
   hostIdParam,
   jsonNoStore,
   hostNotFound,
@@ -14,7 +15,9 @@ import { deleteHost, getHost } from "@/lib/server/db/repos/hosts"
 // (403/415) — lihat lib/server/http.ts. DELETE meng-cascade config, join key,
 // dan job (token job ikut tercabut).
 
-export async function GET(_req: Request, ctx: RouteContext<"/api/hosts/[id]">) {
+export async function GET(req: Request, ctx: RouteContext<"/api/hosts/[id]">) {
+  const denied = guardRead(req)
+  if (denied) return denied
   const p = hostIdParam((await ctx.params).id)
   if ("response" in p) return p.response
   const host = getHost(p.id)

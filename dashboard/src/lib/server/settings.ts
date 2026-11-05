@@ -44,12 +44,35 @@ export type Settings = {
   kernelExtraArgs: string
   dbPath: string
   seed: SeedName
-  /** Header Host yang diterima untuk request mutasi (SR-3-5). */
+  /** Header Host yang diterima untuk semua request API (SR-3-5, DEC-015). */
   allowedHosts: string[]
+  /** Timeout absolut per tahap job (menit, DEC-014 §2). */
+  jobTimeouts: JobTimeouts
+  /** Maks. penyajian script installer per job (CR-4-1, DEC-014 §1). */
+  maxInstallerBoots: number
+  /** Interval timer watchdog in-process (detik). */
+  watchdogIntervalSec: number
+  /** Batas event per job (DEC-014 §3). */
+  jobLogMaxEvents: number
+  /** Jumlah job final yang disimpan per host (DEC-014 §3). */
+  jobHistoryPerHost: number
+  /**
+   * HANYA dev: izinkan trust proxy tanpa file lease dnsmasq dan terbitkan
+   * installer tanpa verifikasi lease (DEC-013). Diperingatkan saat start.
+   */
+  insecureNoLeaseCheck: boolean
+}
+
+export type JobTimeouts = {
+  bootingMin: number
+  installingMin: number
+  configuringMin: number
 }
 
 export type SettingsEnv = Record<string, string | undefined>
 
+/** Karakter URL yang diterima settings (⊂ `SAFE_RE` di boot-script.ts, CR-4-10). */
+export const URL_SAFE_RE = /^[A-Za-z0-9.:/_-]+$/
 const KERNEL_ARGS_RE = /^[A-Za-z0-9 ,._=:/@+-]*$/
 const PATH_RE = /^\/[A-Za-z0-9._/-]*$/
 const HOSTNAME_RE = /^(\[[0-9a-f:]+\]|[a-z0-9.-]+)(:\d{1,5})?$/
@@ -73,7 +96,11 @@ function httpUrl(key: string, raw: string): string {
     fail(`${key} harus http:// atau https://`)
   if (u.search || u.hash || u.username || u.password)
     fail(`${key} tidak boleh memuat query, fragment, atau kredensial`)
-  if (!/^[A-Za-z0-9.:/_[\]-]+$/.test(u.href))
+  // CR-4-10: literal IPv6 (`[..]`) tidak aman untuk script iPXE (`ipxeSafe`).
+  if (u.hostname.startsWith("[") || u.href.includes("[") || u.href.includes("]"))
+    fail(`${key} tidak boleh memakai literal IPv6 ([…]); pakai IPv4 atau nama host`)
+  // Subset ketat dari karakter yang lolos `ipxeSafe` (boot-script.ts).
+  if (!URL_SAFE_RE.test(u.href))
     fail(`${key} memuat karakter yang tidak diizinkan`)
   return u.href.replace(/\/+$/, "")
 }
@@ -85,6 +112,23 @@ function absPath(key: string, raw: string): string {
 }
 
 const intSchema = z.coerce.number().int()
+
+/** Bilangan bulat env dalam [min, max]; kosong → `def`. */
+function intEnv(env: SettingsEnv, key: string, def: number, min: number, max: number): number {
+  const raw = str(env, key)
+  if (raw === undefined) return def
+  const v = intSchema.safeParse(raw)
+  if (!/^-?\d+$/.test(raw) || !v.success || v.data < min || v.data > max)
+    fail(`${key} harus bilangan bulat ${min}–${max}`)
+  return v.data
+}
+
+/** Flag 0/1/true/false; kosong → false. */
+function flagEnv(env: SettingsEnv, key: string): boolean {
+  const raw = (str(env, key) ?? "0").toLowerCase()
+  if (!["0", "1", "true", "false"].includes(raw)) fail(`${key} harus 0 atau 1`)
+  return raw === "1" || raw === "true"
+}
 
 /**
  * Bangun `Settings` dari env (fungsi murni). Default = lab asli
@@ -145,13 +189,30 @@ export function settingsFromEnv(env: SettingsEnv): Settings {
   if (!/^[A-Za-z0-9._-]{1,15}$/.test(iface))
     fail(`PXE_DHCP_INTERFACE "${iface}" bukan nama interface`)
 
-  const trustRaw = (str(env, "PXE_TRUST_PROXY") ?? "0").toLowerCase()
-  if (!["0", "1", "true", "false"].includes(trustRaw))
-    fail(`PXE_TRUST_PROXY harus 0 atau 1`)
+  const trustProxy = flagEnv(env, "PXE_TRUST_PROXY")
+  const insecureNoLeaseCheck = flagEnv(env, "PXE_INSECURE_NO_LEASE_CHECK")
+  // SR-4-2 / DEC-013: binding IP fail-closed. Di belakang proxy tanpa file
+  // lease, `current_ip` bisa diisi IP peminta mana pun → tolak start.
+  if (trustProxy && !leases && !insecureNoLeaseCheck)
+    fail(
+      "PXE_TRUST_PROXY=1 membutuhkan PXE_DNSMASQ_LEASES (verifikasi IP lease, DEC-013); " +
+        "khusus dev: set PXE_INSECURE_NO_LEASE_CHECK=1",
+    )
 
-  const ttl = intSchema.safeParse(str(env, "PXE_TOKEN_TTL_MIN") ?? "360")
-  if (!ttl.success || ttl.data < 5 || ttl.data > 7 * 24 * 60)
-    fail(`PXE_TOKEN_TTL_MIN harus bilangan bulat 5–10080 (menit)`)
+  const ttl = intEnv(env, "PXE_TOKEN_TTL_MIN", 360, 5, 7 * 24 * 60)
+  const jobTimeouts: JobTimeouts = {
+    bootingMin: intEnv(env, "PXE_JOB_BOOTING_TIMEOUT_MIN", 60, 1, 1440),
+    installingMin: intEnv(env, "PXE_JOB_INSTALLING_TIMEOUT_MIN", 120, 1, 1440),
+    configuringMin: intEnv(env, "PXE_JOB_CONFIGURING_TIMEOUT_MIN", 60, 1, 1440),
+  }
+  const stageSum =
+    jobTimeouts.bootingMin + jobTimeouts.installingMin + jobTimeouts.configuringMin
+  // DEC-014 §2: token tidak boleh kedaluwarsa sebelum watchdog memutuskan.
+  if (ttl < stageSum)
+    fail(
+      `PXE_TOKEN_TTL_MIN (${ttl}) harus ≥ jumlah timeout tahap job (${stageSum} menit: ` +
+        "PXE_JOB_BOOTING/INSTALLING/CONFIGURING_TIMEOUT_MIN)",
+    )
 
   const action = (str(env, "PXE_UNKNOWN_HOST_ACTION") ?? "local").toLowerCase()
   if (action !== "local" && action !== "wait")
@@ -198,14 +259,34 @@ export function settingsFromEnv(env: SettingsEnv): Settings {
     tftpRoot,
     dnsmasqLeases: leases ? absPath("PXE_DNSMASQ_LEASES", leases) : null,
     dnsmasqPidfile: pidfile ? absPath("PXE_DNSMASQ_PIDFILE", pidfile) : null,
-    trustProxy: trustRaw === "1" || trustRaw === "true",
-    tokenTtlMin: ttl.data,
+    trustProxy,
+    tokenTtlMin: ttl,
     unknownHostAction: action,
     kernelExtraArgs: extra,
     dbPath,
     seed,
     allowedHosts: [...new Set(allowedHosts)],
+    jobTimeouts,
+    maxInstallerBoots: intEnv(env, "PXE_JOB_MAX_INSTALLER_BOOTS", 3, 1, 10),
+    watchdogIntervalSec: intEnv(env, "PXE_WATCHDOG_INTERVAL_SEC", 30, 5, 600),
+    jobLogMaxEvents: intEnv(env, "PXE_JOB_LOG_MAX_EVENTS", 5000, 100, 100_000),
+    jobHistoryPerHost: intEnv(env, "PXE_JOB_HISTORY_PER_HOST", 20, 1, 1000),
+    insecureNoLeaseCheck,
   }
+}
+
+/**
+ * Peringatan konfigurasi yang tidak menghentikan start (dicatat sekali saat
+ * start, `instrumentation.ts`). Satu baris per peringatan.
+ */
+export function settingsWarnings(s: Settings): string[] {
+  const out: string[] = []
+  if (s.insecureNoLeaseCheck)
+    out.push(
+      "PERINGATAN: PXE_INSECURE_NO_LEASE_CHECK=1 — verifikasi IP lease dnsmasq dimatikan; " +
+        "script installer & file konfigurasi dilayani tanpa binding lease (HANYA untuk dev, DEC-013)",
+    )
+  return out
 }
 
 /** Nama env yang memengaruhi `getSettings()` (kunci cache). */
@@ -230,6 +311,14 @@ export const SETTINGS_ENV_KEYS = [
   "PXE_DB_PATH",
   "PXE_SEED",
   "PXE_ALLOWED_HOSTS",
+  "PXE_JOB_BOOTING_TIMEOUT_MIN",
+  "PXE_JOB_INSTALLING_TIMEOUT_MIN",
+  "PXE_JOB_CONFIGURING_TIMEOUT_MIN",
+  "PXE_JOB_MAX_INSTALLER_BOOTS",
+  "PXE_WATCHDOG_INTERVAL_SEC",
+  "PXE_JOB_LOG_MAX_EVENTS",
+  "PXE_JOB_HISTORY_PER_HOST",
+  "PXE_INSECURE_NO_LEASE_CHECK",
   "NODE_ENV",
   "VITEST",
 ] as const
@@ -253,6 +342,9 @@ export type SettingsResponse = NetworkResponse & {
   tftpRoot: string
   tokenTtlMin: number
   unknownHostAction: UnknownHostAction
+  jobTimeouts: JobTimeouts
+  maxInstallerBoots: number
+  insecureNoLeaseCheck: boolean
 }
 
 export function toSettingsResponse(s: Settings): SettingsResponse {
@@ -264,6 +356,9 @@ export function toSettingsResponse(s: Settings): SettingsResponse {
     tftpRoot: s.tftpRoot,
     tokenTtlMin: s.tokenTtlMin,
     unknownHostAction: s.unknownHostAction,
+    jobTimeouts: { ...s.jobTimeouts },
+    maxInstallerBoots: s.maxInstallerBoots,
+    insecureNoLeaseCheck: s.insecureNoLeaseCheck,
   }
 }
 

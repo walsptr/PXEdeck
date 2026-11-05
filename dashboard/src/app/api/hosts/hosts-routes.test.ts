@@ -10,7 +10,7 @@ vi.mock("next/server", () => ({ connection: vi.fn(async () => undefined) }))
 import { resetDb } from "@/lib/server/db/reset"
 import { getHost } from "@/lib/server/db/repos/hosts"
 import { PROVISION_STATUSES } from "@/lib/types"
-import { ctx, jsonReq } from "@/test/route"
+import { ctx, getReq, jsonReq } from "@/test/route"
 import { dbSnapshot, withDb } from "@/test/db"
 
 import { GET as listGET } from "./route"
@@ -38,7 +38,7 @@ const HostSchema = z.strictObject({
 
 describe("AC-2.5 GET /api/hosts", () => {
   it("200, Cache-Control no-store, {hosts, serverTime} lolos skema Host", async () => {
-    const res = await listGET()
+    const res = await listGET(getReq("/api/hosts"))
     expect(res.status).toBe(200)
     expect(res.headers.get("cache-control")).toBe("no-store")
     const body = await res.json()
@@ -50,7 +50,7 @@ describe("AC-2.5 GET /api/hosts", () => {
 
   it("seed empty → hosts []", async () => {
     resetDb("empty")
-    const body = await (await listGET()).json()
+    const body = await (await listGET(getReq("/api/hosts"))).json()
     expect(body.hosts).toEqual([])
   })
 })
@@ -87,7 +87,7 @@ describe("AC-2.6 DELETE & reboot", () => {
     expect(await res.text()).toBe("")
     const again = await oneGET(jsonReq("/x", "GET"), ctx("525400101011"))
     expect(again.status).toBe(404)
-    const list = await (await listGET()).json()
+    const list = await (await listGET(getReq("/api/hosts"))).json()
     expect(list.hosts).toHaveLength(13)
   })
   it("DELETE id tak dikenal → 404; id invalid → 400", async () => {
