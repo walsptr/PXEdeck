@@ -127,7 +127,7 @@ def main(argv):
         path, milestone, scenario, src = argv[2], argv[3], argv[4], argv[5]
         run = load(src, f"{milestone}{scenario}")
         statuses = [r.get("status") for r in run.get("results", []) if isinstance(r, dict)]
-        bad = [s for s in statuses if s not in ("PASS", "SKIP-NA")]
+        bad = [s for s in statuses if s not in ("PASS", "SKIP-NA", "DRY-RUN")]
         harness_exit = (run.get("harness") or {}).get("exit", 0)
         ok = bool(statuses) and not bad and harness_exit == 0
         run_summary = {"status": "PASS" if ok else "FAIL", "summarizedAt": now()}

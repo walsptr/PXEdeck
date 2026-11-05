@@ -155,7 +155,9 @@ libvirt_norm() {
 libvirt_snapshot "$RUNS_DIR/libvirt-before.txt"
 
 # --- cleanup selalu (trap EXIT) ------------------------------------------------------------
-server_started=0; max_nodes=""; avail_mb=""; mem_avail_mb=""
+server_started=0; nodes_created=0; max_nodes=""; avail_mb=""; mem_avail_mb=""
+# Hasil verifikasi SSH per node (indeks NODE_NAMES): PASS|FAIL|NOT_RUN|DRY-RUN + catatan.
+declare -a VERIFY_STATUS=() VERIFY_NOTE=()
 declare -a WAVES=()
 collect_evidence() {
   local i name
@@ -209,6 +211,8 @@ assert_server_logs() {
 json_str() { python3 -I -c 'import json,sys; print(json.dumps(sys.argv[1]))' "$1"; }
 finish() {
   local rc=$? i failed_stage="" cst=PASS cnote="" prot_ok=true remain=0 p b a diff_sum pw_scan=""
+  # Playwright gagal tetapi verifikasi parsial selesai: exit = kode Playwright (bila verifikasi lulus).
+  ((rc == 0 && ${e2e_rc:-0} != 0)) && rc="$e2e_rc"
   trap - EXIT INT TERM
   set +e
   # Password admin run hanya di memori untuk scan bukti di akhir (cleanup.sh menghapus filenya).
@@ -217,9 +221,26 @@ finish() {
   step evidence start
   collect_evidence
   step evidence done
-  if ((server_started)) && ! is_dry; then
+  # BUG-M6-2: asersi log server hanya bermakna bila node sudah dibuat; selain itu entri NOT_RUN
+  # (bukan FAIL palsu "tidak ada TFTP …") dengan tahap gagal sebagai alasan.
+  if ((server_started && nodes_created)) && ! is_dry; then
     if assert_server_logs; then step server-logs ok; else step server-logs FAIL "server-log-asserts.txt"; ((rc != 0)) || rc=1; fi
+  elif ((!nodes_created)); then
+    for i in "${!NODE_NAMES[@]}"; do
+      for p in CR-4-12-dnsmasq CR-4-12-nginx; do
+        [[ "$p" == CR-4-12-dnsmasq && "${NODE_FWS[$i]}" != uefi ]] && continue
+        "${RJ[@]}" add-entry "$RESULTS" "$run_id" "ac=$p" "node=${NODE_NAMES[$i]}" status=NOT_RUN \
+          "note=node tidak dibuat: run berhenti di tahap ${failed_stage:-${stage}}" 'evidence:=["kvm-run.txt"]'
+      done
+    done
+    step server-logs NOT_RUN "node belum dibuat (tahap ${failed_stage:-$stage})"
   fi
+  # Hasil verifikasi SSH per node (juga node yang tidak diverifikasi -> NOT_RUN + alasan).
+  for i in "${!NODE_NAMES[@]}"; do
+    "${RJ[@]}" add-entry "$RESULTS" "$run_id" ac=verify-node "node=${NODE_NAMES[$i]}" "status=${VERIFY_STATUS[$i]:-NOT_RUN}" \
+      "note=${VERIFY_NOTE[$i]:-tidak diverifikasi: run berhenti di tahap ${failed_stage:-$stage}}" \
+      "evidence:=[\"${NODE_NAMES[$i]}-verify.txt\"]"
+  done
   # Cleanup terpisah per VM node yang dibuat run ini (nama eksplisit), lalu cleanup.sh untuk sisa
   # milik run (^pxe-test-<run>-) dan server bila tidak --keep-server.
   for i in "${!NODE_NAMES[@]}"; do
@@ -346,7 +367,9 @@ media_paths=(ubuntu-24.04/casper/vmlinuz)
 for os in "${NODE_OSES[@]}"; do
   case "$os" in
     debian) media_paths+=(debian-netboot/linux debian-netboot/initrd.gz debian-12/dists/bookworm/Release) ;;
-    rocky) media_paths+=(rocky-9/images/pxeboot/vmlinuz rocky-9/images/pxeboot/initrd.img rocky-9/.treeinfo rocky-9/BaseOS/repodata/repomd.xml) ;;
+    # BUG-M6-1: ISO Rocky 9 *minimal* (9.8) hanya punya repo `Minimal/` (.treeinfo
+    # `repository = Minimal`), tanpa BaseOS/AppStream.
+    rocky) media_paths+=(rocky-9/images/pxeboot/vmlinuz rocky-9/images/pxeboot/initrd.img rocky-9/.treeinfo rocky-9/Minimal/repodata/repomd.xml) ;;
   esac
 done
 if is_dry; then
@@ -396,6 +419,7 @@ wait_discovered() {
   done
   return 1
 }
+nodes_created=1
 if ((waves_mode)); then
   stage_begin discover
   for w in "${!WAVES[@]}"; do
@@ -439,8 +463,11 @@ e2e_env=(
   PXE_KVM_ADMIN_USER="$ADMIN_USERNAME" PXE_KVM_ADMIN_PASS_FILE="$ADMIN_PASS_FILE"
   PXE_KVM_MAX_NODES="$max_nodes" PXE_KVM_WAVES="${WAVES[*]:-}" PXE_KVM_BOOTING_TIMEOUT_MIN="${booting_min:-}"
 )
+e2e_rc=0
 if is_dry; then
   run env "${e2e_env[@]}" npx --prefix "$DASH_DIR" playwright test -c "$E2E_CONFIG"
+  # Test harness (dry-run saja): simulasikan exit Playwright ≠ 0.
+  e2e_rc="${PXE_KVM_DRY_PLAYWRIGHT_RC:-0}"
   # Rencana peran destroy (dijalankan suite lewat PXE_KVM_POWER_CMD saat status Installing).
   for i in "${!NODE_NAMES[@]}"; do
     [[ "${NODE_ROLES[$i]}" == destroy ]] || continue
@@ -455,15 +482,38 @@ if is_dry; then
     if ((w + 1 < ${#WAVES[@]})); then for name in "${wn[@]}"; do run "$INFRA_DIR/node.sh" poweroff "$name"; done; fi
   done
 else
-  e2e_rc=0
   (cd "$DASH_DIR" && env "${e2e_env[@]}" npx playwright test -c "$E2E_CONFIG") \
     > "$RUNS_DIR/playwright-kvm.log" 2>&1 || e2e_rc=$?
-  step playwright "$([[ $e2e_rc == 0 ]] && echo ok || echo FAIL)" "exit=$e2e_rc (playwright-kvm.log)"
-  ((e2e_rc == 0)) || exit "$e2e_rc"
 fi
+[[ "$e2e_rc" =~ ^[0-9]+$ ]] || die "PXE_KVM_DRY_PLAYWRIGHT_RC '$e2e_rc' harus angka"
+step playwright "$([[ $e2e_rc == 0 ]] && echo ok || echo FAIL)" "exit=$e2e_rc (playwright-kvm.log)"
 
 # --- verifikasi SSH per node (key yang di-inject) -------------------------------------------
+# Playwright gagal (mis. satu node macet) -> verifikasi parsial: hanya node yang status host-nya
+# `done` di dashboard (GET /api/hosts dengan sesi admin) yang diverifikasi; sisanya NOT_RUN dengan
+# alasan. Exit keseluruhan tetap ≠ 0 (kode Playwright; lihat finish).
 stage_begin verify
+declare -A HOST_STATUS=()
+host_statuses() { # -> baris "<mac> <status>"
+  if is_dry; then tr ' ' '\n' <<<"${PXE_KVM_DRY_HOST_STATUS:-}" | sed -n 's/^\([0-9a-f:]\{17\}\)=\([a-z]*\)$/\1 \2/p'; return 0; fi
+  admin_login "$ADMIN_PASS_FILE" "$SESSION_JAR" >/dev/null || return 1
+  curl -fsS --max-time 10 -b "$SESSION_JAR" "http://$SERVER_IP/api/hosts" 2>/dev/null \
+    | python3 -I -c 'import json,sys; [print(str(h.get("mac","")).lower(), h.get("status","")) for h in json.load(sys.stdin).get("hosts", [])]'
+}
+if ((e2e_rc != 0)); then
+  while read -r hm hs; do [[ -n "$hm" ]] && HOST_STATUS["$hm"]="$hs"; done < <(host_statuses || true)
+  step verify partial "Playwright exit=$e2e_rc: hanya node berstatus done (${#HOST_STATUS[@]} host terbaca)"
+fi
+verify_eligible() { # verify_eligible <index>: 0 bila node boleh diverifikasi
+  local i="$1" st
+  ((e2e_rc == 0)) && return 0
+  st="${HOST_STATUS[${NODE_MACS[$i]}]:-tidak diketahui}"
+  [[ "$st" == done ]] && return 0
+  VERIFY_STATUS[$i]=NOT_RUN
+  VERIFY_NOTE[$i]="tidak diverifikasi: Playwright exit=$e2e_rc, status host $st (bukan done)"
+  step verify NOT_RUN "${NODE_NAMES[$i]} (status host $st)"
+  return 1
+}
 NODE_SSH_OPTS=(-i "$RUN_KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
   -o LogLevel=ERROR -o ConnectTimeout=10 -o BatchMode=yes -o IdentitiesOnly=yes)
 verify_rc=0
@@ -478,6 +528,7 @@ verify_one() { # verify_one <index>
   if is_dry; then
     local vs="$VERIFY_SCRIPT"; [[ -f "$vs" ]] || vs=/dev/null
     run ssh "${NODE_SSH_OPTS[@]}" "$NODE_USER@$ip" "$remote_env bash -s" < "$vs"
+    VERIFY_STATUS[$i]=DRY-RUN; VERIFY_NOTE[$i]="dry-run: verifikasi hanya dicetak"
     return 0
   fi
   vout="$RUNS_DIR/$name-verify.txt"
@@ -498,6 +549,8 @@ verify_one() { # verify_one <index>
     echo "FAIL login password tidak ditolak dengan benar" >> "$vout"; rc=1
   fi
   step verify "$([[ $rc == 0 ]] && echo ok || echo FAIL)" "$name ($name-verify.txt)"
+  VERIFY_STATUS[$i]="$([[ $rc == 0 ]] && echo PASS || echo FAIL)"
+  VERIFY_NOTE[$i]="verify-node.sh exit=$rc + cek login password$( ((e2e_rc != 0)) && echo " (verifikasi parsial, Playwright exit=$e2e_rc)")"
   ((rc == 0)) || verify_rc=1
 }
 wait_node_ssh() { # wait_node_ssh <index> <timeout-s>
@@ -512,7 +565,10 @@ if ((waves_mode)); then
   # Verifikasi per gelombang: nyalakan node gelombang (boot dari disk), verifikasi, matikan bila
   # masih ada gelombang berikutnya (batas VM paralel).
   for w in "${!WAVES[@]}"; do
-    IFS=, read -r -a wn <<<"${WAVES[$w]}"
+    IFS=, read -r -a wall <<<"${WAVES[$w]}"
+    wn=()
+    for name in "${wall[@]}"; do i="$(idx_of "$name")"; verify_eligible "$i" && wn+=("$name"); done
+    ((${#wn[@]})) || continue
     for name in "${wn[@]}"; do
       i="$(idx_of "$name")"
       if is_dry || ! dom_running "$name"; then node_cmd start "$name" "${NODE_MACS[$i]}"; fi
@@ -525,6 +581,7 @@ if ((waves_mode)); then
     if ((w + 1 < ${#WAVES[@]})); then for name in "${wn[@]}"; do node_cmd poweroff "$name"; done; fi
   done
 else
-  for i in "${!NODE_NAMES[@]}"; do verify_one "$i"; done
+  for i in "${!NODE_NAMES[@]}"; do verify_eligible "$i" && verify_one "$i"; done
 fi
+((e2e_rc == 0)) || exit "$e2e_rc"
 exit "$verify_rc"

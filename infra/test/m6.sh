@@ -439,3 +439,81 @@ t "M6 nginx limit_req login + /boot/, allowlist tetap (O5)"              test_m6
 t "M6 redact-evidence: hash scrypt teks & base64 (AC-6.52)"              test_m6_redact_scrypt
 t "M6 install-dashboard overlay: statis"                                  test_m6_install_dashboard_overlay_static
 t "M6 install-dashboard overlay: merge env di sandbox"                    test_m6_install_dashboard_overlay_merge
+
+# ---- Perbaikan smoke M6 (BUG-M6-1, BUG-M6-2, verifikasi parsial) ------------------------------
+test_m6_bug1_rocky_minimal_repo() {
+  # ISO Rocky 9 minimal hanya punya repo Minimal/ (.treeinfo repository = Minimal).
+  local l; l="$(grep -E '^\s*rocky\) media_paths\+=' "$INFRA_DIR_UNDER_TEST/kvm-run.sh")"
+  [[ -n "$l" ]] || _fail "baris media rocky tidak ditemukan"
+  assert_contains "$l" "rocky-9/Minimal/repodata/repomd.xml"
+  assert_contains "$l" "rocky-9/.treeinfo"
+  assert_contains "$l" "rocky-9/images/pxeboot/vmlinuz"
+  assert_no_match "$l" "BaseOS|AppStream"
+}
+
+test_m6_bug2_not_run_entries_before_nodes() {
+  _prepare_kvm_run_sandbox
+  export INFRA_DRY_RUN=1
+  PXE_KVM_DRY_FAIL_AT=server-check run_infra kvm-run.sh m6 --nodes "41:uefi:os=debian 42:bios:os=rocky"
+  assert_ne "$RC" 0
+  local r="$PXE_RUNS_DIR/results.json"
+  assert_eq "$(_m6_json "$r" 'sorted((e["ac"], e["node"][-6:], e["status"]) for e in d["results"] if e["ac"].startswith("CR-4-12"))')" \
+    "[('CR-4-12-dnsmasq', 'node41', 'NOT_RUN'), ('CR-4-12-nginx', 'node41', 'NOT_RUN'), ('CR-4-12-nginx', 'node42', 'NOT_RUN')]"
+  assert_eq "$(_m6_json "$r" '[e for e in d["results"] if e["ac"].startswith("CR-4-12")][0]["note"]')" \
+    "node tidak dibuat: run berhenti di tahap server-check"
+  assert_eq "$(_m6_json "$r" '[e["status"] for e in d["results"] if e["ac"]=="verify-node"]')" "['NOT_RUN', 'NOT_RUN']"
+  assert_eq "$(_m6_json "$r" 'len([e for e in d["results"] if e["status"]=="FAIL"])')" 0 "entri FAIL menyesatkan"
+  assert_eq "$(_m6_json "$r" '[e["ac"] for e in d["results"]].count("cleanup")')" 1
+  assert_match "$(cat "$PXE_RUNS_DIR/kvm-run.txt")" "server-logs +NOT_RUN node belum dibuat \(tahap server-check\)"
+  # Setelah node dibuat (gagal di playwright via tahap): tidak ada entri NOT_RUN CR-4-12 dari harness.
+  rm -rf "$PXE_RUNS_DIR"; mkdir -p "$PXE_RUNS_DIR"
+  PXE_KVM_DRY_FAIL_AT=playwright run_infra kvm-run.sh m6 --nodes "41:uefi"
+  assert_ne "$RC" 0
+  assert_eq "$(_m6_json "$PXE_RUNS_DIR/results.json" 'len([e for e in d["results"] if e["ac"].startswith("CR-4-12")])')" 0
+}
+
+test_m6_partial_verify_after_playwright_fail() {
+  _prepare_kvm_run_sandbox
+  export INFRA_DRY_RUN=1
+  # Playwright exit 1: node21 failed, node22 done -> hanya node22 diverifikasi, exit≠0.
+  PXE_KVM_DRY_PLAYWRIGHT_RC=1 PXE_KVM_DRY_HOST_STATUS="52:54:00:99:00:21=failed 52:54:00:99:00:22=done" \
+    run_infra kvm-run.sh m6 --scenario core
+  assert_eq "$RC" 1 "$(tail -5 <<<"$OUT")"
+  OUT="$(unq "$OUT")"
+  assert_match "$OUT" "DRY-RUN: ssh .* m6admin@10\.99\.0\.32 EXPECT_HOSTNAME=m6-node22 "
+  assert_no_match "$OUT" "DRY-RUN: ssh .* m6admin@10\.99\.0\.31 "
+  local r="$PXE_RUNS_DIR/core/results.json"
+  assert_eq "$(_m6_json "$r" '[(e["node"][-6:], e["status"]) for e in d["results"] if e["ac"]=="verify-node"]')" \
+    "[('node21', 'NOT_RUN'), ('node22', 'DRY-RUN')]"
+  assert_match "$(_m6_json "$r" '[e for e in d["results"] if e["ac"]=="verify-node"][0]["note"]')" "Playwright exit=1, status host failed"
+  assert_eq "$(_m6_json "$r" 'd["harness"]["exit"]')" 1
+  assert_eq "$(_m6_json "$r" 'd["harness"]["failedStage"]')" verify
+  assert_match "$(cat "$PXE_RUNS_DIR/core/kvm-run.txt")" "verify +partial Playwright exit=1"
+  assert_eq "$(_m6_json "$PXE_RUNS_DIR/results.json" 'd["runs"]["core"]["status"]')" FAIL
+  # Status tidak terbaca -> tidak ada node diverifikasi, tetap exit≠0 (kode Playwright).
+  PXE_KVM_DRY_PLAYWRIGHT_RC=3 run_infra kvm-run.sh m6 --scenario core
+  assert_eq "$RC" 3
+  assert_no_match "$(unq "$OUT")" "DRY-RUN: ssh .* m6admin@10\.99\.0\.3[12] "
+  # Playwright sukses -> semua node diverifikasi (perilaku lama), exit 0.
+  run_infra kvm-run.sh m6 --scenario core
+  assert_eq "$RC" 0
+  assert_match "$(unq "$OUT")" "DRY-RUN: ssh .* m6admin@10\.99\.0\.31 "
+  assert_eq "$(_m6_json "$PXE_RUNS_DIR/core/results.json" '[e["status"] for e in d["results"] if e["ac"]=="verify-node"]')" "['DRY-RUN', 'DRY-RUN']"
+  assert_eq "$(_m6_json "$PXE_RUNS_DIR/results.json" 'd["runs"]["core"]["status"]')" PASS
+  # Gelombang (max_nodes 1): node26 belum done -> verifikasi hanya 25 & 27, tanpa start node26.
+  rm -rf "$PXE_RUNS_DIR"; mkdir -p "$PXE_RUNS_DIR"
+  PXE_KVM_DRY_PLAYWRIGHT_RC=1 PXE_KVM_DRY_HOST_STATUS="52:54:00:99:00:25=done 52:54:00:99:00:26=installing 52:54:00:99:00:27=done" \
+    PXE_KVM_MEMINFO="$(_m6_meminfo "$(_m6_mem_for 1)")" run_infra kvm-run.sh m6 --scenario bulk --waves
+  assert_eq "$RC" 1
+  OUT="$(unq "$OUT")"
+  local vpart; vpart="$(sed -nE '/verify +partial/,$p' <<<"$OUT")"
+  assert_match "$vpart" "node\.sh start pxe-test-m6bulk-node25 "
+  assert_match "$vpart" "node\.sh start pxe-test-m6bulk-node27 "
+  assert_no_match "$vpart" "node\.sh start pxe-test-m6bulk-node26"
+  assert_eq "$(_m6_json "$PXE_RUNS_DIR/bulk/results.json" '[(e["node"][-6:], e["status"]) for e in d["results"] if e["ac"]=="verify-node"]')" \
+    "[('node25', 'DRY-RUN'), ('node26', 'NOT_RUN'), ('node27', 'DRY-RUN')]"
+}
+
+t "M6 BUG-M6-1 server-check Rocky memakai repo Minimal/"                   test_m6_bug1_rocky_minimal_repo
+t "M6 BUG-M6-2 gagal sebelum node -> CR-4-12 NOT_RUN, bukan FAIL"          test_m6_bug2_not_run_entries_before_nodes
+t "M6 verifikasi parsial setelah Playwright gagal (node done saja)"         test_m6_partial_verify_after_playwright_fail
