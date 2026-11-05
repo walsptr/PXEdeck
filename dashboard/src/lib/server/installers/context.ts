@@ -138,7 +138,7 @@ export function buildContext(i: BuildContextInput): InstallContext {
   if (cfg.sshUser && cfg.sshUser !== cfg.username)
     bad("User target SSH berbeda dari user Credentials belum didukung")
   if (cfg.os.partition === "custom")
-    bad("Skema partisi custom belum didukung generator M4")
+    bad("Skema partisi custom belum didukung")
   const keys = [...i.libraryKeys.map((k) => k.publicKey), ...cfg.extraKeys].map(sanitizeKey)
   return validateContext({
     jobId: i.jobId,

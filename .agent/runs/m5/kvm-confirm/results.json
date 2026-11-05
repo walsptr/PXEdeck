@@ -1,0 +1,54 @@
+{
+  "run": "m5",
+  "session": "1793908134889-06ccadcc",
+  "generatedAt": "2026-11-05T19:55:56.251Z",
+  "results": [{"ac": "CR-4-12-nginx", "node": "pxe-test-m5-node12", "status": "PASS", "note": "user-data 200 x1 (min 1)", "evidence": ["server-nginx.txt"]}, 
+    {
+      "ac": "AC-5.42",
+      "node": "pxe-test-m5-node12",
+      "status": "PASS",
+      "note": "log 404, status 404, event 1→1",
+      "evidence": [
+        "pxe-test-m5-node12-negative.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.41",
+      "node": "pxe-test-m5-node12",
+      "status": "PASS",
+      "durationS": 420,
+      "note": "booting → installing → configuring → done dalam 394s; penanda seq 7<8<11; koneksi live/ended; job setelah reboot 1",
+      "evidence": [
+        "pxe-test-m5-node12-sse.txt",
+        "pxe-test-m5-node12-verify-ssh.txt",
+        "pxe-test-m5-node12-timeline.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.38",
+      "node": "pxe-test-m5-node12",
+      "status": "PASS",
+      "durationS": 0,
+      "evidence": [
+        "allowlist-check.txt",
+        "server-check.txt",
+        "deploy-dashboard.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.43-scan",
+      "status": "PASS",
+      "note": "0 temuan (scan harness)",
+      "evidence": [
+        "evidence-scan.txt"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "pxe-test-m5-node12",
+      "fw": "bios",
+      "role": "install"
+    }
+  ]
+}

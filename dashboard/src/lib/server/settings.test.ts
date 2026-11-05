@@ -90,6 +90,10 @@ describe("AC-4.5 settingsFromEnv: konfigurasi valid", () => {
       PXE_UNKNOWN_HOST_ACTION: "WAIT",
       PXE_SEED: "Demo",
       PXE_TOKEN_TTL_MIN: "5",
+      // DEC-014 (M5): TTL token ≥ jumlah timeout tahap → timeout tahap kecil agar TTL 5 tetap sah.
+      PXE_JOB_BOOTING_TIMEOUT_MIN: "1",
+      PXE_JOB_INSTALLING_TIMEOUT_MIN: "2",
+      PXE_JOB_CONFIGURING_TIMEOUT_MIN: "1",
       PXE_ALLOWED_HOSTS: " Pxe.Lab.Example:8443, localhost ,,",
     })
     expect(s.network.dynamicRange).toEqual(["10.99.0.100", "10.99.0.200"])
@@ -196,6 +200,10 @@ describe("getSettings (process.env) & toSettingsResponse", () => {
       tftpRoot: "/srv/pxe/tftp",
       tokenTtlMin: 360,
       unknownHostAction: "local",
+      // M5 (AC-5.1): pengaturan job non-rahasia.
+      jobTimeouts: { bootingMin: 60, installingMin: 120, configuringMin: 60 },
+      maxInstallerBoots: 3,
+      insecureNoLeaseCheck: false,
     })
     const json = JSON.stringify(r)
     for (const secret of ["pxe.db", "dnsmasq.leases", "dnsmasq.pid", "seed", "allowed"]) expect(json).not.toContain(secret)

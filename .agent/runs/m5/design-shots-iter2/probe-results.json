@@ -1,0 +1,2093 @@
+{
+ "at": "2026-11-05T18:35:33.539Z",
+ "states": [
+  {
+   "name": "os-images",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1383,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": [
+    {
+     "id": "debian-12\t",
+     "h": 120,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "debian-netboot/linux",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "debian-netboot/initrd.gz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "debian-12",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/debian-12",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": null
+    },
+    {
+     "id": "rocky-9\t",
+     "h": 146,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "rocky-9/images/pxeboot/vmlinuz",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "rocky-9/images/pxeboot/initrd.img",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "rocky-9",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/rocky-9",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": null
+    },
+    {
+     "id": "rocky-9-singlesegment\t",
+     "h": 258,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "rocky-9.4-x86_64-boot-images-pxeboot-vmlinuz-with-very-long-single-segment-name-abcdefghij",
+       "lines": 1,
+       "brokenSegs": [
+        {
+         "text": "rocky-9.4-x86_64-boot-images-pxeboot-vmlinuz-with-very-long-single-segment-name-abcdefghij",
+         "w": 208,
+         "h": 64,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "r/initrd.img",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+       "lines": 1,
+       "brokenSegs": [
+        {
+         "text": "rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+         "w": 208,
+         "h": 64,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+         "w": 208,
+         "h": 64,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Media rocky-9-singlesegment tidak tersedia (rocky-9.4-x86_64-boot-images-pxeboot-vmlinuz-with-very-long-single-segment-n",
+      "w": 160,
+      "h": 170,
+      "right": 1396,
+      "sw": 160,
+      "cw": 160,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    },
+    {
+     "id": "ubuntu-22.04\t",
+     "h": 120,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "ubuntu-22.04/casper/vmlinuz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-22.04/casper/initrd",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-22.04",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/ubuntu-22.04",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+      "w": 160,
+      "h": 94,
+      "right": 1396,
+      "sw": 160,
+      "cw": 160,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    },
+    {
+     "id": "ubuntu-24.04\t",
+     "h": 120,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "ubuntu-24.04/casper/vmlinuz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04/casper/initrd",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/ubuntu-24.04",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": null
+    },
+    {
+     "id": "ubuntu-24.04-custom-hwe-lab\t",
+     "h": 271,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/casper/hwe-vmlinuz",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/",
+         "w": 208,
+         "h": 48,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/casper/hwe-initrd",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/",
+         "w": 208,
+         "h": 48,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+       "lines": 1,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+         "w": 208,
+         "h": 48,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+         "w": 208,
+         "h": 48,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Media ubuntu-24.04-custom-hwe-lab tidak tersedia (ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/casper/hwe-vm",
+      "w": 160,
+      "h": 151,
+      "right": 1396,
+      "sw": 165,
+      "cw": 160,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    },
+    {
+     "id": "windows-2022\t",
+     "h": 121,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "windows-2022",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/windows-2022",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+      "w": 160,
+      "h": 94,
+      "right": 1396,
+      "sw": 160,
+      "cw": 160,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    }
+   ]
+  },
+  {
+   "name": "ssh-keys",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 900,
+    "h1": {
+     "text": "SSH Keys",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": [
+    {
+     "tag": "DIV",
+     "sw": 1118,
+     "cw": 1118,
+     "w": 1118,
+     "right": 1407,
+     "headers": [
+      "NAMA",
+      "TIPE",
+      "FINGERPRINT",
+      "DIBUAT",
+      "DIPAKAI",
+      "AKSI"
+     ]
+    },
+    {
+     "tag": "TABLE",
+     "sw": 1118,
+     "cw": 1118,
+     "w": 1118,
+     "right": 1407,
+     "headers": [
+      "NAMA",
+      "TIPE",
+      "FINGERPRINT",
+      "DIBUAT",
+      "DIPAKAI",
+      "AKSI"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "jobs-list",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 900,
+    "h1": {
+     "text": "Provisioning Jobs",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "jobs-history-done",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 936,
+    "h1": {
+     "text": "Provisioning Jobs",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": {
+    "bg": "rgb(250, 250, 247)",
+    "borderLeft": "rgb(38, 37, 30) 2px",
+    "texts": [
+     {
+      "t": "web-node-061",
+      "c": "rgb(38, 37, 30)",
+      "ff": "\"JetBrains Mono "
+     },
+     {
+      "t": "52:54:00:99:00:61",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"JetBrains Mono "
+     },
+     {
+      "t": "Ubuntu Server 24.04.5 LTS",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "Booting",
+      "c": "rgb(38, 37, 30)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "baru saja",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "38 dtk",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"JetBrains Mono "
+     }
+    ]
+   }
+  },
+  {
+   "name": "jobs-failed-callback",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 938,
+    "h1": {
+     "text": "Provisioning Jobs",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": {
+    "bg": "rgb(250, 250, 247)",
+    "borderLeft": "rgb(38, 37, 30) 2px",
+    "texts": [
+     {
+      "t": "db-node-062",
+      "c": "rgb(38, 37, 30)",
+      "ff": "\"JetBrains Mono "
+     },
+     {
+      "t": "52:54:00:99:00:62",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"JetBrains Mono "
+     },
+     {
+      "t": "Ubuntu Server 24.04.5 LTS",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "Failed",
+      "c": "rgb(255, 255, 255)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "Installer melaporkan gagal",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "3 menit yang lalu",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "0 dtk",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"JetBrains Mono "
+     }
+    ]
+   }
+  },
+  {
+   "name": "jobs-live-log",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 900,
+    "h1": {
+     "text": "Provisioning Jobs",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "hosts",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1459,
+    "h1": {
+     "text": "Hosts",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "settings",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1455,
+    "h1": {
+     "text": "Settings",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "w1280-os-images",
+   "viewport": {
+    "width": 1280,
+    "height": 800
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "scrollHeight": 1383,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": [
+    {
+     "id": "debian-12\t",
+     "h": 120,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "debian-netboot/linux",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "debian-netboot/initrd.gz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "debian-12",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/debian-12",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": null
+    },
+    {
+     "id": "rocky-9\t",
+     "h": 146,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "rocky-9/images/pxeboot/vmlinuz",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "rocky-9/images/pxeboot/initrd.img",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "rocky-9",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/rocky-9",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": null
+    },
+    {
+     "id": "rocky-9-singlesegment\t",
+     "h": 258,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "rocky-9.4-x86_64-boot-images-pxeboot-vmlinuz-with-very-long-single-segment-name-abcdefghij",
+       "lines": 1,
+       "brokenSegs": [
+        {
+         "text": "rocky-9.4-x86_64-boot-images-pxeboot-vmlinuz-with-very-long-single-segment-name-abcdefghij",
+         "w": 208,
+         "h": 64,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "r/initrd.img",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+       "lines": 1,
+       "brokenSegs": [
+        {
+         "text": "rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+         "w": 208,
+         "h": 64,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+         "w": 208,
+         "h": 64,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Media rocky-9-singlesegment tidak tersedia (rocky-9.4-x86_64-boot-images-pxeboot-vmlinuz-with-very-long-single-segment-n",
+      "w": 160,
+      "h": 170,
+      "right": 1396,
+      "sw": 160,
+      "cw": 160,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    },
+    {
+     "id": "ubuntu-22.04\t",
+     "h": 120,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "ubuntu-22.04/casper/vmlinuz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-22.04/casper/initrd",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-22.04",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/ubuntu-22.04",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+      "w": 160,
+      "h": 94,
+      "right": 1396,
+      "sw": 160,
+      "cw": 160,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    },
+    {
+     "id": "ubuntu-24.04\t",
+     "h": 120,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "ubuntu-24.04/casper/vmlinuz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04/casper/initrd",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/ubuntu-24.04",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": null
+    },
+    {
+     "id": "ubuntu-24.04-custom-hwe-lab\t",
+     "h": 271,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/casper/hwe-vmlinuz",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/",
+         "w": 208,
+         "h": 48,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/casper/hwe-initrd",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/",
+         "w": 208,
+         "h": 48,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+       "lines": 1,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+         "w": 208,
+         "h": 48,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+         "w": 208,
+         "h": 48,
+         "container": 256
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Media ubuntu-24.04-custom-hwe-lab tidak tersedia (ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/casper/hwe-vm",
+      "w": 160,
+      "h": 151,
+      "right": 1396,
+      "sw": 165,
+      "cw": 160,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    },
+    {
+     "id": "windows-2022\t",
+     "h": 121,
+     "w": 1331,
+     "right": 1620,
+     "srcW": 256,
+     "display": "table-row",
+     "paths": [
+      {
+       "text": "windows-2022",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/windows-2022",
+       "lines": 2,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+      "w": 160,
+      "h": 94,
+      "right": 1396,
+      "sw": 160,
+      "cw": 160,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    }
+   ]
+  },
+  {
+   "name": "w1280-ssh-keys",
+   "viewport": {
+    "width": 1280,
+    "height": 800
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1280,
+    "clientWidth": 1280,
+    "scrollHeight": 800,
+    "h1": {
+     "text": "SSH Keys",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": [
+    {
+     "tag": "DIV",
+     "sw": 958,
+     "cw": 958,
+     "w": 958,
+     "right": 1247,
+     "headers": [
+      "NAMA",
+      "TIPE",
+      "FINGERPRINT",
+      "DIBUAT",
+      "DIPAKAI",
+      "AKSI"
+     ]
+    },
+    {
+     "tag": "TABLE",
+     "sw": 958,
+     "cw": 958,
+     "w": 958,
+     "right": 1247,
+     "headers": [
+      "NAMA",
+      "TIPE",
+      "FINGERPRINT",
+      "DIBUAT",
+      "DIPAKAI",
+      "AKSI"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "mobile-os-images",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1754,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": [
+    {
+     "id": "debian-12",
+     "h": 155,
+     "w": 325,
+     "right": 350,
+     "srcW": 293,
+     "display": "flex",
+     "paths": [
+      {
+       "text": "debian-netboot/linux",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "debian-netboot/initrd.gz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "debian-12",
+       "lines": 0,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/debian-12",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": null
+    },
+    {
+     "id": "rocky-9",
+     "h": 155,
+     "w": 325,
+     "right": 350,
+     "srcW": 293,
+     "display": "flex",
+     "paths": [
+      {
+       "text": "rocky-9/images/pxeboot/vmlinuz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "rocky-9/images/pxeboot/initrd.img",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "rocky-9",
+       "lines": 0,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/rocky-9",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": null
+    },
+    {
+     "id": "rocky-9-singlesegment",
+     "h": 308,
+     "w": 325,
+     "right": 350,
+     "srcW": 293,
+     "display": "flex",
+     "paths": [
+      {
+       "text": "rocky-9.4-x86_64-boot-images-pxeboot-vmlinuz-with-very-long-single-segment-name-abcdefghij",
+       "lines": 1,
+       "brokenSegs": [
+        {
+         "text": "rocky-9.4-x86_64-boot-images-pxeboot-vmlinuz-with-very-long-single-segment-name-abcdefghij",
+         "w": 245,
+         "h": 48,
+         "container": 293
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "r/initrd.img",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+       "lines": 0,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "rocky-9.4-x86_64-minimal-repository-with-a-very-long-directory-name-0123456789abcdef",
+         "w": 245,
+         "h": 48,
+         "container": 293
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Media rocky-9-singlesegment tidak tersedia (rocky-9.4-x86_64-boot-images-pxeboot-vmlinuz-with-very-long-single-segment-n",
+      "w": 293,
+      "h": 75,
+      "right": 334,
+      "sw": 293,
+      "cw": 293,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    },
+    {
+     "id": "ubuntu-22.04",
+     "h": 196,
+     "w": 325,
+     "right": 350,
+     "srcW": 293,
+     "display": "flex",
+     "paths": [
+      {
+       "text": "ubuntu-22.04/casper/vmlinuz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-22.04/casper/initrd",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-22.04",
+       "lines": 0,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/ubuntu-22.04",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+      "w": 293,
+      "h": 38,
+      "right": 334,
+      "sw": 293,
+      "cw": 293,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    },
+    {
+     "id": "ubuntu-24.04",
+     "h": 155,
+     "w": 325,
+     "right": 350,
+     "srcW": 293,
+     "display": "flex",
+     "paths": [
+      {
+       "text": "ubuntu-24.04/casper/vmlinuz",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04/casper/initrd",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04",
+       "lines": 0,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/ubuntu-24.04",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": null
+    },
+    {
+     "id": "ubuntu-24.04-custom-hwe-lab",
+     "h": 342,
+     "w": 325,
+     "right": 350,
+     "srcW": 293,
+     "display": "flex",
+     "paths": [
+      {
+       "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/casper/hwe-vmlinuz",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/",
+         "w": 245,
+         "h": 32,
+         "container": 293
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/casper/hwe-initrd",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/",
+         "w": 245,
+         "h": 32,
+         "container": 293
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+       "lines": 0,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+       "lines": 2,
+       "brokenSegs": [
+        {
+         "text": "ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105",
+         "w": 245,
+         "h": 32,
+         "container": 293
+        }
+       ],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Media ubuntu-24.04-custom-hwe-lab tidak tersedia (ubuntu-24.04-live-server-amd64-hwe-custom-build-20261105/casper/hwe-vm",
+      "w": 293,
+      "h": 75,
+      "right": 334,
+      "sw": 293,
+      "cw": 293,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    },
+    {
+     "id": "windows-2022",
+     "h": 198,
+     "w": 325,
+     "right": 350,
+     "srcW": 293,
+     "display": "flex",
+     "paths": [
+      {
+       "text": "windows-2022",
+       "lines": 0,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      },
+      {
+       "text": "http://10.99.0.2/media/windows-2022",
+       "lines": 1,
+       "brokenSegs": [],
+       "mono": true,
+       "overflowRight": false
+      }
+     ],
+     "reason": {
+      "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+      "w": 293,
+      "h": 38,
+      "right": 334,
+      "sw": 293,
+      "cw": 293,
+      "ff": "\"Inter Variable\", -apple-syste"
+     }
+    }
+   ]
+  },
+  {
+   "name": "mobile-ssh-keys",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 812,
+    "h1": {
+     "text": "SSH Keys",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": [
+    {
+     "tag": "DIV",
+     "sw": 584,
+     "cw": 325,
+     "w": 325,
+     "right": 350,
+     "headers": [
+      "NAMA",
+      "FINGERPRINT",
+      "DIBUAT",
+      "DIPAKAI",
+      "AKSI"
+     ]
+    },
+    {
+     "tag": "TABLE",
+     "sw": 584,
+     "cw": 584,
+     "w": 584,
+     "right": 609,
+     "headers": [
+      "NAMA",
+      "FINGERPRINT",
+      "DIBUAT",
+      "DIPAKAI",
+      "AKSI"
+     ]
+    }
+   ]
+  },
+  {
+   "name": "mobile-jobs-list",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1065,
+    "h1": {
+     "text": "Provisioning Jobs",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "mobile-jobs-history-done",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1458,
+    "h1": {
+     "text": "Provisioning Jobs",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": {
+    "bg": "rgb(250, 250, 247)",
+    "borderLeft": "rgb(38, 37, 30) 2px",
+    "texts": [
+     {
+      "t": "web-node-061",
+      "c": "rgb(38, 37, 30)",
+      "ff": "\"JetBrains Mono "
+     },
+     {
+      "t": "52:54:00:99:00:61",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"JetBrains Mono "
+     },
+     {
+      "t": "Ubuntu Server 24.04.5 LTS",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "Booting",
+      "c": "rgb(38, 37, 30)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "1 menit yang lalu",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "55 dtk",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"JetBrains Mono "
+     }
+    ]
+   }
+  },
+  {
+   "name": "mobile-jobs-failed-callback",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1783,
+    "h1": {
+     "text": "Provisioning Jobs",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": {
+    "bg": "rgb(250, 250, 247)",
+    "borderLeft": "rgb(38, 37, 30) 2px",
+    "texts": [
+     {
+      "t": "db-node-062",
+      "c": "rgb(38, 37, 30)",
+      "ff": "\"JetBrains Mono "
+     },
+     {
+      "t": "52:54:00:99:00:62",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"JetBrains Mono "
+     },
+     {
+      "t": "Ubuntu Server 24.04.5 LTS",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "Failed",
+      "c": "rgb(255, 255, 255)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "Installer melaporkan gagal",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "3 menit yang lalu",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"Inter Variable\""
+     },
+     {
+      "t": "0 dtk",
+      "c": "rgb(90, 88, 82)",
+      "ff": "\"JetBrains Mono "
+     }
+    ]
+   }
+  },
+  {
+   "name": "mobile-jobs-live-log",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1726,
+    "h1": {
+     "text": "Provisioning Jobs",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "mobile-hosts",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1561,
+    "h1": {
+     "text": "Hosts",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "mobile-settings",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1980,
+    "h1": {
+     "text": "Settings",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "os-register-dialog",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1383,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": {
+    "dialog": {
+     "top": 16,
+     "h": 868,
+     "sh": 988,
+     "ch": 868
+    },
+    "footer": {
+     "bg": "rgb(255, 255, 255)",
+     "pos": "sticky"
+    },
+    "btns": [
+     {
+      "t": "Batal",
+      "top": 828,
+      "bottom": 868,
+      "inViewport": true
+     },
+     {
+      "t": "Daftarkan image",
+      "top": 828,
+      "bottom": 868,
+      "inViewport": true
+     }
+    ],
+    "errs": [],
+    "hints": [
+     "Huruf kecil, angka, titik, minus. Tidak bisa diubah.",
+     "Wajib punya kernel dan initrd. Windows (unattend) belum bisa",
+     "Path relatif root media, tanpa / di awal.",
+     "URL: http://10.99.0.2/media/<repo>"
+    ]
+   }
+  },
+  {
+   "name": "os-register-errors",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1383,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": {
+    "dialog": {
+     "top": 16,
+     "h": 868,
+     "sh": 1095,
+     "ch": 868
+    },
+    "footer": {
+     "bg": "rgb(255, 255, 255)",
+     "pos": "sticky"
+    },
+    "btns": [
+     {
+      "t": "Batal",
+      "top": 828,
+      "bottom": 868,
+      "inViewport": true
+     },
+     {
+      "t": "Daftarkan image",
+      "top": 828,
+      "bottom": 868,
+      "inViewport": true
+     }
+    ],
+    "errs": [
+     "Wajib diisi",
+     "Wajib diisi",
+     "Wajib diisi",
+     "Wajib diisi",
+     "Image bootable wajib punya kernel dan initrd"
+    ],
+    "hints": [
+     "Wajib punya kernel dan initrd. Windows (unattend) belum bisa",
+     "Path relatif root media, tanpa / di awal.",
+     "URL: http://10.99.0.2/media/<repo>"
+    ]
+   }
+  },
+  {
+   "name": "mobile-os-register-dialog",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1754,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": {
+    "dialog": {
+     "top": 16,
+     "h": 780,
+     "sh": 1301,
+     "ch": 780
+    },
+    "footer": {
+     "bg": "rgb(255, 255, 255)",
+     "pos": "sticky"
+    },
+    "btns": [
+     {
+      "t": "Batal",
+      "top": 740,
+      "bottom": 780,
+      "inViewport": true
+     },
+     {
+      "t": "Daftarkan image",
+      "top": 692,
+      "bottom": 732,
+      "inViewport": true
+     }
+    ],
+    "errs": [],
+    "hints": [
+     "Huruf kecil, angka, titik, minus. Tidak bisa diubah.",
+     "Wajib punya kernel dan initrd. Windows (unattend) belum bisa",
+     "Path relatif root media, tanpa / di awal.",
+     "URL: http://10.99.0.2/media/<repo>"
+    ]
+   }
+  },
+  {
+   "name": "mobile-os-register-errors",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1754,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": {
+    "dialog": {
+     "top": 16,
+     "h": 780,
+     "sh": 1439,
+     "ch": 780
+    },
+    "footer": {
+     "bg": "rgb(255, 255, 255)",
+     "pos": "sticky"
+    },
+    "btns": [
+     {
+      "t": "Batal",
+      "top": 740,
+      "bottom": 780,
+      "inViewport": true
+     },
+     {
+      "t": "Daftarkan image",
+      "top": 692,
+      "bottom": 732,
+      "inViewport": true
+     }
+    ],
+    "errs": [
+     "Wajib diisi",
+     "Wajib diisi",
+     "Wajib diisi",
+     "Wajib diisi",
+     "Image bootable wajib punya kernel dan initrd"
+    ],
+    "hints": [
+     "Wajib punya kernel dan initrd. Windows (unattend) belum bisa",
+     "Path relatif root media, tanpa / di awal.",
+     "URL: http://10.99.0.2/media/<repo>"
+    ]
+   }
+  },
+  {
+   "name": "os-register-errors-invalid",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1383,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": {
+    "dialog": {
+     "top": 16,
+     "h": 868,
+     "sh": 1127,
+     "ch": 868
+    },
+    "footer": {
+     "bg": "rgb(255, 255, 255)",
+     "pos": "sticky"
+    },
+    "btns": [
+     {
+      "t": "Batal",
+      "top": 828,
+      "bottom": 868,
+      "inViewport": true
+     },
+     {
+      "t": "Daftarkan image",
+      "top": 828,
+      "bottom": 868,
+      "inViewport": true
+     }
+    ],
+    "errs": [
+     "Id: huruf kecil, angka, titik, minus",
+     "Maksimal 32 karakter",
+     "Path relatif terhadap media (tanpa / di awal)",
+     "Path tidak boleh memuat ..",
+     "Image bootable wajib punya kernel dan initrd"
+    ],
+    "hints": [
+     "Wajib punya kernel dan initrd. Windows (unattend) belum bisa",
+     "Path relatif root media, tanpa / di awal.",
+     "URL: http://10.99.0.2/media/../luar"
+    ]
+   }
+  },
+  {
+   "name": "os-delete-confirm",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1383,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "os-delete-409",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1383,
+    "h1": {
+     "text": "OS Images",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "install-rejected-single",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1503,
+    "h1": {
+     "text": "Hosts",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": [
+    {
+     "text": "52:54:00:99:00:64: instalasi sedang berjalan",
+     "monoSpans": [
+      "52:54:00:99:00:64"
+     ],
+     "liFont": "\"Inter Variable\", -a"
+    }
+   ]
+  },
+  {
+   "name": "bulk-sheet-os",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1573,
+    "h1": {
+     "text": "Hosts",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "bulk-partial",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1529,
+    "h1": {
+     "text": "Hosts",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   },
+   "extra": [
+    {
+     "text": "52:54:00:99:00:64: instalasi sedang berjalan",
+     "monoSpans": [
+      "52:54:00:99:00:64"
+     ],
+     "liFont": "\"Inter Variable\", -a"
+    }
+   ]
+  },
+  {
+   "name": "sheet-os-tab",
+   "viewport": {
+    "width": 1440,
+    "height": 900
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 1440,
+    "clientWidth": 1440,
+    "scrollHeight": 1459,
+    "h1": {
+     "text": "Hosts",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  },
+  {
+   "name": "mobile-sheet-os-tab",
+   "viewport": {
+    "width": 375,
+    "height": 812
+   },
+   "generic": {
+    "bodyBg": "rgb(247, 247, 244)",
+    "scrollWidth": 375,
+    "clientWidth": 375,
+    "scrollHeight": 1518,
+    "h1": {
+     "text": "Hosts",
+     "fs": "26px",
+     "fw": "400",
+     "ls": "-0.325px",
+     "ff": "\"Inter Variable\", -apple-system, system-"
+    },
+    "milestoneRefs": []
+   }
+  }
+ ]
+}

@@ -9,13 +9,24 @@ import {
   sudoersText,
 } from "./firstboot"
 import { singleLine } from "./lines"
-import { b64, b64write, callbackCmd } from "./shell"
+import { b64, b64write, callbackCmd, logCmd, logTailCmd } from "./shell"
+
+/** Penanda log installer (konstanta; M5 plan §2.5). */
+export const ROCKY_LOG = {
+  start: "installer: kickstart mulai",
+  post: "installer: post mulai",
+  postDone: "installer: konfigurasi target selesai",
+} as const
+
+/** Log anaconda yang di-tail saat gagal. */
+export const ROCKY_ERROR_LOGS = ["/tmp/anaconda.log", "/tmp/program.log"]
 
 /** Script %post (chroot target). Diekspor untuk test. */
 export function rockyPostScript(ctx: InstallContext): string {
   const c = validateContext(ctx)
   const lines = [
     "#!/bin/sh",
+    logCmd("kickstart", c.mac, ROCKY_LOG.post),
     callbackCmd("kickstart", c.mac, "configuring"),
     ...authorizedKeysCmds("", c.username, c.authorizedKeys),
   ]
@@ -26,7 +37,11 @@ export function rockyPostScript(ctx: InstallContext): string {
       b64write("/etc/ssh/sshd_config.d/60-pxe-no-password.conf", "644", SSHD_NO_PASSWORD_TEXT),
     )
   }
-  lines.push(...firstbootInstallCmds("", "kickstart", c.mac), "restorecon -R /etc /usr/local/sbin /home 2>/dev/null || true")
+  lines.push(
+    ...firstbootInstallCmds("", "kickstart", c.mac),
+    "restorecon -R /etc /usr/local/sbin /home 2>/dev/null || true",
+    logCmd("kickstart", c.mac, ROCKY_LOG.postDone),
+  )
   return `${lines.join("\n")}\n`
 }
 
@@ -62,6 +77,10 @@ export function rockyKickstart(ctx: InstallContext): string {
     "bootloader --location=mbr",
     "reboot",
     "",
+    "%pre",
+    logCmd("kickstart", c.mac, ROCKY_LOG.start),
+    "%end",
+    "",
     "%packages",
     "@^minimal-environment",
     "curl",
@@ -72,6 +91,7 @@ export function rockyKickstart(ctx: InstallContext): string {
     "%end",
     "",
     "%onerror",
+    logTailCmd("kickstart", c.mac, ROCKY_ERROR_LOGS),
     callbackCmd("kickstart", c.mac, "failed"),
     "%end",
   ].map((l) => singleLine(l, "kickstart"))

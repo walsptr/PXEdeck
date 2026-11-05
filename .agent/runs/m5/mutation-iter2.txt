@@ -1,0 +1,24 @@
+# Mutasi iter2 (test-engineer) — revert sementara perbaikan produk, file dikembalikan via git checkout HEAD; basis test @ fb8077e (E2E @ 16d390d + revert)
+## E2E DR-5-1 375 (os-images-view.tsx @ d19b44c)
+  ✘  1 [m5-library] › e2e/m5-library.spec.ts:136:5 › DR-5-1 OS Images 375×812: kartu per image ≤ 200 px, path dipenggal di '/', tanpa scroll horizontal (439ms)
+    Error: tinggi kartu debian-12
+    Expected: <= 200
+    Received:    751
+    test-results/m5-library-DR-5-1-OS-Image-2c790--di-tanpa-scroll-horizontal-m5-library/test-failed-1.png
+    Error Context: test-results/m5-library-DR-5-1-OS-Image-2c790--di-tanpa-scroll-horizontal-m5-library/error-context.md
+  1 failed
+## E2E DR-5-1 1440 (os-images-view.tsx @ d19b44c)
+  ✘  1 [m5-library] › e2e/m5-library.spec.ts:179:5 › DR-5-1 OS Images 1440×900: path Sumber tidak terpotong per karakter, tabel tanpa scroll horizontal (537ms)
+    Error: path "rocky-9/images/pxeboot/vmlinuz" dipecah 3 baris
+    Expected: <= 2
+    Received:    3
+    test-results/m5-library-DR-5-1-OS-Image-56ad9-bel-tanpa-scroll-horizontal-m5-library/test-failed-1.png
+    Error Context: test-results/m5-library-DR-5-1-OS-Image-56ad9-bel-tanpa-scroll-horizontal-m5-library/error-context.md
+  1 failed
+## Vitest (ringkas; detail di test-migration.md §Iterasi 2 — tinjauan test-engineer)
+job-lifecycle.ts@d19b44c: m5-iter2 2 gagal; m5-te-lifecycle AC-5.8 booting gagal (setelah fb8077e; sebelumnya hijau)
+cleanEventMessage urutan lama: 14/37 gagal
+handleLogPost tanpa redaksi body: 3 gagal
+tanpa redactOrphanKeyTail: 2 gagal
+tanpa TOKEN_PATH_PARTIAL_RE: 3 gagal; tanpa TOKEN_PATH_PCT_RE: 4 gagal; tanpa HASH_PARTIAL_RE: 2 gagal
+redact.ts@d19b44c: 11/37 gagal

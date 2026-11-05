@@ -1,0 +1,1 @@
+PASS  CR-4-12-nginx    pxe-test-m5-node12           user-data 200 x1 (min 1)

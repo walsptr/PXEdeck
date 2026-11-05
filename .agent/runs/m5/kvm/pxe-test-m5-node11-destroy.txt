@@ -1,0 +1,22 @@
+# AC-5.39 pxe-test-m5-node11 job job-c0476190-6c5e-489a-8a05-3bef5b5d0cd8
+timeout installing (settings): 15 mnt
+masuk Installing (server): 2026-11-05T16:49:25.817Z
+Failed (server, stage watchdog): 2026-11-05T17:04:25.957Z source=watchdog → +900 dtk
+Failed teramati di UI hosts (tanpa reload): +902 dtk sejak Installing; status lain sebelum Failed: tidak ada
+job: status=failed failureReason=timeout-installing installerBoots=1 finishedAt=2026-11-05T17:04:25.957Z
+kernel installer di serial: sebelum destroy=4 saat Failed=4
+nginx GET /boot/52:54:00:99:00:11.ipxe: sebelum destroy=2 setelah start=3
+event warn boot lokal: seq=8 repeat=1
+event error watchdog: seq=9 "Timeout di tahap Installing (> 15 mnt)"
+UI hosts alasan: Timeout di tahap Installing (> 15 mnt)
+halaman Jobs tanpa reload: true; hosts tanpa reload: true
+# event job
+1 2026-11-05T16:48:55.559Z stage/info install: Job install dibuat (OS ubuntu-24.04); menunggu PXE boot
+2 2026-11-05T16:49:06.800Z system/info boot-script: Script installer dilayani (ke-1/3, platform efi, IP 10.99.0.184)
+3 2026-11-05T16:49:25.801Z system/info config-fetch: File meta-data diambil dari IP 10.99.0.184
+4 2026-11-05T16:49:25.817Z system/info config-fetch: File user-data diambil dari IP 10.99.0.184
+5 2026-11-05T16:49:25.817Z stage/info config-fetch: Installing: konfigurasi user-data diambil installer
+6 2026-11-05T16:49:25.831Z system/info config-fetch: File vendor-data diambil dari IP 10.99.0.184
+7 2026-11-05T16:49:39.686Z installer/info installer: installer: autoinstall mulai
+8 2026-11-05T16:50:07.815Z system/warn boot-script: PXE boot ulang saat Installing: boot lokal, instalasi tidak diulang
+9 2026-11-05T17:04:25.957Z stage/error watchdog: Timeout di tahap Installing (> 15 mnt)

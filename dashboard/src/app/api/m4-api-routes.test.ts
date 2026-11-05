@@ -10,7 +10,7 @@ import { closeDb, getDb } from "@/lib/server/db"
 import { getActiveJob } from "@/lib/server/db/repos/jobs"
 import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ECDSA, SSH_ED25519, SSH_ED25519_B } from "@/test/fixtures"
-import { ctx, jsonReq } from "@/test/route"
+import { ctx, getReq, jsonReq } from "@/test/route"
 
 import { GET as hostsGET } from "./hosts/route"
 import { DELETE as hostDELETE, GET as hostGET, PATCH } from "./hosts/[id]/route"
@@ -58,7 +58,7 @@ const patch = (id: string, body: unknown) => PATCH(jsonReq(`/api/hosts/${id}`, "
 describe("AC-4.6 GET /api/settings", () => {
   it("cidr, gateway, dns, dynamicRange, pxeServer, baseUrl, tftpRoot, interface; tanpa path DB/rahasia; no-store", async () => {
     Object.assign(process.env, KVM, { PXE_DB_PATH: ":memory:", PXE_DNSMASQ_LEASES: "/var/lib/misc/dnsmasq.leases", PXE_ALLOWED_HOSTS: "localhost" })
-    const res = await settingsGET()
+    const res = await settingsGET(getReq("/api/settings"))
     expect(res.status).toBe(200)
     expect(res.headers.get("cache-control")).toBe("no-store")
     const body = await res.json()
@@ -75,16 +75,20 @@ describe("AC-4.6 GET /api/settings", () => {
       tftpRoot: "/srv/pxe/tftp",
       tokenTtlMin: 360,
       unknownHostAction: "local",
+      // M5 (AC-5.1): pengaturan job non-rahasia.
+      jobTimeouts: { bootingMin: 60, installingMin: 120, configuringMin: 60 },
+      maxInstallerBoots: 3,
+      insecureNoLeaseCheck: false,
     })
     const raw = JSON.stringify(body)
     for (const s of ["memory", "dnsmasq.leases", MEDIA, "seed", "allowed", "dbPath"]) expect(raw).not.toContain(s)
     // /api/network (kontrak M3) = subset yang sama.
-    const net = await (await networkGET()).json()
+    const net = await (await networkGET(getReq("/api/network"))).json()
     expect(net).toEqual({ cidr: body.cidr, prefix: 24, gateway: body.gateway, dns: body.dns, dynamicRange: body.dynamicRange, pxeServer: body.pxeServer })
   })
   it("env tidak valid → 500 {error} yang menyebut variabel", async () => {
     process.env.PXE_BASE_URL = "ftp://x"
-    const res = await settingsGET()
+    const res = await settingsGET(getReq("/api/settings"))
     expect(res.status).toBe(500)
     expect(res.headers.get("cache-control")).toBe("no-store")
     expect((await res.json()).error).toMatch(/PXE_BASE_URL/)
@@ -93,7 +97,7 @@ describe("AC-4.6 GET /api/settings", () => {
 
 describe("AC-4.7 GET /api/server-status", () => {
   it("env kosong → unknown ×3; pidfile hidup + TFTP → online; pidfile basi → offline; env rusak → 500", async () => {
-    let body = await (await statusGET()).json()
+    let body = await (await statusGET(getReq("/api/server-status"))).json()
     expect(body.services.map((s: { name: string; state: string }) => [s.name, s.state])).toEqual([
       ["DHCP", "unknown"],
       ["TFTP", "unknown"],
@@ -104,16 +108,16 @@ describe("AC-4.7 GET /api/server-status", () => {
     for (const f of ["snponly.efi", "undionly.kpxe"]) writeFileSync(path.join(dir, "tftp", f), "x")
     writeFileSync(path.join(dir, "pid"), String(process.pid))
     Object.assign(process.env, { PXE_DNSMASQ_PIDFILE: path.join(dir, "pid"), PXE_TFTP_ROOT: path.join(dir, "tftp") })
-    const res = await statusGET()
+    const res = await statusGET(getReq("/api/server-status"))
     expect(res.headers.get("cache-control")).toBe("no-store")
     body = await res.json()
     expect(body.services.map((s: { state: string }) => s.state)).toEqual(["online", "online", "online"])
     expect(body.services.map((s: { online: boolean }) => s.online)).toEqual([true, true, true])
     writeFileSync(path.join(dir, "pid"), "999999999")
-    body = await (await statusGET()).json()
+    body = await (await statusGET(getReq("/api/server-status"))).json()
     expect(body.services.map((s: { state: string }) => s.state)).toEqual(["offline", "offline", "online"])
     process.env.PXE_TOKEN_TTL_MIN = "1"
-    const bad = await statusGET()
+    const bad = await statusGET(getReq("/api/server-status"))
     expect(bad.status).toBe(500)
     expect((await bad.json()).error).toMatch(/PXE_TOKEN_TTL_MIN/)
   })
@@ -125,7 +129,7 @@ describe("API ssh-keys (GET/POST/DELETE)", () => {
     expect(res.status).toBe(201)
     const k = await res.json()
     expect(k).toMatchObject({ name: "Laptop", type: "ssh-ed25519", fingerprint: SSH_ED25519.fingerprint, comment: SSH_ED25519.comment, publicKey: SSH_ED25519.publicKey })
-    const list = await keysGET()
+    const list = await keysGET(getReq("/api/ssh-keys"))
     expect(list.headers.get("cache-control")).toBe("no-store")
     expect(await list.json()).toEqual([k])
     const dup = await keysPOST(jsonReq("/api/ssh-keys", "POST", { name: "Lagi", publicKey: `${SSH_ED25519.publicKey.split(" ").slice(0, 2).join(" ")} komentar-lain` }))
@@ -148,7 +152,7 @@ describe("API ssh-keys (GET/POST/DELETE)", () => {
     expect(cross.status).toBe(403)
     expect((await keyDELETE(jsonReq(`/api/ssh-keys/${b.id}`, "DELETE"), idp(b.id))).status).toBe(204)
     expect((await keyDELETE(jsonReq(`/api/ssh-keys/${b.id}`, "DELETE"), idp(b.id))).status).toBe(404)
-    expect((await (await keysGET()).json()).map((k: { id: string }) => k.id)).toEqual([a.id])
+    expect((await (await keysGET(getReq("/api/ssh-keys"))).json()).map((k: { id: string }) => k.id)).toEqual([a.id])
     // Hapus host → join dilepas → key bisa dihapus.
     expect((await hostDELETE(jsonReq(`/api/hosts/${NODE01}`, "DELETE"), ID(NODE01))).status).toBe(204)
     expect((await keyDELETE(jsonReq(`/api/ssh-keys/${a.id}`, "DELETE"), idp(a.id))).status).toBe(204)
@@ -157,7 +161,7 @@ describe("API ssh-keys (GET/POST/DELETE)", () => {
 
 describe("API os-images (GET/POST/DELETE)", () => {
   it("GET: katalog + available/reason sesuai media; Windows tidak tersedia + alasan", async () => {
-    const res = await imagesGET()
+    const res = await imagesGET(getReq("/api/os-images"))
     expect(res.headers.get("cache-control")).toBe("no-store")
     const imgs = (await res.json()) as { id: string; available: boolean; reason: string | null; bootable: boolean }[]
     expect(Object.fromEntries(imgs.map((i) => [i.id, i.available]))).toEqual({
@@ -194,6 +198,21 @@ describe("API os-images (GET/POST/DELETE)", () => {
     expect((await imageDELETE(jsonReq("/api/os-images/ubuntu-24.10", "DELETE"), idp("ubuntu-24.10"))).status).toBe(404)
     expect((await imageDELETE(new Request("http://evil.example/api/os-images/win-x", { method: "DELETE" }), idp("win-x"))).status).toBe(403)
   })
+  it("409 hapus: N di pesan = usedBy GET /api/os-images (host unik; regresi BUG-M5-1)", async () => {
+    const usedBy = async (id: string) =>
+      ((await (await imagesGET(getReq("/api/os-images"))).json()) as { id: string; usedBy: number }[]).find((i) => i.id === id)!.usedBy
+    const before = await usedBy("ubuntu-24.04")
+    // Satu host: config os ubuntu-24.04 + os_assigned + job aktif → tetap satu host.
+    const os = { osImageId: "ubuntu-24.04", disk: "", partition: "lvm", timezone: "UTC", locale: "en_US.UTF-8" }
+    expect((await patch(DISC1, { ...creds, ...sshNew, os })).status).toBe(200)
+    expect((await (await hostGET(jsonReq("/x", "GET"), ID(DISC1))).json()).osAssigned).toBe("ubuntu-24.04")
+    expect((await install(jsonReq("/x", "POST"), ID(DISC1))).status).toBe(200)
+    const n = await usedBy("ubuntu-24.04")
+    expect(n).toBe(before + 1)
+    const used = await imageDELETE(jsonReq("/api/os-images/ubuntu-24.04", "DELETE"), idp("ubuntu-24.04"))
+    expect(used.status).toBe(409)
+    expect((await used.json()).error).toBe(`OS image dipakai ${n} host/job`)
+  })
 })
 
 describe("AC-4.2 persistence & tanpa secret di response", () => {
@@ -216,8 +235,8 @@ describe("AC-4.2 persistence & tanpa secret di response", () => {
       const read = async () => ({
         host: await (await hostGET(jsonReq("/x", "GET"), ID(DISC1))).json(),
         config: await (await configGET(jsonReq("/x", "GET"), ID(DISC1))).json(),
-        keys: await (await keysGET()).json(),
-        hosts: (await (await hostsGET()).json()).hosts.length,
+        keys: await (await keysGET(getReq("/api/ssh-keys"))).json(),
+        hosts: (await (await hostsGET(getReq("/api/hosts"))).json()).hosts.length,
         job: getActiveJob(DISC1),
       })
       const before = await read()
@@ -240,16 +259,16 @@ describe("AC-4.2 persistence & tanpa secret di response", () => {
     expect((await patch(DISC1, { ...creds, ...sshNew, os: { osImageId: "ubuntu-24.04", disk: "", partition: "lvm", timezone: "UTC", locale: "en_US.UTF-8" } })).status).toBe(200)
     const bodies: [string, Response][] = [
       ["install", await install(jsonReq("/x", "POST"), ID(DISC1))],
-      ["hosts", await hostsGET()],
+      ["hosts", await hostsGET(getReq("/api/hosts"))],
       ["host", await hostGET(jsonReq("/x", "GET"), ID(DISC1))],
       ["config", await configGET(jsonReq("/x", "GET"), ID(DISC1))],
       ["patch", await patch(DISC2, { ...creds, ...sshNew })],
       ["bulk", await bulkPOST(jsonReq("/api/hosts/bulk", "POST", { hostIds: [DISC1, DISC2], credentials: { mode: "random", username: "ops", length: 16, sudo: true, disableSshPassword: false } }))],
       ["bulk-install", await bulkInstall(jsonReq("/api/hosts/bulk/install", "POST", { hostIds: [DISC2] }))],
-      ["keys", await keysGET()],
-      ["images", await imagesGET()],
-      ["settings", await settingsGET()],
-      ["status", await statusGET()],
+      ["keys", await keysGET(getReq("/api/ssh-keys"))],
+      ["images", await imagesGET(getReq("/api/os-images"))],
+      ["settings", await settingsGET(getReq("/api/settings"))],
+      ["status", await statusGET(getReq("/api/server-status"))],
     ]
     for (const [name, r] of bodies) {
       const text = await r.text()

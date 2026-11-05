@@ -13,6 +13,12 @@ export type SettingsResponse = NetworkResponse & {
   tftpRoot: string
   tokenTtlMin: number
   unknownHostAction: "local" | "wait"
+  /** M5: timeout per tahap job (menit). */
+  jobTimeouts: { bootingMin: number; installingMin: number; configuringMin: number }
+  /** M5: batas penyajian script installer per job. */
+  maxInstallerBoots: number
+  /** M5: binding IP lewat lease dinonaktifkan (PXE_INSECURE_NO_LEASE_CHECK=1). */
+  insecureNoLeaseCheck: boolean
 }
 
 export const SETTINGS_KEY = ["settings"] as const

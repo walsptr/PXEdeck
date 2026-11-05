@@ -1,0 +1,7 @@
+▲ Next.js 16.4.5
+- Local:         http://localhost:3260
+- Network:       http://192.168.0.207:3260
+✓ Ready in 160ms
+✓ Running next.config.ts took 31ms
+(node:721333) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)

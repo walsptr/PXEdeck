@@ -8,7 +8,8 @@
 #         (user pxe, HOSTNAME=127.0.0.1 PORT=3000, DB /var/lib/pxe-dashboard), nginx
 #         10.99.0.2:80 (X-Real-IP, X-Forwarded-* dibuang), restart, cek listen 127.0.0.1:3000.
 #   host: tunggu GET http://10.99.0.2/api/settings 200 dengan cidr 10.99.0.0/24.
-# Bukti: <runs>/deploy-dashboard.txt. Env: SKIP_BUILD=1 (pakai build yang ada), INFRA_DRY_RUN=1.
+# Bukti: <runs>/deploy-dashboard.txt. Env: SKIP_BUILD=1 (pakai build yang ada), INFRA_DRY_RUN=1,
+# PXE_ADMIN_ALLOW (IP/CIDR admin untuk UI + /api/** di nginx, default 10.99.0.1, DEC-015).
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 
@@ -58,6 +59,13 @@ if ! is_dry; then
 fi
 cp "$INFRA_DIR/server/dashboard.env" "$INFRA_DIR/server/pxe-dashboard.service" \
   "$INFRA_DIR/server/nginx-pxe.conf" "$stage/"
+# DEC-015: allowlist admin nginx untuk UI + /api/** (IPv4 atau CIDR IPv4; default host lab).
+admin_allow="${PXE_ADMIN_ALLOW:-10.99.0.1}"
+[[ "$admin_allow" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}(/([0-9]|[12][0-9]|3[0-2]))?$ ]] \
+  || die "PXE_ADMIN_ALLOW '$admin_allow' harus IPv4 atau CIDR IPv4"
+sed -i -E "s#^([[:space:]]*)allow [^;]+; \# PXE_ADMIN_ALLOW\$#\1allow $admin_allow; \# PXE_ADMIN_ALLOW#" "$stage/nginx-pxe.conf"
+[[ "$(grep -c "allow $admin_allow; # PXE_ADMIN_ALLOW" "$stage/nginx-pxe.conf")" -ge 2 ]] \
+  || die "nginx-pxe.conf: penanda PXE_ADMIN_ALLOW tidak ditemukan"
 
 # --- upload + install di VM ----------------------------------------------------------------
 ssh_server "mkdir -m 700 '$remote_stage'"

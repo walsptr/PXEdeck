@@ -1,15 +1,20 @@
 import { connection } from "next/server"
 
 import { listImages, toImageInfo } from "@/lib/server/db/repos/os-images"
-import { guardMutation, jsonNoStore, readJson } from "@/lib/server/http"
+import { guardMutation, guardRead, jsonNoStore, readJson } from "@/lib/server/http"
 import { createOsImage, newOsImagePayload } from "@/lib/server/library-service"
 import { getSettings } from "@/lib/server/settings"
 
-/** Katalog OS image + ketersediaan media (`OsImageInfo[]`). */
-export async function GET() {
+/**
+ * Katalog OS image + ketersediaan media (`OsImageInfo[]`), M5: + `source`, `repoUrl`, `usedBy`
+ * (jumlah host), `createdAt`.
+ */
+export async function GET(req: Request) {
+  const denied = guardRead(req)
+  if (denied) return denied
   await connection()
-  const root = getSettings().mediaRoot
-  return jsonNoStore(listImages().map((i) => toImageInfo(i, root)))
+  const s = getSettings()
+  return jsonNoStore(listImages().map((i) => toImageInfo(i, s.mediaRoot, s.mediaUrl)))
 }
 
 /**

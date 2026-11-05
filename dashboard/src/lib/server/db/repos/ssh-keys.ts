@@ -56,6 +56,11 @@ export function insertKey(k: SshKey): void {
     .run(k.id, k.name, k.type, k.publicKey, k.fingerprint, k.comment, k.createdAt)
 }
 
+/** Ubah nama key (public key/fingerprint tidak bisa diubah). */
+export function renameKey(id: string, name: string): boolean {
+  return Number(getDb().prepare("UPDATE ssh_keys SET name = ? WHERE id = ?").run(name, id).changes) > 0
+}
+
 export function deleteKey(id: string): boolean {
   return Number(getDb().prepare("DELETE FROM ssh_keys WHERE id = ?").run(id).changes) > 0
 }

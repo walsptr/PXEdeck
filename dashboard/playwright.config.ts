@@ -71,7 +71,47 @@ const FILE_SERVERS = [
     testMatch: /m4-discovery\.spec\.ts/,
     env: { ...M4_ENV, ...dbEnv("m4-discovery", "empty"), PXE_DNSMASQ_LEASES: e2eLeaseFile("m4-discovery") },
   },
-  { name: "m4-settings", port: 3109, testMatch: /m4-settings\.spec\.ts/, env: { ...M4_ENV, ...dbEnv("m4-settings") } },
+  {
+    name: "m4-settings",
+    port: 3109,
+    testMatch: /m4-settings\.spec\.ts/,
+    // DEC-013 (M5): PXE_TRUST_PROXY=1 wajib disertai file lease (fail-closed) → fixture lease kosong.
+    env: { ...M4_ENV, ...dbEnv("m4-settings"), PXE_DNSMASQ_LEASES: e2eLeaseFile("m4-settings") },
+  },
+  // M5 (M5-T13): halaman Jobs/log/riwayat, library (OS Images + SSH Keys), perbaikan DR-4-x.
+  // Lease fixture per server (DEC-013: PXE_TRUST_PROXY=1 wajib disertai file lease).
+  {
+    name: "m5-jobs",
+    port: 3110,
+    testMatch: /m5-jobs\.spec\.ts/,
+    env: { ...M4_ENV, ...dbEnv("m5-jobs", "empty"), PXE_DNSMASQ_LEASES: e2eLeaseFile("m5-jobs") },
+  },
+  {
+    // Webserver kedua ber-timeout pendek untuk uji watchdog (DEC-014 §6, O13): build produksi yang
+    // sama, hanya env berbeda — tanpa seam test di kode produk.
+    name: "m5-timeout",
+    port: 3111,
+    testMatch: /m5-timeout\.spec\.ts/,
+    env: {
+      ...M4_ENV,
+      ...dbEnv("m5-timeout", "empty"),
+      PXE_DNSMASQ_LEASES: e2eLeaseFile("m5-timeout"),
+      PXE_JOB_BOOTING_TIMEOUT_MIN: "1",
+      PXE_WATCHDOG_INTERVAL_SEC: "5",
+    },
+  },
+  {
+    name: "m5-library",
+    port: 3112,
+    testMatch: /m5-library\.spec\.ts/,
+    env: { ...M4_ENV, ...dbEnv("m5-library", "empty"), PXE_DNSMASQ_LEASES: e2eLeaseFile("m5-library") },
+  },
+  {
+    name: "m5-ui",
+    port: 3113,
+    testMatch: /m5-ui-fixes\.spec\.ts/,
+    env: { ...M4_ENV, ...dbEnv("m5-ui", "empty"), PXE_DNSMASQ_LEASES: e2eLeaseFile("m5-ui") },
+  },
 ] as const
 
 const chromium = { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }

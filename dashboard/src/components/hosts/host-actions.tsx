@@ -68,12 +68,18 @@ export function RowActions({ host }: { host: Host }) {
             <HugeiconsIcon icon={ComputerTerminal01Icon} strokeWidth={2} />
             Lihat log
           </DropdownMenuItem>
-          {/* Reboot jarak jauh butuh IPMI/Redfish — di luar M4 (API 501). Nonaktif + alasan. */}
-          <DropdownMenuItem disabled className="items-start">
-            <HugeiconsIcon icon={RefreshIcon} strokeWidth={2} className="mt-0.5" />
+          {/* Reboot jarak jauh butuh IPMI/Redfish — di luar M4 (API 501). Nonaktif + alasan.
+              DR-4-6: item tidak di-dim seluruhnya (opacity 0.5 membuat alasan ≈ 1,9:1); hanya ikon
+              dan label yang tampak nonaktif, alasan tetap terbaca (warna body, kontras ≈ 7:1). */}
+          <DropdownMenuItem disabled className="items-start data-disabled:opacity-100">
+            <HugeiconsIcon
+              icon={RefreshIcon}
+              strokeWidth={2}
+              className="mt-0.5 text-muted-soft"
+            />
             <span className="flex flex-col gap-0.5">
-              Reboot ke PXE{" "}
-              <span className="text-xs text-muted-foreground">
+              <span className="text-muted-foreground">Reboot ke PXE</span>{" "}
+              <span data-slot="reboot-reason" className="text-xs text-body">
                 Belum didukung (butuh IPMI/Redfish) — reboot host manual
               </span>
             </span>

@@ -1,0 +1,14 @@
+# host 10.99.0.1: GET /api/settings → 200
+# dari pxe-test-m5-node12 (10.99.0.22) via SSH (exit=0):
+src_ip 10.99.0.22/24 
+GET /api/hosts 403
+GET /api/settings 403
+GET /hosts 403
+GET /boot/52:54:00:99:00:12.ipxe 200
+# body /boot
+#!ipxe
+echo Tidak ada instalasi aktif: boot dari disk lokal
+iseq ${platform} efi && exit 1 ||
+sanboot --no-describe --drive 0x80 || exit 1
+
+# server-check.txt RESULT PASS + layanan + 127.0.0.1:3000 + nginx -t: true

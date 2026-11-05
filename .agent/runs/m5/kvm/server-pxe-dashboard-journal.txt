@@ -1,0 +1,10 @@
+2026-11-05T16:48:30+00:00 pxe-test-server systemd[1]: Started pxe-dashboard.service - PXE dashboard (Next.js standalone).
+2026-11-05T16:48:31+00:00 pxe-test-server node[1626]: ▲ Next.js 16.4.5
+2026-11-05T16:48:31+00:00 pxe-test-server node[1626]: - Local:         http://127.0.0.1:3000
+2026-11-05T16:48:31+00:00 pxe-test-server node[1626]: - Network:       http://127.0.0.1:3000
+2026-11-05T16:48:31+00:00 pxe-test-server node[1626]: ✓ Ready in 0ms
+2026-11-05T16:48:31+00:00 pxe-test-server node[1626]: ✓ Running next.config took 0.9ms
+2026-11-05T16:48:31+00:00 pxe-test-server node[1626]: (node:1626) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-11-05T16:48:31+00:00 pxe-test-server node[1626]: (Use `node --trace-warnings ...` to show where the warning was created)
+2026-11-05T17:17:43+00:00 pxe-test-server node[1626]: [boot] tolak log mac=52:54:00:99:00:12 alasan=token-unknown
+2026-11-05T17:17:43+00:00 pxe-test-server node[1626]: [boot] tolak status mac=52:54:00:99:00:12 alasan=token-unknown

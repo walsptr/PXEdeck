@@ -1,0 +1,11 @@
+
+Running 4 tests using 1 worker
+
+  ✓  1 e2e-kvm/m5-jobs.spec.ts:270:9 › AC-5.39 pxe-test-m5-node11 (uefi): virsh destroy saat Installing → boot lokal → Failed timeout-installing (15.8m)
+  ✓  2 e2e-kvm/m5-jobs.spec.ts:435:9 › AC-5.40 pxe-test-m5-node11: install ulang dari UI → Done → SSH key, 2 job, reboot dari disk (13.2m)
+  ✓  3 e2e-kvm/m5-jobs.spec.ts:497:9 › AC-5.41 + AC-5.42 pxe-test-m5-node12 (bios): jalur positif, log live SSE, token acak ditolak (7.0m)
+  ✓  4 e2e-kvm/m5-jobs.spec.ts:639:7 › AC-5.38 server-check + allowlist nginx (host vs pxe-test-m5-node12) (227ms)
+
+  Slow test file: e2e-kvm/m5-jobs.spec.ts (36.1m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  4 passed (36.1m)

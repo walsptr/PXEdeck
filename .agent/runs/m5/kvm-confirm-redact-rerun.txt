@@ -1,0 +1,2 @@
+redact-evidence: 32 file di .agent/runs/m5/kvm-confirm bersih (token/hash disamarkan; 6 biner/kosong hanya dipindai)
+redact_rc=0

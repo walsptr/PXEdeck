@@ -4,16 +4,20 @@
 // token baru (DB hanya menyimpan sha256; plaintext dibuang — token yang
 // dipakai installer dibuat ulang saat script iPXE dilayani), host `booting`
 // + `osAssigned`. Semua dalam satu transaksi. Token tidak pernah dikembalikan.
+// M5 (DEC-014): event "Job install dibuat" + pemangkasan riwayat job final host
+// (`PXE_JOB_HISTORY_PER_HOST`) di transaksi yang sama. Host `failed` boleh
+// di-install ulang (job baru).
 import type { InstallResult } from "@/lib/host-config"
 import { IN_PROGRESS_STATUSES, type Host } from "@/lib/types"
 import { getDb, tx } from "@/lib/server/db"
 import { peekConfig } from "@/lib/server/db/repos/configs"
 import { getHost, setHostStatus } from "@/lib/server/db/repos/hosts"
-import { insertJob, supersedeActiveJobs } from "@/lib/server/db/repos/jobs"
+import { insertJob, pruneHostHistory, supersedeActiveJobs } from "@/lib/server/db/repos/jobs"
 import {
   getImage,
   imageAvailability,
 } from "@/lib/server/db/repos/os-images"
+import { logJobEvent } from "@/lib/server/job-lifecycle"
 import { getSettings } from "@/lib/server/settings"
 import { newToken } from "@/lib/server/tokens"
 
@@ -43,7 +47,7 @@ export function installBlocker(
   const { available, reason } = imageAvailability(img, mediaRoot, exists)
   if (!available) return `${label(h)}: ${reason}`
   if (cfg!.os!.partition === "custom")
-    return `${label(h)}: skema partisi custom belum didukung generator M4`
+    return `${label(h)}: skema partisi custom belum didukung`
   if (cfg!.sshUser && cfg!.sshUser !== cfg!.username)
     return `${label(h)}: user target SSH berbeda dari user Credentials belum didukung`
   return null
@@ -71,10 +75,13 @@ export function installHosts(
         continue
       }
       const osImageId = peekConfig(id)!.os!.osImageId
-      // Job aktif lama (seharusnya tidak ada) dicabut lebih dulu.
-      supersedeActiveJobs(id, at)
+      // Job aktif lama (seharusnya tidak ada) dicabut lebih dulu → failed `superseded`.
+      for (const old of supersedeActiveJobs(id, at)) {
+        logJobEvent(old, { at, kind: "stage", level: "error", source: "install", message: "Failed: digantikan job install baru" })
+      }
+      const jobId = `job-${crypto.randomUUID()}`
       insertJob({
-        id: `job-${crypto.randomUUID()}`,
+        id: jobId,
         hostId: id,
         kind: "install",
         osImageId,
@@ -88,6 +95,14 @@ export function installHosts(
         finishedAt: null,
       })
       setHostStatus(id, "booting", at, { osAssigned: osImageId })
+      logJobEvent(jobId, {
+        at,
+        kind: "stage",
+        level: "info",
+        source: "install",
+        message: `Job install dibuat (OS ${osImageId}); menunggu PXE boot`,
+      })
+      pruneHostHistory(id, s.jobHistoryPerHost)
       result.started.push(id)
     }
     return result

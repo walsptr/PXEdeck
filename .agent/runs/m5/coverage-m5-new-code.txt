@@ -1,0 +1,77 @@
+# Coverage kode baru/berubah M5 (git diff --diff-filter=AM 23e508e..HEAD -- dashboard/src, non-test) @ 909e2e7
+# Sumber: dashboard/coverage/coverage-summary.json (npm run test = vitest run --coverage, v8, include DEC-004)
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/app/(dashboard)/jobs/page.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/app/(dashboard)/os-images/page.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/app/(dashboard)/ssh-keys/page.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/host-config/config-sheet.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/host-config/tab-os.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/hosts/columns.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/hosts/host-actions.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/jobs/job-detail.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/jobs/job-timeline.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/jobs/jobs-filters.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/jobs/jobs-table.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/jobs/jobs-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/jobs/log-viewer.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/os-images/os-images-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/os-images/register-image-dialog.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/settings/settings-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/ssh-keys/add-key-dialog.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/ssh-keys/ssh-keys-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/instrumentation.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/api/hosts/[id]/config/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/api/hosts/[id]/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/api/hosts/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/api/jobs/[id]/logs/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/api/jobs/[id]/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/api/jobs/route.ts
+  83.33% lines  100.00% branches  dashboard/src/app/api/network/route.ts
+ 100.00% lines   87.50% branches  dashboard/src/app/api/os-images/route.ts
+  83.33% lines  100.00% branches  dashboard/src/app/api/server-status/route.ts
+  83.33% lines  100.00% branches  dashboard/src/app/api/settings/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/api/ssh-keys/[id]/route.ts
+ 100.00% lines   87.50% branches  dashboard/src/app/api/ssh-keys/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/boot/[name]/[token]/[file]/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/boot/[name]/[token]/log/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/boot/[name]/[token]/status/route.ts
+ 100.00% lines  100.00% branches  dashboard/src/app/boot/[name]/route.ts
+ 100.00% lines   88.64% branches  dashboard/src/hooks/use-job-log.ts
+ 100.00% lines   96.67% branches  dashboard/src/hooks/use-jobs.ts
+ 100.00% lines   96.15% branches  dashboard/src/hooks/use-os-images.ts
+ 100.00% lines  100.00% branches  dashboard/src/hooks/use-settings.ts
+ 100.00% lines   94.74% branches  dashboard/src/hooks/use-ssh-keys.ts
+  91.67% lines  100.00% branches  dashboard/src/lib/format.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/install-errors.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/jobs.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/boot-http.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/boot-script.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/db/migrations.ts
+  97.67% lines   94.23% branches  dashboard/src/lib/server/db/repos/job-events.ts
+ 100.00% lines   94.12% branches  dashboard/src/lib/server/db/repos/jobs.ts
+ 100.00% lines   90.00% branches  dashboard/src/lib/server/db/repos/os-images.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/db/repos/ssh-keys.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/db/reset.ts
+ 100.00% lines   94.44% branches  dashboard/src/lib/server/discovery.ts
+ 100.00% lines   98.18% branches  dashboard/src/lib/server/http.ts
+  97.44% lines  100.00% branches  dashboard/src/lib/server/install-service.ts
+ 100.00% lines   99.00% branches  dashboard/src/lib/server/installers/context.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/installers/debian.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/installers/firstboot.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/installers/rocky.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/installers/shell.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/installers/ubuntu.ts
+  92.31% lines   81.82% branches  dashboard/src/lib/server/job-lifecycle.ts
+ 100.00% lines   96.30% branches  dashboard/src/lib/server/jobs-service.ts
+  94.23% lines   91.30% branches  dashboard/src/lib/server/library-service.ts
+  96.72% lines   91.26% branches  dashboard/src/lib/server/provisioning.ts
+ 100.00% lines   97.37% branches  dashboard/src/lib/server/redact.ts
+ 100.00% lines   99.03% branches  dashboard/src/lib/server/settings.ts
+  90.24% lines   82.98% branches  dashboard/src/lib/server/sse.ts
+  88.89% lines   66.67% branches  dashboard/src/lib/server/startup.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/server/watchdog.ts
+ 100.00% lines  100.00% branches  dashboard/src/lib/types.ts
+
+TOTAL kode baru M5 (dalam include DEC-004): lines 1564/1589 = 98.43%  branches 1162/1211 = 95.95%
+Repo (All files): lines 98.69%  branches 96.17%  functions 98.55%  statements 97.96%
+File kode baru < 80% lines: tidak ada
+Komponen .tsx di luar include DEC-004 dibuktikan per AC lewat E2E (m5-*.spec.ts) dan test komponen jsdom.

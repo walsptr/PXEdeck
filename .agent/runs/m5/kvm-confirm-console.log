@@ -1,0 +1,55 @@
+2026-11-05T19:48:21Z preflight          ok max_nodes=3 avail_mb=13533
+[2026-11-05T19:48:21Z] network pxe-test sudah terdefinisi
+[2026-11-05T19:48:21Z] network pxe-test sudah aktif
+[2026-11-05T19:48:21Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T19:48:21Z] network pxe-test-nat sudah aktif
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+2026-11-05T19:48:21Z net-up             ok 
+[2026-11-05T19:48:21Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-05T19:48:21Z] network pxe-test sudah terdefinisi
+[2026-11-05T19:48:21Z] network pxe-test sudah aktif
+[2026-11-05T19:48:21Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T19:48:21Z] network pxe-test-nat sudah aktif
+[2026-11-05T19:48:22Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-05T19:48:31Z] SSH siap dalam 10s
+[2026-11-05T19:48:32Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm-confirm/server-listen.txt
+2026-11-05T19:48:32Z server-up          ok 
+[2026-11-05T19:48:32Z] build standalone (PXE_STANDALONE=1 npm run build)
+[2026-11-05T19:48:49Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261105T194832Z
+[2026-11-05T19:48:52Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm-confirm/deploy-dashboard.txt)
+2026-11-05T19:48:52Z deploy             ok 
+2026-11-05T19:48:53Z server-check       ok 
+[2026-11-05T19:48:53Z] create pxe-test-m5-node12 (bios, 52:54:00:99:00:12, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+2026-11-05T19:48:53Z node-create        ok pxe-test-m5-node12 bios 52:54:00:99:00:12
+2026-11-05T19:55:56Z playwright         ok exit=0 (playwright-kvm.log)
+2026-11-05T19:55:56Z verify             ok pxe-test-m5-node12 (pxe-test-m5-node12-verify.txt)
+2026-11-05T19:55:56Z evidence           start 
+2026-11-05T19:55:57Z evidence           done 
+PASS  CR-4-12-nginx    pxe-test-m5-node12           user-data 200 x1 (min 1)
+2026-11-05T19:55:57Z server-logs        ok 
+redact-evidence: 33 file di /home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm-confirm bersih (token/hash disamarkan; 6 biner/kosong hanya dipindai)
+2026-11-05T19:56:00Z redact             ok 
+Domain 'pxe-test-server' is being shutdown
+
+Domain 'pxe-test-server' has been undefined
+
+[2026-11-05T19:56:03Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-05T19:56:03Z] cleanup run m5 selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm-confirm/cleanup.txt)
+2026-11-05T19:56:03Z cleanup            done 
+2026-11-05T19:56:03Z result             PASS exit=0
+exit=0

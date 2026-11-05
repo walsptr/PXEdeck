@@ -75,7 +75,8 @@ export function waitScript(baseUrl: string, mac: string, iteration: number): str
   return lines(
     `echo Menunggu tugas instalasi (${iteration + 1}/${WAIT_MAX_ITERATIONS})`,
     "sleep 30",
-    `chain --autofree ${next} || ${IPXE_EXIT_TO_NEXT}`,
+    // CR-4-5: `--replace` seperti entry.ipxe → `exit 1` script berikutnya langsung ke firmware.
+    `chain --replace --autofree ${next} || ${IPXE_EXIT_TO_NEXT}`,
   )
 }
 

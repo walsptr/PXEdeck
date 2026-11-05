@@ -1,0 +1,10 @@
+POST /boot/52:54:00:99:00:12/<token-acak-43>/log → 404 body="not found\n"
+POST /boot/52:54:00:99:00:12/<token-acak-43>/status → 404 body="not found\n"
+eventCount job sebelum=1 sesudah=1
+GET /boot/52:54:00:99:00:12.ipxe dari host:
+#!ipxe
+echo Tidak ada instalasi aktif: boot dari disk lokal
+iseq ${platform} efi && exit 1 ||
+sanboot --no-describe --drive 0x80 || exit 1
+
+status host setelah uji negatif: booting

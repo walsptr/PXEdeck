@@ -1,0 +1,32 @@
+2026-11-05T16:48:37.119Z settings jobTimeouts={"bootingMin":60,"installingMin":15,"configuringMin":60} maxInstallerBoots=3
+2026-11-05T16:48:53.776Z discovered firmware=uefi
+2026-11-05T16:48:55.593Z install dibuat (UI): booting
+2026-11-05T16:48:55.987Z node.sh reset
+2026-11-05T16:49:30.974Z installing (UI)
+2026-11-05T16:49:43.023Z event installer 'autoinstall mulai' tampil di log job (UI)
+2026-11-05T16:49:43.598Z sebelum destroy: status=installing installerBoots=1 kernelSerial=4 warn=0 nginxIpxe=2 skewMs=-2
+2026-11-05T16:49:43.867Z node.sh poweroff (virsh destroy)
+2026-11-05T16:49:49.067Z node.sh start
+2026-11-05T16:50:11.423Z setelah start (+22 dtk): status=installing installerBoots=1 nginxIpxe=3 kernelSerial=4
+2026-11-05T16:50:11.433Z menunggu watchdog: UI=installing kernelSerial=4 (+46 dtk sejak Installing)
+2026-11-05T16:51:11.583Z menunggu watchdog: UI=installing kernelSerial=4 (+106 dtk sejak Installing)
+2026-11-05T16:52:11.742Z menunggu watchdog: UI=installing kernelSerial=4 (+166 dtk sejak Installing)
+2026-11-05T16:53:11.893Z menunggu watchdog: UI=installing kernelSerial=4 (+226 dtk sejak Installing)
+2026-11-05T16:54:12.049Z menunggu watchdog: UI=installing kernelSerial=4 (+286 dtk sejak Installing)
+2026-11-05T16:55:12.193Z menunggu watchdog: UI=installing kernelSerial=4 (+346 dtk sejak Installing)
+2026-11-05T16:56:12.337Z menunggu watchdog: UI=installing kernelSerial=4 (+407 dtk sejak Installing)
+2026-11-05T16:57:12.493Z menunggu watchdog: UI=installing kernelSerial=4 (+467 dtk sejak Installing)
+2026-11-05T16:58:12.648Z menunggu watchdog: UI=installing kernelSerial=4 (+527 dtk sejak Installing)
+2026-11-05T16:59:12.797Z menunggu watchdog: UI=installing kernelSerial=4 (+587 dtk sejak Installing)
+2026-11-05T17:00:12.947Z menunggu watchdog: UI=installing kernelSerial=4 (+647 dtk sejak Installing)
+2026-11-05T17:01:13.087Z menunggu watchdog: UI=installing kernelSerial=4 (+707 dtk sejak Installing)
+2026-11-05T17:02:13.241Z menunggu watchdog: UI=installing kernelSerial=4 (+767 dtk sejak Installing)
+2026-11-05T17:03:13.393Z menunggu watchdog: UI=installing kernelSerial=4 (+828 dtk sejak Installing)
+2026-11-05T17:04:13.538Z menunggu watchdog: UI=installing kernelSerial=4 (+888 dtk sejak Installing)
+2026-11-05T17:04:27.572Z Failed teramati di UI: +902 dtk sejak Installing
+2026-11-05T17:04:28.979Z install ulang (UI): booting
+2026-11-05T17:04:29.060Z node.sh reset (install ulang)
+2026-11-05T17:04:29.066Z job2: booting (UI)
+2026-11-05T17:04:59.260Z job2: installing (UI)
+2026-11-05T17:10:26.234Z job2: configuring (UI)
+2026-11-05T17:14:04.801Z job2: done (UI)

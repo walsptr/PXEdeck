@@ -1,0 +1,267 @@
+# Mutasi iter3 (test-engineer, verifikasi independen) @ 909e2e7 — setiap perbaikan iterasi 3 di-revert sementara (mutasi minimal, lihat .agent/tmp skrip mutate.py yang disalin di bawah), test dijalankan, lalu file dipulihkan dengan git checkout dan diverifikasi sha256 identik + git diff dashboard/src kosong.
+# Unit: npx vitest run (suite penuh, 1266 test). E2E: PXE_E2E_MILESTONE=5 npx playwright test e2e/m5-library.spec.ts [--grep] (next build ulang per mutasi).
+# Catatan: m5-library berjalan serial, jadi kegagalan pertama menghentikan test sesudahnya (did not run); karena itu mutasi E2E diulang dengan --grep per test.
+
+## Ringkasan
+| Perbaikan | Mutasi | Test | Hasil |
+|---|---|---|---|
+| CR-5-18 | `bare = plain` (tanpa salinan bebas-ANSI) | vitest penuh | MERAH 53 (CR-5-18 41, SR-5-16/CR-5-24 12) |
+| SR-5-12 (a/b) | tanpa `replaceAll("\r","")` di handleLogPost | vitest penuh | MERAH 3 (SR-5-12) |
+| SR-5-12 (c) | tanpa `\p{Cf}` di kelas kontrol | vitest penuh | MERAH 18 (SR-5-12) |
+| SR-5-11 | pola baris key lama `^[ \t]*[A-Za-z0-9+/=]*[ \t]*\r?$` atas baris mentah | vitest penuh | MERAH 3 (test performa SR-5-11) |
+| CR-5-19 | perilaku 7af8d05: baris kosong selalu ditelan, baris base64/kata pendek apa pun ditelan | vitest penuh | MERAH 56 (CR-5-19 12, SR-5-17/CR-5-23 44) |
+| SR-5-16/CR-5-24 | pilih salah satu salinan (bare bila memuat secret), perilaku 0c61ed8 | vitest penuh | MERAH 14 (SR-5-16/CR-5-24) |
+| SR-5-17/CR-5-23 | tanpa `longAbove` + adjacency lama `cursor === start` | vitest penuh | MERAH 44 (SR-5-17/CR-5-23) |
+| SR-5-17/CR-5-23 (varian) | hanya tanpa `longAbove` | vitest penuh | MERAH 44 |
+| DR-5-8 | span ID `type-data` saja + sel tanpa `whitespace-normal` (nowrap) | E2E m5-library | MERAH DR-5-8 "@375 debian-12.7-…: sel saling tumpang-tindih" |
+| DR-5-9 | komponen = versi 7af8d05 (+ data-testid img-id/img-name) | E2E --grep DR-5-9 | MERAH "@1280: scroll horizontal di dalam tabel" (tanpa grep: DR-5-8 merah lebih dulu) |
+| DR-5-9 (bagian breakpoint saja) | `xl:` → `md:` (52 kelas) | E2E m5-library | HIJAU 11/11 — lihat catatan (1) |
+| DR-5-12 | `wrap-anywhere` → `wrap-break-word` (8 tempat) | E2E m5-library | MERAH DR-5-12 "@1280: … (tabel 1037 px)" |
+| DR-5-12 (sebagian) | `wrap-anywhere` → `wrap-break-word` hanya PathText/nama/alasan (ID tetap) | E2E m5-library | MERAH DR-5-12 "(tabel 985 px)" |
+| DR-5-13 | komponen = versi 0c61ed8 (sebelum DR-5-12/13) | E2E --grep DR-5-13 | MERAH "@375 rocky9customlab…: elemen/teks meluber keluar kartu" |
+| DR-5-13 (hanya `max-xl:min-w-0` dihapus) | 3 sel kartu | E2E m5-library | HIJAU 11/11 — catatan (2), sesuai CR-5-32 |
+| DR-5-13 (hanya wrap-anywhere direvert) | DR-5-12 / DR-5-12 sebagian | E2E --grep DR-5-13 | HIJAU 1/1 — catatan (2) |
+
+Catatan:
+(1) Breakpoint kartu `md`→`xl` tidak terdeteksi sendiri: dengan 7 kolom + `wrap-anywhere`, tabel tetap muat di 1280/1440,
+    dan E2E DR-5-9/DR-5-12 hanya mengukur 1280/1440 (mode tabel) serta DR-5-8/DR-5-13 di 375/414 (mode kartu). Rentang
+    768–1279 tidak diasersikan E2E (design-reviewer mengukurnya manual di design-shots-iter3b). Perbaikan inti DR-5-9
+    (penggabungan kolom + wrap) terbukti merah lewat revert penuh. Bukan pelemahan; celah cakupan rentang 768–1279
+    dicatat untuk M6.
+(2) Untuk DR-5-13, `max-xl:min-w-0` dan `wrap-anywhere` masing-masing cukup sendiri (redundan, CR-5-32): menghapus salah
+    satunya tetap hijau; menghapus keduanya (revert 0c61ed8) merah.
+Setiap mutasi dipulihkan: sha256 4 file produk identik dengan sebelum mutasi dan `git diff -- dashboard/src` kosong
+(baris "pulih" di bawah). Setelah semua mutasi, `.next` dibangun ulang dari HEAD dan m5-library dijalankan ulang di
+HEAD (11/11 lulus, e2e.log RUN 3) untuk menimpa screenshot.
+
+## Log mentah — unit
+=== mutasi CR-5-18 @ 909e2e7 2026-11-05T19:36:06Z
+  src/lib/server/db/repos/job-events.ts: 1x 'const bare = dropMatches(dropMatches(rawView, ANSI_RE), ctrl' -> 'const bare = plain'
+  diff mutasi: 1	1	dashboard/src/lib/server/db/repos/job-events.ts 
+  vitest rc=1 ::  Tests 53 failed | 1213 passed (1266)
+         41 |node| src/lib/server/m5-iter3-redact.test.ts > CR-5-18 sekuens ANSI di tengah secret
+         12 |node| src/lib/server/m5-iter3-redact.test.ts > SR-5-16 / CR-5-24 secret terpotong `stripAnsi` + secret kedua di body yang sama
+  jumlah test merah (×): 53
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi SR-5-12-cr @ 909e2e7 2026-11-05T19:36:15Z
+  src/lib/server/provisioning.ts: 1x 'cleanAndRedact(input.text.replaceAll("\r", ""), true)' -> 'cleanAndRedact(input.text, true)'
+  diff mutasi: 1	1	dashboard/src/lib/server/provisioning.ts 
+  vitest rc=1 ::  Tests 3 failed | 1263 passed (1266)
+          3 |node| src/lib/server/m5-iter3-redact.test.ts > SR-5-12 `\r` dan karakter format Unicode (Cf)
+  jumlah test merah (×): 3
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi SR-5-12-cf @ 909e2e7 2026-11-05T19:36:24Z
+  src/lib/server/db/repos/job-events.ts: 1x '\\u2028\\u2029\\p{Cf}"' -> '\\u2028\\u2029"'
+  diff mutasi: 1	1	dashboard/src/lib/server/db/repos/job-events.ts 
+  vitest rc=1 ::  Tests 18 failed | 1248 passed (1266)
+         18 |node| src/lib/server/m5-iter3-redact.test.ts > SR-5-12 `\r` dan karakter format Unicode (Cf)
+  jumlah test merah (×): 18
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi SR-5-11 @ 909e2e7 2026-11-05T19:36:34Z
+  src/lib/server/redact.ts: 1x '  if (!PKEY_BODY_LINE_RE.test(t)) return false
+  if (t.lengt' -> '  if (!/^[ \t]*[A-Za-z0-9+/=]*[ \t]*\r?$/.test(line)) return'
+  diff mutasi: 1	1	dashboard/src/lib/server/redact.ts 
+  vitest rc=1 ::  Tests 3 failed | 1263 passed (1266)
+          3 |node| src/lib/server/m5-iter3-redact.test.ts > SR-5-11 baris isi key linear
+  jumlah test merah (×): 3
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi CR-5-19 @ 909e2e7 2026-11-05T19:36:44Z
+  src/lib/server/redact.ts: 1x '  if (t.length >= PKEY_BODY_MIN) return true
+  if (!adjacent' -> '  return true
+  if (!adjacent)'
+  src/lib/server/redact.ts: 1x '        if (prevStart === 0) start = 0
+' -> '        start = prevStart
+'
+  diff mutasi: 2	2	dashboard/src/lib/server/redact.ts 
+  vitest rc=1 ::  Tests 56 failed | 1210 passed (1266)
+         12 |node| src/lib/server/m5-iter3-redact.test.ts > CR-5-19 footer END yatim tidak menelan baris diagnostik
+         44 |node| src/lib/server/m5-iter3-redact.test.ts > SR-5-17 / CR-5-23 baris akhir key pendek berbentuk kata
+  jumlah test merah (×): 56
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi SR-5-16 @ 909e2e7 2026-11-05T19:36:54Z
+  src/lib/server/db/repos/job-events.ts: 1x '  const inPlain = mark(plain)
+  const inBare = mark(bare)
+' -> '  const inBare = mark(bare)
+  const inPlain = inBare ? false'
+  diff mutasi: 1	1	dashboard/src/lib/server/db/repos/job-events.ts 
+  vitest rc=1 ::  Tests 14 failed | 1252 passed (1266)
+         14 |node| src/lib/server/m5-iter3-redact.test.ts > SR-5-16 / CR-5-24 secret terpotong `stripAnsi` + secret kedua di body yang sama
+  jumlah test merah (×): 14
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi SR-5-17 @ 909e2e7 2026-11-05T19:37:04Z
+  src/lib/server/redact.ts: 1x '  return !WORD_RE.test(t) || longAbove()' -> '  return !WORD_RE.test(t)'
+  src/lib/server/redact.ts: 1x 'isKeyBodyLine(line, adjacent, () =>' -> 'isKeyBodyLine(line, adjacent && cursor === start, () =>'
+  diff mutasi: 2	2	dashboard/src/lib/server/redact.ts 
+  vitest rc=1 ::  Tests 44 failed | 1222 passed (1266)
+         44 |node| src/lib/server/m5-iter3-redact.test.ts > SR-5-17 / CR-5-23 baris akhir key pendek berbentuk kata
+  jumlah test merah (×): 44
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi SR-5-17-longAbove @ 909e2e7 2026-11-05T19:37:14Z
+  src/lib/server/redact.ts: 1x '  return !WORD_RE.test(t) || longAbove()' -> '  return !WORD_RE.test(t)'
+  diff mutasi: 1	1	dashboard/src/lib/server/redact.ts 
+  vitest rc=1 ::  Tests 44 failed | 1222 passed (1266)
+         44 |node| src/lib/server/m5-iter3-redact.test.ts > SR-5-17 / CR-5-23 baris akhir key pendek berbentuk kata
+  jumlah test merah (×): 44
+  pulih: sha256 identik, git diff dashboard/src kosong
+
+## Log mentah — E2E (file penuh)
+=== mutasi DR-5-8 @ 909e2e7 2026-11-05T19:37:30Z
+  src/components/os-images/os-images-view.tsx: 1x 'className="type-data inline-block max-w-full min-w-0 wrap-an' -> 'className="type-data"'
+  src/components/os-images/os-images-view.tsx: 1x 'className="pl-4 align-top whitespace-normal xl:max-w-44 max-' -> 'className="pl-4 align-top xl:max-w-44 max-xl:order-1'
+  diff mutasi: 2	2	dashboard/src/components/os-images/os-images-view.tsx 
+  playwright rc=1 ::  1 failed  4 passed (25.4s) 
+      ✘   5 [m5-library] › e2e/m5-library.spec.ts:379:5 › DR-5-8 OS Images 375/414: ID 48 karakter + path panjang — ID, Dipakai, Hapus tidak tumpang-tindih, tidak meluber, tanpa scroll horizontal
+          1     Error: @375 debian-12.7-bookworm-netinst-lab-cluster-a: sel saling tumpang-tindih
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi DR-5-9 @ 909e2e7 2026-11-05T19:37:57Z
+  src/components/os-images/os-images-view.tsx: 52x regex (?<![\w-])(max-)?xl: -> (max-)md:
+  diff mutasi: 20	20	dashboard/src/components/os-images/os-images-view.tsx 
+  playwright rc=0 ::  11 passed (36.8s) 
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi DR-5-9-full @ 909e2e7 2026-11-05T19:39:16Z
+  src/components/os-images/os-images-view.tsx: isi diganti versi 7af8d05 (+ 2 test hook data-testid)
+  diff mutasi: 39	69	dashboard/src/components/os-images/os-images-view.tsx 
+  playwright rc=1 ::  1 failed  4 passed (25.2s) 
+      ✘   5 [m5-library] › e2e/m5-library.spec.ts:379:5 › DR-5-8 OS Images 375/414: ID 48 karakter + path panjang — ID, Dipakai, Hapus tidak tumpang-tindih, tidak meluber, tanpa scroll horizontal
+          1     Error: @375 debian-12.7-bookworm-netinst-lab-cluster-a: sel saling tumpang-tindih
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi DR-5-12 @ 909e2e7 2026-11-05T19:39:43Z
+  src/components/os-images/os-images-view.tsx: 8x 'wrap-anywhere' -> 'wrap-break-word'
+  diff mutasi: 7	7	dashboard/src/components/os-images/os-images-view.tsx 
+  playwright rc=1 ::  1 failed  6 passed (27.8s) 
+      ✘   7 [m5-library] › e2e/m5-library.spec.ts:475:5 › DR-5-12 OS Images 1280/1440: ID 48 tanpa '-', nama ber-underscore/tanpa spasi, segmen path 110 — tabel tanpa overflow, Dipakai + Hapus di dalam kontainer
+          1     Error: @1280: scroll horizontal di dalam tabel (tabel 1037 px)
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi DR-5-13-wrap @ 909e2e7 2026-11-05T19:40:12Z
+  src/components/os-images/os-images-view.tsx: 1x 'cn("type-data min-w-0 text-xs wrap-anywhere"' -> 'cn("type-data min-w-0 text-xs wrap-break-word"'
+  src/components/os-images/os-images-view.tsx: 1x '"min-w-0 wrap-anywhere text-foreground"' -> '"min-w-0 wrap-break-word text-foreground"'
+  src/components/os-images/os-images-view.tsx: 1x '<span className="min-w-0 wrap-anywhere">{img.reason' -> '<span className="min-w-0 wrap-break-word">{img.reason'
+  diff mutasi: 3	3	dashboard/src/components/os-images/os-images-view.tsx 
+  playwright rc=1 ::  1 failed  6 passed (27.7s) 
+      ✘   7 [m5-library] › e2e/m5-library.spec.ts:475:5 › DR-5-12 OS Images 1280/1440: ID 48 tanpa '-', nama ber-underscore/tanpa spasi, segmen path 110 — tabel tanpa overflow, Dipakai + Hapus di dalam kontainer
+          1     Error: @1280: scroll horizontal di dalam tabel (tabel 985 px)
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi DR-5-13-minw @ 909e2e7 2026-11-05T19:40:41Z
+  src/components/os-images/os-images-view.tsx: 1x 'max-xl:order-3 max-xl:min-w-0' -> 'max-xl:order-3'
+  src/components/os-images/os-images-view.tsx: 1x 'max-xl:order-6 max-xl:min-w-0' -> 'max-xl:order-6'
+  src/components/os-images/os-images-view.tsx: 1x 'max-xl:order-5 max-xl:min-w-0' -> 'max-xl:order-5'
+  diff mutasi: 3	3	dashboard/src/components/os-images/os-images-view.tsx 
+  playwright rc=0 ::  11 passed (36.7s) 
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi DR-5-13-full @ 909e2e7 2026-11-05T19:41:19Z
+  src/components/os-images/os-images-view.tsx: isi diganti versi 0c61ed8 (+ 0 test hook data-testid)
+  diff mutasi: 11	23	dashboard/src/components/os-images/os-images-view.tsx 
+  playwright rc=1 ::  1 failed  6 passed (27.8s) 
+      ✘   7 [m5-library] › e2e/m5-library.spec.ts:475:5 › DR-5-12 OS Images 1280/1440: ID 48 tanpa '-', nama ber-underscore/tanpa spasi, segmen path 110 — tabel tanpa overflow, Dipakai + Hapus di dalam kontainer
+          1     Error: @1280: scroll horizontal di dalam tabel (tabel 1037 px)
+  pulih: sha256 identik, git diff dashboard/src kosong
+
+## Log mentah — E2E (--grep, isolasi)
+=== mutasi DR-5-9-full @ 909e2e7 2026-11-05T19:41:57Z
+  src/components/os-images/os-images-view.tsx: isi diganti versi 7af8d05 (+ 2 test hook data-testid)
+  diff mutasi: 39	69	dashboard/src/components/os-images/os-images-view.tsx 
+  --grep "DR-5-9 OS Images"
+  playwright rc=1 ::  1 failed 
+      ✘  1 [m5-library] › e2e/m5-library.spec.ts:429:5 › DR-5-9 OS Images 1280/1440: ID/nama/path panjang — tabel muat tanpa scroll horizontal, Dipakai + Hapus di dalam kontainer
+          1     Error: @1280: scroll horizontal di dalam tabel
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi DR-5-12 @ 909e2e7 2026-11-05T19:42:19Z
+  src/components/os-images/os-images-view.tsx: 8x 'wrap-anywhere' -> 'wrap-break-word'
+  diff mutasi: 7	7	dashboard/src/components/os-images/os-images-view.tsx 
+  --grep "DR-5-13 OS Images"
+  playwright rc=0 ::  1 passed (21.8s) 
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi DR-5-13-wrap @ 909e2e7 2026-11-05T19:42:42Z
+  src/components/os-images/os-images-view.tsx: 1x 'cn("type-data min-w-0 text-xs wrap-anywhere"' -> 'cn("type-data min-w-0 text-xs wrap-break-word"'
+  src/components/os-images/os-images-view.tsx: 1x '"min-w-0 wrap-anywhere text-foreground"' -> '"min-w-0 wrap-break-word text-foreground"'
+  src/components/os-images/os-images-view.tsx: 1x '<span className="min-w-0 wrap-anywhere">{img.reason' -> '<span className="min-w-0 wrap-break-word">{img.reason'
+  diff mutasi: 3	3	dashboard/src/components/os-images/os-images-view.tsx 
+  --grep "DR-5-13 OS Images"
+  playwright rc=0 ::  1 passed (21.9s) 
+  pulih: sha256 identik, git diff dashboard/src kosong
+=== mutasi DR-5-13-full @ 909e2e7 2026-11-05T19:43:06Z
+  src/components/os-images/os-images-view.tsx: isi diganti versi 0c61ed8 (+ 0 test hook data-testid)
+  diff mutasi: 11	23	dashboard/src/components/os-images/os-images-view.tsx 
+  --grep "DR-5-13 OS Images"
+  playwright rc=1 ::  1 failed 
+      ✘  1 [m5-library] › e2e/m5-library.spec.ts:528:5 › DR-5-13 OS Images 375/414: nama tanpa spasi + segmen path tanpa titik pecah — tidak ada elemen kartu meluber, scrollWidth kontainer = clientWidth
+          1     Error: @375 rocky9customlabimagebuildnumber00000000000000001: elemen/teks meluber keluar kartu
+  pulih: sha256 identik, git diff dashboard/src kosong
+
+## Skrip mutasi (mutate.py) — salinan untuk reproduksi
+# Mutasi iterasi 3: terapkan satu mutasi (replace persis, jumlah kecocokan diasersikan).
+# Pakai: python3 -I mutate.py <id>
+import sys
+D = "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard/"
+JE = D + "src/lib/server/db/repos/job-events.ts"
+RD = D + "src/lib/server/redact.ts"
+PV = D + "src/lib/server/provisioning.ts"
+VW = D + "src/components/os-images/os-images-view.tsx"
+M = {
+  # CR-5-18: tanpa salinan bebas-ANSI (bare = plain)
+  "CR-5-18": [(JE, "const bare = dropMatches(dropMatches(rawView, ANSI_RE), ctrl)", "const bare = plain", 1)],
+  # SR-5-12 (a/b): tanpa normalisasi \r sebelum redaksi body
+  "SR-5-12-cr": [(PV, 'cleanAndRedact(input.text.replaceAll("\\r", ""), true)', "cleanAndRedact(input.text, true)", 1)],
+  # SR-5-12 (c): tanpa kategori Unicode Cf
+  "SR-5-12-cf": [(JE, '\\\\u2028\\\\u2029\\\\p{Cf}"', '\\\\u2028\\\\u2029"', 1)],
+  # SR-5-11: pola baris key lama (kuantor bertumpuk, atas baris mentah) — seperti 7af8d05
+  "SR-5-11": [(RD, "  if (!PKEY_BODY_LINE_RE.test(t)) return false\n  if (t.length",
+               "  if (!/^[ \\t]*[A-Za-z0-9+/=]*[ \\t]*\\r?$/.test(line)) return false\n  if (t.length", 1)],
+  # CR-5-19: perilaku 7af8d05 — footer yatim menelan baris kosong & baris base64/kata apa pun
+  "CR-5-19": [(RD, "  if (t.length >= PKEY_BODY_MIN) return true\n  if (!adjacent)", "  return true\n  if (!adjacent)", 1),
+              (RD, "        if (prevStart === 0) start = 0\n", "        start = prevStart\n", 1)],
+  # SR-5-16/CR-5-24: pilih SALAH SATU salinan (bare bila memuat secret, selain itu plain) — perilaku 0c61ed8
+  "SR-5-16": [(JE, "  const inPlain = mark(plain)\n  const inBare = mark(bare)\n",
+               "  const inBare = mark(bare)\n  const inPlain = inBare ? false : mark(plain)\n", 1)],
+  # SR-5-17/CR-5-23: tanpa longAbove + adjacency lama (cursor === start) — perilaku 0c61ed8
+  "SR-5-17": [(RD, "  return !WORD_RE.test(t) || longAbove()", "  return !WORD_RE.test(t)", 1),
+              (RD, "isKeyBodyLine(line, adjacent, () =>", "isKeyBodyLine(line, adjacent && cursor === start, () =>", 1)],
+  # SR-5-17 varian: hanya tanpa longAbove
+  "SR-5-17-longAbove": [(RD, "  return !WORD_RE.test(t) || longAbove()", "  return !WORD_RE.test(t)", 1)],
+  # DR-5-8: sel ID kembali nowrap (tanpa wrap/min-w-0 di span, sel tanpa whitespace-normal)
+  "DR-5-8": [(VW, 'className="type-data inline-block max-w-full min-w-0 wrap-anywhere xl:min-w-[12ch]"', 'className="type-data"', 1),
+             (VW, 'className="pl-4 align-top whitespace-normal xl:max-w-44 max-xl:order-1', 'className="pl-4 align-top xl:max-w-44 max-xl:order-1', 1)],
+  # DR-5-9: batas kartu kembali ke md (max-xl: -> max-md:, xl: -> md:)
+  "DR-5-9": [(VW, "RE:(?<![\\w-])(max-)?xl:", "\\1md:", -1)],
+  # DR-5-12: wrap-anywhere -> wrap-break-word di semua tempat
+  "DR-5-12": [(VW, "wrap-anywhere", "wrap-break-word", -1)],
+  # DR-5-13 (CR-5-32): hanya max-xl:min-w-0 sel Nama/Sumber/Ketersediaan dihapus
+  "DR-5-13-minw": [(VW, "max-xl:order-3 max-xl:min-w-0", "max-xl:order-3", 1), (VW, "max-xl:order-6 max-xl:min-w-0", "max-xl:order-6", 1),
+                   (VW, "max-xl:order-5 max-xl:min-w-0", "max-xl:order-5", 1)],
+  # DR-5-13: wrap-anywhere -> wrap-break-word hanya di PathText + nama + alasan (ID tetap)
+  "DR-5-13-wrap": [(VW, 'cn("type-data min-w-0 text-xs wrap-anywhere"', 'cn("type-data min-w-0 text-xs wrap-break-word"', 1),
+                   (VW, '"min-w-0 wrap-anywhere text-foreground"', '"min-w-0 wrap-break-word text-foreground"', 1),
+                   (VW, '<span className="min-w-0 wrap-anywhere">{img.reason', '<span className="min-w-0 wrap-break-word">{img.reason', 1)],
+}
+import subprocess
+def from_commit(commit, path, extra):
+    src = subprocess.check_output(["git", "-C", D, "show", f"{commit}:dashboard/" + path.split("dashboard/")[1]], text=True)
+    for old, new in extra:
+        assert src.count(old) == 1, (commit, old)
+        src = src.replace(old, new)
+    open(path, "w").write(src)
+    print(f"  {path.split('dashboard/')[1]}: isi diganti versi {commit} (+ {len(extra)} test hook data-testid)")
+if sys.argv[1] == "DR-5-9-full":
+    # Komponen = versi 7af8d05 (sebelum DR-5-8/DR-5-9), hanya ditambah data-testid img-id/img-name yang dipakai test.
+    from_commit("7af8d05", VW, [
+        ('<TableCell className="pl-4 align-top max-md:order-1 max-md:min-w-0 max-md:flex-1 max-md:p-0">',
+         '<TableCell className="pl-4 align-top max-md:order-1 max-md:min-w-0 max-md:flex-1 max-md:p-0" data-testid="img-id">'),
+        ('<span className="text-foreground">{img.name}</span>', '<span className="text-foreground" data-testid="img-name">{img.name}</span>')])
+    sys.exit(0)
+if sys.argv[1] == "DR-5-13-full":
+    # Komponen = versi 0c61ed8 (sebelum DR-5-12/DR-5-13); testid sudah ada, tanpa tambahan.
+    from_commit("0c61ed8", VW, [])
+    sys.exit(0)
+for path, old, new, n in M[sys.argv[1]]:
+    s = open(path).read()
+    if old.startswith("RE:"):
+        import re
+        s2, c = re.subn(old[3:], lambda m: (m.group(1) or "") + "md:", s)
+        if c == 0: sys.exit("regex tanpa kecocokan")
+        open(path, "w").write(s2); print(f"  {path.split('dashboard/')[1]}: {c}x regex {old[3:]} -> (max-)md:"); continue
+    c = s.count(old)
+    if (n == -1 and c == 0) or (n != -1 and c != n):
+        sys.exit(f"mutasi {sys.argv[1]}: '{old[:50]}' ditemukan {c}x (harap {n})")
+    s = s.replace(old, new)
+    open(path, "w").write(s)
+    print(f"  {path.split('dashboard/')[1]}: {c}x '{old[:60]}' -> '{new[:60]}'")

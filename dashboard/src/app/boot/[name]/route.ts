@@ -9,7 +9,8 @@ import { getSettings } from "@/lib/server/settings"
 /**
  * `GET /boot/entry.ipxe` → script chain ke `/boot/${mac}.ipxe?platform=…`.
  * `GET /boot/{mac}.ipxe?platform=efi|pcbios[&wait=n]` → discovery + script
- * boot (lokal / tunggu / installer). MAC invalid → 400; nama lain → 404.
+ * boot (lokal / tunggu / installer). MAC invalid / tak terdekode → 400 (tidak pernah 500);
+ * nama lain → 404.
  * Selalu text/plain + no-store. Token hanya muncul di script installer.
  */
 export async function GET(req: Request, ctx: RouteContext<"/boot/[name]">) {
@@ -17,7 +18,8 @@ export async function GET(req: Request, ctx: RouteContext<"/boot/[name]">) {
   const name = (await ctx.params).name
   if (name === "entry.ipxe") return textResponse(entryScript(getSettings().baseUrl))
   if (!name.endsWith(".ipxe")) return textResponse("not found\n", 404)
-  const mac = parseBootMac(decodeURIComponent(name.slice(0, -".ipxe".length)))
+  // CR-4-9: segmen sudah didekode Next; tanpa decodeURIComponent kedua (`%25zz` → 500).
+  const mac = parseBootMac(name.slice(0, -".ipxe".length))
   if (!mac) return textResponse("MAC tidak valid\n", 400)
   const url = new URL(req.url)
   const platform = url.searchParams.get("platform")

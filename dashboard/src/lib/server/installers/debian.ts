@@ -9,7 +9,14 @@ import {
   SSHD_NO_PASSWORD_TEXT,
   sudoersText,
 } from "./firstboot"
-import { b64, b64write, callbackCmd, shQuote } from "./shell"
+import { b64, b64write, callbackCmd, logCmd, shQuote } from "./shell"
+
+/** Penanda log installer (konstanta; M5 plan §2.5). */
+export const DEBIAN_LOG = {
+  start: "installer: preseed mulai",
+  late: "installer: late_command mulai",
+  lateDone: "installer: konfigurasi target selesai",
+} as const
 
 /** Konfigurasi ifupdown untuk interface `$IF` (dicari dari MAC saat runtime). */
 function interfacesText(c: InstallContext): string {
@@ -44,6 +51,7 @@ export function debianLateScript(ctx: InstallContext): string {
   const lines = [
     "#!/bin/sh",
     "set -e",
+    logCmd("preseed", c.mac, DEBIAN_LOG.late),
     callbackCmd("preseed", c.mac, "configuring"),
     ...authorizedKeysCmds("", c.username, c.authorizedKeys),
   ]
@@ -61,6 +69,7 @@ export function debianLateScript(ctx: InstallContext): string {
     "mkdir -p /etc/network/interfaces.d",
     `printf %s '${b64(interfacesText(c))}' | base64 -d | sed "s/\\$IF/$IF/g" > /etc/network/interfaces.d/mgmt`,
     ...firstbootInstallCmds("", "preseed", c.mac),
+    logCmd("preseed", c.mac, DEBIAN_LOG.lateDone),
   )
   return `${lines.join("\n")}\n`
 }
@@ -71,6 +80,7 @@ export function debianPreseed(ctx: InstallContext): string {
   const recipe = c.storage.partition === "lvm" ? "lvm" : "regular"
   const out = [
     "# Preseed dibuat PXE dashboard (jangan edit manual)",
+    di("preseed/early_command", "string", logCmd("preseed", c.mac, DEBIAN_LOG.start)),
     di("debian-installer/locale", "string", c.locale.replace(".UTF-8", "")),
     di("debian-installer/language", "string", "en"),
     di("keyboard-configuration/xkb-keymap", "select", "us"),

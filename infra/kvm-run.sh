@@ -1,10 +1,11 @@
 #!/usr/bin/env bash
-# infra/kvm-run.sh <m> [--nodes "11:uefi 12:bios"] [--keep-server] [--skip-build]
+# infra/kvm-run.sh <m> [--nodes "11:uefi[:destroy] 12:bios"] [--keep-server] [--skip-build]
 # Orkestrasi suite KVM satu milestone (M4-T7/T13):
 #   preflight -> net-up -> server-up -> deploy-dashboard -> server-check -> key sekali pakai ->
 #   buat node pxe-test-<m>-nodeNN -> Playwright dashboard/e2e-kvm -> verifikasi SSH per node
 #   (dashboard/e2e-kvm/verify-node.sh) -> kumpulkan bukti -> cleanup (SELALU, via trap EXIT).
-# Default node: 11:uefi (AC-4.30 gate) dan 12:bios (AC-4.33). Node NN: MAC 52:54:00:99:00:NN,
+# Default node: 11:uefi (AC-4.30 gate) dan 12:bios (AC-4.33). Peran opsional `:destroy` (M5,
+# AC-5.39): suite mematikan paksa node itu di tengah install lewat PXE_KVM_POWER_CMD. Node NN: MAC 52:54:00:99:00:NN,
 # IP statis 10.99.0.(10+NN), hostname <m>-nodeNN, user ${PXE_KVM_NODE_USER:-<m>admin}.
 # --keep-server : cleanup tanpa --server (VM pxe-test-server dibiarkan menyala untuk debug).
 # --skip-build  : deploy memakai build standalone yang sudah ada (SKIP_BUILD=1).
@@ -19,9 +20,15 @@
 #   PXE_KVM_SSH_KEY      path private key pasangannya
 #   PXE_KVM_RESET_CMD    path infra/node.sh; panggil "<cmd> reset <name>" setelah Install
 #   PXE_KVM_GATEWAY / PXE_KVM_DNS / PXE_KVM_PREFIX   10.99.0.1 / 10.99.0.2 / 24
+#   PXE_KVM_SPEC         <m> → suite dashboard/e2e-kvm/<m>-*.spec.ts (M5)
+#   PXE_KVM_POWER_CMD    path infra/node.sh; "<cmd> poweroff <name>" / "<cmd> start <name>" (M5)
+#   PXE_KVM_DESTROY_NODES  nama node berperan destroy, dipisah spasi (M5)
+# Setelah bukti terkumpul: infra/assert-server-logs.sh (CR-4-12) → entri results.json; FAIL =
+# run gagal. Log job per node diekspor ke jobs-<name>.json (GET /api/jobs + /logs?format=json)
+# sebelum redaksi.
 set -euo pipefail
 
-usage() { echo "pakai: $0 <m> [--nodes \"NN:uefi|bios ...\"] [--keep-server] [--skip-build]" >&2; exit 2; }
+usage() { echo "pakai: $0 <m> [--nodes \"NN:uefi|bios[:destroy] ...\"] [--keep-server] [--skip-build]" >&2; exit 2; }
 [[ $# -ge 1 ]] || usage
 m="$1"; shift
 [[ "$m" =~ ^m[0-9]+$ ]] || { echo "milestone '$m' harus berbentuk m<angka>" >&2; exit 2; }
@@ -52,15 +59,15 @@ step() { # step <nama> <status> [catatan]
 }
 
 # --- daftar node (eksplisit, maks 3; tanpa wildcard) ----------------------------------------
-declare -a NODE_NAMES=() NODE_MACS=() NODE_FWS=() NODE_IPS=()
+declare -a NODE_NAMES=() NODE_MACS=() NODE_FWS=() NODE_IPS=() NODE_ROLES=()
 for spec in $nodes_spec; do
-  [[ "$spec" =~ ^([1-8][0-9]):(uefi|bios)$ ]] || die "spec node '$spec' harus NN:uefi|bios (NN 10-89)"
-  nn="${BASH_REMATCH[1]}"; fw="${BASH_REMATCH[2]}"
+  [[ "$spec" =~ ^([1-8][0-9]):(uefi|bios)(:destroy)?$ ]] || die "spec node '$spec' harus NN:uefi|bios[:destroy] (NN 10-89)"
+  nn="${BASH_REMATCH[1]}"; fw="${BASH_REMATCH[2]}"; role="${BASH_REMATCH[3]#:}"
   name="pxe-test-$m-node$nn"
   assert_name "$name"
   for n in "${NODE_NAMES[@]}"; do [[ "$n" == "$name" ]] && die "node $name ganda"; done
   NODE_NAMES+=("$name"); NODE_MACS+=("52:54:00:99:00:$nn"); NODE_FWS+=("$fw")
-  NODE_IPS+=("10.99.0.$((10#$nn + 10))")
+  NODE_IPS+=("10.99.0.$((10#$nn + 10))"); NODE_ROLES+=("${role:-install}")
   assert_mac "${NODE_MACS[-1]}"
 done
 ((${#NODE_NAMES[@]} >= 1 && ${#NODE_NAMES[@]} <= 3)) || die "jumlah node harus 1-3"
@@ -83,6 +90,35 @@ collect_evidence() {
   ssh "${SSH_OPTS[@]}" "root@$SERVER_IP" 'cat /var/log/nginx/pxe-access.log' > "$RUNS_DIR/server-nginx.txt" 2>&1 || true
   ssh "${SSH_OPTS[@]}" "root@$SERVER_IP" 'journalctl -u pxe-dashboard --no-pager -o short-iso' \
     > "$RUNS_DIR/server-pxe-dashboard-journal.txt" 2>&1 || true
+  export_job_logs
+}
+# Ekspor riwayat + log job per node (M5) dari host lewat nginx (allowlist admin = host lab).
+export_job_logs() {
+  local i name hid jobs id out
+  for i in "${!NODE_NAMES[@]}"; do
+    name="${NODE_NAMES[$i]}"; hid="${NODE_MACS[$i]//:/}"
+    out="$RUNS_DIR/jobs-$name.json"
+    jobs="$(curl -fsS --max-time 10 "http://$SERVER_IP/api/jobs?hostId=$hid&limit=200" 2>/dev/null)" || jobs='{"error":"GET /api/jobs gagal"}'
+    {
+      printf '{"node": "%s", "jobs": %s, "logs": {' "$name" "$jobs"
+      local first=1
+      for id in $(grep -oE '"id":"job-[0-9a-f-]{36}"' <<<"$jobs" | cut -d'"' -f4 | sort -u); do
+        ((first)) || printf ','
+        first=0
+        printf '"%s": %s' "$id" "$(curl -fsS --max-time 10 "http://$SERVER_IP/api/jobs/$id/logs?format=json" 2>/dev/null || echo '{"error":"log gagal"}')"
+      done
+      printf '}}\n'
+    } > "$out"
+  done
+}
+# CR-4-12: asersi log dnsmasq/nginx (infra/assert-server-logs.sh) → results.json.
+assert_server_logs() {
+  local i specs=() want
+  for i in "${!NODE_NAMES[@]}"; do
+    want=1; [[ "${NODE_ROLES[$i]}" == destroy ]] && want=2
+    specs+=("${NODE_NAMES[$i]}=${NODE_MACS[$i]}=${NODE_FWS[$i]}=$want")
+  done
+  "$INFRA_DIR/assert-server-logs.sh" "$RUNS_DIR" "${specs[@]}"
 }
 finish() {
   local rc=$? i
@@ -91,6 +127,9 @@ finish() {
   step evidence start
   collect_evidence
   step evidence done
+  if ((server_started)) && ! is_dry; then
+    if assert_server_logs; then step server-logs ok; else step server-logs FAIL "server-log-asserts.txt"; ((rc != 0)) || rc=1; fi
+  fi
   # AC-4.34: samarkan token job (/boot/<mac>/<token>/...) dan hash $6$ di SEMUA bukti (console,
   # nginx, journal, Playwright), lalu scan ulang; masih ada secret -> run gagal.
   if "$INFRA_DIR/redact-evidence.sh" "$RUNS_DIR"; then
@@ -187,9 +226,10 @@ for i in "${!NODE_NAMES[@]}"; do
 done
 
 # --- Playwright e2e-kvm -------------------------------------------------------------------
-kvm_nodes=""
+kvm_nodes=""; destroy_nodes=""
 for i in "${!NODE_NAMES[@]}"; do
   kvm_nodes+="${kvm_nodes:+ }${NODE_NAMES[$i]}=${NODE_MACS[$i]}=${NODE_FWS[$i]}=${NODE_IPS[$i]}"
+  [[ "${NODE_ROLES[$i]}" == destroy ]] && destroy_nodes+="${destroy_nodes:+ }${NODE_NAMES[$i]}"
 done
 e2e_env=(
   PXE_KVM_BASE_URL="http://$SERVER_IP" PXE_KVM_RUN="$m" PXE_KVM_RUNS_DIR="$RUNS_DIR"
@@ -197,9 +237,16 @@ e2e_env=(
   PXE_KVM_SSH_KEY="$RUN_KEY" PXE_KVM_SSH_PUBKEY="$RUN_KEY.pub"
   PXE_KVM_RESET_CMD="$INFRA_DIR/node.sh"
   PXE_KVM_GATEWAY=10.99.0.1 PXE_KVM_DNS=10.99.0.2 PXE_KVM_PREFIX=24
+  PXE_KVM_SPEC="$m" PXE_KVM_POWER_CMD="$INFRA_DIR/node.sh" PXE_KVM_DESTROY_NODES="$destroy_nodes"
 )
 if is_dry; then
   run env "${e2e_env[@]}" npx --prefix "$DASH_DIR" playwright test -c "$E2E_CONFIG"
+  # Rencana peran destroy (dijalankan suite lewat PXE_KVM_POWER_CMD saat status Installing).
+  for i in "${!NODE_NAMES[@]}"; do
+    [[ "${NODE_ROLES[$i]}" == destroy ]] || continue
+    run "$INFRA_DIR/node.sh" poweroff "${NODE_NAMES[$i]}"
+    run "$INFRA_DIR/node.sh" start "${NODE_NAMES[$i]}" "${NODE_MACS[$i]}"
+  done
 else
   e2e_rc=0
   (cd "$DASH_DIR" && env "${e2e_env[@]}" npx playwright test -c "$E2E_CONFIG") \

@@ -1,0 +1,5 @@
+{
+  "run": "kvm",
+  "generatedAt": "2026-11-05T16:04:03Z",
+  "results": [{"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m5-node11", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.184 (lease 52:54:00:99:00:11)", "evidence": ["server-dnsmasq.txt"]},{"ac": "CR-4-12-nginx", "node": "pxe-test-m5-node11", "status": "PASS", "note": "user-data 200 x2 (min 2)", "evidence": ["server-nginx.txt"]}]
+}

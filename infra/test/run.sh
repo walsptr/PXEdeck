@@ -644,6 +644,8 @@ t "redact-evidence: blob base64 berisi token/\$6\$/key disamarkan (B-5)" test_re
 t "redact-evidence: header private key → exit 1 tanpa isi"        test_redact_evidence_private_key_fails
 t "redact-evidence: argumen salah → exit 2"                       test_redact_evidence_bad_args
 t "kvm-run.sh finish() memanggil redact-evidence (gagal = FAIL)"  test_kvm_run_calls_redact_in_finish
+# M5 (M5-T14): test infra milestone 5.
+source "$(dirname "$0")/m5.sh"
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"

@@ -18,6 +18,7 @@ import { hashToken } from "@/lib/server/tokens"
 import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { containsSecret, evalCallbackUrl } from "@/test/cmdline"
 import { DUMMY_PASSWORD, SSH_ED25519 } from "@/test/fixtures"
+import { getReq } from "@/test/route"
 
 import { GET as hostsGET } from "../api/hosts/route"
 import { DELETE as hostDELETE } from "../api/hosts/[id]/route"
@@ -39,6 +40,9 @@ const KVM_ENV = {
   PXE_BASE_URL: "http://10.99.0.2",
   PXE_MEDIA_ROOT: MEDIA,
   PXE_TRUST_PROXY: "1",
+  // DEC-013 (M5): trust proxy tanpa file lease wajib flag dev eksplisit; test yang memerlukan
+  // verifikasi lease menyetel fixture lease (`writeLeases`). Lihat .agent/runs/m5/test-migration.md.
+  PXE_INSECURE_NO_LEASE_CHECK: "1",
   PXE_KERNEL_EXTRA_ARGS: "console=ttyS0,115200n8 console=tty0",
 }
 withDb("empty", KVM_ENV)
@@ -232,19 +236,19 @@ describe("AC-4.11 sinkron lease saat GET /api/hosts", () => {
     const before = getHost(ID2)
     writeLeases([`${exp()} ${MAC} ${LEASE_IP} node11 *`, `${exp()} ${MAC2} 10.99.0.199 * *`, `${exp()} 52:54:00:99:00:13 10.99.0.170 * *`])
     vi.setSystemTime(new Date(T0.getTime() + 5_000))
-    const res = await hostsGET()
+    const res = await hostsGET(getReq("/api/hosts"))
     const hosts = (await res.json()).hosts as { mac: string; status: string; currentIp: string }[]
     expect(hosts.map((h) => h.mac)).toEqual([MAC, MAC2, "52:54:00:99:00:13"])
     expect(getHost(ID)).toMatchObject({ status: "discovered", currentIp: LEASE_IP, vendor: "QEMU/KVM", firmware: null, lastSeen: "2026-11-05T10:00:05.000Z" })
     expect(getHost(ID2)).toEqual(before)
     // Kedua kali: tidak ada duplikat.
-    await hostsGET()
+    await hostsGET(getReq("/api/hosts"))
     expect(getDb().prepare("SELECT count(*) AS n FROM hosts").get()).toEqual({ n: 3 })
   })
   it("tanpa file lease / file kosong → tidak ada host baru", async () => {
-    await hostsGET()
+    await hostsGET(getReq("/api/hosts"))
     writeLeases([])
-    await hostsGET()
+    await hostsGET(getReq("/api/hosts"))
     expect(getDb().prepare("SELECT count(*) AS n FROM hosts").get()).toEqual({ n: 0 })
   })
 })
@@ -277,7 +281,8 @@ describe("AC-4.14 boot lokal & mode wait", () => {
     process.env.PXE_UNKNOWN_HOST_ACTION = "wait"
     const w = (await boot(MAC)).body
     expect(w).toContain("sleep 30")
-    expect(w).toContain(`chain --autofree http://10.99.0.2/boot/${MAC}.ipxe?platform=\${platform}&wait=1 || exit 1`)
+    // CR-4-5 (M5, AC-5.21): waitScript memakai `chain --replace --autofree`.
+    expect(w).toContain(`chain --replace --autofree http://10.99.0.2/boot/${MAC}.ipxe?platform=\${platform}&wait=1 || exit 1`)
     expect((await boot(MAC, LEASE_IP, "efi", "wait=5")).body).toContain("&wait=6")
     expect(isLocal((await boot(MAC, LEASE_IP, "efi", "wait=20")).body)).toBe(true)
     // wait tidak valid → 0.
@@ -401,7 +406,8 @@ describe("AC-4.23 GET /boot/{mac}/{token}/{file}", () => {
     expect(containsSecret(ud.body, token)).toBe(false)
     const kcmd = script.split("\n").find((l) => l.startsWith("kernel "))!.split(" ").slice(2).join(" ")
     const late = (parseYaml(ud.body) as { autoinstall: { "late-commands": string[] } }).autoinstall["late-commands"]
-    expect(evalCallbackUrl(late[0], kcmd)).toBe(`http://10.99.0.2/boot/${MAC}/${token}/status`)
+    // M5 (DEC-014 §4): late[0] = log "late-commands mulai", callback configuring di late[1].
+    expect(evalCallbackUrl(late[1], kcmd)).toBe(`http://10.99.0.2/boot/${MAC}/${token}/status`)
     expect(ud.body).not.toContain(DUMMY_PASSWORD)
     expect(ud.body).toContain(peekConfig(ID)!.passwordHash!)
     expect(getHost(ID)).toMatchObject({ status: "installing", statusSince: "2026-11-05T10:01:00.000Z" })
@@ -435,7 +441,10 @@ describe("AC-4.23 GET /boot/{mac}/{token}/{file}", () => {
     expect((await file(MAC, token, "meta-data", "10.99.0.140")).res.status).toBe(200)
     expect((await file(MAC, token, "meta-data", LEASE_IP)).res.status).toBe(200) // current_ip host
     await deny("IP lease MAC lain", file(MAC, token, "meta-data", "10.99.0.160"))
-    // Token expired (jam injeksi).
+    // Semua penolakan di atas tanpa efek pada status host.
+    expect(getHost(ID)!.status).toBe("booting")
+    // Token expired (jam injeksi). M5 (DEC-014 §2): TTL ≥ jumlah timeout tahap, jadi pada titik ini
+    // watchdog (sapuan lazy) sudah menandai job gagal `timeout-booting` dan mencabut token → 404.
     vi.setSystemTime(new Date(T0.getTime() + 361 * 60_000))
     await deny("token expired", file(MAC, token, "meta-data", LEASE_IP))
     for (const [name, r] of bodies) {
@@ -444,7 +453,8 @@ describe("AC-4.23 GET /boot/{mac}/{token}/{file}", () => {
       expect(r.res.headers.get("content-type"), name).toBe("text/plain; charset=utf-8")
       expect(r.res.headers.get("cache-control"), name).toBe("no-store")
     }
-    expect(getHost(ID)!.status).toBe("booting")
+    expect(getHost(ID)!.status).toBe("failed")
+    expect(listJobsForHost(ID)[0]).toMatchObject({ status: "failed", failureReason: "timeout-booting", tokenHash: null })
   })
 
   it("job configuring / done / failed → 404", async () => {

@@ -77,6 +77,41 @@ function sections(s: SettingsResponse): {
         },
       ],
     },
+    {
+      title: "Job & watchdog",
+      description:
+        "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.",
+      rows: [
+        {
+          label: "Timeout Booting",
+          value: `${s.jobTimeouts.bootingMin} menit`,
+          mono: true,
+        },
+        {
+          label: "Timeout Installing",
+          value: `${s.jobTimeouts.installingMin} menit`,
+          mono: true,
+        },
+        {
+          label: "Timeout Configuring",
+          value: `${s.jobTimeouts.configuringMin} menit`,
+          mono: true,
+        },
+        {
+          label: "Batas penyajian installer",
+          value: `${s.maxInstallerBoots} kali per job`,
+          mono: true,
+          hint: "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.",
+        },
+        {
+          label: "Pemeriksaan lease DHCP",
+          value: s.insecureNoLeaseCheck
+            ? "Nonaktif (PXE_INSECURE_NO_LEASE_CHECK=1)"
+            : "Aktif",
+          mono: s.insecureNoLeaseCheck,
+        },
+      ],
+    },
   ]
 }
 
@@ -122,7 +157,24 @@ export function SettingsView() {
           </AlertDescription>
         </Alert>
       ) : (
-        sections(settings.data).map((sec) => (
+        <>
+        {settings.data.insecureNoLeaseCheck && (
+          <Alert variant="destructive" data-testid="insecure-lease-warning">
+            <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} />
+            <AlertTitle>Pemeriksaan lease DHCP dinonaktifkan</AlertTitle>
+            <AlertDescription>
+              <span>
+                Server berjalan dengan{" "}
+                <span className="type-data text-xs">
+                  PXE_INSECURE_NO_LEASE_CHECK=1
+                </span>
+                : installer dan konfigurasi per host dilayani tanpa mencocokkan IP
+                klien dengan lease dnsmasq. Gunakan hanya di lab terisolasi.
+              </span>
+            </AlertDescription>
+          </Alert>
+        )}
+        {sections(settings.data).map((sec) => (
           <Card key={sec.title} data-slot="settings-section">
             <CardHeader>
               <CardTitle className="type-section-title">{sec.title}</CardTitle>
@@ -161,7 +213,8 @@ export function SettingsView() {
               </dl>
             </CardContent>
           </Card>
-        ))
+        ))}
+        </>
       )}
     </div>
   )

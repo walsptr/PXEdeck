@@ -41,7 +41,7 @@ import {
   updateJob,
   type Job,
 } from "./repos/jobs"
-import { getImage, imageAvailability, imageUsage, listImages } from "./repos/os-images"
+import { getImage, imageAvailability, imageHostCount, imageUsage, listImages } from "./repos/os-images"
 import { hostKeyIds, insertKey, keyUsage, listKeys, setHostKeyIds } from "./repos/ssh-keys"
 import { DEMO_HOSTS } from "./seed"
 
@@ -52,7 +52,8 @@ const LEGACY01 = "3ca82a10447c"
 const DISC1 = "b083fe5c19e2"
 const T = "2026-11-05T10:00:00.000Z"
 
-const TABLES = ["schema_migrations", "meta", "settings", "hosts", "host_configs", "ssh_keys", "host_ssh_keys", "os_images", "jobs"]
+// M5: migrasi 2 menambah `job_events` (DEC-014, lihat .agent/runs/m5/test-migration.md).
+const TABLES = ["schema_migrations", "meta", "settings", "hosts", "host_configs", "ssh_keys", "host_ssh_keys", "os_images", "jobs", "job_events"]
 
 const DB_DIR = tmpDir("db")
 withDb("demo")
@@ -93,6 +94,10 @@ function job(id: string, hostId: string, over: Partial<Job> = {}): Job {
     createdAt: T,
     updatedAt: T,
     finishedAt: null,
+    // M5 (migrasi 2): kolom baru dengan default DB.
+    failureReason: null,
+    installerBoots: 0,
+    eventSeq: 0,
     ...over,
   }
 }
@@ -103,7 +108,10 @@ describe("AC-4.1 migrasi", () => {
     expect(tables(db)).toEqual([...TABLES].sort())
     const idx = (db.prepare("SELECT name FROM sqlite_master WHERE type = 'index' AND name NOT LIKE 'sqlite_%' ORDER BY name").all() as { name: string }[]).map((r) => r.name)
     expect(idx).toEqual(expect.arrayContaining(["hosts_hostname_uq", "host_configs_ip_uq", "jobs_active_uq", "host_ssh_keys_key", "jobs_host"]))
-    expect(db.prepare("SELECT version, name FROM schema_migrations").all()).toEqual([{ version: 1, name: "init" }])
+    expect(db.prepare("SELECT version, name FROM schema_migrations").all()).toEqual([
+      { version: 1, name: "init" },
+      { version: 2, name: "job-events" }, // M5 (DEC-014)
+    ])
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 })
     db.close()
   })
@@ -136,10 +144,11 @@ describe("AC-4.1 migrasi", () => {
 
   it("migrasi yang gagal di-rollback dan tidak tercatat", () => {
     const db = openDbAt(":memory:", "empty")
-    const bad = [...MIGRATIONS, { version: 2, name: "rusak", sql: "CREATE TABLE x (a INTEGER); INSERT INTO tidak_ada VALUES (1);" }]
+    // Versi 99 (versi 2 sudah dipakai migrasi M5 `job-events`).
+    const bad = [...MIGRATIONS, { version: 99, name: "rusak", sql: "CREATE TABLE x (a INTEGER); INSERT INTO tidak_ada VALUES (1);" }]
     expect(() => runMigrations(db, bad)).toThrow()
     expect(tables(db)).not.toContain("x")
-    expect((db.prepare("SELECT version FROM schema_migrations").all() as { version: number }[]).map((r) => r.version)).toEqual([1])
+    expect((db.prepare("SELECT version FROM schema_migrations").all() as { version: number }[]).map((r) => r.version)).toEqual([1, 2])
     db.close()
   })
 
@@ -398,6 +407,22 @@ describe("repo jobs & ssh-keys", () => {
     insertJob(job("j1", LEGACY01))
     expect(imageUsage("ubuntu-24.04")).toBe(base + 1)
     expect(imageUsage("debian-12")).toBe(0)
+  })
+
+  it("imageUsage menghitung host unik = imageHostCount/usedBy (regresi BUG-M5-1)", () => {
+    const CTRL03 = "1418774a2c03" // demo: osAssigned ubuntu-24.04
+    const base = imageUsage("ubuntu-24.04")
+    expect(base).toBe(imageHostCount("ubuntu-24.04"))
+    // Host yang sama: os_assigned + config + job aktif untuk image yang sama → tetap dihitung 1×.
+    const os = { osImageId: "ubuntu-24.04", disk: "/dev/sda", partition: "lvm", timezone: "UTC", locale: "en_US.UTF-8" } as const
+    tx(() => saveConfig(CTRL03, { ...configOrDefault(getHost(CTRL03)!), os, updatedAt: T }))
+    insertJob(job("j-dup", CTRL03))
+    expect(imageUsage("ubuntu-24.04")).toBe(base)
+    expect(imageUsage("ubuntu-24.04")).toBe(imageHostCount("ubuntu-24.04"))
+    // Host lain hanya lewat config → +1.
+    tx(() => saveConfig(LEGACY01, { ...configOrDefault(getHost(LEGACY01)!), os, updatedAt: T }))
+    expect(imageUsage("ubuntu-24.04")).toBe(base + 1)
+    expect(imageUsage("ubuntu-24.04")).toBe(imageHostCount("ubuntu-24.04"))
   })
 
   it("imageAvailability: non-bootable/Windows, file media hilang, tersedia", () => {

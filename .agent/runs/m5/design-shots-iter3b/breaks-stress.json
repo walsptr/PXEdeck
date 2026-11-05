@@ -1,0 +1,5607 @@
+{
+ "after@375": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-",
+    "bookworm-netinst-",
+    "lab-cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabima",
+    "gebuildnumber00000",
+    "000000000001"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberS",
+    "atuTanpaSpasiSamaSekali"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber0000",
+    "0000000000001segmenpathtunggalyangp",
+    "anjangsekalimelebihidelapanpuluhkar",
+    "akter/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber0000",
+    "0000000000001segmenpathtunggalyangp",
+    "anjangsekalimelebihidelapanpuluhkar",
+    "akter/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber0000",
+    "0000000000001segmenpathtunggalyangp",
+    "anjangsekalimelebihidelapanpuluhkar",
+    "akter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia ",
+    "(ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-image-",
+    "02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 ",
+    "Node Image Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02-media-root-directory/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02-media-root-directory/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02-media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02 tidak tersedia ",
+    "(ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02-media-root-",
+    "directory/casper/hwe-vmlinuz-6.8.0-",
+    "generic-panjang tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml ",
+    "(install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@414": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-bookworm-",
+    "netinst-lab-cluster-b-",
+    "arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimagebui",
+    "ldnumber000000000000000",
+    "01"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberSatuTan",
+    "paSpasiSamaSekali"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber000000000",
+    "00000001segmenpathtunggalyangpanjangseka",
+    "limelebihidelapanpuluhkarakter/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber000000000",
+    "00000001segmenpathtunggalyangpanjangseka",
+    "limelebihidelapanpuluhkarakter/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber000000000",
+    "00000001segmenpathtunggalyangpanjangseka",
+    "limelebihidelapanpuluhkarakter"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-",
+    "22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-",
+    "hwe-lab-rack07-node-",
+    "image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 Node ",
+    "Image Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-",
+    "image-02-media-root-directory/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-",
+    "image-02-media-root-directory/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-",
+    "image-02-media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02 tidak tersedia (ubuntu-24.04-",
+    "custom-hwe-lab-rack07-node-image-02-media-",
+    "root-directory/casper/hwe-vmlinuz-6.8.0-",
+    "generic-panjang tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install ",
+    "via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@768": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-",
+    "installer-amd64/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-",
+    "installer-amd64/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-lab-cluster-b-",
+    "installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimagebuildnumber00",
+    "000000000000001"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberSatuTanpaSpasiSam",
+    "aSekali"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segm",
+    "enpathtunggalyangpanjangsekalimelebihidelapanpuluhka",
+    "rakter/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segm",
+    "enpathtunggalyangpanjangsekalimelebihidelapanpuluhka",
+    "rakter/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber00000000000000001segm",
+    "enpathtunggalyangpanjangsekalimelebihidelapanpuluhka",
+    "rakter"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-",
+    "22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 Node Image Edisi ",
+    "Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-",
+    "media-root-directory/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-",
+    "media-root-directory/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-",
+    "media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-rack07-node-image-02 ",
+    "tidak tersedia (ubuntu-24.04-custom-hwe-lab-rack07-node-",
+    "image-02-media-root-directory/casper/hwe-vmlinuz-6.8.0-",
+    "generic-panjang tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@1024": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64/casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64/casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberSatuTanpaSpasiSamaSekali"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebi",
+    "hidelapanpuluhkarakter/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebi",
+    "hidelapanpuluhkarakter/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebi",
+    "hidelapanpuluhkarakter"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 Node Image Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory/casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory/casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-rack07-node-image-02 tidak tersedia (ubuntu-24.04-custom-",
+    "hwe-lab-rack07-node-image-02-media-root-directory/casper/hwe-vmlinuz-6.8.0-generic-panjang tidak ",
+    "ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@1279": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64/casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64/casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberSatuTanpaSpasiSamaSekali"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebihidelapanpuluhkarakter/casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebihidelapanpuluhkarakter/casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebihidelapanpuluhkarakter"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 Node Image Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory/casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory/casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-rack07-node-image-02 tidak tersedia (ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-",
+    "root-directory/casper/hwe-vmlinuz-6.8.0-generic-panjang tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@1280": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path2",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-",
+    "bookworm-",
+    "netinst-lab-",
+    "cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian ",
+    "Bookworm ",
+    "Netinst Lab ",
+    "Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-",
+    "amd64/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-",
+    "amd64/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path2",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak ",
+    "bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path2",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlab",
+    "imagebuildnumbe",
+    "r00000000000000",
+    "001"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCust",
+    "omLabImageBuil",
+    "dNumberSatuTa",
+    "npaSpasiSamaS",
+    "ekali"
+   ],
+   "mid": 4
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path2",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-",
+    "22.04 tidak ",
+    "tersedia (ubuntu-",
+    "22.04/casper/vml",
+    "inuz tidak ada)"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-",
+    "image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server ",
+    "Custom HWE ",
+    "Lab Rack 07 ",
+    "Node Image ",
+    "Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-",
+    "24.04-custom-",
+    "hwe-lab-rack07-",
+    "node-image-02 ",
+    "tidak tersedia ",
+    "(ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-",
+    "image-02-media-",
+    "root-",
+    "directory/casper/",
+    "hwe-vmlinuz-",
+    "6.8.0-generic-",
+    "panjang tidak ",
+    "ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path0",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya ",
+    "generator ",
+    "unattend.xml ",
+    "(install via PXE ",
+    "belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@1440": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path2",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-",
+    "bookworm-netinst-",
+    "lab-cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm ",
+    "Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-",
+    "amd64/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-",
+    "amd64/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path2",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable ",
+    "via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path2",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimage",
+    "buildnumber000000000",
+    "00000001"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLab",
+    "ImageBuildNumberSat",
+    "uTanpaSpasiSamaSek",
+    "ali"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path2",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 ",
+    "tidak tersedia ",
+    "(ubuntu-",
+    "22.04/casper/vmlinuz ",
+    "tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-",
+    "hwe-lab-rack07-node-",
+    "image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom ",
+    "HWE Lab Rack 07 ",
+    "Node Image Edisi ",
+    "Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-image-",
+    "02 tidak tersedia ",
+    "(ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-image-",
+    "02-media-root-",
+    "directory/casper/hwe",
+    "-vmlinuz-6.8.0-",
+    "generic-panjang tidak ",
+    "ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path0",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya ",
+    "generator ",
+    "unattend.xml (install ",
+    "via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@375": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-",
+    "bookworm-netinst-",
+    "lab-cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabima",
+    "gebuildnumber00000",
+    "000000000001"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberS",
+    "atuTanpaSpasiSamaSekali"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber0000",
+    "0000000000001segmenpathtunggalyangp",
+    "anjangsekalimelebihidelapanpuluhkar",
+    "akter/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber0000",
+    "0000000000001segmenpathtunggalyangp",
+    "anjangsekalimelebihidelapanpuluhkar",
+    "akter/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber0000",
+    "0000000000001segmenpathtunggalyangp",
+    "anjangsekalimelebihidelapanpuluhkar",
+    "akter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia ",
+    "(ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-image-",
+    "02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 ",
+    "Node Image Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02-media-root-directory/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02-media-root-directory/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02-media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02 tidak tersedia ",
+    "(ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02-media-root-",
+    "directory/casper/hwe-vmlinuz-6.8.0-",
+    "generic-panjang tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml ",
+    "(install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@414": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-bookworm-",
+    "netinst-lab-cluster-b-",
+    "arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimagebui",
+    "ldnumber000000000000000",
+    "01"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberSatuTan",
+    "paSpasiSamaSekali"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber000000000",
+    "00000001segmenpathtunggalyangpanjangseka",
+    "limelebihidelapanpuluhkarakter/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber000000000",
+    "00000001segmenpathtunggalyangpanjangseka",
+    "limelebihidelapanpuluhkarakter/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber000000000",
+    "00000001segmenpathtunggalyangpanjangseka",
+    "limelebihidelapanpuluhkarakter"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-",
+    "22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-",
+    "hwe-lab-rack07-node-",
+    "image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 Node ",
+    "Image Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-",
+    "image-02-media-root-directory/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-",
+    "image-02-media-root-directory/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-",
+    "image-02-media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-rack07-",
+    "node-image-02 tidak tersedia (ubuntu-24.04-",
+    "custom-hwe-lab-rack07-node-image-02-media-",
+    "root-directory/casper/hwe-vmlinuz-6.8.0-",
+    "generic-panjang tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install ",
+    "via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@768": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-",
+    "cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-",
+    "installer-amd64/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-",
+    "installer-amd64/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-lab-cluster-b-",
+    "installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimagebuildnumber00",
+    "000000000000001"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberSatuTanpaSpasiSam",
+    "aSekali"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segm",
+    "enpathtunggalyangpanjangsekalimelebihidelapanpuluhka",
+    "rakter/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segm",
+    "enpathtunggalyangpanjangsekalimelebihidelapanpuluhka",
+    "rakter/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber00000000000000001segm",
+    "enpathtunggalyangpanjangsekalimelebihidelapanpuluhka",
+    "rakter"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-",
+    "22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 Node Image Edisi ",
+    "Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-",
+    "media-root-directory/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-",
+    "media-root-directory/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-",
+    "media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-rack07-node-image-02 ",
+    "tidak tersedia (ubuntu-24.04-custom-hwe-lab-rack07-node-",
+    "image-02-media-root-directory/casper/hwe-vmlinuz-6.8.0-",
+    "generic-panjang tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@1024": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64/casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64/casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberSatuTanpaSpasiSamaSekali"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebi",
+    "hidelapanpuluhkarakter/",
+    "casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebi",
+    "hidelapanpuluhkarakter/",
+    "casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebi",
+    "hidelapanpuluhkarakter"
+   ],
+   "mid": 1
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 Node Image Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory/casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory/casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-rack07-node-image-02 tidak tersedia (ubuntu-24.04-custom-",
+    "hwe-lab-rack07-node-image-02-media-root-directory/casper/hwe-vmlinuz-6.8.0-generic-panjang tidak ",
+    "ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@1279": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64/casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64/casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12.7-bookworm-netinst-lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLabImageBuildNumberSatuTanpaSpasiSamaSekali"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebihidelapanpuluhkarakter/casper/",
+    "hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebihidelapanpuluhkarakter/casper/",
+    "hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumber00000000000000001segmenpathtunggalyangpanjangsekalimelebihidelapanpuluhkarakter"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom HWE Lab Rack 07 Node Image Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory/casper/hwe-vmlinuz-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory/casper/hwe-initrd-6.8.0-generic-panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-custom-hwe-lab-rack07-node-image-02 tidak tersedia (ubuntu-24.04-custom-hwe-lab-rack07-node-image-02-media-",
+    "root-directory/casper/hwe-vmlinuz-6.8.0-generic-panjang tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@1280": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path2",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-",
+    "bookworm-netinst-",
+    "lab-cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm ",
+    "Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-",
+    "amd64/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-",
+    "amd64/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path2",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable ",
+    "via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path2",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabima",
+    "gebuildnumber00000",
+    "000000000001"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomL",
+    "abImageBuildNumbe",
+    "rSatuTanpaSpasiSam",
+    "aSekali"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path2",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 ",
+    "tidak tersedia ",
+    "(ubuntu-",
+    "22.04/casper/vmlinuz ",
+    "tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-image-",
+    "02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server ",
+    "Custom HWE Lab ",
+    "Rack 07 Node Image ",
+    "Edisi Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-image-",
+    "02 tidak tersedia ",
+    "(ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-image-",
+    "02-media-root-",
+    "directory/casper/hwe",
+    "-vmlinuz-6.8.0-",
+    "generic-panjang tidak ",
+    "ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path0",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya ",
+    "generator ",
+    "unattend.xml (install ",
+    "via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@1440": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path2",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "id",
+   "lines": [
+    "debian-12.7-",
+    "bookworm-netinst-",
+    "lab-cluster-b-arm"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "name",
+   "lines": [
+    "Debian Bookworm ",
+    "Netinst Lab Cluster B"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path0",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-",
+    "amd64/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path1",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-",
+    "amd64/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path2",
+   "lines": [
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12.7-bookworm-netinst-",
+    "lab-cluster-b-installer-amd64"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+   "k": "reason",
+   "lines": [
+    "Image tidak bootable ",
+    "via PXE"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path2",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "id",
+   "lines": [
+    "rocky9customlabimage",
+    "buildnumber000000000",
+    "00000001"
+   ],
+   "mid": 2
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "name",
+   "lines": [
+    "RockyLinuxCustomLab",
+    "ImageBuildNumberSat",
+    "uTanpaSpasiSamaSek",
+    "ali"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path0",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path1",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path2",
+   "lines": [
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "rocky9customlabimagebuildnumber00000000000000001",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky9customlabimagebuildnumb",
+    "er00000000000000001segmenpath",
+    "tunggalyangpanjangsekalimeleb",
+    "ihidelapanpuluhkarakter"
+   ],
+   "mid": 3
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 ",
+    "tidak tersedia ",
+    "(ubuntu-",
+    "22.04/casper/vmlinuz ",
+    "tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04-custom-",
+    "hwe-lab-rack07-node-",
+    "image-02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server Custom ",
+    "HWE Lab Rack 07 ",
+    "Node Image Edisi ",
+    "Panjang 02"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory/",
+    "casper/",
+    "hwe-vmlinuz-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory/",
+    "casper/",
+    "hwe-initrd-6.8.0-generic-",
+    "panjang"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04-custom-hwe-lab-",
+    "rack07-node-image-02-media-",
+    "root-directory"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-image-",
+    "02 tidak tersedia ",
+    "(ubuntu-24.04-",
+    "custom-hwe-lab-",
+    "rack07-node-image-",
+    "02-media-root-",
+    "directory/casper/hwe",
+    "-vmlinuz-6.8.0-",
+    "generic-panjang tidak ",
+    "ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path0",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya ",
+    "generator ",
+    "unattend.xml (install ",
+    "via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ]
+}

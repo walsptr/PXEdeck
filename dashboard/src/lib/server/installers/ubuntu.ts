@@ -11,7 +11,20 @@ import {
   SSHD_NO_PASSWORD_TEXT,
   sudoersText,
 } from "./firstboot"
-import { b64write, callbackCmd } from "./shell"
+import { b64write, callbackCmd, logCmd, logTailCmd } from "./shell"
+
+/** Penanda log installer (konstanta; M5 plan §2.5). */
+export const UBUNTU_LOG = {
+  start: "installer: autoinstall mulai",
+  late: "installer: late-commands mulai",
+  lateDone: "installer: konfigurasi target selesai",
+} as const
+
+/** Log installer Ubuntu yang di-tail saat gagal (dipilih saat runtime bila ada). */
+export const UBUNTU_ERROR_LOGS = [
+  "/var/log/installer/subiquity-server-debug.log",
+  "/var/log/curtin/install.log",
+]
 
 /** UEFI: entry "ubuntu" ke urutan boot pertama (lab, README §7). */
 export const BOOTORDER_SNIPPET = `if [ -d /sys/firmware/efi ]; then
@@ -65,7 +78,10 @@ function storage(c: InstallContext) {
 /** Objek autoinstall (dipakai `ubuntuUserData`; diekspor untuk test). */
 export function ubuntuAutoinstall(ctx: InstallContext) {
   const c = validateContext(ctx)
-  const late: string[] = [callbackCmd("autoinstall", c.mac, "configuring")]
+  const late: string[] = [
+    logCmd("autoinstall", c.mac, UBUNTU_LOG.late),
+    callbackCmd("autoinstall", c.mac, "configuring"),
+  ]
   if (c.sudo) {
     late.push(b64write(`/target/etc/sudoers.d/90-${c.username}`, "440", sudoersText(c.username)))
   }
@@ -76,7 +92,7 @@ export function ubuntuAutoinstall(ctx: InstallContext) {
     )
   }
   late.push(...firstbootInstallCmds("/target", "autoinstall", c.mac))
-  late.push(BOOTORDER_SNIPPET, FORCE_REBOOT_GUARD)
+  late.push(logCmd("autoinstall", c.mac, UBUNTU_LOG.lateDone), BOOTORDER_SNIPPET, FORCE_REBOOT_GUARD)
   return {
     version: 1,
     locale: c.locale,
@@ -96,8 +112,12 @@ export function ubuntuAutoinstall(ctx: InstallContext) {
       "authorized-keys": [...c.authorizedKeys],
     },
     storage: storage(c),
+    "early-commands": [logCmd("autoinstall", c.mac, UBUNTU_LOG.start)],
     "late-commands": late,
-    "error-commands": [callbackCmd("autoinstall", c.mac, "failed")],
+    "error-commands": [
+      logTailCmd("autoinstall", c.mac, UBUNTU_ERROR_LOGS),
+      callbackCmd("autoinstall", c.mac, "failed"),
+    ],
     shutdown: "reboot",
   }
 }
