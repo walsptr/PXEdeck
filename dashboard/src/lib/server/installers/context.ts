@@ -4,7 +4,7 @@
 import { validateUsername } from "@/lib/credentials"
 import type { HostConfig, SshKey } from "@/lib/host-config"
 import { validateHostname } from "@/lib/hostname"
-import { isIpv4 } from "@/lib/net"
+import { dnsAddressError, isIpv4 } from "@/lib/net"
 import type { OsImageRecord } from "@/lib/server/db/repos/os-images"
 import { parseSshKey } from "@/lib/ssh-key"
 import type { Host } from "@/lib/types"
@@ -87,7 +87,7 @@ export function validateContext(c: InstallContext): InstallContext {
     if (!isIpv4(n.ip) || n.ip !== n.ip.trim()) bad("IP tidak valid")
     if (!Number.isInteger(n.prefix) || n.prefix < 8 || n.prefix > 30) bad("Prefix tidak valid")
     if (!isIpv4(n.gateway) || n.gateway !== n.gateway.trim()) bad("Gateway tidak valid")
-    if (n.dns.length < 1 || n.dns.length > 4 || !n.dns.every((d) => isIpv4(d) && d === d.trim()))
+    if (n.dns.length < 1 || n.dns.length > 4 || !n.dns.every((d) => dnsAddressError(d) === null && d === d.trim()))
       bad("DNS tidak valid")
     if (n.vlan !== null && (!Number.isInteger(n.vlan) || n.vlan < 1 || n.vlan > 4094))
       bad("VLAN tidak valid")

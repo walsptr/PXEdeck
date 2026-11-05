@@ -58,6 +58,25 @@ export function inSubnet(ip: string, cidr: string): boolean {
   return n >= network && n <= broadcast
 }
 
+/**
+ * Validasi alamat server DNS (DEC-011): cukup IPv4 valid yang bukan alamat
+ * khusus — 0.0.0.0/8 ("this network"), loopback 127/8, multicast 224/4, dan
+ * 240/4 (reserved, termasuk broadcast 255.255.255.255). Tidak terikat subnet
+ * management (DNS publik lewat gateway NAT sah). Mengembalikan pesan error
+ * atau null.
+ */
+export function dnsAddressError(ip: string): string | null {
+  const v = ip.trim()
+  if (!isIpv4(v)) return `DNS tidak valid: ${ip}`
+  const first = Number(v.split(".")[0])
+  if (first === 0) return `DNS ${v} adalah alamat "this network" (0.0.0.0/8)`
+  if (first === 127) return `DNS ${v} adalah alamat loopback`
+  if (first >= 224 && first <= 239) return `DNS ${v} adalah alamat multicast`
+  if (v === "255.255.255.255") return `DNS ${v} adalah alamat broadcast`
+  if (first >= 240) return `DNS ${v} adalah alamat reserved (240.0.0.0/4)`
+  return null
+}
+
 /** `a.b.c.d/p` dengan IPv4 valid dan prefix 0–32. */
 export function isCidr(s: string): boolean {
   const m = /^([^/]+)\/(\d{1,2})$/.exec(s.trim())
@@ -85,7 +104,9 @@ function resolveNet(net: string | MgmtNetwork | undefined): MgmtNetwork {
 /**
  * Validasi parameter jaringan statis bersama (DEC-006): prefix wajib sama
  * dengan subnet management, gateway wajib IPv4 host di subnet management
- * dan di luar range DHCP dinamis, DNS wajib IPv4 (boleh di luar subnet). Mengembalikan daftar pesan error.
+ * dan di luar range DHCP dinamis, DNS wajib IPv4 bukan alamat khusus
+ * (`dnsAddressError`, boleh di luar subnet — DEC-011). Mengembalikan daftar
+ * pesan error.
  */
 export function validateStaticNetwork(
   v: { prefix: number; gateway: string; dns: readonly string[] },
@@ -107,7 +128,8 @@ export function validateStaticNetwork(
       `Gateway ${gw} di dalam range DHCP dinamis ${net.dynamicRange[0]}–${net.dynamicRange[1]}`,
     )
   for (const d of v.dns) {
-    if (!isIpv4(d)) errors.push(`DNS tidak valid: ${d}`)
+    const err = dnsAddressError(d)
+    if (err) errors.push(err)
   }
   return errors
 }
@@ -271,7 +293,9 @@ export type MgmtNetworkEnv = {
  *
  * - `PXE_DYNAMIC_RANGE`: "a.b.c.d-a.b.c.e" (atau dipisah koma)
  * - `PXE_MGMT_DNS`: daftar IPv4 dipisah koma (default: gateway bila
- *   `PXE_MGMT_GATEWAY` diisi, selain itu default `base`)
+ *   `PXE_MGMT_GATEWAY` diisi, selain itu default `base`). Tidak wajib di
+ *   subnet; alamat khusus (loopback/multicast/0.0.0.0/broadcast) ditolak
+ *   (DEC-011).
  */
 export function mgmtNetworkFromEnv(
   env: MgmtNetworkEnv,
@@ -318,6 +342,10 @@ export function mgmtNetworkFromEnv(
     fail(`PXE server ${pxeServer} (PXE_SERVER_IP) di luar subnet ${cidr}`)
   if (dns.length === 0 || dns.length > 4 || !dns.every(isIpv4))
     fail(`PXE_MGMT_DNS harus 1–4 IPv4`)
+  for (const d of dns) {
+    const err = dnsAddressError(d)
+    if (err) fail(`${err} (PXE_MGMT_DNS)`)
+  }
   const [lo, hi] = dynamicRange
   if (!isHostInSubnet(lo, cidr) || !isHostInSubnet(hi, cidr))
     fail(`range dinamis ${lo}–${hi} (PXE_DYNAMIC_RANGE) di luar subnet ${cidr}`)

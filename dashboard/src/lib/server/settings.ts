@@ -9,7 +9,6 @@
 import { z } from "zod"
 
 import {
-  inSubnet,
   ipToInt,
   isIpv4,
   mgmtNetworkFromEnv,
@@ -110,11 +109,9 @@ export function settingsFromEnv(env: SettingsEnv): Settings {
       (e as Error).message.replaceAll("PXE_DYNAMIC_RANGE", rangeKey),
     )
   }
-  const { cidr, gateway, pxeServer, dynamicRange } = network
-  for (const d of network.dns) {
-    if (!inSubnet(d, cidr))
-      fail(`DNS ${d} (PXE_MGMT_DNS) di luar subnet ${cidr}`)
-  }
+  const { gateway, pxeServer, dynamicRange } = network
+  // DNS tidak terikat subnet (DEC-011); format + alamat khusus sudah divalidasi
+  // `mgmtNetworkFromEnv`. Gateway & PXE server tetap wajib di subnet (DEC-006).
   const [lo, hi] = dynamicRange.map(ipToInt)
   for (const [ip, what] of [
     [gateway, "gateway"],

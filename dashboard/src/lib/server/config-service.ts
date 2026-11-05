@@ -14,7 +14,8 @@
 // Aturan yang perlu diketahui klien:
 //  - Network statis (DEC-006): prefix wajib = prefix subnet management,
 //    IP & gateway wajib host di subnet management (jadi selalu satu subnet),
-//    gateway di luar range DHCP dinamis, IP host ≠ gateway payload, DNS IPv4.
+//    gateway di luar range DHCP dinamis, IP host ≠ gateway payload, DNS IPv4
+//    bukan alamat khusus, tidak terikat subnet (DEC-011).
 //  - `updated`/`updatedAt` hanya untuk host yang benar-benar berubah (mode
 //    credentials CSV: hanya host yang ada di CSV).
 //  - Key SSH baru (G3-3): fingerprint yang sudah ada di library → 422
