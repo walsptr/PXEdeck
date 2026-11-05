@@ -2,7 +2,7 @@ import { z } from "zod"
 
 import { hostIdField, LIMITS } from "@/lib/host-config"
 import { checkCredentialsCsv } from "@/lib/server/config-service"
-import { readJson } from "@/lib/server/http"
+import { guardMutation, readJson } from "@/lib/server/http"
 import { mockDb } from "@/lib/server/mock-hosts"
 
 const schema = z.object({
@@ -12,6 +12,8 @@ const schema = z.object({
 
 /** Validasi CSV mac,username,password per baris. Password tidak dikembalikan. */
 export async function POST(req: Request) {
+  const g = guardMutation(req, "json")
+  if (g) return g
   const body = await readJson(req, schema)
   if ("response" in body) return body.response
   const { rows } = checkCredentialsCsv(

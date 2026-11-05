@@ -142,7 +142,7 @@ export function HostsToolbar({
       >
         <SelectTrigger
           size="sm"
-          className="h-9 min-w-44"
+          className="min-w-44 data-[size=sm]:h-9"
           aria-label="Filter OS"
         >
           <SelectValue />

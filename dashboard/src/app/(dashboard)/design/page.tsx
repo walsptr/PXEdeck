@@ -124,7 +124,7 @@ export default function DesignPage() {
           <CardContent>
             <dl
               aria-label="Pemetaan varian tombol ke SPEC"
-              className="grid grid-cols-[auto_1fr] items-center gap-x-6 gap-y-3"
+              className="grid grid-cols-[auto_minmax(0,1fr)] items-center gap-x-6 gap-y-3"
             >
               {BUTTON_VARIANTS.map(([variant, spec, usage, label]) => (
                 <div key={variant} className="contents">
@@ -140,7 +140,7 @@ export default function DesignPage() {
                       {label}
                     </Button>
                   </dt>
-                  <dd className="flex flex-col gap-0.5">
+                  <dd className="flex min-w-0 flex-col gap-0.5 break-words">
                     <span className="type-body text-foreground">
                       SPEC: {spec}{" "}
                       <code className="type-data text-muted-foreground">

@@ -8,7 +8,10 @@
 //
 // Aturan yang perlu diketahui klien:
 //  - Network statis (DEC-006): prefix wajib = prefix subnet management,
-//    IP & gateway wajib host di subnet management, DNS wajib IPv4.
+//    IP & gateway wajib host di subnet management (jadi selalu satu subnet),
+//    gateway di luar range DHCP dinamis, IP host ≠ gateway payload, DNS IPv4.
+//  - `updated`/`updatedAt` hanya untuk host yang benar-benar berubah (mode
+//    credentials CSV: hanya host yang ada di CSV).
 //  - Key SSH baru (G3-3): fingerprint yang sudah ada di library → 422
 //    "sudah ada di library sebagai …" (pilih key itu dari library via
 //    `keyIds`); dua key baru dengan fingerprint sama dalam satu request → 422.
@@ -109,10 +112,12 @@ export function checkCredentialsCsv(
     if (uErr) errors.push(uErr)
     const pErr = validatePassword(password)
     if (pErr) errors.push(`Password: ${pErr}`)
+    // Kolom mentah yang invalid tidak di-echo (SR-3-4 / AC-3.9): bila urutan
+    // kolom salah, kolom itu bisa berisi password.
     rows.push({
       line: i + offset,
-      mac: mac ?? rawMac.trim(),
-      username,
+      mac: mac ?? "",
+      username: uErr ? "" : username,
       hostId: host?.id ?? null,
       errors,
     })
@@ -134,6 +139,8 @@ export function checkCredentialsCsv(
 type Prepared = {
   apply: () => void
   generated?: SaveResult["generatedPasswords"]
+  /** Host yang benar-benar diubah langkah ini; undefined = semua host batch. */
+  touches?: string[]
 }
 
 export type ApplyResult =
@@ -289,6 +296,8 @@ export function applyConfigPrepared(
         })
       }
       steps.push({
+        // Host terpilih yang tidak ada di CSV tidak diubah (CR-3-3).
+        touches: creds.map((cr) => cr.hostId),
         apply: () => {
           for (const cr of creds) {
             const cfg = getConfig(s, s.hosts.get(cr.hostId)!)
@@ -322,11 +331,12 @@ export function applyConfigPrepared(
         hostId: h.id,
         ip: (n.assignments[h.id] ?? "").trim(),
       }))
-      const ipErrors = validateIpAssignments(
-        assignments,
-        ipUsage(s, batch),
-        net,
-      )
+      // IP host tidak boleh sama dengan gateway dari payload (CR-3-9); gateway
+      // server sudah ditolak oleh validateStaticIp.
+      const usage = ipUsage(s, batch)
+      const gw = n.gateway.trim()
+      if (!usage.used.has(gw)) usage.used.set(gw, `gateway ${gw}`)
+      const ipErrors = validateIpAssignments(assignments, usage, net)
       for (const [hostId, message] of ipErrors) {
         errors.push({
           section: "network",
@@ -484,7 +494,15 @@ export function applyConfigPrepared(
   // Semua valid: terapkan sekaligus.
   const now = new Date().toISOString()
   for (const st of steps) st.apply()
-  for (const h of hosts) getConfig(s, h).updatedAt = now
+  // Hanya host yang benar-benar diubah yang dihitung & diberi updatedAt (CR-3-3).
+  const touched = steps.every((st) => st.touches)
+    ? new Set(steps.flatMap((st) => st.touches!))
+    : batch
+  const changed = hosts.filter((h) => touched.has(h.id))
+  for (const h of hosts) {
+    const cfg = getConfig(s, h) // config tetap dibuat untuk semua host batch
+    if (touched.has(h.id)) cfg.updatedAt = now
+  }
   // Hostname diambil setelah semua bagian diterapkan (bisa ikut berubah di request ini).
   const generated = steps
     .find((st) => st.generated)
@@ -494,7 +512,7 @@ export function applyConfigPrepared(
     }))
   return {
     ok: true,
-    result: { updated: hosts.length, generatedPasswords: generated },
+    result: { updated: changed.length, generatedPasswords: generated },
   }
 }
 

@@ -17,10 +17,13 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { NAV_ITEMS, navItemFor } from "@/lib/nav"
+import { useNetworkConfig } from "@/hooks/use-network-config"
 
 export function AppSidebar() {
   const pathname = usePathname()
   const active = navItemFor(pathname)
+  // IP PXE server dari subnet aktif di server (CR-3-2), bukan nilai lab hard-coded.
+  const network = useNetworkConfig()
 
   return (
     <Sidebar collapsible="icon">
@@ -35,7 +38,7 @@ export function AppSidebar() {
                 <div className="flex flex-col leading-tight">
                   <span className="font-semibold tracking-tight">PXE Lab</span>
                   <span className="type-data text-xs text-muted-foreground">
-                    10.10.10.1
+                    {network.data?.pxeServer ?? "\u00a0"}
                   </span>
                 </div>
               </Link>

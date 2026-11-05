@@ -1,0 +1,38 @@
+$ npm run test  # 2026-11-05T06:59:46Z
+
+> dashboard@0.1.0 test
+> vitest run --coverage
+
+
+ RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/dashboard
+      Coverage enabled with v8
+
+ ❯ |node| src/lib/format.test.ts (8 tests | 1 failed) 42ms
+   ❯ AC-2.2 formatRelative (5)
+     × 2 hari → '2 hari yang lalu' 22ms
+
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+
+ FAIL  |node| src/lib/format.test.ts > AC-2.2 formatRelative > 2 hari → '2 hari yang lalu'
+AssertionError: expected 'kemarin dulu' to be '2 hari yang lalu' // Object.is equality
+
+Expected: "2 hari yang lalu"
+Received: "kemarin dulu"
+
+ ❯ src/lib/format.test.ts:32:17
+     30|   it("2 hari → '2 hari yang lalu'", () => {
+     31|     const out = formatRelative(ago(2 * 86_400_000), NOW)
+     32|     expect(out).toBe(rtf.format(-2, "day"))
+       |                 ^
+     33|     expect(out).toBe("2 hari yang lalu")
+     34|   })
+
+⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
+
+
+ Test Files  1 failed | 19 passed (20)
+      Tests  1 failed | 243 passed (244)
+   Start at  13:59:46
+   Duration  4.53s (environment 37%, import 30%, tests 16%, setup 7%, worker 6%, transform 3%)
+
+EXIT CODE: 1

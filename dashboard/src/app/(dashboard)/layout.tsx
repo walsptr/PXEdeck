@@ -10,9 +10,13 @@ export default function DashboardLayout({
       <AppSidebar />
       <SidebarInset className="min-w-0">
         <TopBar />
-        <main className="flex flex-1 flex-col gap-6 p-6 md:p-8">
+        {/* SidebarInset sudah me-render <main>; konten cukup <div> agar hanya ada satu landmark (CR-1-2). */}
+        <div
+          data-slot="page-content"
+          className="flex min-w-0 flex-1 flex-col gap-6 p-6 md:p-8"
+        >
           {children}
-        </main>
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )

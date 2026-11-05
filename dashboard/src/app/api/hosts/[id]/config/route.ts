@@ -1,5 +1,5 @@
 import { toPublicConfig } from "@/lib/server/config-service"
-import { hostIdParam, hostNotFound } from "@/lib/server/http"
+import { hostIdParam, hostNotFound, jsonNoStore } from "@/lib/server/http"
 import { getConfig, mockDb } from "@/lib/server/mock-hosts"
 
 /** Konfigurasi tersimpan (tanpa hash password). Id bukan 12 hex → 400. */
@@ -12,5 +12,5 @@ export async function GET(
   const s = mockDb()
   const host = s.hosts.get(p.id)
   if (!host) return hostNotFound()
-  return Response.json(toPublicConfig(getConfig(s, host)))
+  return jsonNoStore(toPublicConfig(getConfig(s, host)))
 }

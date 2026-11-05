@@ -31,22 +31,30 @@ import type { NewKeyForm, SshForm } from "@/components/host-config/form-state"
 import { useSshKeys } from "@/hooks/use-host-config"
 import { parseSshKey, sshFingerprint } from "@/lib/ssh-key"
 
-/** Parse + fingerprint (async karena Web Crypto). */
-function useKeyInfo(publicKey: string) {
-  return useQuery({
-    queryKey: ["ssh-key-info", publicKey.trim()],
-    queryFn: async () => {
-      const parsed = parseSshKey(publicKey)
-      if ("error" in parsed) return { error: parsed.error }
-      return {
-        type: parsed.type,
-        comment: parsed.comment,
-        fingerprint: await sshFingerprint(parsed.blob),
-      }
-    },
-    enabled: publicKey.trim().length > 0,
+type KeyInfo =
+  | { error: string }
+  | { type: string; comment: string; fingerprint: string | undefined }
+
+/**
+ * Parse sinkron; hanya fingerprint (Web Crypto, async) yang lewat react-query. Query key memakai
+ * blob public key yang sudah lolos parse — teks mentah (bisa saja private key yang salah tempel)
+ * tidak pernah masuk cache query (CR-3-5).
+ */
+function useKeyInfo(publicKey: string): KeyInfo | undefined {
+  const parsed = React.useMemo(
+    () => (publicKey.trim() ? parseSshKey(publicKey) : null),
+    [publicKey],
+  )
+  const ok = parsed && !("error" in parsed) ? parsed : null
+  const fp = useQuery({
+    queryKey: ["ssh-key-fp", ok?.type, ok?.normalized.split(" ")[1]],
+    queryFn: () => sshFingerprint(ok!.blob),
+    enabled: ok !== null,
     staleTime: Infinity,
   })
+  if (!parsed) return undefined
+  if ("error" in parsed) return { error: parsed.error }
+  return { type: parsed.type, comment: parsed.comment, fingerprint: fp.data }
 }
 
 function NewKeyEditor({
@@ -60,7 +68,7 @@ function NewKeyEditor({
   onChange: (v: Partial<NewKeyForm>) => void
   onRemove: () => void
 }) {
-  const info = useKeyInfo(value.publicKey).data
+  const info = useKeyInfo(value.publicKey)
   const fileRef = React.useRef<HTMLInputElement>(null)
   const invalid = info && "error" in info ? info.error : null
 
@@ -131,9 +139,11 @@ function NewKeyEditor({
           />
           {invalid ? (
             <FieldError>{invalid}</FieldError>
-          ) : info && "fingerprint" in info ? (
+          ) : info && "fingerprint" in info && info.fingerprint ? (
             <FieldDescription className="flex flex-wrap items-center gap-1.5">
-              <Badge variant="secondary">{info.type}</Badge>
+              <Badge variant="secondary" className="type-data">
+                {info.type}
+              </Badge>
               <span className="type-data text-xs break-all">
                 {info.fingerprint}
               </span>
@@ -214,7 +224,10 @@ export function TabSsh({
                   />
                   <FieldContent className="min-w-0">
                     <FieldTitle>
-                      {k.name} <Badge variant="secondary">{k.type}</Badge>
+                      {k.name}{" "}
+                      <Badge variant="secondary" className="type-data">
+                        {k.type}
+                      </Badge>
                     </FieldTitle>
                     <FieldDescription className="type-data truncate text-xs">
                       {k.fingerprint}

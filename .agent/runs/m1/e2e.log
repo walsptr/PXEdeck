@@ -1,0 +1,114 @@
+$ npm run test:e2e  # 2026-11-05T07:00:12Z
+
+> dashboard@0.1.0 test:e2e
+> playwright test
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 build
+[WebServer] > next build
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5 (Turbopack)
+[WebServer] ✓ Running next.config.ts took 34ms
+[WebServer] - Cache Components enabled
+[WebServer] - Partial Prefetching enabled
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 593ms
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 2.4s ...
+[WebServer]   Collecting page data using 11 workers ...
+[WebServer]   Generating static pages using 11 workers (0/14) ...
+[WebServer]   Generating static pages using 11 workers (3/14) 
+[WebServer]   Generating static pages using 11 workers (6/14) 
+[WebServer]   Generating static pages using 11 workers (10/14) 
+[WebServer] ✓ Generating static pages using 11 workers (14/14) in 888ms
+[WebServer]   Finalizing page optimization ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ○ /_not-found
+[WebServer] ├ ƒ /api/credentials/import
+[WebServer] ├ ƒ /api/hosts
+[WebServer] ├ ƒ /api/hosts/[id]
+[WebServer] ├ ƒ /api/hosts/[id]/config
+[WebServer] ├ ƒ /api/hosts/[id]/install
+[WebServer] ├ ƒ /api/hosts/[id]/reboot
+[WebServer] ├ ƒ /api/hosts/bulk
+[WebServer] ├ ƒ /api/hosts/bulk/install
+[WebServer] ├ ƒ /api/ssh-keys
+[WebServer] ├ ○ /design
+[WebServer] ├ ○ /hosts
+[WebServer] ├ ○ /jobs
+[WebServer] ├ ○ /os-images
+[WebServer] ├ ○ /settings
+[WebServer] └ ○ /ssh-keys
+[WebServer] 
+[WebServer] 
+[WebServer] ○  (Static)   prerendered as static content
+[WebServer] ƒ  (Dynamic)  server-rendered on demand
+[WebServer] 
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3100
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3100
+[WebServer] - Network:       http://10.24.10.19:3100
+[WebServer] ✓ Ready in 192ms
+[WebServer] ✓ Running next.config.ts took 52ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3101
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3101
+[WebServer] - Network:       http://10.24.10.19:3101
+[WebServer] ✓ Ready in 187ms
+[WebServer] ✓ Running next.config.ts took 34ms
+
+Running 42 tests using 1 worker
+
+  ✓   1 [chromium] › e2e/m1-design-system.spec.ts:9:9 › AC-1.2 warna dasar & font › body bg/teks, font Inter + JetBrains Mono di /hosts (577ms)
+  ✓   2 [chromium] › e2e/m1-design-system.spec.ts:9:9 › AC-1.2 warna dasar & font › body bg/teks, font Inter + JetBrains Mono di /design (334ms)
+  ✓   3 [chromium] › e2e/m1-design-system.spec.ts:40:7 › AC-1.3 tanpa drop shadow › /hosts, dropdown aksi baris, dan Sheet konfigurasi (1.7s)
+  ✓   4 [chromium] › e2e/m1-design-system.spec.ts:58:7 › AC-1.3 tanpa drop shadow › /design (461ms)
+  ✓   5 [chromium] › e2e/m1-design-system.spec.ts:67:7 › AC-1.4 bentuk & ukuran di /design › Button 40px/8px, Input 44px/8px border hairline, Card 12px putih, pill 9999px, placeholder muted-soft (487ms)
+  ✓   6 [chromium] › e2e/m1-design-system.spec.ts:112:7 › AC-1.4 bentuk & ukuran di /design › G1-3: pemetaan varian tombol ke SPEC terdokumentasi (328ms)
+  ✓   7 [chromium] › e2e/m1-design-system.spec.ts:123:7 › AC-1.5 tipografi › judul top bar, label kolom tabel, sel MAC mono (451ms)
+  ✓   8 [chromium] › e2e/m1-design-system.spec.ts:151:5 › oranye hanya pada tombol primary (/hosts, /design) (655ms)
+  ✓   9 [chromium] › e2e/m1-layout.spec.ts:18:7 › AC-1.8 layout › sidebar 5 link, item aktif, border hairline, top bar 64px, padding main 32px (736ms)
+  ✓  10 [chromium] › e2e/m1-layout.spec.ts:44:7 › AC-1.8 layout › item aktif & judul mengikuti halaman (486ms)
+  ✓  11 [chromium] › e2e/m1-layout.spec.ts:57:9 › AC-1.8 layout › viewport < 768 › padding main 24px, top bar tetap 64px (450ms)
+  ✓  12 [chromium] › e2e/m1-layout.spec.ts:67:7 › AC-1.9 navigasi › GET / redirect ke /hosts (508ms)
+  ✓  13 [chromium] › e2e/m1-layout.spec.ts:76:7 › AC-1.9 navigasi › klik tiap item sidebar membuka halaman benar dengan <title> dan isi (846ms)
+  ✓  14 [chromium] › e2e/m1-layout.spec.ts:94:9 › AC-1.9 navigasi › placeholder /os-images menampilkan judul + deskripsi (285ms)
+  ✓  15 [chromium] › e2e/m1-layout.spec.ts:94:9 › AC-1.9 navigasi › placeholder /ssh-keys menampilkan judul + deskripsi (303ms)
+  ✓  16 [chromium] › e2e/m1-layout.spec.ts:94:9 › AC-1.9 navigasi › placeholder /jobs menampilkan judul + deskripsi (301ms)
+  ✓  17 [chromium] › e2e/m1-layout.spec.ts:94:9 › AC-1.9 navigasi › placeholder /settings menampilkan judul + deskripsi (296ms)
+  ✓  18 [chromium] › e2e/m1-layout.spec.ts:107:7 › AC-1.10 pencarian global › Ctrl+K buka dialog, cari halaman + Enter bernavigasi, Escape menutup (1.4s)
+  ✓  19 [chromium] › e2e/m1-layout.spec.ts:125:7 › AC-1.10 pencarian global › memilih host → /hosts?q=<mac> dan tabel terfilter ke host itu (749ms)
+  ✓  20 [chromium] › e2e/m1-layout.spec.ts:141:7 › AC-1.11 status server PXE › top bar menampilkan DHCP, TFTP, HTTP dengan teks aksesibel online/offline (518ms)
+  ✓  21 [chromium] › e2e/m2-hosts-table.spec.ts:29:7 › AC-2.8 kolom & isi tabel › header kolom, satu baris per host API, '—', font mono, pill data-status (1.1s)
+  ✓  22 [chromium] › e2e/m2-hosts-table.spec.ts:67:7 › AC-2.10 pencarian & filter › pencarian MAC/hostname/IP mempersempit baris (581ms)
+  ✓  23 [chromium] › e2e/m2-hosts-table.spec.ts:84:7 › AC-2.10 pencarian & filter › filter status (hitungan + hanya status itu), filter OS, Reset, tanpa hasil (1.7s)
+  ✓  24 [chromium] › e2e/m2-hosts-table.spec.ts:132:7 › AC-2.10 pencarian & filter › /hosts?q=<mac> mengisi pencarian awal (379ms)
+  ✓  25 [chromium] › e2e/m2-hosts-table.spec.ts:141:7 › AC-2.11 seleksi & bulk bar › 2 baris → toolbar, tombol, hanya Install OS primary; batal mengosongkan (893ms)
+  ✓  26 [chromium] › e2e/m2-hosts-table.spec.ts:163:7 › AC-2.11 seleksi & bulk bar › Shift+klik memilih rentang (605ms)
+  ✓  27 [chromium] › e2e/m2-hosts-table.spec.ts:174:7 › AC-2.11 seleksi & bulk bar › checkbox header: semua / indeterminate; tersembunyi oleh filter (997ms)
+  ✓  28 [chromium] › e2e/m2-hosts-table.spec.ts:202:7 › AC-2.12 menu aksi baris › berisi tepat lima aksi (507ms)
+  ✓  29 [chromium] › e2e/m2-hosts-table.spec.ts:208:7 › AC-2.12 menu aksi baris › Hapus: Batal tidak mengubah apa pun; konfirmasi menghapus baris + toast (1.8s)
+  ✓  30 [chromium] › e2e/m2-hosts-table.spec.ts:233:7 › AC-2.12 menu aksi baris › Reboot ke PXE → AlertDialog → status baris berubah (1.8s)
+  ✓  31 [chromium] › e2e/m2-hosts-table.spec.ts:253:7 › AC-2.12 menu aksi baris › Lihat log → /jobs?host=<id> (636ms)
+  ✓  32 [chromium] › e2e/m2-hosts-table.spec.ts:260:7 › AC-2.12 menu aksi baris › Install OS / Edit konfigurasi membuka Sheet (1.4s)
+  ✓  33 [chromium] › e2e/m2-hosts-table.spec.ts:277:7 › AC-2.13 empty & error state › {hosts: []} → 'Belum ada host' + penjelasan PXE boot (472ms)
+  ✓  34 [chromium] › e2e/m2-hosts-table.spec.ts:286:7 › AC-2.13 empty & error state › GET /api/hosts 500 → Alert 'Gagal memuat data host' (1.7s)
+  ✓  35 [chromium] › e2e/m2-hosts-table.spec.ts:297:7 › AC-2.14 copy MAC › tombol copy terlihat saat fokus keyboard dan menulis MAC ke clipboard (908ms)
+  ✓  36 [chromium] › e2e/m2-polling.spec.ts:9:5 › AC-2.9 host baru discovery muncul ≤ 6 dtk tanpa reload; polling ~5 dtk (16.4s)
+  ✓  37 [chromium] › e2e/m3-bulk.spec.ts:29:5 › AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password acak sekali tampil + CSV (7.1s)
+  ✓  38 [chromium] › e2e/m3-bulk.spec.ts:166:5 › AC-3.15 Simpan & Install: dialog konfirmasi, Batal tanpa request, install → Booting (3.0s)
+  ✓  39 [chromium] › e2e/m3-bulk.spec.ts:208:5 › AC-3.15 bulk: dialog menyebut jumlah host; Batal tidak mengirim request (2.2s)
+  ✓  40 [chromium] › e2e/m3-sheet.spec.ts:9:5 › AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toast + tabel ter-update (4.0s)
+  ✓  41 [chromium] › e2e/m3-sheet.spec.ts:115:5 › AC-3.13 validasi UI per tab menonaktifkan simpan; 422 server tampil di tab yang benar (3.6s)
+  ✓  42 [chromium] › e2e/smoke.spec.ts:4:5 › halaman /hosts terbuka (449ms)
+
+  42 passed (1.2m)
+EXIT CODE: 0
