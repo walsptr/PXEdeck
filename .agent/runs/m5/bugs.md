@@ -43,3 +43,19 @@ Kode produk TIDAK diubah oleh test-engineer. Setiap butir memuat repro; Orchestr
   sekali. Diuji di `m5-te-hooks.test.ts`.
 - I-3: `logTailCmd` mengirim `tail -n 60 | cut -c1-240` per file, plan §2.5 menyebut 100 baris
   sebagai kandidat ("backend-dev memverifikasinya … memilih file yang ada"). Bukan pelanggaran AC.
+
+## Iterasi 2 — catatan test-engineer (info, bukan bug; arah aman/fail-closed)
+
+Diamati saat meninjau `redact.ts` @ `fb8077e`, dengan probe vitest sementara yang sudah dihapus.
+Kode produk tidak diubah.
+- I-4 (over-redaksi footer yatim): `redactOrphanKeyTail` ikut menelan baris pendek alfanumerik atau
+  kosong yang mendahului `-----END … PRIVATE KEY-----` tanpa BEGIN, walau baris itu bukan isi key.
+  Contoh: `"langkah 3\nok\n\n-----END OPENSSH PRIVATE KEY-----\nselesai"` →
+  `"langkah 3\n[REDACTED PRIVATE KEY]\nselesai"`, sehingga baris `ok` hilang. Dampaknya hanya
+  kehilangan konteks log; tidak ada kebocoran.
+- I-5 (over-redaksi segmen path): `TOKEN_PATH_PARTIAL_RE` (`{8,43}`) juga cocok dengan segmen bukan
+  token setelah MAC. Contoh: `GET /boot/52:54:00:99:00:11/user-data 200` →
+  `GET /boot/52:54:00:99:00:11/[REDACTED] 200`. Rute nyata selalu memuat token di posisi itu, jadi
+  dampaknya hanya kosmetik.
+- Sisa risiko yang diterima oleh desain CR-5-1 opsi (a): prefiks token terpotong < 8 karakter tidak
+  diredaksi. Ini sudah diasersikan sebagai kasus negatif di `m5-iter2-redact-timeout.test.ts`.

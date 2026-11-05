@@ -1,4 +1,6 @@
-infra/test/run.sh — 2026-11-05T17:14:17Z
+# commit fb8077e (fb8077ea0ef443d98d2403c19acab770f0ebfe7c) — infra/test/run.sh — 2026-11-05T18:16:34Z
+# worktree clean: 0 perubahan tracked
+infra/test/run.sh — 2026-11-05T18:16:56Z
   ok   bash -n semua script infra
   ok   set -euo pipefail di setiap script
   ok   PATH test hanya berisi virsh/ssh palsu, tanpa sudo
@@ -47,3 +49,4 @@ infra/test/run.sh — 2026-11-05T17:14:17Z
   ok   M5 deploy PXE_ADMIN_ALLOW divalidasi (AC-5.37)
   ok   M5 bash -n semua script infra + e2e-kvm (AC-5.37)
 hasil: 47 lulus, 0 gagal
+exit=0

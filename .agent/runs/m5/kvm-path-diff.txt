@@ -1,0 +1,53 @@
+# Cek diff jalur KVM (boot/installer/infra) sejak commit produk run KVM 543cf5a — @ fb8077e 2026-11-05T18:17:58Z
+$ git diff 543cf5a..HEAD --stat -- dashboard/src/lib/server/installers infra dashboard/src/app/boot dashboard/src/lib/server/boot-script.ts
+ .../src/app/boot/m5-te-lifecycle-routes.test.ts    | 737 +++++++++++++++++++++
+ dashboard/src/lib/server/installers/context.ts     |   2 +-
+ .../src/lib/server/installers/m5-te-hooks.test.ts  | 344 ++++++++++
+ infra/test/m5.sh                                   | 319 +++++++++
+ infra/test/run.sh                                  |   2 +
+ 5 files changed, 1403 insertions(+), 1 deletion(-)
+
+## Non-test (yang bisa memengaruhi node):
+ dashboard/src/lib/server/installers/context.ts | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+diff --git a/dashboard/src/lib/server/installers/context.ts b/dashboard/src/lib/server/installers/context.ts
+index f740bcb..fe51d7d 100644
+--- a/dashboard/src/lib/server/installers/context.ts
++++ b/dashboard/src/lib/server/installers/context.ts
+@@ -138,7 +138,7 @@ export function buildContext(i: BuildContextInput): InstallContext {
+   if (cfg.sshUser && cfg.sshUser !== cfg.username)
+     bad("User target SSH berbeda dari user Credentials belum didukung")
+   if (cfg.os.partition === "custom")
+-    bad("Skema partisi custom belum didukung generator M4")
++    bad("Skema partisi custom belum didukung")
+   const keys = [...i.libraryKeys.map((k) => k.publicKey), ...cfg.extraKeys].map(sanitizeKey)
+   return validateContext({
+     jobId: i.jobId,
+
+## Golden installer (output generator) sejak 543cf5a:
+(kosong = output generator tidak berubah)
+
+## Produk server lain yang berubah sejak 543cf5a (bukan generator/boot script):
+ dashboard/src/lib/server/db/repos/job-events.ts | 38 +++++++++++++++++---
+ dashboard/src/lib/server/db/repos/os-images.ts  | 19 ++++------
+ dashboard/src/lib/server/install-service.ts     |  2 +-
+ dashboard/src/lib/server/job-lifecycle.ts       | 15 ++++----
+ dashboard/src/lib/server/provisioning.ts        |  9 +++--
+ dashboard/src/lib/server/redact.ts              | 47 +++++++++++++++++++++++--
+ 6 files changed, 101 insertions(+), 29 deletions(-)
+
+## Analisis test-engineer
+- `dashboard/src/app/boot/**`, `boot-script.ts`, dan `infra/` (di luar `infra/test/`): **tidak berubah** sejak 543cf5a. Yang
+  berubah hanya file test (`*.test.ts`, `infra/test/*`).
+- `installers/context.ts`: hanya teks pesan error untuk partisi `custom`. Konfigurasi itu ditolak sebelum
+  job dibuat, jadi node tidak pernah menerima output dari cabang ini. Golden installer (5 file) tidak berubah,
+  sehingga byte output generator (user-data/preseed/kickstart/first-boot) yang dilayani ke node identik.
+- Produk server lain: redaksi event log (`redact.ts`, `job-events.ts`), redaksi body `POST /boot/.../log`
+  (`provisioning.ts`), titik awal timer Booting (`job-lifecycle.ts`, DEC-016), hitungan `imageUsage`, dan
+  teks pesan. Semuanya hanya memengaruhi isi yang disimpan/ditampilkan server dan kapan watchdog menandai
+  job gagal. Status HTTP yang dilihat node tidak berubah: log tetap 200/404/413/429, serta script iPXE dan
+  file konfigurasi tetap sama. Pada alur KVM normal installer dilayani sekali, sehingga entri `booting`
+  pertama dan terakhir praktis sama. Pada skenario destroy (node11), job sudah berada di tahap Installing,
+  yang dihitung dari entri `installing` dan tidak berubah.
+- Kesimpulan: tidak ada perubahan di jalur boot/installer yang memengaruhi node. Sesuai DEC-016
+  §Konsekuensi, bukti KVM M5 (543cf5a) tetap berlaku. KVM tidak dijalankan ulang.

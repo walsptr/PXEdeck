@@ -101,3 +101,53 @@ Catatan kompatibilitas asersi lama:
   `/^(\d+) host$/` di AC-5.27 tetap lulus tanpa perubahan.
 - `img-repo-url` `toHaveText` tetap: path dipecah per segmen dengan `<span>` tanpa mengubah textContent.
 - `key-name` `toHaveText` tetap (hanya `truncate` + `title`).
+
+## Iterasi 2 — tinjauan test-engineer (diff `d19b44c..16d390d` + perubahan test `fb8077e`)
+
+Metode: membaca diff test dan produk, lalu **mutasi**. Setiap perbaikan produk di-revert sementara
+(file ke `d19b44c` atau satu baris dihapus), test terkait dijalankan, lalu file dikembalikan dengan
+`git checkout HEAD -- <file>` (worktree diverifikasi bersih). Test sah bila merah saat perbaikannya
+di-revert.
+
+| Temuan | Mutasi (revert sementara) | Hasil test | Kesimpulan |
+|---|---|---|---|
+| CR-5-2 / DEC-016 | `job-lifecycle.ts` ke `d19b44c` (`stageEnteredAt` = entri terakhir) | `m5-iter2-redact-timeout` 2 gagal (2 test CR-5-2). Sebelum `fb8077e`, `m5-te-lifecycle-routes` AC-5.8 **tetap hijau**, sesuai catatan backend-dev | Sah; AC-5.8 diperketat (lihat T1) |
+| SR-5-1 | `cleanEventMessage` = `sanitizeMessage(redactSecrets(raw))` (urutan lama) | 14/37 gagal (14 test SR-5-1 cleanEventMessage + appendEvent) | Sah. Test juga mengasersikan bahwa urutan lama memang bocor (kontrol negatif) |
+| SR-5-2 | `handleLogPost` tanpa redaksi body utuh (`splitLogLines(input.text)`) | 3 gagal (blok dengan footer, tanpa footer, terpecah 2 request) | Sah |
+| SR-5-2 | `redactSecrets` tanpa `redactOrphanKeyTail` | 2 gagal (footer yatim, terpecah 2 request) | Sah |
+| CR-5-1 | hapus `.replace(TOKEN_PATH_PARTIAL_RE…)` | 3 gagal | Sah |
+| SR-5-5(a) | hapus `.replace(TOKEN_PATH_PCT_RE…)` | 4 gagal | Sah |
+| CR-5-1 (hash) | hapus `.replace(HASH_PARTIAL_RE…)` | 2 gagal | Sah |
+| SR-5-1/2, CR-5-1 | `redact.ts` utuh ke `d19b44c` | 11/37 gagal | Sah |
+| DR-5-1 (375) | `os-images-view.tsx` ke `d19b44c`, `playwright --project=m5-library -g DR-5-1` | merah: `tinggi kartu debian-12` Expected ≤ 200, Received **751** (angka iter1) | Sah. Testid sama di versi lama, jadi kegagalan berasal dari asersi dimensi |
+| DR-5-1 (1440) | idem, `-g "DR-5-1 OS Images 1440"` | merah: `path "rocky-9/images/pxeboot/vmlinuz" dipecah 3 baris` (≤ 2) | Sah |
+
+Tanpa mutasi (ditinjau dari diff saja): DR-5-2 (overflow container + tombol di dalam container
+@1280/1440, `title`), DR-5-5/DR-5-6 (`Wajib diisi` per field, tidak ada teks zod Inggris, footer
+sticky dan rata bawah ±1 px sebelum/sesudah error), DR-5-7/I-5-8 (warna persis + kontras ≥ 4,5:1
+dihitung untuk setiap elemen teks di baris), DR-5-3 (label tepat sekali per item), F7/F8 unit. Semua
+asersinya konkret: angka/warna/teks persis, bukan `toBeTruthy`. F8 (`install-errors.test.ts`) adalah
+file baru untuk fungsi baru `stripHostPrefix`. Test ini otomatis merah bila fungsinya hilang, dan
+mencakup kasus negatif (prefix di tengah, tanpa spasi).
+
+Pemeriksaan pelemahan pada `git diff d19b44c..HEAD -- '*.test.ts' '*.test.tsx' 'dashboard/e2e/'`:
+- baris `-` hanya dua jenis:
+  1. import `m5-library.spec.ts`, yang diganti dengan versi yang menambah tipe `Locator`;
+  2. empat baris `toStage` milik T1 (test-engineer). Dua `expect` di antaranya dipindah utuh ke
+     dalam blok `if`. `.at(-1)` diganti nilai harapan tetap ditambah asersi entri pertama.
+
+  Diff dev tidak menghapus atau mengubah satu pun `expect`;
+- tidak ada `skip`/`only`/`todo`/`fixme`/`retries`;
+- `vitest.config.ts` dan `playwright.config.ts` tidak berubah.
+
+Catatan backend-dev soal AC-5.13 (`dua[31m merah`: ESC dibuang, sisa `[31m` tetap ada) benar.
+Asersi lama tidak diubah.
+
+### Perubahan test oleh test-engineer di iterasi 2
+
+| # | File | Perubahan | Dasar | Jenis |
+|---|---|---|---|---|
+| T1 | `dashboard/src/app/boot/m5-te-lifecycle-routes.test.ts` › AC-5.8 `toStage` | Fixture kini memberi selisih waktu nyata: install di T0, installer dilayani di +10 mnt dan +25 mnt (dua penyajian, token berotasi, `installerBoots` = 2), user-data di +35 mnt, callback `configuring` di +45 mnt. Entri `booting` diasersikan `[T0, +10, +25]`. `entered` kini **konstanta yang diharapkan** per tahap (booting = T0, installing = +35, configuring = +45), tidak lagi dibaca dari `.at(-1)`. Entri **pertama** tahap itu juga diasersikan = `entered`. Seluruh asersi lama (−1 dtk tetap, +1 dtk failed, `finished_at`, token 404, satu event, sapuan kedua no-op) tidak diubah | DEC-016 §1. Diverifikasi dengan mutasi: revert `stageEnteredAt` → AC-5.8 booting merah (sebelumnya hijau) | Pengetatan |
+
+**Kesimpulan iterasi 2: tidak ada pelemahan. Setiap perbaikan wajib (SR-5-1, SR-5-2, CR-5-1,
+CR-5-2, DR-5-1) punya test yang terbukti merah bila perbaikannya di-revert.**
