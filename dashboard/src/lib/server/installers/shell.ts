@@ -64,3 +64,44 @@ export function callbackCmd(method: CmdlineMethod, mac: string, stage: string, c
   if (!/^[a-z]+$/.test(stage)) throw new Error("stage tidak valid")
   return `${callbackUrlCmd(method, mac, cmdline)}; curl -fsS -m 15 --retry 5 --retry-delay 3 -X POST -d stage=${stage} "$u" >/dev/null 2>&1 || wget -q -T 15 -O /dev/null --post-data=stage=${stage} "$u" || true`
 }
+
+const LOG_MESSAGE_RE = /^[A-Za-z0-9 :.,_()/-]{1,200}$/
+
+/**
+ * Perintah sh yang mengisi variabel `b` dengan basis URL per job `${base}/boot/{mac}/{token}/`
+ * (diakhiri "/"), diturunkan saat runtime dari argumen kernel installer — pola sama dengan
+ * `callbackUrlCmd` (MAC host ini + token 43 karakter), B-5. `b` kosong bila tidak cocok.
+ */
+export function callbackBaseCmd(method: CmdlineMethod, mac: string, cmdline: string = PROC_CMDLINE): string {
+  if (!Object.hasOwn(CMDLINE_CONFIG_PARAM, method)) throw new Error("metode tidak valid")
+  if (!MAC_RE.test(mac)) throw new Error("MAC tidak valid")
+  if (!PATH_RE.test(cmdline)) throw new Error(`Path tidak aman: ${cmdline}`)
+  const param = CMDLINE_CONFIG_PARAM[method].replaceAll(".", "\\.")
+  const sed = `s#^${param}\\(https\\{0,1\\}://.*/boot/${mac}/[A-Za-z0-9_-]\\{43\\}/\\)[^/]*$#\\1#p`
+  return `b=$(tr ' ' '\\n' < ${cmdline} | sed -n '${sed}' | head -n 1)`
+}
+
+/**
+ * Kirim satu baris log KONSTAN ke `${b}log` (M5, plan §2.5). `message` hanya konstanta generator
+ * (tanpa nilai pengguna; divalidasi). `b` kosong → no-op; tidak pernah gagal (`|| true`). Token tidak
+ * pernah tertulis di perintah (URL dari /proc/cmdline).
+ */
+export function logCmd(method: CmdlineMethod, mac: string, message: string, cmdline?: string): string {
+  if (!LOG_MESSAGE_RE.test(message)) throw new Error("pesan log tidak valid")
+  const q = shQuote(message)
+  return `${callbackBaseCmd(method, mac, cmdline)}; if [ -n "$b" ]; then printf '%s\\n' ${q} | curl -fsS -m 15 --data-binary @- -H 'Content-Type: text/plain' "\${b}log" >/dev/null 2>&1 || wget -q -T 15 -O /dev/null --header='Content-Type: text/plain' --post-data=${q} "\${b}log" >/dev/null 2>&1 || true; fi`
+}
+
+/** Baris & lebar maksimum tail per file (≤ batas endpoint 200 baris / 16 KB per request). */
+export const LOG_TAIL_LINES = 60
+export const LOG_TAIL_WIDTH = 240
+
+/**
+ * Kirim tail file log installer yang ada (`[ -f ]`) ke `${b}log`, satu request per file, diawali
+ * baris `ERROR installer gagal: <file>` (level error di server). Hanya dipakai di jalur gagal
+ * (error-commands / %onerror); isi diredaksi server. Tidak pernah gagal.
+ */
+export function logTailCmd(method: CmdlineMethod, mac: string, files: string[], cmdline?: string): string {
+  for (const f of files) if (!PATH_RE.test(f) || f.includes("..")) throw new Error(`Path tidak aman: ${f}`)
+  return `${callbackBaseCmd(method, mac, cmdline)}; if [ -n "$b" ]; then for f in ${files.join(" ")}; do [ -f "$f" ] && { printf 'ERROR installer gagal: %s\\n' "$f"; tail -n ${LOG_TAIL_LINES} "$f" | cut -c1-${LOG_TAIL_WIDTH}; } | curl -fsS -m 15 --data-binary @- -H 'Content-Type: text/plain' "\${b}log" >/dev/null 2>&1; done; fi; true`
+}

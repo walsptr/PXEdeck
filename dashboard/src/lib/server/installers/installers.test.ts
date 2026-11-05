@@ -35,9 +35,9 @@ import {
 } from "./firstboot"
 import { INSTALLER_FILES, installerFile } from "./index"
 import { di, singleLine } from "./lines"
-import { rockyKickstart, rockyPostScript } from "./rocky"
-import { b64write, callbackCmd, callbackUrlCmd, CMDLINE_CONFIG_PARAM, shQuote } from "./shell"
-import { BOOTORDER_SNIPPET, FORCE_REBOOT_GUARD, ubuntuAutoinstall, ubuntuMetaData, ubuntuUserData, ubuntuVendorData } from "./ubuntu"
+import { ROCKY_ERROR_LOGS, rockyKickstart, rockyPostScript } from "./rocky"
+import { b64write, callbackCmd, callbackUrlCmd, CMDLINE_CONFIG_PARAM, logCmd, logTailCmd, shQuote } from "./shell"
+import { BOOTORDER_SNIPPET, FORCE_REBOOT_GUARD, UBUNTU_ERROR_LOGS, UBUNTU_LOG, ubuntuAutoinstall, ubuntuMetaData, ubuntuUserData, ubuntuVendorData } from "./ubuntu"
 import { windowsMac, windowsUnattend } from "./windows"
 import { xmlEscape } from "./xml"
 
@@ -179,9 +179,11 @@ describe("AC-4.18 Ubuntu autoinstall", () => {
   })
   it("late-commands: callback configuring, unit first-boot done, BootOrder UEFI, guard pxe-force-reboot", () => {
     const late = ai["late-commands"]
-    expect(late[0]).toBe(callbackCmd("autoinstall", MAC, "configuring"))
-    expect(late[0]).toContain(`-d stage=configuring "$u"`)
-    expect(evalCallbackUrl(late[0], KCMD.autoinstall)).toBe(CALLBACK)
+    // M5 (DEC-014 §4, plan §2.5): log "late-commands mulai" SEBELUM callback configuring.
+    expect(late[0]).toBe(logCmd("autoinstall", MAC, UBUNTU_LOG.late))
+    expect(late[1]).toBe(callbackCmd("autoinstall", MAC, "configuring"))
+    expect(late[1]).toContain(`-d stage=configuring "$u"`)
+    expect(evalCallbackUrl(late[1], KCMD.autoinstall)).toBe(CALLBACK)
     const files = b64Files(late.join("\n"))
     expect(files[`/target${CALLBACK_URL_FILE}`]).toBeUndefined()
     expect(runUrlFileCmd(urlFileCmd(late), "/target", KCMD.autoinstall)).toEqual({ mode: "600", content: `${CALLBACK}\n` })
@@ -194,8 +196,9 @@ describe("AC-4.18 Ubuntu autoinstall", () => {
     expect(FORCE_REBOOT_GUARD).toContain("--unit=pxe-force-reboot")
   })
   it("error-commands: callback failed", () => {
-    expect(ai["error-commands"]).toEqual([callbackCmd("autoinstall", MAC, "failed")])
-    expect(evalCallbackUrl(ai["error-commands"][0], KCMD.autoinstall)).toBe(CALLBACK)
+    // M5 (plan §2.5): tail log installer lalu callback failed (urutan itu).
+    expect(ai["error-commands"]).toEqual([logTailCmd("autoinstall", MAC, UBUNTU_ERROR_LOGS), callbackCmd("autoinstall", MAC, "failed")])
+    expect(evalCallbackUrl(ai["error-commands"][1], KCMD.autoinstall)).toBe(CALLBACK)
   })
   it("meta-data: instance-id = jobId + local-hostname; vendor-data kosong", () => {
     expect(parseYaml(ubuntuMetaData(ctx()))).toEqual({ "instance-id": ctx().jobId, "local-hostname": "m4-node11" })
@@ -232,8 +235,9 @@ describe("AC-4.19 Debian preseed", () => {
     expect(lines.at(-1)).toBe("d-i finish-install/reboot_in_progress note")
   })
   it("late_command (didekode): authorized_keys 0600 milik user, sudoers, sshd drop-in, interface via MAC, first-boot, callback", () => {
-    expect(late.split("\n")[2]).toBe(callbackCmd("preseed", MAC, "configuring"))
-    expect(evalCallbackUrl(late.split("\n")[2], KCMD.preseed)).toBe(CALLBACK)
+    // M5 (plan §2.5): baris [2] = log late_command mulai; callback configuring di [3].
+    expect(late.split("\n")[3]).toBe(callbackCmd("preseed", MAC, "configuring"))
+    expect(evalCallbackUrl(late.split("\n")[3], KCMD.preseed)).toBe(CALLBACK)
     const files = b64Files(late)
     expect(files["/home/ops/.ssh/authorized_keys"]).toEqual({ mode: "600", content: `${SSH_ED25519.publicKey}\n${SSH_ED25519_B.publicKey}\n` })
     expect(late).toContain("chown -R 'ops': /home/ops/.ssh")
@@ -301,15 +305,19 @@ describe("AC-4.20 Rocky kickstart", () => {
   it("section %…/%end seimbang; %post (didekode) + %onerror callback failed", () => {
     const opens = lines.filter((l) => /^%(?!end$)/.test(l))
     const ends = lines.filter((l) => l === "%end")
-    expect(opens.map((l) => l.split(" ")[0])).toEqual(["%packages", "%post", "%onerror"])
+    // M5 (plan §2.5): + %pre (log mulai).
+    expect(opens.map((l) => l.split(" ")[0])).toEqual(["%pre", "%packages", "%post", "%onerror"])
     expect(ends).toHaveLength(opens.length)
     const onerr = lines.indexOf("%onerror")
-    expect(lines[onerr + 1]).toBe(callbackCmd("kickstart", MAC, "failed"))
-    expect(evalCallbackUrl(lines[onerr + 1], KCMD.kickstart)).toBe(CALLBACK)
+    // M5: %onerror = tail log anaconda lalu callback failed.
+    expect(lines[onerr + 1]).toBe(logTailCmd("kickstart", MAC, ROCKY_ERROR_LOGS))
+    expect(lines[onerr + 2]).toBe(callbackCmd("kickstart", MAC, "failed"))
+    expect(evalCallbackUrl(lines[onerr + 2], KCMD.kickstart)).toBe(CALLBACK)
     const post = echoPayload(lines[lines.indexOf("%post --log=/root/pxe-post.log") + 1])
     expect(post).toBe(rockyPostScript(c))
     expect(post).toContain(callbackCmd("kickstart", MAC, "configuring"))
-    expect(evalCallbackUrl(post.split("\n")[1], KCMD.kickstart)).toBe(CALLBACK)
+    // M5: baris [1] = log post mulai; callback configuring di [2].
+    expect(evalCallbackUrl(post.split("\n")[2], KCMD.kickstart)).toBe(CALLBACK)
     const files = b64Files(post)
     expect(files["/home/ops/.ssh/authorized_keys"].mode).toBe("600")
     expect(files["/etc/sudoers.d/90-ops"].content).toBe(sudoersText("ops"))

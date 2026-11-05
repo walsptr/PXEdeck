@@ -92,7 +92,8 @@ describe("localBootScript / waitScript (AC-4.14)", () => {
   it("wait: sleep 30 lalu chain dengan wait=n+1; batas iterasi → boot lokal", () => {
     const s = waitScript("http://10.99.0.2", "52:54:00:99:00:11", 3)
     expect(s).toContain("sleep 30")
-    expect(s).toContain("chain --autofree http://10.99.0.2/boot/52:54:00:99:00:11.ipxe?platform=${platform}&wait=4 || exit 1")
+    // CR-4-5 (M5, AC-5.21): `--replace` seperti entry.ipxe.
+    expect(s).toContain("chain --replace --autofree http://10.99.0.2/boot/52:54:00:99:00:11.ipxe?platform=${platform}&wait=4 || exit 1")
     expect(s).toContain(`(4/${WAIT_MAX_ITERATIONS})`)
     expect(waitScript("http://10.99.0.2", "52:54:00:99:00:11", WAIT_MAX_ITERATIONS)).toBe(localBootScript())
     expect(waitScript("http://10.99.0.2", "52:54:00:99:00:11", WAIT_MAX_ITERATIONS + 5)).toBe(localBootScript())

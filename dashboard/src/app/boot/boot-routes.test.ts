@@ -281,7 +281,8 @@ describe("AC-4.14 boot lokal & mode wait", () => {
     process.env.PXE_UNKNOWN_HOST_ACTION = "wait"
     const w = (await boot(MAC)).body
     expect(w).toContain("sleep 30")
-    expect(w).toContain(`chain --autofree http://10.99.0.2/boot/${MAC}.ipxe?platform=\${platform}&wait=1 || exit 1`)
+    // CR-4-5 (M5, AC-5.21): waitScript memakai `chain --replace --autofree`.
+    expect(w).toContain(`chain --replace --autofree http://10.99.0.2/boot/${MAC}.ipxe?platform=\${platform}&wait=1 || exit 1`)
     expect((await boot(MAC, LEASE_IP, "efi", "wait=5")).body).toContain("&wait=6")
     expect(isLocal((await boot(MAC, LEASE_IP, "efi", "wait=20")).body)).toBe(true)
     // wait tidak valid → 0.
@@ -405,7 +406,8 @@ describe("AC-4.23 GET /boot/{mac}/{token}/{file}", () => {
     expect(containsSecret(ud.body, token)).toBe(false)
     const kcmd = script.split("\n").find((l) => l.startsWith("kernel "))!.split(" ").slice(2).join(" ")
     const late = (parseYaml(ud.body) as { autoinstall: { "late-commands": string[] } }).autoinstall["late-commands"]
-    expect(evalCallbackUrl(late[0], kcmd)).toBe(`http://10.99.0.2/boot/${MAC}/${token}/status`)
+    // M5 (DEC-014 §4): late[0] = log "late-commands mulai", callback configuring di late[1].
+    expect(evalCallbackUrl(late[1], kcmd)).toBe(`http://10.99.0.2/boot/${MAC}/${token}/status`)
     expect(ud.body).not.toContain(DUMMY_PASSWORD)
     expect(ud.body).toContain(peekConfig(ID)!.passwordHash!)
     expect(getHost(ID)).toMatchObject({ status: "installing", statusSince: "2026-11-05T10:01:00.000Z" })

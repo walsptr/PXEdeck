@@ -25,10 +25,17 @@ WantedBy=multi-user.target
 `
 
 export const FIRSTBOOT_SCRIPT_TEXT = `#!/bin/sh
-# Kirim stage=done ke PXE dashboard lalu hapus diri (token sekali pakai).
+# Kirim log "OS terpasang" lalu stage=done ke PXE dashboard, kemudian hapus diri (token sekali pakai).
+# URL (berisi token) hanya dibaca dari file 0600; tidak pernah dicetak.
 url=$(cat ${CALLBACK_URL_FILE}) || exit 1
+base=\${url%status}
+m="first-boot: OS terpasang boot dari disk: $(hostname) $(ip -4 -o addr show scope global 2>/dev/null | awk '{print $2"="$4}' | tr '\\n' ' ')"
+logged=0
 i=0
 while [ $i -lt 60 ]; do
+  if [ $logged -eq 0 ]; then
+    printf '%s\\n' "$m" | curl -fsS -m 15 --data-binary @- -H 'Content-Type: text/plain' "\${base}log" >/dev/null 2>&1 && logged=1
+  fi
   if curl -fsS -m 15 -X POST -d stage=done "$url" >/dev/null 2>&1 ||
      wget -q -T 15 -O /dev/null --post-data=stage=done "$url" 2>/dev/null; then
     rm -rf /etc/pxe-callback
