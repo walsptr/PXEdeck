@@ -1,7 +1,9 @@
 // Design audit read-only (design-reviewer). Jalankan dari dashboard/:
 //   node ../.agent/runs/m1/design/audit.mjs   (server: PXE_MOCK_SIMULATION=off next start -p 3200)
 // Tidak ada request simpan/install: dialog install ditutup dengan "Batal".
-import { writeFileSync } from "node:fs"
+// Iter2: output ke m{1,2,3}/design/iter2/. State baru memakai page.route (stub di browser,
+// server tidak dimutasi): empty state /hosts, error state Sheet, dialog password acak (dummy).
+import { mkdirSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
 import { createRequire } from "node:module"
@@ -12,7 +14,10 @@ const { chromium } = require("playwright")
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const RUNS = path.resolve(HERE, "../..")
 const BASE = process.env.BASE_URL ?? "http://localhost:3200"
-const shot = (m, name) => path.join(RUNS, `m${m}`, "design", `${name}.png`)
+const OUT = process.env.AUDIT_OUT ?? "iter2"
+const outDir = (m) => path.join(RUNS, `m${m}`, "design", OUT)
+for (const m of [1, 2, 3]) mkdirSync(outDir(m), { recursive: true })
+const shot = (m, name) => path.join(outDir(m), `${name}.png`)
 
 // ---------- pengukuran di browser ----------
 function measure() {
@@ -106,6 +111,7 @@ function measure() {
     ip: /^(\d{1,3}\.){3}\d{1,3}(\/\d{1,2})?$/,
     key: /^(ssh-(ed25519|rsa)|ecdsa-sha2-)|^SHA256:/,
     hostname: /^[a-z][a-z0-9-]*-\d{1,3}[a-z0-9-]*$/,
+    keytype: /^(ssh-(ed25519|rsa|dss)|ecdsa-sha2-nistp\d+)$/,
   }
   const tech = []
   const leafs = all.filter((el) => !(el instanceof SVGElement) && el.children.length === 0)
@@ -142,7 +148,7 @@ function measure() {
     return { ...desc(el), radius: [cs.borderTopLeftRadius, cs.borderTopRightRadius, cs.borderBottomRightRadius, cs.borderBottomLeftRadius].join(" "), height: Math.round(r.height * 10) / 10, bg: cs.backgroundColor, inSheet: !!el.closest("[data-slot=sheet-content],[data-slot=dialog-content],[data-slot=alert-dialog-content]"), inTable: !!el.closest("table") }
   })
   const shapes = {
-    buttons: shape("[data-slot=button],[data-slot=alert-dialog-action],[data-slot=alert-dialog-cancel]"),
+    buttons: shape("[data-slot=button],[data-slot=input-group-button],[data-slot=alert-dialog-action],[data-slot=alert-dialog-cancel]"),
     inputs: shape("[data-slot=input],[data-slot=select-trigger],[data-slot=textarea],[data-slot=input-group]"),
     cards: shape("[data-slot=card]"),
     dialogs: shape("[data-slot=dialog-content],[data-slot=alert-dialog-content],[data-slot=sheet-content],[data-slot=dropdown-menu-content],[data-slot=popover-content]"),
@@ -157,7 +163,21 @@ function measure() {
       .filter((el) => { const p = el.parentElement; return !p || p.getBoundingClientRect().right <= vw + 1 })
       .slice(0, 15).map((el) => ({ ...desc(el), right: Math.round(el.getBoundingClientRect().right) })),
   }
-  return { url: location.pathname + location.search, bodyBg: body.backgroundColor, bodyColor: body.color, htmlFont: getComputedStyle(document.documentElement).fontFamily, title, headerH, th, shadows, orange, pastel, pills, tech, shapes, overflow }
+  const sidebarIp = (() => {
+    const el = document.querySelector("[data-slot=sidebar] .type-data, [data-sidebar=sidebar] .type-data")
+    if (!el) return null
+    const cs = getComputedStyle(el)
+    return { text: el.innerText.trim(), font: cs.fontFamily, mono: cs.fontFamily.startsWith('"JetBrains Mono'), fontSize: cs.fontSize, color: cs.color }
+  })()
+  const checkboxes = Array.from(document.querySelectorAll("[data-slot=checkbox]")).filter(vis).map((el) => {
+    const cs = getComputedStyle(el)
+    return { ...desc(el), state: el.dataset.state ?? (el.hasAttribute("data-checked") ? "checked" : null), bg: cs.backgroundColor, border: cs.borderTopColor, radius: cs.borderTopLeftRadius, size: el.getBoundingClientRect().width }
+  })
+  const alerts = Array.from(document.querySelectorAll("[data-slot=alert]")).filter(vis).map((el) => {
+    const cs = getComputedStyle(el)
+    return { ...desc(el), bg: cs.backgroundColor, color: cs.color, border: cs.borderTopColor, radius: cs.borderTopLeftRadius }
+  })
+  return { sidebarIp, checkboxes, alerts, url: location.pathname + location.search, bodyBg: body.backgroundColor, bodyColor: body.color, htmlFont: getComputedStyle(document.documentElement).fontFamily, title, headerH, th, shadows, orange, pastel, pills, tech, shapes, overflow }
 }
 
 // ---------- skenario ----------
@@ -255,6 +275,51 @@ try {
   await page.keyboard.press("Escape")
   await page.context().close()
 
+  // ===== iter2: state baru =====
+  // M2 empty state (stub /api/hosts kosong) — CIDR dari /api/network harus mono
+  await page.context().close()
+  page = await newPage()
+  await page.route("**/api/hosts", (r) => r.request().method() === "GET"
+    ? r.fulfill({ json: { hosts: [], serverTime: new Date().toISOString() } }) : r.continue())
+  await page.goto(`${BASE}/hosts`)
+  await page.getByText("Belum ada host").waitFor()
+  await page.waitForTimeout(500)
+  await record(page, 2, "hosts-empty", { blur: true })
+  await page.unrouteAll({ behavior: "ignoreErrors" })
+
+  // M3 error state Sheet (stub GET config 500)
+  await page.route("**/api/hosts/*/config", (r) => r.request().method() === "GET"
+    ? r.fulfill({ status: 500, json: { error: "Simulasi gagal (design audit)" } }) : r.continue())
+  await gotoHosts(page)
+  await page.getByRole("button", { name: "Aksi untuk storage-01" }).click()
+  await page.getByRole("menuitem", { name: "Edit konfigurasi" }).click()
+  await page.getByRole("dialog", { name: "Konfigurasi storage-01" }).getByText("Gagal memuat konfigurasi host").waitFor({ timeout: 15000 })
+  await record(page, 3, "sheet-error", { blur: true })
+  await page.keyboard.press("Escape")
+  await page.unrouteAll({ behavior: "ignoreErrors" })
+
+  // M3 dialog password acak (stub POST /api/hosts/bulk dengan password dummy)
+  await page.route("**/api/hosts/bulk", async (r) => {
+    if (r.request().method() !== "POST") return r.continue()
+    const body = r.request().postDataJSON()
+    const hosts = (await (await page.request.get(`${BASE}/api/hosts`)).json()).hosts
+    const pw = body.hostIds.map((id, i) => { const h = hosts.find((x) => x.id === id); return { mac: h?.mac ?? "52:54:00:00:00:0" + i, hostname: h?.hostname ?? null, username: "ubuntu", password: `DUMMY-audit-${i}xxxxx` } })
+    return r.fulfill({ json: { updated: body.hostIds.length, generatedPasswords: pw } })
+  })
+  await gotoHosts(page)
+  await selectTwo(page)
+  await page.getByRole("toolbar", { name: "Aksi untuk host terpilih" }).getByRole("button", { name: "Set Credentials" }).click()
+  const cs = page.getByRole("dialog", { name: /^Konfigurasi 2 host/ }); await cs.waitFor()
+  await cs.getByRole("radio", { name: "Password acak per host" }).click()
+  const user = cs.locator("#cred-user"); if (await user.count() && !(await user.inputValue())) await user.fill("ubuntu")
+  await cs.getByRole("button", { name: "Simpan konfigurasi" }).click()
+  const pd = page.getByRole("dialog", { name: "Password acak dibuat" }); await pd.waitFor()
+  await record(page, 3, "passwords-dialog", { blur: true })
+  await pd.getByRole("checkbox", { name: "Saya sudah menyimpan password" }).click()
+  await record(page, 3, "passwords-dialog-confirmed", { blur: true })
+  await pd.getByRole("button", { name: "Selesai" }).click()
+  await page.unrouteAll({ behavior: "ignoreErrors" })
+
   // ===== 375px =====
   page = await newPage(375, 812)
   await gotoHosts(page); await record(page, 1, "mobile-hosts")
@@ -277,7 +342,7 @@ try {
   await browser.close()
   for (const m of [1, 2, 3]) {
     const states = results.states.filter((s) => s.milestone === m || (m === 2 && s.alsoM2))
-    writeFileSync(path.join(RUNS, `m${m}`, "design", "audit-results.json"), JSON.stringify({ ...results, states }, null, 2))
+    writeFileSync(path.join(outDir(m), "audit-results.json"), JSON.stringify({ ...results, states }, null, 2))
   }
-  writeFileSync(path.join(HERE, "audit-results-all.json"), JSON.stringify(results, null, 2))
+  writeFileSync(path.join(outDir(1), "audit-results-all.json"), JSON.stringify(results, null, 2))
 }
