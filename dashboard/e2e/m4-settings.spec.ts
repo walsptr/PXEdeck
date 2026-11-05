@@ -24,6 +24,10 @@ test("AC-4.6 GET /api/settings + halaman Settings read-only", async ({ page }) =
     tftpRoot: "/srv/pxe/tftp",
     tokenTtlMin: 360,
     unknownHostAction: "local",
+    // M5 (AC-5.1, test-migration #16): pengaturan job non-rahasia.
+    jobTimeouts: { bootingMin: 60, installingMin: 120, configuringMin: 60 },
+    maxInstallerBoots: 3,
+    insecureNoLeaseCheck: false,
   })
   // Tanpa path DB / seed / allowlist (non-rahasia saja).
   expect(JSON.stringify(s)).not.toMatch(/\.db|seed|allowed|PXE_DB/i)
