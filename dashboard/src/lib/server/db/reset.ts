@@ -6,6 +6,7 @@ import { getDb, tx } from "./index"
 import { applySeed } from "./seed"
 
 const TABLES = [
+  "job_events",
   "jobs",
   "host_ssh_keys",
   "host_configs",

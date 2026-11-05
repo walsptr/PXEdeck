@@ -7,6 +7,7 @@ export type Migration = { version: number; name: string; sql: string }
 
 const STATUSES = `'discovered','booting','installing','configuring','done','failed','offline'`
 const JOB_STATUSES = `'booting','installing','configuring','done','failed'`
+const FAILURE_REASONS = `'timeout-booting','timeout-installing','timeout-configuring','installer-boot-limit','installer-error','superseded'`
 
 export const MIGRATIONS: Migration[] = [
   {
@@ -112,6 +113,35 @@ CREATE TABLE jobs (
 CREATE UNIQUE INDEX jobs_active_uq ON jobs (host_id)
   WHERE status IN ('booting','installing','configuring');
 CREATE INDEX jobs_host ON jobs (host_id);
+`,
+  },
+  {
+    // M5 (DEC-014): siklus hidup job + event/log. Hanya menambah kolom/tabel (R9).
+    version: 2,
+    name: "job-events",
+    sql: `
+ALTER TABLE jobs ADD COLUMN failure_reason TEXT CHECK (failure_reason IS NULL OR failure_reason IN (${FAILURE_REASONS}));
+ALTER TABLE jobs ADD COLUMN installer_boots INTEGER NOT NULL DEFAULT 0;
+ALTER TABLE jobs ADD COLUMN event_seq INTEGER NOT NULL DEFAULT 0;
+
+CREATE TABLE job_events (
+  job_id TEXT NOT NULL REFERENCES jobs(id) ON DELETE CASCADE,
+  seq INTEGER NOT NULL,
+  at TEXT NOT NULL,
+  kind TEXT NOT NULL CHECK (kind IN ('stage','system','installer')),
+  level TEXT NOT NULL CHECK (level IN ('info','warn','error')),
+  source TEXT NOT NULL,
+  message TEXT NOT NULL,
+  repeat INTEGER NOT NULL DEFAULT 1,
+  PRIMARY KEY (job_id, seq)
+);
+CREATE INDEX jobs_created ON jobs (created_at, id);
+
+-- Backfill: jumlah penyajian installer job M4 = entri stages dari boot-script.
+UPDATE jobs SET installer_boots = (
+  SELECT count(*) FROM json_each(jobs.stages)
+  WHERE json_extract(json_each.value, '$.source') = 'boot-script'
+);
 `,
   },
 ]
