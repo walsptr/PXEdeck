@@ -12,7 +12,7 @@ export default defineConfig({
   outputDir: "./test-results",
   fullyParallel: false,
   workers: 1,
-  forbidOnly: !!process.env.CI,
+  forbidOnly: true,
   retries: 0,
   reporter: [["list"], ["html", { outputFolder: "playwright-report", open: "never" }]],
   use: {
@@ -28,7 +28,7 @@ export default defineConfig({
       command: `npm run build && npm run start -- -p ${PORT}`,
       url: `${BASE_URL}/hosts`,
       env: { PXE_MOCK_SIMULATION: "off" },
-      reuseExistingServer: !process.env.CI,
+      reuseExistingServer: false,
       timeout: 300_000,
       stdout: "pipe",
       stderr: "pipe",

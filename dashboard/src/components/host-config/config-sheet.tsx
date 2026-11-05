@@ -2,9 +2,10 @@
 
 import * as React from "react"
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Cancel01Icon } from "@hugeicons/core-free-icons"
+import { Alert02Icon, Cancel01Icon } from "@hugeicons/core-free-icons"
 import { toast } from "sonner"
 
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import {
   AlertDialog,
   AlertDialogAction,
@@ -49,12 +50,14 @@ import {
   useInstall,
   useSaveConfig,
 } from "@/hooks/use-host-config"
+import { useNetworkConfig } from "@/hooks/use-network-config"
 import type {
   CsvRowResult,
   PublicHostConfig,
   SaveResult,
   SectionKey,
 } from "@/lib/host-config"
+import type { MgmtNetwork } from "@/lib/net"
 import { osLabel } from "@/lib/os-images"
 import type { Host } from "@/lib/types"
 import { cn } from "@/lib/utils"
@@ -113,6 +116,9 @@ function SheetBody({
   }, [allHosts, target.hostIds])
   const single = hosts.length === 1 ? hosts[0] : null
   const config = useHostConfig(single?.id ?? null)
+  const network = useNetworkConfig()
+  const failed = (single && config.isError) || network.isError
+  const loading = (single && config.isPending) || network.isPending
 
   const title = single
     ? `Konfigurasi ${single.hostname ?? single.mac}`
@@ -132,7 +138,34 @@ function SheetBody({
       </SheetHeader>
       {hosts.length === 0 ? (
         <p className="p-6 text-body">Host tidak lagi tersedia.</p>
-      ) : single && config.isPending ? (
+      ) : failed ? (
+        // CR-3-13: jangan render form dari nilai default bila data gagal dimuat.
+        <div className="p-6">
+          <Alert variant="destructive">
+            <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} />
+            <AlertTitle>
+              {single && config.isError
+                ? "Gagal memuat konfigurasi host"
+                : "Gagal memuat parameter jaringan"}
+            </AlertTitle>
+            <AlertDescription className="flex flex-col items-start gap-3">
+              <span>
+                {(config.error ?? network.error)?.message}. Form tidak
+                ditampilkan agar nilai tersimpan tidak tertimpa default.
+              </span>
+              <Button
+                variant="outline"
+                onClick={() => {
+                  if (single && config.isError) config.refetch()
+                  if (network.isError) network.refetch()
+                }}
+              >
+                Coba lagi
+              </Button>
+            </AlertDescription>
+          </Alert>
+        </div>
+      ) : loading || !network.data ? (
         <div className="flex flex-col gap-3 p-6">
           <Skeleton className="h-9 w-full" />
           <Skeleton className="h-40 w-full" />
@@ -143,6 +176,7 @@ function SheetBody({
           hosts={hosts}
           allHosts={allHosts}
           config={config.data}
+          net={network.data}
           initialTab={target.tab}
           preselect={Boolean(target.preselect)}
           onClose={onClose}
@@ -157,6 +191,7 @@ function ConfigForm({
   hosts,
   allHosts,
   config,
+  net,
   initialTab,
   preselect,
   onClose,
@@ -165,12 +200,13 @@ function ConfigForm({
   hosts: Host[]
   allHosts: Host[]
   config?: PublicHostConfig
+  net: MgmtNetwork
   initialTab: SectionKey
   preselect: boolean
   onClose: () => void
   onSaved: (result: SaveResult) => void
 }) {
-  const [initial] = React.useState(() => initialForm(hosts, config))
+  const [initial] = React.useState(() => initialForm(hosts, config, net))
   const [form, setForm] = React.useState<FormState>(initial)
   const [dirty, setDirty] = React.useState<Set<SectionKey>>(
     () => new Set(preselect ? [initialTab] : []),
@@ -186,7 +222,7 @@ function ConfigForm({
   const install = useInstall()
   const busy = save.isPending || install.isPending
 
-  const ctx: Context = { hosts, allHosts, config }
+  const ctx: Context = { hosts, allHosts, config, net }
   const bulk = hosts.length > 1
 
   function update<K extends SectionKey>(
@@ -384,6 +420,8 @@ function ConfigForm({
               <Button
                 variant="ghost"
                 size="icon-xs"
+                // Area klik 32px tanpa membesarkan badge (DR-3-3).
+                className="relative after:absolute after:-inset-1 after:content-['']"
                 aria-label={`Batalkan perubahan ${SECTION_LABEL[k]}`}
                 onClick={() => resetSection(k)}
               >

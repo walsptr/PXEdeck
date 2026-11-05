@@ -39,9 +39,18 @@ export const features = tableFeatures({
 
 type F = typeof features
 
-/** Normalisasi untuk pencarian MAC: "52-54-00", "525400", "52:54:00" setara. */
+/** Normalisasi untuk pencarian MAC: "52-54-00", "525400", "52:54:00", "5254.0010" setara. */
 function compact(s: string) {
-  return s.toLowerCase().replace(/[^0-9a-z.]/g, "")
+  return s.toLowerCase().replace(/[^0-9a-z]/g, "")
+}
+
+/**
+ * Query bertitik hanya dianggap MAC bila berbentuk gaya Cisco (`5254.0010.1011`, grup 4 hex),
+ * agar pencarian IP seperti "10.10.10" tidak ikut mencocokkan digit MAC (CR-2-4).
+ */
+function macQuery(q: string) {
+  if (q.includes(".") && !/^([0-9a-f]{4}\.)*[0-9a-f]{0,4}$/.test(q)) return ""
+  return compact(q)
 }
 
 /** Pencarian global: MAC, hostname, IP saat ini, IP management. */
@@ -53,7 +62,7 @@ export const hostGlobalFilter: FilterFn<F, Host> = (row, _columnId, value) => {
   const h = row.original
   const hay = [h.hostname, h.currentIp, h.mgmtIp].filter(Boolean) as string[]
   if (hay.some((v) => v.toLowerCase().includes(q))) return true
-  const cq = compact(q)
+  const cq = macQuery(q)
   return cq.length > 0 && compact(h.mac).includes(cq)
 }
 
@@ -133,7 +142,8 @@ export const columns = helper.columns([
       </div>
     ),
   }),
-  helper.accessor((h) => h.hostname ?? "", {
+  // `undefined` (bukan "") agar `sortUndefined: "last"` berlaku untuk host tanpa hostname (CR-2-3).
+  helper.accessor((h) => h.hostname ?? undefined, {
     id: "hostname",
     header: ({ column }) => (
       <SortableHeader column={column}>Hostname</SortableHeader>

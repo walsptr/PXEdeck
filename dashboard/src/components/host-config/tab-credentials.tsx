@@ -122,7 +122,7 @@ export function PasswordInput({
         <Tooltip>
           <TooltipTrigger asChild>
             <InputGroupButton
-              size="icon-xs"
+              size="icon-sm"
               aria-label={show ? "Sembunyikan password" : "Tampilkan password"}
               onClick={() => setShow((s) => !s)}
             >
@@ -137,7 +137,7 @@ export function PasswordInput({
         <Tooltip>
           <TooltipTrigger asChild>
             <InputGroupButton
-              size="icon-xs"
+              size="icon-sm"
               aria-label="Buat password acak"
               onClick={() => {
                 onChange(generatePassword(16))

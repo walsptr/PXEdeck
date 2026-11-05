@@ -100,7 +100,7 @@ export function TabHostname({
               <TooltipTrigger asChild>
                 <Button
                   variant="outline"
-                  size="xs"
+                  size="sm"
                   className="type-data"
                   onClick={() => insertToken(t.token)}
                 >

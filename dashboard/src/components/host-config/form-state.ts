@@ -15,14 +15,19 @@ import {
   type HostnameRow,
 } from "@/lib/hostname"
 import {
+  intToIp,
+  ipToInt,
   MGMT_NETWORK,
   parseCidr,
   planIps,
+  subnetBounds,
   validateIpAssignments,
   validateStaticNetwork,
   type IpPlanRow,
   type IpUsage,
+  type MgmtNetwork,
 } from "@/lib/net"
+import { parseSshKey } from "@/lib/ssh-key"
 import type { Host } from "@/lib/types"
 
 export const SECTION_LABEL: Record<SectionKey, string> = {
@@ -107,12 +112,27 @@ export type FormState = {
   ssh: SshForm
 }
 
+/**
+ * Default range alokasi bulk dari subnet aktif: mulai `.11` (setelah gateway/PXE server, sama
+ * dengan pxe-nodes) sampai tepat sebelum range DHCP dinamis (atau sebelum broadcast).
+ */
+export function defaultIpRange(mgmt: MgmtNetwork): { start: string; end: string } {
+  const { network, broadcast } = subnetBounds(mgmt.cidr)
+  const start = Math.min(network + 11, broadcast - 1)
+  const lo = ipToInt(mgmt.dynamicRange[0])
+  const end = lo - 1 > start && lo <= broadcast ? lo - 1 : broadcast - 1
+  return { start: intToIp(start), end: intToIp(end) }
+}
+
 export function initialForm(
   hosts: Host[],
   config?: PublicHostConfig,
+  /** Subnet management aktif dari server (`GET /api/network`, CR-3-2). */
+  mgmt: MgmtNetwork = MGMT_NETWORK,
 ): FormState {
   const single = hosts.length === 1 ? hosts[0] : null
   const net = config?.network
+  const range = defaultIpRange(mgmt)
   return {
     os: {
       osImageId:
@@ -139,16 +159,16 @@ export function initialForm(
       mode: net?.mode ?? "static",
       ip: net?.mode === "static" ? net.ip : (single?.mgmtIp ?? ""),
       planKind: "range",
-      start: "10.10.10.11",
-      end: "10.10.10.99",
+      start: range.start,
+      end: range.end,
       step: 1,
       skipUsed: true,
       prefix:
         net?.mode === "static"
           ? net.prefix
-          : parseCidr(MGMT_NETWORK.cidr).prefix,
-      gateway: net?.mode === "static" ? net.gateway : MGMT_NETWORK.gateway,
-      dns: net?.mode === "static" ? net.dns : [...MGMT_NETWORK.dns],
+          : parseCidr(mgmt.cidr).prefix,
+      gateway: net?.mode === "static" ? net.gateway : mgmt.gateway,
+      dns: net?.mode === "static" ? net.dns : [...mgmt.dns],
       vlan: net?.mode === "static" && net.vlan ? String(net.vlan) : "",
       ifaceBy: net?.mode === "static" ? net.iface.by : "mac",
       ifaceName:
@@ -173,6 +193,13 @@ export type Context = {
   /** Semua host (untuk deteksi bentrok IP/hostname di luar batch). */
   allHosts: Host[]
   config?: PublicHostConfig
+  /** Subnet management aktif dari server; default lab hanya untuk test/fallback. */
+  net?: MgmtNetwork
+}
+
+/** Subnet yang dipakai validasi klien. */
+export function mgmtOf(ctx: Context): MgmtNetwork {
+  return ctx.net ?? MGMT_NETWORK
 }
 
 export function ipUsageFor(ctx: Context): IpUsage {
@@ -202,7 +229,9 @@ export function ipPlan(f: NetForm, ctx: Context): IpPlanRow[] {
   if (ctx.hosts.length === 1) {
     const h = ctx.hosts[0]
     const err =
-      validateIpAssignments([{ hostId: h.id, ip: f.ip }], usage).get(h.id) ??
+      validateIpAssignments([{ hostId: h.id, ip: f.ip }], usage, mgmtOf(ctx)).get(
+        h.id,
+      ) ??
       null
     return [{ hostId: h.id, ip: f.ip.trim() || null, error: err }]
   }
@@ -214,6 +243,7 @@ export function ipPlan(f: NetForm, ctx: Context): IpPlanRow[] {
       : { kind: "increment", start: f.start.trim(), step: f.step },
     usage,
     f.skipUsed,
+    mgmtOf(ctx),
   )
 }
 
@@ -293,7 +323,7 @@ export function sectionErrors(
           : `${bad.length} host belum dapat IP valid`,
       )
     // Aturan sama dengan server (DEC-006): prefix = subnet management, gateway di subnet.
-    for (const m of validateStaticNetwork(n)) push("network", m)
+    for (const m of validateStaticNetwork(n, mgmtOf(ctx))) push("network", m)
     if (n.dns.length === 0) push("network", "Minimal satu DNS")
     if (n.vlan && !(Number(n.vlan) >= 1 && Number(n.vlan) <= 4094))
       push("network", "VLAN ID 1–4094")
@@ -316,6 +346,11 @@ export function sectionErrors(
   if (s.user.trim()) push("ssh", validateUsername(s.user))
   s.newKeys.forEach((k, i) => {
     if (!k.publicKey.trim()) push("ssh", `Key baru #${i + 1} kosong`)
+    else {
+      // Key yang gagal di-parse (mis. private key) memblokir simpan agar tidak terkirim (CR-3-5).
+      const parsed = parseSshKey(k.publicKey)
+      if ("error" in parsed) push("ssh", `Key baru #${i + 1}: ${parsed.error}`)
+    }
     if (k.saveToLibrary && !k.name.trim())
       push("ssh", `Key baru #${i + 1}: isi nama`)
   })
@@ -390,7 +425,10 @@ export function buildPayload(
   if (dirty.has("ssh")) {
     p.ssh = {
       keyIds: form.ssh.keyIds,
-      newKeys: form.ssh.newKeys.map((k) => ({ ...k, name: k.name.trim() })),
+      // Pertahanan berlapis: private key tidak pernah ikut payload walau validasi terlewati.
+      newKeys: form.ssh.newKeys
+        .filter((k) => !k.publicKey.includes("PRIVATE KEY"))
+        .map((k) => ({ ...k, name: k.name.trim() })),
       user: form.ssh.user.trim(),
     }
   }

@@ -8,6 +8,8 @@ export default defineConfig({
     tsconfigPaths: true,
   },
   test: {
+    // CR-1-1: `.only` tidak boleh lolos diam-diam (lokal maupun CI).
+    allowOnly: false,
     // Dua lingkungan: DOM (jsdom) untuk komponen `.tsx` dan hook; node untuk sisanya
     // (lib, route handler, server).
     projects: [

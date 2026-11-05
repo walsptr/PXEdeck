@@ -25,12 +25,14 @@ import {
 } from "@/components/ui/input-group"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import {
+  defaultIpRange,
   ipPlan,
+  mgmtOf,
   type Context,
   type NetForm,
 } from "@/components/host-config/form-state"
 import { PlanTable } from "@/components/host-config/plan-table"
-import { isHostInSubnet, isIpv4, MGMT_NETWORK, parseCidr } from "@/lib/net"
+import { isHostInSubnet, isIpv4, parseCidr } from "@/lib/net"
 
 export function TabNetwork({
   value,
@@ -44,10 +46,12 @@ export function TabNetwork({
   const bulk = ctx.hosts.length > 1
   const [dnsDraft, setDnsDraft] = React.useState("")
   const plan = value.mode === "static" ? ipPlan(value, ctx) : []
-  const [lo, hi] = MGMT_NETWORK.dynamicRange
+  // Subnet aktif dari server (CR-3-2), bukan konstanta lab.
+  const mgmt = mgmtOf(ctx)
+  const [lo, hi] = mgmt.dynamicRange
   // Sama dengan aturan server (DEC-006); pesan lengkap tampil di ringkasan error tab.
-  const prefixInvalid = value.prefix !== parseCidr(MGMT_NETWORK.cidr).prefix
-  const gatewayInvalid = !isHostInSubnet(value.gateway, MGMT_NETWORK.cidr)
+  const prefixInvalid = value.prefix !== parseCidr(mgmt.cidr).prefix
+  const gatewayInvalid = !isHostInSubnet(value.gateway, mgmt.cidr)
 
   function addDns() {
     const v = dnsDraft.trim()
@@ -88,7 +92,7 @@ export function TabNetwork({
               <Input
                 id="net-ip"
                 className="type-data"
-                placeholder="10.10.10.11"
+                placeholder={defaultIpRange(mgmt).start}
                 value={value.ip}
                 aria-invalid={plan[0]?.error ? true : undefined}
                 onChange={(e) => onChange({ ip: e.target.value })}
@@ -98,7 +102,7 @@ export function TabNetwork({
               ) : (
                 <FieldDescription>
                   Di dalam{" "}
-                  <span className="type-data text-xs">{MGMT_NETWORK.cidr}</span>
+                  <span className="type-data text-xs">{mgmt.cidr}</span>
                   , di luar range dinamis{" "}
                   <span className="type-data text-xs">
                     {lo}–{hi}
@@ -236,6 +240,8 @@ export function TabNetwork({
                   <Button
                     variant="ghost"
                     size="icon-xs"
+                    // Area klik 32px tanpa membesarkan badge (DR-3-3).
+                    className="relative after:absolute after:-inset-1 after:content-['']"
                     aria-label={`Hapus DNS ${d}`}
                     onClick={() =>
                       onChange({ dns: value.dns.filter((x) => x !== d) })
@@ -263,6 +269,7 @@ export function TabNetwork({
               <InputGroupAddon align="inline-end">
                 <InputGroupButton
                   size="xs"
+                  className="h-8 px-2.5"
                   disabled={!isIpv4(dnsDraft.trim()) || value.dns.length >= 4}
                   onClick={addDns}
                 >

@@ -64,6 +64,7 @@ import {
 } from "@/lib/types"
 import type { SaveResult, SectionKey } from "@/lib/host-config"
 import { cn } from "@/lib/utils"
+import { useNetworkConfig } from "@/hooks/use-network-config"
 
 const EMPTY: Host[] = []
 const DEFAULT_SORT: SortingState = [{ id: "lastSeen", desc: true }]
@@ -432,6 +433,8 @@ function LoadingRows({ cols }: { cols: number }) {
 }
 
 function NoHosts({ onRefresh }: { onRefresh: () => void }) {
+  // Subnet aktif dari server (CR-2-6), bukan nilai lab hard-coded.
+  const cidr = useNetworkConfig().data?.cidr
   return (
     <Empty className="rounded-xl border border-dashed border-border bg-canvas-soft py-16">
       <EmptyHeader>
@@ -441,7 +444,8 @@ function NoHosts({ onRefresh }: { onRefresh: () => void }) {
         <EmptyTitle>Belum ada host</EmptyTitle>
         <EmptyDescription>
           Host akan muncul otomatis di sini saat melakukan PXE boot di jaringan
-          provisioning <span className="type-data">10.10.10.0/24</span>.
+          provisioning{" "}
+          {cidr ? <span className="type-data">{cidr}</span> : "management"}.
           Pastikan Network/PXE boot (IPv4) aktif di BIOS/UEFI node.
         </EmptyDescription>
       </EmptyHeader>

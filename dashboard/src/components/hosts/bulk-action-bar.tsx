@@ -58,6 +58,7 @@ export function BulkActionBar({
         <Button
           variant="ghost"
           size="icon-sm"
+          className="size-9"
           onClick={onClear}
           aria-label="Batalkan pilihan"
         >
@@ -72,6 +73,7 @@ export function BulkActionBar({
             key={b.action}
             variant="outline"
             size="sm"
+            className="h-9"
             onClick={() => onAction(b.action)}
           >
             <HugeiconsIcon
@@ -82,7 +84,7 @@ export function BulkActionBar({
             {b.label}
           </Button>
         ))}
-        <Button size="sm" onClick={() => onAction("install")}>
+        <Button size="sm" className="h-9" onClick={() => onAction("install")}>
           <HugeiconsIcon
             icon={DiscIcon}
             strokeWidth={2}
