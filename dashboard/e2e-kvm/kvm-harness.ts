@@ -49,6 +49,16 @@ export function randomPassword(): string {
   return `${randomBytes(18).toString("base64url")}-A1`
 }
 
+/**
+ * Password acak per SESI Playwright (M5): dibuat sekali oleh playwright.config.ts di proses runner
+ * (`PXE_KVM_RUN_PASSWORD`, hanya env proses, tidak pernah ditulis) dan diwarisi worker. Worker
+ * yang di-restart setelah test gagal tetap memakai password yang sama sehingga scan bukti
+ * (scanEvidence) mencakup password setiap node.
+ */
+export function sessionPassword(): string {
+  return process.env.PXE_KVM_RUN_PASSWORD || randomPassword()
+}
+
 export function publicKey(): string {
   return readFileSync(KVM.sshPub, "utf8").trim()
 }
@@ -96,6 +106,23 @@ export function consoleLog(node: KvmNode): string {
   return existsSync(f) ? readFileSync(f, "latin1") : ""
 }
 
+/**
+ * M5 (AC-5.39): `infra/node.sh poweroff <name>` (virsh destroy; definisi & disk tetap) atau
+ * `infra/node.sh start <name> <mac>` (virsh start + listener serial append). Hanya node milik run.
+ */
+export function powerNode(node: KvmNode, action: "poweroff" | "start") {
+  if (!new RegExp(`^pxe-test-${KVM.run}-node[1-8][0-9]$`).test(node.name)) throw new Error(`nama ${node.name}`)
+  const cmd = env("PXE_KVM_POWER_CMD")
+  if (!/\/infra\/node\.sh$/.test(cmd)) throw new Error(`power cmd ${cmd}`)
+  const args = action === "start" ? ["start", node.name, node.mac] : ["poweroff", node.name]
+  execFileSync(cmd, args, { stdio: "pipe", timeout: 120_000 })
+}
+
+/** Node berperan `destroy` (PXE_KVM_DESTROY_NODES dari kvm-run.sh). */
+export function isDestroyNode(node: KvmNode): boolean {
+  return (process.env.PXE_KVM_DESTROY_NODES ?? "").split(/\s+/).includes(node.name)
+}
+
 /** Jumlah kernel installer yang di-boot (Ubuntu casper/NFS) di serial log node. */
 export function installerBoots(node: KvmNode): number {
   return (consoleLog(node).match(/netboot=nfs|casper\/vmlinuz/g) ?? []).length
@@ -103,15 +130,31 @@ export function installerBoots(node: KvmNode): number {
 
 // ---- results.json ----
 export type AcResult = { ac: string; node?: string; status: "PASS" | "FAIL" | "NOT_RUN"; durationS?: number; note?: string; evidence?: string[] }
-const results: AcResult[] = []
+// Sesi Playwright (PXE_KVM_SESSION dari playwright.config.ts): entri results.json dari worker
+// sebelumnya di sesi yang sama dipertahankan (worker di-restart setelah test gagal); berkas dari
+// run lain diganti.
+const SESSION = process.env.PXE_KVM_SESSION ?? ""
+function loadResults(): AcResult[] {
+  const f = path.join(KVM.runsDir, "results.json")
+  if (!SESSION || !existsSync(f)) return []
+  try {
+    const j = JSON.parse(readFileSync(f, "utf8")) as { session?: string; results?: AcResult[] }
+    return j.session === SESSION && Array.isArray(j.results) ? j.results : []
+  } catch {
+    return []
+  }
+}
+const results: AcResult[] = loadResults()
+let extraFields: Record<string, unknown> = {}
 export function record(r: AcResult) {
   results.push(r)
   writeResults()
 }
 export function writeResults(extra: Record<string, unknown> = {}) {
+  extraFields = { ...extraFields, ...extra }
   writeFileSync(
     path.join(KVM.runsDir, "results.json"),
-    JSON.stringify({ run: KVM.run, generatedAt: new Date().toISOString(), results, ...extra }, null, 2) + "\n",
+    JSON.stringify({ run: KVM.run, session: SESSION, generatedAt: new Date().toISOString(), results, ...extraFields }, null, 2) + "\n",
   )
 }
 
