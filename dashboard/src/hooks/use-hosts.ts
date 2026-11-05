@@ -3,19 +3,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { syncServerClock } from "@/hooks/use-now"
+import { apiJson } from "@/lib/api-client"
 import type { Host, HostsResponse } from "@/lib/types"
 
 export const HOSTS_KEY = ["hosts"] as const
 export const HOSTS_POLL_MS = 5_000
 
-async function request<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init)
-  if (!res.ok) {
-    const body = await res.json().catch(() => null)
-    throw new Error(body?.error ?? `${res.status} ${res.statusText}`)
-  }
-  return (res.status === 204 ? undefined : await res.json()) as T
-}
+/** M6: lewat `apiJson` (401 → sesi habis, 429 → jeda); error = `ApiError` (pesan server). */
+const request = apiJson
 
 /** Daftar host, diperbarui otomatis tiap 5 detik selama `enabled`. */
 export function useHosts({ enabled = true }: { enabled?: boolean } = {}) {

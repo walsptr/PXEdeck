@@ -1,0 +1,20 @@
+[DR-5-10 kartu] src/components/ssh-keys/ssh-keys-view.tsx :: s/max-lg:flex max-lg:flex-wrap/flex-x/ => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 1 failed | 29 passed (30) ; pulih sha256 identik=ya
+[DR-5-11/14 alasan] src/components/os-images/os-images-view.tsx :: s|<ReasonText reason={img.reason ?? "Media tidak tersedia"} data-testid="img-reason" />|<span className="min-w-0 wrap-anywhere" data-testid="img-reason">{img.reason ?? "Media tidak tersedia"}</span>| => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 1 failed | 29 passed (30) ; pulih sha256 identik=ya
+[I-5-9 top bar] src/components/top-bar.tsx :: s/md:w-9 md:justify-center lg:w-48 lg:justify-start lg:px-3 xl:w-64/w-64 px-3 md:flex/ => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 1 failed | 29 passed (30) ; pulih sha256 identik=ya
+[CR-5-4 merge head] src/lib/jobs.ts :: s/const retained = first.jobs.filter(keep)/const retained: JobSummary[] = []/ => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 3 failed | 15 passed (18) ; pulih sha256 identik=ya
+[CR-5-5 404 final] src/hooks/use-job-log.ts :: s/if (res.status >= 400 \&\& res.status < 500) return this.halt("not-found")/if (false) return this.halt("not-found")/ => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 3 failed | 39 passed (42) ; pulih sha256 identik=ya
+[401 tahan request] src/lib/api-client.ts :: s/  if (halted) throw new ApiError(SESSION_EXPIRED_MESSAGE, 401)/  \/\/ dihapus/ => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 1 failed | 6 passed (7) ; pulih sha256 identik=ya
+[CR-5-7 lastAt] src/components/jobs/log-viewer.tsx :: s/{e.lastAt \&\& e.lastAt !== e.at \&\& (/{false \&\& (/ => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 1 failed | 29 passed (30) ; pulih sha256 identik=ya
+[redirect sekali] src/components/providers.tsx :: s/if (pathname === LOGIN_PATH) return/if (pathname === LOGIN_PATH) return\n          navigate(loginHref(pathname))/ => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 1 failed | 29 passed (30) ; pulih sha256 identik=ya
+[fokus Alert] src/components/auth/login-form.tsx :: s/if (error) alertRef.current?.focus()/void 0/ => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 1 failed | 29 passed (30) ; pulih sha256 identik=ya
+[offline kontras] src/components/status-pill.tsx :: s/offline: "bg-secondary text-body"/offline: "bg-secondary text-muted-foreground"/ => ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ Tests 2 failed | 43 passed (45) ; pulih sha256 identik=ya

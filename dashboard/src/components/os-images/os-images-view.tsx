@@ -42,6 +42,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { PathText, ReasonText } from "@/components/os-images/path-text"
 import { RegisterImageDialog } from "@/components/os-images/register-image-dialog"
 import {
   useDeleteOsImage,
@@ -62,30 +63,6 @@ const COLS = 7
  */
 const ROW_MOBILE =
   "max-xl:flex max-xl:flex-wrap max-xl:items-start max-xl:gap-x-3 max-xl:gap-y-1 max-xl:px-4 max-xl:py-3"
-
-/**
- * Path/URL mono yang dipenggal di "/" (DR-5-1): setiap segmen (beserta "/" penutupnya) adalah
- * `inline-block` sehingga baris hanya pecah di batas segmen — bukan per karakter atau di "-"
- * (`ubuntu-` / `24.04`). Segmen yang sendirian lebih lebar dari kolom tetap dipecah
- * (`wrap-anywhere`) agar tidak melebar keluar. DR-5-12/DR-5-13: `wrap-anywhere` (bukan
- * `wrap-break-word`) karena hanya `anywhere` yang ikut mengecilkan lebar min-content — di tabel
- * `table-layout: auto` dan item flex kartu, `break-word` tetap memakai lebar token utuh sebagai
- * batas bawah sehingga tabel/kartu melebar. Pemisahan tetap mengutamakan "/" (segmen inline-block).
- * textContent tidak berubah.
- */
-function PathText({ value, className, ...props }: React.ComponentProps<"span"> & { value: string }) {
-  const parts = value.split("/")
-  return (
-    <span className={cn("type-data min-w-0 text-xs wrap-anywhere", className)} {...props}>
-      {parts.map((p, i) => (
-        <span key={i} className="inline-block max-w-full">
-          {p}
-          {i < parts.length - 1 && "/"}
-        </span>
-      ))}
-    </span>
-  )
-}
 
 function SourceCell({ img }: { img: OsImageInfo }) {
   const s = img.source
@@ -126,14 +103,18 @@ function AvailabilityCell({ img }: { img: OsImageInfo }) {
     )
   return (
     <span
-      className="type-caption flex items-start xl:max-w-40 gap-1.5 whitespace-normal text-muted-foreground"
+      className="type-caption flex items-start gap-1.5 whitespace-normal text-muted-foreground xl:w-[24ch]"
       data-testid="img-available"
       data-available="false"
     >
       <HugeiconsIcon icon={InformationCircleIcon} strokeWidth={2} className="mt-0.5 size-4 shrink-0" />
-      {/* Alasan bisa memuat id/path panjang tanpa titik pecah → dipecah di dalam kata agar tidak meluber
-          (`wrap-anywhere`: juga mengecilkan min-content, DR-5-12). */}
-      <span className="min-w-0 wrap-anywhere">{img.reason ?? "Media tidak tersedia"}</span>
+      {/*
+        DR-5-11/DR-5-14 (M6): path & id di alasan dirender mono (`ReasonText`/`PathText`), dipecah
+        hanya setelah "/" atau bila satu token lebih lebar dari baris. Span alasan sendiri TIDAK
+        `wrap-anywhere` (kata/nama file tidak lagi terbelah, mis. `vml|inuz`); lebar kolom di desktop
+        tetap `24ch` agar tidak menyempit oleh baris lain ber-ID/nama panjang.
+      */}
+      <ReasonText reason={img.reason ?? "Media tidak tersedia"} data-testid="img-reason" />
     </span>
   )
 }
@@ -229,6 +210,10 @@ export function OsImagesView() {
               <TableRow>
                 <TableHead className="pl-4">ID</TableHead>
                 <TableHead>Nama</TableHead>
+                {/*
+                  I-5-13 (opsional) TIDAK diterapkan: header "Arsitektur · Metode" (nowrap) melebarkan
+                  kolom ±43 px sehingga tabel meluber di 1280 (audit M6). Tetap "Platform".
+                */}
                 <TableHead>Platform</TableHead>
                 <TableHead>Sumber</TableHead>
                 <TableHead>Ketersediaan</TableHead>

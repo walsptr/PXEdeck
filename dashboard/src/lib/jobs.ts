@@ -4,6 +4,7 @@ import type {
   FailureReason,
   JobLogEvent,
   JobStatus,
+  JobsResponse,
   JobSummary,
 } from "@/lib/types"
 
@@ -191,4 +192,44 @@ export function jobsHref(p: {
   if (p.job) q.set("job", p.job)
   const s = q.toString()
   return s ? `/jobs?${s}` : "/jobs"
+}
+
+/** Halaman daftar job yang di-cache (bentuk `InfiniteData<JobsResponse>` TanStack). */
+export type JobPages = {
+  pages: JobsResponse[]
+  pageParams: (string | null)[]
+}
+
+/** true bila job `a` lebih lama dari `b` dalam urutan server (`created_at DESC, id DESC`). */
+function olderThan(a: JobSummary, b: JobSummary): boolean {
+  return a.createdAt < b.createdAt || (a.createdAt === b.createdAt && a.id < b.id)
+}
+
+/**
+ * CR-5-4 (klien): polling hanya me-refetch HALAMAN PERTAMA lalu menggabungkannya ke halaman yang
+ * sudah dimuat, tanpa me-refetch halaman lama dengan cursor lama.
+ *  - Job di halaman lama yang lebih baru dari job terakhir `head` tetapi tidak ada di `head`
+ *    (terhapus retensi / keluar filter) dibuang; job yang ada di `head` memakai versi `head`.
+ *  - Job yang lebih lama dari job terakhir `head` dipertahankan (termasuk yang "terdorong" keluar
+ *    halaman pertama oleh job baru) → tidak ada item yang hilang di antara halaman 1 dan 2.
+ *  - `head.nextBefore === null` → `head` sudah memuat semua job; halaman lain dibuang.
+ * Cursor halaman berikutnya tetap milik halaman terakhir yang dimuat (cursor opak stabil).
+ */
+export function mergeJobsHead(old: JobPages | undefined, head: JobsResponse): JobPages {
+  if (!old || old.pages.length === 0 || head.nextBefore === null || head.jobs.length === 0)
+    return { pages: [head], pageParams: [null] }
+  const inHead = new Set(head.jobs.map((j) => j.id))
+  const boundary = head.jobs[head.jobs.length - 1]
+  const keep = (j: JobSummary) => !inHead.has(j.id) && olderThan(j, boundary)
+  const [first, ...rest] = old.pages
+  const retained = first.jobs.filter(keep)
+  const page0: JobsResponse = {
+    ...head,
+    jobs: [...head.jobs, ...retained],
+    nextBefore: rest.length || retained.length ? first.nextBefore : head.nextBefore,
+  }
+  return {
+    pages: [page0, ...rest.map((p) => ({ ...p, jobs: p.jobs.filter(keep) }))],
+    pageParams: [null, ...old.pageParams.slice(1)],
+  }
 }

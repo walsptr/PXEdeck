@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { ReasonText } from "@/components/os-images/path-text"
 import type { OsForm } from "@/components/host-config/form-state"
 import { LOCALES, TIMEZONES } from "@/lib/host-config"
 import {
@@ -116,7 +117,7 @@ export function TabOs({
         )}
         {blocked && image?.method !== "unattend" && (
           <FieldDescription className="text-destructive">
-            {blocked}. Install akan ditolak server.
+            <ReasonText reason={blocked} />. Install akan ditolak server.
           </FieldDescription>
         )}
       </FieldSet>
@@ -314,7 +315,7 @@ function OsImageOption({
         data-available={img.available}
       >
         <FieldContent>
-          <FieldTitle>
+          <FieldTitle id={`${id}-title`}>
             {img.name} {img.version}
           </FieldTitle>
           <FieldDescription>
@@ -336,7 +337,8 @@ function OsImageOption({
                 aria-hidden
                 className="mt-0.5 size-3.5 shrink-0"
               />
-              <span>{note}</span>
+              {/* DR-5-11 (M6): path/id di alasan "tidak tersedia" mono, dipecah hanya di "/". */}
+              <ReasonText reason={note} />
             </FieldDescription>
           )}
           {windows && (
@@ -349,6 +351,9 @@ function OsImageOption({
           value={img.id}
           id={id}
           disabled={disabled}
+          // a11y (M6, O10): nama aksesibel radio = judul kartu (label pembungkus tidak terbaca oleh
+          // semua pembaca layar untuk role=radio berbasis <button>).
+          aria-labelledby={`${id}-title`}
           aria-describedby={note ? `${id}-note` : undefined}
         />
       </Field>

@@ -2,7 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
-import { ApiError } from "@/hooks/use-host-config"
+import { ApiError, apiJson } from "@/lib/api-client"
 
 import { canonicalOsImageId, osLabel, type OsImage } from "@/lib/os-images"
 import type { OsImageInfo } from "@/lib/types"
@@ -27,14 +27,7 @@ export const OS_IMAGES_KEY = ["os-images"] as const
 export function useOsImages() {
   return useQuery({
     queryKey: OS_IMAGES_KEY,
-    queryFn: async (): Promise<OsImageInfo[]> => {
-      const res = await fetch("/api/os-images", { cache: "no-store" })
-      if (!res.ok) {
-        const body = await res.json().catch(() => null)
-        throw new Error(body?.error ?? `${res.status} ${res.statusText}`)
-      }
-      return (await res.json()) as OsImageInfo[]
-    },
+    queryFn: () => apiJson<OsImageInfo[]>("/api/os-images", { cache: "no-store" }),
     staleTime: 30_000,
   })
 }
@@ -62,19 +55,7 @@ export function useOsLabel(): (id: string | null | undefined) => string | null {
   }
 }
 
-async function mutate<T>(url: string, init: RequestInit): Promise<T> {
-  const res = await fetch(url, init)
-  const body =
-    res.status === 204 ? undefined : await res.json().catch(() => undefined)
-  if (!res.ok)
-    throw new ApiError(
-      body?.error ?? `${res.status} ${res.statusText}`,
-      res.status,
-      body?.errors ?? [],
-      body,
-    )
-  return body as T
-}
+const mutate = apiJson
 
 /** Daftarkan OS image (201) — 400 per field (`errors[]`), 409 id sudah ada. */
 export function useCreateOsImage() {

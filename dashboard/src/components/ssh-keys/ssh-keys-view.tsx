@@ -51,8 +51,19 @@ import {
   type SshKeyInfo,
 } from "@/hooks/use-ssh-keys"
 import { formatDate, formatDateTime } from "@/lib/format"
+import { cn } from "@/lib/utils"
 
 const COLS = 7
+
+/**
+ * DR-5-10 (M6): di bawah `lg` baris tabel → kartu (satu DOM, tanpa duplikasi testid — pola
+ * OS Images DR-5-1). Urutan lewat `order`: (1) nama + tipe · hapus, (2) dibuat · dipakai,
+ * (3) fingerprint mono utuh selebar kartu. Batas `lg` (bukan `md`): di 768–1023 px sidebar
+ * terbuka menyisakan ±450 px sedangkan tabel butuh ±584 px (audit M6) → kolom Hapus terdorong
+ * keluar. Tabel `≥ lg` tidak berubah.
+ */
+const ROW_MOBILE =
+  "max-lg:flex max-lg:flex-wrap max-lg:items-start max-lg:gap-x-4 max-lg:gap-y-1.5 max-lg:px-4 max-lg:py-3"
 
 /** Nama key yang bisa diubah langsung di tabel (PATCH `{name}`). */
 function NameCell({
@@ -73,10 +84,13 @@ function NameCell({
   if (!editing) {
     return (
       <div className="flex min-w-0 flex-col gap-0.5">
-        <div className="flex min-w-0 items-center gap-1">
-          {/* DR-5-2: nama panjang dipotong (nama lengkap di `title`) agar kolom aksi tetap terlihat. */}
+        <div className="flex min-w-0 items-center gap-1 max-lg:items-start">
+          {/*
+            DR-5-2: nama panjang dipotong (nama lengkap di `title`) agar kolom aksi tetap terlihat.
+            DR-5-10: di kartu (< lg) nama dibungkus utuh (tanpa titik pecah → `wrap-anywhere`).
+          */}
           <span
-            className="max-w-48 truncate text-foreground"
+            className="max-w-48 truncate text-foreground max-lg:max-w-full max-lg:min-w-0 max-lg:overflow-visible max-lg:whitespace-normal max-lg:wrap-anywhere"
             title={k.comment ? `${k.name} (${k.comment})` : k.name}
             data-testid="key-name"
           >
@@ -117,7 +131,11 @@ function NameCell({
   }
 
   return (
-    <form onSubmit={save} className="flex min-w-64 flex-col gap-1" data-testid="key-rename-form">
+    <form
+      onSubmit={save}
+      className="flex min-w-64 flex-col gap-1 max-lg:w-full max-lg:min-w-0"
+      data-testid="key-rename-form"
+    >
       <Field data-invalid={Boolean(error) || undefined} className="gap-1">
         <div className="flex items-center gap-1.5">
           <Input
@@ -231,8 +249,8 @@ export function SshKeysView() {
         </Empty>
       ) : (
         <div className="overflow-hidden rounded-xl border border-border bg-card">
-          <Table data-testid="ssh-keys-table">
-            <TableHeader>
+          <Table data-testid="ssh-keys-table" className="max-lg:block">
+            <TableHeader className="max-lg:hidden">
               <TableRow>
                 <TableHead className="pl-4">Nama</TableHead>
                 <TableHead className="max-xl:hidden">Tipe</TableHead>
@@ -245,14 +263,17 @@ export function SshKeysView() {
                 </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="max-lg:block">
               {keys.isPending
                 ? Array.from({ length: 3 }, (_, i) => (
-                    <TableRow key={i} className="hover:bg-transparent">
+                    <TableRow key={i} className={cn(ROW_MOBILE, "hover:bg-transparent")}>
                       {Array.from({ length: COLS }, (_, j) => (
                         <TableCell
                           key={j}
-                          className={j === 1 ? "max-xl:hidden" : j === 3 ? "max-2xl:hidden" : undefined}
+                          className={cn(
+                            "max-lg:p-0",
+                            j === 1 ? "max-xl:hidden" : j === 3 ? "max-2xl:hidden" : undefined,
+                          )}
                         >
                           <Skeleton className="h-4 w-20" />
                         </TableCell>
@@ -260,8 +281,13 @@ export function SshKeysView() {
                     </TableRow>
                   ))
                 : list.map((k) => (
-                    <TableRow key={k.id} data-testid="ssh-key-row" data-key-id={k.id}>
-                      <TableCell className="pl-4 align-top">
+                    <TableRow
+                      key={k.id}
+                      data-testid="ssh-key-row"
+                      data-key-id={k.id}
+                      className={ROW_MOBILE}
+                    >
+                      <TableCell className="pl-4 align-top max-lg:order-1 max-lg:min-w-0 max-lg:flex-1 max-lg:basis-[calc(100%-4rem)] max-lg:p-0 max-lg:whitespace-normal">
                         <NameCell
                           k={k}
                           editing={editingId === k.id}
@@ -272,10 +298,10 @@ export function SshKeysView() {
                       <TableCell className="max-xl:hidden">
                         <span className="type-data text-xs">{k.type}</span>
                       </TableCell>
-                      <TableCell>
-                        {/* DR-5-2: fingerprint boleh wrap (hash base64 tanpa spasi). */}
+                      <TableCell className="max-lg:order-4 max-lg:min-w-0 max-lg:basis-full max-lg:p-0">
+                        {/* DR-5-2: fingerprint boleh wrap (hash base64 tanpa spasi). DR-5-10: utuh selebar kartu. */}
                         <span
-                          className="type-data block max-w-48 text-xs break-all whitespace-normal"
+                          className="type-data block max-w-48 text-xs break-all whitespace-normal max-lg:max-w-full"
                           data-testid="key-fingerprint"
                         >
                           {k.fingerprint}
@@ -293,7 +319,8 @@ export function SshKeysView() {
                           <span className="text-muted-soft">—</span>
                         )}
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="max-lg:order-3 max-lg:p-0">
+                        <span className="type-caption text-muted-foreground lg:hidden">Dibuat </span>
                         <time
                           dateTime={k.createdAt}
                           title={formatDateTime(k.createdAt)}
@@ -302,10 +329,14 @@ export function SshKeysView() {
                           {formatDate(k.createdAt)}
                         </time>
                       </TableCell>
-                      <TableCell className="text-body" data-testid="key-used-by">
+                      <TableCell
+                        className="text-body max-lg:order-3 max-lg:p-0"
+                        data-testid="key-used-by"
+                      >
+                        <span className="type-caption text-muted-foreground lg:hidden">Dipakai </span>
                         <span className="type-data text-xs">{k.usedBy}</span> host
                       </TableCell>
-                      <TableCell className="pr-4 text-right">
+                      <TableCell className="pr-4 text-right max-lg:order-2 max-lg:-my-1 max-lg:p-0">
                         <Button
                           variant="ghost"
                           size="icon-sm"

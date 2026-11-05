@@ -127,3 +127,21 @@ yang sama.
 
 Test baru: `installers/m6-generator.test.ts` (AC-6.28, AC-6.29; termasuk regresi `installHosts` Windows →
 gagal "hanya generator", tanpa job; `newOsImagePayload` unattend `bootable:true` ditolak).
+
+## T8/T9 — UI login, sesi habis, carry-over UI (frontend-dev)
+
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `components/status-pill.test.tsx` › "offline memakai kelas netral (tanpa pastel stage)" | `toMatch(/\btext-muted-foreground\b/)` | `toMatch(/\btext-body\b/)` + `not.toMatch(/\btext-muted-foreground\b/)` (asersi `bg-secondary` dan `not stage-` tetap) | DEC-017 §9: label status tidak boleh `muted` (muted di atas surface-strong 3,26:1, ditemukan axe). Asersi diganti setara/lebih ketat, jumlah asersi naik 3 → 4. |
+
+Tidak ada test lama lain yang diubah. Perubahan perilaku yang berdampak pada E2E lama (untuk adaptasi T12):
+- Footer sidebar: caption statis "Ubuntu 24.04.5 · dnsmasq" diganti username admin (`data-testid="sidebar-username"`, mono) + tombol "Keluar" (`data-testid="logout"`). Tidak ada E2E lama yang mengasersi caption itu.
+- Top bar: tombol pencarian global kini `data-testid="global-search"`, nama aksesibel dari teks (tanpa `aria-label`), lebar `md:w-9` (ikon) / `lg:w-48` / `xl:w-64`, Kbd hanya di `xl`. Regex lama `/Cari MAC, hostname, IP/` (m1-layout) tetap cocok.
+- SSH Keys < 1024 px dirender sebagai kartu (`table` `display:block`); ≥ 1024 tetap tabel (DR-5-2 1280/1440 tidak berubah).
+- OS Images: alasan "tidak tersedia" dirender `ReasonText` (`data-testid="img-reason"`, path `[data-slot=path-text]` mono, id `[data-slot=data-token]`); kolom `xl:w-[24ch]`. `textContent` alasan identik dengan `reason` server.
+- Log job: status baru `data-state="not-found"` ("Job tidak ditemukan") dan `"session"`; event gabungan menampilkan `· terakhir HH:MM:SS` (`data-testid="log-last-at"`) bila `lastAt ≠ at`.
+- Daftar Jobs: polling 5 dtk hanya meminta halaman pertama (`/api/jobs?…limit=50` tanpa `before`), halaman lama tidak di-refetch.
+- Toggle password login: aria-label "Tampilkan kata sandi"/"Sembunyikan kata sandi" (bukan "password") agar `getByLabel("Password")` tidak ambigu.
+
+Test baru: `src/lib/m6-api-client.test.ts`, `src/lib/m6-jobs-head.test.ts`, `src/hooks/m6-hooks.test.ts`,
+`src/components/m6-components.test.tsx`. Audit mandiri lebar layar: `.agent/runs/m6/dev-audit/`.

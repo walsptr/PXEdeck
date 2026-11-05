@@ -3,8 +3,8 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
 import { HOSTS_KEY } from "@/hooks/use-hosts"
+import { ApiError, apiJson } from "@/lib/api-client"
 import type {
-  ApiFieldError,
   ConfigPayload,
   CsvRowResult,
   InstallResult,
@@ -13,33 +13,14 @@ import type {
   SshKey,
 } from "@/lib/host-config"
 
-export class ApiError extends Error {
-  constructor(
-    message: string,
-    public status: number,
-    public errors: ApiFieldError[] = [],
-    public body?: unknown,
-  ) {
-    super(message)
-  }
-}
+/** M6: `ApiError` pindah ke `lib/api-client.ts` (wrapper 401/429 bersama); diekspor ulang di sini. */
+export { ApiError }
 
-async function api<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, {
+function api<T>(url: string, init?: RequestInit): Promise<T> {
+  return apiJson<T>(url, {
     ...init,
     headers: { "content-type": "application/json", ...init?.headers },
   })
-  const body =
-    res.status === 204 ? undefined : await res.json().catch(() => undefined)
-  if (!res.ok) {
-    throw new ApiError(
-      body?.error ?? `${res.status} ${res.statusText}`,
-      res.status,
-      body?.errors ?? [],
-      body,
-    )
-  }
-  return body as T
 }
 
 export const configKey = (id: string) => ["host-config", id] as const

@@ -2,6 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query"
 
+import { apiJson } from "@/lib/api-client"
+
 import {
   fromNetworkResponse,
   type MgmtNetwork,
@@ -28,14 +30,10 @@ export function toActiveNetwork(r: NetworkResponse): ActiveNetwork {
 export function useNetworkConfig() {
   return useQuery({
     queryKey: NETWORK_KEY,
-    queryFn: async (): Promise<ActiveNetwork> => {
-      const res = await fetch("/api/network", { cache: "no-store" })
-      if (!res.ok) {
-        const body = await res.json().catch(() => null)
-        throw new Error(body?.error ?? `${res.status} ${res.statusText}`)
-      }
-      return toActiveNetwork((await res.json()) as NetworkResponse)
-    },
+    queryFn: async (): Promise<ActiveNetwork> =>
+      toActiveNetwork(
+        await apiJson<NetworkResponse>("/api/network", { cache: "no-store" }),
+      ),
     // Berubah hanya saat server di-restart dengan env lain.
     staleTime: 5 * 60_000,
   })

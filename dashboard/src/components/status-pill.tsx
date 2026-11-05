@@ -23,7 +23,9 @@ const STATUS_CLASS: Record<ProvisionStatus, string> = {
   configuring: "bg-stage-configuring text-foreground",
   done: "bg-stage-done text-white",
   failed: "bg-destructive text-white",
-  offline: "bg-secondary text-muted-foreground",
+  // M6 (DEC-017 §9): label status tidak boleh `muted` — muted di atas surface-strong hanya 3,26:1;
+  // `body` ≈ 5,6:1. Tetap abu (SPEC "Offline abu").
+  offline: "bg-secondary text-body",
 }
 
 export function StatusPill({

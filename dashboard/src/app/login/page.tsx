@@ -1,18 +1,23 @@
 import type { Metadata } from "next"
 import { Suspense } from "react"
 
-import { LoginForm } from "./login-form"
+import { LoginCard, LoginFormFallback } from "@/components/auth/login-card"
+
+import { LoginGate } from "./login-gate"
 
 export const metadata: Metadata = { title: "Masuk" }
 
-// PLACEHOLDER backend-dev (M6-T2): form minimal agar redirect/login berfungsi. Halaman login sesuai
-// design system (M6-T8, `components/auth/**`) menggantikan file ini.
-export default function LoginPage() {
+/**
+ * Halaman login (M6-T8, plan §2.8): di luar route group `(dashboard)` → tanpa sidebar/top bar.
+ * Shell (nama produk + card) statis; bagian yang membaca request (cookie sesi, env admin, `next`)
+ * di dalam Suspense (Cache Components).
+ */
+export default function LoginPage({ searchParams }: PageProps<"/login">) {
   return (
-    <main className="flex min-h-svh items-center justify-center p-6">
-      <Suspense>
-        <LoginForm />
+    <LoginCard>
+      <Suspense fallback={<LoginFormFallback />}>
+        <LoginGate searchParams={searchParams} />
       </Suspense>
-    </main>
+    </LoginCard>
   )
 }

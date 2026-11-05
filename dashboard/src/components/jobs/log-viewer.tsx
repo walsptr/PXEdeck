@@ -8,12 +8,15 @@ import { useJobLog, type LogConnection } from "@/hooks/use-job-log"
 import { formatClock } from "@/lib/jobs"
 import { cn } from "@/lib/utils"
 
-const CONNECTION: Record<LogConnection, { label: string; dot: string }> = {
+const CONNECTION: Record<LogConnection, { label: string; dot: string; important?: boolean }> = {
   connecting: { label: "Menyambung…", dot: "bg-muted-soft" },
   live: { label: "Live", dot: "bg-success" },
   reconnecting: { label: "Terputus — mencoba ulang", dot: "bg-muted-soft" },
   polling: { label: "Live (polling tiap 5 dtk)", dot: "bg-success" },
   ended: { label: "Selesai", dot: "bg-muted-soft" },
+  // CR-5-5 / M6: status final penting → bukan `muted` (DEC-017 §9).
+  "not-found": { label: "Job tidak ditemukan", dot: "bg-destructive", important: true },
+  session: { label: "Sesi berakhir — masuk lagi", dot: "bg-destructive", important: true },
 }
 
 /**
@@ -46,7 +49,10 @@ export function LogViewer({ jobId }: { jobId: string }) {
             data-testid="log-connection"
             data-state={connection}
             role="status"
-            className="type-caption flex items-center gap-1.5 text-muted-foreground"
+            className={cn(
+              "type-caption flex items-center gap-1.5",
+              conn.important ? "text-foreground" : "text-muted-foreground",
+            )}
           >
             <span aria-hidden className={cn("size-1.5 rounded-full", conn.dot)} />
             {conn.label}
@@ -74,7 +80,13 @@ export function LogViewer({ jobId }: { jobId: string }) {
       >
         {events.length === 0 ? (
           <p className="px-4 py-2 text-muted-foreground">
-            {connection === "ended" ? "Job ini tidak punya log." : "Menunggu log…"}
+            {connection === "ended"
+              ? "Job ini tidak punya log."
+              : connection === "not-found"
+                ? "Job tidak ditemukan — mungkin sudah dihapus oleh retensi riwayat atau host dihapus."
+                : connection === "session"
+                  ? "Sesi berakhir. Masuk lagi untuk melihat log."
+                  : "Menunggu log…"}
           </p>
         ) : (
           events.map((e) => (
@@ -97,6 +109,16 @@ export function LogViewer({ jobId }: { jobId: string }) {
                 {e.repeat > 1 && (
                   <span data-testid="log-repeat" className="ml-2 text-muted-foreground">
                     ×{e.repeat}
+                    {/* CR-5-7: waktu kemunculan terakhir event gabungan. */}
+                    {e.lastAt && e.lastAt !== e.at && (
+                      <>
+                        {" "}
+                        · terakhir{" "}
+                        <time dateTime={e.lastAt} data-testid="log-last-at">
+                          {formatClock(e.lastAt)}
+                        </time>
+                      </>
+                    )}
                   </span>
                 )}
               </span>

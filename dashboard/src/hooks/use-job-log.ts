@@ -5,6 +5,14 @@ import { useQueryClient } from "@tanstack/react-query"
 
 import { HOSTS_KEY } from "@/hooks/use-hosts"
 import { JOBS_KEY, jobKey } from "@/hooks/use-jobs"
+import {
+  ApiError,
+  apiFetch,
+  isSessionHalted,
+  noteRateLimited,
+  notifySessionExpired,
+  parseRetryAfter,
+} from "@/lib/api-client"
 import { mergeLogEvents, parseLogEvent } from "@/lib/jobs"
 import type { JobLogEvent, JobLogResponse, JobSummary } from "@/lib/types"
 
@@ -14,7 +22,11 @@ import type { JobLogEvent, JobLogResponse, JobSummary } from "@/lib/types"
  *  - `live` — SSE tersambung;
  *  - `reconnecting` — koneksi putus, mencoba ulang;
  *  - `polling` — fallback JSON tiap 5 dtk (SSE gagal 3× berturut-turut);
- *  - `ended` — job final dan semua event sudah diterima.
+ *  - `ended` — job final dan semua event sudah diterima;
+ *  - `not-found` — job tidak ada / terhapus (404 atau 4xx lain selain 401/429, atau SSE `end`
+ *    `{"status":"deleted"}`) — final, tanpa polling lagi (CR-5-5);
+ *  - `session` — sesi habis (401 atau SSE `end` `{"reason":"session"}`) — final; alur sesi habis
+ *    global (redirect ke login) dipicu.
  */
 export type LogConnection =
   | "connecting"
@@ -22,6 +34,8 @@ export type LogConnection =
   | "reconnecting"
   | "polling"
   | "ended"
+  | "not-found"
+  | "session"
 
 /** Jeda sebelum membuka ulang SSE (sama dengan `retry:` server). */
 export const SSE_RETRY_MS = 3_000
@@ -42,14 +56,17 @@ type EventSourceCtor = new (url: string) => EventSource
 
 export type JobLogDeps = {
   EventSource?: EventSourceCtor
-  fetch: typeof fetch
+  fetch: (url: string, init?: RequestInit) => Promise<Response>
+  /** Sesi habis (bawaan: `notifySessionExpired` → redirect login global). */
+  onUnauthorized?: () => void
 }
 
 function defaultDeps(): JobLogDeps {
   return {
     EventSource:
       typeof EventSource === "undefined" ? undefined : EventSource,
-    fetch: (...a) => fetch(...a),
+    // M6: lewat wrapper API (401 → sesi habis, 429 → jeda bersama).
+    fetch: apiFetch,
   }
 }
 
@@ -104,8 +121,30 @@ export class JobLogClient {
     this.h.onEnd()
   }
 
+  /** Status final selain `ended` (tanpa invalidasi daftar). */
+  private halt(c: "not-found" | "session") {
+    this.stop()
+    this.h.onConnection(c)
+    if (c === "session") (this.deps.onUnauthorized ?? notifySessionExpired)()
+  }
+
+  /** `event: end` server: `{reason:"session"}` → sesi habis; `{status:"deleted"}` → job hilang. */
+  private onEndEvent(data: string | undefined) {
+    let d: { reason?: unknown; status?: unknown } = {}
+    try {
+      d = JSON.parse(data ?? "{}") ?? {}
+    } catch {
+      // data rusak → anggap selesai biasa
+    }
+    if (d.reason === "session") this.halt("session")
+    else if (d.status === "deleted") this.halt("not-found")
+    else this.finish()
+  }
+
   private openSse() {
     if (this.stopped) return
+    // Sesi sudah dinyatakan habis oleh request lain → jangan buka koneksi baru.
+    if (!this.deps.onUnauthorized && isSessionHalted()) return this.halt("session")
     const ES = this.deps.EventSource!
     const es = new ES(this.lastSeq ? `${this.base}?after=${this.lastSeq}` : this.base)
     this.es = es
@@ -124,7 +163,7 @@ export class JobLogClient {
         // data rusak: abaikan, polling detail job tetap memperbarui status
       }
     })
-    es.addEventListener("end", () => this.finish())
+    es.addEventListener("end", (ev) => this.onEndEvent((ev as MessageEvent<string>).data))
     es.onerror = () => {
       if (this.stopped || this.es !== es) return
       // Tutup sendiri dan buka ulang dengan `?after=` agar resume eksplisit (tanpa baris ganda).
@@ -150,6 +189,17 @@ export class JobLogClient {
         cache: "no-store",
       })
       if (this.stopped) return
+      if (res.status === 401) return this.halt("session")
+      if (res.status === 429) {
+        const sec = parseRetryAfter(res.headers.get("retry-after"))
+        // Fetch injeksi (test) tidak lewat apiFetch → catat jeda di sini juga (idempoten).
+        if (this.deps.fetch !== apiFetch) noteRateLimited(sec)
+        this.h.onConnection("reconnecting")
+        this.timer = setTimeout(() => this.poll(), sec * 1000)
+        return
+      }
+      // CR-5-5: 404 (atau 4xx lain) final — job tidak ada / terhapus; jangan polling tanpa batas.
+      if (res.status >= 400 && res.status < 500) return this.halt("not-found")
       if (!res.ok) throw new Error(String(res.status))
       const body = (await res.json()) as JobLogResponse
       if (this.stopped) return
@@ -161,10 +211,16 @@ export class JobLogClient {
       this.h.onConnection("polling")
       const more = body.events.length >= JSON_PAGE
       this.timer = setTimeout(() => this.poll(), more ? 0 : LOG_POLL_MS)
-    } catch {
+    } catch (e) {
       if (this.stopped) return
+      // Request ditahan lokal oleh apiFetch: sesi habis → final; jeda rate limit → tunggu sisa jeda.
+      if (e instanceof ApiError && e.status === 401) return this.halt("session")
+      const wait =
+        e instanceof ApiError && e.status === 429 && e.retryAfterSec
+          ? e.retryAfterSec * 1000
+          : LOG_POLL_MS
       this.h.onConnection("reconnecting")
-      this.timer = setTimeout(() => this.poll(), LOG_POLL_MS)
+      this.timer = setTimeout(() => this.poll(), wait)
     }
   }
 }

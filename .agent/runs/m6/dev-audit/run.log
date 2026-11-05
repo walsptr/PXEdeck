@@ -1,0 +1,20 @@
+
+Running 15 tests using 1 worker
+
+  ✓   1 .e2e-data/dev-audit/audit.spec.ts:92:5 › seed stres lewat API (287ms)
+  ✓   2 .e2e-data/dev-audit/audit.spec.ts:118:7 › overflow /hosts (12.4s)
+  ✓   3 .e2e-data/dev-audit/audit.spec.ts:118:7 › overflow /jobs (13.2s)
+  ✓   4 .e2e-data/dev-audit/audit.spec.ts:118:7 › overflow /jobs?job=job-audit-007-xxxxxxxxxxxxxxxxxxxx (13.2s)
+  ✓   5 .e2e-data/dev-audit/audit.spec.ts:118:7 › overflow /os-images (12.0s)
+  ✓   6 .e2e-data/dev-audit/audit.spec.ts:118:7 › overflow /ssh-keys (11.7s)
+  ✓   7 .e2e-data/dev-audit/audit.spec.ts:118:7 › overflow /settings (12.1s)
+  ✓   8 .e2e-data/dev-audit/audit.spec.ts:152:5 › OS Images: alasan mono, token builtin tidak terbelah, DR-5-1 ≤ 200 px di 375 (7.2s)
+  ✓   9 .e2e-data/dev-audit/audit.spec.ts:220:5 › SSH Keys: kartu < md, fingerprint utuh, aksi terlihat; tabel ≥ md (7.1s)
+  ✓  10 .e2e-data/dev-audit/audit.spec.ts:267:5 › Sheet OS: alasan mono di kartu image, tanpa overflow (3.2s)
+  ✓  11 .e2e-data/dev-audit/audit.spec.ts:295:5 › Login: desain + overflow + satu-satunya oranye (2.4s)
+  ✓  12 .e2e-data/dev-audit/audit.spec.ts:343:5 › Login: alur keyboard, error fokus, next, logout, Back tanpa data (1.8s)
+  ✓  13 .e2e-data/dev-audit/audit.spec.ts:383:5 › Sesi dihapus saat di /hosts → redirect sekali ke /login?next=/hosts tanpa polling setelahnya (12.7s)
+  ✓  14 .e2e-data/dev-audit/audit.spec.ts:416:5 › ringkasan: tidak ada pelanggaran (2ms)
+  ✓  15 .e2e-data/dev-audit/probe.spec.ts:17:5 › probe axe (19.9s)
+
+  15 passed (2.2m)
