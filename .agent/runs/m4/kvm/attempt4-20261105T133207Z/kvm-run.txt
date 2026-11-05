@@ -1,0 +1,14 @@
+# kvm-run m4 20261105T133207Z nodes=[11:uefi 12:bios] keep_server=0 dry=0
+2026-11-05T13:32:07Z preflight          ok max_nodes=3 avail_mb=12455
+2026-11-05T13:32:07Z net-up             ok 
+2026-11-05T13:32:18Z server-up          ok 
+2026-11-05T13:32:39Z deploy             ok 
+2026-11-05T13:32:39Z server-check       ok 
+2026-11-05T13:32:40Z node-create        ok pxe-test-m4-node11 uefi 52:54:00:99:00:11
+2026-11-05T13:32:41Z node-create        ok pxe-test-m4-node12 bios 52:54:00:99:00:12
+2026-11-05T13:57:51Z playwright         FAIL exit=130 (playwright-kvm.log)
+2026-11-05T13:57:51Z evidence           start 
+2026-11-05T13:57:52Z evidence           done 
+2026-11-05T13:58:02Z redact             ok 
+2026-11-05T13:58:06Z cleanup            done 
+2026-11-05T13:58:06Z result             FAIL exit=130

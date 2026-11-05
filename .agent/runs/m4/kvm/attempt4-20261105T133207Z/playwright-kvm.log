@@ -1,0 +1,32 @@
+
+Running 4 tests using 1 worker
+
+  ✓  1 e2e-kvm/m4-install.spec.ts:58:7 › AC-4.30 pxe-test-m4-node11 (uefi) install via dashboard → Done ≤ 30 menit (9.9m)
+  ✓  2 e2e-kvm/m4-install.spec.ts:149:7 › AC-4.31 pxe-test-m4-node11: SSH key login, verifikasi, password ditolak, reboot dari disk (3.6m)
+  ✘  3 e2e-kvm/m4-install.spec.ts:58:7 › AC-4.33 pxe-test-m4-node12 (bios) install via dashboard → Done ≤ 30 menit (11.6m)
+  -  4 e2e-kvm/m4-install.spec.ts:149:7 › AC-4.31 pxe-test-m4-node12: SSH key login, verifikasi, password ditolak, reboot dari disk
+
+
+  1) e2e-kvm/m4-install.spec.ts:58:7 › AC-4.33 pxe-test-m4-node12 (bios) install via dashboard → Done ≤ 30 menit 
+
+    Test was interrupted.
+
+    Error: page.waitForResponse: Test ended.
+
+      100 |     await sheet.getByRole("button", { name: "Simpan & Install" }).click()
+      101 |     const confirm = page.getByRole("alertdialog", { name: /^Install OS ke / })
+    > 102 |     const installed = page.waitForResponse((r) => r.url().endsWith(`/api/hosts/${hostId(node.mac)}/install`))
+          |                            ^
+      103 |     await confirm.getByRole("button", { name: "Hapus disk & install" }).click()
+      104 |     expect((await installed).status()).toBe(200)
+      105 |     const pill = row.locator("[data-status]")
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts:102:28
+
+    Error Context: ../.agent/runs/m4/kvm/playwright-kvm-artifacts/m4-install-AC-4-33-pxe-tes-8dc98-dashboard-→-Done-≤-30-menit/error-context.md
+
+    Error Context: ../.agent/runs/m4/kvm/playwright-kvm-artifacts/m4-install-AC-4-33-pxe-tes-8dc98-dashboard-→-Done-≤-30-menit/error-context.md
+
+  1 interrupted
+    e2e-kvm/m4-install.spec.ts:58:7 › AC-4.33 pxe-test-m4-node12 (bios) install via dashboard → Done ≤ 30 menit 
+  1 did not run
+  2 passed (25.2m)

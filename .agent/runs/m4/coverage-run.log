@@ -1,62 +1,42 @@
 
+> dashboard@0.1.0 test
+> vitest run --coverage
+
+
  RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard
       Coverage enabled with v8
 
-(node:54138) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:171504) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node-22 --trace-warnings ...` to show where the warning was created)
-(node:54132) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:171491) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node-22 --trace-warnings ...` to show where the warning was created)
-(node:54158) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:171497) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node-22 --trace-warnings ...` to show where the warning was created)
-(node:54121) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:171523) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node-22 --trace-warnings ...` to show where the warning was created)
-(node:54223) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:171583) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node-22 --trace-warnings ...` to show where the warning was created)
-(node:54243) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:171509) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node-22 --trace-warnings ...` to show where the warning was created)
- ❯ |node| src/lib/server/installers/installers.test.ts (243 tests | 1 failed) 866ms
-   ❯ AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap (207)
-     × windows: hostname = "n1\r" 93ms
-(node:54269) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:171612) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node-22 --trace-warnings ...` to show where the warning was created)
-(node:54328) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:171727) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node-22 --trace-warnings ...` to show where the warning was created)
-(node:54344) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(node:171888) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:171869) ExperimentalWarning: SQLite is an experimental feature and might change at any time
 (Use `node-22 --trace-warnings ...` to show where the warning was created)
 
-⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
-
- FAIL  |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1\r"
-AssertionError: expected 'n1\n' to be 'n1\r' // Object.is equality
-
-- Expected
-+ Received
-
-- n1
-+ n1
-+
-
- ❯ src/lib/server/installers/installers.test.ts:420:43
-    418|           expect(g.structure(out)).toEqual(baseline)
-    419|           const back = readBack(g.name, out, field)
-    420|           if (back !== null) expect(back).toBe(value)
-       |                                           ^
-    421|         })
-    422|       }
-
-⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯⎯[1/1]⎯
-
-
- Test Files  1 failed | 29 passed (30)
-      Tests  1 failed | 761 passed (762)
-   Start at  18:50:48
-   Duration  5.77s (tests 41%, import 25%, environment 21%, setup 6%, worker 4%, transform 2%)
+ Test Files  30 passed (30)
+      Tests  766 passed (766)
+   Start at  20:33:18
+   Duration  6.88s (tests 40%, import 26%, environment 20%, setup 6%, worker 4%, transform 3%)
 
  % Coverage report from v8
 -------------------|---------|----------|---------|---------|-------------------
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 -------------------|---------|----------|---------|---------|-------------------
-All files          |   98.62 |    96.92 |   99.27 |   99.14 |                   
+All files          |   98.63 |    96.94 |   99.27 |   99.14 |                   
  app/api/os-images |   91.66 |    83.33 |     100 |     100 |                   
   route.ts         |   91.66 |    83.33 |     100 |     100 | 22                
  app/api/ssh-keys  |      90 |    83.33 |     100 |     100 |                   
@@ -84,15 +64,14 @@ All files          |   98.62 |    96.92 |   99.27 |   99.14 |
  ...erver/db/repos |     100 |     92.5 |     100 |     100 |                   
   configs.ts       |     100 |    90.24 |     100 |     100 | 39-42             
   os-images.ts     |     100 |    89.47 |     100 |     100 | 79-80             
- ...ver/installers |   99.16 |    98.55 |     100 |     100 |                   
-  context.ts       |   98.85 |    98.95 |     100 |     100 | 71                
+ ...ver/installers |    99.2 |    98.62 |     100 |     100 |                   
+  context.ts       |   98.85 |       99 |     100 |     100 | 75                
   windows.ts       |   97.72 |     90.9 |     100 |     100 | 28-29             
 -------------------|---------|----------|---------|---------|-------------------
 
 =============================== Coverage summary ===============================
-Statements   : 98.62% ( 2015/2043 )
-Branches     : 96.92% ( 1450/1496 )
-Functions    : 99.27% ( 409/412 )
-Lines        : 99.14% ( 1734/1749 )
+Statements   : 98.63% ( 2028/2056 )
+Branches     : 96.94% ( 1461/1507 )
+Functions    : 99.27% ( 410/413 )
+Lines        : 99.14% ( 1744/1759 )
 ================================================================================
-exit=1

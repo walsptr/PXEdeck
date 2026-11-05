@@ -1,0 +1,48 @@
+2026-11-05T12:28:18Z preflight          ok max_nodes=3 avail_mb=13170
+[2026-11-05T12:28:18Z] network pxe-test sudah terdefinisi
+[2026-11-05T12:28:18Z] network pxe-test sudah aktif
+[2026-11-05T12:28:18Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T12:28:18Z] network pxe-test-nat sudah aktif
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+2026-11-05T12:28:18Z net-up             ok 
+[2026-11-05T12:28:18Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-05T12:28:18Z] network pxe-test sudah terdefinisi
+[2026-11-05T12:28:18Z] network pxe-test sudah aktif
+[2026-11-05T12:28:18Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T12:28:18Z] network pxe-test-nat sudah aktif
+[2026-11-05T12:28:18Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-05T12:28:27Z] SSH siap dalam 9s
+[2026-11-05T12:28:29Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/server-listen.txt
+2026-11-05T12:28:29Z server-up          ok 
+[2026-11-05T12:28:29Z] build standalone (PXE_STANDALONE=1 npm run build)
+[2026-11-05T12:28:42Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261105T122829Z
+[2026-11-05T12:28:45Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/deploy-dashboard.txt)
+2026-11-05T12:28:45Z deploy             ok 
+2026-11-05T12:28:46Z server-check       ok 
+[2026-11-05T12:28:46Z] create pxe-test-m4-node11 (uefi, 52:54:00:99:00:11, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+2026-11-05T12:28:47Z node-create        ok pxe-test-m4-node11 uefi 52:54:00:99:00:11
+[2026-11-05T12:28:47Z] create pxe-test-m4-node12 (bios, 52:54:00:99:00:12, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+2026-11-05T12:28:47Z node-create        ok pxe-test-m4-node12 bios 52:54:00:99:00:12
+2026-11-05T12:59:08Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-05T12:59:08Z evidence           start 
+2026-11-05T12:59:09Z evidence           done 

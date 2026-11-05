@@ -1,17 +1,7 @@
-# Coverage v8 — vitest run --coverage --coverage.reportOnFailure=true (npm test exit 1 karena 1 test gagal → tanpa flag ini laporan tidak dicetak). Config DEC-004 (include/exclude/threshold 80%) TIDAK diubah.
- ❯ |node| src/lib/server/installers/installers.test.ts (243 tests | 1 failed) 866ms
- FAIL  |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1\r"
-    418|           expect(g.structure(out)).toEqual(baseline)
-    419|           const back = readBack(g.name, out, field)
-    420|           if (back !== null) expect(back).toBe(value)
-    421|         })
-    422|       }
- Test Files  1 failed | 29 passed (30)
-      Tests  1 failed | 761 passed (762)
--------------------|---------|----------|---------|---------|-------------------
+# Coverage v8 — npm test (vitest run --coverage), config DEC-004 tidak diubah; 2026-11-05T13:33:34Z @ b3a7ed4+worktree
 File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
 -------------------|---------|----------|---------|---------|-------------------
-All files          |   98.62 |    96.92 |   99.27 |   99.14 |                   
+All files          |   98.63 |    96.94 |   99.27 |   99.14 |                   
  app/api/os-images |   91.66 |    83.33 |     100 |     100 |                   
   route.ts         |   91.66 |    83.33 |     100 |     100 | 22                
  app/api/ssh-keys  |      90 |    83.33 |     100 |     100 |                   
@@ -39,7 +29,14 @@ All files          |   98.62 |    96.92 |   99.27 |   99.14 |
  ...erver/db/repos |     100 |     92.5 |     100 |     100 |                   
   configs.ts       |     100 |    90.24 |     100 |     100 | 39-42             
   os-images.ts     |     100 |    89.47 |     100 |     100 | 79-80             
- ...ver/installers |   99.16 |    98.55 |     100 |     100 |                   
-  context.ts       |   98.85 |    98.95 |     100 |     100 | 71                
+ ...ver/installers |    99.2 |    98.62 |     100 |     100 |                   
+  context.ts       |   98.85 |       99 |     100 |     100 | 75                
   windows.ts       |   97.72 |     90.9 |     100 |     100 | 28-29             
 -------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 98.63% ( 2028/2056 )
+Branches     : 96.94% ( 1461/1507 )
+Functions    : 99.27% ( 410/413 )
+Lines        : 99.14% ( 1744/1759 )
+================================================================================

@@ -46,7 +46,7 @@ async function apiHost(page: Page, mac: string) {
 
 test.afterAll(() => {
   const findings = scanEvidence([PASSWORD])
-  writeFileSync(path.join(KVM.runsDir, "evidence-scan.txt"), findings.length ? findings.join("\n") + "\n" : "bersih: tanpa password run, token /boot/, private key\n")
+  writeFileSync(path.join(KVM.runsDir, "evidence-scan.txt"), findings.length ? findings.join("\n") + "\n" : "bersih: tanpa password run, token /boot/, private key (teks & base64)\n")
   record({ ac: "AC-4.34-scan", status: findings.length ? "FAIL" : "PASS", note: `${findings.length} temuan`, evidence: ["evidence-scan.txt"] })
   writeResults({ nodes: NODES.map((n) => n.name) })
 })
@@ -92,15 +92,35 @@ for (const node of NODES) {
     await sheet.getByRole("tab", { name: /^Hostname/ }).click()
     await sheet.locator("#hn-name").fill(hostname)
     await sheet.getByRole("tab", { name: /^SSH Keys/ }).click()
-    await sheet.getByRole("button", { name: "Tempel / unggah key baru" }).click()
-    await sheet.locator("#key-0").fill(publicKey())
-    await sheet.locator("#key-name-0").fill(`${KVM.run}-${node.nn}-run-key`)
+    // Key run yang sama untuk semua node. Node pertama menempelnya sebagai key baru (masuk
+    // library); node berikutnya WAJIB memilihnya dari library karena produk (G3-3) menolak key
+    // baru ber-fingerprint sama dengan 422 (attempt4: PATCH node12 → 422, harness menggantung).
+    const [kType, kBlob] = publicKey().split(/\s+/)
+    const lib = (await (await page.request.get("/api/ssh-keys")).json()) as { id: string; publicKey: string }[]
+    const inLib = lib.find((k) => k.publicKey.split(/\s+/)[1] === kBlob && k.publicKey.startsWith(kType))
+    if (inLib) {
+      const cb = sheet.locator(`[id="lib-${inLib.id}"]`)
+      if ((await cb.getAttribute("aria-checked")) !== "true") await cb.click()
+      await expect(cb).toHaveAttribute("aria-checked", "true")
+    } else {
+      await sheet.getByRole("button", { name: "Tempel / unggah key baru" }).click()
+      await sheet.locator("#key-0").fill(publicKey())
+      await sheet.locator("#key-name-0").fill(`${KVM.run}-${node.nn}-run-key`)
+    }
     await page.screenshot({ path: shot(`${node.name}-sheet`), mask: [sheet.locator("#cred-pass")] })
 
     await sheet.getByRole("button", { name: "Simpan & Install" }).click()
     const confirm = page.getByRole("alertdialog", { name: /^Install OS ke / })
+    // Konfirmasi → PATCH (simpan) lalu POST /install. Simpan harus 200: bila ditolak, gagal cepat
+    // dengan body error (bukan menunggu /install tanpa batas seperti attempt4).
+    const saved = page.waitForResponse(
+      (r) => r.request().method() === "PATCH" && r.url().endsWith(`/api/hosts/${hostId(node.mac)}`),
+      { timeout: 60_000 },
+    )
     const installed = page.waitForResponse((r) => r.url().endsWith(`/api/hosts/${hostId(node.mac)}/install`))
     await confirm.getByRole("button", { name: "Hapus disk & install" }).click()
+    const savedRes = await saved
+    expect(savedRes.status(), await savedRes.text()).toBe(200)
     expect((await installed).status()).toBe(200)
     const pill = row.locator("[data-status]")
     await expect(pill).toHaveAttribute("data-status", "booting")

@@ -1,0 +1,17 @@
+# 2026-11-05T13:59:15Z sebelum kvm-run (test-engineer)
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+total 2519112
+drwxr-xr-x 1 syawal syawal        104 Nov  5 20:58 .
+drwxr-xr-x 1 syawal syawal         62 Nov  5 15:16 ..
+-rw-r--r-- 1 qemu   qemu   2579628032 Nov  5 14:00 pxe-test-server-base.qcow2
+-rw-r--r-- 1 syawal syawal         76 Nov  5 14:00 pxe-test-server-base.ready

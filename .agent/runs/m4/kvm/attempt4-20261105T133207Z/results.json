@@ -1,0 +1,46 @@
+{
+  "run": "m4",
+  "generatedAt": "2026-11-05T13:57:51.565Z",
+  "results": [
+    {
+      "ac": "AC-4.32",
+      "node": "pxe-test-m4-node11",
+      "status": "PASS",
+      "evidence": [
+        "pxe-test-m4-node11-negative.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.30",
+      "node": "pxe-test-m4-node11",
+      "status": "PASS",
+      "durationS": 593,
+      "note": "booting → installing → configuring → done",
+      "evidence": [
+        "pxe-test-m4-node11-status.txt",
+        "pxe-test-m4-node11-console.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.31",
+      "node": "pxe-test-m4-node11",
+      "status": "PASS",
+      "durationS": 217,
+      "evidence": [
+        "pxe-test-m4-node11-verify-ssh.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.34-scan",
+      "status": "PASS",
+      "note": "0 temuan",
+      "evidence": [
+        "evidence-scan.txt"
+      ]
+    }
+  ],
+  "nodes": [
+    "pxe-test-m4-node11",
+    "pxe-test-m4-node12"
+  ]
+}

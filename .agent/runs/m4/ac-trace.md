@@ -43,25 +43,45 @@ belum dikonfirmasi user).
 | AC-4.19 | unit | `gen` › `AC-4.19 Debian preseed` (regex baris, hash/root-login/hostname/mirror/pkgsel, late_command didekode: authorized_keys 0600+chown, sudoers, sshd, interface via MAC, first-boot, callback; variasi; golden) | PASS |
 | AC-4.20 | unit | `gen` › `AC-4.20 Rocky kickstart` (direktif, sshkey per key, network statis/DHCP/VLAN, `%`/`%end` seimbang, %post didekode, %onerror failed, golden) | PASS |
 | AC-4.21 | unit | `gen` › `AC-4.21 Windows unattend.xml` (well-formed via DOMParser, ComputerName, > 15 char error, Identifier `52-54-00-…`, IP/prefix/gateway/DNS, FirstLogonCommands OpenSSH + administrators_authorized_keys didekode, tanpa `$6$`/password config, golden) | PASS |
-| AC-4.22 | unit | `gen` › `AC-4.22 injeksi…` (13 input berbahaya × hostname/username/disk × 4 generator + komentar key × 4 + hash non-`$6$` + field lain) — **1 dari 216 kasus gagal**: `windows: hostname = "n1\r"` (lihat Bug B-1) | **FAIL (1 kasus)** |
+| AC-4.22 | unit | `gen` › `AC-4.22 injeksi…` (13 input berbahaya × hostname/username/disk × 4 generator + komentar key × 4 + hash non-`$6$` + field lain) — semua kasus lulus (B-1 diperbaiki `3658754`) | PASS |
 | AC-4.23 | integration (+e2e) | `boot` › `AC-4.23 GET /boot/{mac}/{token}/{file}` (200 + no-store; user-data pertama → installing; meta/vendor-data tidak mengubah status; 13 penolakan → 404 body identik: token salah/bentuk, token host lain, MAC invalid, IP asing, header IP hilang, network-config, file tak dikenal, file OS lain, IP lease MAC lain, expired; job configuring/done/failed → 404); E2E `m4-discovery.spec.ts` AC-4.27 | PASS |
 | AC-4.24 | integration | `boot` › `AC-4.24 siklus token` (43 char base64url; file DB + WAL hanya hash; install ulang setelah failed → URL lama 404; done/hapus host mencabut; log console yang ditangkap tanpa token); `bsc` › tokens | PASS |
 | AC-4.25 | integration (+e2e) | `cfg` › AC-3.11 + M4 (tanpa credentials ditolak, media tidak tersedia, Windows "hanya generator", bulk job+host booting, tanpa token); `boot` › `AC-4.25 install (service)` (job+host booting+osAssigned, host berjalan gagal, partisi custom/user SSH beda/OS tak dikenal); E2E `m3-bulk.spec.ts` AC-3.15 | PASS |
 | AC-4.26 | integration (+e2e) | `boot` › `AC-4.26 callback` (maju + stages + status_since; sama → 200 tanpa perubahan; mundur → 409; tak dikenal → 400; IP statis untuk done, IP asing → 404; done → osInstalled/osAssigned null/current_ip/job selesai/token dicabut; failed → boot lokal; body rusak/terlalu besar) | PASS |
 | AC-4.27 | e2e | `m4-discovery.spec.ts` › `AC-4.27 Install dari Sheet → pill Booting → Installing → Configuring → Done tanpa refresh` (+ OS tab: ubuntu-22.04 nonaktif + alasan, Windows nonaktif + catatan password + alert peringatan); `hk` › installBlockReason | PASS |
-| AC-4.28 | unit-shell | `infra/test/run.sh` (29 test, virsh/virt-install/qemu-img/ssh PALSU, PATH terisolasi): idempotensi net-up, XML, nama `^pxe-test-`, node.sh/cleanup.sh menolak nama terlindungi tanpa virsh, path disk, `bash -n`, kvm-run dry-run end-to-end; + `redact-evidence` (token path/`token=`/`$6$` disamarkan exit 0, header private key exit 1, argumen salah exit 2, dipanggil di `finish()`) — `infra-test.log` 29/29 (iter 2, B-2 diperbaiki di `3658754`) | PASS |
-| AC-4.29 | kvm | `infra/kvm-run.sh` → `kvm/server-check.txt` (+ `server/verify-listen.sh` RESULT PASS, layanan aktif, Next `127.0.0.1:3000`, `/api/settings` cidr `10.99.0.0/24`, vmlinuz 200, sha256 TFTP = `media.log`) — attempt3 2026-11-05T12:28Z @ `ab2904f` | PASS |
-| AC-4.30 | kvm | `dashboard/e2e-kvm/m4-install.spec.ts` › `AC-4.30 pxe-test-m4-node11 (uefi) …` — attempt3 @ `ab2904f`: discovery/konfigurasi/Install → booting 12:29:07 → installing 12:29:43 → configuring 12:34:55 (B-3 beres); **done tidak tercapai** dalam 30 menit: setelah reboot installer, script boot lokal EFI `exit` membuat OVMF membuka BootManagerMenuApp, OS di disk tidak boot (Bug B-4). Bukti `kvm/pxe-test-m4-node11-status.txt`, `kvm/pxe-test-m4-node11-console.txt` (akhir), `kvm/playwright-kvm.log` | **FAIL (B-4)** |
-| AC-4.31 | kvm | `m4-install.spec.ts` › `AC-4.31 …` + `dashboard/e2e-kvm/verify-node.sh`; kvm-run juga verify-node + cek password | NOT_RUN (bergantung AC-4.30, B-4) |
-| AC-4.32 | kvm | `m4-install.spec.ts` (bagian AC-4.32 di test AC-4.30) — `kvm/pxe-test-m4-node11-negative.txt` (attempt3): `/boot/<mac>.ipxe` dari host → script lokal tanpa token, token acak → 404, current_ip tetap; versi lokal `boot` › `AC-4.32 (lokal)` | PASS |
-| AC-4.33 | kvm | `m4-install.spec.ts` › `AC-4.33 pxe-test-m4-node12 (bios) …` — tidak dijalankan (mode serial setelah AC-4.30 gagal) | NOT_RUN (B-4) |
-| AC-4.34 | kvm | `kvm-run.sh` (trap cleanup, `kvm/cleanup.txt`, key run dihapus) + `redact-evidence.sh` + afterAll (`kvm/results.json`, `kvm/evidence-scan.txt`) + `secret-scan.txt` (+ `b64-scan.py`) — cleanup bersih; scan harness "0 temuan" **keliru**: token job ter-base64 (late-command `/etc/pxe-callback/url`) ada di `kvm/pxe-test-m4-node11-console.{log,txt}` (Bug B-5), disamarkan manual sebelum commit | **FAIL (B-5)**; cleanup PASS |
+| AC-4.28 | unit-shell | `infra/test/run.sh` (33 test, virsh/virt-install/qemu-img/ssh PALSU, PATH terisolasi): idempotensi net-up, XML, nama `^pxe-test-`, node.sh/cleanup.sh menolak nama terlindungi tanpa virsh, path disk, `bash -n`, kvm-run dry-run end-to-end; + `redact-evidence` (token path/`token=`/`$6$` disamarkan exit 0, blob base64 berisi token/`$6$`/key disamarkan (B-5), header private key exit 1, argumen salah exit 2, dipanggil di `finish()`) — `infra-test.log` 33/33 | PASS |
+| AC-4.29 | kvm | `infra/kvm-run.sh` → `kvm/server-check.txt` (`server/verify-listen.sh` RESULT PASS, layanan aktif, Next `127.0.0.1:3000`, `/api/settings` cidr `10.99.0.0/24`, vmlinuz 200, sha256 TFTP = `media.log`; `# server-check exit=0`) — attempt resmi `kvm/` 20261105T135915Z @ `b3a7ed4` | PASS |
+| AC-4.30 | kvm | `dashboard/e2e-kvm/m4-install.spec.ts` › `AC-4.30 pxe-test-m4-node11 (uefi) install via dashboard → Done ≤ 30 menit` — attempt resmi `kvm/` 20261105T135915Z @ `b3a7ed4`: booting 14:00:14 → installing 14:00:51 → configuring 14:06:16 → done 14:09:56 (603 s, UI tanpa reload + API); dnsmasq `sent /srv/pxe/tftp/snponly.efi`, nginx `user-data` 200 dari node (token `***`). Bukti `kvm/pxe-test-m4-node11-status.txt`, `-console.txt` (boot lokal: `exit 1` → BdsDxe `Boot0008 "Ubuntu"` shimx64.efi), `kvm/server-dnsmasq.txt`, `kvm/server-nginx.txt`, `kvm/screenshots/pxe-test-m4-node11-*.png` | PASS |
+| AC-4.31 | kvm | `m4-install.spec.ts` › `AC-4.31 pxe-test-m4-node11/12: SSH key login, verifikasi, password ditolak, reboot dari disk` + `dashboard/e2e-kvm/verify-node.sh` (hostname, IP/MAC, gw, DNS, user, `sudo -n`, authorized_keys persis 0600, `sshd -T passwordauthentication no`, root fs disk lokal) sebelum & sesudah reboot; password → `Permission denied (publickey)`; kernel installer di serial 4 → 4; status tetap done, `/boot/<mac>.ipxe` lokal; kvm-run verify-node ulang — attempt resmi `kvm/` 20261105T135915Z @ `b3a7ed4`. Bukti `kvm/pxe-test-m4-node1{1,2}-verify-ssh.txt`, `-verify.txt` | PASS (node11 217 s, node12 28 s) |
+| AC-4.32 | kvm | `m4-install.spec.ts` (bagian AC-4.32 di test AC-4.30/4.33) — `kvm/pxe-test-m4-node1{1,2}-negative.txt`: `/boot/<mac>.ipxe` dari host 10.99.0.1 → script lokal tanpa token, token acak → 404, current_ip tetap — attempt resmi `kvm/` 20261105T135915Z @ `b3a7ed4`; versi lokal `boot` › `AC-4.32 (lokal)` | PASS |
+| AC-4.33 | kvm | `m4-install.spec.ts` › `AC-4.33 pxe-test-m4-node12 (bios) install via dashboard → Done ≤ 30 menit` — attempt resmi `kvm/` 20261105T135915Z @ `b3a7ed4`: booting 14:13:36 → installing 14:14:16 → configuring 14:19:37 → done 14:20:07 (393 s); dnsmasq `undionly.kpxe`/iPXE pcbios; reboot → `Booting from SAN device 0x80` (sanboot) → `m4-node12 login:` tanpa installer kedua; SSH key + hostname benar (AC-4.31 node12). Bukti `kvm/pxe-test-m4-node12-status.txt`, `-console.txt`, `-verify-ssh.txt` | PASS |
+| AC-4.34 | kvm | `kvm-run.sh` trap cleanup (`kvm/cleanup.txt`: tanpa VM `pxe-test-m4-*`/`pxe-test-server`, disk `pxe-test-server.qcow2` dihapus, key run `.agent/keys/pxe-test-m4-*` dihapus; network `pxe-test` tetap) + `kvm/libvirt-before.txt` vs `kvm/libvirt-after.txt` (domain & network identik: `ubuntu24.04`, `default`, `int`) + `redact-evidence.sh` (redact ok, scan ulang 193 file bersih) + afterAll `scanEvidence` kini juga mendekode blob base64 (UTF-8/UTF-16LE, offset 0–3, bertingkat; token `/boot/`, `$6$`, private key, password run) → `kvm/evidence-scan.txt` bersih + `kvm/results.json` (status + durasi per AC) + `secret-scan.txt` (+ `b64-scan.py`: hanya blob sshd drop-in `PasswordAuthentication no`, bukan secret) — attempt resmi `kvm/` 20261105T135915Z @ `b3a7ed4`; B-5 tidak muncul lagi (URL callback dari `/proc/cmdline`) | PASS |
 
 ## AC tanpa test yang lulus
 
 - (iter 1) AC-4.22: 1 kasus gagal (B-1). AC-4.28: 1 test gagal (B-2) — keduanya diperbaiki di `3658754`.
 - (KVM attempt2 2026-11-05T12:00Z) AC-4.30 FAIL karena B-3 (diperbaiki `ab2904f`). Bukti di `kvm/attempt2-20261105T120018Z/`.
 - (KVM attempt3 2026-11-05T12:28Z @ `ab2904f`) AC-4.30 FAIL karena **B-4**; AC-4.31/AC-4.33 NOT_RUN; AC-4.34 FAIL karena **B-5**. Gate M4 mensyaratkan bukti KVM.
+
+- (KVM attempt4 2026-11-05T13:32Z @ `b3a7ed4`, `kvm/attempt4-20261105T133207Z/`) AC-4.29/4.30/4.31(node11)/4.32 PASS; AC-4.33 gagal di harness (bug test, bukan produk — lihat bawah), run dihentikan.
+- (KVM attempt resmi 2026-11-05T13:59Z @ `b3a7ed4`, `kvm/`) **AC-4.29..AC-4.34 semua PASS** (B-4 dan B-5 terverifikasi beres).
+
+## Bug test attempt4 (diperbaiki test-engineer, bukan pelemahan)
+
+- `dashboard/e2e-kvm/m4-install.spec.ts` (sebelumnya :94-97) menempel public key run yang sama
+  sebagai *key baru* untuk setiap node. Saat node11 key masuk library (`m4-11-run-key`); untuk node12
+  produk (G3-3, M3) dengan benar menolak key baru ber-fingerprint sama → `PATCH /api/hosts/525400990012`
+  **422** (`attempt4-…/server-nginx.txt` 13:46:15), lalu spec menunggu `POST /install` tanpa batas
+  (Playwright `actionTimeout` 0) → di-SIGINT 13:57:51, trap cleanup berjalan
+  (`attempt4-…/interrupted.txt`). Perbaikan: bila key run sudah ada di library (`GET /api/ssh-keys`,
+  cocok type+blob) centang `#lib-<id>` dan tegaskan `aria-checked=true`; bila belum, tempel sebagai key
+  baru seperti sebelumnya. Ditambah assertion lebih ketat: `PATCH` simpan harus 200 (gagal cepat dengan
+  body error). Verifikasi tetap sama (authorized_keys berisi persis key itu).
+- `dashboard/e2e-kvm/kvm-harness.ts` `scanEvidence`: ditambah deteksi secret di blob base64
+  (`base64Secret`, selaras `infra/redact-evidence.sh` `_b64_secret` dan `b64-scan.py`); temuan
+  base64 tidak disamarkan oleh harness → dilaporkan sebagai temuan (AC-4.34-scan FAIL).
+  Diuji manual pada data sintetis (token URL base64, `$6$` UTF-16LE dengan offset, base64 bertingkat,
+  password run base64 → terdeteksi; blob sshd `PasswordAuthentication` → tidak).
 
 ## Bug baru (attempt3)
 
@@ -84,16 +104,16 @@ belum dikonfirmasi user).
 | CR-2-11 use-now | `hk` › `carry-over CR-2-11 use-now` | PASS |
 | I-3-8 shadow toast.error | `iter3-ui.spec.ts` › `M2 hapus host gagal → toast.error datar` | PASS |
 
-## Hasil run (sesi ini)
+## Hasil run (sesi ini, 2026-11-05T13:33–14:22Z @ `b3a7ed4` + perubahan test e2e-kvm)
 
 | Perintah | Exit | Ringkasan |
 |---|---|---|
 | `npm run typecheck` | 0 | bersih |
 | `npm run lint` | 0 | bersih |
-| `npm test` (vitest + coverage v8) | 1 | 761/762 lulus, 30 file; gagal: AC-4.22 `windows: hostname = "n1\r"` |
-| coverage (`--coverage.reportOnFailure`) | 1 (test yang sama) | all files lines 99.14% / branches 96.92%; kode baru M4 lines 99.08% / branches 96.82% (`coverage-m4-new-code.txt`) |
-| `npm run test:e2e` | 0 | 69/69 lulus, 12 file spec |
-| `bash infra/test/run.sh` | 1 | 24/25 lulus; gagal: `cleanup.sh default|int` exit 0 |
+| `npm test` (vitest + coverage v8) | 0 | 766/766 lulus, 30 file; all files lines 99.14% / branches 96.94%; kode baru M4 lines 1512/1526 = 99.08% / branches 1320/1363 = 96.85% (`coverage-m4-new-code.txt`) |
+| `npm run test:e2e` | 0 | 69/69 lulus |
+| `bash infra/test/run.sh` | 0 | 33/33 lulus |
+| `infra/kvm-run.sh m4` (attempt resmi 20261105T135915Z) | 0 | Playwright KVM 4/4 lulus (20.7 menit), verify ×2 ok, redact ok, cleanup done |
 | guard CR-1-10 | — | spec yatim di subfolder → config gagal dimuat (exit 1) |
 | scan secret bukti | — | bersih |
 

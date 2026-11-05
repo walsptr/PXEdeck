@@ -1,0 +1,36 @@
+
+Running 4 tests using 1 worker
+
+  ✘  1 e2e-kvm/m4-install.spec.ts:58:7 › AC-4.30 pxe-test-m4-node11 (uefi) install via dashboard → Done ≤ 30 menit (30.3m)
+  -  2 e2e-kvm/m4-install.spec.ts:149:7 › AC-4.31 pxe-test-m4-node11: SSH key login, verifikasi, password ditolak, reboot dari disk
+  -  3 e2e-kvm/m4-install.spec.ts:58:7 › AC-4.33 pxe-test-m4-node12 (bios) install via dashboard → Done ≤ 30 menit
+  -  4 e2e-kvm/m4-install.spec.ts:149:7 › AC-4.31 pxe-test-m4-node12: SSH key login, verifikasi, password ditolak, reboot dari disk
+
+
+  1) e2e-kvm/m4-install.spec.ts:58:7 › AC-4.30 pxe-test-m4-node11 (uefi) install via dashboard → Done ≤ 30 menit 
+
+    Error: 2026-11-05T12:29:07.735Z booting (UI)
+    2026-11-05T12:29:43.960Z installing (UI)
+    2026-11-05T12:34:55.289Z configuring (UI)
+
+    expect(received).toBe(expected) // Object.is equality
+
+    Expected: "done"
+    Received: "configuring"
+
+      140 |     const ordered = ["booting", "installing", "configuring", "done"].every((s) => seen.has(s))
+      141 |     record({ ac, node: node.name, status: ordered && last === "done" ? "PASS" : "FAIL", durationS, note: [...seen].join(" → "), evidence: [`${node.name}-status.txt`, `${node.name}-console.txt`] })
+    > 142 |     expect(last, statusLog.join("\n")).toBe("done")
+          |                                        ^
+      143 |     expect([...seen]).toEqual(["booting", "installing", "configuring", "done"])
+      144 |     expect(await page.evaluate(() => (window as unknown as { __noReload?: boolean }).__noReload)).toBe(true)
+      145 |     const done = await apiHost(page, node.mac)
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts:142:40
+
+    Error Context: ../.agent/runs/m4/kvm/playwright-kvm-artifacts/m4-install-AC-4-30-pxe-tes-da2c6-dashboard-→-Done-≤-30-menit/error-context.md
+
+    Error Context: ../.agent/runs/m4/kvm/playwright-kvm-artifacts/m4-install-AC-4-30-pxe-tes-da2c6-dashboard-→-Done-≤-30-menit/error-context.md
+
+  1 failed
+    e2e-kvm/m4-install.spec.ts:58:7 › AC-4.30 pxe-test-m4-node11 (uefi) install via dashboard → Done ≤ 30 menit 
+  3 did not run

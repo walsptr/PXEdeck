@@ -1,5 +1,5 @@
 # Coverage kode baru/berubah M4 (git diff --diff-filter=AM main...HEAD -- dashboard/src, non-test)
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/app/(dashboard)/settings/page.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/app/(dashboard)/settings/page.tsx
 100.00% lines 100.00% branches  dashboard/src/app/api/credentials/import/route.ts
 100.00% lines 100.00% branches  dashboard/src/app/api/hosts/[id]/config/route.ts
 100.00% lines 100.00% branches  dashboard/src/app/api/hosts/[id]/install/route.ts
@@ -16,16 +16,16 @@
 100.00% lines 100.00% branches  dashboard/src/app/boot/[name]/[token]/[file]/route.ts
 100.00% lines 100.00% branches  dashboard/src/app/boot/[name]/[token]/status/route.ts
 100.00% lines 100.00% branches  dashboard/src/app/boot/[name]/route.ts
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/app-sidebar.tsx
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/host-config/config-sheet.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/app-sidebar.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/host-config/config-sheet.tsx
 100.00% lines  99.46% branches  dashboard/src/components/host-config/form-state.ts
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/host-config/tab-os.tsx
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/hosts/host-actions.tsx
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/hosts/hosts-view.tsx
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/server-status.tsx
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/settings/settings-view.tsx
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/top-bar.tsx
-   (di luar include DEC-004: komponen .tsx/halaman) dashboard/src/components/ui/sonner.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/host-config/tab-os.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/hosts/host-actions.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/hosts/hosts-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/server-status.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/settings/settings-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/top-bar.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/components/ui/sonner.tsx
 100.00% lines 100.00% branches  dashboard/src/hooks/use-network-config.ts
  97.14% lines  89.47% branches  dashboard/src/hooks/use-now.ts
 100.00% lines 100.00% branches  dashboard/src/hooks/use-os-images.ts
@@ -48,7 +48,7 @@
 100.00% lines 100.00% branches  dashboard/src/lib/server/discovery.ts
 100.00% lines  98.00% branches  dashboard/src/lib/server/http.ts
 100.00% lines 100.00% branches  dashboard/src/lib/server/install-service.ts
-100.00% lines  98.95% branches  dashboard/src/lib/server/installers/context.ts
+100.00% lines  99.00% branches  dashboard/src/lib/server/installers/context.ts
 100.00% lines 100.00% branches  dashboard/src/lib/server/installers/debian.ts
 100.00% lines 100.00% branches  dashboard/src/lib/server/installers/firstboot.ts
 100.00% lines 100.00% branches  dashboard/src/lib/server/installers/index.ts
@@ -66,4 +66,4 @@
 100.00% lines 100.00% branches  dashboard/src/lib/server/server-status.ts
 100.00% lines  98.86% branches  dashboard/src/lib/server/settings.ts
 100.00% lines 100.00% branches  dashboard/src/lib/server/tokens.ts
-TOTAL M4 (file dalam include coverage): lines 99.08% (1502/1516), branches 96.82% (1309/1352)
+# TOTAL kode baru M4 (dalam include): lines 1512/1526 = 99.08%  branches 1320/1363 = 96.85%

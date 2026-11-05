@@ -118,10 +118,44 @@ export function writeResults(extra: Record<string, unknown> = {}) {
 // ---- scan bukti (AC-4.34) ----
 const TOKEN_IN_BOOT_PATH = /(\/boot\/[0-9a-fA-F:%-]{12,40}\/)([A-Za-z0-9_-]{43})(?=\/)/g
 const PRIVATE_KEY = /-----BEGIN [A-Z ]*PRIVATE KEY-----/
+// B-5: secret di dalam blob base64 (mis. late-command `printf %s '<b64>' | base64 -d` yang
+// dicetak installer ke console serial). Selaras infra/redact-evidence.sh (_b64_secret) dan
+// .agent/runs/m4/b64-scan.py: blob >= 40 char, decode di offset 0-3 (UTF-8 & UTF-16LE: NUL
+// dibuang), bertingkat hingga 2 lapis lagi (blob dalam >= 16 char). Pola hasil decode: token pada
+// path /boot/<mac>/<token>, hash `$6$`, header private key, atau password run.
+const B64_RUN = /[A-Za-z0-9+/]{40,}={0,2}/g
+const B64_INNER = /[A-Za-z0-9+/]{16,}={0,2}/g
+const B64_DECODED_TOKEN = /\/boot\/[0-9a-fA-F:%-]{12,40}\/[A-Za-z0-9_-]{43}/
+
+/** Label secret bila `blob` base64 (setelah decode, bertingkat) memuatnya; null bila bersih. */
+export function base64Secret(blob: string, secrets: string[], depth = 2): string | null {
+  for (let off = 0; off < 4; off++) {
+    let s = blob.slice(off)
+    const eq = s.indexOf("=")
+    if (eq >= 0) s = s.slice(0, eq)
+    if (s.length < 16) continue
+    s = s.slice(0, Math.floor(s.length / 4) * 4)
+    const dec = Buffer.from(s, "base64").toString("latin1").replace(/\0/g, "")
+    if (!dec) continue
+    if (B64_DECODED_TOKEN.test(dec)) return "token /boot/ dalam base64"
+    if (dec.includes("$6$")) return "hash $6$ dalam base64"
+    if (dec.includes("PRIVATE KEY")) return "private key dalam base64"
+    for (const sec of secrets) if (sec && dec.includes(sec)) return "password run dalam base64"
+    if (depth > 0) {
+      for (const inner of new Set(dec.match(B64_INNER) ?? [])) {
+        const hit = base64Secret(inner, secrets, depth - 1)
+        if (hit) return hit
+      }
+    }
+  }
+  return null
+}
 
 /**
  * Samarkan token pada path /boot/ di file teks bukti (token sudah dicabut saat itu, R10) lalu
- * pindai: password run, token tersisa, private key. Mengembalikan daftar temuan (kosong = bersih).
+ * pindai: password run, token tersisa, private key, serta token/`$6$`/private key/password run di
+ * dalam blob base64 (B-5; tidak disamarkan di sini -> temuan). Mengembalikan daftar temuan
+ * (kosong = bersih).
  */
 export function scanEvidence(secrets: string[]): string[] {
   const findings: string[] = []
@@ -141,6 +175,10 @@ export function scanEvidence(secrets: string[]): string[] {
         TOKEN_IN_BOOT_PATH.lastIndex = 0
         if (PRIVATE_KEY.test(text)) findings.push(`${p}: private key`)
         for (const s of secrets) if (s && text.includes(s)) findings.push(`${p}: password run`)
+        for (const blob of new Set(text.match(B64_RUN) ?? [])) {
+          const hit = base64Secret(blob, secrets)
+          if (hit) findings.push(`${p}: ${hit} (${blob.slice(0, 16)}…)`)
+        }
       }
     }
   }

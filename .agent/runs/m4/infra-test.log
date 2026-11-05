@@ -1,4 +1,4 @@
-infra/test/run.sh — 2026-11-05T11:58:14Z
+infra/test/run.sh — 2026-11-05T13:32:30Z
   ok   bash -n semua script infra
   ok   set -euo pipefail di setiap script
   ok   PATH test hanya berisi virsh/ssh palsu, tanpa sudo
@@ -10,6 +10,9 @@ infra/test/run.sh — 2026-11-05T11:58:14Z
   ok   operasi disk VM selalu didahului assert_path_in_vms
   ok   node.sh create dry-run UEFI/BIOS sesuai spesifikasi
   ok   node.sh create/reset/destroy (palsu) idempoten
+  ok   node.sh create tanpa tahap install virt-install (B-3)
+  ok   node.sh reset: VM tetap running (on_reboot=restart, B-3)
+  ok   node.sh create gagal bila XML live on_reboot=destroy (B-3)
   ok   cleanup.sh hanya resource run + snapshot
   ok   cleanup.sh --server
   ok   cleanup.sh dry-run tanpa mutasi
@@ -25,7 +28,8 @@ infra/test/run.sh — 2026-11-05T11:58:14Z
   ok   tanpa sudo, ssh hanya dengan key, tanpa ~/.ssh
   ok   verify-node.sh: symlink, gagal cepat tanpa env, cek AC-4.31
   ok   redact-evidence: token path/token=/$6$ disamarkan, exit 0
+  ok   redact-evidence: blob base64 berisi token/$6$/key disamarkan (B-5)
   ok   redact-evidence: header private key → exit 1 tanpa isi
   ok   redact-evidence: argumen salah → exit 2
   ok   kvm-run.sh finish() memanggil redact-evidence (gagal = FAIL)
-hasil: 29 lulus, 0 gagal
+hasil: 33 lulus, 0 gagal
