@@ -32,12 +32,17 @@ const Toaster = ({ ...props }: ToasterProps) => {
           "--normal-bg": "var(--popover)",
           "--normal-text": "var(--popover-foreground)",
           "--normal-border": "var(--border)",
-          "--border-radius": "var(--radius)",
+          // Panel mengambang: radius 12px seperti Sheet/Dialog (I-1-5).
+          "--border-radius": "var(--radius-xl)",
         } as React.CSSProperties
       }
       toastOptions={{
+        // DR-1-2: tanpa drop shadow (SPEC §1). Sonner menyetel `box-shadow: 0 4px 12px …` pada
+        // `[data-sonner-toast][data-styled=true]` (juga saat :focus-visible) — ditimpa dengan
+        // !important; fokus keyboard memakai ring spread-only (offset 0, blur 0). Hairline 1px.
         classNames: {
-          toast: "cn-toast",
+          toast:
+            "cn-toast shadow-none! border! border-border! rounded-xl! focus-visible:ring-[3px] focus-visible:ring-ring/50",
         },
       }}
       {...props}

@@ -226,6 +226,10 @@ export function takenHostnames(ctx: Context): Map<string, string> {
 /** Rencana IP per host (bulk dari range/increment, single dari input). */
 export function ipPlan(f: NetForm, ctx: Context): IpPlanRow[] {
   const usage = ipUsageFor(ctx)
+  // IP host tidak boleh sama dengan gateway payload (CR-3-14), sama dengan API
+  // (`config-service.ts`): bentrok host lain tetap diutamakan.
+  const gw = f.gateway.trim()
+  if (gw && !usage.used.has(gw)) usage.used.set(gw, `gateway ${gw}`)
   if (ctx.hosts.length === 1) {
     const h = ctx.hosts[0]
     const err =

@@ -415,13 +415,14 @@ function ConfigForm({
             {dirtyList.length ? "Akan disimpan:" : "Belum ada perubahan."}
           </span>
           {dirtyList.map((k) => (
-            <Badge key={k} variant="outline" className="h-7 gap-1 bg-card pr-1">
+            <Badge key={k} variant="outline" className="h-7 gap-1 overflow-visible bg-card pr-1">
               {SECTION_LABEL[k]}
               <Button
                 variant="ghost"
                 size="icon-xs"
-                // Area klik 32px tanpa membesarkan badge (DR-3-3).
-                className="relative after:absolute after:-inset-1 after:content-['']"
+                // Area klik 38px (padding box 22 + 2×8) tanpa membesarkan badge; badge overflow-visible agar
+                // pseudo-element tidak terpotong (DR-3-3/DR-3-4).
+                className="relative after:absolute after:-inset-2 after:content-['']"
                 aria-label={`Batalkan perubahan ${SECTION_LABEL[k]}`}
                 onClick={() => resetSection(k)}
               >

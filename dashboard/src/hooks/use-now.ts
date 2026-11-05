@@ -15,19 +15,34 @@ function notify() {
   listeners.forEach((l) => l())
 }
 
+function refresh() {
+  now = Date.now()
+  notify()
+}
+
+function onVisibility() {
+  if (document.visibilityState === "visible") refresh()
+}
+
 function subscribe(onChange: () => void) {
   listeners.add(onChange)
+  // CR-2-2: segarkan saat subscribe (mis. kembali ke /hosts) — useSyncExternalStore membaca
+  // snapshot lagi setelah subscribe — dan saat tab terlihat kembali, tanpa menunggu tick.
+  now = Date.now()
   if (!timer) {
-    timer = setInterval(() => {
-      now = Date.now()
-      notify()
-    }, TICK_MS)
+    timer = setInterval(refresh, TICK_MS)
+    if (typeof document !== "undefined") {
+      document.addEventListener("visibilitychange", onVisibility)
+    }
   }
   return () => {
     listeners.delete(onChange)
     if (listeners.size === 0 && timer) {
       clearInterval(timer)
       timer = null
+      if (typeof document !== "undefined") {
+        document.removeEventListener("visibilitychange", onVisibility)
+      }
     }
   }
 }

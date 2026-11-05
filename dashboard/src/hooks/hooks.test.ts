@@ -231,3 +231,51 @@ describe("iter2 use-network-config", () => {
     expect(r2.result.current.error?.message).toBe("502 Bad Gateway")
   })
 })
+
+// ---- Iterasi 3: CR-2-2 use-now segar saat subscribe / tab terlihat kembali ----
+describe("iter3 CR-2-2 use-now", () => {
+  it("subscribe ulang memakai jam terbaru, bukan nilai tick terakhir", () => {
+    vi.useFakeTimers()
+    const t0 = Date.parse("2026-11-05T10:00:00Z")
+    vi.setSystemTime(t0)
+    syncServerClock(new Date(t0).toISOString(), t0)
+    const off = serverClockOffset()
+    const first = renderHook(() => useNow())
+    expect(first.result.current).toBe(t0 + off)
+    first.unmount()
+    // 40 dtk tanpa subscriber (pindah halaman): tidak ada tick.
+    vi.setSystemTime(t0 + 40_000)
+    const again = renderHook(() => useNow())
+    expect(again.result.current).toBe(t0 + 40_000 + off)
+    again.unmount()
+  })
+  it("visibilitychange → visible menyegarkan segera; hidden diabaikan; listener dilepas saat unmount", () => {
+    vi.useFakeTimers()
+    const t0 = Date.parse("2026-11-05T11:00:00Z")
+    vi.setSystemTime(t0)
+    const off = serverClockOffset()
+    let state: DocumentVisibilityState = "visible"
+    const spy = vi.spyOn(document, "visibilityState", "get").mockImplementation(() => state)
+    const { result, unmount } = renderHook(() => useNow())
+    expect(result.current).toBe(t0 + off)
+    // Jam maju 10 dtk (belum tick 15 dtk). Tab tersembunyi → tidak berubah.
+    vi.setSystemTime(t0 + 10_000)
+    state = "hidden"
+    act(() => {
+      document.dispatchEvent(new Event("visibilitychange"))
+    })
+    expect(result.current).toBe(t0 + off)
+    state = "visible"
+    act(() => {
+      document.dispatchEvent(new Event("visibilitychange"))
+    })
+    expect(result.current).toBe(t0 + 10_000 + off)
+    unmount()
+    const remove = vi.spyOn(document, "removeEventListener")
+    const again = renderHook(() => useNow())
+    again.unmount()
+    expect(remove).toHaveBeenCalledWith("visibilitychange", expect.any(Function))
+    spy.mockRestore()
+    remove.mockRestore()
+  })
+})

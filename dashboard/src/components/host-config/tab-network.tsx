@@ -234,14 +234,15 @@ export function TabNetwork({
                 <Badge
                   key={d}
                   variant="outline"
-                  className="type-data h-7 gap-1 bg-card pr-1"
+                  className="type-data h-7 gap-1 overflow-visible bg-card pr-1"
                 >
                   {d}
                   <Button
                     variant="ghost"
                     size="icon-xs"
-                    // Area klik 32px tanpa membesarkan badge (DR-3-3).
-                    className="relative after:absolute after:-inset-1 after:content-['']"
+                    // Area klik 38px (padding box 22 + 2×8) tanpa membesarkan badge; badge overflow-visible agar
+                    // pseudo-element tidak terpotong (DR-3-3/DR-3-4).
+                    className="relative after:absolute after:-inset-2 after:content-['']"
                     aria-label={`Hapus DNS ${d}`}
                     onClick={() =>
                       onChange({ dns: value.dns.filter((x) => x !== d) })
@@ -269,7 +270,7 @@ export function TabNetwork({
               <InputGroupAddon align="inline-end">
                 <InputGroupButton
                   size="xs"
-                  className="h-8 px-2.5"
+                  className="h-9 px-3"
                   disabled={!isIpv4(dnsDraft.trim()) || value.dns.length >= 4}
                   onClick={addDns}
                 >

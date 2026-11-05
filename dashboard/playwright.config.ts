@@ -1,3 +1,6 @@
+import { readdirSync } from "node:fs"
+import path from "node:path"
+
 import { defineConfig, devices } from "@playwright/test"
 
 const PORT = 3100
@@ -41,6 +44,31 @@ const FILE_SERVERS = [
 
 const chromium = { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }
 
+const TEST_DIR = path.join(__dirname, "e2e")
+/** Pola `testMatch` project "chromium" (spec read-only di server :3100). */
+const SHARED_MATCH = [/m1-.*\.spec\.ts/, /smoke\.spec\.ts/]
+const POLLING_MATCH = /m2-polling\.spec\.ts/
+
+/**
+ * CR-1-9: setiap `e2e/*.spec.ts` wajib terkumpul oleh tepat satu project. File yatim (tidak cocok
+ * pola mana pun) atau ganda membuat config gagal dimuat, sehingga suite tidak menyempit diam-diam.
+ */
+function assertEverySpecCollected() {
+  const patterns = [...SHARED_MATCH, POLLING_MATCH, ...FILE_SERVERS.map((s) => s.testMatch)]
+  const specs = readdirSync(TEST_DIR).filter((f) => f.endsWith(".spec.ts"))
+  const problems = specs
+    .map((f) => ({ f, n: patterns.filter((re) => re.test(path.join(TEST_DIR, f))).length }))
+    .filter(({ n }) => n !== 1)
+    .map(({ f, n }) => `${f} (cocok ${n} project)`)
+  if (problems.length) {
+    throw new Error(
+      `playwright.config.ts: spec E2E tidak terkumpul tepat satu project: ${problems.join(", ")}. ` +
+        "Tambahkan ke FILE_SERVERS atau pola project yang sesuai.",
+    )
+  }
+}
+assertEverySpecCollected()
+
 // E2E selalu terhadap build produksi (`next build && next start`) dengan simulasi store mock
 // dimatikan (DEC-005) agar keadaan deterministik. Chromium bundel Playwright (DEC-004).
 export default defineConfig({
@@ -62,12 +90,12 @@ export default defineConfig({
     {
       // Spec read-only (M1 + smoke) berbagi server :3100.
       name: "chromium",
-      testMatch: [/m1-.*\.spec\.ts/, /smoke\.spec\.ts/],
+      testMatch: SHARED_MATCH,
       use: { ...chromium, baseURL: BASE_URL },
     },
     {
       name: "m2-polling",
-      testMatch: /m2-polling\.spec\.ts/,
+      testMatch: POLLING_MATCH,
       use: { ...chromium, baseURL: `http://localhost:${DISCOVERY_PORT}` },
     },
     ...FILE_SERVERS.map((s) => ({

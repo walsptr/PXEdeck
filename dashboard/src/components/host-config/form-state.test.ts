@@ -327,3 +327,38 @@ describe("iter2 CR-3-5 key yang gagal di-parse memblokir simpan; private key tid
     expect(JSON.stringify(p)).not.toContain("PRIVATE KEY")
   })
 })
+
+// ---- Iterasi 3 ----
+
+describe("iter3 CR-3-14 IP host = gateway payload ditolak di klien (sama dengan API)", () => {
+  it("single: IP = gateway yang diketik → 'Bentrok dengan gateway <gw>'", () => {
+    const ctx: Context = { hosts: [B], allHosts: [B] }
+    const f = initialForm([B])
+    const r = ipPlan({ ...f.network, ip: "10.10.10.5", gateway: "10.10.10.5" }, ctx)
+    expect(r).toEqual([{ hostId: B.id, ip: "10.10.10.5", error: "Bentrok dengan gateway 10.10.10.5" }])
+    // Gateway dengan spasi tetap dicocokkan.
+    expect(ipPlan({ ...f.network, ip: "10.10.10.5", gateway: " 10.10.10.5 " }, ctx)[0].error).toBe("Bentrok dengan gateway 10.10.10.5")
+    expect(ipPlan({ ...f.network, ip: "10.10.10.6", gateway: "10.10.10.5" }, ctx)[0].error).toBeNull()
+    expect(sectionErrors(edit(f, { network: { ip: "10.10.10.5", gateway: "10.10.10.5" } }), dirty(), ctx, null).network).toEqual([
+      "Bentrok dengan gateway 10.10.10.5",
+    ])
+  })
+  it("bentrok host lain tetap diutamakan atas label gateway", () => {
+    const ctx: Context = { hosts: [B], allHosts: [B, OTHER] }
+    const f = initialForm([B])
+    expect(ipPlan({ ...f.network, ip: "10.10.10.21", gateway: "10.10.10.21" }, ctx)[0].error).toBe("Bentrok dengan ctrl-01")
+  })
+  it("bulk: skipUsed melompati gateway; tanpa skipUsed → error gateway", () => {
+    const ctx: Context = { hosts: [B, C], allHosts: [B, C] }
+    const f = initialForm([B, C])
+    const net = { ...f.network, start: "10.10.10.30", end: "10.10.10.40", gateway: "10.10.10.31" }
+    expect(ipPlan({ ...net, skipUsed: true }, ctx).map((r) => r.ip)).toEqual(["10.10.10.30", "10.10.10.32"])
+    const strict = ipPlan({ ...net, skipUsed: false }, ctx)
+    expect(strict.some((r) => r.error === "Bentrok dengan gateway 10.10.10.31")).toBe(true)
+  })
+  it("gateway kosong tidak menambah entri usage", () => {
+    const ctx: Context = { hosts: [B], allHosts: [B] }
+    const f = initialForm([B])
+    expect(ipPlan({ ...f.network, ip: "10.10.10.5", gateway: "" }, ctx)[0].error).toBeNull()
+  })
+})
