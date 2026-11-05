@@ -73,28 +73,24 @@ function StatusCell({ job }: { job: JobSummary }) {
   )
 }
 
-function CreatedCell({ iso }: { iso: string }) {
+/** Dibuat (relatif, tooltip waktu absolut) + durasi job (mono) dalam satu sel. */
+function TimeCell({ job }: { job: JobSummary }) {
   const now = useNow()
   if (!now) return <span className="text-muted-foreground">…</span>
   return (
-    <Tooltip>
-      <TooltipTrigger asChild>
-        <span className="type-caption cursor-default text-body">
-          {formatRelative(iso, now)}
-        </span>
-      </TooltipTrigger>
-      <TooltipContent>{formatDateTime(iso)}</TooltipContent>
-    </Tooltip>
-  )
-}
-
-function DurationCell({ job }: { job: JobSummary }) {
-  const now = useNow()
-  if (!now && !job.finishedAt) return <span className="text-muted-foreground">…</span>
-  return (
-    <span className="type-data text-xs text-body">
-      {formatDuration(jobDurationMs(job, now))}
-    </span>
+    <div className="flex flex-col gap-0.5">
+      <Tooltip>
+        <TooltipTrigger asChild>
+          <span className="type-caption cursor-default text-body" data-testid="job-row-created">
+            {formatRelative(job.createdAt, now)}
+          </span>
+        </TooltipTrigger>
+        <TooltipContent>{formatDateTime(job.createdAt)}</TooltipContent>
+      </Tooltip>
+      <span className="type-data text-xs text-muted-foreground" data-testid="job-row-duration">
+        {formatDuration(jobDurationMs(job, now))}
+      </span>
+    </div>
   )
 }
 
@@ -111,19 +107,12 @@ const columns = helper.columns([
     cell: ({ row }) => <StatusCell job={row.original} />,
   }),
   helper.display({
-    id: "created",
-    header: "Dibuat",
-    cell: ({ row }) => <CreatedCell iso={row.original.createdAt} />,
-  }),
-  helper.display({
-    id: "duration",
-    header: "Durasi",
-    cell: ({ row }) => <DurationCell job={row.original} />,
+    id: "time",
+    header: "Dibuat / durasi",
+    cell: ({ row }) => <TimeCell job={row.original} />,
     meta: { headClassName: "pr-4", cellClassName: "pr-4" },
   }),
 ])
-
-export const JOBS_TABLE_COLUMNS = columns.length
 
 /** Daftar job (TanStack Table). Klik baris / Enter memilih job untuk panel detail. */
 export function JobsTable({
