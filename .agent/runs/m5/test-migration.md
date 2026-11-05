@@ -58,3 +58,23 @@ skema migrasi 2, golden file (hanya test "golden file", `containsSecret` token t
 
 **Kesimpulan: tidak ditemukan pelemahan test. 7/7 butir semantik sah menurut DEC-013/014/015; #9
 dilengkapi test pengganti untuk cabang token kedaluwarsa.**
+
+## Iterasi 2 — backend-dev (SR-5-1, SR-5-2, CR-5-1 + SR-5-5a, CR-5-2/DEC-016, DR-5-4)
+
+Tidak ada test lama yang diubah, dihapus, di-skip, atau dilonggarkan oleh backend-dev di iterasi 2.
+Semua asersi lama tetap lulus tanpa perubahan:
+- Teks DR-5-4 diganti tanpa menyentuh test: asersi lama memakai potongan yang tetap ada
+  (`/hanya generator/`, `/Windows: hanya generator unattend\.xml/`, `/custom belum didukung/`, `/custom/`).
+- CR-5-2: AC-5.8 (`m5-te-lifecycle-routes.test.ts`) menghitung `entered` dari entri tahap terakhir;
+  di fixture itu install dan penyajian installer terjadi pada detik yang sama, jadi entri pertama = terakhir
+  dan test tetap lulus tanpa perubahan. Semantik baru (entri pertama) dibuktikan oleh test baru di bawah.
+- AC-5.13 (`dua[31m merah\tkolom`) tetap: sanitasi hanya membuang karakter kontrol, tidak membuang
+  sekuens ANSI utuh (sengaja tidak diubah).
+
+Test baru: `dashboard/src/lib/server/m5-iter2-redact-timeout.test.ts` (37 test).
+| Temuan | Test |
+|---|---|
+| SR-5-1 | `cleanEventMessage` + `appendEvent` (DB): token 43 karakter di `token=`/JSON/path dan hash `$6$` (biasa/rounds) yang disisipi ESC/\x01, serta header private key bersisip \x01 → teredaksi; asersi kontrol bahwa urutan lama (redaksi → sanitasi) memang bocor; redaksi sebelum pemotongan 2048; `stripControl` dengan/tanpa newline |
+| SR-5-2 | `redactSecrets` body utuh: blok multi-baris dengan dan tanpa footer, footer END yatim; `handleLogPost`: blok dengan/tanpa footer → tidak ada baris base64 di DB, blok terpecah dua request, batas 200 baris dihitung dari body mentah |
+| CR-5-1 + SR-5-5(a) | token terpotong `cut -c1-240` di setiap panjang 8..43 (36 kasus), terpotong di tengah baris untuk 4 bentuk MAC, percent-encoded `%2F`/`%2f` (utuh & terpotong), hash `$6$` terpotong di setiap panjang (biasa & rounds), negatif (44 karakter, < 8, `token=` pendek, `$6$` tanpa salt), base64 berisi token parsial/percent-encoded, `handleLogPost` dengan baris ber-token terpotong |
+| CR-5-2 | 2 dan 3 penyajian installer: timeout Booting dari entri `booting` pertama (gagal di +60 mnt, bukan +100 mnt), event penyajian tetap tercatat; Installing tetap dari entri `installing`; fallback `createdAt` |

@@ -1,6 +1,8 @@
 // Repo `job_events` (M5, DEC-014 §3): log job append-only dengan `seq` naik ketat per job.
-//  - `appendEvent` membersihkan (karakter kontrol, panjang) dan meredaksi pesan (`redactSecrets`)
-//    sebelum disimpan — pertahanan berlapis walau pemanggil sudah meredaksi.
+//  - `appendEvent` membersihkan dan meredaksi pesan sebelum disimpan — pertahanan berlapis walau
+//    pemanggil sudah meredaksi. Urutan (SR-5-1): buang karakter kontrol → redaksi
+//    (`redactSecrets`) → potong panjang. Redaksi setelah pembersihan agar secret yang disisipi
+//    ESC/\x01 tidak lolos lalu "menyatu kembali" setelah karakter kontrolnya dibuang.
 //  - Penggabungan: event `system` identik (kind, level, source, message) dengan event terakhir job
 //    yang `at`-nya ≤ 60 dtk lalu → `repeat += 1` (seq tidak bertambah; `jobs.updated_at` berubah).
 //  - Cap `PXE_JOB_LOG_MAX_EVENTS`: setelah `event_seq` ≥ cap, event `installer` dibuang dan satu
@@ -46,10 +48,36 @@ const CONTROL_RE = new RegExp(
   "g",
 )
 
+// Sama dengan CONTROL_RE tetapi mempertahankan \n dan \r (untuk body log multi-baris).
+const CONTROL_KEEP_NL_RE = new RegExp(
+  "[" +
+    [[0x00, 0x08], [0x0b, 0x0c], [0x0e, 0x1f], [0x7f, 0x9f], [0x2028, 0x2029]]
+      .map(([a, b]) => `${String.fromCharCode(a)}-${String.fromCharCode(b)}`)
+      .join("") +
+    "]",
+  "g",
+)
+
+/**
+ * Buang karakter kontrol (kecuali \t; `keepNewlines` juga mempertahankan \n/\r). Tanpa pemotongan
+ * panjang.
+ */
+export function stripControl(raw: string, keepNewlines = false): string {
+  return raw.replace(keepNewlines ? CONTROL_KEEP_NL_RE : CONTROL_RE, "")
+}
+
+function truncateMessage(s: string): string {
+  return s.length > EVENT_MESSAGE_MAX ? s.slice(0, EVENT_MESSAGE_MAX) + TRUNCATED_SUFFIX : s
+}
+
 /** Buang CR & karakter kontrol (kecuali \t), potong > EVENT_MESSAGE_MAX. */
 export function sanitizeMessage(raw: string): string {
-  const s = raw.replace(CONTROL_RE, "")
-  return s.length > EVENT_MESSAGE_MAX ? s.slice(0, EVENT_MESSAGE_MAX) + TRUNCATED_SUFFIX : s
+  return truncateMessage(stripControl(raw))
+}
+
+/** Pesan event: bersihkan kontrol → redaksi → potong (SR-5-1, lihat header). */
+export function cleanEventMessage(raw: string): string {
+  return truncateMessage(redactSecrets(stripControl(raw)))
 }
 
 type Row = Omit<JobEvent, "seq" | "repeat"> & { seq: number; repeat: number }
@@ -123,7 +151,7 @@ export function appendEvent(jobId: string, input: NewJobEvent, maxEvents: number
   const e: NewJobEvent = {
     ...input,
     source: sanitizeMessage(input.source).slice(0, 32) || "-",
-    message: sanitizeMessage(redactSecrets(input.message)),
+    message: cleanEventMessage(input.message),
   }
   const seq = Number(job.event_seq)
 

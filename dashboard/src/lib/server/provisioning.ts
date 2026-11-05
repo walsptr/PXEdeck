@@ -16,6 +16,7 @@
 // akses sah/transisi dicatat sebagai event job (tanpa token).
 import { configOrDefault, peekConfig } from "@/lib/server/db/repos/configs"
 import { getHost, setHostStatus } from "@/lib/server/db/repos/hosts"
+import { stripControl } from "@/lib/server/db/repos/job-events"
 import {
   ACTIVE_JOB_STATUSES,
   getJobByTokenHash,
@@ -30,6 +31,7 @@ import { parseBootMac } from "@/lib/server/discovery"
 import { buildContext, installerFile, InstallerInputError } from "@/lib/server/installers"
 import { failJob, logJobEvent, STAGE_LABEL, sweepJobs } from "@/lib/server/job-lifecycle"
 import { ipMatchesLease } from "@/lib/server/leases"
+import { redactSecrets } from "@/lib/server/redact"
 import { getSettings } from "@/lib/server/settings"
 import { hashToken, isTokenShape } from "@/lib/server/tokens"
 import type { Host } from "@/lib/types"
@@ -303,9 +305,12 @@ export function handleLogPost(input: {
     const cfg = configOrDefault(host)
     const staticIp = cfg.network.mode === "static" ? cfg.network.ip : null
     if (!ipAllowed(host, input.ip, [staticIp, host.mgmtIp])) return deny("ip")
-    const lines = splitLogLines(input.text)
-    if (lines.length > LOG_MAX_LINES) return { ok: false, status: 413, reason: "lines" }
+    if (splitLogLines(input.text).length > LOG_MAX_LINES) return { ok: false, status: 413, reason: "lines" }
     if (!rateAllow(job.id, now.getTime())) return { ok: false, status: 429, reason: "rate" }
+    // SR-5-2/SR-5-1: redaksi atas SELURUH body (setelah karakter kontrol dibuang, \n dipertahankan)
+    // sebelum dipecah per baris, agar blok private key multi-baris (juga tanpa footer) tersamarkan
+    // utuh. Tiap baris diredaksi lagi di `appendEvent` (berlapis).
+    const lines = splitLogLines(redactSecrets(stripControl(input.text, true)))
     const at = now.toISOString()
     for (const line of lines) {
       logJobEvent(job.id, {
