@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# cloud-localds PALSU untuk test infra: hanya mencatat argumen (stdin dibuang). Tidak ada koneksi jaringan.
+echo "cloud-localds $*" >> "$FAKE_LOG"
+cat >/dev/null 2>&1 || true
+exit 0

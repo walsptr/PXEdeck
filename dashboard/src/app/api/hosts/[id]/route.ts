@@ -8,10 +8,11 @@ import {
   readJson,
   validationFailed,
 } from "@/lib/server/http"
-import { deleteHost, getHost } from "@/lib/server/mock-hosts"
+import { deleteHost, getHost } from "@/lib/server/db/repos/hosts"
 
 // Id bukan 12 hex → 400; host tidak ada → 404; mutasi lewat guardMutation
-// (403/415) — lihat lib/server/http.ts.
+// (403/415) — lihat lib/server/http.ts. DELETE meng-cascade config, join key,
+// dan job (token job ikut tercabut).
 
 export async function GET(_req: Request, ctx: RouteContext<"/api/hosts/[id]">) {
   const p = hostIdParam((await ctx.params).id)

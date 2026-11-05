@@ -1,0 +1,42 @@
+2026-11-05T13:12:47Z preflight          ok max_nodes=3 avail_mb=12998
+[2026-11-05T13:12:47Z] network pxe-test sudah terdefinisi
+[2026-11-05T13:12:47Z] network pxe-test sudah aktif
+[2026-11-05T13:12:47Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T13:12:47Z] network pxe-test-nat sudah aktif
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+2026-11-05T13:12:47Z net-up             ok 
+[2026-11-05T13:12:47Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-05T13:12:47Z] network pxe-test sudah terdefinisi
+[2026-11-05T13:12:47Z] network pxe-test sudah aktif
+[2026-11-05T13:12:47Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T13:12:47Z] network pxe-test-nat sudah aktif
+[2026-11-05T13:12:47Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-05T13:12:57Z] SSH siap dalam 10s
+[2026-11-05T13:12:58Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/fix-B4/server-listen.txt
+2026-11-05T13:12:58Z server-up          ok 
+[2026-11-05T13:12:58Z] build standalone (PXE_STANDALONE=1 npm run build)
+[2026-11-05T13:13:15Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261105T131258Z
+[2026-11-05T13:13:19Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/fix-B4/deploy-dashboard.txt)
+2026-11-05T13:13:19Z deploy             ok 
+2026-11-05T13:13:19Z server-check       ok 
+[2026-11-05T13:13:19Z] create pxe-test-m4-node19 (uefi, 52:54:00:99:00:19, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+2026-11-05T13:13:20Z node-create        ok pxe-test-m4-node19 uefi 52:54:00:99:00:19
+2026-11-05T13:26:57Z playwright         ok exit=0 (playwright-kvm.log)
+2026-11-05T13:26:57Z verify             ok pxe-test-m4-node19 (pxe-test-m4-node19-verify.txt)
+2026-11-05T13:26:57Z evidence           start 
+2026-11-05T13:26:58Z evidence           done 

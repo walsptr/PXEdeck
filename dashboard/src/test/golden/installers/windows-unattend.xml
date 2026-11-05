@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<unattend xmlns="urn:schemas-microsoft-com:unattend">
+  <settings pass="windowsPE">
+    <component name="Microsoft-Windows-International-Core-WinPE" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <SetupUILanguage>
+        <UILanguage>en-US</UILanguage>
+      </SetupUILanguage>
+      <InputLocale>en-US</InputLocale>
+      <SystemLocale>en-US</SystemLocale>
+      <UILanguage>en-US</UILanguage>
+      <UserLocale>en-US</UserLocale>
+    </component>
+    <component name="Microsoft-Windows-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <UserData>
+        <AcceptEula>true</AcceptEula>
+      </UserData>
+    </component>
+  </settings>
+  <settings pass="specialize">
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <ComputerName>m4-node11</ComputerName>
+      <TimeZone>UTC</TimeZone>
+    </component>
+    <component name="Microsoft-Windows-TCPIP" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Interfaces>
+        <Interface wcm:action="add">
+          <Ipv4Settings>
+            <DhcpEnabled>false</DhcpEnabled>
+          </Ipv4Settings>
+          <Identifier>52-54-00-99-00-11</Identifier>
+          <UnicastIpAddresses>
+            <IpAddress wcm:action="add" wcm:keyValue="1">10.99.0.21/24</IpAddress>
+          </UnicastIpAddresses>
+          <Routes>
+            <Route wcm:action="add">
+              <Identifier>0</Identifier>
+              <Prefix>0.0.0.0/0</Prefix>
+              <NextHopAddress>10.99.0.1</NextHopAddress>
+            </Route>
+          </Routes>
+        </Interface>
+      </Interfaces>
+    </component>
+    <component name="Microsoft-Windows-DNS-Client" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <Interfaces>
+        <Interface wcm:action="add">
+          <Identifier>52-54-00-99-00-11</Identifier>
+          <DNSServerSearchOrder>
+            <IpAddress wcm:action="add" wcm:keyValue="1">10.99.0.2</IpAddress>
+          </DNSServerSearchOrder>
+        </Interface>
+      </Interfaces>
+    </component>
+  </settings>
+  <settings pass="oobeSystem">
+    <component name="Microsoft-Windows-Shell-Setup" processorArchitecture="amd64" publicKeyToken="31bf3856ad364e35" language="neutral" versionScope="nonSxS" xmlns:wcm="http://schemas.microsoft.com/WMIConfig/2002/State" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+      <OOBE>
+        <HideEULAPage>true</HideEULAPage>
+        <HideOnlineAccountScreens>true</HideOnlineAccountScreens>
+        <HideWirelessSetupInOOBE>true</HideWirelessSetupInOOBE>
+        <ProtectYourPC>3</ProtectYourPC>
+      </OOBE>
+      <UserAccounts>
+        <LocalAccounts>
+          <LocalAccount wcm:action="add">
+            <Password>
+              <Value>RANDOM</Value>
+              <PlainText>true</PlainText>
+            </Password>
+            <Group>Administrators</Group>
+            <Name>pxeadmin</Name>
+          </LocalAccount>
+        </LocalAccounts>
+      </UserAccounts>
+      <AutoLogon>
+        <Password>
+          <Value>RANDOM</Value>
+          <PlainText>true</PlainText>
+        </Password>
+        <Enabled>true</Enabled>
+        <LogonCount>1</LogonCount>
+        <Username>pxeadmin</Username>
+      </AutoLogon>
+      <FirstLogonCommands>
+        <SynchronousCommand wcm:action="add">
+          <Order>1</Order>
+          <CommandLine>powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand QQBkAGQALQBXAGkAbgBkAG8AdwBzAEMAYQBwAGEAYgBpAGwAaQB0AHkAIAAtAE8AbgBsAGkAbgBlACAALQBOAGEAbQBlACAATwBwAGUAbgBTAFMASAAuAFMAZQByAHYAZQByAH4AfgB+AH4AMAAuADAALgAxAC4AMAA=</CommandLine>
+          <Description>pxe-1</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>2</Order>
+          <CommandLine>powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand JABkACAAPQAgACcAQwA6AFwAUAByAG8AZwByAGEAbQBEAGEAdABhAFwAcwBzAGgAJwA7ACAATgBlAHcALQBJAHQAZQBtACAALQBJAHQAZQBtAFQAeQBwAGUAIABEAGkAcgBlAGMAdABvAHIAeQAgAC0ARgBvAHIAYwBlACAALQBQAGEAdABoACAAJABkACAAfAAgAE8AdQB0AC0ATgB1AGwAbAA7ACAAJABmACAAPQAgAEoAbwBpAG4ALQBQAGEAdABoACAAJABkACAAJwBhAGQAbQBpAG4AaQBzAHQAcgBhAHQAbwByAHMAXwBhAHUAdABoAG8AcgBpAHoAZQBkAF8AawBlAHkAcwAnADsAIABbAEkATwAuAEYAaQBsAGUAXQA6ADoAVwByAGkAdABlAEEAbABsAEIAeQB0AGUAcwAoACQAZgAsACAAWwBDAG8AbgB2AGUAcgB0AF0AOgA6AEYAcgBvAG0AQgBhAHMAZQA2ADQAUwB0AHIAaQBuAGcAKAAnAGMAMwBOAG8ATABXAFYAawBNAGoAVQAxAE0AVABrAGcAUQBVAEYAQgBRAFUATQB6AFQAbgBwAGgAUQB6AEYAcwBXAGsAUgBKAE0AVQA1AFUAUgBUAFYAQgBRAFUARgBCAFMAVQBNADMAZAAyADkASwBOADAAVgBwAE0AVgBOAEkAUwAwAGgAbQBTAHoAaABSAE8ARwBsAEgAVwBHADAAeQBMADAASQB5AFMAMABSAFoAZABuAHAAegBhAFQATgBIAFIAbgBwAFQAVQBIAGwAQwBLADAAUQBnAFoAbQBsADQAZABIAFYAeQBaAFMAMQBsAFoARABJADEATgBUAEUANQBRAEgAUgBsAGMAMwBRAEsAYwAzAE4AbwBMAFcAVgBrAE0AagBVADEATQBUAGsAZwBRAFUARgBCAFEAVQBNAHoAVABuAHAAaABRAHoARgBzAFcAawBSAEoATQBVADUAVQBSAFQAVgBCAFEAVQBGAEIAUwBVAE4AVgBNAFUAaABtAFUAagBSAGgAVQAwAHAAcwBVADAAMQBYAGUAbgBOAE0AVgBIAGcAMQBSADAAbwByAFoAVgBoAFQAVwBuAFIAcABaAFgAbABMAGMAVABkAFYAZABsAEIAVwBhADMAVgB2AGIAbgBJAGcAWgBtAGwANABkAEgAVgB5AFoAUwAxAGwAWgBEAEkAMQBOAFQARQA1AEwAVwBKAEEAZABHAFYAegBkAEEAbwA9ACcAKQApADsAIABpAGMAYQBjAGwAcwAuAGUAeABlACAAJABmACAALwBpAG4AaABlAHIAaQB0AGEAbgBjAGUAOgByACAALwBnAHIAYQBuAHQAIAAnAEEAZABtAGkAbgBpAHMAdAByAGEAdABvAHIAcwA6AEYAJwAgAC8AZwByAGEAbgB0ACAAJwBTAFkAUwBUAEUATQA6AEYAJwAgAHwAIABPAHUAdAAtAE4AdQBsAGwA</CommandLine>
+          <Description>pxe-2</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>3</Order>
+          <CommandLine>powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand JABjACAAPQAgACcAQwA6AFwAUAByAG8AZwByAGEAbQBEAGEAdABhAFwAcwBzAGgAXABzAHMAaABkAF8AYwBvAG4AZgBpAGcAJwA7ACAAaQBmACAAKAAtAG4AbwB0ACAAKABUAGUAcwB0AC0AUABhAHQAaAAgACQAYwApACkAIAB7ACAAUwB0AGEAcgB0AC0AUwBlAHIAdgBpAGMAZQAgAHMAcwBoAGQAOwAgAFMAdABvAHAALQBTAGUAcgB2AGkAYwBlACAAcwBzAGgAZAAgAH0AOwAgAEEAZABkAC0AQwBvAG4AdABlAG4AdAAgAC0AUABhAHQAaAAgACQAYwAgAC0AVgBhAGwAdQBlACAAJwBQAGEAcwBzAHcAbwByAGQAQQB1AHQAaABlAG4AdABpAGMAYQB0AGkAbwBuACAAbgBvACcA</CommandLine>
+          <Description>pxe-3</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>4</Order>
+          <CommandLine>powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand UwBlAHQALQBTAGUAcgB2AGkAYwBlACAALQBOAGEAbQBlACAAcwBzAGgAZAAgAC0AUwB0AGEAcgB0AHUAcABUAHkAcABlACAAQQB1AHQAbwBtAGEAdABpAGMAOwAgAFMAdABhAHIAdAAtAFMAZQByAHYAaQBjAGUAIABzAHMAaABkADsAIABOAGUAdwAtAE4AZQB0AEYAaQByAGUAdwBhAGwAbABSAHUAbABlACAALQBOAGEAbQBlACAAcwBzAGgAZAAgAC0ARABpAHMAcABsAGEAeQBOAGEAbQBlACAAJwBPAHAAZQBuAFMAUwBIACAAUwBlAHIAdgBlAHIAJwAgAC0AUAByAG8AdABvAGMAbwBsACAAVABDAFAAIAAtAEwAbwBjAGEAbABQAG8AcgB0ACAAMgAyACAALQBBAGMAdABpAG8AbgAgAEEAbABsAG8AdwAgAC0ARQByAHIAbwByAEEAYwB0AGkAbwBuACAAUwBpAGwAZQBuAHQAbAB5AEMAbwBuAHQAaQBuAHUAZQAgAHwAIABPAHUAdAAtAE4AdQBsAGwA</CommandLine>
+          <Description>pxe-4</Description>
+        </SynchronousCommand>
+        <SynchronousCommand wcm:action="add">
+          <Order>5</Order>
+          <CommandLine>powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand dAByAHkAIAB7ACAASQBuAHYAbwBrAGUALQBXAGUAYgBSAGUAcQB1AGUAcwB0ACAALQBVAHMAZQBCAGEAcwBpAGMAUABhAHIAcwBpAG4AZwAgAC0ATQBlAHQAaABvAGQAIABQAG8AcwB0ACAALQBCAG8AZAB5ACAAJwBzAHQAYQBnAGUAPQBkAG8AbgBlACcAIAAtAFUAcgBpACAAJwBoAHQAdABwADoALwAvADEAMAAuADkAOQAuADAALgAyAC8AYgBvAG8AdAAvADUAMgA6ADUANAA6ADAAMAA6ADkAOQA6ADAAMAA6ADEAMQAvAEYASQBYAFQAVQBSAEUALQB0AG8AawBlAG4ALQBuAG8AdAAtAHIAZQBhAGwAXwAwADAAMAAwADAAMAAwADAAMAAwADAAMAAwADAAMAAwADAAMAAwADAALwBzAHQAYQB0AHUAcwAnACAAfAAgAE8AdQB0AC0ATgB1AGwAbAAgAH0AIABjAGEAdABjAGgAIAB7AH0A</CommandLine>
+          <Description>pxe-5</Description>
+        </SynchronousCommand>
+      </FirstLogonCommands>
+    </component>
+  </settings>
+</unattend>

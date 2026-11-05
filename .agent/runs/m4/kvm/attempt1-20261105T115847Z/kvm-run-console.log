@@ -1,0 +1,63 @@
+2026-11-05T11:58:47Z preflight          ok max_nodes=3 avail_mb=16109
+[2026-11-05T11:58:47Z] network pxe-test sudah terdefinisi
+Network pxe-test started
+
+[2026-11-05T11:58:48Z] network pxe-test-nat sudah terdefinisi
+Network pxe-test-nat started
+
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+2026-11-05T11:58:48Z net-up             ok 
+[2026-11-05T11:58:48Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-05T11:58:48Z] network pxe-test sudah terdefinisi
+[2026-11-05T11:58:48Z] network pxe-test sudah aktif
+[2026-11-05T11:58:48Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T11:58:48Z] network pxe-test-nat sudah aktif
+[2026-11-05T11:58:48Z] start pxe-test-server
+Domain 'pxe-test-server' started
+
+[2026-11-05T11:58:57Z] SSH siap dalam 9s
+[2026-11-05T11:58:58Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/server-listen.txt
+2026-11-05T11:58:58Z server-up          ok 
+[2026-11-05T11:58:58Z] build standalone (PXE_STANDALONE=1 npm run build)
+[2026-11-05T11:59:14Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261105T115858Z
+[2026-11-05T11:59:17Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/deploy-dashboard.txt)
+2026-11-05T11:59:17Z deploy             ok 
+2026-11-05T11:59:18Z server-check       ok 
+[2026-11-05T11:59:18Z] create pxe-test-m4-node11 (uefi, 52:54:00:99:00:11, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+
+Domain is still running. Installation may be in progress.
+You can reconnect to the console to complete the installation process.
+2026-11-05T11:59:19Z node-create        ok pxe-test-m4-node11 uefi 52:54:00:99:00:11
+[2026-11-05T11:59:19Z] create pxe-test-m4-node12 (bios, 52:54:00:99:00:12, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+
+Domain is still running. Installation may be in progress.
+You can reconnect to the console to complete the installation process.
+2026-11-05T11:59:20Z node-create        ok pxe-test-m4-node12 bios 52:54:00:99:00:12
+2026-11-05T11:59:32Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-05T11:59:32Z evidence           start 
+2026-11-05T11:59:33Z evidence           done 
+redact-evidence: 37 file di /home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm bersih (token/hash disamarkan)
+2026-11-05T11:59:33Z redact             ok 
+Domain 'pxe-test-server' is being shutdown
+
+Domain 'pxe-test-server' has been undefined
+
+[2026-11-05T11:59:36Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-05T11:59:36Z] cleanup run m4 selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/cleanup.txt)
+2026-11-05T11:59:36Z cleanup            done 
+2026-11-05T11:59:36Z result             FAIL exit=1
+exit=1

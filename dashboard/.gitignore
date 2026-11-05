@@ -46,3 +46,8 @@ next-env.d.ts
 /playwright-report/
 /blob-report/
 /playwright/.cache/
+/data/
+
+# data sementara test (M4: DB SQLite, media palsu, lease fixture)
+/.test-tmp/
+/.e2e-data/

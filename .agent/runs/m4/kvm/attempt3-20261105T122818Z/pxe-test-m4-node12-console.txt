@@ -1,0 +1,37 @@
+cSeaBIOS (version 1.17.0-10.fc44)
+Machine UUID f7bb86de-f1f1-4a40-b910-44aaeb8aee93
+
+
+iPXE (https://ipxe.org) 01:00.0 C000 PCI2.10 PnP PMM+7EFCA450+7EF0A450 C000
+Press Ctrl-B to configure iPXE (PCI 01:00.0)...                                                                               
+
+
+Booting from ROM...
+iPXE (PCI 01:00.0) starting execution...ok
+iPXE initialising devices...ok
+
+
+
+iPXE 1.0.0+ (de8a0821) -- Open Source Network Boot Firmware -- https://ipxe.org
+Features: DNS HTTP HTTPS iSCSI NFS TFTP AoE ELF MBOOT PXE bzImage Menu PXEXT
+
+Press Ctrl-B for the iPXE command line...                                         net0: 52:54:00:99:00:12 using virtio-net on 0000:01:00.0 (Ethernet) [open]
+  [Link:up, TX:0 TXE:0 RX:0 RXE:0]
+Configuring (net0 52:54:00:99:00:12).............. ok
+net0: 10.99.0.185/255.255.255.0 gw 10.99.0.1
+net0: fe80::5054:ff:fe99:12/64
+Next server: 10.99.0.2
+Filename: http://10.99.0.2/boot/52:54:00:99:00:12.ipxe?platform=pcbios
+http://10.99.0.2/boot/52:54:00:99:00:12.ipxe... ok
+52:54:00:99:00:12.ipxe : 135 bytes [script]
+Tidak ada instalasi aktif: boot dari disk lokal
+Booting from SAN device 0x80
+Boot from SAN device 0x80 failed: Input/output error (https://ipxe.org/1d852039)
+
+
+No more network devices
+
+Press Ctrl-B for the iPXE command line...                                         Booting from Hard Disk...
+Boot failed: not a bootable disk
+
+No bootable device.

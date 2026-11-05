@@ -1,0 +1,6 @@
+# CR-1-10: spec yatim di subfolder e2e/zz-guard-check/ → config harus gagal dimuat
+$ npx playwright test --list
+Error: playwright.config.ts: spec E2E tidak terkumpul tepat satu project: zz-guard-check/orphan.spec.ts (cocok 0 project). Tambahkan ke FILE_SERVERS atau pola project yang sesuai.
+exit(list dengan spec yatim)=1
+# tanpa spec yatim:
+Total: 69 tests in 12 files

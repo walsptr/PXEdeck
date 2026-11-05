@@ -127,7 +127,7 @@ export function defaultIpRange(mgmt: MgmtNetwork): { start: string; end: string 
 export function initialForm(
   hosts: Host[],
   config?: PublicHostConfig,
-  /** Subnet management aktif dari server (`GET /api/network`, CR-3-2). */
+  /** Subnet management aktif dari server (`GET /api/settings`, CR-3-2). */
   mgmt: MgmtNetwork = MGMT_NETWORK,
 ): FormState {
   const single = hosts.length === 1 ? hosts[0] : null
@@ -193,7 +193,7 @@ export type Context = {
   /** Semua host (untuk deteksi bentrok IP/hostname di luar batch). */
   allHosts: Host[]
   config?: PublicHostConfig
-  /** Subnet management aktif dari server; default lab hanya untuk test/fallback. */
+  /** Subnet management aktif dari server (`GET /api/settings`); default lab hanya untuk test. */
   net?: MgmtNetwork
 }
 

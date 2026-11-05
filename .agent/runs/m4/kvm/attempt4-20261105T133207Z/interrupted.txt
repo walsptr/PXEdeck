@@ -1,0 +1,9 @@
+# attempt4 kvm-run m4 20261105T133207Z @ b3a7ed4 (+ scanEvidence base64) — dihentikan test-engineer
+AC-4.29 PASS; AC-4.30 PASS (node11 UEFI, 593 s: booting 13:33:04 -> installing 13:33:40 -> configuring 13:39:01 -> done 13:42:36);
+AC-4.31 PASS (node11, 217 s, reboot dari disk); AC-4.32 PASS; scan bukti 0 temuan (teks + base64).
+AC-4.33 (node12 BIOS): Sheet "Simpan & Install" -> PATCH /api/hosts/525400990012 = 422 (server-nginx.txt 13:46:15).
+Penyebab: bug HARNESS (bukan produk): m4-install.spec.ts menempel public key run yang sama sebagai
+"key baru" untuk setiap node; key itu sudah masuk library saat node11 (m4-11-run-key), dan produk
+(G3-3, M3) menolak key baru ber-fingerprint sama dengan 422 "sudah ada di library ... pilih dari library".
+Spec lalu menunggu POST /install tanpa batas (actionTimeout 0) -> Playwright di-SIGINT 13:57:51,
+kvm-run trap: evidence -> redact ok -> cleanup done (exit 130). Perbaikan di spec, run diulang (attempt resmi berikutnya).

@@ -6,10 +6,16 @@
 // Validasi + penerapan (`applyConfigPrepared`) sepenuhnya sinkron, sehingga
 // dua request paralel tidak bisa sama-sama lolos cek IP/hostname bentrok.
 //
+// Sejak M4 (DEC-007) data ada di SQLite: validasi + penerapan berjalan di
+// dalam satu transaksi `BEGIN IMMEDIATE` (`tx`), constraint UNIQUE (MAC, IP
+// statis, hostname case-insensitive, fingerprint key) menjadi pertahanan
+// kedua → pelanggarannya dipetakan ke 422 yang sama.
+//
 // Aturan yang perlu diketahui klien:
 //  - Network statis (DEC-006): prefix wajib = prefix subnet management,
 //    IP & gateway wajib host di subnet management (jadi selalu satu subnet),
-//    gateway di luar range DHCP dinamis, IP host ≠ gateway payload, DNS IPv4.
+//    gateway di luar range DHCP dinamis, IP host ≠ gateway payload, DNS IPv4
+//    bukan alamat khusus, tidak terikat subnet (DEC-011).
 //  - `updated`/`updatedAt` hanya untuk host yang benar-benar berubah (mode
 //    credentials CSV: hanya host yang ada di CSV).
 //  - Key SSH baru (G3-3): fingerprint yang sudah ada di library → 422
@@ -31,7 +37,6 @@ import type {
   ConfigPayload,
   CsvRowResult,
   HostConfig,
-  InstallResult,
   PublicHostConfig,
   SaveResult,
   SshKey,
@@ -43,16 +48,19 @@ import {
   validateStaticNetwork,
   type IpUsage,
 } from "@/lib/net"
-import { OS_IMAGES } from "@/lib/os-images"
+import { canonicalOsImageId } from "@/lib/os-images"
 import { parseSshKey, sshFingerprint, type ParsedSshKey } from "@/lib/ssh-key"
 import type { Host } from "@/lib/types"
-import { getMgmtNetwork } from "@/lib/server/net-config"
+import { getDb, isUniqueViolation, tx, uniqueViolationTarget } from "@/lib/server/db"
+import { configOrDefault, saveConfig } from "@/lib/server/db/repos/configs"
+import { getHost, listHosts } from "@/lib/server/db/repos/hosts"
+import { getImage } from "@/lib/server/db/repos/os-images"
 import {
-  getConfig,
-  mockDb,
-  startInstall,
-  type Store,
-} from "@/lib/server/mock-hosts"
+  getKey,
+  insertKey,
+  listKeys,
+} from "@/lib/server/db/repos/ssh-keys"
+import { getMgmtNetwork } from "@/lib/server/net-config"
 
 export function toPublicConfig(c: HostConfig): PublicHostConfig {
   const { passwordHash, ...rest } = c
@@ -64,9 +72,9 @@ function label(h: Host) {
 }
 
 /** IP yang dipakai host DI LUAR batch (IP management + lease aktif). */
-function ipUsage(s: Store, batch: Set<string>): IpUsage {
+function ipUsage(all: Host[], batch: Set<string>): IpUsage {
   const used = new Map<string, string>()
-  for (const h of s.hosts.values()) {
+  for (const h of all) {
     if (batch.has(h.id)) continue
     if (h.currentIp && h.status !== "offline")
       used.set(h.currentIp, `lease ${label(h)}`)
@@ -79,13 +87,12 @@ type CsvCred = { hostId: string; username: string; password: string }
 
 /** Validasi CSV mac,username,password terhadap host terpilih. */
 export function checkCredentialsCsv(
-  s: Store,
   csv: string,
   hostIds: string[],
 ): { rows: CsvRowResult[]; creds: CsvCred[] } {
   const byMac = new Map<string, Host>()
   for (const id of hostIds) {
-    const h = s.hosts.get(id)
+    const h = getHost(id)
     if (h) byMac.set(h.mac, h)
   }
   let table = parseCsv(csv)
@@ -178,9 +185,23 @@ export async function applyConfig(
   return applyConfigPrepared(hostIds, p, prepared)
 }
 
+
+/** Pesan 422 untuk pelanggaran constraint unik (pertahanan kedua). */
+function uniqueError(e: unknown): ApiFieldError {
+  const t = uniqueViolationTarget(e) ?? ""
+  if (/hostname/.test(t))
+    return { section: "hostname", message: "Hostname sudah dipakai host lain" }
+  if (/ip/.test(t))
+    return { section: "network", message: "IP sudah dipakai host lain" }
+  if (/fingerprint/.test(t))
+    return { section: "ssh", message: "Key sudah ada di library" }
+  return { section: "hostIds", message: "Data bentrok dengan host lain" }
+}
+
 /**
  * Bagian sinkron `applyConfig`. `preparedKeys[i]` wajib hasil
- * `prepareNewKeys(p.ssh.newKeys)` (urutan sama).
+ * `prepareNewKeys(p.ssh.newKeys)` (urutan sama). Validasi + apply dalam satu
+ * transaksi; gagal validasi → tidak ada perubahan.
  */
 export function applyConfigPrepared(
   hostIds: string[],
@@ -190,13 +211,28 @@ export function applyConfigPrepared(
   if (preparedKeys.length !== (p.ssh?.newKeys.length ?? 0)) {
     throw new Error("preparedKeys tidak sesuai dengan ssh.newKeys")
   }
-  const s = mockDb()
+  getDb()
+  try {
+    return tx(() => applyInTx(hostIds, p, preparedKeys))
+  } catch (e) {
+    if (isUniqueViolation(e)) return { ok: false, errors: [uniqueError(e)] }
+    throw e
+  }
+}
+
+function applyInTx(
+  hostIds: string[],
+  p: ConfigPayload,
+  preparedKeys: PreparedNewKey[],
+): ApplyResult {
   const errors: ApiFieldError[] = []
   const ids = [...new Set(hostIds)]
+  const all = listHosts()
+  const byId = new Map(all.map((h) => [h.id, h]))
   const hosts: Host[] = []
   for (const id of ids) {
-    const h = s.hosts.get(id)
-    if (h) hosts.push(h)
+    const h = byId.get(id)
+    if (h) hosts.push({ ...h })
     else
       errors.push({
         section: "hostIds",
@@ -206,12 +242,16 @@ export function applyConfigPrepared(
   }
   if (errors.length) return { ok: false, errors }
   const batch = new Set(ids)
+  const hostById = new Map(hosts.map((h) => [h.id, h]))
+  // Config kerja per host (tersimpan atau default); ditulis sekaligus di akhir.
+  const cfgs = new Map(hosts.map((h) => [h.id, configOrDefault(h)]))
+  const cfg = (h: Host) => cfgs.get(h.id)!
   const steps: Prepared[] = []
 
   // ---- OS ----
   if (p.os) {
-    const os = p.os
-    if (!OS_IMAGES.some((i) => i.id === os.osImageId)) {
+    const os = { ...p.os, osImageId: canonicalOsImageId(p.os.osImageId) }
+    if (!getImage(os.osImageId)) {
       errors.push({ section: "os", message: "OS image tidak dikenal" })
     }
     if (os.partition === "custom" && !os.customStorage?.trim()) {
@@ -223,7 +263,7 @@ export function applyConfigPrepared(
     steps.push({
       apply: () => {
         for (const h of hosts) {
-          getConfig(s, h).os = { ...os, disk: os.disk.trim() }
+          cfg(h).os = { ...os, disk: os.disk.trim() }
           if (
             h.status !== "booting" &&
             h.status !== "installing" &&
@@ -244,7 +284,7 @@ export function applyConfigPrepared(
       const uErr = validateUsername(c.username)
       if (uErr) errors.push({ section: "credentials", message: uErr })
       if (c.password === "") {
-        const missing = hosts.filter((h) => !getConfig(s, h).passwordHash)
+        const missing = hosts.filter((h) => !cfg(h).passwordHash)
         if (missing.length) {
           errors.push({
             section: "credentials",
@@ -258,11 +298,11 @@ export function applyConfigPrepared(
       steps.push({
         apply: () => {
           for (const h of hosts) {
-            const cfg = getConfig(s, h)
-            cfg.username = c.username.trim()
+            const hc = cfg(h)
+            hc.username = c.username.trim()
             // Salt acak per host: hash berbeda walau password sama.
-            if (c.password) cfg.passwordHash = encrypt(c.password)
-            Object.assign(cfg, flags)
+            if (c.password) hc.passwordHash = encrypt(c.password)
+            Object.assign(hc, flags)
           }
         },
       })
@@ -279,15 +319,15 @@ export function applyConfigPrepared(
         generated,
         apply: () => {
           hosts.forEach((h, i) => {
-            const cfg = getConfig(s, h)
-            cfg.username = generated[i].username
-            cfg.passwordHash = encrypt(generated[i].password)
-            Object.assign(cfg, flags)
+            const hc = cfg(h)
+            hc.username = generated[i].username
+            hc.passwordHash = encrypt(generated[i].password)
+            Object.assign(hc, flags)
           })
         },
       })
     } else {
-      const { rows, creds } = checkCredentialsCsv(s, c.csv, ids)
+      const { rows, creds } = checkCredentialsCsv(c.csv, ids)
       const bad = rows.filter((r) => r.errors.length)
       if (bad.length) {
         errors.push({
@@ -300,10 +340,10 @@ export function applyConfigPrepared(
         touches: creds.map((cr) => cr.hostId),
         apply: () => {
           for (const cr of creds) {
-            const cfg = getConfig(s, s.hosts.get(cr.hostId)!)
-            cfg.username = cr.username
-            cfg.passwordHash = encrypt(cr.password)
-            Object.assign(cfg, flags)
+            const hc = cfgs.get(cr.hostId)!
+            hc.username = cr.username
+            hc.passwordHash = encrypt(cr.password)
+            Object.assign(hc, flags)
           }
         },
       })
@@ -317,7 +357,7 @@ export function applyConfigPrepared(
       steps.push({
         apply: () => {
           for (const h of hosts) {
-            getConfig(s, h).network = { mode: "dhcp" }
+            cfg(h).network = { mode: "dhcp" }
             h.mgmtIp = null
           }
         },
@@ -333,7 +373,7 @@ export function applyConfigPrepared(
       }))
       // IP host tidak boleh sama dengan gateway dari payload (CR-3-9); gateway
       // server sudah ditolak oleh validateStaticIp.
-      const usage = ipUsage(s, batch)
+      const usage = ipUsage(all, batch)
       const gw = n.gateway.trim()
       if (!usage.used.has(gw)) usage.used.set(gw, `gateway ${gw}`)
       const ipErrors = validateIpAssignments(assignments, usage, net)
@@ -341,14 +381,14 @@ export function applyConfigPrepared(
         errors.push({
           section: "network",
           hostId,
-          message: `${label(s.hosts.get(hostId)!)}: ${message}`,
+          message: `${label(hostById.get(hostId)!)}: ${message}`,
         })
       }
       steps.push({
         apply: () => {
           for (const { hostId, ip } of assignments) {
-            const h = s.hosts.get(hostId)!
-            getConfig(s, h).network = {
+            const h = hostById.get(hostId)!
+            cfg(h).network = {
               mode: "static",
               ip,
               prefix: n.prefix,
@@ -366,9 +406,11 @@ export function applyConfigPrepared(
 
   // ---- Hostname ----
   if (p.hostname) {
+    // Unik case-insensitive (sama dengan indeks hosts_hostname_uq).
     const taken = new Map<string, string>()
-    for (const h of s.hosts.values()) {
-      if (!batch.has(h.id) && h.hostname) taken.set(h.hostname, h.mac)
+    for (const h of all) {
+      if (!batch.has(h.id) && h.hostname)
+        taken.set(h.hostname.toLowerCase(), h.mac)
     }
     const seen = new Set<string>()
     const names = hosts.map((h) => ({
@@ -376,17 +418,18 @@ export function applyConfigPrepared(
       name: (p.hostname!.assignments[h.id] ?? "").trim(),
     }))
     for (const { h, name } of names) {
+      const lower = name.toLowerCase()
       const err =
         validateHostname(name) ??
-        (seen.has(name) ? "Duplikat dalam batch" : null) ??
-        (taken.has(name) ? `Sudah dipakai ${taken.get(name)}` : null)
+        (seen.has(lower) ? "Duplikat dalam batch" : null) ??
+        (taken.has(lower) ? `Sudah dipakai ${taken.get(lower)}` : null)
       if (err)
         errors.push({
           section: "hostname",
           hostId: h.id,
           message: `${h.mac}: ${err}`,
         })
-      seen.add(name)
+      seen.add(lower)
     }
     steps.push({
       apply: () => {
@@ -396,11 +439,12 @@ export function applyConfigPrepared(
   }
 
   // ---- SSH keys ----
+  const newLibrary: SshKey[] = []
   if (p.ssh) {
     const ssh = p.ssh
     const keyIds = [...new Set(ssh.keyIds)]
     for (const id of keyIds) {
-      if (!s.sshKeys.has(id))
+      if (!getKey(id))
         errors.push({
           section: "ssh",
           message: `Key ${id} tidak ada di library`,
@@ -410,11 +454,8 @@ export function applyConfigPrepared(
       const uErr = validateUsername(ssh.user)
       if (uErr) errors.push({ section: "ssh", message: `User target: ${uErr}` })
     }
-    const newLibrary: SshKey[] = []
     const extra: string[] = []
-    const libraryByFp = new Map(
-      [...s.sshKeys.values()].map((k) => [k.fingerprint, k]),
-    )
+    const libraryByFp = new Map(listKeys().map((k) => [k.fingerprint, k]))
     const newByFp = new Map<string, number>()
     for (const [i, k] of ssh.newKeys.entries()) {
       const prep = preparedKeys[i]
@@ -472,12 +513,11 @@ export function applyConfigPrepared(
     }
     steps.push({
       apply: () => {
-        for (const k of newLibrary) s.sshKeys.set(k.id, k)
         for (const h of hosts) {
-          const cfg = getConfig(s, h)
-          cfg.sshKeyIds = [...keyIds, ...newLibrary.map((k) => k.id)]
-          cfg.extraKeys = extra
-          cfg.sshUser = ssh.user.trim() || null
+          const hc = cfg(h)
+          hc.sshKeyIds = [...keyIds, ...newLibrary.map((k) => k.id)]
+          hc.extraKeys = extra
+          hc.sshUser = ssh.user.trim() || null
         }
       },
     })
@@ -491,7 +531,7 @@ export function applyConfigPrepared(
   }
   if (errors.length) return { ok: false, errors }
 
-  // Semua valid: terapkan sekaligus.
+  // Semua valid: terapkan ke objek kerja, lalu tulis ke DB.
   const now = new Date().toISOString()
   for (const st of steps) st.apply()
   // Hanya host yang benar-benar diubah yang dihitung & diberi updatedAt (CR-3-3).
@@ -499,10 +539,10 @@ export function applyConfigPrepared(
     ? new Set(steps.flatMap((st) => st.touches!))
     : batch
   const changed = hosts.filter((h) => touched.has(h.id))
-  for (const h of hosts) {
-    const cfg = getConfig(s, h) // config tetap dibuat untuk semua host batch
-    if (touched.has(h.id)) cfg.updatedAt = now
-  }
+  for (const h of hosts) if (touched.has(h.id)) cfg(h).updatedAt = now
+
+  persist(hosts, cfgs, newLibrary)
+
   // Hostname diambil setelah semua bagian diterapkan (bisa ikut berubah di request ini).
   const generated = steps
     .find((st) => st.generated)
@@ -516,37 +556,29 @@ export function applyConfigPrepared(
   }
 }
 
-/** Mulai instalasi: host wajib punya OS + credentials. */
-export function installHosts(hostIds: string[]): InstallResult {
-  const s = mockDb()
-  const result: InstallResult = { started: [], failed: [] }
-  for (const id of new Set(hostIds)) {
-    const h = s.hosts.get(id)
-    if (!h) {
-      result.failed.push({ hostId: id, message: "Host tidak ditemukan" })
-      continue
-    }
-    const cfg = getConfig(s, h)
-    const missing = [
-      !cfg.os && "OS image",
-      (!cfg.username || !cfg.passwordHash) && "credentials",
-    ].filter(Boolean)
-    if (missing.length) {
-      result.failed.push({
-        hostId: id,
-        message: `${label(h)}: belum ada ${missing.join(" dan ")}`,
-      })
-      continue
-    }
-    if (["booting", "installing", "configuring"].includes(h.status)) {
-      result.failed.push({
-        hostId: id,
-        message: `${label(h)}: instalasi sedang berjalan`,
-      })
-      continue
-    }
-    startInstall(s, h, cfg.os!.osImageId)
-    result.started.push(id)
+/**
+ * Tulis host + config batch. Dua fase (kosongkan hostname & config batch
+ * dulu) supaya pertukaran hostname/IP di dalam batch tidak melanggar indeks
+ * unik di tengah jalan.
+ */
+function persist(
+  hosts: Host[],
+  cfgs: Map<string, ReturnType<typeof configOrDefault>>,
+  newLibrary: SshKey[],
+) {
+  const db = getDb()
+  for (const k of newLibrary) insertKey(k)
+  const clearName = db.prepare("UPDATE hosts SET hostname = NULL WHERE id = ?")
+  const clearCfg = db.prepare("DELETE FROM host_configs WHERE host_id = ?")
+  for (const h of hosts) {
+    clearName.run(h.id)
+    clearCfg.run(h.id)
   }
-  return result
+  const upd = db.prepare(
+    "UPDATE hosts SET hostname = ?, mgmt_ip = ?, os_assigned = ? WHERE id = ?",
+  )
+  for (const h of hosts) {
+    upd.run(h.hostname, h.mgmtIp, h.osAssigned, h.id)
+    saveConfig(h.id, cfgs.get(h.id)!)
+  }
 }

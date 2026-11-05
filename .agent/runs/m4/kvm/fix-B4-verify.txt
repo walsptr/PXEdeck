@@ -1,0 +1,104 @@
+# fix-B4-verify — uji KVM nyata perbaikan B-4 (exit 1 di jalur EFI) + B-5 (token tidak di late-command)
+# 2026-11-05T13:27:39Z, kode: working tree di atas 340b866 (commit fix(m4) menyusul), build di-deploy dari worktree
+# perintah: PXE_RUNS_DIR=.agent/runs/m4/kvm/fix-B4 infra/kvm-run.sh m4 --nodes "19:uefi"
+# bukti lengkap: .agent/runs/m4/kvm/fix-B4/ (token sudah disamarkan/tidak pernah muncul)
+
+## kvm-run.txt
+# kvm-run m4 20261105T131247Z nodes=[19:uefi] keep_server=0 dry=0
+2026-11-05T13:12:47Z preflight          ok max_nodes=3 avail_mb=12998
+2026-11-05T13:12:47Z net-up             ok 
+2026-11-05T13:12:58Z server-up          ok 
+2026-11-05T13:13:19Z deploy             ok 
+2026-11-05T13:13:19Z server-check       ok 
+2026-11-05T13:13:20Z node-create        ok pxe-test-m4-node19 uefi 52:54:00:99:00:19
+2026-11-05T13:26:57Z playwright         ok exit=0 (playwright-kvm.log)
+2026-11-05T13:26:57Z verify             ok pxe-test-m4-node19 (pxe-test-m4-node19-verify.txt)
+2026-11-05T13:26:57Z evidence           start 
+2026-11-05T13:26:58Z evidence           done 
+2026-11-05T13:27:02Z redact             ok 
+2026-11-05T13:27:05Z cleanup            done 
+2026-11-05T13:27:05Z result             PASS exit=0
+
+## status host (UI, tanpa reload)
+2026-11-05T13:13:44.240Z booting (UI)
+2026-11-05T13:14:20.501Z installing (UI)
+2026-11-05T13:19:41.526Z configuring (UI)
+2026-11-05T13:23:20.104Z done (UI)
+
+## results.json (ringkas)
+      "ac": "AC-4.32",
+      "status": "PASS",
+      "ac": "AC-4.30",
+      "status": "PASS",
+      "durationS": 598,
+      "note": "booting → installing → configuring → done",
+      "ac": "AC-4.31",
+      "status": "PASS",
+      "durationS": 217,
+      "ac": "AC-4.34-scan",
+      "status": "PASS",
+      "note": "0 temuan",
+
+## console: script boot lokal iPXE setelah install (B-4) -> BDS lanjut ke Boot#### berikutnya -> Ubuntu (shim) dari disk
+30:Tidak ada instalasi aktif: boot dari disk lokal
+34:Press Ctrl-B for the iPXE command line...                                         BdsDxe: failed to start Boot0003 "UEFI PXEv4 (MAC:525400990019)" from PciRoot(0x0)/Pc
+46:BdsDxe: loading Boot0003 "UEFI PXEv4 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.
+47:BdsDxe: starting Boot0003 "UEFI PXEv4 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0
+1300:BdsDxe: loading Boot0003 "UEFI PXEv4 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.
+1301:BdsDxe: starting Boot0003 "UEFI PXEv4 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0
+1319:Tidak ada instalasi aktif: boot dari disk lokal
+1323:Press Ctrl-B for the iPXE command line...                                         BdsDxe: failed to start Boot0003 "UEFI PXEv4 (MAC:525400990019)" from PciRoot(0x0)/
+1327:BdsDxe: failed to load Boot0004 "UEFI PXEv6 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv6(0000:0000:0000:0000:0000:0000:
+1333:BdsDxe: failed to load Boot0005 "UEFI HTTPv4 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.
+1339:BdsDxe: failed to load Boot0006 "UEFI HTTPv6 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv6(0000:0000:0000:0000:0000:0000
+1340:BdsDxe: loading Boot0008 "Ubuntu" from HD(1,GPT,CFDA6B19-3ECD-4BBB-B114-9622FD8CC102,0x800,0x1DC800)/\EFI\ubuntu\shimx64.efi
+1341:BdsDxe: starting Boot0008 "Ubuntu" from HD(1,GPT,CFDA6B19-3ECD-4BBB-B114-9622FD8CC102,0x800,0x1DC800)/\EFI\ubuntu\shimx64.efi
+1345:[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-6.8.0-139-generic root=/dev/mapper/ubuntu--vg-ubuntu--lv ro console=ttyS0,115200n8 console=tty0
+2198:BdsDxe: loading Boot0003 "UEFI PXEv4 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.
+2199:BdsDxe: starting Boot0003 "UEFI PXEv4 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0
+2217:Tidak ada instalasi aktif: boot dari disk lokal
+2221:Press Ctrl-B for the iPXE command line...                                         BdsDxe: failed to start Boot0003 "UEFI PXEv4 (MAC:525400990019)" from PciRoot(0x0)/
+2225:BdsDxe: failed to load Boot0004 "UEFI PXEv6 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv6(0000:0000:0000:0000:0000:0000:
+2231:BdsDxe: failed to load Boot0005 "UEFI HTTPv4 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.
+2237:BdsDxe: failed to load Boot0006 "UEFI HTTPv6 (MAC:525400990019)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990019,0x1)/IPv6(0000:0000:0000:0000:0000:0000
+2238:BdsDxe: loading Boot0008 "Ubuntu" from HD(1,GPT,CFDA6B19-3ECD-4BBB-B114-9622FD8CC102,0x800,0x1DC800)/\EFI\ubuntu\shimx64.efi
+2239:BdsDxe: starting Boot0008 "Ubuntu" from HD(1,GPT,CFDA6B19-3ECD-4BBB-B114-9622FD8CC102,0x800,0x1DC800)/\EFI\ubuntu\shimx64.efi
+2243:[    0.000000] Command line: BOOT_IMAGE=/vmlinuz-6.8.0-139-generic root=/dev/mapper/ubuntu--vg-ubuntu--lv ro console=ttyS0,115200n8 console=tty0
+# jumlah 'BootManagerMenuApp' di console: 0
+# jumlah boot OS terpasang (Command line: BOOT_IMAGE=): 2
+
+## console: late-commands subiquity (B-5) — callback & file URL diturunkan dari /proc/cmdline, tanpa token
+start:  subiquity/Late/run/command_0: u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/52:54:00:99:00:19/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); curl -fsS -m 15 --retry 5 --retry-delay 3 -X POST -d stage=con
+start:  subiquity/Late/run/command_4: mkdir -p /target/etc/pxe-callback /target/usr/local/sbin /target/etc/systemd/system/multi-user.target.wants && chmod 700 /target/etc/pxe-callback
+start:  subiquity/Late/run/command_5: u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/52:54:00:99:00:19/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); if [ -n "$u" ]; then (umask 077; printf '%s\n' "$u" > /target/
+
+## verify SSH (AC-4.31)
+# exit=0
+# ditolak=true
+# reboot: kembali=true
+# exit=0
+# kernel installer di serial log: sebelum reboot=4 sesudah=4
+# status host sesudah reboot: done osInstalled=ubuntu-24.04 osAssigned=null
+
+## scan secret bukti
+# evidence-scan.txt (harness): bersih: tanpa password run, token /boot/, private key
+# infra/redact-evidence.sh (dengan deteksi base64 baru), dijalankan kvm-run: 2026-11-05T13:27:02Z redact             ok 
+# grep token plaintext /boot/<mac>/<43 char>: 0 baris
+# .agent/runs/m4/b64-scan.py (test-engineer) atas fix-B4:
+#   fix-B4/pxe-test-m4-node19-console.log IyBEaXBhc2FuZyBQWEUgZGFz -> b'Password'
+#   fix-B4/pxe-test-m4-node19-console.txt IyBEaXBhc2FuZyBQWEUgZGFz -> b'Password'
+#   (satu-satunya temuan: drop-in sshd 'PasswordAuthentication no' — pola 'password' b64-scan, bukan secret)
+
+## virsh list --all setelah cleanup
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+## virsh net-list --all
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+

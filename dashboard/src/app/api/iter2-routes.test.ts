@@ -6,14 +6,18 @@
 //  - SR-3-4/AC-3.9: CSV import tidak memantulkan kolom mentah yang invalid (password).
 //  - CR-3-3: mode CSV hanya menghitung/menandai host yang benar-benar diubah.
 //  - CR-3-9: IP host = gateway payload ditolak; gateway di range DHCP dinamis ditolak.
+// M4: DB SQLite (`resetDb("demo")`), snapshot = semua tabel DB. Reboot → 501 (DEC-012); allowlist
+// header Host (SR-3-5) → host asing 403 "Host tidak diizinkan". NODE01 diberi credentials + media
+// agar install tetap bisa 200 (seed M4 tanpa credentials, SR-2-1).
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 vi.mock("next/server", () => ({ connection: vi.fn(async () => undefined) }))
 
 import { MGMT_NETWORK } from "@/lib/net"
-import { mockDb, resetMockStore } from "@/lib/server/mock-hosts"
-import { isolateEnv } from "@/test/env"
-import { DUMMY_PASSWORD } from "@/test/fixtures"
+import { applyConfig } from "@/lib/server/config-service"
+import { peekConfig } from "@/lib/server/db/repos/configs"
+import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
+import { DUMMY_PASSWORD, SSH_ED25519 } from "@/test/fixtures"
 import { ctx, jsonReq } from "@/test/route"
 
 import { POST as csvImport } from "./credentials/import/route"
@@ -27,9 +31,15 @@ import { POST as reboot } from "./hosts/[id]/reboot/route"
 import { DELETE, GET as oneGET, PATCH } from "./hosts/[id]/route"
 import { GET as sshKeys } from "./ssh-keys/route"
 
-isolateEnv({ PXE_MOCK_SIMULATION: "off" })
-beforeEach(() => {
-  resetMockStore("default")
+const MEDIA = makeMediaRoot(tmpDir("media"))
+withDb("demo", { PXE_MEDIA_ROOT: MEDIA })
+beforeEach(async () => {
+  // NODE01 siap install (credentials eksplisit + key) — pengganti credentials seed M2/M3.
+  const r = await applyConfig(["525400101011"], {
+    credentials: { mode: "same", username: "ubuntu", password: DUMMY_PASSWORD, sudo: true, disableSshPassword: false },
+    ssh: { keyIds: [], newKeys: [{ name: "", publicKey: SSH_ED25519.publicKey, saveToLibrary: false }], user: "" },
+  })
+  if (!r.ok) throw new Error(JSON.stringify(r.errors))
 })
 
 const NODE01 = "525400101011" // done, 10.10.10.11
@@ -152,47 +162,56 @@ type Mut = {
   body: "json" | "none"
   call: (headers: Record<string, string>, body?: string) => Promise<Response>
   validBody: string
+  /** Status bila request lolos guard (reboot = 501 sejak DEC-012). */
+  okStatus: number[]
 }
 
 const MUTATIONS: Mut[] = [
   {
     name: "PATCH /api/hosts/:id",
+    okStatus: [200],
     body: "json",
     validBody: JSON.stringify({ network: { mode: "dhcp" } }),
     call: (h, b) => PATCH(rawReq(`/api/hosts/${NODE01}`, "PATCH", h, b), ctx(NODE01)),
   },
   {
     name: "POST /api/hosts/bulk",
+    okStatus: [200],
     body: "json",
     validBody: JSON.stringify({ hostIds: [NODE01], network: { mode: "dhcp" } }),
     call: (h, b) => bulk(rawReq("/api/hosts/bulk", "POST", h, b)),
   },
   {
     name: "POST /api/hosts/bulk/install",
+    okStatus: [200],
     body: "json",
     validBody: JSON.stringify({ hostIds: [NODE01] }),
     call: (h, b) => bulkInstall(rawReq("/api/hosts/bulk/install", "POST", h, b)),
   },
   {
     name: "POST /api/credentials/import",
+    okStatus: [200],
     body: "json",
     validBody: JSON.stringify({ csv: `b0:83:fe:5c:19:e2,ops,${DUMMY_PASSWORD}`, hostIds: [DISC1] }),
     call: (h, b) => csvImport(rawReq("/api/credentials/import", "POST", h, b)),
   },
   {
     name: "DELETE /api/hosts/:id",
+    okStatus: [204],
     body: "none",
     validBody: "",
     call: (h) => DELETE(rawReq(`/api/hosts/${LEGACY01}`, "DELETE", h), ctx(LEGACY01)),
   },
   {
     name: "POST /api/hosts/:id/reboot",
+    okStatus: [501],
     body: "none",
     validBody: "",
     call: (h) => reboot(rawReq(`/api/hosts/${LEGACY01}/reboot`, "POST", h), ctx(LEGACY01)),
   },
   {
     name: "POST /api/hosts/:id/install",
+    okStatus: [200],
     body: "none",
     validBody: "",
     call: (h) => install(rawReq(`/api/hosts/${NODE01}/install`, "POST", h), ctx(NODE01)),
@@ -201,14 +220,8 @@ const MUTATIONS: Mut[] = [
 
 const JSON_CT = { "content-type": "application/json" }
 
-/** Snapshot store untuk membuktikan request yang ditolak tidak berefek. */
-function storeSnapshot() {
-  const s = mockDb()
-  return JSON.stringify({
-    hosts: [...s.hosts.values()],
-    configs: [...s.configs.entries()],
-  })
-}
+/** Snapshot DB (semua tabel) untuk membuktikan request yang ditolak tidak berefek. */
+const storeSnapshot = dbSnapshot
 
 describe("iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek", () => {
   const cross: [string, Record<string, string>][] = [
@@ -237,6 +250,8 @@ describe("iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek",
       ctx(NODE01),
     )
     expect(r1.status).toBe(200)
+    // SR-3-5: pxe.lab.example harus ada di allowlist Host agar lolos guard.
+    process.env.PXE_ALLOWED_HOSTS = "localhost,pxe.lab.example"
     const r2 = await reboot(
       rawReq(`/api/hosts/${LEGACY01}/reboot`, "POST", {
         origin: "https://pxe.lab.example",
@@ -245,13 +260,41 @@ describe("iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek",
       }),
       ctx(LEGACY01),
     )
-    expect(r2.status).toBe(200)
+    // Lolos guard; reboot sendiri 501 sejak DEC-012 (bukan 403/415).
+    expect(r2.status).toBe(501)
     // X-Forwarded-Host berbeda dari Origin → tetap 403.
     const r3 = await reboot(
       rawReq(`/api/hosts/${LEGACY01}/reboot`, "POST", { origin: "http://localhost", "x-forwarded-host": "pxe.lab.example" }),
       ctx(LEGACY01),
     )
     expect(r3.status).toBe(403)
+  })
+})
+
+describe("SR-3-5 guardMutation: header Host di luar allowlist → 403 tanpa efek", () => {
+  // DNS rebinding: Origin = Host = domain penyerang (cek Origin saja tidak cukup).
+  for (const m of MUTATIONS) {
+    it(`${m.name}: Origin = Host = evil.example → 403 "Host tidak diizinkan"`, async () => {
+      const before = storeSnapshot()
+      const res = await m.call(
+        { ...JSON_CT, host: "evil.example", "x-forwarded-host": "evil.example", origin: "http://evil.example", "sec-fetch-site": "same-origin" },
+        m.body === "json" ? m.validBody : undefined,
+      )
+      expect(res.status).toBe(403)
+      expect(await res.json()).toEqual({ error: "Host tidak diizinkan" })
+      expect(storeSnapshot()).toBe(before)
+    })
+  }
+  it("PXE_ALLOWED_HOSTS: entri tanpa port menerima port apa pun; host lain tetap 403", async () => {
+    process.env.PXE_ALLOWED_HOSTS = "pxe.lab.example"
+    const ok = await PATCH(
+      rawReq(`/api/hosts/${NODE01}`, "PATCH", { ...JSON_CT, "x-forwarded-host": "pxe.lab.example:8080", origin: "http://pxe.lab.example:8080" }, JSON.stringify({ network: { mode: "dhcp" } })),
+      ctx(NODE01),
+    )
+    expect(ok.status).toBe(200)
+    // localhost tidak lagi di allowlist bila PXE_ALLOWED_HOSTS diset eksplisit.
+    const bad = await PATCH(rawReq(`/api/hosts/${NODE01}`, "PATCH", JSON_CT, JSON.stringify({ network: { mode: "dhcp" } })), ctx(NODE01))
+    expect(bad.status).toBe(403)
   })
 })
 
@@ -290,13 +333,16 @@ describe("iter2 SR-3-2 guardMutation: Content-Type → 415", () => {
       const form = await m.call({ "content-type": "application/x-www-form-urlencoded" })
       expect(form.status).toBe(415)
       const ok = await m.call({})
-      expect([200, 204]).toContain(ok.status)
+      expect(m.okStatus).toContain(ok.status)
     })
   }
 
   it("endpoint tanpa body menerima Content-Type application/json", async () => {
+    // reboot lolos guard → 501 (DEC-012); DELETE & install membuktikan jalur sukses.
     const res = await reboot(rawReq(`/api/hosts/${LEGACY01}/reboot`, "POST", JSON_CT), ctx(LEGACY01))
-    expect(res.status).toBe(200)
+    expect(res.status).toBe(501)
+    expect((await install(rawReq(`/api/hosts/${NODE01}/install`, "POST", JSON_CT), ctx(NODE01))).status).toBe(200)
+    expect((await DELETE(rawReq(`/api/hosts/${LEGACY01}`, "DELETE", JSON_CT), ctx(LEGACY01))).status).toBe(204)
   })
 })
 
@@ -385,8 +431,7 @@ describe("iter2 SR-3-4 / AC-3.9: CSV import tidak memantulkan password", () => {
 // ---------------------------------------------------------------------------------------------
 describe("iter2 CR-3-3 mode CSV: updated/updatedAt hanya host yang diubah", () => {
   it("3 host terpilih, CSV 1 host → updated 1; updatedAt hanya host itu", async () => {
-    const s = mockDb()
-    const before = Object.fromEntries([DISC1, DISC2, DISC3].map((id) => [id, s.configs.get(id)?.updatedAt ?? null]))
+    const before = Object.fromEntries([DISC1, DISC2, DISC3].map((id) => [id, peekConfig(id)?.updatedAt ?? null]))
     const res = await bulk(
       jsonReq("/api/hosts/bulk", "POST", {
         hostIds: [DISC1, DISC2, DISC3],
@@ -395,10 +440,10 @@ describe("iter2 CR-3-3 mode CSV: updated/updatedAt hanya host yang diubah", () =
     )
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ updated: 1 })
-    expect(s.configs.get(DISC2)!.updatedAt).toEqual(expect.any(String))
-    expect(s.configs.get(DISC2)!.updatedAt).not.toBe(before[DISC2])
-    expect(s.configs.get(DISC1)!.updatedAt).toBe(before[DISC1])
-    expect(s.configs.get(DISC3)!.updatedAt).toBe(before[DISC3])
+    expect(peekConfig(DISC2)!.updatedAt).toEqual(expect.any(String))
+    expect(peekConfig(DISC2)!.updatedAt).not.toBe(before[DISC2])
+    expect(peekConfig(DISC1)?.updatedAt ?? null).toBe(before[DISC1])
+    expect(peekConfig(DISC3)?.updatedAt ?? null).toBe(before[DISC3])
   })
 
   it("mode CSV + bagian lain di request yang sama → semua host batch dihitung", async () => {

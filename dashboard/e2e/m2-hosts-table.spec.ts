@@ -127,16 +127,17 @@ test.describe("AC-2.10 pencarian & filter", () => {
     await expect(hostRows(page)).toHaveCount(hosts.length)
 
     await page.getByRole("combobox", { name: "Filter OS" }).click()
-    await page.getByRole("option", { name: "Rocky Linux 9.4" }).click()
+    // M4: id OS kanonik `rocky-9` (label "Rocky Linux 9"; id lama rocky-9.4 dipetakan, plan §2.2).
+    await page.getByRole("option", { name: "Rocky Linux 9", exact: true }).click()
     await expect(hostRows(page)).toHaveCount(2)
-    await expect(hostRows(page).nth(0)).toContainText("Rocky Linux 9.4")
+    await expect(hostRows(page).nth(0)).toContainText("Rocky Linux 9")
     await page.getByRole("combobox", { name: "Filter OS" }).click()
     await page.getByRole("option", { name: "Belum ada OS" }).click()
     const noOs = hosts.filter((h) => !h.osInstalled && !h.osAssigned)
     expect(noOs.length).toBeGreaterThan(0)
     await expect(hostRows(page)).toHaveCount(noOs.length)
     for (const h of noOs) await expect(rowByMac(page, h.mac)).toHaveCount(1)
-    const rocky = hosts.filter((h) => h.osInstalled === "rocky-9.4" || h.osAssigned === "rocky-9.4")
+    const rocky = hosts.filter((h) => h.osInstalled === "rocky-9" || h.osAssigned === "rocky-9")
     expect(rocky).toHaveLength(2)
 
     await page.getByLabel("Cari host").fill("node01")
@@ -217,10 +218,14 @@ test.describe("AC-2.11 seleksi & bulk bar", () => {
 })
 
 test.describe("AC-2.12 menu aksi baris", () => {
-  test("berisi tepat lima aksi", async ({ page }) => {
+  test("berisi tepat lima aksi; Reboot ke PXE nonaktif dengan alasan (DEC-012)", async ({ page }) => {
     await gotoHosts(page)
     await page.getByRole("button", { name: "Aksi untuk node01" }).click()
-    await expect(page.getByRole("menuitem")).toHaveText(["Install OS", "Edit konfigurasi", "Lihat log", "Reboot ke PXE", "Hapus"])
+    const items = page.getByRole("menuitem")
+    await expect(items).toHaveText(["Install OS", "Edit konfigurasi", "Lihat log", /^Reboot ke PXE\s*Belum didukung \(butuh IPMI\/Redfish\) — reboot host manual$/, "Hapus"])
+    const reboot = items.nth(3)
+    await expect(reboot).toHaveAttribute("aria-disabled", "true")
+    for (const i of [0, 1, 2, 4]) await expect(items.nth(i)).not.toHaveAttribute("aria-disabled", "true")
   })
 
   test("Hapus: Batal tidak mengubah apa pun; konfirmasi menghapus baris + toast", async ({ page }) => {
@@ -248,24 +253,25 @@ test.describe("AC-2.12 menu aksi baris", () => {
     await page.screenshot({ path: SHOTS(2, "ac-2.12-deleted-toast") })
   })
 
-  test("Reboot ke PXE → AlertDialog → status baris berubah", async ({ page }) => {
+  // DEC-012: reboot jarak jauh butuh IPMI/Redfish. Menggantikan alur lama "AlertDialog → status
+  // berubah": item nonaktif tidak membuka dialog / mengirim request; API 501 tanpa efek.
+  test("Reboot ke PXE nonaktif: klik tidak membuka dialog/request; API 501, status tetap", async ({ page }) => {
     await gotoHosts(page)
-    const row = rowByMac(page, "3c:a8:2a:10:44:7c") // legacy-01, done, tanpa OS tugasan
+    const requests: string[] = []
+    page.on("request", (r) => r.method() !== "GET" && requests.push(`${r.method()} ${r.url()}`))
+    const row = rowByMac(page, "3c:a8:2a:10:44:7c") // legacy-01, done
     await expect(row.locator("[data-status]")).toHaveAttribute("data-status", "done")
     await page.getByRole("button", { name: "Aksi untuk legacy-01" }).click()
-    await page.getByRole("menuitem", { name: "Reboot ke PXE" }).click()
-    const dlg = page.getByRole("alertdialog", { name: "Reboot ke PXE?" })
-    await expect(dlg).toContainText("Belum ada OS yang ditugaskan")
-    await dlg.getByRole("button", { name: "Reboot" }).click()
-    await expect(row.locator("[data-status]")).toHaveAttribute("data-status", "discovered")
-    await expect(page.getByText("legacy-01 di-reboot ke PXE")).toBeVisible()
-
-    const failed = rowByMac(page, "ac:1f:6b:22:7d:40") // compute-03, failed, OS tugasan → booting
-    await page.getByRole("button", { name: "Aksi untuk compute-03" }).click()
-    await page.getByRole("menuitem", { name: "Reboot ke PXE" }).click()
-    await expect(page.getByRole("alertdialog")).toContainText("OS yang ditugaskan akan di-install")
-    await page.getByRole("alertdialog").getByRole("button", { name: "Reboot" }).click()
-    await expect(failed.locator("[data-status]")).toHaveAttribute("data-status", "booting")
+    await page.getByRole("menuitem", { name: /^Reboot ke PXE/ }).click({ force: true })
+    await expect(page.getByRole("alertdialog")).toHaveCount(0)
+    await page.keyboard.press("Escape")
+    expect(requests).toEqual([])
+    const res = await page.request.post("/api/hosts/3ca82a10447c/reboot", { headers: { "content-type": "application/json" } })
+    expect(res.status()).toBe(501)
+    expect((await res.json()).error).toMatch(/IPMI\/Redfish/)
+    await page.reload()
+    await expect(rowByMac(page, "3c:a8:2a:10:44:7c").locator("[data-status]")).toHaveAttribute("data-status", "done")
+    await expect(page.getByText("di-reboot ke PXE")).toHaveCount(0)
   })
 
   test("Lihat log → /jobs?host=<id>", async ({ page }) => {

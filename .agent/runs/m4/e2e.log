@@ -1,0 +1,282 @@
+
+> dashboard@0.1.0 test:e2e
+> playwright test
+
+(node:172256) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 build
+[WebServer] > next build
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5 (Turbopack)
+[WebServer] ✓ Running next.config.ts took 39ms
+[WebServer] - Cache Components enabled
+[WebServer] - Partial Prefetching enabled
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 1211ms
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 3.4s ...
+[WebServer]   Collecting page data using 11 workers ...
+[WebServer] (node:172361) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172402) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172358) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172374) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172381) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172367) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172409) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172401) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172393) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer]   Generating static pages using 11 workers (0/18) ...
+[WebServer]   Generating static pages using 11 workers (4/18) 
+[WebServer]   Generating static pages using 11 workers (8/18) 
+[WebServer]   Generating static pages using 11 workers (13/18) 
+[WebServer] ✓ Generating static pages using 11 workers (18/18) in 705ms
+[WebServer]   Finalizing page optimization ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ○ /_not-found
+[WebServer] ├ ƒ /api/credentials/import
+[WebServer] ├ ƒ /api/hosts
+[WebServer] ├ ƒ /api/hosts/[id]
+[WebServer] ├ ƒ /api/hosts/[id]/config
+[WebServer] ├ ƒ /api/hosts/[id]/install
+[WebServer] ├ ƒ /api/hosts/[id]/reboot
+[WebServer] ├ ƒ /api/hosts/bulk
+[WebServer] ├ ƒ /api/hosts/bulk/install
+[WebServer] ├ ƒ /api/network
+[WebServer] ├ ƒ /api/os-images
+[WebServer] ├ ƒ /api/os-images/[id]
+[WebServer] ├ ƒ /api/server-status
+[WebServer] ├ ƒ /api/settings
+[WebServer] ├ ƒ /api/ssh-keys
+[WebServer] ├ ƒ /api/ssh-keys/[id]
+[WebServer] ├ ƒ /boot/[name]
+[WebServer] ├ ƒ /boot/[name]/[token]/[file]
+[WebServer] ├ ƒ /boot/[name]/[token]/status
+[WebServer] ├ ○ /design
+[WebServer] ├ ○ /hosts
+[WebServer] ├ ○ /jobs
+[WebServer] ├ ○ /os-images
+[WebServer] ├ ○ /settings
+[WebServer] └ ○ /ssh-keys
+[WebServer] 
+[WebServer] 
+[WebServer] ○  (Static)   prerendered as static content
+[WebServer] ƒ  (Dynamic)  server-rendered on demand
+[WebServer] 
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3100
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3100
+[WebServer] - Network:       http://192.168.0.207:3100
+[WebServer] ✓ Ready in 178ms
+[WebServer] ✓ Running next.config.ts took 38ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3101
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3101
+[WebServer] - Network:       http://192.168.0.207:3101
+[WebServer] ✓ Ready in 164ms
+[WebServer] ✓ Running next.config.ts took 31ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3102
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3102
+[WebServer] - Network:       http://192.168.0.207:3102
+[WebServer] ✓ Ready in 161ms
+[WebServer] ✓ Running next.config.ts took 33ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3103
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3103
+[WebServer] - Network:       http://192.168.0.207:3103
+[WebServer] ✓ Ready in 154ms
+[WebServer] ✓ Running next.config.ts took 32ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3104
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3104
+[WebServer] - Network:       http://192.168.0.207:3104
+[WebServer] ✓ Ready in 182ms
+[WebServer] ✓ Running next.config.ts took 41ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3105
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3105
+[WebServer] - Network:       http://192.168.0.207:3105
+[WebServer] ✓ Ready in 177ms
+[WebServer] ✓ Running next.config.ts took 31ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3106
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3106
+[WebServer] - Network:       http://192.168.0.207:3106
+[WebServer] ✓ Ready in 156ms
+[WebServer] ✓ Running next.config.ts took 35ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3107
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3107
+[WebServer] - Network:       http://192.168.0.207:3107
+[WebServer] ✓ Ready in 180ms
+[WebServer] ✓ Running next.config.ts took 34ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3108
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3108
+[WebServer] - Network:       http://192.168.0.207:3108
+[WebServer] ✓ Ready in 162ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3109
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3109
+[WebServer] - Network:       http://192.168.0.207:3109
+[WebServer] ✓ Ready in 188ms
+[WebServer] ✓ Running next.config.ts took 38ms
+
+Running 69 tests using 1 worker
+
+(node:172951) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172587) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓   1 [chromium] › e2e/m1-design-system.spec.ts:18:9 › AC-1.2 warna dasar & font › body bg/teks, font Inter + JetBrains Mono di /hosts (510ms)
+  ✓   2 [chromium] › e2e/m1-design-system.spec.ts:18:9 › AC-1.2 warna dasar & font › body bg/teks, font Inter + JetBrains Mono di /design (337ms)
+  ✓   3 [chromium] › e2e/m1-design-system.spec.ts:49:7 › AC-1.3 tanpa drop shadow › /hosts, dropdown aksi baris, dan Sheet konfigurasi (1.2s)
+  ✓   4 [chromium] › e2e/m1-design-system.spec.ts:69:7 › AC-1.3 tanpa drop shadow › /design (422ms)
+  ✓   5 [chromium] › e2e/m1-design-system.spec.ts:78:7 › AC-1.4 bentuk & ukuran di /design › Button 40px/8px, Input 44px/8px border hairline, Card 12px putih, pill 9999px, placeholder muted-soft (499ms)
+  ✓   6 [chromium] › e2e/m1-design-system.spec.ts:123:7 › AC-1.4 bentuk & ukuran di /design › G1-3: pemetaan varian tombol ke SPEC terdokumentasi (359ms)
+  ✓   7 [chromium] › e2e/m1-design-system.spec.ts:134:7 › AC-1.5 tipografi › judul top bar, label kolom tabel, sel MAC mono (484ms)
+  ✓   8 [chromium] › e2e/m1-design-system.spec.ts:162:5 › oranye hanya pada tombol primary (/hosts, /design) (645ms)
+  ✓   9 [chromium] › e2e/m1-layout.spec.ts:20:7 › AC-1.8 layout › sidebar 5 link, item aktif, border hairline, top bar 64px, padding main 32px (686ms)
+  ✓  10 [chromium] › e2e/m1-layout.spec.ts:46:7 › AC-1.8 layout › item aktif & judul mengikuti halaman (427ms)
+  ✓  11 [chromium] › e2e/m1-layout.spec.ts:59:9 › AC-1.8 layout › viewport < 768 › padding main 24px, top bar tetap 64px (416ms)
+  ✓  12 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /hosts: tepat satu <main>/role=main, konten berada di dalamnya (450ms)
+  ✓  13 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /design: tepat satu <main>/role=main, konten berada di dalamnya (333ms)
+  ✓  14 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /settings: tepat satu <main>/role=main, konten berada di dalamnya (330ms)
+  ✓  15 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /ssh-keys: tepat satu <main>/role=main, konten berada di dalamnya (303ms)
+  ✓  16 [chromium] › e2e/m1-layout.spec.ts:82:7 › AC-1.9 navigasi › GET / redirect ke /hosts (424ms)
+  ✓  17 [chromium] › e2e/m1-layout.spec.ts:91:7 › AC-1.9 navigasi › klik tiap item sidebar membuka halaman benar dengan <title> dan isi (852ms)
+  ✓  18 [chromium] › e2e/m1-layout.spec.ts:108:9 › AC-1.9 navigasi › placeholder /os-images menampilkan judul + deskripsi (316ms)
+  ✓  19 [chromium] › e2e/m1-layout.spec.ts:108:9 › AC-1.9 navigasi › placeholder /ssh-keys menampilkan judul + deskripsi (318ms)
+  ✓  20 [chromium] › e2e/m1-layout.spec.ts:108:9 › AC-1.9 navigasi › placeholder /jobs menampilkan judul + deskripsi (303ms)
+  ✓  21 [chromium] › e2e/m1-layout.spec.ts:120:7 › AC-1.9 navigasi › /settings: halaman Settings read-only (bukan placeholder) dengan nilai dari API (351ms)
+  ✓  22 [chromium] › e2e/m1-layout.spec.ts:132:7 › AC-1.10 pencarian global › Ctrl+K buka dialog, cari halaman + Enter bernavigasi, Escape menutup (1.2s)
+  ✓  23 [chromium] › e2e/m1-layout.spec.ts:150:7 › AC-1.10 pencarian global › memilih host → /hosts?q=<mac> dan tabel terfilter ke host itu (775ms)
+  ✓  24 [chromium] › e2e/m1-layout.spec.ts:169:7 › AC-1.11 status server PXE › top bar menampilkan DHCP, TFTP, HTTP dengan teks aksesibel sesuai status server (583ms)
+  ✓  25 [chromium] › e2e/smoke.spec.ts:4:5 › halaman /hosts terbuka (434ms)
+(node:173518) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172625) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  26 [m2-polling] › e2e/m2-polling.spec.ts:13:5 › AC-2.9/AC-4.12 host baru dari /boot/{mac}.ipxe muncul ≤ 6 dtk tanpa reload; polling ~5 dtk (21.4s)
+(node:173703) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172669) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  27 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:40:7 › AC-2.8 kolom & isi tabel › header kolom, satu baris per host API, '—', font mono, pill data-status (1.3s)
+  ✓  28 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:78:7 › AC-2.10 pencarian & filter › pencarian MAC/hostname/IP mempersempit baris (622ms)
+  ✓  29 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:95:7 › AC-2.10 pencarian & filter › filter status (hitungan + hanya status itu), filter OS, Reset, tanpa hasil (1.9s)
+  ✓  30 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:151:7 › AC-2.10 pencarian & filter › /hosts?q=<mac> mengisi pencarian awal (420ms)
+  ✓  31 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:160:7 › AC-2.11 seleksi & bulk bar › 2 baris → toolbar, tombol, hanya Install OS primary; batal mengosongkan (858ms)
+  ✓  32 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:182:7 › AC-2.11 seleksi & bulk bar › Shift+klik memilih rentang (740ms)
+  ✓  33 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:193:7 › AC-2.11 seleksi & bulk bar › checkbox header: semua / indeterminate; tersembunyi oleh filter (947ms)
+  ✓  34 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:221:7 › AC-2.12 menu aksi baris › berisi tepat lima aksi; Reboot ke PXE nonaktif dengan alasan (DEC-012) (553ms)
+  ✓  35 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:231:7 › AC-2.12 menu aksi baris › Hapus: Batal tidak mengubah apa pun; konfirmasi menghapus baris + toast (2.0s)
+  ✓  36 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:258:7 › AC-2.12 menu aksi baris › Reboot ke PXE nonaktif: klik tidak membuka dialog/request; API 501, status tetap (812ms)
+  ✓  37 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:277:7 › AC-2.12 menu aksi baris › Lihat log → /jobs?host=<id> (705ms)
+  ✓  38 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:284:7 › AC-2.12 menu aksi baris › Install OS / Edit konfigurasi membuka Sheet (1.5s)
+  ✓  39 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:301:7 › AC-2.13 empty & error state › {hosts: []} → 'Belum ada host' + penjelasan PXE boot (497ms)
+  ✓  40 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:310:7 › AC-2.13 empty & error state › GET /api/hosts 500 → Alert 'Gagal memuat data host' (1.7s)
+  ✓  41 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:321:7 › AC-2.14 copy MAC › tombol copy terlihat saat fokus keyboard dan menulis MAC ke clipboard (807ms)
+(node:174148) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172703) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  42 [m3-sheet] › e2e/m3-sheet.spec.ts:18:5 › AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toast + tabel ter-update (3.5s)
+  ✓  43 [m3-sheet] › e2e/m3-sheet.spec.ts:143:5 › AC-3.13 validasi UI per tab menonaktifkan simpan; 422 server tampil di tab yang benar (3.1s)
+(node:174276) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172740) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  44 [m3-bulk] › e2e/m3-bulk.spec.ts:55:5 › AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password acak sekali tampil + CSV (6.5s)
+  ✓  45 [m3-bulk] › e2e/m3-bulk.spec.ts:197:5 › AC-3.15 Simpan & Install: dialog konfirmasi, Batal tanpa request, install → Booting (3.9s)
+  ✓  46 [m3-bulk] › e2e/m3-bulk.spec.ts:238:5 › AC-3.15 bulk: dialog menyebut jumlah host; Batal tidak mengirim request (3.3s)
+(node:174481) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172776) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  47 [iter2-ui] › e2e/iter2-ui.spec.ts:45:7 › CR-3-6 dialog password sekali tampil › tidak bisa ditutup (Escape/overlay/tanpa tombol X) sebelum unduh atau konfirmasi; Selesai aktif setelah centang (2.6s)
+  ✓  48 [iter2-ui] › e2e/iter2-ui.spec.ts:83:7 › CR-3-6 dialog password sekali tampil › Selesai aktif setelah unduh CSV; batch berikutnya terkunci lagi (state di-reset); CSV aman formula (3.5s)
+  ✓  49 [iter2-ui] › e2e/iter2-ui.spec.ts:115:7 › CR-3-13 Sheet error state + Coba lagi › GET config host gagal → alert, form tidak dirender; Coba lagi memuat ulang form (2.6s)
+  ✓  50 [iter2-ui] › e2e/iter2-ui.spec.ts:148:7 › CR-3-13 Sheet error state + Coba lagi › GET /api/settings gagal → alert 'Gagal memuat parameter jaringan'; Coba lagi → form dengan default subnet (1.9s)
+  ✓  51 [iter2-ui] › e2e/iter2-ui.spec.ts:185:7 › CR-3-2 form & tampilan memakai parameter jaringan dari server (GET /api/settings) › server lab: /api/network = env PXE_MGMT_* lab; sidebar & empty state memakai nilainya (440ms)
+  ✓  52 [iter2-ui] › e2e/iter2-ui.spec.ts:203:7 › CR-3-2 form & tampilan memakai parameter jaringan dari server (GET /api/settings) › respons /api/settings lain → default range, gateway, DNS, preview IP, validasi, deskripsi, sidebar ikut (2.5s)
+  ✓  53 [iter2-ui] › e2e/iter2-ui.spec.ts:249:7 › CR-2-4 / CR-2-3 tabel host › pencarian MAC Cisco 5254.0010.1011 → hanya node01; query IP tidak cocok dengan digit MAC (560ms)
+  ✓  54 [iter2-ui] › e2e/iter2-ui.spec.ts:263:7 › CR-2-4 / CR-2-3 tabel host › sort Hostname naik & turun: host tanpa hostname ('—') selalu di akhir (608ms)
+  ✓  55 [iter2-ui] › e2e/iter2-ui.spec.ts:286:7 › DR-2-1/2-2, DR-3-2, DR-3-3 ukuran & radius › toolbar & bulk bar 36px; Sheet radius 12px di sisi konten; tombol kecil Sheet ≥ 32px (1.1s)
+(node:174759) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  56 [iter2-network-env] › e2e/iter2-network-env.spec.ts:10:5 › GET /api/network mencerminkan env server (subnet KVM) (93ms)
+[WebServer] (node:172812) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  57 [iter2-network-env] › e2e/iter2-network-env.spec.ts:24:5 › bulk Set IP: default & preview dari subnet env, simpan diterima server (200) dengan IP 10.99.0.x (1.5s)
+  ✓  58 [iter2-network-env] › e2e/iter2-network-env.spec.ts:60:5 › single host: IP lab ditolak UI ('Di luar subnet 10.99.0.0/24') dan API (422); IP KVM diterima keduanya (1.5s)
+(node:174880) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172848) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  59 [iter3-ui] › e2e/iter3-ui.spec.ts:117:7 › DR-1-2 toast Sonner tanpa drop shadow (alur nyata M2 & M3) › M2 hapus host → toast datar (diam/hover/focus-visible), border 1px, radius 12px (2.1s)
+  ✓  60 [iter3-ui] › e2e/iter3-ui.spec.ts:136:7 › DR-1-2 toast Sonner tanpa drop shadow (alur nyata M2 & M3) › M2 hapus host gagal → toast.error datar (diam/hover/focus-visible) (2.0s)
+  ✓  61 [iter3-ui] › e2e/iter3-ui.spec.ts:154:7 › DR-1-2 toast Sonner tanpa drop shadow (alur nyata M2 & M3) › M3 simpan konfigurasi → toast datar (diam/hover/focus-visible); seluruh halaman tanpa drop shadow (2.3s)
+  ✓  62 [iter3-ui] › e2e/iter3-ui.spec.ts:217:7 › DR-3-4 ukuran kontrol kecil Sheet › 'Tambah' DNS tinggi 36px; area klik 'Hapus DNS …' dan 'Batalkan perubahan …' ≥ 36px dan berfungsi (3.8s)
+  ✓  63 [iter3-ui] › e2e/iter3-ui.spec.ts:254:7 › CR-3-14 IP host = gateway payload ditolak di UI › single host: pesan 'Bentrok dengan gateway <gw>', simpan & install nonaktif, tanpa request (1.5s)
+  ✓  64 [iter3-ui] › e2e/iter3-ui.spec.ts:283:7 › I-3-13 bukti dialog password acak › screenshot dialog password terlihat penuh (opacity 1), kolom password di-mask (2.1s)
+(node:175135) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:172886) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  65 [m4-discovery] › e2e/m4-discovery.spec.ts:44:5 › AC-4.9/4.11/4.12 discovery: IP asing ditolak; MAC di lease muncul ≤ 10 dtk tanpa refresh (5.9s)
+[WebServer] [boot] tolak file mac=52:54:00:99:00:32 alasan=ip
+[WebServer] [boot] tolak status mac=52:54:00:99:00:32 alasan=token-unknown
+  ✓  66 [m4-discovery] › e2e/m4-discovery.spec.ts:78:5 › AC-4.27 Install dari Sheet → pill Booting → Installing → Configuring → Done tanpa refresh (18.1s)
+(node:175350) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  67 [m4-settings] › e2e/m4-settings.spec.ts:9:5 › AC-4.6 GET /api/settings + halaman Settings read-only (575ms)
+[WebServer] (node:172922) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+  ✓  68 [m4-settings] › e2e/m4-settings.spec.ts:43:5 › AC-4.6 tab Network memakai subnet server 10.99.0.0/24; 10.10.10.5 ditandai di luar subnet (1.6s)
+  ✓  69 [m4-settings] › e2e/m4-settings.spec.ts:68:5 › AC-4.7 top bar mengikuti GET /api/server-status (online / offline / tidak diketahui) (15.8s)
+
+  69 passed (2.9m)

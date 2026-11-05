@@ -1,0 +1,134 @@
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 vendor class: PXEClient:Arch:00007:UNDI:003001
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 DHCPDISCOVER(pxe0) 52:54:00:99:00:01 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 tags: efi64, pxe0
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 DHCPOFFER(pxe0) 10.99.0.168 52:54:00:99:00:01 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 1:netmask, 2:time-offset, 3:router, 4, 5, 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 6:dns-server, 12:hostname, 13:boot-file-size, 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 15:domain-name, 17:root-path, 18:extension-path, 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 22:max-datagram-reassembly, 23:default-ttl, 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 28:broadcast, 40:nis-domain, 41:nis-server, 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 42:ntp-server, 43:vendor-encap, 50:requested-address, 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 51:lease-time, 54:server-identifier, 58:T1, 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 59:T2, 60:vendor-class, 66:tftp-server, 67:bootfile-name, 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 97:client-machine-id, 128, 129, 130, 131, 
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 requested options: 132, 133, 134, 135
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 next server: 10.99.0.2
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 broadcast response
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  1 option: 53 message-type  2
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 51 lease-time  1h
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 58 T1  30m
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 59 T2  52m30s
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 07:18:29 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 vendor class: PXEClient:Arch:00007:UNDI:003001
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 DHCPREQUEST(pxe0) 10.99.0.168 52:54:00:99:00:01 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 tags: efi64, pxe0
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 DHCPACK(pxe0) 10.99.0.168 52:54:00:99:00:01 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 1:netmask, 2:time-offset, 3:router, 4, 5, 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 6:dns-server, 12:hostname, 13:boot-file-size, 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 15:domain-name, 17:root-path, 18:extension-path, 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 22:max-datagram-reassembly, 23:default-ttl, 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 28:broadcast, 40:nis-domain, 41:nis-server, 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 42:ntp-server, 43:vendor-encap, 50:requested-address, 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 51:lease-time, 54:server-identifier, 58:T1, 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 59:T2, 60:vendor-class, 66:tftp-server, 67:bootfile-name, 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 97:client-machine-id, 128, 129, 130, 131, 
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 requested options: 132, 133, 134, 135
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 next server: 10.99.0.2
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 broadcast response
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  1 option: 53 message-type  5
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 51 lease-time  1h
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 58 T1  30m
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 59 T2  52m30s
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 07:18:37 dnsmasq-dhcp[1244]: 3236201503 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 07:18:37 dnsmasq-tftp[1244]: error 8 User aborted the transfer received from 10.99.0.168
+Nov  5 07:18:37 dnsmasq-tftp[1244]: sent /srv/pxe/tftp/snponly.efi to 10.99.0.168
+Nov  5 07:18:37 dnsmasq-tftp[1244]: sent /srv/pxe/tftp/snponly.efi to 10.99.0.168
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 vendor class: PXEClient:Arch:00007:UNDI:003010
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 user class: iPXE
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 DHCPDISCOVER(pxe0) 52:54:00:99:00:01 
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 tags: ipxe, efi64, pxe0
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 DHCPOFFER(pxe0) 10.99.0.168 52:54:00:99:00:01 
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 requested options: 203
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 next server: 10.99.0.2
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 broadcast response
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  1 option: 53 message-type  2
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 51 lease-time  1h
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size: 55 option: 67 bootfile-name  http://10.99.0.2/boot/${mac}.ipxe?platform=${platform}
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 58 T1  30m
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 59 T2  52m30s
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 07:18:39 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 vendor class: PXEClient:Arch:00007:UNDI:003010
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 user class: iPXE
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 DHCPDISCOVER(pxe0) 52:54:00:99:00:01 
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 tags: ipxe, efi64, pxe0
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 DHCPOFFER(pxe0) 10.99.0.168 52:54:00:99:00:01 
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 requested options: 203
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 next server: 10.99.0.2
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 broadcast response
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  1 option: 53 message-type  2
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 51 lease-time  1h
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size: 55 option: 67 bootfile-name  http://10.99.0.2/boot/${mac}.ipxe?platform=${platform}
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 58 T1  30m
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 59 T2  52m30s
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 07:18:40 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 vendor class: PXEClient:Arch:00007:UNDI:003010
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 user class: iPXE
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 DHCPREQUEST(pxe0) 10.99.0.168 52:54:00:99:00:01 
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 tags: ipxe, efi64, pxe0
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 DHCPACK(pxe0) 10.99.0.168 52:54:00:99:00:01 
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 requested options: 203
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 next server: 10.99.0.2
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 broadcast response
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  1 option: 53 message-type  5
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 51 lease-time  1h
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size: 55 option: 67 bootfile-name  http://10.99.0.2/boot/${mac}.ipxe?platform=${platform}
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 58 T1  30m
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 59 T2  52m30s
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 07:18:42 dnsmasq-dhcp[1244]: 2096777794 sent size:  4 option:  3 router  10.99.0.1

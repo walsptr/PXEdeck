@@ -1,0 +1,45 @@
+[2026-11-05T06:59:26Z] node-v22.23.4-linux-x64.tar.xz sudah ada (sha256 cocok)
+[2026-11-05T06:59:26Z] network pxe-test sudah terdefinisi
+[2026-11-05T06:59:26Z] network pxe-test sudah aktif
+[2026-11-05T06:59:26Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T06:59:26Z] network pxe-test-nat sudah aktif
+[2026-11-05T06:59:26Z] membuat base disk dari ubuntu-24.04-server-cloudimg-amd64.img
+Image resized.
+[2026-11-05T06:59:28Z] virt-install pxe-test-server-base (RAM 3072 MB)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-05T06:59:29Z] menunggu SSH 10.99.0.2
+[2026-11-05T06:59:43Z] menunggu cloud-init selesai
+[2026-11-05T07:00:15Z] memasang Node dari node-v22.23.4-linux-x64.tar.xz
+v22.23.4
+status: disabled
+extended_status: disabled
+boot_status_code: disabled-by-marker-file
+last_update: Thu, 01 Jan 1970 00:00:39 +0000
+detail: DataSourceNoCloud [seed=/dev/sr0]
+ii  dnsmasq           2.91-0ubuntu0.24.04.2 all          Small caching DNS proxy and DHCP/TFTP server - system daemon
+ii  nfs-kernel-server 1:2.6.4-3ubuntu5.1    amd64        support for NFS kernel server
+ii  nftables          1.0.9-1ubuntu0.1      amd64        Program to control packet filtering rules by Netfilter project
+ii  nginx             1.24.0-2ubuntu7.19    amd64        small, powerful, scalable web/proxy server
+v22.23.4
+[2026-11-05T07:00:20Z] mematikan pxe-test-server-base
+Domain 'pxe-test-server-base' has been undefined
+
+[2026-11-05T07:00:22Z] base siap dalam 56s
+[2026-11-05T07:00:22Z] network pxe-test sudah terdefinisi
+[2026-11-05T07:00:22Z] network pxe-test sudah aktif
+[2026-11-05T07:00:22Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T07:00:22Z] network pxe-test-nat sudah aktif
+[2026-11-05T07:00:23Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-05T07:00:32Z] SSH siap dalam 10s
+[2026-11-05T07:00:33Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/server-listen.txt
+
+real	1m7.869s
+user	0m5.765s
+sys	0m3.033s

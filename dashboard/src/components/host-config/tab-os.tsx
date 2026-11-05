@@ -1,5 +1,10 @@
 "use client"
 
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Alert02Icon } from "@hugeicons/core-free-icons"
+
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { Button } from "@/components/ui/button"
 import {
   Field,
   FieldContent,
@@ -12,6 +17,7 @@ import {
 } from "@/components/ui/field"
 import { Badge } from "@/components/ui/badge"
 import { Input } from "@/components/ui/input"
+import { Skeleton } from "@/components/ui/skeleton"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import {
   Select,
@@ -25,7 +31,12 @@ import { Textarea } from "@/components/ui/textarea"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 import type { OsForm } from "@/components/host-config/form-state"
 import { LOCALES, TIMEZONES } from "@/lib/host-config"
-import { OS_IMAGES } from "@/lib/os-images"
+import {
+  installBlockReason,
+  useOsImages,
+  type OsImageInfo,
+} from "@/hooks/use-os-images"
+import { canonicalOsImageId } from "@/lib/os-images"
 import type { Host } from "@/lib/types"
 
 const PARTITION_LABEL = {
@@ -49,35 +60,60 @@ export function TabOs({
   onChange: (v: Partial<OsForm>) => void
   hosts: Host[]
 }) {
-  const image = OS_IMAGES.find((i) => i.id === value.osImageId)
+  const images = useOsImages()
+  const selectedId = value.osImageId ? canonicalOsImageId(value.osImageId) : ""
+  const image = images.data?.find((i) => i.id === selectedId)
+  const blocked = installBlockReason(image)
   const installed = hosts.filter((h) => h.osInstalled).length
 
   return (
     <FieldGroup>
       <FieldSet>
         <FieldLegend variant="label">OS image</FieldLegend>
-        <RadioGroup
-          value={value.osImageId}
-          onValueChange={(osImageId) => onChange({ osImageId })}
-          className="grid gap-2 sm:grid-cols-2"
-        >
-          {OS_IMAGES.map((img) => (
-            <FieldLabel key={img.id} htmlFor={`os-${img.id}`}>
-              <Field orientation="horizontal">
-                <FieldContent>
-                  <FieldTitle>
-                    {img.name} {img.version}
-                  </FieldTitle>
-                  <FieldDescription>
-                    <span className="type-data text-xs">{img.arch}</span> ·{" "}
-                    {img.method}
-                  </FieldDescription>
-                </FieldContent>
-                <RadioGroupItem value={img.id} id={`os-${img.id}`} />
-              </Field>
-            </FieldLabel>
-          ))}
-        </RadioGroup>
+        {images.isError ? (
+          <Alert variant="destructive">
+            <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} />
+            <AlertTitle>Gagal memuat daftar OS image</AlertTitle>
+            <AlertDescription className="flex flex-col items-start gap-3">
+              <span>{images.error.message}</span>
+              <Button variant="outline" onClick={() => images.refetch()}>
+                Coba lagi
+              </Button>
+            </AlertDescription>
+          </Alert>
+        ) : images.isPending ? (
+          <div className="grid gap-2 sm:grid-cols-2">
+            {Array.from({ length: 4 }, (_, i) => (
+              <Skeleton key={i} className="h-16 w-full" />
+            ))}
+          </div>
+        ) : (
+          <RadioGroup
+            value={selectedId}
+            onValueChange={(osImageId) => onChange({ osImageId })}
+            className="grid gap-2 sm:grid-cols-2"
+          >
+            {images.data.map((img) => (
+              <OsImageOption key={img.id} img={img} />
+            ))}
+          </RadioGroup>
+        )}
+        {image?.method === "unattend" && (
+          <Alert data-slot="windows-warning">
+            <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} />
+            <AlertTitle>Windows: hanya generator unattend.xml</AlertTitle>
+            <AlertDescription>
+              Password dari tab Credentials tidak dipakai — akses Windows
+              key-only. Install Windows lewat dashboard ditolak server sampai
+              media dan pengujian tersedia; konfigurasi tetap bisa disimpan.
+            </AlertDescription>
+          </Alert>
+        )}
+        {blocked && image?.method !== "unattend" && (
+          <FieldDescription className="text-destructive">
+            {blocked}. Install akan ditolak server.
+          </FieldDescription>
+        )}
       </FieldSet>
 
       <FieldSet>
@@ -241,5 +277,55 @@ export function TabOs({
         )}
       </FieldSet>
     </FieldGroup>
+  )
+}
+
+function OsImageOption({ img }: { img: OsImageInfo }) {
+  const id = `os-${img.id}`
+  const disabled = !img.available
+  const windows = img.method === "unattend"
+  const note = disabled
+    ? (img.reason ?? "Media tidak tersedia di server")
+    : windows
+      ? "Hanya generator unattend.xml"
+      : !img.bootable
+        ? "Tidak bisa di-boot lewat PXE"
+        : null
+  return (
+    <FieldLabel htmlFor={id}>
+      <Field
+        orientation="horizontal"
+        data-disabled={disabled || undefined}
+        data-available={img.available}
+      >
+        <FieldContent>
+          <FieldTitle>
+            {img.name} {img.version}
+          </FieldTitle>
+          <FieldDescription>
+            <span className="type-data text-xs">{img.arch}</span> · {img.method}
+          </FieldDescription>
+          {note && (
+            <FieldDescription
+              id={`${id}-note`}
+              className={disabled ? "text-destructive" : undefined}
+            >
+              {note}
+            </FieldDescription>
+          )}
+          {windows && (
+            <FieldDescription data-slot="windows-password-note">
+              Password dari tab Credentials tidak dipakai (akses key-only).
+            </FieldDescription>
+          )}
+        </FieldContent>
+        <RadioGroupItem
+          value={img.id}
+          id={id}
+          disabled={disabled}
+          aria-describedby={note ? `${id}-note` : undefined}
+        />
+      </Field>
+    </FieldLabel>
   )
 }

@@ -1,26 +1,14 @@
-// Sumber tunggal parameter subnet management di server (DEC-006). Nilai dari
-// env (PXE_MGMT_CIDR, PXE_MGMT_GATEWAY, PXE_MGMT_DNS, PXE_DYNAMIC_RANGE,
-// PXE_SERVER_IP) dengan default lab dari `MGMT_NETWORK`. Hanya untuk kode
-// server: modul ini membaca process.env (tidak di-bundle ke client karena
-// hanya di-import oleh route handler / lib/server). Tahap 4 menambah Settings.
-import { mgmtNetworkFromEnv, type MgmtNetwork } from "@/lib/net"
-
-let cache: { key: string; net: MgmtNetwork } | null = null
+// Sumber tunggal parameter subnet management di server (DEC-006). Sejak M4
+// nilainya bagian dari `getSettings()` (src/lib/server/settings.ts, env
+// PXE_MGMT_*, PXE_DHCP_RANGE/PXE_DYNAMIC_RANGE, PXE_SERVER_IP). Modul ini
+// dipertahankan sebagai pembungkus tipis untuk pemanggil lama.
+import type { MgmtNetwork } from "@/lib/net"
+import { getSettings } from "@/lib/server/settings"
 
 /**
- * Parameter subnet management aktif. Env dibaca ulang tiap panggilan (murah,
- * di-cache per kombinasi nilai) agar test bisa mengganti env tanpa reload
- * modul. Env tidak konsisten → Error (fail fast, bukan diam-diam default).
+ * Parameter subnet management aktif. Env dibaca ulang tiap panggilan (di-cache
+ * per kombinasi nilai). Env tidak konsisten → Error (fail fast).
  */
 export function getMgmtNetwork(): MgmtNetwork {
-  const env = {
-    PXE_MGMT_CIDR: process.env.PXE_MGMT_CIDR,
-    PXE_MGMT_GATEWAY: process.env.PXE_MGMT_GATEWAY,
-    PXE_MGMT_DNS: process.env.PXE_MGMT_DNS,
-    PXE_DYNAMIC_RANGE: process.env.PXE_DYNAMIC_RANGE,
-    PXE_SERVER_IP: process.env.PXE_SERVER_IP,
-  }
-  const key = JSON.stringify(env)
-  if (cache?.key !== key) cache = { key, net: mgmtNetworkFromEnv(env) }
-  return cache.net
+  return getSettings().network
 }

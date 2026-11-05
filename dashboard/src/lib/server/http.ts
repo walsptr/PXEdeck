@@ -1,6 +1,7 @@
 import type { z } from "zod"
 
 import { parseHostId, type ApiFieldError } from "@/lib/host-config"
+import { getSettings } from "@/lib/server/settings"
 
 // Konvensi kode status API host:
 //  400 `{error}`            id di URL bukan 12 hex, body bukan JSON
@@ -14,6 +15,12 @@ import { parseHostId, type ApiFieldError } from "@/lib/host-config"
 // Perlindungan request mutasi (SR-2-2, SR-3-2, SR-3-3) — sampai auth/CSRF M6:
 //  - SETIAP handler POST/PATCH/DELETE memanggil `guardMutation(req, mode)`
 //    sebagai langkah pertama:
+//      * header Host efektif (X-Forwarded-Host / Host) wajib ada di allowlist
+//        `PXE_ALLOWED_HOSTS` (default: localhost, 127.0.0.1, [::1], IP PXE
+//        server, host dari PXE_BASE_URL) — SR-3-5, menutup DNS rebinding
+//        (Origin = Host = domain penyerang) → 403 "Host tidak diizinkan".
+//        Entri tanpa port cocok dengan port apa pun; entri dengan port harus
+//        persis sama.
 //      * header `Origin` ada dan host-nya ≠ host request (header Host /
 //        X-Forwarded-Host), `Origin: null`, atau `Sec-Fetch-Site:
 //        cross-site` → 403 "Request lintas-origin ditolak".
@@ -60,6 +67,24 @@ function requestHost(req: Request): string {
 }
 
 /**
+ * true bila `host` ("nama[:port]", huruf kecil) cocok dengan salah satu entri
+ * allowlist. Entri tanpa port menerima port apa pun (fungsi murni, SR-3-5).
+ */
+export function isHostAllowed(host: string, allowed: readonly string[]): boolean {
+  const h = host.trim().toLowerCase()
+  if (!h) return false
+  const m = /^(\[[^\]]*\]|[^:]*)(?::(\d+))?$/.exec(h)
+  if (!m) return false
+  const name = m[1]
+  return allowed.some((a) => {
+    const e = a.trim().toLowerCase()
+    const em = /^(\[[^\]]*\]|[^:]*)(?::(\d+))?$/.exec(e)
+    if (!em) return false
+    return em[2] === undefined ? em[1] === name : e === h
+  })
+}
+
+/**
  * Pemeriksaan wajib request mutasi (lihat konvensi di atas). Mengembalikan
  * Response 403/415 bila ditolak, atau null bila boleh lanjut.
  */
@@ -67,6 +92,9 @@ export function guardMutation(
   req: Request,
   body: "json" | "none",
 ): Response | null {
+  if (!isHostAllowed(requestHost(req), getSettings().allowedHosts)) {
+    return errorResponse(403, "Host tidak diizinkan")
+  }
   const origin = req.headers.get("origin")
   if (origin !== null) {
     let host: string | null = null

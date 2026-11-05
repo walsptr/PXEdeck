@@ -55,7 +55,7 @@ import {
   type HostAction,
 } from "@/components/hosts/host-actions"
 import { HostsToolbar } from "@/components/hosts/hosts-toolbar"
-import { useDeleteHost, useHosts, useRebootHost } from "@/hooks/use-hosts"
+import { useDeleteHost, useHosts } from "@/hooks/use-hosts"
 import {
   IN_PROGRESS_STATUSES,
   PROVISION_STATUSES,
@@ -64,12 +64,12 @@ import {
 } from "@/lib/types"
 import type { SaveResult, SectionKey } from "@/lib/host-config"
 import { cn } from "@/lib/utils"
-import { useNetworkConfig } from "@/hooks/use-network-config"
+import { useActiveNetwork } from "@/hooks/use-settings"
 
 const EMPTY: Host[] = []
 const DEFAULT_SORT: SortingState = [{ id: "lastSeen", desc: true }]
 
-type Confirm = { kind: "reboot" | "delete"; host: Host } | null
+type Confirm = { kind: "delete"; host: Host } | null
 
 /** Tab sheet yang dibuka oleh tiap aksi. */
 const BULK_TAB: Record<BulkAction, SectionKey> = {
@@ -101,7 +101,6 @@ export function HostsView({ initialQuery = "" }: { initialQuery?: string }) {
   const router = useRouter()
   const { data, isPending, isError, error, isFetching, refetch } = useHosts()
   const deleteHost = useDeleteHost()
-  const rebootHost = useRebootHost()
 
   const [sorting, setSorting] = React.useState<SortingState>(DEFAULT_SORT)
   const [globalFilter, setGlobalFilter] = React.useState(initialQuery)
@@ -157,8 +156,10 @@ export function HostsView({ initialQuery = "" }: { initialQuery?: string }) {
           router.push(`/jobs?host=${host.id}`)
           return
         case "reboot":
+          // "Reboot ke PXE" butuh IPMI/Redfish (di luar M4; API → 501). Item menu nonaktif.
+          return
         case "delete":
-          setConfirm({ kind: action, host })
+          setConfirm({ kind: "delete", host })
           return
         case "install":
         case "edit":
@@ -187,33 +188,24 @@ export function HostsView({ initialQuery = "" }: { initialQuery?: string }) {
 
   function runConfirm() {
     if (!confirm) return
-    const { kind, host } = confirm
-    const name = host.hostname ?? host.mac
-    if (kind === "delete") {
-      deleteHost.mutate(host.id, {
-        onSuccess: () => {
-          setRowSelection((old) => {
-            const next = { ...old }
-            delete next[host.id]
-            return next
-          })
-          toast.success(`${name} dihapus dari daftar`)
-        },
-        onError: (e) =>
-          toast.error(`Gagal menghapus ${name}`, { description: e.message }),
-      })
-    } else {
-      rebootHost.mutate(host.id, {
-        onSuccess: (h) =>
-          toast.success(`${name} di-reboot ke PXE`, {
-            description: h.osAssigned
-              ? "Host akan menjalankan instalasi OS yang ditugaskan."
-              : "Belum ada OS ditugaskan; host hanya akan tercatat ulang.",
-          }),
-        onError: (e) =>
-          toast.error(`Gagal reboot ${name}`, { description: e.message }),
-      })
-    }
+    const { host } = confirm
+    // DR-2-3: hostname/MAC di judul toast memakai mono.
+    const name = <span className="type-data">{host.hostname ?? host.mac}</span>
+    deleteHost.mutate(host.id, {
+      onSuccess: () => {
+        setRowSelection((old) => {
+          const next = { ...old }
+          delete next[host.id]
+          return next
+        })
+        toast.success(<span>{name} dihapus dari daftar</span>)
+      },
+      onError: (e) =>
+        toast.error(
+          <span>Gagal menghapus {name}</span>,
+          { description: e.message },
+        ),
+    })
     setConfirm(null)
   }
 
@@ -361,36 +353,21 @@ export function HostsView({ initialQuery = "" }: { initialQuery?: string }) {
       >
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>
-              {confirm?.kind === "delete" ? "Hapus host?" : "Reboot ke PXE?"}
-            </AlertDialogTitle>
+            <AlertDialogTitle>Hapus host?</AlertDialogTitle>
             <AlertDialogDescription>
-              {confirm?.kind === "delete" ? (
+              {confirm ? (
                 <>
                   <span className="type-data">{confirm.host.mac}</span> akan
                   dihapus dari dashboard. Host akan muncul lagi sebagai
                   Discovered jika melakukan PXE boot.
-                </>
-              ) : confirm ? (
-                <>
-                  <span className="type-data">
-                    {confirm.host.hostname ?? confirm.host.mac}
-                  </span>{" "}
-                  akan di-reboot dan boot dari jaringan.
-                  {confirm.host.osAssigned
-                    ? " OS yang ditugaskan akan di-install dan disk dihapus."
-                    : " Belum ada OS yang ditugaskan, jadi tidak ada instalasi."}
                 </>
               ) : null}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Batal</AlertDialogCancel>
-            <AlertDialogAction
-              variant={confirm?.kind === "delete" ? "destructive" : "default"}
-              onClick={runConfirm}
-            >
-              {confirm?.kind === "delete" ? "Hapus" : "Reboot"}
+            <AlertDialogAction variant="destructive" onClick={runConfirm}>
+              Hapus
             </AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
@@ -434,7 +411,7 @@ function LoadingRows({ cols }: { cols: number }) {
 
 function NoHosts({ onRefresh }: { onRefresh: () => void }) {
   // Subnet aktif dari server (CR-2-6), bukan nilai lab hard-coded.
-  const cidr = useNetworkConfig().data?.cidr
+  const cidr = useActiveNetwork().data?.cidr
   return (
     <Empty className="rounded-xl border border-dashed border-border bg-canvas-soft py-16">
       <EmptyHeader>

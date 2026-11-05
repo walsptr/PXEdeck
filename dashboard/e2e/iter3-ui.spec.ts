@@ -1,7 +1,8 @@
 // Iterasi 3 — bukti test untuk perbaikan gate iter2 (server sendiri, project "iter3-ui",
 // env PXE_MGMT_* = subnet lab):
 //  - DR-1-2  toast Sonner tanpa drop shadow (AC-1.3 / SPEC §1), dipicu dari alur nyata M2
-//            (hapus & reboot host) dan M3 (simpan konfigurasi): diam, hover, focus-visible.
+//            (hapus host sukses & gagal — reboot dihapus DEC-012) dan M3 (simpan konfigurasi):
+//            diam, hover, focus-visible.
 //  - DR-3-4  "Tambah" DNS 36px; area klik "Hapus DNS …" / "Batalkan perubahan …" ≥ 36px (hit-test).
 //  - CR-3-14 IP host = gateway payload ditolak di klien ("Bentrok dengan gateway <gw>"), simpan nonaktif.
 //  - I-3-13  screenshot dialog password acak yang benar-benar menampilkan dialog (password di-mask).
@@ -120,18 +121,34 @@ test.describe("DR-1-2 toast Sonner tanpa drop shadow (alur nyata M2 & M3)", () =
     await page.getByRole("alertdialog", { name: "Hapus host?" }).getByRole("button", { name: "Hapus" }).click()
     await expect(rowByMac(page, "00:50:56:b2:3e:91")).toHaveCount(0)
     const toast = page.locator(TOAST).filter({ hasText: "win-jump dihapus dari daftar" })
+    // Carry-over DR-1-3: toast memakai Inter (bukan ui-sans-serif Sonner); DR-2-3: hostname di
+    // judul toast memakai mono (`type-data`).
+    await expect(toast).toBeVisible()
+    expect(await toast.evaluate((el) => getComputedStyle(el).fontFamily)).toMatch(/^"Inter Variable"/)
+    const name = toast.locator(".type-data").filter({ hasText: /^win-jump$/ })
+    await expect(name).toHaveCount(1)
+    expect(await name.evaluate((el) => getComputedStyle(el).fontFamily)).toMatch(/^"JetBrains Mono Variable"/)
     await expectFlatToastAllStates(page, toast, { m: 2, name: "iter3-toast-delete" })
   })
 
-  test("M2 reboot ke PXE → toast datar (diam/hover/focus-visible)", async ({ page }) => {
+  // M4/DEC-012: aksi reboot (dan toast-nya) tidak ada lagi. Toast M2 kedua yang tersisa adalah
+  // varian error (hapus gagal) — sekaligus pengukuran shadow toast.error (carry-over I-3-8).
+  test("M2 hapus host gagal → toast.error datar (diam/hover/focus-visible)", async ({ page }) => {
     await gotoHosts(page)
-    const row = rowByMac(page, "3c:a8:2a:10:44:7c") // legacy-01
+    await page.route("**/api/hosts/3ca82a10447c", (r) =>
+      r.request().method() === "DELETE" ? r.fulfill({ status: 500, json: { error: "DB terkunci (uji)" } }) : r.fallback(),
+    )
     await page.getByRole("button", { name: "Aksi untuk legacy-01" }).click()
-    await page.getByRole("menuitem", { name: "Reboot ke PXE" }).click()
-    await page.getByRole("alertdialog", { name: "Reboot ke PXE?" }).getByRole("button", { name: "Reboot" }).click()
-    await expect(row.locator("[data-status]")).toHaveAttribute("data-status", "discovered")
-    const toast = page.locator(TOAST).filter({ hasText: "legacy-01 di-reboot ke PXE" })
-    await expectFlatToastAllStates(page, toast, { m: 2, name: "iter3-toast-reboot" })
+    await page.getByRole("menuitem", { name: "Hapus" }).click()
+    await page.getByRole("alertdialog", { name: "Hapus host?" }).getByRole("button", { name: "Hapus" }).click()
+    const toast = page.locator(TOAST).filter({ hasText: "Gagal menghapus legacy-01" })
+    await expect(toast).toBeVisible()
+    await expect(toast).toContainText("DB terkunci (uji)")
+    await expect(toast).toHaveAttribute("data-type", "error")
+    expect(await toast.evaluate((el) => getComputedStyle(el).fontFamily)).toMatch(/^"Inter Variable"/)
+    expect(await toast.locator(".type-data").filter({ hasText: /^legacy-01$/ }).evaluate((el) => getComputedStyle(el).fontFamily)).toMatch(/^"JetBrains Mono Variable"/)
+    await expect(rowByMac(page, "3c:a8:2a:10:44:7c")).toHaveCount(1)
+    await expectFlatToastAllStates(page, toast, { m: 2, name: "iter3-toast-delete-error" })
   })
 
   test("M3 simpan konfigurasi → toast datar (diam/hover/focus-visible); seluruh halaman tanpa drop shadow", async ({ page }) => {

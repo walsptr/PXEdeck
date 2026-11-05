@@ -1,0 +1,179 @@
+{
+  "run": "m4",
+  "generatedAt": "2026-11-05T14:20:35.540Z",
+  "results": [
+    {
+      "ac": "AC-4.32",
+      "node": "pxe-test-m4-node11",
+      "status": "PASS",
+      "evidence": [
+        "pxe-test-m4-node11-negative.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.30",
+      "node": "pxe-test-m4-node11",
+      "status": "PASS",
+      "durationS": 603,
+      "note": "booting → installing → configuring → done",
+      "evidence": [
+        "pxe-test-m4-node11-status.txt",
+        "pxe-test-m4-node11-console.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.31",
+      "node": "pxe-test-m4-node11",
+      "status": "PASS",
+      "durationS": 217,
+      "evidence": [
+        "pxe-test-m4-node11-verify-ssh.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.32",
+      "node": "pxe-test-m4-node12",
+      "status": "PASS",
+      "evidence": [
+        "pxe-test-m4-node12-negative.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.33",
+      "node": "pxe-test-m4-node12",
+      "status": "PASS",
+      "durationS": 393,
+      "note": "booting → installing → configuring → done",
+      "evidence": [
+        "pxe-test-m4-node12-status.txt",
+        "pxe-test-m4-node12-console.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.31",
+      "node": "pxe-test-m4-node12",
+      "status": "PASS",
+      "durationS": 28,
+      "evidence": [
+        "pxe-test-m4-node12-verify-ssh.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.34-scan",
+      "status": "PASS",
+      "note": "0 temuan",
+      "evidence": [
+        "evidence-scan.txt"
+      ]
+    }
+  ],
+  "nodes": [
+    "pxe-test-m4-node11",
+    "pxe-test-m4-node12"
+  ],
+  "kvmRun": {
+    "ts": "20261105T135915Z",
+    "commit": "b3a7ed4 (+ dashboard/e2e-kvm: scanEvidence base64, pemilihan key run dari library)",
+    "command": "infra/kvm-run.sh m4 (default nodes 11:uefi 12:bios)",
+    "result": "PASS exit=0",
+    "summary": "kvm-run.txt",
+    "steps": {
+      "preflight": "13:59:15",
+      "server-up": "13:59:26",
+      "deploy": "13:59:49",
+      "server-check": "13:59:49",
+      "playwright": "14:20:35 ok",
+      "verify": "14:20:36 ok x2",
+      "redact": "14:20:57 ok",
+      "cleanup": "14:21:01 done"
+    },
+    "stagesUtc": {
+      "pxe-test-m4-node11": {
+        "booting": "14:00:14",
+        "installing": "14:00:51",
+        "configuring": "14:06:16",
+        "done": "14:09:56"
+      },
+      "pxe-test-m4-node12": {
+        "booting": "14:13:36",
+        "installing": "14:14:16",
+        "configuring": "14:19:37",
+        "done": "14:20:07"
+      }
+    },
+    "previousAttempts": [
+      "attempt1-20261105T115847Z",
+      "attempt2-20261105T120018Z",
+      "attempt3-20261105T122818Z",
+      "attempt4-20261105T133207Z (dihentikan: bug harness key duplikat, lihat interrupted.txt)"
+    ]
+  },
+  "acSummary": [
+    {
+      "ac": "AC-4.29",
+      "status": "PASS",
+      "evidence": [
+        "server-check.txt",
+        "server-listen.txt",
+        "kvm-run.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.30",
+      "node": "pxe-test-m4-node11",
+      "status": "PASS",
+      "durationS": 603,
+      "evidence": [
+        "pxe-test-m4-node11-status.txt",
+        "pxe-test-m4-node11-console.txt",
+        "server-dnsmasq.txt",
+        "server-nginx.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.31",
+      "status": "PASS",
+      "nodes": {
+        "pxe-test-m4-node11": 217,
+        "pxe-test-m4-node12": 28
+      },
+      "evidence": [
+        "pxe-test-m4-node11-verify-ssh.txt",
+        "pxe-test-m4-node12-verify-ssh.txt",
+        "pxe-test-m4-node11-verify.txt",
+        "pxe-test-m4-node12-verify.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.32",
+      "status": "PASS",
+      "evidence": [
+        "pxe-test-m4-node11-negative.txt",
+        "pxe-test-m4-node12-negative.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.33",
+      "node": "pxe-test-m4-node12",
+      "status": "PASS",
+      "durationS": 393,
+      "evidence": [
+        "pxe-test-m4-node12-status.txt",
+        "pxe-test-m4-node12-console.txt",
+        "pxe-test-m4-node12-verify-ssh.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.34",
+      "status": "PASS",
+      "durationS": 4,
+      "evidence": [
+        "cleanup.txt",
+        "libvirt-before.txt",
+        "libvirt-after.txt",
+        "evidence-scan.txt",
+        "../secret-scan.txt"
+      ]
+    }
+  ]
+}

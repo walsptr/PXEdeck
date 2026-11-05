@@ -1,0 +1,18 @@
+{
+  "run": "m4",
+  "generatedAt": "2026-11-05T11:59:32.609Z",
+  "results": [
+    {
+      "ac": "AC-4.34-scan",
+      "status": "PASS",
+      "note": "0 temuan",
+      "evidence": [
+        "evidence-scan.txt"
+      ]
+    }
+  ],
+  "nodes": [
+    "pxe-test-m4-node11",
+    "pxe-test-m4-node12"
+  ]
+}

@@ -1,16 +1,19 @@
 import { toPublicConfig } from "@/lib/server/config-service"
+import { configOrDefault } from "@/lib/server/db/repos/configs"
+import { getHost } from "@/lib/server/db/repos/hosts"
 import { hostIdParam, hostNotFound, jsonNoStore } from "@/lib/server/http"
-import { getConfig, mockDb } from "@/lib/server/mock-hosts"
 
-/** Konfigurasi tersimpan (tanpa hash password). Id bukan 12 hex → 400. */
+/**
+ * Konfigurasi tersimpan (tanpa hash password). Host tanpa config → default
+ * (tanpa credentials/key) TANPA menulis ke DB (CR-3-4). Id bukan 12 hex → 400.
+ */
 export async function GET(
   _req: Request,
   ctx: RouteContext<"/api/hosts/[id]/config">,
 ) {
   const p = hostIdParam((await ctx.params).id)
   if ("response" in p) return p.response
-  const s = mockDb()
-  const host = s.hosts.get(p.id)
+  const host = getHost(p.id)
   if (!host) return hostNotFound()
-  return jsonNoStore(toPublicConfig(getConfig(s, host)))
+  return jsonNoStore(toPublicConfig(configOrDefault(host)))
 }

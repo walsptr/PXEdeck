@@ -1,0 +1,18 @@
+network:
+  version: 2
+  ethernets:
+    pxe0:
+      match:
+        macaddress: "52:54:00:99:01:02"
+      set-name: pxe0
+      addresses: [10.99.0.2/24]
+    nat0:
+      match:
+        macaddress: "52:54:00:99:01:03"
+      set-name: nat0
+      addresses: [192.168.199.2/24]
+      routes:
+        - to: default
+          via: 192.168.199.1
+      nameservers:
+        addresses: [1.1.1.1, 9.9.9.9]

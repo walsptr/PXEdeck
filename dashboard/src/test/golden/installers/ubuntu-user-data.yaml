@@ -1,0 +1,66 @@
+#cloud-config
+autoinstall:
+  version: 1
+  locale: en_US.UTF-8
+  keyboard:
+    layout: us
+  timezone: Asia/Jakarta
+  refresh-installer:
+    update: false
+  apt:
+    geoip: false
+    fallback: offline-install
+  network:
+    version: 2
+    ethernets:
+      mgmt:
+        match:
+          macaddress: 52:54:00:99:00:11
+        dhcp4: false
+        dhcp6: false
+        addresses:
+          - 10.99.0.21/24
+        routes:
+          - to: default
+            via: 10.99.0.1
+        nameservers:
+          addresses:
+            - 10.99.0.2
+  identity:
+    hostname: m4-node11
+    username: ops
+    password: $6$fixturesalt$AbCdEfGhIjKlMnOpQrStUvWxYz0123456789./AbCdEfGhIjKlMnOpQrStUvWxYz0123456789./AbCdEfGhIj
+  ssh:
+    install-server: true
+    allow-pw: false
+    authorized-keys:
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIC7woJ7Ei1SHKHfK8Q8iGXm2/B2KDYvzsi3GFzSPyB+D fixture-ed25519@test
+      - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICU1HfR4aSJlSMWzsLTx5GJ+eXSZtieyKq7UvPVkuonr fixture-ed25519-b@test
+  storage:
+    layout:
+      name: lvm
+      sizing-policy: all
+      match:
+        path: /dev/vda
+  late-commands:
+    - u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/52:54:00:99:00:11/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); curl -fsS -m 15 --retry 5 --retry-delay 3 -X POST -d stage=configuring "$u" >/dev/null 2>&1 || wget -q -T 15 -O /dev/null --post-data=stage=configuring "$u" || true
+    - printf %s 'b3BzIEFMTD0oQUxMKSBOT1BBU1NXRDpBTEwK' | base64 -d > /target/etc/sudoers.d/90-ops && chmod 440 /target/etc/sudoers.d/90-ops
+    - mkdir -p /target/etc/ssh/sshd_config.d
+    - printf %s 'IyBEaXBhc2FuZyBQWEUgZGFzaGJvYXJkOiBsb2dpbiBoYW55YSBkZW5nYW4ga2V5ClBhc3N3b3JkQXV0aGVudGljYXRpb24gbm8KS2JkSW50ZXJhY3RpdmVBdXRoZW50aWNhdGlvbiBubwo=' | base64 -d > /target/etc/ssh/sshd_config.d/60-pxe-no-password.conf && chmod 644 /target/etc/ssh/sshd_config.d/60-pxe-no-password.conf
+    - mkdir -p /target/etc/pxe-callback /target/usr/local/sbin /target/etc/systemd/system/multi-user.target.wants && chmod 700 /target/etc/pxe-callback
+    - u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/52:54:00:99:00:11/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); if [ -n "$u" ]; then (umask 077; printf '%s\n' "$u" > /target/etc/pxe-callback/url) && chmod 600 /target/etc/pxe-callback/url; fi
+    - printf %s 'IyEvYmluL3NoCiMgS2lyaW0gc3RhZ2U9ZG9uZSBrZSBQWEUgZGFzaGJvYXJkIGxhbHUgaGFwdXMgZGlyaSAodG9rZW4gc2VrYWxpIHBha2FpKS4KdXJsPSQoY2F0IC9ldGMvcHhlLWNhbGxiYWNrL3VybCkgfHwgZXhpdCAxCmk9MAp3aGlsZSBbICRpIC1sdCA2MCBdOyBkbwogIGlmIGN1cmwgLWZzUyAtbSAxNSAtWCBQT1NUIC1kIHN0YWdlPWRvbmUgIiR1cmwiID4vZGV2L251bGwgMj4mMSB8fAogICAgIHdnZXQgLXEgLVQgMTUgLU8gL2Rldi9udWxsIC0tcG9zdC1kYXRhPXN0YWdlPWRvbmUgIiR1cmwiIDI+L2Rldi9udWxsOyB0aGVuCiAgICBybSAtcmYgL2V0Yy9weGUtY2FsbGJhY2sKICAgIHN5c3RlbWN0bCBkaXNhYmxlIHB4ZS1jYWxsYmFjay1kb25lLnNlcnZpY2UgPi9kZXYvbnVsbCAyPiYxIHx8IHRydWUKICAgIHJtIC1mIC9ldGMvc3lzdGVtZC9zeXN0ZW0vcHhlLWNhbGxiYWNrLWRvbmUuc2VydmljZSAvdXNyL2xvY2FsL3NiaW4vcHhlLWNhbGxiYWNrLWRvbmUKICAgIGV4aXQgMAogIGZpCiAgaT0kKChpICsgMSkpCiAgc2xlZXAgMTAKZG9uZQpleGl0IDEK' | base64 -d > /target/usr/local/sbin/pxe-callback-done && chmod 755 /target/usr/local/sbin/pxe-callback-done
+    - printf %s 'W1VuaXRdCkRlc2NyaXB0aW9uPVBYRSBkYXNoYm9hcmQ6IGxhcG9yIGluc3RhbGFzaSBzZWxlc2FpIChzZWthbGkgamFsYW4pCldhbnRzPW5ldHdvcmstb25saW5lLnRhcmdldApBZnRlcj1uZXR3b3JrLW9ubGluZS50YXJnZXQKQ29uZGl0aW9uUGF0aEV4aXN0cz0vZXRjL3B4ZS1jYWxsYmFjay91cmwKCltTZXJ2aWNlXQpUeXBlPW9uZXNob3QKRXhlY1N0YXJ0PS91c3IvbG9jYWwvc2Jpbi9weGUtY2FsbGJhY2stZG9uZQoKW0luc3RhbGxdCldhbnRlZEJ5PW11bHRpLXVzZXIudGFyZ2V0Cg==' | base64 -d > /target/etc/systemd/system/pxe-callback-done.service && chmod 644 /target/etc/systemd/system/pxe-callback-done.service
+    - ln -sf /etc/systemd/system/pxe-callback-done.service /target/etc/systemd/system/multi-user.target.wants/pxe-callback-done.service
+    - |
+      if [ -d /sys/firmware/efi ]; then
+        n=$(efibootmgr | awk '/[Uu]buntu/ {print substr($1,5,4); exit}')
+        o=$(efibootmgr | awk -F': ' '/^BootOrder/ {print $2}')
+        if [ -n "$n" ]; then
+          efibootmgr -o "$(echo "$n,$o" | tr ',' '\n' | awk '!s[$0]++' | paste -sd,)" || true
+        fi
+      fi
+    - systemd-run --unit=pxe-force-reboot -p DefaultDependencies=no /bin/sh -c 'until [ "$(systemctl is-system-running)" = stopping ]; do sleep 2; done; sleep 45; echo s > /proc/sysrq-trigger; sleep 3; echo b > /proc/sysrq-trigger'
+  error-commands:
+    - u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/52:54:00:99:00:11/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); curl -fsS -m 15 --retry 5 --retry-delay 3 -X POST -d stage=failed "$u" >/dev/null 2>&1 || wget -q -T 15 -O /dev/null --post-data=stage=failed "$u" || true
+  shutdown: reboot

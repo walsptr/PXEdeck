@@ -103,7 +103,6 @@ test.describe("AC-1.9 navigasi", () => {
     ["/os-images", "OS Images — dibangun di tahap 4", /Daftar image installer/],
     ["/ssh-keys", "SSH Keys — dibangun di tahap 4", /Library public key dengan fingerprint SHA256/],
     ["/jobs", "Provisioning Jobs — dibangun di tahap 5", /Riwayat job per host/],
-    ["/settings", "Settings — dibangun di tahap 4", /Interface, subnet DHCP/],
   ] as const
   for (const [url, title, desc] of PLACEHOLDERS) {
     test(`placeholder ${url} menampilkan judul + deskripsi`, async ({ page }) => {
@@ -116,6 +115,17 @@ test.describe("AC-1.9 navigasi", () => {
       expect(((await d.textContent()) ?? "").trim().length).toBeGreaterThan(10)
     })
   }
+
+  // M4-T8 (AC-4.6): /settings bukan lagi placeholder — halaman read-only dari GET /api/settings.
+  test("/settings: halaman Settings read-only (bukan placeholder) dengan nilai dari API", async ({ page }) => {
+    const api = await (await page.request.get("/api/settings")).json()
+    await page.goto("/settings")
+    const content = page.locator(CONTENT)
+    await expect(content.locator('[data-slot="empty"]')).toHaveCount(0)
+    await expect(content).toContainText("Read-only")
+    for (const v of [api.cidr, api.gateway, api.pxeServer, api.tftpRoot, api.baseUrl, api.interface]) await expect(content).toContainText(v)
+    await expect(content.locator("input, textarea, select")).toHaveCount(0)
+  })
 })
 
 test.describe("AC-1.10 pencarian global", () => {
@@ -153,21 +163,29 @@ test.describe("AC-1.10 pencarian global", () => {
 })
 
 test.describe("AC-1.11 status server PXE", () => {
-  test("top bar menampilkan DHCP, TFTP, HTTP dengan teks aksesibel online/offline", async ({ page }) => {
+  // M4 (CR-1-7): status berasal dari GET /api/server-status (tiga nilai: online/offline/tidak
+  // diketahui). Teks aksesibel & warna titik harus sesuai state dari API; variasi ketiga state
+  // dibuktikan deterministik di e2e/m4-settings.spec.ts (page.route, AC-4.7).
+  test("top bar menampilkan DHCP, TFTP, HTTP dengan teks aksesibel sesuai status server", async ({ page }) => {
     await gotoHosts(page)
+    const api = (await (await page.request.get("/api/server-status")).json()) as { services: { name: string; state: string }[] }
+    const LABEL: Record<string, string> = { online: "online", offline: "offline", unknown: "tidak diketahui" }
     const group = page.locator("header").getByRole("group", { name: "Status server PXE" })
     await expect(group).toBeVisible()
     for (const name of ["DHCP", "TFTP", "HTTP"]) {
       const badge = group.locator(`[data-service="${name}"]`)
+      const state = api.services.find((s) => s.name === name)!.state
       await expect(badge).toBeVisible()
       await expect(badge).toContainText(name)
+      await expect(badge).toHaveAttribute("data-state", state)
       const sr = (await badge.textContent())!.replace(name, "").trim()
-      expect(["online", "offline"]).toContain(sr)
-      const online = (await badge.getAttribute("data-online")) === "true"
-      await expect(badge.locator('[data-slot="status-dot"]')).toHaveCSS(
-        "background-color",
-        online ? "rgb(31, 138, 101)" : "rgb(207, 45, 86)",
-      )
+      expect(sr).toBe(LABEL[state])
+      await expect(badge).toHaveAttribute("data-online", String(state === "online"))
+      if (state !== "unknown")
+        await expect(badge.locator('[data-slot="status-dot"]')).toHaveCSS(
+          "background-color",
+          state === "online" ? "rgb(31, 138, 101)" : "rgb(207, 45, 86)",
+        )
     }
     await expect(group).toHaveAccessibleName("Status server PXE")
   })

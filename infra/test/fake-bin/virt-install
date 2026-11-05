@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+# virt-install PALSU: catat argumen, buat domain di state palsu (running).
+set -uo pipefail
+echo "virt-install $*" >> "$FAKE_LOG"
+# Memodelkan B-3: --pxe tanpa --import / --install no_install=yes = "tahap install" virt-install
+# → XML live <on_reboot>destroy</on_reboot> (disimpan di $FAKE_STATE/onreboot/<name>).
+# FAKE_VIRT_INSTALL_ONREBOOT=destroy memaksa nilai itu (untuk menguji pemeriksaan pasca-create).
+name=""; nvram=0; pxe=0; noinst=0
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --name) name="$2"; shift ;;
+    --boot) [[ "$2" == *nvram.template* ]] && nvram=1; shift ;;
+    --pxe) pxe=1 ;;
+    --import) noinst=1 ;;
+    --install) [[ "$2" == *no_install=yes* ]] && noinst=1; shift ;;
+  esac
+  shift
+done
+mkdir -p "$FAKE_STATE/dom" "$FAKE_STATE/onreboot"; echo running > "$FAKE_STATE/dom/$name"
+((nvram)) && touch "$FAKE_STATE/dom/$name.nvram"
+onr=restart; ((pxe && !noinst)) && onr=destroy
+onr="${FAKE_VIRT_INSTALL_ONREBOOT:-$onr}"
+echo "$onr" > "$FAKE_STATE/onreboot/$name"
+exit 0

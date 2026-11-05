@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+# scp PALSU untuk test infra: hanya mencatat argumen (stdin dibuang). Tidak ada koneksi jaringan.
+echo "scp $*" >> "$FAKE_LOG"
+cat >/dev/null 2>&1 || true
+exit 0

@@ -3,7 +3,6 @@ import { z } from "zod"
 import { hostIdField, LIMITS } from "@/lib/host-config"
 import { checkCredentialsCsv } from "@/lib/server/config-service"
 import { guardMutation, readJson } from "@/lib/server/http"
-import { mockDb } from "@/lib/server/mock-hosts"
 
 const schema = z.object({
   csv: z.string().max(200_000),
@@ -16,11 +15,7 @@ export async function POST(req: Request) {
   if (g) return g
   const body = await readJson(req, schema)
   if ("response" in body) return body.response
-  const { rows } = checkCredentialsCsv(
-    mockDb(),
-    body.data.csv,
-    body.data.hostIds,
-  )
+  const { rows } = checkCredentialsCsv(body.data.csv, body.data.hostIds)
   return Response.json({
     rows,
     valid: rows.filter((r) => r.errors.length === 0).length,

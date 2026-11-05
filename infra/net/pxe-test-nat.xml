@@ -1,0 +1,9 @@
+<!-- NAT khusus VM pxe-test-server (apt/provisioning), DEC-009: IP statis, tanpa dhcp,
+     DNS libvirt mati (tidak ada dnsmasq libvirt di host untuk network ini). -->
+<network>
+  <name>pxe-test-nat</name>
+  <forward mode='nat'/>
+  <bridge name='virbr-pxenat' stp='on' delay='0'/>
+  <dns enable='no'/>
+  <ip address='192.168.199.1' netmask='255.255.255.0'/>
+</network>

@@ -1,0 +1,16 @@
+# deploy-dashboard 20261105T120028Z (commit 3658754)
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+curl: (7) Failed to connect to 127.0.0.1 port 3000 after 0 ms: Couldn't connect to server
+# release /opt/pxe-dashboard/releases/20261105T120028Z (v22.23.4)
+# systemctl is-active
+pxe-dashboard  active
+nginx          active
+dnsmasq        active
+# listen :3000 / :80
+LISTEN 0      511                        127.0.0.1:3000  0.0.0.0:* users:(("next-server (v1",pid=1629,fd=21))                                    
+LISTEN 0      511                        10.99.0.2:80    0.0.0.0:* users:(("nginx",pid=1633,fd=6),("nginx",pid=1632,fd=6),("nginx",pid=904,fd=6))
+OK   next listen 127.0.0.1:3000
+# install-dashboard exit=0
+# host: GET http://10.99.0.2/api/settings
+{"cidr":"10.99.0.0/24","prefix":24,"gateway":"10.99.0.1","dns":["10.99.0.2"],"dynamicRange":["10.99.0.100","10.99.0.200"],"pxeServer":"10.99.0.2","interface":"pxe0","baseUrl":"http://10.99.0.2","mediaUrl":"http://10.99.0.2/media","tftpRoot":"/srv/pxe/tftp","tokenTtlMin":360,"unknownHostAction":"local"}
