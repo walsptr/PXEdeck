@@ -36,6 +36,18 @@ const features = tableFeatures({
 
 const helper = createColumnHelper<typeof features, JobSummary>()
 
+/**
+ * DR-5-7: baris terpilih = `canvas-soft` + indikator kiri ink 2px (sel pertama; baris lain
+ * transparan agar konten tidak bergeser). Teks muted di baris terpilih naik ke `text-body`
+ * (#5a5852 di atas #fafaf7 ≈ 6.9:1) — muted #807d72 di sana hanya ≈ 3.9:1.
+ */
+const JOB_ROW = [
+  "cursor-pointer focus-visible:bg-canvas-soft focus-visible:outline-none",
+  "[&>td:first-child]:border-l-2 [&>td:first-child]:border-l-transparent",
+  "data-[state=selected]:bg-canvas-soft data-[state=selected]:[&>td:first-child]:border-l-foreground",
+  "data-[state=selected]:[&_.text-muted-foreground]:text-body",
+].join(" ")
+
 function HostCell({ job }: { job: JobSummary }) {
   const label = useOsLabel()
   return (
@@ -48,7 +60,11 @@ function HostCell({ job }: { job: JobSummary }) {
           {job.host.mac}
         </span>
       )}
-      <span data-testid="job-row-os" className="type-caption truncate text-body">
+      <span
+        data-testid="job-row-os"
+        className="type-caption truncate text-body"
+        title={label(job.osImageId) ?? undefined}
+      >
         {label(job.osImageId)}
       </span>
     </div>
@@ -140,7 +156,10 @@ export function JobsTable({
     <Table data-testid="jobs-table">
       <TableHeader>
         {table.getHeaderGroups().map((group) => (
-          <TableRow key={group.id} className="hover:bg-transparent">
+          <TableRow
+            key={group.id}
+            className="hover:bg-transparent [&>th:first-child]:border-l-2 [&>th:first-child]:border-l-transparent"
+          >
             {group.headers.map((header) => (
               <TableHead
                 key={header.id}
@@ -187,7 +206,7 @@ export function JobsTable({
                     onSelect(row.id)
                   }
                 }}
-                className="cursor-pointer focus-visible:bg-canvas-soft focus-visible:outline-none"
+                className={JOB_ROW}
               >
                 {row.getAllCells().map((cell) => (
                   <TableCell

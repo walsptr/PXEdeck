@@ -288,6 +288,38 @@ test("AC-5.25 Hosts: Lihat log → riwayat host + job terbaru terpilih; Failed +
   await expect(page.getByTestId("jobs-history-count")).toHaveText("1 job")
   await expect(jobRow(page, jOld.id)).toHaveAttribute("data-state", "selected")
   await expect(page.getByTestId("job-detail")).toHaveAttribute("data-job-id", jOld.id)
+  // DR-5-7: baris terpilih = canvas-soft + indikator kiri ink; semua teks (di luar pill status)
+  // kontras ≥ 4,5:1 terhadap latar baris. I-5-8: OS yang bisa terpotong punya `title`.
+  const sel = jobRow(page, jOld.id)
+  await expect(sel).toHaveCSS("background-color", "rgb(250, 250, 247)")
+  const firstCell = sel.locator("td").first()
+  await expect(firstCell).toHaveCSS("border-left-color", "rgb(38, 37, 30)")
+  await expect(firstCell).toHaveCSS("border-left-width", "2px")
+  await expect(sel.getByTestId("job-row-failure")).toBeVisible()
+  const lowContrast = await sel.evaluate((row) => {
+    const lum = (c: string) => {
+      const [r, g, b] = (c.match(/\d+(\.\d+)?/g) ?? []).slice(0, 3).map(Number).map((v) => {
+        const x = v / 255
+        return x <= 0.03928 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4
+      })
+      return 0.2126 * r + 0.7152 * g + 0.0722 * b
+    }
+    const bg = getComputedStyle(row).backgroundColor
+    const out: string[] = []
+    for (const el of row.querySelectorAll<HTMLElement>("*")) {
+      if (el.closest("[data-status]")) continue
+      const ownText = [...el.childNodes].some((n) => n.nodeType === 3 && n.textContent!.trim())
+      if (!ownText || !el.getClientRects().length) continue
+      const [a, b] = [lum(getComputedStyle(el).color), lum(bg)].sort((x, y) => y - x)
+      const ratio = (a + 0.05) / (b + 0.05)
+      if (ratio < 4.5) out.push(`${el.textContent!.trim().slice(0, 30)}: ${ratio.toFixed(2)}`)
+    }
+    return out
+  })
+  expect(lowContrast).toEqual([])
+  const os = sel.getByTestId("job-row-os")
+  await expect(os).toHaveAttribute("title", (await os.innerText()).trim())
+  await page.screenshot({ path: SHOTS(5, "dr-5-7-job-selected") })
 
   // Install OS ulang dari host Failed (UI).
   await page.goto("/hosts")
