@@ -113,7 +113,7 @@ export function imageAvailability(
       available: false,
       reason:
         img.method === "unattend"
-          ? "Windows: hanya generator unattend.xml di M4 (install via PXE belum didukung)"
+          ? "Windows: hanya generator unattend.xml (install via PXE belum didukung)"
           : "Image tidak bootable via PXE",
     }
   }

@@ -47,7 +47,7 @@ export function installBlocker(
   const { available, reason } = imageAvailability(img, mediaRoot, exists)
   if (!available) return `${label(h)}: ${reason}`
   if (cfg!.os!.partition === "custom")
-    return `${label(h)}: skema partisi custom belum didukung generator M4`
+    return `${label(h)}: skema partisi custom belum didukung`
   if (cfg!.sshUser && cfg!.sshUser !== cfg!.username)
     return `${label(h)}: user target SSH berbeda dari user Credentials belum didukung`
   return null
