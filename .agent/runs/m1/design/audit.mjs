@@ -3,6 +3,8 @@
 // Tidak ada request simpan/install: dialog install ditutup dengan "Batal".
 // Iter2: output ke m{1,2,3}/design/iter2/. State baru memakai page.route (stub di browser,
 // server tidak dimutasi): empty state /hosts, error state Sheet, dialog password acak (dummy).
+// Iter3: output ke iter3/; state toast (reboot, hapus, simpan konfigurasi single & bulk) di keadaan
+// diam, hover, dan focus-visible (Alt+T); mutasi di-stub via page.route di browser.
 import { mkdirSync, writeFileSync } from "node:fs"
 import path from "node:path"
 import { fileURLToPath } from "node:url"
@@ -14,7 +16,7 @@ const { chromium } = require("playwright")
 const HERE = path.dirname(fileURLToPath(import.meta.url))
 const RUNS = path.resolve(HERE, "../..")
 const BASE = process.env.BASE_URL ?? "http://localhost:3200"
-const OUT = process.env.AUDIT_OUT ?? "iter2"
+const OUT = process.env.AUDIT_OUT ?? "iter3"
 const outDir = (m) => path.join(RUNS, `m${m}`, "design", OUT)
 for (const m of [1, 2, 3]) mkdirSync(outDir(m), { recursive: true })
 const shot = (m, name) => path.join(outDir(m), `${name}.png`)
@@ -177,7 +179,14 @@ function measure() {
     const cs = getComputedStyle(el)
     return { ...desc(el), bg: cs.backgroundColor, color: cs.color, border: cs.borderTopColor, radius: cs.borderTopLeftRadius }
   })
-  return { sidebarIp, checkboxes, alerts, url: location.pathname + location.search, bodyBg: body.backgroundColor, bodyColor: body.color, htmlFont: getComputedStyle(document.documentElement).fontFamily, title, headerH, th, shadows, orange, pastel, pills, tech, shapes, overflow }
+  const toasts = Array.from(document.querySelectorAll("[data-sonner-toast]")).filter(vis).map((el) => {
+    const cs = getComputedStyle(el)
+    return { ...desc(el), type: el.dataset.type ?? null, expanded: el.dataset.expanded ?? null, hovered: el.matches(":hover"), focusVisible: el.matches(":focus-visible"),
+      boxShadow: cs.boxShadow, border: `${cs.borderTopWidth} ${cs.borderTopStyle} ${cs.borderTopColor}`, radius: cs.borderTopLeftRadius, bg: cs.backgroundColor, color: cs.color, font: cs.fontFamily, fontSize: cs.fontSize,
+      descColor: (() => { const d = el.querySelector("[data-description]"); return d ? getComputedStyle(d).color : null })(),
+      iconColor: (() => { const d = el.querySelector("[data-icon]"); return d ? getComputedStyle(d).color : null })() }
+  })
+  return { toasts, sidebarIp, checkboxes, alerts, url: location.pathname + location.search, bodyBg: body.backgroundColor, bodyColor: body.color, htmlFont: getComputedStyle(document.documentElement).fontFamily, title, headerH, th, shadows, orange, pastel, pills, tech, shapes, overflow }
 }
 
 // ---------- skenario ----------
@@ -319,6 +328,75 @@ try {
   await record(page, 3, "passwords-dialog-confirmed", { blur: true })
   await pd.getByRole("button", { name: "Selesai" }).click()
   await page.unrouteAll({ behavior: "ignoreErrors" })
+
+  // ===== iter3: toast (DR-1-2) =====
+  {
+    const tp = await newPage()
+    const hostsNow = async () => (await (await tp.request.get(`${BASE}/api/hosts`)).json()).hosts
+    await tp.route("**/api/hosts/*/reboot", async (r) => {
+      if (r.request().method() !== "POST") return r.continue()
+      const id = decodeURIComponent(r.request().url().split("/api/hosts/")[1].split("/")[0])
+      const h = (await hostsNow()).find((x) => x.id === id)
+      return r.fulfill({ json: h })
+    })
+    await tp.route(/\/api\/hosts\/[^/]+$/, (r) => {
+      const m = r.request().method()
+      if (m === "DELETE") return r.fulfill({ status: 204, body: "" })
+      if (m === "PATCH") return r.fulfill({ json: { updated: 1 } })
+      return r.continue()
+    })
+    await tp.route("**/api/hosts/bulk", (r) => r.request().method() === "POST"
+      ? r.fulfill({ json: { updated: r.request().postDataJSON().hostIds.length } }) : r.continue())
+
+    const toastStates = async (m, prefix) => {
+      const t = tp.locator("[data-sonner-toast]").first()
+      await t.waitFor()
+      await record(tp, m, `${prefix}-idle`)
+      const box = await t.boundingBox()
+      await settle(tp)
+      await tp.mouse.move(box.x + box.width / 2, box.y + box.height / 2)
+      await tp.waitForTimeout(500)
+      const data = await tp.evaluate(measure)
+      await tp.screenshot({ path: shot(m, `${prefix}-hover`) })
+      results.states.push({ milestone: m, name: `${prefix}-hover`, viewport: tp.viewportSize(), ...data }); console.log(`ok ${prefix}-hover`)
+      await tp.mouse.move(1, 1)
+      await tp.keyboard.press("Alt+t"); await tp.waitForTimeout(300)
+      await tp.keyboard.press("Tab"); await tp.waitForTimeout(300)
+      const fdata = await tp.evaluate(measure)
+      await tp.screenshot({ path: shot(m, `${prefix}-focus`) })
+      results.states.push({ milestone: m, name: `${prefix}-focus`, viewport: tp.viewportSize(), activeEl: await tp.evaluate(() => document.activeElement?.outerHTML.slice(0, 160)), ...fdata }); console.log(`ok ${prefix}-focus`)
+      await tp.reload()
+    }
+    const rowAction = async (name, item, confirmBtn) => {
+      await gotoHosts(tp)
+      await tp.getByRole("button", { name: `Aksi untuk ${name}` }).click()
+      await tp.getByRole("menuitem", { name: item }).click()
+      const ad = tp.getByRole("alertdialog"); await ad.waitFor()
+      await ad.getByRole("button", { name: confirmBtn, exact: true }).click()
+    }
+    await rowAction("storage-01", /Reboot ke PXE/, "Reboot"); await toastStates(2, "toast-reboot")
+    await rowAction("storage-01", /^Hapus$/, "Hapus"); await toastStates(2, "toast-delete")
+
+    // M3 simpan konfigurasi single (PATCH di-stub)
+    await gotoHosts(tp)
+    await tp.getByRole("button", { name: "Aksi untuk storage-01" }).click()
+    await tp.getByRole("menuitem", { name: "Edit konfigurasi" }).click()
+    const ss = tp.getByRole("dialog", { name: "Konfigurasi storage-01" }); await ss.waitFor()
+    await ss.getByRole("tab", { name: /^Hostname/ }).click()
+    await ss.locator("#hn-name").fill("storage-99")
+    await ss.getByRole("button", { name: "Simpan konfigurasi" }).click()
+    await toastStates(3, "toast-save-single")
+
+    // M3 simpan konfigurasi bulk (POST bulk di-stub)
+    await gotoHosts(tp)
+    await selectTwo(tp)
+    await tp.getByRole("toolbar", { name: "Aksi untuk host terpilih" }).getByRole("button", { name: "Set Hostname" }).click()
+    const bs3 = tp.getByRole("dialog", { name: /^Konfigurasi 2 host/ }); await bs3.waitFor()
+    await bs3.getByRole("table", { name: "Preview Hostname baru" }).waitFor()
+    await bs3.getByRole("button", { name: "Simpan konfigurasi" }).click()
+    await toastStates(3, "toast-save-bulk")
+    await tp.context().close()
+  }
 
   // ===== 375px =====
   page = await newPage(375, 812)
