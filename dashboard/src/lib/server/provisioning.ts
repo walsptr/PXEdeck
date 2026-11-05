@@ -1,0 +1,207 @@
+// Akses file konfigurasi per job + callback status (M4-T5, DEC-008).
+//
+// `GET /boot/{mac}/{token}/{file}` dilayani hanya bila: token cocok dengan
+// job (sha256), MAC path = MAC host job, job `booting|installing`, belum lewat
+// `token_expires_at`, IP sumber ∈ IP lease MAC ∪ `current_ip` host, dan file
+// dikenal untuk metode OS job. Semua penolakan → 404 seragam (alasan dicatat
+// tanpa token). Fetch pertama file utama → host & job `installing`.
+//
+// `POST /boot/{mac}/{token}/status` (`stage=installing|configuring|done|
+// failed`): token cocok, job belum final, belum expired, IP ∈ lease ∪
+// current_ip ∪ IP statis host. Maju saja (`failed` dari mana pun); sama →
+// 200 no-op; mundur → 409; stage tak dikenal → 400. `done`/`failed` mencabut
+// token.
+import { configOrDefault, peekConfig } from "@/lib/server/db/repos/configs"
+import { getHost, setHostStatus } from "@/lib/server/db/repos/hosts"
+import {
+  ACTIVE_JOB_STATUSES,
+  getJobByTokenHash,
+  updateJob,
+  type Job,
+  type JobStatus,
+} from "@/lib/server/db/repos/jobs"
+import { getImage } from "@/lib/server/db/repos/os-images"
+import { getKey } from "@/lib/server/db/repos/ssh-keys"
+import { getDb, tx } from "@/lib/server/db"
+import { parseBootMac } from "@/lib/server/discovery"
+import { buildContext, installerFile, InstallerInputError } from "@/lib/server/installers"
+import { ipMatchesLease } from "@/lib/server/leases"
+import { getSettings } from "@/lib/server/settings"
+import { hashToken, isTokenShape } from "@/lib/server/tokens"
+import type { Host } from "@/lib/types"
+
+export type Denied = { ok: false; status: 404; reason: string }
+
+type Authorized = { ok: true; mac: string; token: string; job: Job; host: Host }
+
+function deny(reason: string): Denied {
+  return { ok: false, status: 404, reason }
+}
+
+/** Cek token + MAC + TTL (tanpa IP/status). Panggil di dalam `tx`. */
+function authorize(rawMac: string, token: string, now: Date): Authorized | Denied {
+  const mac = parseBootMac(rawMac)
+  if (!mac) return deny("mac-invalid")
+  if (!isTokenShape(token)) return deny("token-shape")
+  const job = getJobByTokenHash(hashToken(token))
+  if (!job) return deny("token-unknown")
+  const host = getHost(job.hostId)
+  if (!host || host.mac !== mac) return deny("mac-mismatch")
+  if (!job.tokenExpiresAt || Date.parse(job.tokenExpiresAt) <= now.getTime())
+    return deny("token-expired")
+  return { ok: true, mac, token, job, host }
+}
+
+function ipAllowed(host: Host, ip: string | null, extra: (string | null)[] = []): boolean {
+  if (!ip) return false
+  if (ipMatchesLease(host.mac, ip) === true) return true
+  return [host.currentIp, ...extra].includes(ip)
+}
+
+export type FileResult =
+  | { ok: true; body: string; contentType: string }
+  | Denied
+
+export function serveConfigFile(input: {
+  mac: string
+  token: string
+  file: string
+  ip: string | null
+  now?: Date
+}): FileResult {
+  const now = input.now ?? new Date()
+  const s = getSettings()
+  getDb()
+  return tx((): FileResult => {
+    const a = authorize(input.mac, input.token, now)
+    if (!a.ok) return a
+    const { job, host, mac } = a
+    if (job.status !== "booting" && job.status !== "installing") return deny(`job-${job.status}`)
+    if (!ipAllowed(host, input.ip)) return deny("ip")
+    const img = getImage(job.osImageId)
+    if (!img) return deny("image")
+    const file = installerFile(img.method, input.file)
+    if (!file) return deny("file")
+    const cfg = peekConfig(host.id)
+    if (!cfg) return deny("config")
+    let body: string
+    try {
+      body = file.render(
+        buildContext({
+          host,
+          config: cfg,
+          jobId: job.id,
+          image: img,
+          libraryKeys: cfg.sshKeyIds.map(getKey).filter((k) => k !== null),
+          mediaUrl: s.mediaUrl,
+          serverIp: s.network.pxeServer,
+          callbackUrl: `${s.baseUrl}/boot/${mac}/${input.token}/status`,
+        }),
+      )
+    } catch (e) {
+      if (e instanceof InstallerInputError) return deny(`generator: ${e.message}`)
+      throw e
+    }
+    if (file.primary && job.status === "booting") {
+      const at = now.toISOString()
+      updateJob(
+        job.id,
+        {
+          status: "installing",
+          stages: [...job.stages, { stage: "installing", at, source: "config-fetch" }],
+        },
+        at,
+      )
+      setHostStatus(host.id, "installing", at)
+    }
+    return { ok: true, body, contentType: file.contentType }
+  })
+}
+
+export const CALLBACK_STAGES = ["installing", "configuring", "done", "failed"] as const
+export type CallbackStage = (typeof CALLBACK_STAGES)[number]
+
+const ORDER: Record<JobStatus, number> = {
+  booting: 0,
+  installing: 1,
+  configuring: 2,
+  done: 3,
+  failed: 4,
+}
+
+/** Keputusan transisi (fungsi murni). */
+export function transition(
+  from: JobStatus,
+  to: CallbackStage,
+): "apply" | "noop" | "conflict" {
+  if (from === to) return "noop"
+  if (to === "failed") return "apply"
+  return ORDER[to] > ORDER[from] ? "apply" : "conflict"
+}
+
+export type StatusResult =
+  | { ok: true; status: 200; changed: boolean }
+  | { ok: false; status: 400 | 409; reason: string }
+  | Denied
+
+export function handleStatusCallback(input: {
+  mac: string
+  token: string
+  stage: string
+  ip: string | null
+  now?: Date
+}): StatusResult {
+  const now = input.now ?? new Date()
+  getDb()
+  return tx((): StatusResult => {
+    const a = authorize(input.mac, input.token, now)
+    if (!a.ok) return a
+    const { job, host } = a
+    if (!ACTIVE_JOB_STATUSES.includes(job.status)) return deny(`job-${job.status}`)
+    const cfg = configOrDefault(host)
+    const staticIp = cfg.network.mode === "static" ? cfg.network.ip : null
+    if (!ipAllowed(host, input.ip, [staticIp, host.mgmtIp])) return deny("ip")
+    if (!(CALLBACK_STAGES as readonly string[]).includes(input.stage))
+      return { ok: false, status: 400, reason: "stage" }
+    const stage = input.stage as CallbackStage
+    const t = transition(job.status, stage)
+    if (t === "noop") return { ok: true, status: 200, changed: false }
+    if (t === "conflict") return { ok: false, status: 409, reason: "backward" }
+    const at = now.toISOString()
+    const final = stage === "done" || stage === "failed"
+    updateJob(
+      job.id,
+      {
+        status: stage,
+        stages: [...job.stages, { stage, at, source: "callback" }],
+        ...(final ? { finishedAt: at, tokenHash: null, tokenExpiresAt: null } : {}),
+      },
+      at,
+    )
+    if (stage === "done") {
+      setHostStatus(host.id, "done", at, {
+        osInstalled: job.osImageId,
+        osAssigned: null,
+        currentIp: input.ip,
+        lastSeen: at,
+      })
+    } else {
+      setHostStatus(host.id, stage, at, { lastSeen: at })
+    }
+    return { ok: true, status: 200, changed: true }
+  })
+}
+
+/** Ambil `stage` dari body form (`stage=done`) atau JSON (`{"stage":"done"}`). */
+export function parseStageBody(text: string, contentType: string | null): string | null {
+  const ct = (contentType ?? "").split(";")[0].trim().toLowerCase()
+  if (ct === "application/json") {
+    try {
+      const v = (JSON.parse(text) as { stage?: unknown })?.stage
+      return typeof v === "string" ? v : null
+    } catch {
+      return null
+    }
+  }
+  return new URLSearchParams(text).get("stage")
+}

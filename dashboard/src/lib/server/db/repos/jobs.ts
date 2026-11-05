@@ -6,7 +6,7 @@ export type JobStatus = (typeof JOB_STATUSES)[number]
 export const ACTIVE_JOB_STATUSES: readonly JobStatus[] = ["booting", "installing", "configuring"]
 
 export type JobStage = {
-  stage: JobStatus | "boot-served"
+  stage: JobStatus
   at: string
   /** Asal sinyal: "install", "boot-script", "config-fetch", "callback", … */
   source: string

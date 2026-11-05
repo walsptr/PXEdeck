@@ -135,7 +135,7 @@ export function decideBoot(req: BootRequest): BootDecision {
             bootServedAt: now,
             stages: [
               ...job.stages,
-              { stage: "boot-served", at: now, source: "boot-script" },
+              { stage: "booting", at: now, source: "boot-script" },
             ],
           },
           now,
