@@ -11,7 +11,7 @@ import { execFileSync } from "node:child_process"
 import { mkdirSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
-import { expect, test, type Page } from "@playwright/test"
+import { expect, test, type Locator, type Page } from "@playwright/test"
 
 import { SSH_ED25519, SSH_ED25519_B, SSH_RSA } from "../src/test/fixtures"
 import { dropShadowViolations, rowByMac, SHOTS } from "./helpers"
@@ -124,6 +124,113 @@ test("AC-5.27 Daftarkan image: error per field, 409 id ganda, valid → baris ba
   await expect(newRow).toHaveCount(0)
 })
 
+// ---- iter2: regresi temuan design review M5 iter1 ----
+
+/** Jumlah baris visual (line-height `text-xs` = 16 px) setiap path di kolom Sumber (kernel/initrd/repo/URL) satu baris image. */
+async function sourceLineCounts(row: Locator) {
+  return row.getByTestId("img-source").locator(".type-data").evaluateAll((els) =>
+    els.map((e) => ({ text: e.textContent ?? "", lines: Math.round(e.getBoundingClientRect().height / 16) })),
+  )
+}
+
+test("DR-5-1 OS Images 375×812: kartu per image ≤ 200 px, path dipenggal di '/', tanpa scroll horizontal", async ({ page }) => {
+  await page.setViewportSize({ width: 375, height: 812 })
+  await page.goto("/os-images")
+  const rows = page.getByTestId("os-image-row")
+  await expect(rows.first()).toBeVisible()
+  const n = await rows.count()
+  expect(n).toBeGreaterThanOrEqual(5)
+  const heights: number[] = []
+  for (let i = 0; i < n; i++) {
+    const row = rows.nth(i)
+    const box = (await row.boundingBox())!
+    heights.push(Math.round(box.height))
+    expect(box.height, `tinggi kartu ${await row.getAttribute("data-image-id")}`).toBeLessThanOrEqual(200)
+    expect(box.x + box.width, "kartu tidak melebihi viewport").toBeLessThanOrEqual(375)
+    // Path tidak dipecah per karakter: setiap path ≤ 2 baris visual.
+    for (const { text, lines } of await sourceLineCounts(row))
+      expect(lines, `path "${text}" dipecah ${lines} baris`).toBeLessThanOrEqual(2)
+    // Data inti tetap terlihat di kartu: id, sumber, aksi hapus.
+    await expect(row.getByTestId("img-source")).toBeVisible()
+    await expect(row.getByRole("button", { name: /^Hapus / })).toBeVisible()
+  }
+  const doc = await page.evaluate(() => ({
+    scrollWidth: document.documentElement.scrollWidth,
+    scrollHeight: document.documentElement.scrollHeight,
+    tableOverflow: (() => {
+      const c = document.querySelector('[data-testid="os-images-page"] [data-slot="table-container"]') as HTMLElement
+      return c.scrollWidth - c.clientWidth
+    })(),
+  }))
+  expect(doc.scrollWidth, "scroll horizontal di level halaman").toBeLessThanOrEqual(375)
+  expect(doc.tableOverflow, "scroll horizontal di dalam tabel").toBeLessThanOrEqual(0)
+  // iter1: 4.032 px untuk 5 image. Batas: header + intro (~300 px) + 200 px per image.
+  expect(doc.scrollHeight, `tinggi halaman (kartu: ${heights.join("/")} px)`).toBeLessThanOrEqual(300 + 200 * n)
+  // ID & path tetap mono di layout kartu.
+  const u24 = page.locator('[data-testid="os-image-row"][data-image-id="ubuntu-24.04"]')
+  expect(await u24.getByTestId("img-repo-url").evaluate((e) => getComputedStyle(e).fontFamily)).toMatch(/JetBrains Mono/)
+  await expect(u24.getByTestId("img-repo-url")).toHaveText("http://10.99.0.2/media/ubuntu-24.04")
+  await expect(u24.getByTestId("img-used-by")).toContainText("1 host")
+  await page.screenshot({ path: SHOTS(5, "dr-5-1-os-images-375"), fullPage: true })
+})
+
+test("DR-5-1 OS Images 1440×900: path Sumber tidak terpotong per karakter, tabel tanpa scroll horizontal", async ({ page }) => {
+  await page.goto("/os-images")
+  const rows = page.getByTestId("os-image-row")
+  await expect(rows.first()).toBeVisible()
+  for (let i = 0; i < (await rows.count()); i++)
+    for (const { text, lines } of await sourceLineCounts(rows.nth(i)))
+      expect(lines, `path "${text}" dipecah ${lines} baris`).toBeLessThanOrEqual(2)
+  // Kernel Ubuntu muat satu baris di desktop.
+  const kernel = (await sourceLineCounts(page.locator('[data-testid="os-image-row"][data-image-id="ubuntu-24.04"]')))[0]
+  expect(kernel.lines, kernel.text).toBe(1)
+  const overflow = await page.locator('[data-testid="os-images-page"] [data-slot="table-container"]').evaluate((c) => c.scrollWidth - c.clientWidth)
+  expect(overflow).toBeLessThanOrEqual(0)
+  await expect(page.getByRole("button", { name: "Hapus ubuntu-24.04", exact: true })).toBeInViewport()
+  await page.screenshot({ path: SHOTS(5, "dr-5-1-os-images-1440") })
+})
+
+test("DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900", async ({ page }) => {
+  await page.goto("/os-images")
+  await page.getByTestId("img-register").click()
+  const dlg = page.getByRole("dialog", { name: "Daftarkan OS image" })
+  const submit = dlg.getByTestId("img-submit")
+  // DR-5-6: tombol submit di dalam viewport tanpa scroll.
+  await expect(submit).toBeInViewport({ ratio: 1 })
+  const footer = dlg.getByTestId("img-dialog-footer")
+  await expect(footer).toHaveCSS("position", "sticky")
+  expect((await footer.boundingBox())!.y + (await footer.boundingBox())!.height).toBeLessThanOrEqual(900)
+  // Footer rata di tepi bawah dialog (konten yang di-scroll tidak terlihat di bawahnya).
+  const flush = async () => {
+    const d = (await dlg.boundingBox())!
+    const f = (await footer.boundingBox())!
+    return Math.abs(d.y + d.height - (f.y + f.height))
+  }
+  expect(await flush()).toBeLessThanOrEqual(1)
+  await expect(dlg.getByTestId("img-hint-id")).toBeVisible()
+  // Semua field kosong → server 400 → pesan per field berbahasa Indonesia.
+  const r = page.waitForResponse((x) => x.url().endsWith("/api/os-images") && x.request().method() === "POST")
+  await submit.click()
+  expect((await r).status()).toBe(400)
+  for (const f of ["id", "name", "version", "source.repo"]) await expect(dlg.getByTestId(`img-error-${f}`)).toHaveText("Wajib diisi")
+  await expect(dlg).not.toContainText(/Too small|Too big|expected|Invalid/)
+  // Hint ID tidak tampil bersamaan dengan error ID (tidak duplikat).
+  await expect(dlg.getByTestId("img-hint-id")).toHaveCount(0)
+  // Footer tetap terlihat (dan rata bawah) setelah error menambah tinggi form.
+  await expect(submit).toBeInViewport({ ratio: 1 })
+  expect(await flush()).toBeLessThanOrEqual(1)
+  // Id tidak valid (bukan kosong) → pesan server (bahasa Indonesia), hint tetap tersembunyi.
+  await dlg.locator("#img-id").fill("Bad ID")
+  const r2 = page.waitForResponse((x) => x.url().endsWith("/api/os-images") && x.request().method() === "POST")
+  await submit.click()
+  expect((await r2).status()).toBe(400)
+  await expect(dlg.getByTestId("img-error-id")).toContainText("huruf kecil")
+  await expect(dlg.getByTestId("img-hint-id")).toHaveCount(0)
+  await page.screenshot({ path: SHOTS(5, "dr-5-5-register-errors") })
+  await dlg.getByRole("button", { name: "Batal", exact: true }).click()
+  await expect(dlg).toBeHidden()
+})
+
 test("AC-5.28/5.32 SSH Keys: paste + unggah .pub (fingerprint = ssh-keygen), invalid, 409, rename, hapus, Sheet library", async ({ page }) => {
   await page.goto("/ssh-keys")
   await expect(page.getByTestId("ssh-keys-page")).toBeVisible()
@@ -217,4 +324,31 @@ test("AC-5.28/5.32 SSH Keys: paste + unggah .pub (fingerprint = ssh-keygen), inv
   await expect(sheet.locator(`[id="lib-${keyB}"]`)).toHaveCount(0)
   await expect(sheet).toContainText("kunci-rsa")
   expect(await mono(page, '[data-testid="key-fingerprint"], [role=dialog] .type-data')).toMatch(/JetBrains Mono/)
+})
+
+test("DR-5-2 SSH Keys 1280/1440: kolom Dipakai + tombol Hapus terlihat tanpa scroll horizontal (nama panjang dipotong + title)", async ({ page, request }) => {
+  const longName = "ci-runner-rsa-panjang-sekali-namanya-untuk-uji-layout"
+  const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: longName, publicKey: SSH_ED25519_B.publicKey } })
+  expect(r.status()).toBe(201)
+  for (const width of [1280, 1440]) {
+    await page.setViewportSize({ width, height: 900 })
+    await page.goto("/ssh-keys")
+    const rows = page.getByTestId("ssh-key-row")
+    await expect(rows.first()).toBeVisible()
+    const container = page.locator('[data-testid="ssh-keys-page"] [data-slot="table-container"]')
+    const c = (await container.boundingBox())!
+    expect(await container.evaluate((e) => e.scrollWidth - e.clientWidth), `overflow tabel @${width}`).toBeLessThanOrEqual(0)
+    expect(await page.evaluate(() => document.documentElement.scrollWidth)).toBeLessThanOrEqual(width)
+    for (let i = 0; i < (await rows.count()); i++) {
+      const row = rows.nth(i)
+      for (const target of [row.getByTestId("key-used-by"), row.getByRole("button", { name: /^Hapus / })]) {
+        await expect(target).toBeVisible()
+        const b = (await target.boundingBox())!
+        expect(b.x + b.width, `@${width}: kolom aksi di luar container`).toBeLessThanOrEqual(c.x + c.width)
+      }
+    }
+    const name = page.getByTestId("key-name").filter({ hasText: longName })
+    await expect(name).toHaveAttribute("title", new RegExp(`^${longName}`))
+    await page.screenshot({ path: SHOTS(5, `dr-5-2-ssh-keys-${width}`) })
+  }
 })
