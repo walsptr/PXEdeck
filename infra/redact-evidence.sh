@@ -14,7 +14,8 @@
 #                                                                      -> REDACTED-B64-SECRET
 #     (B-5: late-command `printf %s '<b64>' | base64 -d` dicetak installer ke console serial;
 #     logika selaras .agent/runs/m4/b64-scan.py, diimplementasi dengan bash+base64+grep)
-# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key.
+# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, dan SEMUA
+# isi file biner (CR-4-14: file non-teks tidak pernah diubah in-place; secret di dalamnya = exit 1).
 # Pola scan selaras dengan .agent/runs/m4/secret-scan.sh.
 set -euo pipefail
 
@@ -78,9 +79,12 @@ _b64_scan() {
   done < <(grep -Enoa "$B64_RUN_RE" "$f" || true)
 }
 
-n=0
+n=0; nbin=0
 while IFS= read -r -d '' f; do
   n=$((n + 1))
+  # CR-4-14: redaksi in-place hanya untuk file teks (grep -I: berisi NUL = biner, mis. PNG/trace).
+  # File biner TIDAK diubah, tetapi tetap ikut scan di bawah (secret di biner -> exit 1).
+  if ! grep -Iq . "$f" 2>/dev/null; then nbin=$((nbin + 1)); continue; fi
   sed -E -i \
     -e "s#(/boot/[0-9a-fA-F:%-]{12,40}/)$B64U{43}([^A-Za-z0-9_-]|\$)#\1REDACTED-TOKEN\2#g" \
     -e "s#$TOKEN_KV_RE#\1REDACTED-TOKEN\2#gI" \
@@ -101,4 +105,4 @@ if [[ -n "$hits" ]]; then
   echo "$hits" >&2
   exit 1
 fi
-echo "redact-evidence: $n file di $dir bersih (token/hash disamarkan)" >&2
+echo "redact-evidence: $n file di $dir bersih (token/hash disamarkan; $nbin biner/kosong hanya dipindai)" >&2

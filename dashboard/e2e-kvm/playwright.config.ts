@@ -13,9 +13,13 @@ if (!runsDir || !process.env.PXE_KVM_BASE_URL) {
   throw new Error("e2e-kvm: jalankan lewat infra/kvm-run.sh (PXE_KVM_BASE_URL/PXE_KVM_RUNS_DIR kosong)")
 }
 
+const spec = process.env.PXE_KVM_SPEC ?? "m4"
+if (!/^m[0-9]+$/.test(spec)) throw new Error(`e2e-kvm: PXE_KVM_SPEC '${spec}' harus m<angka>`)
+
 export default defineConfig({
   testDir: __dirname,
-  testMatch: /m4-.*\.spec\.ts/,
+  // Spec per milestone: kvm-run.sh <m> menyetel PXE_KVM_SPEC=<m> (default m4) → `<m>-*.spec.ts`.
+  testMatch: new RegExp(`(^|/)${spec}-[^/]*\\.spec\\.ts$`),
   outputDir: path.join(runsDir, "playwright-kvm-artifacts"),
   fullyParallel: false,
   workers: 1,
