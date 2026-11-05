@@ -131,11 +131,21 @@ wait_ssh() { # wait_ssh <timeout-s>
 # Serial console VM: libvirt (qemu:///system) membuat file serial milik root 0600 yang tidak
 # terbaca tanpa sudo. Karena itu VM memakai chardev TCP mode=connect ke listener socat milik
 # user di 127.0.0.1:<port> yang menulis ke file log (terbaca, tanpa root).
-# serial_capture_start <port> <file> -> mencetak argumen --serial untuk virt-install.
+# serial_capture_start <port> <file> [append] -> mencetak argumen --serial untuk virt-install.
+# Default: file log dikosongkan (VM baru). Mode "append" (VM lama yang di-start ulang): log lama
+# dipertahankan, ditambah penanda waktu agar bukti sebelumnya tidak tertimpa diam-diam.
+# socat tanpa fork hanya melayani satu koneksi dan keluar saat VM mati, jadi setiap
+# `virsh start` VM yang memakai chardev ini WAJIB didahului serial_capture_start.
 serial_capture_start() {
-  local port="$1" file="$2" pidf="$RUNS_DIR/.capture-$1.pid"
+  local port="$1" file="$2" mode="${3:-truncate}" pidf="$RUNS_DIR/.capture-$1.pid"
   serial_capture_stop "$port"
-  is_dry || : > "$file"
+  if ! is_dry; then
+    if [[ "$mode" == append ]]; then
+      printf '\n===== serial capture restart %s (port %s) =====\n' "$(date -u +%FT%TZ)" "$port" >> "$file"
+    else
+      : > "$file"
+    fi
+  fi
   if ! is_dry; then
     nohup socat -u "TCP-LISTEN:$port,bind=127.0.0.1,reuseaddr" "OPEN:$file,creat,append" >/dev/null 2>&1 &
     echo $! > "$pidf"

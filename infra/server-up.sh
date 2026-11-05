@@ -20,7 +20,11 @@ t0=$(date +%s)
 
 if dom_exists "$SERVER_NAME"; then
   if dom_running "$SERVER_NAME"; then log "$SERVER_NAME sudah berjalan"
-  else log "start $SERVER_NAME"; virsh_m start "$SERVER_NAME"; fi
+  else
+    # Listener socat serial harus hidup sebelum QEMU connect (chardev mode=connect).
+    serial_capture_start 45900 "$RUNS_DIR/$SERVER_NAME-serial.log" append >/dev/null
+    log "start $SERVER_NAME"; virsh_m start "$SERVER_NAME"
+  fi
 else
   for iso in "$ISO_UBUNTU" "$ISO_DEBIAN" "$ISO_ROCKY"; do [[ -f "$iso" ]] || die "ISO $iso tidak ada"; done
   assert_path_in_vms "$SERVER_DISK"

@@ -1,4 +1,4 @@
-smoke pxe-test-m4-smoke01 mac=52:54:00:99:00:01 firmware=uefi duration_s=23 ipxe_script_reached=1
+smoke pxe-test-m4-smoke01 mac=52:54:00:99:00:01 firmware=uefi duration_s=24 ipxe_script_reached=1
 PASS dhcp: DHCPACK dari dnsmasq VM server (pxe0) ke 52:54:00:99:00:01
 PASS dhcp: server-identifier = 10.99.0.2 (VM server)
 PASS dhcp: bootfile snponly.efi ditawarkan (client-arch EFI)

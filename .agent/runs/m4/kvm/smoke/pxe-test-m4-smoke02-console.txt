@@ -1,5 +1,5 @@
 cSeaBIOS (version 1.17.0-10.fc44)
-Machine UUID f292fd2b-ed6f-4e4d-bdf4-136882f7b29a
+Machine UUID 7833cbc1-b154-47b7-b527-daae2335e1e7
 
 
 iPXE (https://ipxe.org) 01:00.0 C000 PCI2.10 PnP PMM+7EFCA450+7EF0A450 C000

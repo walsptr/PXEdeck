@@ -22,7 +22,12 @@ case "$action" in
     [[ "$fw" == uefi || "$fw" == bios ]] || usage
     ensure_dirs
     assert_path_in_vms "$disk"
-    if dom_exists "$name"; then log "$name sudah ada"; exit 0; fi
+    if dom_exists "$name"; then
+      if dom_running "$name"; then log "$name sudah berjalan"; exit 0; fi
+      # VM lama yang mati: nyalakan listener serial dulu (append), lalu start.
+      serial_capture_start "$(serial_port_for_mac "$mac")" "$console" append >/dev/null
+      log "start $name (sudah ada)"; virsh_m start "$name"; exit 0
+    fi
     net_active "$NET_PXE" || die "network $NET_PXE belum aktif (net-up.sh)"
     run rm -f "$disk"
     run qemu-img create -q -f qcow2 "$disk" 20G
