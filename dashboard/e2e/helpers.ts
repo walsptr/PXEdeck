@@ -28,11 +28,12 @@ export async function gotoHosts(page: Page, query = "") {
 /**
  * AC-1.3: untuk setiap elemen terlihat, setiap lapisan box-shadow wajib offset-x = offset-y =
  * blur = 0 (ring/hairline spread-only diizinkan). Mengembalikan daftar pelanggaran.
+ * `scope` (iter3, DR-1-2): selector elemen yang diperiksa; default seluruh `body *`.
  */
-export async function dropShadowViolations(page: Page): Promise<string[]> {
-  return page.evaluate(() => {
+export async function dropShadowViolations(page: Page, scope = "body *"): Promise<string[]> {
+  return page.evaluate((scope) => {
     const out: string[] = []
-    for (const el of Array.from(document.querySelectorAll<HTMLElement>("body *"))) {
+    for (const el of Array.from(document.querySelectorAll<HTMLElement>(scope))) {
       const cs = getComputedStyle(el)
       if (cs.boxShadow === "none" || cs.visibility === "hidden" || cs.display === "none") continue
       const r = el.getBoundingClientRect()
@@ -67,7 +68,7 @@ export async function dropShadowViolations(page: Page): Promise<string[]> {
       }
     }
     return out
-  })
+  }, scope)
 }
 
 export const ORANGE = "rgb(245, 78, 0)"

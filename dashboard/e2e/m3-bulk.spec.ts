@@ -5,7 +5,7 @@ import { readFileSync } from "node:fs"
 import { expect, test, type Page, type Request } from "@playwright/test"
 
 import { DUMMY_PASSWORD } from "../src/test/fixtures"
-import { gotoHosts, ORANGE, rowByMac, SHOTS } from "./helpers"
+import { gotoHosts, ORANGE, rowByMac, SHOTS, waitForAnimations } from "./helpers"
 
 const BULK = ["b0:83:fe:5c:19:e2", "b0:83:fe:5c:19:e3", "a0:36:9f:0b:72:5d"]
 
@@ -142,6 +142,8 @@ test("AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password ac
   const shown = (await pwRows.locator("td:nth-child(3)").allTextContents()).map((t) => t.trim())
   expect(new Set(shown).size).toBe(3)
   for (const p of shown) expect(p).toHaveLength(16)
+  // I-3-13: tunggu animasi buka dialog selesai agar screenshot benar-benar menampilkan dialog.
+  await waitForAnimations(page)
   await page.screenshot({ path: SHOTS(3, "ac-3.14-passwords-dialog"), mask: [pwRows.locator("td:nth-child(3)")] })
 
   const [download] = await Promise.all([page.waitForEvent("download"), dlg.getByRole("button", { name: "Unduh CSV" }).click()])

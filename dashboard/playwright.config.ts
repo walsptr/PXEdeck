@@ -40,6 +40,7 @@ const FILE_SERVERS = [
   { name: "m3-bulk", port: 3104, testMatch: /m3-bulk\.spec\.ts/, env: LAB_ENV },
   { name: "iter2-ui", port: 3105, testMatch: /iter2-ui\.spec\.ts/, env: LAB_ENV },
   { name: "iter2-network-env", port: 3106, testMatch: /iter2-network-env\.spec\.ts/, env: KVM_ENV },
+  { name: "iter3-ui", port: 3107, testMatch: /iter3-ui\.spec\.ts/, env: LAB_ENV },
 ] as const
 
 const chromium = { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }

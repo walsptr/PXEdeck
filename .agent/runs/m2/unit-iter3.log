@@ -1,0 +1,41 @@
+
+> dashboard@0.1.0 test
+> vitest run --coverage
+
+
+ RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/dashboard
+      Coverage enabled with v8
+
+
+ Test Files  21 passed (21)
+      Tests  365 passed (365)
+   Start at  15:06:40
+   Duration  4.26s (environment 34%, import 28%, tests 22%, setup 7%, worker 6%, transform 3%)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   99.72 |       98 |   99.05 |   99.79 |                   
+ ...ts/host-config |     100 |    99.46 |     100 |     100 |                   
+  form-state.ts    |     100 |    99.46 |     100 |     100 | 212               
+ hooks             |   98.27 |    90.56 |   95.83 |   98.11 |                   
+  ...ost-config.ts |     100 |    95.45 |     100 |     100 | 33                
+  use-mobile.ts    |   88.88 |      100 |      80 |    87.5 | 16                
+  use-now.ts       |   97.43 |    76.47 |    90.9 |   97.14 | 74                
+ lib               |     100 |    98.67 |     100 |     100 |                   
+  credentials.ts   |     100 |    98.03 |     100 |     100 | 41                
+  net.ts           |     100 |    99.13 |     100 |     100 | 220               
+  ssh-key.ts       |     100 |    93.75 |     100 |     100 | 57                
+ lib/server        |   99.76 |    97.52 |     100 |     100 |                   
+  ...ig-service.ts |   99.61 |    96.87 |     100 |     100 | ...71,338,376,511 
+  mock-hosts.ts    |     100 |    97.53 |     100 |     100 | 311,392           
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 99.72% ( 1104/1107 )
+Branches     : 98% ( 784/800 )
+Functions    : 99.05% ( 209/211 )
+Lines        : 99.79% ( 958/960 )
+================================================================================
+exit 0
