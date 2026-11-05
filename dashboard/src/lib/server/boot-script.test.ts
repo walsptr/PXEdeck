@@ -121,7 +121,7 @@ describe("installerScript (AC-4.15, AC-4.16)", () => {
     expect(s).toBe(
       [
         "#!ipxe",
-        `kernel http://10.99.0.2/media/debian-netboot/linux initrd=initrd auto=true priority=critical url=${BASE.configUrl}preseed.cfg interface=auto netcfg/dhcp_timeout=60 console=ttyS0,115200n8 console=tty0`,
+        `kernel http://10.99.0.2/media/debian-netboot/linux initrd=initrd auto=true priority=critical url=${BASE.configUrl}preseed.cfg interface=auto netcfg/dhcp_timeout=60 console=ttyS0,115200n8 console=tty0 ---`,
         "initrd --name initrd http://10.99.0.2/media/debian-netboot/initrd.gz",
         "boot",
         "",

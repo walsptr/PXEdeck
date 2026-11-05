@@ -109,7 +109,11 @@ function xmlDoc(xml: string): Document {
 const texts = (d: Document, tag: string) => Array.from(d.getElementsByTagName(tag)).map((e) => e.textContent)
 
 /** Decode `powershell … -EncodedCommand <b64 utf16le>`. */
-const psDecode = (cmd: string) => Buffer.from(/-EncodedCommand (\S+)/.exec(cmd)![1], "base64").toString("utf16le")
+/** Isi -EncodedCommand (UTF-16LE); perintah polos (`logoff`, M6) dikembalikan apa adanya. */
+const psDecode = (cmd: string) => {
+  const m = /-EncodedCommand (\S+)/.exec(cmd)
+  return m ? Buffer.from(m[1], "base64").toString("utf16le") : cmd
+}
 
 describe("AC-4.18 Ubuntu autoinstall", () => {
   const ud = ubuntuUserData(ctx())
@@ -371,7 +375,14 @@ describe("AC-4.21 Windows unattend.xml", () => {
     const keysB64 = /FromBase64String\('([A-Za-z0-9+/=]+)'\)/.exec(cmds[1])![1]
     expect(Buffer.from(keysB64, "base64").toString()).toBe(`${SSH_ED25519.publicKey}\n${SSH_ED25519_B.publicKey}\n`)
     expect(cmds[2]).toContain("PasswordAuthentication no")
-    expect(cmds.at(-1)).toContain(`-Body 'stage=done' -Uri '${CALLBACK}'`)
+    // M6 (CR-4-7/SR-4-3): tanpa callback ber-token; empat langkah terakhir = pembersihan.
+    expect(cmds.slice(-4)).toEqual([
+      expect.stringContaining("Remove-Item -Path 'C:\\Windows\\Panther\\unattend*.xml'"),
+      expect.stringContaining("AutoAdminLogon -Value '0'"),
+      expect.stringContaining("Set-LocalUser -Name 'pxeadmin'"),
+      "logoff",
+    ])
+    expect(cmds.join("\n")).not.toContain(CALLBACK)
     const noDisable = texts(xmlDoc(windowsUnattend(ctx({ disableSshPassword: false }))), "CommandLine").map((c) => psDecode(c!))
     expect(noDisable.some((c) => c.includes("PasswordAuthentication no"))).toBe(false)
   })
@@ -632,9 +643,11 @@ describe("B-5 token callback tidak pernah tertulis di konfigurasi installer", ()
       expect(containsSecret(text, TOKEN), name).toBe(false)
       expect(text, name).not.toContain("/status'")
     }
-    // Kontrol positif pemindai: Windows (belum dilayani M4) masih menyisipkan URL di
-    // -EncodedCommand UTF-16LE → terdeteksi.
-    expect(containsSecret(windowsUnattend(ctx()), TOKEN)).toBe(true)
+    // M6 (CR-4-7/SR-4-3): Windows tidak lagi menyisipkan URL ber-token. Kontrol positif pemindai
+    // kini sintetis: URL di -EncodedCommand UTF-16LE (bentuk generator M4) tetap terdeteksi.
+    expect(containsSecret(windowsUnattend(ctx()), TOKEN)).toBe(false)
+    const synthetic = `powershell -EncodedCommand ${Buffer.from(`Invoke-WebRequest -Uri '${CALLBACK}'`, "utf16le").toString("base64")}`
+    expect(containsSecret(`<CommandLine>${synthetic}</CommandLine>`, TOKEN)).toBe(true)
     expect(containsSecret(b64write("/x", "600", Buffer.from(`a ${CALLBACK}`).toString("base64")), TOKEN)).toBe(true)
   })
   it("parameter cmdline per metode selaras dengan installerScript; URL diturunkan hanya untuk MAC & token valid", () => {

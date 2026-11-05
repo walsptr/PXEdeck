@@ -124,14 +124,17 @@ export function installerScript(i: InstallerScriptInput): string {
         "boot",
       )
     case "preseed":
-      cmdline = args(
+      // SR-4-6 (M6): ` ---` di akhir. d-i menyalin parameter SETELAH `---` ke bootloader sistem
+      // terpasang; semua parameter (termasuk `url=…/<token>/preseed.cfg`) berada sebelum `---`
+      // sehingga URL ber-token tidak tertulis ke GRUB target.
+      cmdline = `${args(
         "initrd=initrd",
         "auto=true",
         "priority=critical",
         `url=${c}preseed.cfg`,
         "interface=auto",
         "netcfg/dhcp_timeout=60",
-      )
+      )} ---`
       break
     case "kickstart":
       cmdline = args(
