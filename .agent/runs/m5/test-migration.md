@@ -78,3 +78,26 @@ Test baru: `dashboard/src/lib/server/m5-iter2-redact-timeout.test.ts` (37 test).
 | SR-5-2 | `redactSecrets` body utuh: blok multi-baris dengan dan tanpa footer, footer END yatim; `handleLogPost`: blok dengan/tanpa footer → tidak ada baris base64 di DB, blok terpecah dua request, batas 200 baris dihitung dari body mentah |
 | CR-5-1 + SR-5-5(a) | token terpotong `cut -c1-240` di setiap panjang 8..43 (36 kasus), terpotong di tengah baris untuk 4 bentuk MAC, percent-encoded `%2F`/`%2f` (utuh & terpotong), hash `$6$` terpotong di setiap panjang (biasa & rounds), negatif (44 karakter, < 8, `token=` pendek, `$6$` tanpa salt), base64 berisi token parsial/percent-encoded, `handleLogPost` dengan baris ber-token terpotong |
 | CR-5-2 | 2 dan 3 penyajian installer: timeout Booting dari entri `booting` pertama (gagal di +60 mnt, bukan +100 mnt), event penyajian tetap tercatat; Installing tetap dari entri `installing`; fallback `createdAt` |
+
+## Iterasi 2 — frontend-dev (DR-5-1, DR-5-2, DR-5-3, DR-5-5, DR-5-6, DR-5-7, I-5-3, I-5-8)
+
+Tidak ada test lama yang dihapus, di-skip, atau dilonggarkan. Semua perubahan bersifat **penambahan**
+asersi/test; asersi lama tidak diubah. Tidak ada `skip`/`only`/`todo`/`retries`/ambang coverage yang
+diubah.
+
+| # | File | Perubahan | Alasan |
+|---|---|---|---|
+| F1 | `dashboard/e2e/m5-library.spec.ts` | Test baru "DR-5-1 OS Images 375×812": setiap kartu image ≤ 200 px, kartu dalam viewport, setiap path Sumber ≤ 2 baris visual, `scrollWidth` halaman ≤ 375, tabel tanpa overflow horizontal, `scrollHeight` halaman ≤ 300 + 200 × jumlah image, id/URL tetap mono | Regresi DR-5-1 (iter1: baris 751 px, halaman 4.032 px) |
+| F2 | `dashboard/e2e/m5-library.spec.ts` | Test baru "DR-5-1 OS Images 1440×900": path Sumber ≤ 2 baris, kernel Ubuntu 1 baris, tabel tanpa overflow horizontal, tombol Hapus di viewport | Regresi DR-5-1 desktop (path terpotong di tengah kata) |
+| F3 | `dashboard/e2e/m5-library.spec.ts` | Test baru "DR-5-5/DR-5-6": submit terlihat penuh di 1440×900, footer `position: sticky` dan rata bawah dialog (sebelum & sesudah error), field kosong → "Wajib diisi" (bukan pesan zod Inggris), hint ID hilang saat ID invalid | Regresi DR-5-5, DR-5-6 |
+| F4 | `dashboard/e2e/m5-library.spec.ts` | Test baru "DR-5-2 SSH Keys 1280/1440" (di akhir file, setelah test AC-5.28): menambah key bernama panjang lewat API, lalu memastikan tabel tanpa overflow horizontal, kolom Dipakai + tombol Hapus setiap baris di dalam container, nama panjang punya `title` | Regresi DR-5-2 |
+| F5 | `dashboard/e2e/m5-ui-fixes.spec.ts` | Asersi tambahan di 2 test AC-5.30 (single & bulk): item `install-error-item` berisi label host tepat sekali | Regresi DR-5-3 |
+| F6 | `dashboard/e2e/m5-jobs.spec.ts` | Asersi tambahan di test AC-5.25: baris terpilih `rgb(250, 250, 247)`, border kiri 2 px `rgb(38, 37, 30)`, semua teks di luar pill kontras ≥ 4,5:1 terhadap latar baris, `job-row-os` punya `title` = teks | Regresi DR-5-7, I-5-8 |
+| F7 | `dashboard/src/hooks/m5-library-hooks.test.ts` | Test unit baru: `osImageFieldErrors` menerjemahkan pesan zod (Too small/Too big/Invalid option) per field; `localizeValidationMessage` membiarkan pesan kustom Indonesia | DR-5-5. Test lama `osImageFieldErrors` (pesan kustom Indonesia) tetap persis sama dan lulus |
+| F8 | `dashboard/src/lib/install-errors.test.ts` (baru) | 4 test unit `stripHostPrefix`: prefix hostname, prefix MAC, hanya prefix di awal sekali, pesan tanpa prefix utuh | DR-5-3 |
+
+Catatan kompatibilitas asersi lama:
+- `img-used-by` di desktop tetap `innerText` = `"<n> host"` (label "Dipakai" mobile `md:hidden`), regex
+  `/^(\d+) host$/` di AC-5.27 tetap lulus tanpa perubahan.
+- `img-repo-url` `toHaveText` tetap: path dipecah per segmen dengan `<span>` tanpa mengubah textContent.
+- `key-name` `toHaveText` tetap (hanya `truncate` + `title`).
