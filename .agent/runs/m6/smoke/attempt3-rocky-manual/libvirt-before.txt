@@ -1,0 +1,13 @@
+# 2026-11-05T22:46:28Z list --all
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+# net-list --all
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+

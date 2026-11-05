@@ -1,0 +1,94 @@
+{
+  "task": "M6-T15 smoke KVM dini",
+  "commit": "30c88c9",
+  "worktree": ".agent/wt-m6-smoke (detached)",
+  "generatedAt": "2026-11-05T23:20:00Z",
+  "memAvailableMbAtStart": 15317,
+  "maxNodes": 3,
+  "attempts": [
+    {
+      "dir": "attempt1-servercheck-rocky",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 42:uefi:os=rocky 43:uefi:failpath'",
+      "result": "FAIL",
+      "failedStage": "server-check",
+      "note": "BUG-M6-1: HEAD rocky-9/BaseOS/repodata/repomd.xml 404 (ISO minimal memakai Minimal/); node tidak dibuat",
+      "cleanup": "PASS"
+    },
+    {
+      "dir": "attempt2-debian-failpath",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 43:uefi:failpath'",
+      "result": "FAIL",
+      "failedStage": "playwright",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "fw": "uefi",
+          "status": "FAIL",
+          "durationS": 949,
+          "note": "BUG-M6-3: d-i macet di '[!!] Select your location' -> failed/timeout-installing; preseed.cfg 200 via url= dengan ':' di path MAC, early_command callback OK"
+        },
+        {
+          "node": "pxe-test-m6-node43",
+          "os": "ubuntu-24.04",
+          "fw": "uefi",
+          "role": "failpath",
+          "status": "PASS",
+          "durationS": 860,
+          "note": "job1 /dev/vdz -> failed/installer-error dalam 270 dtk, 1 event installer error-commands (tail subiquity-server-debug.log); job2 disk otomatis -> Done dalam 571 dtk; SSH key yang di-inject OK; verify-node.sh tidak dijalankan kvm-run (playwright exit 1 karena node41)"
+        }
+      ],
+      "login": "PASS (tanpa sesi 401, salah 401, login 204 + Set-Cookie pxe_session HttpOnly SameSite=Strict, sesi 200)"
+    },
+    {
+      "dir": "attempt3-rocky-manual",
+      "cmd": "rocky-manual.sh (diagnostik; script infra tanpa modifikasi, cek media Minimal/)",
+      "result": "FAIL",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node42",
+          "os": "rocky-9",
+          "fw": "uefi",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "note": "BUG-M6-4: dracut unduh install.img 1.2 GB ke RAM -> ENOSPC, halt; ks.cfg tidak diambil; playwright dihentikan manual (SIGINT)"
+        }
+      ]
+    },
+    {
+      "dir": "attempt4-rocky-manual-4g",
+      "cmd": "NODE_RAM_MB=4096 rocky-manual.sh (diagnostik, menyimpang dari CLAUDE.md 2 GB)",
+      "result": "FAIL",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node42",
+          "os": "rocky-9",
+          "fw": "uefi",
+          "ramMb": 4096,
+          "status": "FAIL",
+          "durationS": 932,
+          "note": "BUG-M6-5: ks.cfg 200 via inst.ks= dengan ':' di path MAC, %pre callback OK; anaconda macet setelah AppStream/repodata 404 x4 -> failed/timeout-installing"
+        }
+      ]
+    }
+  ],
+  "cr-4-6": {
+    "debian url= ':' path": "PASS",
+    "debian early_command /proc/cmdline": "PASS",
+    "debian late_command chroot + sed BRE busybox": "NOT_RUN (BUG-M6-3)",
+    "rocky inst.ks= ':' path": "PASS (node 4 GB)",
+    "rocky %pre /proc/cmdline": "PASS (node 4 GB)",
+    "rocky %post": "NOT_RUN (BUG-M6-5)"
+  },
+  "o11": {
+    "debian kernel netboot == DVD": "PASS (sha256 d8808aa4... sama)",
+    "debian paket dari DVD": "NOT_RUN (BUG-M6-3)",
+    "rocky paket": "curl/openssh-server/sudo ada di Minimal/Packages; repo AppStream tidak ada (BUG-M6-5); O11-C tidak dipakai"
+  },
+  "sr-5-5c": "PASS (attempt2 node43: Failed installer-error + event error-commands)",
+  "libvirtAfter": "hanya ubuntu24.04 (shut off); network default/int/pxe-test/pxe-test-nat aktif (pxe-test* dipertahankan sampai T16)",
+  "installerLogs": "installer-logs/ (Ubuntu subiquity-server-debug, curtin-install, event error-commands; Debian/Rocky tidak tersedia karena instalasi tidak selesai)"
+}

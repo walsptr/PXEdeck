@@ -8,7 +8,13 @@ import { randomBytes } from "node:crypto"
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
-export type KvmNode = { name: string; mac: string; fw: "uefi" | "bios"; ip: string; nn: string }
+export type KvmOs = "ubuntu" | "debian" | "rocky"
+export type KvmRole = "install" | "destroy" | "failpath"
+/**
+ * Node dari PXE_KVM_NODES. M6 (infra/kvm-run.sh): field 5-7 `<os>=<role>=<hostname>` opsional
+ * (default ubuntu / install / `<run>-node<NN>`), 4 field pertama tetap kontrak M4.
+ */
+export type KvmNode = { name: string; mac: string; fw: "uefi" | "bios"; ip: string; nn: string; os: KvmOs; role: KvmRole; hostname: string }
 
 function env(name: string): string {
   const v = process.env[name]
@@ -34,14 +40,32 @@ export function kvmNodes(): KvmNode[] {
     .split(/\s+/)
     .filter(Boolean)
     .map((spec) => {
-      const [name, mac, fw, ip] = spec.split("=")
+      const [name, mac, fw, ip, os = "ubuntu", role = "install", hostname] = spec.split("=")
       const m = new RegExp(`^pxe-test-${KVM.run}-node([1-8][0-9])$`).exec(name)
       if (!m) throw new Error(`nama node tidak valid: ${name}`)
       if (mac !== `52:54:00:99:00:${m[1]}`) throw new Error(`MAC ${mac} tidak cocok dengan ${name}`)
       if (fw !== "uefi" && fw !== "bios") throw new Error(`firmware ${fw}`)
       if (!/^10\.99\.0\.\d{1,3}$/.test(ip)) throw new Error(`IP ${ip} di luar 10.99.0.*`)
-      return { name, mac, fw, ip, nn: m[1] }
+      if (os !== "ubuntu" && os !== "debian" && os !== "rocky") throw new Error(`os ${os}`)
+      if (role !== "install" && role !== "destroy" && role !== "failpath") throw new Error(`peran ${role}`)
+      const hn = hostname ?? `${KVM.run}-node${m[1]}`
+      if (!/^[a-z0-9][a-z0-9-]{0,62}$/.test(hn)) throw new Error(`hostname ${hn}`)
+      return { name, mac, fw, ip, nn: m[1], os, role, hostname: hn }
     })
+}
+
+/**
+ * M6: password admin dashboard per run. Hanya PATH yang diterima lewat env
+ * (`PXE_KVM_ADMIN_PASS_FILE`, dibuat kvm-run.sh di .agent/keys, 0600); isi dibaca di memori dan
+ * tidak pernah ditulis/di-log. Mengembalikan [username, password].
+ */
+export function adminCredentials(): [string, string] {
+  const f = path.resolve(env("PXE_KVM_ADMIN_PASS_FILE"))
+  if (!/\/\.agent\/keys\/[^/]+\.pass$/.test(f)) throw new Error(`file password admin ${f} bukan di .agent/keys`)
+  if ((statSync(f).mode & 0o077) !== 0) throw new Error(`file password admin ${f} harus 0600`)
+  const pw = readFileSync(f, "utf8").replace(/\n$/, "")
+  if (pw.length < 12) throw new Error("password admin terlalu pendek")
+  return [process.env.PXE_KVM_ADMIN_USER || "pxeadmin", pw]
 }
 
 /** Password acak per run (hanya di memori). */
@@ -71,15 +95,16 @@ function assertKeyPath() {
 const SSH_OPTS = ["-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-o", "LogLevel=ERROR", "-o", "ConnectTimeout=10", "-o", "BatchMode=yes", "-o", "IdentitiesOnly=yes"]
 
 /** ssh <user>@<ip> dengan key sekali pakai; `script` (bila ada) lewat stdin ke `bash -s`. */
-export function ssh(ip: string, remote: string, script?: string): { code: number; out: string } {
+export function ssh(ip: string, remote: string, script?: string, opts: { maxBuffer?: number; stdoutOnly?: boolean } = {}): { code: number; out: string } {
   if (!/^10\.99\.0\.\d{1,3}$/.test(ip)) throw new Error(`ssh hanya ke 10.99.0.* (${ip})`)
   assertKeyPath()
   const r = spawnSync("ssh", ["-i", KVM.sshKey, ...SSH_OPTS, `${KVM.user}@${ip}`, remote], {
     input: script ?? "",
     encoding: "utf8",
     timeout: 120_000,
+    ...(opts.maxBuffer ? { maxBuffer: opts.maxBuffer } : {}),
   })
-  return { code: r.status ?? -1, out: `${r.stdout ?? ""}${r.stderr ?? ""}` }
+  return { code: r.status ?? -1, out: opts.stdoutOnly ? (r.stdout ?? "") : `${r.stdout ?? ""}${r.stderr ?? ""}` }
 }
 
 /** Login password harus ditolak: server hanya menawarkan publickey. */

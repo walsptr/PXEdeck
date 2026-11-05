@@ -1,0 +1,56 @@
+[
+  {
+    "ac": "CR-4-12-dnsmasq",
+    "node": "pxe-test-m6-node41",
+    "status": "FAIL",
+    "note": "tidak ada TFTP snponly.efi ke IP lease 52:54:00:99:00:41 ()",
+    "evidence": [
+      "server-dnsmasq.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-nginx",
+    "node": "pxe-test-m6-node41",
+    "status": "FAIL",
+    "note": "preseed.cfg 200 x0 (min 1)",
+    "evidence": [
+      "server-nginx.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-dnsmasq",
+    "node": "pxe-test-m6-node42",
+    "status": "FAIL",
+    "note": "tidak ada TFTP snponly.efi ke IP lease 52:54:00:99:00:42 ()",
+    "evidence": [
+      "server-dnsmasq.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-nginx",
+    "node": "pxe-test-m6-node42",
+    "status": "FAIL",
+    "note": "ks.cfg 200 x0 (min 1)",
+    "evidence": [
+      "server-nginx.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-dnsmasq",
+    "node": "pxe-test-m6-node43",
+    "status": "FAIL",
+    "note": "tidak ada TFTP snponly.efi ke IP lease 52:54:00:99:00:43 ()",
+    "evidence": [
+      "server-dnsmasq.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-nginx",
+    "node": "pxe-test-m6-node43",
+    "status": "FAIL",
+    "note": "user-data 200 x0 (min 2)",
+    "evidence": [
+      "server-nginx.txt"
+    ]
+  }
+]

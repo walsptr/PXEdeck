@@ -1,0 +1,14 @@
+{
+  "run": "m6",
+  "generatedAt": "2026-11-05T22:27:31Z",
+  "results": [
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node41", "status": "FAIL", "note": "tidak ada TFTP snponly.efi ke IP lease 52:54:00:99:00:41 ()", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node41", "status": "FAIL", "note": "preseed.cfg 200 x0 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node42", "status": "FAIL", "note": "tidak ada TFTP snponly.efi ke IP lease 52:54:00:99:00:42 ()", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node42", "status": "FAIL", "note": "ks.cfg 200 x0 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node43", "status": "FAIL", "note": "tidak ada TFTP snponly.efi ke IP lease 52:54:00:99:00:43 ()", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node43", "status": "FAIL", "note": "user-data 200 x0 (min 2)", "evidence": ["server-nginx.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "server-check", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "harness": {"milestone": "m6", "scenario": "", "runId": "m6", "nodes": "41:uefi:os=debian 42:uefi:os=rocky 43:uefi:failpath", "maxNodes": 3, "memAvailableMb": 15317, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "server-check", "exit": 1, "dryRun": false, "startedAt": "2026-11-05T22:26:47Z", "durationSec": 48}
+}

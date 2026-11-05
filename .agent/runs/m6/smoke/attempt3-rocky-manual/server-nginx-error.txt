@@ -1,0 +1,4 @@
+2026/11/05 07:00:01 [notice] 2341#2341: using inherited sockets from "5;6;"
+2026/11/05 22:46:57 [error] 1693#1693: *13 open() "/srv/pxe/media/rocky-9/BaseOS/repodata/repomd.xml" failed (2: No such file or directory), client: 10.99.0.1, server: _, request: "HEAD /media/rocky-9/BaseOS/repodata/repomd.xml HTTP/1.1", host: "10.99.0.2"
+2026/11/05 22:47:38 [error] 1693#1693: *39 open() "/srv/pxe/media/rocky-9/images/updates.img" failed (2: No such file or directory), client: 10.99.0.132, server: _, request: "GET /media/rocky-9/images/updates.img HTTP/1.1", host: "10.99.0.2"
+2026/11/05 22:47:38 [error] 1693#1693: *40 open() "/srv/pxe/media/rocky-9/images/product.img" failed (2: No such file or directory), client: 10.99.0.132, server: _, request: "GET /media/rocky-9/images/product.img HTTP/1.1", host: "10.99.0.2"

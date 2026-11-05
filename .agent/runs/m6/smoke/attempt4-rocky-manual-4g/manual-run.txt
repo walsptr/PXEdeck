@@ -1,0 +1,16 @@
+2026-11-05T22:57:40Z mem              MemAvailable:   14653688 kB
+2026-11-05T22:57:40Z net-up           ok
+2026-11-05T22:57:51Z server-up        ok
+2026-11-05T22:57:51Z admin-pass       baru (0600)
+2026-11-05T22:58:07Z deploy           ok
+2026-11-05T22:58:07Z server-check     HEAD /media/rocky-9/images/pxeboot/vmlinuz 200;HEAD /media/rocky-9/images/pxeboot/initrd.img 200;HEAD /media/rocky-9/.treeinfo 200;HEAD /media/rocky-9/Minimal/repodata/repomd.xml 200;HEAD /media/rocky-9/BaseOS/repodata/repomd.xml 404;GET /login 200;GET /api/settings tanpa sesi 401;
+2026-11-05T22:58:08Z node-create      pxe-test-m6-node42
+2026-11-05T23:13:59Z playwright       exit=1
+2026-11-05T23:13:59Z verify           SSH tidak tersambung
+2026-11-05T23:13:59Z finish           rc=1
+2026-11-05T23:14:00Z server-logs      exit=0
+2026-11-05T23:14:03Z cleanup          exit=0
+2026-11-05T23:14:03Z libvirt-diff     exit=0 (lihat libvirt-diff.txt)
+2026-11-05T23:14:05Z redact           exit=0
+2026-11-05T23:14:05Z admin-pass       ok tidak ada di bukti
+2026-11-05T23:14:05Z result           rc=1

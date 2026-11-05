@@ -1,0 +1,39 @@
+Nov  5 07:00:01 dnsmasq[2304]: started, version 2.91 cachesize 150
+Nov  5 07:00:01 dnsmasq[2304]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov  5 07:00:01 dnsmasq[2304]: warning: ignoring resolv-file flag because no-resolv is set
+Nov  5 07:00:01 dnsmasq[2304]: warning: no upstream servers configured
+Nov  5 07:00:01 dnsmasq-dhcp[2304]: DHCP, IP range 10.99.0.100 -- 10.99.0.200, lease time 1h
+Nov  5 07:00:01 dnsmasq-dhcp[2304]: DHCP, sockets bound exclusively to interface pxe0
+Nov  5 07:00:01 dnsmasq-tftp[2304]: TFTP root is /srv/pxe/tftp  
+Nov  5 07:00:01 dnsmasq[2304]: using only locally-known addresses for pxe.test
+Nov  5 07:00:01 dnsmasq[2304]: read /etc/hosts - 8 names
+Nov  5 07:00:10 dnsmasq[2304]: exiting on receipt of SIGTERM
+Nov  5 07:00:10 dnsmasq[3636]: started, version 2.91 cachesize 150
+Nov  5 07:00:10 dnsmasq[3636]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov  5 07:00:10 dnsmasq[3636]: warning: ignoring resolv-file flag because no-resolv is set
+Nov  5 07:00:10 dnsmasq[3636]: warning: no upstream servers configured
+Nov  5 07:00:10 dnsmasq-dhcp[3636]: DHCP, IP range 10.99.0.100 -- 10.99.0.200, lease time 1h
+Nov  5 07:00:10 dnsmasq-dhcp[3636]: DHCP, sockets bound exclusively to interface pxe0
+Nov  5 07:00:10 dnsmasq-tftp[3636]: TFTP root is /srv/pxe/tftp  
+Nov  5 07:00:10 dnsmasq[3636]: using only locally-known addresses for pxe.test
+Nov  5 07:00:10 dnsmasq[3636]: read /etc/hosts - 8 names
+Nov  5 07:00:21 dnsmasq[3636]: exiting on receipt of SIGTERM
+Nov  5 22:26:54 dnsmasq[877]: started, version 2.91 cachesize 150
+Nov  5 22:26:54 dnsmasq[877]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov  5 22:26:54 dnsmasq[877]: warning: ignoring resolv-file flag because no-resolv is set
+Nov  5 22:26:54 dnsmasq[877]: warning: no upstream servers configured
+Nov  5 22:26:54 dnsmasq-dhcp[877]: DHCP, IP range 10.99.0.100 -- 10.99.0.200, lease time 1h
+Nov  5 22:26:54 dnsmasq-dhcp[877]: DHCP, sockets bound exclusively to interface pxe0
+Nov  5 22:26:54 dnsmasq-tftp[877]: TFTP root is /srv/pxe/tftp  
+Nov  5 22:26:54 dnsmasq[877]: using only locally-known addresses for pxe.test
+Nov  5 22:26:54 dnsmasq[877]: read /etc/hosts - 8 names
+Nov  5 22:26:57 dnsmasq[877]: exiting on receipt of SIGTERM
+Nov  5 22:26:57 dnsmasq[1242]: started, version 2.91 cachesize 150
+Nov  5 22:26:57 dnsmasq[1242]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov  5 22:26:57 dnsmasq[1242]: warning: ignoring resolv-file flag because no-resolv is set
+Nov  5 22:26:57 dnsmasq[1242]: warning: no upstream servers configured
+Nov  5 22:26:57 dnsmasq-dhcp[1242]: DHCP, IP range 10.99.0.100 -- 10.99.0.200, lease time 1h
+Nov  5 22:26:57 dnsmasq-dhcp[1242]: DHCP, sockets bound exclusively to interface pxe0
+Nov  5 22:26:57 dnsmasq-tftp[1242]: TFTP root is /srv/pxe/tftp  
+Nov  5 22:26:57 dnsmasq[1242]: using only locally-known addresses for pxe.test
+Nov  5 22:26:57 dnsmasq[1242]: read /etc/hosts - 8 names

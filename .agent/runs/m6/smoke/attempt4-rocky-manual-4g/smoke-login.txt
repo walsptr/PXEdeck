@@ -1,0 +1,6 @@
+GET /api/settings tanpa sesi: 401
+POST /api/auth/login password salah: 401
+POST /api/auth/login: 204
+Set-Cookie atribut: Path=/; HttpOnly; SameSite=Strict; Max-Age=43200 (nilai tidak dicatat)
+cookie pxe_session di jar: true
+GET /api/settings dengan sesi: 200

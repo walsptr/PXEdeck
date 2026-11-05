@@ -1,0 +1,17 @@
+2026-11-05T22:46:28Z mem              MemAvailable:   15389840 kB
+2026-11-05T22:46:28Z net-up           ok
+2026-11-05T22:46:39Z server-up        ok
+2026-11-05T22:46:39Z admin-pass       baru (0600)
+2026-11-05T22:46:57Z deploy           ok
+2026-11-05T22:46:57Z server-check     HEAD /media/rocky-9/images/pxeboot/vmlinuz 200;HEAD /media/rocky-9/images/pxeboot/initrd.img 200;HEAD /media/rocky-9/.treeinfo 200;HEAD /media/rocky-9/Minimal/repodata/repomd.xml 200;HEAD /media/rocky-9/BaseOS/repodata/repomd.xml 404;GET /login 200;GET /api/settings tanpa sesi 401;
+2026-11-05T22:46:58Z node-create      pxe-test-m6-node42
+2026-11-05T22:57:22Z diagnostik: dracut gagal (install.img 1.2 GB ke RAM 2 GB, ENOSPC) -> node halt; playwright dihentikan manual (SIGINT) agar tidak menunggu 30 mnt
+2026-11-05T22:57:22Z playwright       exit=130
+2026-11-05T22:57:25Z verify           SSH tidak tersambung
+2026-11-05T22:57:25Z finish           rc=1
+2026-11-05T22:57:26Z server-logs      exit=1
+2026-11-05T22:57:29Z cleanup          exit=0
+2026-11-05T22:57:29Z libvirt-diff     exit=0 (lihat libvirt-diff.txt)
+2026-11-05T22:57:31Z redact           exit=0
+2026-11-05T22:57:31Z admin-pass       ok tidak ada di bukti
+2026-11-05T22:57:31Z result           rc=1

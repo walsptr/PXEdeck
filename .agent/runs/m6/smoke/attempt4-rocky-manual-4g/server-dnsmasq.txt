@@ -1,0 +1,531 @@
+Nov  5 07:00:01 dnsmasq[2304]: started, version 2.91 cachesize 150
+Nov  5 07:00:01 dnsmasq[2304]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov  5 07:00:01 dnsmasq[2304]: warning: ignoring resolv-file flag because no-resolv is set
+Nov  5 07:00:01 dnsmasq[2304]: warning: no upstream servers configured
+Nov  5 07:00:01 dnsmasq-dhcp[2304]: DHCP, IP range 10.99.0.100 -- 10.99.0.200, lease time 1h
+Nov  5 07:00:01 dnsmasq-dhcp[2304]: DHCP, sockets bound exclusively to interface pxe0
+Nov  5 07:00:01 dnsmasq-tftp[2304]: TFTP root is /srv/pxe/tftp  
+Nov  5 07:00:01 dnsmasq[2304]: using only locally-known addresses for pxe.test
+Nov  5 07:00:01 dnsmasq[2304]: read /etc/hosts - 8 names
+Nov  5 07:00:10 dnsmasq[2304]: exiting on receipt of SIGTERM
+Nov  5 07:00:10 dnsmasq[3636]: started, version 2.91 cachesize 150
+Nov  5 07:00:10 dnsmasq[3636]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov  5 07:00:10 dnsmasq[3636]: warning: ignoring resolv-file flag because no-resolv is set
+Nov  5 07:00:10 dnsmasq[3636]: warning: no upstream servers configured
+Nov  5 07:00:10 dnsmasq-dhcp[3636]: DHCP, IP range 10.99.0.100 -- 10.99.0.200, lease time 1h
+Nov  5 07:00:10 dnsmasq-dhcp[3636]: DHCP, sockets bound exclusively to interface pxe0
+Nov  5 07:00:10 dnsmasq-tftp[3636]: TFTP root is /srv/pxe/tftp  
+Nov  5 07:00:10 dnsmasq[3636]: using only locally-known addresses for pxe.test
+Nov  5 07:00:10 dnsmasq[3636]: read /etc/hosts - 8 names
+Nov  5 07:00:21 dnsmasq[3636]: exiting on receipt of SIGTERM
+Nov  5 22:57:48 dnsmasq[876]: started, version 2.91 cachesize 150
+Nov  5 22:57:48 dnsmasq[876]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov  5 22:57:48 dnsmasq[876]: warning: ignoring resolv-file flag because no-resolv is set
+Nov  5 22:57:48 dnsmasq[876]: warning: no upstream servers configured
+Nov  5 22:57:48 dnsmasq-dhcp[876]: DHCP, IP range 10.99.0.100 -- 10.99.0.200, lease time 1h
+Nov  5 22:57:48 dnsmasq-dhcp[876]: DHCP, sockets bound exclusively to interface pxe0
+Nov  5 22:57:48 dnsmasq-tftp[876]: TFTP root is /srv/pxe/tftp  
+Nov  5 22:57:48 dnsmasq[876]: using only locally-known addresses for pxe.test
+Nov  5 22:57:48 dnsmasq[876]: read /etc/hosts - 8 names
+Nov  5 22:57:50 dnsmasq[876]: exiting on receipt of SIGTERM
+Nov  5 22:57:50 dnsmasq[1242]: started, version 2.91 cachesize 150
+Nov  5 22:57:50 dnsmasq[1242]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov  5 22:57:50 dnsmasq[1242]: warning: ignoring resolv-file flag because no-resolv is set
+Nov  5 22:57:50 dnsmasq[1242]: warning: no upstream servers configured
+Nov  5 22:57:50 dnsmasq-dhcp[1242]: DHCP, IP range 10.99.0.100 -- 10.99.0.200, lease time 1h
+Nov  5 22:57:50 dnsmasq-dhcp[1242]: DHCP, sockets bound exclusively to interface pxe0
+Nov  5 22:57:50 dnsmasq-tftp[1242]: TFTP root is /srv/pxe/tftp  
+Nov  5 22:57:50 dnsmasq[1242]: using only locally-known addresses for pxe.test
+Nov  5 22:57:50 dnsmasq[1242]: read /etc/hosts - 8 names
+Nov  5 22:58:12 dnsmasq-dhcp[1242]: 4117976585 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:12 dnsmasq-dhcp[1242]: 4117976585 vendor class: PXEClient:Arch:00007:UNDI:003001
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 DHCPDISCOVER(pxe0) 52:54:00:99:00:42 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 tags: efi64, pxe0
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 DHCPOFFER(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 1:netmask, 2:time-offset, 3:router, 4, 5, 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 6:dns-server, 12:hostname, 13:boot-file-size, 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 15:domain-name, 17:root-path, 18:extension-path, 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 22:max-datagram-reassembly, 23:default-ttl, 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 28:broadcast, 40:nis-domain, 41:nis-server, 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 42:ntp-server, 43:vendor-encap, 50:requested-address, 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 51:lease-time, 54:server-identifier, 58:T1, 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 59:T2, 60:vendor-class, 66:tftp-server, 67:bootfile-name, 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 97:client-machine-id, 128, 129, 130, 131, 
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 requested options: 132, 133, 134, 135
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 next server: 10.99.0.2
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 broadcast response
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  1 option: 53 message-type  2
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:15 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 vendor class: PXEClient:Arch:00007:UNDI:003001
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 DHCPREQUEST(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 tags: efi64, pxe0
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 DHCPACK(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 1:netmask, 2:time-offset, 3:router, 4, 5, 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 6:dns-server, 12:hostname, 13:boot-file-size, 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 15:domain-name, 17:root-path, 18:extension-path, 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 22:max-datagram-reassembly, 23:default-ttl, 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 28:broadcast, 40:nis-domain, 41:nis-server, 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 42:ntp-server, 43:vendor-encap, 50:requested-address, 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 51:lease-time, 54:server-identifier, 58:T1, 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 59:T2, 60:vendor-class, 66:tftp-server, 67:bootfile-name, 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 97:client-machine-id, 128, 129, 130, 131, 
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 requested options: 132, 133, 134, 135
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 next server: 10.99.0.2
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 broadcast response
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  1 option: 53 message-type  5
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:21 dnsmasq-dhcp[1242]: 4117976585 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:21 dnsmasq-tftp[1242]: error 8 User aborted the transfer received from 10.99.0.132
+Nov  5 22:58:21 dnsmasq-tftp[1242]: sent /srv/pxe/tftp/snponly.efi to 10.99.0.132
+Nov  5 22:58:21 dnsmasq-tftp[1242]: sent /srv/pxe/tftp/snponly.efi to 10.99.0.132
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 vendor class: PXEClient:Arch:00007:UNDI:003010
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 user class: iPXE
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 DHCPDISCOVER(pxe0) 52:54:00:99:00:42 
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 tags: ipxe, efi64, pxe0
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 DHCPOFFER(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 requested options: 203
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 next server: 10.99.0.2
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 broadcast response
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  1 option: 53 message-type  2
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size: 55 option: 67 bootfile-name  http://10.99.0.2/boot/${mac}.ipxe?platform=${platform}
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:23 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 vendor class: PXEClient:Arch:00007:UNDI:003010
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 user class: iPXE
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 DHCPDISCOVER(pxe0) 52:54:00:99:00:42 
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 tags: ipxe, efi64, pxe0
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 DHCPOFFER(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 requested options: 203
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 next server: 10.99.0.2
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 broadcast response
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  1 option: 53 message-type  2
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size: 55 option: 67 bootfile-name  http://10.99.0.2/boot/${mac}.ipxe?platform=${platform}
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:24 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 vendor class: PXEClient:Arch:00007:UNDI:003010
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 user class: iPXE
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 DHCPREQUEST(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 tags: ipxe, efi64, pxe0
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 DHCPACK(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 requested options: 203
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 next server: 10.99.0.2
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 broadcast response
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  1 option: 53 message-type  5
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size: 55 option: 67 bootfile-name  http://10.99.0.2/boot/${mac}.ipxe?platform=${platform}
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:26 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 vendor class: PXEClient:Arch:00007:UNDI:003001
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 DHCPDISCOVER(pxe0) 52:54:00:99:00:42 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 tags: efi64, pxe0
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 DHCPOFFER(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 1:netmask, 2:time-offset, 3:router, 4, 5, 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 6:dns-server, 12:hostname, 13:boot-file-size, 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 15:domain-name, 17:root-path, 18:extension-path, 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 22:max-datagram-reassembly, 23:default-ttl, 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 28:broadcast, 40:nis-domain, 41:nis-server, 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 42:ntp-server, 43:vendor-encap, 50:requested-address, 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 51:lease-time, 54:server-identifier, 58:T1, 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 59:T2, 60:vendor-class, 66:tftp-server, 67:bootfile-name, 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 97:client-machine-id, 128, 129, 130, 131, 
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 requested options: 132, 133, 134, 135
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 next server: 10.99.0.2
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 broadcast response
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  1 option: 53 message-type  2
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:28 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 vendor class: PXEClient:Arch:00007:UNDI:003001
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 DHCPREQUEST(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 tags: efi64, pxe0
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 DHCPACK(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 1:netmask, 2:time-offset, 3:router, 4, 5, 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 6:dns-server, 12:hostname, 13:boot-file-size, 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 15:domain-name, 17:root-path, 18:extension-path, 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 22:max-datagram-reassembly, 23:default-ttl, 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 28:broadcast, 40:nis-domain, 41:nis-server, 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 42:ntp-server, 43:vendor-encap, 50:requested-address, 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 51:lease-time, 54:server-identifier, 58:T1, 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 59:T2, 60:vendor-class, 66:tftp-server, 67:bootfile-name, 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 97:client-machine-id, 128, 129, 130, 131, 
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 requested options: 132, 133, 134, 135
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 next server: 10.99.0.2
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 broadcast response
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  1 option: 53 message-type  5
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:32 dnsmasq-dhcp[1242]: 2838237252 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:32 dnsmasq-tftp[1242]: error 8 User aborted the transfer received from 10.99.0.132
+Nov  5 22:58:32 dnsmasq-tftp[1242]: sent /srv/pxe/tftp/snponly.efi to 10.99.0.132
+Nov  5 22:58:32 dnsmasq-tftp[1242]: sent /srv/pxe/tftp/snponly.efi to 10.99.0.132
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 vendor class: PXEClient:Arch:00007:UNDI:003010
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 user class: iPXE
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 DHCPDISCOVER(pxe0) 52:54:00:99:00:42 
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 tags: ipxe, efi64, pxe0
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 DHCPOFFER(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 requested options: 203
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 next server: 10.99.0.2
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 broadcast response
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  1 option: 53 message-type  2
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size: 55 option: 67 bootfile-name  http://10.99.0.2/boot/${mac}.ipxe?platform=${platform}
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:34 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 vendor class: PXEClient:Arch:00007:UNDI:003010
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 user class: iPXE
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 DHCPDISCOVER(pxe0) 52:54:00:99:00:42 
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 tags: ipxe, efi64, pxe0
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 DHCPOFFER(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 requested options: 203
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 next server: 10.99.0.2
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 broadcast response
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  1 option: 53 message-type  2
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size: 55 option: 67 bootfile-name  http://10.99.0.2/boot/${mac}.ipxe?platform=${platform}
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:35 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 vendor class: PXEClient:Arch:00007:UNDI:003010
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 user class: iPXE
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 DHCPREQUEST(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 tags: ipxe, efi64, pxe0
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 DHCPACK(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 requested options: 203
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 next server: 10.99.0.2
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 broadcast response
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  1 option: 53 message-type  5
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size: 55 option: 67 bootfile-name  http://10.99.0.2/boot/${mac}.ipxe?platform=${platform}
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:37 dnsmasq-dhcp[1242]: 1492037178 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 vendor class: anaconda-Linux
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 DHCPDISCOVER(pxe0) 52:54:00:99:00:42 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 tags: pxe0
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 DHCPOFFER(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 1:netmask, 2:time-offset, 6:dns-server, 12:hostname, 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 15:domain-name, 26:mtu, 28:broadcast, 121:classless-static-route, 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 3:router, 33:static-route, 40:nis-domain, 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 41:nis-server, 42:ntp-server, 119:domain-search, 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 249, 252, 17:root-path
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 bootfile name: undionly.kpxe
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 next server: 10.99.0.2
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  1 option: 53 message-type  2
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 vendor class: anaconda-Linux
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 DHCPREQUEST(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 tags: pxe0
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 DHCPACK(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 1:netmask, 2:time-offset, 6:dns-server, 12:hostname, 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 15:domain-name, 26:mtu, 28:broadcast, 121:classless-static-route, 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 3:router, 33:static-route, 40:nis-domain, 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 41:nis-server, 42:ntp-server, 119:domain-search, 
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 requested options: 249, 252, 17:root-path
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 bootfile name: undionly.kpxe
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 next server: 10.99.0.2
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  1 option: 53 message-type  5
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 58 T1  30m
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:58:46 dnsmasq-dhcp[1242]: 143003838 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:58:46 dnsmasq[1242]: query[PTR] 132.0.99.10.in-addr.arpa from 10.99.0.132
+Nov  5 22:58:46 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:58:46 dnsmasq[1242]: query[PTR] 132.0.99.10.in-addr.arpa from 10.99.0.132
+Nov  5 22:58:46 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:58:48 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.132
+Nov  5 22:58:48 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:58:48 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.132
+Nov  5 22:58:48 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 vendor class: anaconda-Linux
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 DHCPDISCOVER(pxe0) 52:54:00:99:00:42 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 tags: pxe0
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 DHCPOFFER(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 1:netmask, 2:time-offset, 6:dns-server, 12:hostname, 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 15:domain-name, 26:mtu, 28:broadcast, 121:classless-static-route, 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 3:router, 33:static-route, 40:nis-domain, 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 41:nis-server, 42:ntp-server, 119:domain-search, 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 249, 252, 17:root-path
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 bootfile name: undionly.kpxe
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 next server: 10.99.0.2
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  1 option: 53 message-type  2
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 58 T1  30m
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 available DHCP range: 10.99.0.100 -- 10.99.0.200
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 vendor class: anaconda-Linux
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 DHCPREQUEST(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 tags: pxe0
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 DHCPACK(pxe0) 10.99.0.132 52:54:00:99:00:42 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 1:netmask, 2:time-offset, 6:dns-server, 12:hostname, 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 15:domain-name, 26:mtu, 28:broadcast, 121:classless-static-route, 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 3:router, 33:static-route, 40:nis-domain, 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 41:nis-server, 42:ntp-server, 119:domain-search, 
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 requested options: 249, 252, 17:root-path
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 bootfile name: undionly.kpxe
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 next server: 10.99.0.2
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  1 option: 53 message-type  5
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 54 server-identifier  10.99.0.2
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 51 lease-time  1h
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 58 T1  30m
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 59 T2  52m30s
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option:  1 netmask  255.255.255.0
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option: 28 broadcast  10.99.0.255
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  8 option: 15 domain-name  pxe.test
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option:  6 dns-server  10.99.0.2
+Nov  5 22:59:01 dnsmasq-dhcp[1242]: 643429815 sent size:  4 option:  3 router  10.99.0.1
+Nov  5 22:59:10 dnsmasq[1242]: query[PTR] 52.0.99.10.in-addr.arpa from 10.99.0.52
+Nov  5 22:59:10 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:10 dnsmasq[1242]: query[PTR] 52.0.99.10.in-addr.arpa from 10.99.0.52
+Nov  5 22:59:10 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:11 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.52
+Nov  5 22:59:11 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:11 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.52
+Nov  5 22:59:11 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:12 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 22:59:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:12 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 22:59:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:12 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 22:59:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:12 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 22:59:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:12 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 22:59:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:12 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 22:59:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:12 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 22:59:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:12 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 22:59:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:31 dnsmasq[1242]: query[PTR] 52.0.99.10.in-addr.arpa from 10.99.0.52
+Nov  5 22:59:31 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:31 dnsmasq[1242]: query[PTR] 52.0.99.10.in-addr.arpa from 10.99.0.52
+Nov  5 22:59:31 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:31 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.52
+Nov  5 22:59:31 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:31 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.52
+Nov  5 22:59:31 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:40 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 22:59:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:40 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 22:59:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:40 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 22:59:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:40 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 22:59:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:40 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 22:59:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:40 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 22:59:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:40 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 22:59:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 22:59:40 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 22:59:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:01 dnsmasq[1242]: query[PTR] 52.0.99.10.in-addr.arpa from 10.99.0.52
+Nov  5 23:00:01 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:01 dnsmasq[1242]: query[PTR] 52.0.99.10.in-addr.arpa from 10.99.0.52
+Nov  5 23:00:01 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:01 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.52
+Nov  5 23:00:01 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:01 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.52
+Nov  5 23:00:01 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:36 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:00:36 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:36 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:00:36 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:36 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:00:36 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:36 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:00:36 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:36 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:00:36 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:36 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:00:36 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:36 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:00:36 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:00:36 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:00:36 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:02:28 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:02:28 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:02:28 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:02:28 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:02:28 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:02:28 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:02:28 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:02:28 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:02:28 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:02:28 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:02:28 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:02:28 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:02:28 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:02:28 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:02:28 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:02:28 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:04:01 dnsmasq[1242]: query[PTR] 52.0.99.10.in-addr.arpa from 10.99.0.52
+Nov  5 23:04:01 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:04:01 dnsmasq[1242]: query[PTR] 52.0.99.10.in-addr.arpa from 10.99.0.52
+Nov  5 23:04:01 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:04:01 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.52
+Nov  5 23:04:01 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:04:01 dnsmasq[1242]: query[PTR] 2.4.0.0.9.9.e.f.f.f.0.0.4.5.0.5.0.0.0.0.0.0.0.0.0.0.0.0.0.8.e.f.ip6.arpa from 10.99.0.52
+Nov  5 23:04:01 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:06:12 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:06:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:06:12 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:06:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:06:12 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:06:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:06:12 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:06:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:06:12 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:06:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:06:12 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:06:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:06:12 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:06:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:06:12 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:06:12 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:13:40 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:13:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:13:40 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:13:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:13:40 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:13:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:13:40 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org from 10.99.0.52
+Nov  5 23:13:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:13:40 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:13:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:13:40 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:13:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:13:40 dnsmasq[1242]: query[A] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:13:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)
+Nov  5 23:13:40 dnsmasq[1242]: query[AAAA] 2.rocky.pool.ntp.org.localdomain from 10.99.0.52
+Nov  5 23:13:40 dnsmasq[1242]: config error is REFUSED (EDE: not ready)

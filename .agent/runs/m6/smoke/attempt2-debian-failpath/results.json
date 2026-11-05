@@ -1,0 +1,19 @@
+{
+  "run": "m6",
+  "session": "1793917722745-c8a5f8ed",
+  "generatedAt": "2026-11-05T22:44:32.907Z",
+  "results": [
+    {"ac": "smoke-login", "status": "PASS", "note": "401/401/204/200", "evidence": ["smoke-login.txt"]},
+    {"ac": "smoke-debian", "node": "pxe-test-m6-node41", "status": "FAIL", "durationS": 949, "note": "job1 failed/timeout-installing", "evidence": ["pxe-test-m6-node41-timeline.txt", "pxe-test-m6-node41-job1-events.txt"]},
+    {"ac": "smoke-ubuntu-failpath", "node": "pxe-test-m6-node43", "status": "PASS", "durationS": 860, "note": "Done + SSH key", "evidence": ["pxe-test-m6-node43-timeline.txt", "pxe-test-m6-node43-job1-events.txt", "pxe-test-m6-node43-job2-events.txt", "installer-logs/pxe-test-m6-node43-subiquity-server-debug.log", "installer-logs/pxe-test-m6-node43-curtin-install.log"]},
+    {"ac": "smoke-scan", "status": "PASS", "note": "0 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node41", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.131 (lease 52:54:00:99:00:41)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node41", "status": "PASS", "note": "preseed.cfg 200 x1 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node43", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.133 (lease 52:54:00:99:00:43)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node43", "status": "PASS", "note": "user-data 200 x2 (min 2)", "evidence": ["server-nginx.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "playwright", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "smoke": true,
+  "nodes": [{"name": "pxe-test-m6-node41", "fw": "uefi", "os": "debian", "role": "install", "hostname": "m6-node41"}, {"name": "pxe-test-m6-node43", "fw": "uefi", "os": "ubuntu", "role": "failpath", "hostname": "m6-node43"}],
+  "harness": {"milestone": "m6", "scenario": "", "runId": "m6", "nodes": "41:uefi:os=debian 43:uefi:failpath", "maxNodes": 3, "memAvailableMb": 15542, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "playwright", "exit": 1, "dryRun": false, "startedAt": "2026-11-05T22:28:05Z", "durationSec": 998}
+}
