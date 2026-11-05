@@ -22,9 +22,10 @@ import { CopyButton } from "@/components/hosts/copy-button"
 import { RowActions } from "@/components/hosts/host-actions"
 import { SortableHeader } from "@/components/hosts/sortable-header"
 import { LastSeen } from "@/components/hosts/last-seen"
+import { useFailureText } from "@/hooks/use-jobs"
 import { ipToNumber } from "@/lib/format"
 import { osLabel } from "@/lib/os-images"
-import { PROVISION_STATUSES, type Host } from "@/lib/types"
+import { PROVISION_STATUSES, type Host, type HostWithJob } from "@/lib/types"
 
 export const features = tableFeatures({
   columnMeta: metaHelper<{ headClassName?: string; cellClassName?: string }>(),
@@ -98,6 +99,33 @@ function SelectCell({ row }: { row: Row<F, Host> }) {
         })
       }
     />
+  )
+}
+
+/**
+ * Pill status + alasan gagal dari job terakhir (M5, `lastJob.failureReason`), mis. "Timeout di
+ * tahap Installing (> 15 mnt)". Alasan hanya untuk host Failed yang job terakhirnya juga failed.
+ */
+function StatusCell({ host }: { host: HostWithJob }) {
+  const failureText = useFailureText()
+  const job = host.lastJob
+  const reason =
+    host.status === "failed" && job?.status === "failed"
+      ? (failureText(job.failureReason) ?? "Alasan tidak tercatat")
+      : null
+  return (
+    <div className="flex flex-col items-start gap-1">
+      <StatusPill status={host.status} />
+      {reason && (
+        <span
+          data-testid="host-failure-reason"
+          data-reason={job?.failureReason ?? ""}
+          className="type-caption max-w-52 whitespace-normal text-muted-foreground"
+        >
+          {reason}
+        </span>
+      )}
+    </div>
   )
 }
 
@@ -220,7 +248,7 @@ export const columns = helper.columns([
     sortFn: (a, b) =>
       statusOrder(a.original.status) - statusOrder(b.original.status),
     filterFn: statusFilter,
-    cell: ({ getValue }) => <StatusPill status={getValue()} />,
+    cell: ({ row }) => <StatusCell host={row.original} />,
   }),
   helper.accessor((h) => Date.parse(h.lastSeen), {
     id: "lastSeen",

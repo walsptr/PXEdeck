@@ -3,7 +3,8 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 
 import { syncServerClock } from "@/hooks/use-now"
-import { isFinalJob } from "@/lib/jobs"
+import { useSettings } from "@/hooks/use-settings"
+import { failureReasonText, isFinalJob } from "@/lib/jobs"
 import type { JobStatus, JobSummary, JobsResponse } from "@/lib/types"
 
 export const JOBS_KEY = ["jobs"] as const
@@ -86,4 +87,17 @@ export function useJob(id: string | null) {
     },
     retry: (n, e) => !(e instanceof JobsApiError && e.status < 500) && n < 2,
   })
+}
+
+/**
+ * Teks alasan gagal job dengan N dari settings server, mis. "Timeout di tahap Installing
+ * (> 15 mnt)" (cache settings dipakai bersama halaman Settings).
+ */
+export function useFailureText() {
+  const s = useSettings().data
+  return (reason: string | null | undefined) =>
+    failureReasonText(reason, {
+      timeouts: s?.jobTimeouts,
+      maxInstallerBoots: s?.maxInstallerBoots,
+    })
 }

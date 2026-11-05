@@ -1,7 +1,7 @@
 "use client"
 
 import { HugeiconsIcon } from "@hugeicons/react"
-import { Alert02Icon } from "@hugeicons/core-free-icons"
+import { Alert02Icon, InformationCircleIcon } from "@hugeicons/core-free-icons"
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
@@ -38,6 +38,7 @@ import {
 } from "@/hooks/use-os-images"
 import { canonicalOsImageId } from "@/lib/os-images"
 import type { Host } from "@/lib/types"
+import { cn } from "@/lib/utils"
 
 const PARTITION_LABEL = {
   auto: "Auto",
@@ -94,7 +95,11 @@ export function TabOs({
             className="grid gap-2 sm:grid-cols-2"
           >
             {images.data.map((img) => (
-              <OsImageOption key={img.id} img={img} />
+              <OsImageOption
+                key={img.id}
+                img={img}
+                selected={img.id === selectedId}
+              />
             ))}
           </RadioGroup>
         )}
@@ -280,7 +285,17 @@ export function TabOs({
   )
 }
 
-function OsImageOption({ img }: { img: OsImageInfo }) {
+/**
+ * Kartu image. DR-4-5: alasan "tidak tersedia"/keterbatasan = keterangan, bukan error → muted +
+ * ikon info; merah hanya bila image itu yang sedang terpilih (install akan ditolak).
+ */
+function OsImageOption({
+  img,
+  selected,
+}: {
+  img: OsImageInfo
+  selected: boolean
+}) {
   const id = `os-${img.id}`
   const disabled = !img.available
   const windows = img.method === "unattend"
@@ -308,9 +323,20 @@ function OsImageOption({ img }: { img: OsImageInfo }) {
           {note && (
             <FieldDescription
               id={`${id}-note`}
-              className={disabled ? "text-destructive" : undefined}
+              className={cn(
+                "flex items-start gap-1.5",
+                disabled && selected
+                  ? "text-destructive"
+                  : "text-muted-foreground",
+              )}
             >
-              {note}
+              <HugeiconsIcon
+                icon={InformationCircleIcon}
+                strokeWidth={2}
+                aria-hidden
+                className="mt-0.5 size-3.5 shrink-0"
+              />
+              <span>{note}</span>
             </FieldDescription>
           )}
           {windows && (

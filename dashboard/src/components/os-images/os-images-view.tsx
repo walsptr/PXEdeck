@@ -251,7 +251,7 @@ export function OsImagesView() {
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
-              Hapus OS image <span className="type-data">{toDelete?.id}</span>?
+              Hapus OS image <span className="font-mono tracking-normal">{toDelete?.id}</span>?
             </AlertDialogTitle>
             <AlertDialogDescription>
               Image dihapus dari katalog dashboard; file media di server tidak disentuh.

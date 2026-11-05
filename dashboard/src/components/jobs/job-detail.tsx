@@ -17,22 +17,12 @@ import { Skeleton } from "@/components/ui/skeleton"
 import { StatusPill } from "@/components/status-pill"
 import { JobTimeline } from "@/components/jobs/job-timeline"
 import { LogViewer } from "@/components/jobs/log-viewer"
-import { JobsApiError, useJob } from "@/hooks/use-jobs"
+import { JobsApiError, useFailureText, useJob } from "@/hooks/use-jobs"
 import { useOsLabel } from "@/hooks/use-os-images"
 import { useSettings } from "@/hooks/use-settings"
-import { failureReasonText, formatClock } from "@/lib/jobs"
+import { formatClock } from "@/lib/jobs"
 import { formatDateTime } from "@/lib/format"
 import type { JobSummary } from "@/lib/types"
-
-/** Teks alasan gagal job dengan N dari settings server (mis. "> 15 mnt"). */
-export function useFailureText() {
-  const s = useSettings().data
-  return (reason: string | null | undefined) =>
-    failureReasonText(reason, {
-      timeouts: s?.jobTimeouts,
-      maxInstallerBoots: s?.maxInstallerBoots,
-    })
-}
 
 export function JobDetail({ jobId, initial }: { jobId: string; initial?: JobSummary }) {
   const q = useJob(jobId)
@@ -68,7 +58,7 @@ function JobDetailCard({ job }: { job: JobSummary }) {
       <CardHeader>
         <CardTitle className="type-section-title flex flex-wrap items-center gap-x-3 gap-y-1">
           <span>
-            Job <span className="type-data">{name}</span>
+            Job <span className="font-mono tracking-normal">{name}</span>
           </span>
           <StatusPill status={job.status} />
         </CardTitle>

@@ -1,6 +1,7 @@
 "use client"
 
 import * as React from "react"
+import Link from "next/link"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Alert02Icon, Cancel01Icon } from "@hugeicons/core-free-icons"
 import { toast } from "sonner"
@@ -50,6 +51,7 @@ import {
   useInstall,
   useSaveConfig,
 } from "@/hooks/use-host-config"
+import { useFailureText } from "@/hooks/use-jobs"
 import { installBlockReason, useOsImages } from "@/hooks/use-os-images"
 import { useActiveNetwork } from "@/hooks/use-settings"
 import type {
@@ -61,7 +63,8 @@ import type {
 } from "@/lib/host-config"
 import type { MgmtNetwork } from "@/lib/net"
 import { canonicalOsImageId, osLabel } from "@/lib/os-images"
-import type { Host } from "@/lib/types"
+import type { Host, HostWithJob } from "@/lib/types"
+import { jobsHref } from "@/lib/jobs"
 import { cn } from "@/lib/utils"
 
 export type ConfigSheetTarget = {
@@ -99,6 +102,30 @@ export function ConfigSheet({
   )
 }
 
+/** Alasan gagal job terakhir host (M5, `lastJob`) + tautan ke log job. */
+function LastJobNote({ host }: { host: HostWithJob }) {
+  const failureText = useFailureText()
+  const job = host.lastJob
+  if (host.status !== "failed" || job?.status !== "failed") return null
+  return (
+    <p
+      data-testid="sheet-last-job-failure"
+      className="type-caption flex flex-wrap items-baseline gap-x-2 text-muted-foreground"
+    >
+      <span>
+        <span className="font-medium text-destructive">Install terakhir gagal:</span>{" "}
+        {failureText(job.failureReason) ?? "alasan tidak tercatat"}
+      </span>
+      <Link
+        href={jobsHref({ host: host.id, job: job.id })}
+        className="text-foreground underline underline-offset-4"
+      >
+        Lihat log
+      </Link>
+    </p>
+  )
+}
+
 function SheetBody({
   target,
   allHosts,
@@ -122,14 +149,23 @@ function SheetBody({
   const failed = (single && config.isError) || network.isError
   const loading = (single && config.isPending) || network.isPending
 
-  const title = single
-    ? `Konfigurasi ${single.hostname ?? single.mac}`
-    : `Konfigurasi ${hosts.length} host`
+  // DR-4-1: hostname/MAC di judul memakai mono (ukuran ikut judul, bukan 13 px `type-data`); DR-4-2: judul 600 eksplisit (tailwind-merge tidak
+  // mengenali utility `type-*`, sehingga `font-medium` bawaan SheetTitle menang tanpa ini).
+  const title = single ? (
+    <>
+      Konfigurasi{" "}
+      <span className="font-mono tracking-normal" data-testid="sheet-title-host">
+        {single.hostname ?? single.mac}
+      </span>
+    </>
+  ) : (
+    `Konfigurasi ${hosts.length} host`
+  )
 
   return (
     <>
       <SheetHeader className="border-b border-border">
-        <SheetTitle className="type-section-title">{title}</SheetTitle>
+        <SheetTitle className="type-section-title font-semibold">{title}</SheetTitle>
         <SheetDescription>
           {single ? (
             <span className="type-data">{single.mac}</span>
@@ -137,6 +173,7 @@ function SheetBody({
             "Hanya bagian yang Anda ubah yang diterapkan ke semua host terpilih."
           )}
         </SheetDescription>
+        {single && <LastJobNote host={single} />}
       </SheetHeader>
       {hosts.length === 0 ? (
         <p className="p-6 text-body">Host tidak lagi tersedia.</p>
@@ -223,6 +260,10 @@ function ConfigForm({
   const [installFailed, setInstallFailed] = React.useState<
     InstallResult["failed"]
   >([])
+  /** Host yang berhasil mulai diinstal pada percobaan bulk yang sebagian gagal (DR-4-4). */
+  const [installStarted, setInstallStarted] = React.useState<string[]>([])
+  /** Error install yang tidak per host (mis. 403/5xx) — Alert di Sheet, bukan toast (DR-4-3). */
+  const [installError, setInstallError] = React.useState<string | null>(null)
 
   const save = useSaveConfig()
   const install = useInstall()
@@ -281,7 +322,11 @@ function ConfigForm({
   async function submit(andInstall: boolean) {
     const ids = hosts.map((h) => h.id)
     setServerErrors({})
-    if (andInstall) setInstallFailed([])
+    if (andInstall) {
+      setInstallFailed([])
+      setInstallStarted([])
+      setInstallError(null)
+    }
     let phase: "save" | "install" = "save"
     try {
       if (dirtyList.length > 0) {
@@ -302,31 +347,19 @@ function ConfigForm({
       if (andInstall) {
         phase = "install"
         const r = await install.mutateAsync(ids)
+        if (r.failed.length) {
+          // DR-4-3/DR-4-4: Sheet tetap terbuka (juga bila sebagian host berhasil) dan alasan per
+          // host + ringkasan yang berhasil tampil di Alert dalam Sheet — tanpa toast yang menutupi
+          // footer.
+          setInstallFailed(r.failed)
+          setInstallStarted(r.started)
+          return
+        }
         if (r.started.length) {
           toast.success(`Instalasi dimulai di ${r.started.length} host`, {
             description:
               "Status akan bergerak dari Booting sampai Done di tabel.",
           })
-        }
-        if (r.failed.length) {
-          setInstallFailed(r.failed)
-          toast.error(`${r.failed.length} host tidak bisa di-install`, {
-            description: (
-              <ul className="flex flex-col gap-0.5">
-                {r.failed.slice(0, 5).map((f) => (
-                  <li key={f.hostId}>
-                    <span className="type-data">{hostLabel(f.hostId)}</span>:{" "}
-                    {f.message}
-                  </li>
-                ))}
-                {r.failed.length > 5 && (
-                  <li>… dan {r.failed.length - 5} host lainnya</li>
-                )}
-              </ul>
-            ),
-          })
-          // Sheet tetap terbuka agar alasan per host bisa dibaca.
-          if (!r.started.length) return
         }
       }
       onClose()
@@ -347,12 +380,11 @@ function ConfigForm({
         toast.error("Konfigurasi ditolak server", {
           description: other.length ? other.join("\n") : e.message,
         })
+      } else if (phase === "install") {
+        // Mis. 403 "Host tidak diizinkan" (guardMutation) atau 5xx: Alert di Sheet (DR-4-3).
+        setInstallError((e as Error).message)
       } else {
-        // Mis. 403 "Host tidak diizinkan" (guardMutation) atau 5xx.
-        toast.error(
-          phase === "install" ? "Gagal memulai instalasi" : "Gagal menyimpan",
-          { description: (e as Error).message },
-        )
+        toast.error("Gagal menyimpan", { description: (e as Error).message })
       }
     }
   }
@@ -394,13 +426,20 @@ function ConfigForm({
           </TabsList>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+          {installError && (
+            <Alert variant="destructive" className="mb-5" data-slot="install-error">
+              <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} />
+              <AlertTitle>Gagal memulai instalasi</AlertTitle>
+              <AlertDescription>{installError}</AlertDescription>
+            </Alert>
+          )}
           {installFailed.length > 0 && (
             <Alert variant="destructive" className="mb-5" data-slot="install-errors">
               <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} />
               <AlertTitle>
                 Install ditolak untuk {installFailed.length} host
               </AlertTitle>
-              <AlertDescription>
+              <AlertDescription className="flex flex-col gap-2">
                 <ul className="flex flex-col gap-1">
                   {installFailed.map((f) => (
                     <li key={f.hostId}>
@@ -409,6 +448,18 @@ function ConfigForm({
                     </li>
                   ))}
                 </ul>
+                {installStarted.length > 0 && (
+                  <p data-slot="install-started" className="text-foreground">
+                    {installStarted.length} host mulai diinstal:{" "}
+                    {installStarted.map((id, i) => (
+                      <React.Fragment key={id}>
+                        {i > 0 && ", "}
+                        <span className="type-data">{hostLabel(id)}</span>
+                      </React.Fragment>
+                    ))}
+                    . Status bergerak dari Booting di tabel.
+                  </p>
+                )}
               </AlertDescription>
             </Alert>
           )}
@@ -525,9 +576,13 @@ function ConfigForm({
           <AlertDialogHeader>
             <AlertDialogTitle>
               Install OS ke{" "}
-              {bulk
-                ? `${hosts.length} host`
-                : (hosts[0].hostname ?? hosts[0].mac)}
+              {bulk ? (
+                `${hosts.length} host`
+              ) : (
+                <span className="font-mono tracking-normal" data-testid="install-confirm-host">
+                  {hosts[0].hostname ?? hosts[0].mac}
+                </span>
+              )}
               ?
             </AlertDialogTitle>
             <AlertDialogDescription asChild>

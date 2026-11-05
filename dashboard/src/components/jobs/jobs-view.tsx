@@ -135,7 +135,7 @@ export function JobsView() {
       {hostId && (
         <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1" data-testid="jobs-history-header">
           <h2 className="type-section-title">
-            Riwayat <span className="type-data">{hostName}</span>
+            Riwayat <span className="font-mono tracking-normal">{hostName}</span>
           </h2>
           <span className="type-caption text-muted-foreground" data-testid="jobs-history-count">
             <span className="type-data text-xs">

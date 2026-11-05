@@ -23,7 +23,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip"
 import { StatusPill } from "@/components/status-pill"
-import { useFailureText } from "@/components/jobs/job-detail"
+import { useFailureText } from "@/hooks/use-jobs"
 import { useNow } from "@/hooks/use-now"
 import { useOsLabel } from "@/hooks/use-os-images"
 import { formatDateTime, formatRelative } from "@/lib/format"
