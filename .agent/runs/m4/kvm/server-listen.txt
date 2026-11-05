@@ -1,37 +1,37 @@
-# ss -lntup  (2026-11-05T12:00:28Z, pxe-test-server)
+# ss -lntup  (2026-11-05T12:28:28Z, pxe-test-server)
 Netid State  Recv-Q Send-Q                 Local Address:Port  Peer Address:PortProcess                                                                      
-udp   UNCONN 0      0                          10.99.0.2:53         0.0.0.0:*    users:(("dnsmasq",pid=1243,fd=6))                                           
-udp   UNCONN 0      0                         127.0.0.54:53         0.0.0.0:*    users:(("systemd-resolve",pid=627,fd=16))                                   
-udp   UNCONN 0      0                      127.0.0.53%lo:53         0.0.0.0:*    users:(("systemd-resolve",pid=627,fd=14))                                   
-udp   UNCONN 0      0                       0.0.0.0%pxe0:67         0.0.0.0:*    users:(("dnsmasq",pid=1243,fd=4))                                           
-udp   UNCONN 0      0                          10.99.0.2:69         0.0.0.0:*    users:(("dnsmasq",pid=1243,fd=8))                                           
-udp   UNCONN 0      0                            0.0.0.0:111        0.0.0.0:*    users:(("rpcbind",pid=608,fd=5),("systemd",pid=1,fd=40))                    
-udp   UNCONN 0      0                            0.0.0.0:35353      0.0.0.0:*    users:(("rpc.mountd",pid=863,fd=4))                                         
-udp   UNCONN 0      0                          127.0.0.1:649        0.0.0.0:*    users:(("rpc.statd",pid=897,fd=5))                                          
-udp   UNCONN 0      0                            0.0.0.0:33655      0.0.0.0:*    users:(("rpc.statd",pid=897,fd=8))                                          
-udp   UNCONN 0      0                            0.0.0.0:35878      0.0.0.0:*                                                                                
-udp   UNCONN 0      0      [fe80::5054:ff:fe99:102]%pxe0:53            [::]:*    users:(("dnsmasq",pid=1243,fd=9))                                           
-udp   UNCONN 0      0      [fe80::5054:ff:fe99:102]%pxe0:69            [::]:*    users:(("dnsmasq",pid=1243,fd=11))                                          
-udp   UNCONN 0      0                               [::]:111           [::]:*    users:(("rpcbind",pid=608,fd=7),("systemd",pid=1,fd=42))                    
-udp   UNCONN 0      0                               [::]:60089         [::]:*    users:(("rpc.statd",pid=897,fd=10))                                         
-udp   UNCONN 0      0                               [::]:50480         [::]:*                                                                                
-udp   UNCONN 0      0                               [::]:48982         [::]:*    users:(("rpc.mountd",pid=863,fd=6))                                         
-tcp   LISTEN 0      4096                         0.0.0.0:60423      0.0.0.0:*    users:(("rpc.statd",pid=897,fd=9))                                          
-tcp   LISTEN 0      4096                         0.0.0.0:44187      0.0.0.0:*    users:(("rpc.mountd",pid=863,fd=5))                                         
-tcp   LISTEN 0      4096                      127.0.0.54:53         0.0.0.0:*    users:(("systemd-resolve",pid=627,fd=17))                                   
+udp   UNCONN 0      0                          127.0.0.1:648        0.0.0.0:*    users:(("rpc.statd",pid=896,fd=5))                                          
+udp   UNCONN 0      0                            0.0.0.0:41913      0.0.0.0:*    users:(("rpc.statd",pid=896,fd=8))                                          
+udp   UNCONN 0      0                            0.0.0.0:56371      0.0.0.0:*                                                                                
+udp   UNCONN 0      0                            0.0.0.0:42845      0.0.0.0:*    users:(("rpc.mountd",pid=865,fd=4))                                         
+udp   UNCONN 0      0                          10.99.0.2:53         0.0.0.0:*    users:(("dnsmasq",pid=1241,fd=6))                                           
+udp   UNCONN 0      0                         127.0.0.54:53         0.0.0.0:*    users:(("systemd-resolve",pid=660,fd=16))                                   
+udp   UNCONN 0      0                      127.0.0.53%lo:53         0.0.0.0:*    users:(("systemd-resolve",pid=660,fd=14))                                   
+udp   UNCONN 0      0                       0.0.0.0%pxe0:67         0.0.0.0:*    users:(("dnsmasq",pid=1241,fd=4))                                           
+udp   UNCONN 0      0                          10.99.0.2:69         0.0.0.0:*    users:(("dnsmasq",pid=1241,fd=8))                                           
+udp   UNCONN 0      0                            0.0.0.0:111        0.0.0.0:*    users:(("rpcbind",pid=647,fd=5),("systemd",pid=1,fd=40))                    
+udp   UNCONN 0      0                               [::]:51886         [::]:*                                                                                
+udp   UNCONN 0      0                               [::]:48306         [::]:*    users:(("rpc.mountd",pid=865,fd=6))                                         
+udp   UNCONN 0      0                               [::]:59372         [::]:*    users:(("rpc.statd",pid=896,fd=10))                                         
+udp   UNCONN 0      0      [fe80::5054:ff:fe99:102]%pxe0:53            [::]:*    users:(("dnsmasq",pid=1241,fd=9))                                           
+udp   UNCONN 0      0      [fe80::5054:ff:fe99:102]%pxe0:69            [::]:*    users:(("dnsmasq",pid=1241,fd=11))                                          
+udp   UNCONN 0      0                               [::]:111           [::]:*    users:(("rpcbind",pid=647,fd=7),("systemd",pid=1,fd=42))                    
+tcp   LISTEN 0      64                           0.0.0.0:46359      0.0.0.0:*                                                                                
+tcp   LISTEN 0      4096                         0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=940,fd=3),("systemd",pid=1,fd=105))                      
+tcp   LISTEN 0      4096                   127.0.0.53%lo:53         0.0.0.0:*    users:(("systemd-resolve",pid=660,fd=15))                                   
+tcp   LISTEN 0      4096                         0.0.0.0:111        0.0.0.0:*    users:(("rpcbind",pid=647,fd=4),("systemd",pid=1,fd=39))                    
+tcp   LISTEN 0      32                         10.99.0.2:53         0.0.0.0:*    users:(("dnsmasq",pid=1241,fd=7))                                           
 tcp   LISTEN 0      64                         10.99.0.2:2049       0.0.0.0:*                                                                                
-tcp   LISTEN 0      32                         10.99.0.2:53         0.0.0.0:*    users:(("dnsmasq",pid=1243,fd=7))                                           
-tcp   LISTEN 0      511                        10.99.0.2:80         0.0.0.0:*    users:(("nginx",pid=906,fd=6),("nginx",pid=905,fd=6),("nginx",pid=904,fd=6))
-tcp   LISTEN 0      4096                   127.0.0.53%lo:53         0.0.0.0:*    users:(("systemd-resolve",pid=627,fd=15))                                   
-tcp   LISTEN 0      4096                         0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=942,fd=3),("systemd",pid=1,fd=105))                      
-tcp   LISTEN 0      4096                         0.0.0.0:111        0.0.0.0:*    users:(("rpcbind",pid=608,fd=4),("systemd",pid=1,fd=39))                    
-tcp   LISTEN 0      64                           0.0.0.0:39507      0.0.0.0:*                                                                                
-tcp   LISTEN 0      32     [fe80::5054:ff:fe99:102]%pxe0:53            [::]:*    users:(("dnsmasq",pid=1243,fd=10))                                          
-tcp   LISTEN 0      64                              [::]:38589         [::]:*                                                                                
-tcp   LISTEN 0      4096                            [::]:22            [::]:*    users:(("sshd",pid=942,fd=4),("systemd",pid=1,fd=106))                      
-tcp   LISTEN 0      4096                            [::]:41061         [::]:*    users:(("rpc.statd",pid=897,fd=11))                                         
-tcp   LISTEN 0      4096                            [::]:111           [::]:*    users:(("rpcbind",pid=608,fd=6),("systemd",pid=1,fd=41))                    
-tcp   LISTEN 0      4096                            [::]:39045         [::]:*    users:(("rpc.mountd",pid=863,fd=7))                                         
+tcp   LISTEN 0      511                        10.99.0.2:80         0.0.0.0:*    users:(("nginx",pid=907,fd=6),("nginx",pid=906,fd=6),("nginx",pid=905,fd=6))
+tcp   LISTEN 0      4096                      127.0.0.54:53         0.0.0.0:*    users:(("systemd-resolve",pid=660,fd=17))                                   
+tcp   LISTEN 0      4096                         0.0.0.0:39905      0.0.0.0:*    users:(("rpc.statd",pid=896,fd=9))                                          
+tcp   LISTEN 0      4096                         0.0.0.0:45857      0.0.0.0:*    users:(("rpc.mountd",pid=865,fd=5))                                         
+tcp   LISTEN 0      64                              [::]:42001         [::]:*                                                                                
+tcp   LISTEN 0      4096                            [::]:50259         [::]:*    users:(("rpc.statd",pid=896,fd=11))                                         
+tcp   LISTEN 0      32     [fe80::5054:ff:fe99:102]%pxe0:53            [::]:*    users:(("dnsmasq",pid=1241,fd=10))                                          
+tcp   LISTEN 0      4096                            [::]:22            [::]:*    users:(("sshd",pid=940,fd=4),("systemd",pid=1,fd=106))                      
+tcp   LISTEN 0      4096                            [::]:111           [::]:*    users:(("rpcbind",pid=647,fd=6),("systemd",pid=1,fd=41))                    
+tcp   LISTEN 0      4096                            [::]:45963         [::]:*    users:(("rpc.mountd",pid=865,fd=7))                                         
 
 # ip -br addr
 lo               UNKNOWN        127.0.0.1/8 ::1/128 
@@ -46,9 +46,9 @@ nftables     active
 rpcbind      active
 
 # mounts
-/srv/pxe/media/debian-12 /dev/sr1 iso9660 ro,relatime,nojoliet,check=s,map=n,blocksize=2048,iocharset=utf8
 /srv/pxe/media/ubuntu-24.04 /dev/sr0 iso9660 ro,relatime,nojoliet,check=s,map=n,blocksize=2048,iocharset=utf8
 /srv/pxe/media/rocky-9 /dev/sr2 iso9660 ro,relatime,nojoliet,check=s,map=n,blocksize=2048,iocharset=utf8
+/srv/pxe/media/debian-12 /dev/sr1 iso9660 ro,relatime,nojoliet,check=s,map=n,blocksize=2048,iocharset=utf8
 
 # tftp root
 13f8e6a6b87af04a2f289729122d8b25330328584b613359fc0e2ab2924cf2e0  snponly.efi
@@ -64,14 +64,14 @@ table inet pxe_guard {
 	}
 }
 
-OK   udp 10.99.0.2:53 users:(("dnsmasq",pid=1243,fd=6))
-OK   udp 0.0.0.0%pxe0:67 users:(("dnsmasq",pid=1243,fd=4))
-OK   udp 10.99.0.2:69 users:(("dnsmasq",pid=1243,fd=8))
-OK   udp [fe80::5054:ff:fe99:102]%pxe0:53 users:(("dnsmasq",pid=1243,fd=9))
-OK   udp [fe80::5054:ff:fe99:102]%pxe0:69 users:(("dnsmasq",pid=1243,fd=11))
+OK   udp 10.99.0.2:53 users:(("dnsmasq",pid=1241,fd=6))
+OK   udp 0.0.0.0%pxe0:67 users:(("dnsmasq",pid=1241,fd=4))
+OK   udp 10.99.0.2:69 users:(("dnsmasq",pid=1241,fd=8))
+OK   udp [fe80::5054:ff:fe99:102]%pxe0:53 users:(("dnsmasq",pid=1241,fd=9))
+OK   udp [fe80::5054:ff:fe99:102]%pxe0:69 users:(("dnsmasq",pid=1241,fd=11))
+OK   tcp 10.99.0.2:53 users:(("dnsmasq",pid=1241,fd=7))
 OK   nfsd tcp 10.99.0.2:2049
-OK   tcp 10.99.0.2:53 users:(("dnsmasq",pid=1243,fd=7))
-OK   tcp 10.99.0.2:80 users:(("nginx",pid=906,fd=6),("nginx",pid=905,fd=6),("nginx",pid=904,fd=6))
-OK   tcp [fe80::5054:ff:fe99:102]%pxe0:53 users:(("dnsmasq",pid=1243,fd=10))
+OK   tcp 10.99.0.2:80 users:(("nginx",pid=907,fd=6),("nginx",pid=906,fd=6),("nginx",pid=905,fd=6))
+OK   tcp [fe80::5054:ff:fe99:102]%pxe0:53 users:(("dnsmasq",pid=1241,fd=10))
 OK   nftables: koneksi baru dari nat0 di-drop (melindungi socket wildcard rpcbind/mountd/statd/sshd)
 RESULT: PASS

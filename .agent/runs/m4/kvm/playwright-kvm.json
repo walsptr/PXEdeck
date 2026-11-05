@@ -115,7 +115,7 @@
       "specs": [
         {
           "title": "AC-4.30 pxe-test-m4-node11 (uefi) install via dashboard → Done ≤ 30 menit",
-          "ok": true,
+          "ok": false,
           "tags": [],
           "tests": [
             {
@@ -137,32 +137,32 @@
                 {
                   "workerIndex": 0,
                   "parallelIndex": 0,
-                  "status": "interrupted",
-                  "duration": 1201072,
+                  "status": "failed",
+                  "duration": 1819326,
                   "error": {
-                    "message": "Error: page.waitForTimeout: Test ended.",
-                    "stack": "Error: page.waitForTimeout: Test ended.\n    at /home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts:136:18",
+                    "message": "Error: 2026-11-05T12:29:07.735Z booting (UI)\n2026-11-05T12:29:43.960Z installing (UI)\n2026-11-05T12:34:55.289Z configuring (UI)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7md\u001b[27mon\u001b[7me\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mc\u001b[27mon\u001b[7mfiguring\u001b[27m\"\u001b[39m",
+                    "stack": "Error: 2026-11-05T12:29:07.735Z booting (UI)\n2026-11-05T12:29:43.960Z installing (UI)\n2026-11-05T12:34:55.289Z configuring (UI)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7md\u001b[27mon\u001b[7me\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mc\u001b[27mon\u001b[7mfiguring\u001b[27m\"\u001b[39m\n    at /home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts:142:40",
                     "location": {
                       "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts",
-                      "column": 18,
-                      "line": 136
+                      "column": 40,
+                      "line": 142
                     },
-                    "snippet": "  134 |       }\n  135 |       if (st === \"done\" || st === \"failed\") break\n> 136 |       await page.waitForTimeout(2_000)\n      |                  ^\n  137 |     }\n  138 |     writeFileSync(path.join(KVM.runsDir, `${node.name}-status.txt`), statusLog.join(\"\\n\") + \"\\n\")\n  139 |     const durationS = Math.round((Date.now() - t0) / 1000)"
+                    "snippet": "  140 |     const ordered = [\"booting\", \"installing\", \"configuring\", \"done\"].every((s) => seen.has(s))\n  141 |     record({ ac, node: node.name, status: ordered && last === \"done\" ? \"PASS\" : \"FAIL\", durationS, note: [...seen].join(\" → \"), evidence: [`${node.name}-status.txt`, `${node.name}-console.txt`] })\n> 142 |     expect(last, statusLog.join(\"\\n\")).toBe(\"done\")\n      |                                        ^\n  143 |     expect([...seen]).toEqual([\"booting\", \"installing\", \"configuring\", \"done\"])\n  144 |     expect(await page.evaluate(() => (window as unknown as { __noReload?: boolean }).__noReload)).toBe(true)\n  145 |     const done = await apiHost(page, node.mac)"
                   },
                   "errors": [
                     {
                       "location": {
                         "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts",
-                        "column": 18,
-                        "line": 136
+                        "column": 40,
+                        "line": 142
                       },
-                      "message": "Error: page.waitForTimeout: Test ended.\n\n  134 |       }\n  135 |       if (st === \"done\" || st === \"failed\") break\n> 136 |       await page.waitForTimeout(2_000)\n      |                  ^\n  137 |     }\n  138 |     writeFileSync(path.join(KVM.runsDir, `${node.name}-status.txt`), statusLog.join(\"\\n\") + \"\\n\")\n  139 |     const durationS = Math.round((Date.now() - t0) / 1000)\n    at /home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts:136:18"
+                      "message": "Error: 2026-11-05T12:29:07.735Z booting (UI)\n2026-11-05T12:29:43.960Z installing (UI)\n2026-11-05T12:34:55.289Z configuring (UI)\n\n\u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoBe\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // Object.is equality\u001b[22m\n\nExpected: \u001b[32m\"\u001b[7md\u001b[27mon\u001b[7me\u001b[27m\"\u001b[39m\nReceived: \u001b[31m\"\u001b[7mc\u001b[27mon\u001b[7mfiguring\u001b[27m\"\u001b[39m\n\n  140 |     const ordered = [\"booting\", \"installing\", \"configuring\", \"done\"].every((s) => seen.has(s))\n  141 |     record({ ac, node: node.name, status: ordered && last === \"done\" ? \"PASS\" : \"FAIL\", durationS, note: [...seen].join(\" → \"), evidence: [`${node.name}-status.txt`, `${node.name}-console.txt`] })\n> 142 |     expect(last, statusLog.join(\"\\n\")).toBe(\"done\")\n      |                                        ^\n  143 |     expect([...seen]).toEqual([\"booting\", \"installing\", \"configuring\", \"done\"])\n  144 |     expect(await page.evaluate(() => (window as unknown as { __noReload?: boolean }).__noReload)).toBe(true)\n  145 |     const done = await apiHost(page, node.mac)\n    at /home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts:142:40"
                     }
                   ],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-05T12:00:51.561Z",
+                  "startTime": "2026-11-05T12:28:49.214Z",
                   "annotations": [
                     {
                       "type": "serial",
@@ -187,12 +187,12 @@
                   ],
                   "errorLocation": {
                     "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts",
-                    "column": 18,
-                    "line": 136
+                    "column": 40,
+                    "line": 142
                   }
                 }
               ],
-              "status": "skipped"
+              "status": "unexpected"
             }
           ],
           "id": "34a6ce291a0331cb14e1-5d8ced0ce8cd7b8cc13d",
@@ -230,7 +230,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-05T12:20:52.744Z",
+                  "startTime": "2026-11-05T12:59:08.650Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -273,7 +273,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-05T12:20:52.744Z",
+                  "startTime": "2026-11-05T12:59:08.650Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -316,7 +316,7 @@
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-05T12:20:52.744Z",
+                  "startTime": "2026-11-05T12:59:08.650Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -334,11 +334,11 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-05T12:00:50.865Z",
-    "duration": 1201887.9070000001,
+    "startTime": "2026-11-05T12:28:48.722Z",
+    "duration": 1819942.2270000002,
     "expected": 0,
-    "skipped": 4,
-    "unexpected": 0,
+    "skipped": 3,
+    "unexpected": 1,
     "flaky": 0
   }
 }

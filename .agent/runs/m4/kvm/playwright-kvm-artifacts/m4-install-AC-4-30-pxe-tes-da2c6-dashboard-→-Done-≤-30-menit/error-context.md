@@ -12,18 +12,19 @@
 # Error details
 
 ```
-Error: page.waitForTimeout: Test ended.
+Error: 2026-11-05T12:29:07.735Z booting (UI)
+2026-11-05T12:29:43.960Z installing (UI)
+2026-11-05T12:34:55.289Z configuring (UI)
+
+expect(received).toBe(expected) // Object.is equality
+
+Expected: "done"
+Received: "configuring"
 ```
 
 # Test source
 
 ```ts
-  36  | const PASSWORD = randomPassword()
-  37  | const NODES = kvmNodes()
-  38  | const shot = (name: string) => path.join(KVM.runsDir, "screenshots", `${name}.png`)
-  39  | const hostId = (mac: string) => mac.replaceAll(":", "")
-  40  | const TOKEN_RE = /\/boot\/[0-9a-f:]{17}\/[A-Za-z0-9_-]{43}\//
-  41  | 
   42  | async function apiHost(page: Page, mac: string) {
   43  |   const r = await page.request.get(`/api/hosts/${hostId(mac)}`)
   44  |   return r.status() === 200 ? r.json() : null
@@ -118,14 +119,14 @@ Error: page.waitForTimeout: Test ended.
   133 |         await page.screenshot({ path: shot(`${node.name}-${st}`) })
   134 |       }
   135 |       if (st === "done" || st === "failed") break
-> 136 |       await page.waitForTimeout(2_000)
-      |                  ^ Error: page.waitForTimeout: Test ended.
+  136 |       await page.waitForTimeout(2_000)
   137 |     }
   138 |     writeFileSync(path.join(KVM.runsDir, `${node.name}-status.txt`), statusLog.join("\n") + "\n")
   139 |     const durationS = Math.round((Date.now() - t0) / 1000)
   140 |     const ordered = ["booting", "installing", "configuring", "done"].every((s) => seen.has(s))
   141 |     record({ ac, node: node.name, status: ordered && last === "done" ? "PASS" : "FAIL", durationS, note: [...seen].join(" → "), evidence: [`${node.name}-status.txt`, `${node.name}-console.txt`] })
-  142 |     expect(last, statusLog.join("\n")).toBe("done")
+> 142 |     expect(last, statusLog.join("\n")).toBe("done")
+      |                                        ^ Error: 2026-11-05T12:29:07.735Z booting (UI)
   143 |     expect([...seen]).toEqual(["booting", "installing", "configuring", "done"])
   144 |     expect(await page.evaluate(() => (window as unknown as { __noReload?: boolean }).__noReload)).toBe(true)
   145 |     const done = await apiHost(page, node.mac)

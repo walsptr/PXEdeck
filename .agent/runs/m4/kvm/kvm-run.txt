@@ -1,14 +1,14 @@
-# kvm-run m4 20261105T120018Z nodes=[11:uefi 12:bios] keep_server=0 dry=0
-2026-11-05T12:00:18Z preflight          ok max_nodes=3 avail_mb=16007
-2026-11-05T12:00:18Z net-up             ok 
-2026-11-05T12:00:28Z server-up          ok 
-2026-11-05T12:00:47Z deploy             ok 
-2026-11-05T12:00:47Z server-check       ok 
-2026-11-05T12:00:49Z node-create        ok pxe-test-m4-node11 uefi 52:54:00:99:00:11
-2026-11-05T12:00:49Z node-create        ok pxe-test-m4-node12 bios 52:54:00:99:00:12
-2026-11-05T12:20:52Z playwright         FAIL exit=130 (playwright-kvm.log)
-2026-11-05T12:20:52Z evidence           start 
-2026-11-05T12:20:53Z evidence           done 
-2026-11-05T12:20:53Z redact             ok 
-2026-11-05T12:20:56Z cleanup            done 
-2026-11-05T12:20:56Z result             FAIL exit=130
+# kvm-run m4 20261105T122818Z nodes=[11:uefi 12:bios] keep_server=0 dry=0
+2026-11-05T12:28:18Z preflight          ok max_nodes=3 avail_mb=13170
+2026-11-05T12:28:18Z net-up             ok 
+2026-11-05T12:28:29Z server-up          ok 
+2026-11-05T12:28:45Z deploy             ok 
+2026-11-05T12:28:46Z server-check       ok 
+2026-11-05T12:28:47Z node-create        ok pxe-test-m4-node11 uefi 52:54:00:99:00:11
+2026-11-05T12:28:47Z node-create        ok pxe-test-m4-node12 bios 52:54:00:99:00:12
+2026-11-05T12:59:08Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-05T12:59:08Z evidence           start 
+2026-11-05T12:59:09Z evidence           done 
+2026-11-05T12:59:09Z redact             ok 
+2026-11-05T12:59:12Z cleanup            done 
+2026-11-05T12:59:12Z result             FAIL exit=1

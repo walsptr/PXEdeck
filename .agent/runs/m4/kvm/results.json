@@ -1,6 +1,6 @@
 {
   "run": "m4",
-  "generatedAt": "2026-11-05T12:20:52.721Z",
+  "generatedAt": "2026-11-05T12:59:08.626Z",
   "nodes": [
     "pxe-test-m4-node11",
     "pxe-test-m4-node12"
@@ -15,6 +15,17 @@
       ]
     },
     {
+      "ac": "AC-4.30",
+      "node": "pxe-test-m4-node11",
+      "status": "FAIL",
+      "durationS": 1819,
+      "note": "booting → installing → configuring",
+      "evidence": [
+        "pxe-test-m4-node11-status.txt",
+        "pxe-test-m4-node11-console.txt"
+      ]
+    },
+    {
       "ac": "AC-4.34-scan",
       "status": "PASS",
       "note": "0 temuan",
@@ -23,21 +34,29 @@
       ]
     }
   ],
-  "source": "harnessResults = ditulis dashboard/e2e-kvm (record/writeResults); acSummary = konsolidasi test-engineer dari kvm-run.txt, server-check.txt, cleanup.txt, playwright-kvm.log",
+  "source": "harnessResults = ditulis dashboard/e2e-kvm (record/writeResults); acSummary = konsolidasi test-engineer dari kvm-run.txt, server-check.txt, cleanup.txt, playwright-kvm.log, console node",
   "attempts": [
     {
       "id": "attempt1-20261105T115847Z",
       "dir": "attempt1-20261105T115847Z/",
       "result": "FAIL",
       "exit": 1,
-      "cause": "bug test: m4-install.spec.ts menegaskan firmware segera saat host muncul dari lease dnsmasq (firmware masih null sebelum iPXE meminta ?platform=). Diperbaiki dengan expect.poll (nilai yang dituntut tetap)."
+      "cause": "bug test: asersi firmware terlalu dini (diperbaiki dengan expect.poll)."
     },
     {
       "id": "attempt2-20261105T120018Z",
-      "dir": "./",
+      "dir": "attempt2-20261105T120018Z/",
       "result": "FAIL",
       "exit": 130,
-      "cause": "bug infra B-3: VM node dibuat virt-install --pxe --noautoconsole -> XML live fase install on_reboot=destroy; harness `node.sh reset` (virsh reset) mematikan node11 (domstate 'shut off (shutdown)') sehingga installer tidak pernah boot. Run dihentikan (SIGINT ke Playwright) pukul 12:20:52Z setelah 20 menit tanpa progres; cleanup trap berjalan. Lihat diag-B3-reset-shutdown.txt."
+      "cause": "bug infra B-3 (on_reboot=destroy live); diperbaiki di ab2904f."
+    },
+    {
+      "id": "attempt3-20261105T122818Z",
+      "dir": "./",
+      "commit": "ab2904f",
+      "result": "FAIL",
+      "exit": 1,
+      "cause": "bug B-4: setelah installer reboot, script boot lokal EFI `exit` (status 0) -> iPXE kembali EFI_SUCCESS ke OVMF -> BdsDxe membuka BootManagerMenuApp (perilaku UEFI spec untuk Boot#### yang return EFI_SUCCESS) alih-alih mencoba opsi 'Ubuntu' di disk; OS terpasang tidak pernah boot -> pxe-callback-done tidak jalan -> status tertahan configuring. Temuan B-5: token job bocor ter-base64 di console (late-command /etc/pxe-callback/url), tidak tertangkap redact-evidence/evidence-scan; disamarkan manual oleh test-engineer."
     }
   ],
   "acSummary": [
@@ -49,24 +68,28 @@
         "server-check.txt",
         "server-listen.txt"
       ],
-      "note": "verify-listen RESULT PASS; layanan aktif; Next 127.0.0.1:3000; /api/settings cidr 10.99.0.0/24; vmlinuz 200; sha256 snponly/undionly = media.log"
+      "note": "dnsmasq hanya 0.0.0.0%pxe0:67, 10.99.0.2:69, 10.99.0.2:53; 4 layanan aktif; Next 127.0.0.1:3000; /api/settings cidr 10.99.0.0/24; vmlinuz 200; sha256 TFTP = media.log (server-up 12:28:18->server-check 12:28:46)"
     },
     {
       "ac": "AC-4.30",
       "node": "pxe-test-m4-node11",
       "status": "FAIL",
-      "durationS": null,
+      "durationS": 1819,
       "evidence": [
-        "playwright-kvm.log",
+        "pxe-test-m4-node11-status.txt",
         "pxe-test-m4-node11-console.txt",
-        "diag-B3-reset-shutdown.txt"
+        "playwright-kvm.log",
+        "server-dnsmasq.txt",
+        "server-nginx.txt",
+        "screenshots/"
       ],
-      "note": "discovery + konfigurasi + Install 200 + booting OK; setelah virsh reset node mati (B-3); tidak mencapai installing/configuring/done"
+      "note": "booting 12:29:07 -> installing 12:29:43 -> configuring 12:34:55 (install ~6 menit, B-3 terbukti beres: reset & reboot installer me-restart node); done tidak tercapai dalam 30 menit karena B-4 (UEFI boot lokal masuk BootManagerMenuApp). dnsmasq memuat TFTP snponly.efi (12 baris); nginx memuat fetch user-data (tersamarkan)."
     },
     {
       "ac": "AC-4.31",
+      "node": "pxe-test-m4-node11",
       "status": "NOT_RUN",
-      "note": "bergantung AC-4.30 (mode serial)"
+      "note": "mode serial; bergantung AC-4.30 (OS terpasang tidak pernah boot karena B-4)"
     },
     {
       "ac": "AC-4.32",
@@ -74,24 +97,25 @@
       "status": "PASS",
       "evidence": [
         "pxe-test-m4-node11-negative.txt"
-      ]
+      ],
+      "note": "dari host: script lokal tanpa token; token acak -> 404; current_ip tetap 10.99.0.184"
     },
     {
       "ac": "AC-4.33",
       "node": "pxe-test-m4-node12",
       "status": "NOT_RUN",
-      "note": "tidak dijalankan (mode serial, AC-4.30 gagal); node12 juga punya on_reboot=destroy live (diag-B3)"
+      "note": "mode serial setelah AC-4.30 gagal; node12 dibuat & PXE (discovery) lalu dihapus saat cleanup"
     },
     {
       "ac": "AC-4.34",
-      "status": "PASS",
+      "status": "FAIL",
       "evidence": [
         "cleanup.txt",
         "evidence-scan.txt",
         "kvm-run.txt",
         "../secret-scan.txt"
       ],
-      "note": "cleanup: tanpa VM pxe-test-m4-*/pxe-test-server, disk node+overlay server terhapus, key run dihapus, pxe-test tetap; redact-evidence ok; scan bersih. Status per AC lengkap bergantung run sukses."
+      "note": "cleanup PASS (tanpa VM pxe-test-m4-*/pxe-test-server, disk node+overlay server terhapus, key run dihapus, pxe-test tetap, resource terlindungi identik). Scan harness PASS tetapi KELIRU: token job ter-base64 lolos di pxe-test-m4-node11-console.{log,txt} (B-5), disamarkan manual sebelum commit. Status+durasi per AC lengkap tidak tersedia (AC-4.31/4.33 tidak jalan)."
     }
   ]
 }
