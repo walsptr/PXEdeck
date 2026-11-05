@@ -49,15 +49,17 @@ import {
   type OsImageInfo,
 } from "@/hooks/use-os-images"
 
-const COLS = 9
+const COLS = 7
 
 /**
- * DR-5-1: baris tabel → kartu di bawah `md` (flex-wrap; urutan sel lewat `order`):
+ * DR-5-1: baris tabel → kartu di bawah `xl` (flex-wrap; urutan sel lewat `order`):
  * (1) ID · dipakai · hapus, (2) nama + versi, (3) arsitektur · metode · bootable, lalu
  * ketersediaan (sebaris bila tersedia; alasan tidak tersedia di baris sendiri), (4) sumber.
+ * DR-5-9: batas kartu dinaikkan dari `md` ke `xl` — tabel butuh kontainer ≥ ~950 px (1280 px ke
+ * atas); di 768–1279 px tabel sebelumnya hanya bisa di-scroll horizontal.
  */
 const ROW_MOBILE =
-  "max-md:flex max-md:flex-wrap max-md:items-start max-md:gap-x-3 max-md:gap-y-1 max-md:px-4 max-md:py-3"
+  "max-xl:flex max-xl:flex-wrap max-xl:items-start max-xl:gap-x-3 max-xl:gap-y-1 max-xl:px-4 max-xl:py-3"
 
 /**
  * Path/URL mono yang dipenggal di "/" (DR-5-1): setiap segmen (beserta "/" penutupnya) adalah
@@ -90,13 +92,13 @@ function SourceCell({ img }: { img: OsImageInfo }) {
   )
   return (
     <div
-      className="flex w-full flex-col whitespace-normal md:w-64 md:gap-0.5"
+      className="flex w-full flex-col whitespace-normal xl:w-64 xl:gap-0.5"
       data-testid="img-source"
     >
       {row("kernel", s.kernel)}
       {row("initrd", s.initrd)}
       {/* Mobile: URL repo sudah berakhiran path repo → baris "repo" disembunyikan (DR-5-1). */}
-      {row("repo", s.repo, img.repoUrl ? "max-md:hidden" : undefined)}
+      {row("repo", s.repo, img.repoUrl ? "max-xl:hidden" : undefined)}
       {img.repoUrl && (
         <div className="flex gap-2">
           <span className="type-caption w-10 shrink-0 text-muted-foreground">URL</span>
@@ -118,12 +120,13 @@ function AvailabilityCell({ img }: { img: OsImageInfo }) {
     )
   return (
     <span
-      className="type-caption flex items-start md:max-w-40 gap-1.5 whitespace-normal text-muted-foreground"
+      className="type-caption flex items-start xl:max-w-40 gap-1.5 whitespace-normal text-muted-foreground"
       data-testid="img-available"
       data-available="false"
     >
       <HugeiconsIcon icon={InformationCircleIcon} strokeWidth={2} className="mt-0.5 size-4 shrink-0" />
-      <span>{img.reason ?? "Media tidak tersedia"}</span>
+      {/* Alasan bisa memuat id/path panjang tanpa titik pecah → dipecah di dalam kata agar tidak meluber. */}
+      <span className="min-w-0 wrap-break-word">{img.reason ?? "Media tidak tersedia"}</span>
     </span>
   )
 }
@@ -205,37 +208,35 @@ export function OsImagesView() {
       ) : (
         <div className="overflow-hidden rounded-xl border border-border bg-card">
           {/*
-            DR-5-1: di bawah `md` tabel dirender sebagai daftar kartu (satu DOM, tanpa duplikasi
+            DR-5-1: di bawah `xl` tabel dirender sebagai daftar kartu (satu DOM, tanpa duplikasi
             testid) — header disembunyikan, tiap baris jadi flex-wrap dengan label inline;
             kolom Sumber selebar kartu sehingga path tidak dipecah per karakter.
           */}
           <Table
             data-testid="os-images-table"
-            // Padding horizontal sel tengah sedikit dirapatkan agar 9 kolom muat di 1440 px tanpa
-            // scroll horizontal (kolom aksi tetap terlihat).
-            className="max-md:block md:[&_td:not(:first-child):not(:last-child)]:px-2.5 md:[&_th:not(:first-child):not(:last-child)]:px-2.5"
+            // Padding horizontal sel tengah sedikit dirapatkan agar 7 kolom muat di 1280/1440 px tanpa
+            // scroll horizontal (kolom Dipakai + aksi tetap terlihat, DR-5-9).
+            className="max-xl:block xl:[&_td:not(:first-child):not(:last-child)]:px-2.5 xl:[&_th:not(:first-child):not(:last-child)]:px-2.5"
           >
-            <TableHeader className="max-md:hidden">
+            <TableHeader className="max-xl:hidden">
               <TableRow>
                 <TableHead className="pl-4">ID</TableHead>
                 <TableHead>Nama</TableHead>
-                <TableHead>Arsitektur</TableHead>
-                <TableHead>Metode</TableHead>
+                <TableHead>Platform</TableHead>
                 <TableHead>Sumber</TableHead>
                 <TableHead>Ketersediaan</TableHead>
-                <TableHead>Bootable</TableHead>
                 <TableHead>Dipakai</TableHead>
                 <TableHead className="w-12 pr-4">
                   <span className="sr-only">Aksi</span>
                 </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody className="max-md:block">
+            <TableBody className="max-xl:block">
               {images.isPending
                 ? Array.from({ length: 4 }, (_, i) => (
                     <TableRow key={i} className={cn(ROW_MOBILE, "hover:bg-transparent")}>
                       {Array.from({ length: COLS }, (_, j) => (
-                        <TableCell key={j} className="max-md:p-0">
+                        <TableCell key={j} className="max-xl:p-0">
                           <Skeleton className="h-4 w-20" />
                         </TableCell>
                       ))}
@@ -248,44 +249,61 @@ export function OsImagesView() {
                       data-testid="os-image-row"
                       data-image-id={img.id}
                     >
-                      <TableCell className="pl-4 align-top max-md:order-1 max-md:min-w-0 max-md:flex-1 max-md:p-0">
-                        <span className="type-data">{img.id}</span>
+                      {/*
+                        DR-5-8/DR-5-9: ID adalah data inti → dibungkus (wrap), bukan dipotong. Mobile:
+                        sel flex-1 + min-w-0 sehingga ID panjang turun baris di dalam selnya sendiri
+                        (tidak menimpa "Dipakai"/Hapus). Desktop: lebar kolom dibatasi agar tabel muat
+                        tanpa scroll horizontal.
+                      */}
+                      <TableCell
+                        className="pl-4 align-top whitespace-normal xl:max-w-44 max-xl:order-1 max-xl:min-w-0 max-xl:flex-1 max-xl:p-0"
+                        data-testid="img-id"
+                      >
+                        {/* min 12ch: id pendek (`ubuntu-24.04`) tidak dipecah di "-" di desktop. */}
+                        <span className="type-data inline-block max-w-full min-w-0 wrap-break-word xl:min-w-[12ch]">
+                          {img.id}
+                        </span>
                       </TableCell>
-                      <TableCell className="align-top max-md:order-3 max-md:basis-full max-md:p-0">
-                        <div className="flex flex-col gap-0.5 max-md:flex-row max-md:flex-wrap max-md:items-baseline max-md:gap-x-1.5">
-                          <span className="text-foreground">{img.name}</span>
+                      <TableCell className="align-top whitespace-normal xl:max-w-40 max-xl:order-3 max-xl:basis-full max-xl:p-0">
+                        <div className="flex flex-col gap-0.5 max-xl:flex-row max-xl:flex-wrap max-xl:items-baseline max-xl:gap-x-1.5">
+                          <span className="min-w-0 wrap-break-word text-foreground" data-testid="img-name">
+                            {img.name}
+                          </span>
                           <span className="type-caption text-muted-foreground">{img.version}</span>
                         </div>
                       </TableCell>
-                      <TableCell className="align-top max-md:order-4 max-md:p-0">
-                        <span className="type-data">{img.arch}</span>
+                      {/*
+                        DR-5-9: arsitektur · metode · bootable digabung satu kolom "Platform" (desktop:
+                        bertumpuk; kartu: sebaris) agar tabel muat di 1280 px.
+                      */}
+                      <TableCell className="align-top text-body max-xl:order-4 max-xl:p-0" data-testid="img-platform">
+                        <div className="flex flex-col gap-0.5 max-xl:flex-row max-xl:flex-wrap max-xl:gap-x-3">
+                          <span className="type-data">{img.arch}</span>
+                          <span>{img.method}</span>
+                          <span className={cn(!img.bootable && "text-muted-foreground")}>
+                            {img.bootable ? "bootable" : "tidak bootable"}
+                          </span>
+                        </div>
                       </TableCell>
-                      <TableCell className="align-top text-body max-md:order-4 max-md:p-0">
-                        {img.method}
-                      </TableCell>
-                      <TableCell className="align-top max-md:order-6 max-md:basis-full max-md:p-0">
+                      <TableCell className="align-top max-xl:order-6 max-xl:basis-full max-xl:p-0">
                         <SourceCell img={img} />
                       </TableCell>
                       <TableCell
                         className={cn(
-                          "align-top max-md:order-5 max-md:p-0",
-                          !img.available && "max-md:basis-full",
+                          "align-top max-xl:order-5 max-xl:p-0",
+                          !img.available && "max-xl:basis-full",
                         )}
                       >
                         <AvailabilityCell img={img} />
                       </TableCell>
-                      <TableCell className="align-top text-body max-md:order-4 max-md:p-0">
-                        <span className="max-md:hidden">{img.bootable ? "Ya" : "Tidak"}</span>
-                        <span className="md:hidden">{img.bootable ? "bootable" : "tidak bootable"}</span>
-                      </TableCell>
                       <TableCell
-                        className="align-top text-body max-md:order-1 max-md:p-0"
+                        className="align-top text-body max-xl:order-1 max-xl:p-0"
                         data-testid="img-used-by"
                       >
-                        <span className="text-muted-foreground md:hidden">Dipakai </span>
+                        <span className="text-muted-foreground xl:hidden">Dipakai </span>
                         <span className="type-data text-xs">{img.usedBy ?? 0}</span> host
                       </TableCell>
-                      <TableCell className="pr-4 text-right align-top max-md:order-2 max-md:-my-1.5 max-md:p-0">
+                      <TableCell className="pr-4 text-right align-top max-xl:order-2 max-xl:-my-1.5 max-xl:p-0">
                         <Button
                           variant="ghost"
                           size="icon-sm"

@@ -11,10 +11,10 @@ import { execFileSync } from "node:child_process"
 import { mkdirSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
-import { expect, test, type Locator, type Page } from "@playwright/test"
+import { expect, test, type APIRequestContext, type Locator, type Page } from "@playwright/test"
 
 import { SSH_ED25519, SSH_ED25519_B, SSH_RSA } from "../src/test/fixtures"
-import { dropShadowViolations, rowByMac, SHOTS } from "./helpers"
+import { dropShadowViolations, orangeElements, rowByMac, SHOTS } from "./helpers"
 import { HEX, leaseWriter, makeHost } from "./m5-support"
 import { e2eLeaseFile, e2eRoot } from "./support/e2e-env"
 
@@ -190,6 +190,211 @@ test("DR-5-1 OS Images 1440×900: path Sumber tidak terpotong per karakter, tabe
   expect(overflow).toBeLessThanOrEqual(0)
   await expect(page.getByRole("button", { name: "Hapus ubuntu-24.04", exact: true })).toBeInViewport()
   await page.screenshot({ path: SHOTS(5, "dr-5-1-os-images-1440") })
+})
+
+// ---- iter3: DR-5-8 (kartu mobile dengan ID panjang) + DR-5-9 (tabel desktop dengan data panjang) ----
+
+/**
+ * Image uji stres (pola probe design-reviewer `design-shots-iter2/p4.mjs`): ID 48 karakter (batas
+ * API `^[a-z0-9][a-z0-9.-]{1,47}$`) dan ±40 karakter, nama panjang, path dengan segmen panjang.
+ * Media tidak ada → "tidak tersedia" (alasan ikut memuat id + path panjang = kasus terburuk).
+ */
+const LONG_IMAGES = [
+  {
+    id: "ubuntu-24.04-custom-hwe-lab-rack07-node-image-01",
+    name: "Ubuntu Server Custom HWE Lab Rack 07 Node Image Edisi Panjang",
+    version: "24.04.5 LTS hwe",
+    seg: "ubuntu-24.04-custom-hwe-lab-rack07-node-image-01-media-root",
+  },
+  {
+    id: "debian-12.7-bookworm-netinst-lab-cluster-a",
+    name: "Debian Bookworm Netinst Lab Cluster A",
+    version: "12.7",
+    seg: "debian-12.7-bookworm-netinst-lab-cluster-a-installer-amd64",
+  },
+] as const
+const LONG_IDS: readonly string[] = LONG_IMAGES.map((x) => x.id)
+/** Batas DR-5-1 (iter2) untuk image bawaan — tidak diubah. */
+const BUILTIN_CARD_MAX = 200
+/** Batas terpisah kartu image panjang (iter3, lihat test-migration.md): terukur 466 px @375, 416 px @414. */
+const LONG_CARD_MAX = 520
+
+async function registerLongImages(request: APIRequestContext) {
+  for (const x of LONG_IMAGES) {
+    expect(x.id.length).toBeLessThanOrEqual(48)
+    const r = await request.post("/api/os-images", {
+      headers: { "content-type": "application/json" },
+      data: {
+        id: x.id, name: x.name, version: x.version, arch: "amd64", method: "autoinstall", bootable: true,
+        source: { kernel: `${x.seg}/casper/hwe-vmlinuz-6.8.0-generic-panjang`, initrd: `${x.seg}/casper/hwe-initrd-6.8.0-generic-panjang`, repo: x.seg },
+      },
+    })
+    expect(r.status(), await r.text()).toBe(201)
+  }
+  expect(LONG_IMAGES[0].id).toHaveLength(48)
+}
+
+async function removeLongImages(request: APIRequestContext) {
+  for (const id of LONG_IDS) {
+    const r = await request.delete(`/api/os-images/${id}`)
+    expect([204, 404]).toContain(r.status())
+  }
+}
+
+type RowGeometry = {
+  id: string
+  height: number
+  /** Pasangan sel (ID/Dipakai/Hapus) yang kotak kontennya saling tumpang-tindih (> 0,5 px). */
+  overlaps: string[]
+  /** Elemen di dalam kartu/baris yang meluber keluar kotak kartu/baris. */
+  spill: string[]
+  /** Sisi kanan konten "Dipakai" dan tombol Hapus vs sisi kanan kontainer tabel. */
+  usedRight: number
+  delRight: number
+  containerRight: number
+  /** ID tampil utuh (tidak terpotong/ellipsis) dan textContent = id. */
+  idFull: boolean
+}
+
+/** Geometri tiap baris/kartu OS image: kotak konten sel (Range, seperti probe reviewer). */
+async function rowGeometry(page: Page): Promise<{ rows: RowGeometry[]; docScrollWidth: number; docScrollHeight: number; tableOverflow: number }> {
+  return page.evaluate(() => {
+    type Box = { l: number; r: number; t: number; b: number }
+    const box = (r: DOMRect): Box => ({ l: r.left, r: r.right, t: r.top, b: r.bottom })
+    const contentBox = (el: Element) => {
+      const range = document.createRange()
+      range.selectNodeContents(el)
+      return box(range.getBoundingClientRect())
+    }
+    const hit = (a: Box, c: Box) =>
+      Math.min(a.r, c.r) - Math.max(a.l, c.l) > 0.5 && Math.min(a.b, c.b) - Math.max(a.t, c.t) > 0.5
+    const container = document.querySelector('[data-testid="os-images-page"] [data-slot="table-container"]') as HTMLElement
+    const cr = container.getBoundingClientRect()
+    const rows = Array.from(document.querySelectorAll<HTMLElement>('[data-testid="os-image-row"]')).map((tr) => {
+      const rr = box(tr.getBoundingClientRect())
+      const idCell = tr.querySelector('[data-testid="img-id"]')!
+      const idSpan = idCell.querySelector("span")!
+      const cells: [string, Box][] = [
+        ["id", contentBox(idCell)],
+        ["dipakai", contentBox(tr.querySelector('[data-testid="img-used-by"]')!)],
+        ["hapus", box(tr.querySelector('button[aria-label^="Hapus"]')!.getBoundingClientRect())],
+      ]
+      const overlaps: string[] = []
+      for (let i = 0; i < cells.length; i++)
+        for (let j = i + 1; j < cells.length; j++)
+          if (hit(cells[i][1], cells[j][1])) overlaps.push(`${cells[i][0]}<>${cells[j][0]}`)
+      const spill = Array.from(tr.querySelectorAll<HTMLElement>("*"))
+        .filter((e) => {
+          const r = e.getBoundingClientRect()
+          if (r.width === 0 && r.height === 0) return false
+          return r.left < rr.l - 0.5 || r.right > rr.r + 0.5 || r.top < rr.t - 0.5 || r.bottom > rr.b + 0.5
+        })
+        .map((e) => `${e.tagName.toLowerCase()}${e.dataset.testid ? `[${e.dataset.testid}]` : ""}`)
+      const st = getComputedStyle(idSpan)
+      return {
+        id: tr.dataset.imageId ?? "",
+        height: Math.round(rr.b - rr.t),
+        overlaps,
+        spill,
+        usedRight: Math.round(cells[1][1].r),
+        delRight: Math.round(cells[2][1].r),
+        containerRight: Math.round(cr.right),
+        idFull: idSpan.textContent === tr.dataset.imageId && st.textOverflow !== "ellipsis" && idSpan.scrollWidth <= idSpan.clientWidth + 1,
+      }
+    })
+    return {
+      rows,
+      docScrollWidth: document.documentElement.scrollWidth,
+      docScrollHeight: document.documentElement.scrollHeight,
+      tableOverflow: container.scrollWidth - container.clientWidth,
+    }
+  })
+}
+
+test("DR-5-8 OS Images 375/414: ID 48 karakter + path panjang — ID, Dipakai, Hapus tidak tumpang-tindih, tidak meluber, tanpa scroll horizontal", async ({ page, request }) => {
+  await registerLongImages(request)
+  try {
+    for (const [width, height] of [[375, 812], [414, 896]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/os-images")
+      for (const id of LONG_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toBeVisible()
+      const g = await rowGeometry(page)
+      test.info().annotations.push({
+        type: `dr-5-8-${width}`,
+        description: JSON.stringify({ cardHeights: Object.fromEntries(g.rows.map((r) => [r.id, r.height])), scrollWidth: g.docScrollWidth, scrollHeight: g.docScrollHeight, overlaps: g.rows.flatMap((r) => r.overlaps) }),
+      })
+      expect(g.rows.length).toBeGreaterThanOrEqual(5 + LONG_IDS.length)
+      let builtin = 0
+      let long = 0
+      for (const r of g.rows) {
+        expect(r.overlaps, `@${width} ${r.id}: sel saling tumpang-tindih`).toEqual([])
+        expect(r.spill, `@${width} ${r.id}: elemen meluber keluar kartu`).toEqual([])
+        expect(r.idFull, `@${width} ${r.id}: ID harus terbaca utuh (wrap, bukan dipotong)`).toBe(true)
+        expect(r.delRight, `@${width} ${r.id}: tombol Hapus di luar kartu`).toBeLessThanOrEqual(r.containerRight)
+        if (LONG_IDS.includes(r.id)) {
+          long++
+          expect(r.height, `@${width} tinggi kartu image panjang ${r.id}`).toBeLessThanOrEqual(LONG_CARD_MAX)
+        } else {
+          builtin++
+          // Batas DR-5-1 untuk image bawaan tetap berlaku dengan image panjang di daftar.
+          expect(r.height, `@${width} tinggi kartu ${r.id}`).toBeLessThanOrEqual(BUILTIN_CARD_MAX)
+        }
+      }
+      expect(long).toBe(LONG_IDS.length)
+      expect(g.docScrollWidth, `@${width}: scrollWidth halaman = lebar viewport`).toBe(width)
+      expect(g.tableOverflow, `@${width}: scroll horizontal di dalam tabel`).toBeLessThanOrEqual(0)
+      expect(g.docScrollHeight, `@${width}: tinggi halaman`).toBeLessThanOrEqual(300 + BUILTIN_CARD_MAX * builtin + LONG_CARD_MAX * long)
+      // Design system tetap: ID mono, tanpa drop shadow, oranye hanya tombol primary.
+      const longRow = page.locator(`[data-testid="os-image-row"][data-image-id="${LONG_IDS[0]}"]`)
+      expect(await longRow.getByTestId("img-id").locator("span").evaluate((e) => getComputedStyle(e).fontFamily)).toMatch(/JetBrains Mono/)
+      await expect(longRow.getByTestId("img-id")).toHaveText(LONG_IDS[0])
+      expect(await dropShadowViolations(page)).toEqual([])
+      for (const o of await orangeElements(page)) expect(o, "oranye hanya untuk CTA utama").toMatchObject({ slot: "button", variant: "default" })
+      await page.screenshot({ path: SHOTS(5, `dr-5-8-os-images-long-${width}`), fullPage: true })
+    }
+  } finally {
+    await removeLongImages(request)
+  }
+  await page.goto("/os-images")
+  for (const id of LONG_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toHaveCount(0)
+})
+
+test("DR-5-9 OS Images 1280/1440: ID/nama/path panjang — tabel muat tanpa scroll horizontal, Dipakai + Hapus di dalam kontainer", async ({ page, request }) => {
+  await registerLongImages(request)
+  try {
+    for (const [width, height] of [[1280, 800], [1440, 900]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/os-images")
+      for (const id of LONG_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toBeVisible()
+      await expect(page.getByRole("columnheader", { name: "Dipakai" })).toBeVisible()
+      const g = await rowGeometry(page)
+      test.info().annotations.push({ type: `dr-5-9-${width}`, description: JSON.stringify({ scrollWidth: g.docScrollWidth, tableOverflow: g.tableOverflow, rowHeights: Object.fromEntries(g.rows.map((r) => [r.id, r.height])) }) })
+      expect(g.tableOverflow, `@${width}: scroll horizontal di dalam tabel`).toBeLessThanOrEqual(0)
+      expect(g.docScrollWidth, `@${width}: scroll horizontal halaman`).toBeLessThanOrEqual(width)
+      for (const r of g.rows) {
+        expect(r.usedRight, `@${width} ${r.id}: kolom Dipakai di luar kontainer`).toBeLessThanOrEqual(r.containerRight)
+        expect(r.delRight, `@${width} ${r.id}: tombol Hapus di luar kontainer`).toBeLessThanOrEqual(r.containerRight)
+        expect(r.overlaps, `@${width} ${r.id}`).toEqual([])
+        expect(r.spill, `@${width} ${r.id}: elemen meluber keluar baris`).toEqual([])
+        expect(r.idFull, `@${width} ${r.id}: ID harus terbaca utuh`).toBe(true)
+      }
+      for (const id of LONG_IDS) {
+        const row = page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)
+        // Gulir vertikal saja (baris bisa di bawah lipatan); horizontal tidak boleh perlu digulir.
+        await row.scrollIntoViewIfNeeded()
+        expect(await page.evaluate(() => window.scrollX)).toBe(0)
+        await expect(row.getByRole("button", { name: `Hapus ${id}`, exact: true })).toBeInViewport()
+        await expect(row.getByTestId("img-used-by")).toBeInViewport()
+      }
+      // ID bawaan pendek tidak dipecah di "-" (satu baris) walau ada ID panjang di kolom yang sama.
+      const u24 = page.locator('[data-testid="os-image-row"][data-image-id="ubuntu-24.04"]').getByTestId("img-id").locator("span")
+      const lh = await u24.evaluate((e) => parseFloat(getComputedStyle(e).lineHeight))
+      expect((await u24.boundingBox())!.height).toBeLessThanOrEqual(lh + 1)
+      await page.screenshot({ path: SHOTS(5, `dr-5-9-os-images-long-${width}`), fullPage: true })
+    }
+  } finally {
+    await removeLongImages(request)
+  }
 })
 
 test("DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900", async ({ page }) => {

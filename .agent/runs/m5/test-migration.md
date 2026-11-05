@@ -188,3 +188,42 @@ Mutasi cepat (backend-dev, test `m5-iter3` + `m5-iter2` + `m5-te-lifecycle-route
 - tanpa salinan ANSI-free → 41 merah;
 - tanpa normalisasi `\r` → 3 merah;
 - tanpa `\p{Cf}` → 18 merah.
+
+## Iterasi 3 — frontend-dev (DR-5-8, DR-5-9)
+
+Perubahan UI di `dashboard/src/components/os-images/os-images-view.tsx`:
+- DR-5-8: sel ID tidak lagi `whitespace-nowrap`. Span ID memakai `wrap-break-word` di dalam sel
+  `flex-1 min-w-0`, sehingga ID panjang turun baris di selnya sendiri dan tetap terbaca utuh (tidak
+  dipotong). Font tetap mono (`type-data`). Alasan "tidak tersedia" (`min-w-0 wrap-break-word`) juga
+  tidak meluber bila memuat id/path panjang.
+- DR-5-9: batas layout kartu dinaikkan dari `md` ke `xl`. Tabel 9 kolom tidak muat di bawah kontainer
+  ~950 px: dengan data bawaan saja, tabel di 1280 sudah 1039 px di kontainer 958 px. Kolom
+  Arsitektur, Metode, dan Bootable digabung menjadi satu kolom "Platform" yang bertumpuk di desktop
+  dan sebaris di kartu. Nama dibungkus (wrap), dan ID diberi `min-w-[12ch]` di desktop agar ID bawaan
+  tidak dipecah di "-". Hasilnya, di 1280 tabel 958 = 958 dan di 1440 1118 = 1118, dengan data panjang.
+
+Test lama: **tidak ada yang diubah atau dilonggarkan.** DR-5-1 375 (≤ 200 px per kartu, path ≤ 2
+baris, halaman ≤ 300 + 200·n, `scrollWidth` ≤ 375) dan DR-5-1 1440 tetap seperti iterasi 2 dan lulus.
+Test itu berjalan sebelum image panjang didaftarkan, sehingga tetap hanya memakai data bawaan.
+Kolom "Bootable" ("Ya"/"Tidak") tidak diasersikan test mana pun. Teksnya kini "bootable"/"tidak
+bootable", sama dengan kartu mobile.
+
+Test baru di `dashboard/e2e/m5-library.spec.ts`:
+| Test | Isi |
+|---|---|
+| DR-5-8 OS Images 375/414 | Mendaftarkan lewat API `ubuntu-24.04-custom-hwe-lab-rack07-node-image-01` (48 karakter, batas API) dan `debian-12.7-bookworm-netinst-lab-cluster-a` (42), dengan nama panjang dan segmen path ±60 karakter (pola `design-shots-iter2/p4.mjs`). Di 375×812 dan 414×896, untuk **setiap** kartu: kotak konten sel ID, "Dipakai", dan tombol Hapus tidak saling tumpang-tindih (> 0,5 px); tidak ada elemen kartu di luar kotak kartu; ID utuh (textContent = id, tanpa ellipsis, `scrollWidth ≤ clientWidth`) dan mono; `scrollWidth` halaman **=** lebar viewport; tabel tanpa overflow; tanpa drop shadow; oranye hanya tombol primary. Tinggi: image bawaan tetap ≤ 200 px (batas DR-5-1), image panjang ≤ 520 px (batas terpisah); halaman ≤ 300 + 200·n_bawaan + 520·n_panjang. Data uji dihapus di `finally`, dan setelahnya diasersikan sudah hilang. |
+| DR-5-9 OS Images 1280/1440 | Data panjang yang sama. Tabel tanpa overflow, `scrollWidth` halaman ≤ lebar; untuk setiap baris, sisi kanan kolom Dipakai dan tombol Hapus ≤ sisi kanan kontainer; tidak ada overlap atau luberan; ID utuh. Untuk baris panjang: setelah gulir vertikal, `scrollX` = 0, lalu Hapus dan Dipakai berada di viewport. `ubuntu-24.04` tetap satu baris. Data dihapus di `finally`. |
+
+Batas baru (bukan pelonggaran): **520 px** untuk kartu image panjang. Ukuran terukur 466 px (48
+karakter @375) dan 416 px (@414); isinya ID 3 baris, nama 2 baris, alasan 4 baris, path 3–4 baris
+masing-masing. Batas 200 px tetap berlaku untuk image bawaan di dalam test yang sama.
+
+Ukuran terukur (anotasi Playwright):
+- 375: kartu bawaan 154/154/196/154/197; panjang 407 dan 466; `scrollWidth` 375; halaman 1973 px (batas 2340); overlap 0.
+- 414: kartu bawaan 154/154/196/154/197; panjang 356 dan 416; `scrollWidth` 414; halaman 1872 px; overlap 0.
+- 1280: tabel overflow 0 (958 = 958), `scrollWidth` 1280; baris 120–146 px untuk bawaan, 303/335 untuk panjang.
+- 1440: tabel overflow 0 (1118 = 1118), `scrollWidth` 1440.
+
+Mutasi: komponen di-revert ke `7af8d05` (hanya ditambah `data-testid="img-id"`). DR-5-8 merah dengan
+"@375 debian-12.7-…: sel saling tumpang-tindih". DR-5-9 merah dengan "@1280: scroll horizontal di
+dalam tabel" (773 px).
