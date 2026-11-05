@@ -463,3 +463,169 @@ O1 persistence `node:sqlite`; O2 token per job + binding IP lease; O3 nginx + po
 `url=`) + cadangan RAM 3 GB; O7 pembagian callback M4/M5; O8 boot lokal default + `virsh
 reset`; O9 Windows tanpa password dari config; O10 serializer + base64; O11 NAT tanpa DHCP;
 O12 matriks KVM M4 (UEFI+BIOS Ubuntu) vs M5/M6.
+
+## 7. Amandemen pasca-implementasi (2026-11-05, setelah APR-004)
+
+> Ditambahkan architect untuk CR-4-2, CR-4-3, dan CR-4-21 (`.agent/runs/m4/gate-iter1.md`
+> §Kewajiban carry-over M5 butir 3). Isi §1–§6 di atas tidak diubah. Bila bertentangan, bagian ini
+> yang berlaku dan mencerminkan `main` @ `m4-approved` (kode produk `b3a7ed4`). Hal yang
+> menyentuh teks DEC hanya berupa **usulan**; keputusan ada di Orchestrator.
+
+### A1. Semua jalur keluar iPXE memakai `exit 1` (B-4, CR-4-2)
+Menggantikan: blok script boot lokal di §2.3 langkah 4, baris `:retry … ; exit` di §2.3, mitigasi
+R2 ("boot lokal pakai `exit`") dan R3 ("Fallback `exit`"), serta teks AC-4.14 dan AC-4.33.
+
+Kode: konstanta `IPXE_EXIT_TO_NEXT = "exit 1"` (`dashboard/src/lib/server/boot-script.ts`), dipakai
+di `entryScript` (`:fail`), `localBootScript` (cabang EFI dan fallback BIOS), dan `waitScript`.
+Script boot lokal yang berlaku:
+```
+#!ipxe
+echo Tidak ada instalasi aktif: boot dari disk lokal
+iseq ${platform} efi && exit 1 ||
+sanboot --no-describe --drive 0x80 || exit 1
+```
+Alasan: `exit` tanpa argumen berstatus 0, sehingga `snponly.efi` kembali ke firmware dengan
+`EFI_SUCCESS`. BdsDxe OVMF/EDK2 lalu berhenti memproses BootOrder dan membuka menu boot manager
+(spesifikasi UEFI §3.1.1), jadi entri disk tidak pernah dicoba. Ini bug B-4 yang ditemukan di KVM.
+Status ≠ 0 membuat BDS mencoba Boot#### berikutnya (disk). Di BIOS nilai status tidak berpengaruh
+(SeaBIOS/ROM iPXE lanjut ke perangkat berikutnya), tetapi `exit 1` dipakai seragam. Larangan: tidak
+boleh ada `exit` berstatus 0 di script iPXE mana pun (diuji `boot-script.test.ts`).
+
+Pembacaan AC yang berlaku:
+- AC-4.14: "… script berisi `iseq ${platform} efi && exit 1` dan `sanboot --no-describe --drive
+  0x80 || exit 1`; tidak berisi `kernel` …" (sisanya tetap).
+- AC-4.33: "reboot → boot dari disk lewat `sanboot`/`exit 1`".
+- Bukti KVM: UEFI `exit 1` diikuti BdsDxe memuat entri "Ubuntu"; BIOS `Booting from SAN device
+  0x80` (`review-code-iter1.md` CR-4-17).
+
+### A2. `entry.ipxe` memakai `chain --replace --autofree` dengan label retry (CR-4-2)
+Menggantikan blok `GET /boot/entry.ipxe` di §2.3 dan memperjelas AC-4.13.
+```
+#!ipxe
+:try1
+chain --replace --autofree ${base}/boot/${mac}.ipxe?platform=${platform} || goto try2
+:try2
+sleep 5
+chain --replace --autofree ${base}/boot/${mac}.ipxe?platform=${platform} || goto try3
+:try3
+sleep 5
+chain --replace --autofree ${base}/boot/${mac}.ipxe?platform=${platform} || goto fail
+:fail
+echo PXE dashboard tidak dapat dihubungi, boot lokal
+exit 1
+```
+Alasan `--replace`: script per-MAC menggantikan `entry.ipxe`. Akibatnya `exit 1` dari script boot
+lokal langsung kembali ke firmware. Tanpa `--replace`, status gagal dari `exit 1` dibaca sebagai
+`chain` gagal, lalu entry lompat ke label retry dan mengunduh ulang hingga 3 kali sebelum `:fail`.
+`--replace` juga mencegah eksekusi jatuh ke label berikutnya setelah script installer selesai.
+AC-4.13 dibaca: "… `chain --replace --autofree` ke `${PXE_BASE_URL}/boot/${mac}.ipxe?platform=${platform}`
+dengan retry terbatas (3 percobaan, jeda 5 dtk), lalu `exit 1`".
+`waitScript` belum memakai `--replace` (CR-4-5). Diperbaiki di M5 (M5-T5, AC-5.21).
+
+### A3. Kontrak URL callback: diturunkan dari `/proc/cmdline` saat runtime (B-5, CR-4-3a)
+Menggantikan frasa di §2.5 Ubuntu "unit first-boot `pxe-callback-done.service` (token di file
+0600, menghapus diri)" dan "callback `configuring`/`failed`" di §2.5 Ubuntu/Debian/Rocky. Asumsi
+lama: generator menulis URL callback ber-token ke file konfigurasi.
+- Generator **tidak** menulis token maupun URL callback ke user-data, preseed, atau kickstart.
+  Alasannya, installer mencetak late-commands/`%post` (termasuk payload base64) ke console dan log,
+  sehingga token bocor (B-5).
+- `CMDLINE_CONFIG_PARAM` (`dashboard/src/lib/server/installers/shell.ts`):
+  `autoinstall → "ds=nocloud-net;s="`, `preseed → "url="`, `kickstart → "inst.ks="`. Nilai
+  parameter ini adalah `${PXE_BASE_URL}/boot/{mac}/{token}/[file]`, yang ditulis `installerScript`
+  ke baris `kernel`.
+- `callbackUrlCmd(method, mac)` menghasilkan
+  `u=$(tr ' ' '\n' < /proc/cmdline | sed -n '<pola>' | head -n 1)`. Pola hanya menerima
+  `http(s)://…/boot/<MAC host ini>/<43 karakter base64url>/` dan mengganti sisa path dengan `status`.
+  Bila tidak cocok, `u` kosong dan callback menjadi no-op (`|| true`), jadi installer tidak gagal.
+- `callbackCmd` = `callbackUrlCmd` + `curl -fsS -m 15 --retry 5 --retry-delay 3 -X POST -d
+  stage=<s> "$u" || wget … || true`.
+- First-boot: `firstbootInstallCmds` menulis `$u` ke `/etc/pxe-callback/url` (direktori 0700, file
+  0600 lewat `umask 077`), hanya bila `$u` tidak kosong. Unit `pxe-callback-done.service`
+  (`ConditionPathExists`) mengirim `done`, lalu menghapus direktori, script, dan unit.
+- Ubuntu: `ds=nocloud-net;s=…` berada sebelum `---`, sehingga curtin tidak menyalinnya ke GRUB
+  target. Cmdline preseed Debian tidak memakai `---` (SR-4-6), diverifikasi di KVM M6.
+- Konsekuensi:
+  - Generator terkopel dengan `installerScript` (nama parameter dan format URL). Test wajib
+    menurunkan cmdline dari output `installerScript` yang nyata (CR-4-4 → M5, AC-5.20).
+  - Asumsi runtime Debian/Rocky baru teruji unit: `/proc/cmdline` tersedia di `in-target`/`%post`,
+    `:` di URL diterima, dan sed BRE `\{43\}` jalan di busybox (CR-4-6 → KVM M6).
+  - Windows `unattend.xml` masih menyisipkan URL ber-token (CR-4-7/SR-4-3). Tidak dilayani
+    (`INSTALLER_FILES.unattend = {}`).
+- AC-4.18–AC-4.20 ("memuat callback `configuring`/`failed`, unit first-boot") dibaca sebagai
+  perintah yang menurunkan URL dari cmdline. Syarat tambahan yang sudah diuji: output generator
+  (teks dan payload base64 yang didekode) tidak memuat token.
+
+### A4. Siklus token aktual (melengkapi §2.4 dan AC-4.24)
+`installHosts` menyimpan hash token placeholder dan membuang plaintext-nya. Token yang dipakai
+installer dibuat baru **setiap kali** script installer dilayani (`decideBoot`): hash lama diganti
+(token lama langsung tidak berlaku) dan TTL diperbarui. Akibatnya installer bisa dilayani ulang
+tanpa batas selama job `booting|installing` (CR-4-1). Diperbaiki di M5 (M5-T3, AC-5.7): rotasi
+hanya saat `booting`, dengan batas jumlah penyajian.
+
+### A5. Nama dan pembagian script infra yang sebenarnya (CR-4-3b)
+Menggantikan tabel §2.7, rujukan di AC-4.28, M4-T7, M4-T12, dan M4-T13.
+
+| Di plan (lama) | Sebenarnya (`main`) | Peran |
+|---|---|---|
+| `infra/net-up.sh`, `net-down.sh`, `fetch-node.sh` | sama | — |
+| `infra/server-up.sh` langkah (1)–(2) (key + base disk) | `infra/server-base.sh` | Provision **sekali** base disk `.agent/vms/pxe-test-server-base.qcow2`: cloud image Ubuntu 24.04 + cloud-init + `infra/server/provision-root.sh` (dnsmasq hanya `pxe0`, nginx `10.99.0.2:80`, NFS, nftables, Node 22 dari nodejs.org, user `pxe`, key `.agent/keys/infra_ed25519`); marker `.ready`; paket apt lewat `pxe-test-nat` |
+| `infra/server-up.sh` langkah (3)–(5) | `infra/server-up.sh` | Overlay `pxe-test-server.qcow2` + VM (NIC `pxe-test` dan `pxe-test-nat`, ISO sebagai CD-ROM read-only), salin file TFTP (`infra/tftp/prepare.sh`, sha256 diverifikasi) dan Debian netboot, lalu `infra/server/verify-listen.sh` (`ss -lntup`; pelanggaran → dnsmasq dihentikan, exit 1) |
+| `infra/server-config.sh` | **tidak ada** | Dipecah ke `server/provision-root.sh` (base), `server-up.sh` (TFTP/netboot/verifikasi listen), `deploy-dashboard.sh` + `server/install-dashboard.sh` (nginx `server/nginx-pxe.conf`, `/etc/pxe-dashboard.env` dari `server/dashboard.env`, unit `server/pxe-dashboard.service`) |
+| — | `infra/server-down.sh [--purge]` | Matikan VM server; `--purge` = undefine + hapus overlay (base tetap) |
+| `infra/deploy-dashboard.sh` | sama, ditambah `server/install-dashboard.sh`, `server/install-node.sh` | Build standalone di host → scp → rilis `/opt/pxe-dashboard/releases/<ts>`; verifikasi `GET /api/settings` dari host |
+| `infra/node-create.sh <m> <NN> <uefi\|bios>` | `infra/node.sh create <name> <mac> [uefi\|bios]`, `node.sh destroy <name> [mac]`, `node.sh reset <name>` | B-3: `--install no_install=yes` + cek XML live `on_reboot=restart` (gagal → VM dihapus, exit ≠ 0); serial lewat listener ke `<runs>/<name>-console.log`; menolak VM server |
+| `infra/cleanup.sh <m> [--server] [--base]` | `infra/cleanup.sh [run] [--server] [--base]` | Run id `^[a-z0-9]+$`, nama terlindungi ditolak; CR-4-13 (run id `server`) → M5 |
+| — | `infra/smoke.sh <name> <mac> <uefi\|bios>` | Smoke rantai PXE tanpa dashboard (script iPXE statis) |
+| `infra/kvm-run.sh <m>` | `infra/kvm-run.sh <m> [--nodes "NN:uefi\|bios …"] [--keep-server] [--skip-build]` | Ditambah `collect_evidence` dan `redact-evidence.sh` di `trap EXIT`, verifikasi SSH per node, pengecekan password ditolak |
+| — | `infra/redact-evidence.sh <dir>` | Redaksi token/hash/blob base64 + scan ulang (AC-4.34); CR-4-14 (file biner) → M5 |
+| `verify-node.sh` (M4-T13) | `dashboard/e2e-kvm/verify-node.sh` | Dijalankan `ssh … 'bash -s' < verify-node.sh` oleh `kvm-run.sh` |
+| test shell (M4-T12) | `infra/test/run.sh` + `infra/test/harness.sh` | — |
+
+AC-4.28 dibaca dengan `node-create.sh` → `node.sh create`.
+
+### A6. Binding IP: `current_ip` diterima selain IP lease (drift DEC-008, CR-4-21)
+Implementasi (`dashboard/src/lib/server/provisioning.ts` `ipAllowed`), sesuai §2.3 plan ini tetapi
+lebih luas daripada teks DEC-008 ("IP lease dnsmasq untuk MAC itu"):
+- File konfigurasi: IP sumber ∈ IP lease aktif MAC itu (file lease dibaca ulang sekali bila tidak
+  cocok) ∪ `hosts.current_ip`.
+- Callback status: himpunan di atas ∪ IP statis di config host (`network.mode=static`) ∪
+  `hosts.mgmt_ip`.
+- `current_ip` hanya diperbarui oleh `GET /boot/{mac}.ipxe` yang lolos verifikasi lease (bila lease
+  dikonfigurasi) dan oleh callback `done` yang sudah lolos binding.
+- Alasan: OVMF PXE dan iPXE bisa memperoleh lease berbeda (R8); installer berbasis NFS-root bisa
+  meminta lease baru; `current_ip` yang tercatat saat boot terverifikasi menjadi jangkar.
+- Celah: bila `PXE_DNSMASQ_LEASES` kosong, `ipMatchesLease` mengembalikan `null`. Akibatnya
+  `current_ip` = IP peminta mana pun, dan binding gagal-terbuka bila `PXE_TRUST_PROXY=1` (SR-4-2).
+  Ditutup di M5 (AC-5.2).
+
+**Usulan teks DEC** (untuk Orchestrator; mis. `DEC-013-binding-ip-config-per-mac.md`, amandemen
+DEC-008):
+
+> # DEC-013: Binding IP untuk file konfigurasi dan callback per-MAC (amandemen DEC-008)
+> ## Konteks
+> DEC-008 menyebut file konfigurasi hanya untuk "IP lease dnsmasq untuk MAC itu". Implementasi M4
+> (APPROVED, APR-004) juga menerima `hosts.current_ip`, karena OVMF PXE dan iPXE dapat memperoleh
+> lease berbeda dan installer NFS-root dapat meminta lease baru (CR-4-21). Security review M4
+> menemukan bahwa tanpa file lease dan dengan `PXE_TRUST_PROXY=1`, `current_ip` dapat diisi IP
+> peminta mana pun (SR-4-2). Opsi: `docs/design/M5-options.md` §O10.
+> ## Keputusan
+> File `/boot/{mac}/{token}/{file}` dilayani bila IP sumber ∈ (IP lease dnsmasq aktif untuk MAC
+> itu ∪ `hosts.current_ip`). Callback status (dan log installer M5) diterima bila IP sumber ∈
+> (himpunan tersebut ∪ IP statis konfigurasi host ∪ `hosts.mgmt_ip`). `hosts.current_ip` hanya
+> boleh diperbarui oleh request boot yang lolos verifikasi lease atau oleh callback yang sudah lolos
+> binding. Binding wajib fail-closed:
+> - server menolak start bila `PXE_TRUST_PROXY=1` tanpa `PXE_DNSMASQ_LEASES`, kecuali
+>   `PXE_INSECURE_NO_LEASE_CHECK=1` (hanya dev; diperingatkan di log start dan Settings);
+> - tanpa file lease dan tanpa flag itu, `/boot/{mac}.ipxe` tidak menerbitkan script installer
+>   maupun token (boot lokal);
+> - tanpa `PXE_TRUST_PROXY=1`, IP sumber tidak diketahui sehingga semua akses file/callback ditolak.
+> ## Konsekuensi
+> - AC-4.23/AC-4.26 tetap berlaku; teks DEC-008 dibaca bersama amandemen ini.
+> - Kombinasi trust proxy × lease kosong × flag insecure wajib diuji (AC-5.2). Test M4 yang
+>   mengandalkan installer tanpa lease harus menyetel fixture lease atau flag secara eksplisit
+>   (pengetatan, bukan pelemahan).
+
+### A7. Jadwal M5 yang diubah oleh plan M5 (rujukan silang)
+Tabel "Pembagian M4 / M5 / M6" di §1 menyebut "status `offline` dari last_seen" untuk M5. Plan M5
+mengusulkan tidak ada transisi `offline` otomatis di M5 (`docs/design/M5-options.md` §O11; kandidat
+decision), karena host Done yang boot dari disk tidak lagi menghubungi dashboard.
