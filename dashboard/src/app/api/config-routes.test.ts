@@ -1,13 +1,20 @@
 // AC-3.5 … AC-3.11: integration route handler M3 (PATCH /api/hosts/:id, GET config,
-// POST bulk, install, bulk/install, credentials/import, GET ssh-keys). Store di-reset per test.
+// POST bulk, install, bulk/install, credentials/import, GET ssh-keys).
+// M4: DB SQLite di-reset per test (`resetDb("demo")`, DEC-005/DEC-007). Seed demo TIDAK lagi
+// berisi credentials/hash maupun key `wals@wal` (carry-over SR-2-1/CR-3-12), jadi test yang dulu
+// mengandalkan credentials/key seed menyiapkannya sendiri lewat API (`ready()`, `ADMIN_KEY`).
+// Install butuh media image di PXE_MEDIA_ROOT (plan §2.4) → root media palsu per file.
 import { verify } from "unixcrypt"
 import { beforeEach, describe, expect, it, vi } from "vitest"
 
 vi.mock("next/server", () => ({ connection: vi.fn(async () => undefined) }))
 
-import { mockDb, resetMockStore } from "@/lib/server/mock-hosts"
-import { isolateEnv } from "@/test/env"
-import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ED25519, SSH_ED25519_B, SSH_RSA } from "@/test/fixtures"
+import { peekConfig } from "@/lib/server/db/repos/configs"
+import { updateHost } from "@/lib/server/db/repos/hosts"
+import { getActiveJob, listJobsForHost } from "@/lib/server/db/repos/jobs"
+import { createSshKey } from "@/lib/server/library-service"
+import { dbSnapshot, makeMediaRoot, tmpDir, useDb } from "@/test/db"
+import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ECDSA, SSH_ED25519, SSH_ED25519_B, SSH_RSA } from "@/test/fixtures"
 import { ctx, jsonReq } from "@/test/route"
 
 import { POST as csvImport } from "./credentials/import/route"
@@ -18,9 +25,15 @@ import { POST as install } from "./hosts/[id]/install/route"
 import { GET as getHost, PATCH } from "./hosts/[id]/route"
 import { GET as sshKeys } from "./ssh-keys/route"
 
-isolateEnv({ PXE_MOCK_SIMULATION: "off" })
-beforeEach(() => {
-  resetMockStore("default")
+const MEDIA = makeMediaRoot(tmpDir("media"))
+useDb("demo", { PXE_MEDIA_ROOT: MEDIA })
+
+/** Key library "Admin workstation" (pengganti key seed `key-admin-wals` M2/M3). */
+let ADMIN_KEY = ""
+beforeEach(async () => {
+  const r = await createSshKey({ name: "Admin workstation", publicKey: SSH_ECDSA.publicKey })
+  if (!r.ok) throw new Error(r.error)
+  ADMIN_KEY = r.value.id
 })
 
 const NODE01 = "525400101011" // done, 10.10.10.11
@@ -55,6 +68,14 @@ const patch = (id: string, body: unknown, raw?: string) => PATCH(jsonReq(`/api/h
 const post = (body: unknown, raw?: string) => bulk(jsonReq("/api/hosts/bulk", "POST", body, raw))
 const config = async (id: string) => (await getConfig(jsonReq("/x", "GET"), ctx(id))).json()
 const host = async (id: string) => (await getHost(jsonReq("/x", "GET"), ctx(id))).json()
+
+/** Credentials eksplisit (+ key) agar host siap install; seed M4 tidak membawa credentials. */
+async function ready(...ids: string[]) {
+  for (const id of ids) {
+    const res = await patch(id, { credentials: same("ubuntu", DUMMY_PASSWORD), ssh: { keyIds: [ADMIN_KEY], newKeys: [], user: "" } })
+    expect(res.status, id).toBe(200)
+  }
+}
 
 describe("AC-3.5 validasi struktural & semantik", () => {
   it("body bukan JSON → 400 {error}", async () => {
@@ -156,7 +177,7 @@ describe("AC-3.7 network", () => {
     expect((await off.json()).errors[0].message).toContain("Bentrok dengan storage-02")
   })
   it("IP bentrok dengan lease aktif host lain → 422", async () => {
-    mockDb().hosts.get(DISC2)!.currentIp = "10.10.10.60"
+    updateHost(DISC2, { currentIp: "10.10.10.60" })
     const res = await patch(DISC1, { network: staticNet({ [DISC1]: "10.10.10.60" }) })
     expect(res.status).toBe(422)
     expect((await res.json()).errors[0].message).toContain("Bentrok dengan lease b0:83:fe:5c:19:e3")
@@ -210,18 +231,20 @@ describe("AC-3.8 credentials & keamanan password", () => {
     expect(res.status).toBe(200)
     const text = JSON.stringify(await res.json())
     expect(text).not.toContain(DUMMY_PASSWORD)
-    const s = mockDb()
-    const h1 = s.configs.get(DISC1)!.passwordHash!
-    const h2 = s.configs.get(DISC2)!.passwordHash!
+    const h1 = peekConfig(DISC1)!.passwordHash!
+    const h2 = peekConfig(DISC2)!.passwordHash!
     expect(h1).toMatch(SHA512_CRYPT)
     expect(h2).toMatch(SHA512_CRYPT)
     expect(verify(DUMMY_PASSWORD, h1)).toBe(true)
     expect(verify("salah-password", h1)).toBe(false)
     expect(h1.split("$")[2]).not.toBe(h2.split("$")[2])
     expect(h1).not.toBe(h2)
-    expect(s.configs.get(DISC1)!.username).toBe("ops")
+    expect(peekConfig(DISC1)!.username).toBe("ops")
   })
   it("password kosong ditolak bila ada host tanpa password; diterima bila semua punya", async () => {
+    // M4: NODE01 tidak lagi punya password dari seed → beri password lebih dulu.
+    expect((await config(NODE01)).hasPassword).toBe(false)
+    await ready(NODE01)
     const res = await post({ hostIds: [NODE01, DISC1], credentials: same("ops", "") })
     expect(res.status).toBe(422)
     expect((await res.json()).errors[0].message).toBe("Password wajib: 1 host belum punya password")
@@ -254,9 +277,8 @@ describe("AC-3.8 credentials & keamanan password", () => {
     for (const g of gen) expect(g.password).toHaveLength(20)
     // Hostname diambil setelah semua bagian diterapkan.
     expect(gen.map((g) => g.hostname)).toEqual(["r-1", "r-2", "r-3"])
-    const s = mockDb()
-    gen.forEach((g, i) => expect(verify(g.password, s.configs.get(ids[i])!.passwordHash!)).toBe(true))
-    expect(s.configs.get(DISC1)).toMatchObject({ sudo: false, disableSshPassword: true })
+    gen.forEach((g, i) => expect(verify(g.password, peekConfig(ids[i])!.passwordHash!)).toBe(true))
+    expect(peekConfig(DISC1)).toMatchObject({ sudo: false, disableSshPassword: true })
     // Tidak ada respons lain yang memuat password.
     for (const id of ids) {
       const c = JSON.stringify(await config(id))
@@ -333,11 +355,11 @@ describe("AC-3.9 CSV import", () => {
     const csv = `mac,username,password\nb0:83:fe:5c:19:e2,ops,${DUMMY_PASSWORD}\nb0:83:fe:5c:19:e3,dev,${DUMMY_PASSWORD}x`
     const res = await post({ hostIds: [DISC1, DISC2, DISC3], credentials: { mode: "csv", csv, sudo: true, disableSshPassword: false } })
     expect(res.status).toBe(200)
-    const s = mockDb()
-    expect(s.configs.get(DISC2)!.username).toBe("dev")
-    expect(verify(`${DUMMY_PASSWORD}x`, s.configs.get(DISC2)!.passwordHash!)).toBe(true)
+    expect(peekConfig(DISC2)!.username).toBe("dev")
+    expect(verify(`${DUMMY_PASSWORD}x`, peekConfig(DISC2)!.passwordHash!)).toBe(true)
     // Host tanpa baris CSV tidak diubah.
-    expect(s.configs.get(DISC3)!.passwordHash).toBeNull()
+    expect(peekConfig(DISC3)?.passwordHash ?? null).toBeNull()
+    expect((await config(DISC3)).hasPassword).toBe(false)
   })
 })
 
@@ -364,7 +386,7 @@ describe("AC-3.10 hostname & SSH", () => {
     expect((await res.json()).errors[0]).toEqual({ section: "ssh", message: "Key key-tidak-ada tidak ada di library" })
   })
   it("key baru invalid → 422 dengan nomor key", async () => {
-    const res = await patch(NODE01, ssh(["key-admin-wals"], [{ name: "", publicKey: FAKE_PRIVATE_KEY, saveToLibrary: false }]))
+    const res = await patch(NODE01, ssh([ADMIN_KEY], [{ name: "", publicKey: FAKE_PRIVATE_KEY, saveToLibrary: false }]))
     expect(res.status).toBe(422)
     expect((await res.json()).errors[0].message).toMatch(/^Key baru #1: Ini private key/)
   })
@@ -374,7 +396,7 @@ describe("AC-3.10 hostname & SSH", () => {
     expect((await res.json()).errors[0].message).toBe("Key baru #1: nama wajib untuk disimpan ke library")
   })
   it("key valid + saveToLibrary → muncul di GET /api/ssh-keys dengan fingerprint benar", async () => {
-    const res = await patch(NODE01, ssh(["key-admin-wals", "key-admin-wals"], [{ name: "Laptop ops", publicKey: SSH_ED25519.publicKey, saveToLibrary: true }], "ops"))
+    const res = await patch(NODE01, ssh([ADMIN_KEY, ADMIN_KEY], [{ name: "Laptop ops", publicKey: SSH_ED25519.publicKey, saveToLibrary: true }], "ops"))
     expect(res.status).toBe(200)
     const keys = await (await sshKeys()).json()
     expect(keys.map((k: { name: string }) => k.name)).toEqual(["Admin workstation", "Laptop ops"])
@@ -382,7 +404,7 @@ describe("AC-3.10 hostname & SSH", () => {
     expect(k).toMatchObject({ type: "ssh-ed25519", fingerprint: SSH_ED25519.fingerprint, comment: SSH_ED25519.comment })
     expect(k.fingerprint).toMatch(/^SHA256:/)
     const c = await config(NODE01)
-    expect(c.sshKeyIds).toEqual(["key-admin-wals", k.id])
+    expect(c.sshKeyIds).toEqual([ADMIN_KEY, k.id])
     expect(c.sshUser).toBe("ops")
   })
   it("key valid tanpa saveToLibrary → extraKeys, library tetap", async () => {
@@ -404,24 +426,29 @@ describe("AC-3.10 hostname & SSH", () => {
   it("tanpa key sama sekali → 422; user target invalid → 422", async () => {
     const none = await patch(NODE01, ssh([], []))
     expect((await none.json()).errors[0].message).toBe("Pilih atau tambahkan minimal satu key")
-    const user = await patch(NODE01, ssh(["key-admin-wals"], [], "Root"))
+    const user = await patch(NODE01, ssh([ADMIN_KEY], [], "Root"))
     expect((await user.json()).errors[0].message).toMatch(/^User target: /)
   })
 })
 
 describe("AC-3.11 install", () => {
   it("POST /api/hosts/:id/install: host siap → 200 started, status booting", async () => {
+    await ready(NODE01)
     const res = await install(jsonReq("/x", "POST"), ctx(NODE01))
     expect(res.status).toBe(200)
     expect(await res.json()).toEqual({ started: [NODE01], failed: [] })
     const h = await host(NODE01)
     expect(h.status).toBe("booting")
-    expect(h.osAssigned).toBe("ubuntu-24.04.5")
+    // Id OS kanonik M4 (ubuntu-24.04.5 → ubuntu-24.04, plan §2.2).
+    expect(h.osAssigned).toBe("ubuntu-24.04")
+    // M4 (AC-4.25): job install `booting` dibuat dalam transaksi yang sama.
+    expect(getActiveJob(NODE01)).toMatchObject({ kind: "install", status: "booting", osImageId: "ubuntu-24.04" })
   })
   it("host tanpa OS/credentials, sedang provisioning, id tak dikenal → failed + 422", async () => {
     const a = await install(jsonReq("/x", "POST"), ctx(DISC1))
     expect(a.status).toBe(422)
     expect((await a.json()).failed).toEqual([{ hostId: DISC1, message: "b0:83:fe:5c:19:e2: belum ada OS image dan credentials" }])
+    await ready(CTRL03) // M4: tanpa credentials pesan "belum ada credentials" didahulukan
     const b = await install(jsonReq("/x", "POST"), ctx(CTRL03))
     expect((await b.json()).failed[0].message).toBe("ctrl-03: instalasi sedang berjalan")
     const c = await install(jsonReq("/x", "POST"), ctx("000000000000"))
@@ -439,9 +466,10 @@ describe("AC-3.11 install", () => {
   })
   it("OS tidak mengubah osAssigned host yang sedang provisioning", async () => {
     await patch(CTRL03, { os: { osImageId: "debian-12", disk: "", partition: "auto", timezone: "UTC", locale: "en_US.UTF-8" } })
-    expect((await host(CTRL03)).osAssigned).toBe("ubuntu-24.04.5")
+    expect((await host(CTRL03)).osAssigned).toBe("ubuntu-24.04")
   })
   it("bulk install: campuran → 200 dengan started & failed; tidak ada yang mulai → 422", async () => {
+    await ready(NODE01, CTRL01, CTRL03)
     const res = await bulkInstall(jsonReq("/x", "POST", { hostIds: [NODE01, CTRL01, DISC1, CTRL03, "000000000000", NODE01] }))
     expect(res.status).toBe(200)
     const body = await res.json()
@@ -453,7 +481,48 @@ describe("AC-3.11 install", () => {
     expect((await bulkInstall(jsonReq("/x", "POST", { hostIds: [] }))).status).toBe(400)
   })
   it("storage-02 (offline, terpasang) bisa install ulang", async () => {
+    await ready(STORAGE02)
     const res = await install(jsonReq("/x", "POST"), ctx(STORAGE02))
     expect(res.status).toBe(200)
+    expect((await host(STORAGE02)).osAssigned).toBe("rocky-9") // id kanonik (rocky-9.4 → rocky-9)
+  })
+
+  // ---- M4 (AC-4.25, carry-over SR-2-1/CR-3-12) ----
+  it("SR-2-1: host demo tanpa credentials eksplisit ditolak install; tidak ada job", async () => {
+    for (const id of [NODE01, CTRL01, STORAGE02]) {
+      const res = await install(jsonReq("/x", "POST"), ctx(id))
+      expect(res.status, id).toBe(422)
+      expect((await res.json()).failed[0].message).toMatch(/: belum ada (OS image dan )?credentials$/)
+      expect(listJobsForHost(id)).toEqual([])
+    }
+  })
+  it("media image tidak tersedia → gagal 'Media … tidak tersedia' tanpa efek", async () => {
+    await ready(DISC1)
+    await patch(DISC1, { os: { osImageId: "ubuntu-22.04", disk: "", partition: "lvm", timezone: "UTC", locale: "en_US.UTF-8" } })
+    const before = dbSnapshot()
+    const res = await install(jsonReq("/x", "POST"), ctx(DISC1))
+    expect(res.status).toBe(422)
+    expect((await res.json()).failed[0].message).toMatch(/Media ubuntu-22\.04 tidak tersedia/)
+    expect(dbSnapshot()).toBe(before)
+  })
+  it("Windows → gagal 'hanya generator' (DEC-010)", async () => {
+    await ready(DISC1)
+    await patch(DISC1, { os: { osImageId: "windows-2022", disk: "", partition: "lvm", timezone: "UTC", locale: "en_US.UTF-8" } })
+    const res = await install(jsonReq("/x", "POST"), ctx(DISC1))
+    expect(res.status).toBe(422)
+    expect((await res.json()).failed[0].message).toMatch(/hanya generator/)
+    expect(getActiveJob(DISC1)).toBeNull()
+  })
+  it("bulk: semua host yang lolos mendapat job booting + osAssigned dalam satu transaksi", async () => {
+    await ready(NODE01, CTRL01)
+    const res = await bulkInstall(jsonReq("/x", "POST", { hostIds: [NODE01, CTRL01, DISC1] }))
+    expect(res.status).toBe(200)
+    for (const id of [NODE01, CTRL01]) {
+      expect(getActiveJob(id)).toMatchObject({ status: "booting", osImageId: "ubuntu-24.04" })
+      expect(await host(id)).toMatchObject({ status: "booting", osAssigned: "ubuntu-24.04" })
+    }
+    expect(getActiveJob(DISC1)).toBeNull()
+    // Token plaintext tidak pernah dikembalikan API.
+    expect(JSON.stringify(await (await install(jsonReq("/x", "POST"), ctx(NODE01))).json())).not.toMatch(/token/i)
   })
 })

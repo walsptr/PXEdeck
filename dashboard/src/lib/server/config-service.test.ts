@@ -1,16 +1,14 @@
-// config-service langsung (store di-reset): atomisitas G3-2, prepareNewKeys, toPublicConfig.
-import { beforeEach, describe, expect, it } from "vitest"
+// config-service langsung (DB di-reset, DEC-005): atomisitas G3-2, prepareNewKeys, toPublicConfig.
+import { describe, expect, it } from "vitest"
 
-import { isolateEnv } from "@/test/env"
+import { useDb } from "@/test/db"
 import { SSH_ED25519 } from "@/test/fixtures"
 
 import { applyConfig, applyConfigPrepared, prepareNewKeys, toPublicConfig } from "./config-service"
-import { getHost, resetMockStore } from "./mock-hosts"
+import { peekConfig } from "./db/repos/configs"
+import { getHost } from "./db/repos/hosts"
 
-isolateEnv({ PXE_MOCK_SIMULATION: "off" })
-beforeEach(() => {
-  resetMockStore("default")
-})
+useDb("demo")
 
 describe("config-service", () => {
   it("toPublicConfig membuang passwordHash dan menambah hasPassword", () => {
@@ -65,6 +63,9 @@ describe("config-service", () => {
     expect([a.ok, b.ok].filter(Boolean)).toHaveLength(1)
     const ips = [getHost("b083fe5c19e2")!.mgmtIp, getHost("b083fe5c19e3")!.mgmtIp]
     expect(ips.filter((ip) => ip === "10.10.10.88")).toHaveLength(1)
+    // M4: yang kalah tidak meninggalkan baris config (transaksi di-rollback).
+    const loser = a.ok ? "b083fe5c19e3" : "b083fe5c19e2"
+    expect(peekConfig(loser)).toBeNull()
   })
 
   it("id duplikat di hostIds disatukan", async () => {

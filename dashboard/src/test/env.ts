@@ -1,15 +1,13 @@
 // Snapshot/restore process.env antar test (dipakai test node).
+// Sejak M4 mencakup semua env `PXE_*` yang dibaca `getSettings()` (settings.ts) sehingga nilai
+// dari shell pengembang tidak bocor ke test. PXE_DB_PATH kosong → `:memory:` di Vitest.
 import { afterEach, beforeEach } from "vitest"
 
+import { SETTINGS_ENV_KEYS } from "@/lib/server/settings"
+
 const KEYS = [
-  "PXE_MOCK_SIMULATION",
-  "PXE_MOCK_DISCOVER_EVERY_MS",
-  "PXE_MOCK_SEED",
-  "PXE_MGMT_CIDR",
-  "PXE_MGMT_GATEWAY",
-  "PXE_MGMT_DNS",
-  "PXE_DYNAMIC_RANGE",
-  "PXE_SERVER_IP",
+  ...SETTINGS_ENV_KEYS.filter((k) => k !== "NODE_ENV" && k !== "VITEST"),
+  "PXE_LOG_BOOT",
 ]
 
 /** Simpan env PXE_* sebelum tiap test, hapus untuk test, kembalikan sesudahnya. */

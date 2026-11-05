@@ -1,23 +1,23 @@
 // AC-2.5, AC-2.6: integration route handler /api/hosts, /api/hosts/:id, /reboot.
 // `connection()` dari next/server di-stub (di luar request scope Next melempar error).
-import { beforeEach, describe, expect, it, vi } from "vitest"
+// M4: store mock diganti DB SQLite (`resetDb("demo")`, DEC-005/DEC-007). Reboot ke PXE kini 501
+// (DEC-012) — test reboot lama diganti perilaku baru; hapus host tetap seperti AC-2.12.
+import { describe, expect, it, vi } from "vitest"
 import { z } from "zod"
 
 vi.mock("next/server", () => ({ connection: vi.fn(async () => undefined) }))
 
-import { resetMockStore } from "@/lib/server/mock-hosts"
+import { resetDb } from "@/lib/server/db/reset"
+import { getHost } from "@/lib/server/db/repos/hosts"
 import { PROVISION_STATUSES } from "@/lib/types"
 import { ctx, jsonReq } from "@/test/route"
-import { isolateEnv } from "@/test/env"
+import { dbSnapshot, useDb } from "@/test/db"
 
 import { GET as listGET } from "./route"
 import { DELETE, GET as oneGET } from "./[id]/route"
 import { POST as reboot } from "./[id]/reboot/route"
 
-isolateEnv({ PXE_MOCK_SIMULATION: "off" })
-beforeEach(() => {
-  resetMockStore("default")
-})
+useDb("demo")
 
 const iso = z.string().refine((s) => !Number.isNaN(Date.parse(s)) && new Date(s).toISOString() === s)
 const ipOrNull = z.string().regex(/^\d+\.\d+\.\d+\.\d+$/).nullable()
@@ -49,7 +49,7 @@ describe("AC-2.5 GET /api/hosts", () => {
   })
 
   it("seed empty → hosts []", async () => {
-    resetMockStore("empty")
+    resetDb("empty")
     const body = await (await listGET()).json()
     expect(body.hosts).toEqual([])
   })
@@ -94,15 +94,19 @@ describe("AC-2.6 DELETE & reboot", () => {
     expect((await DELETE(jsonReq("/x", "DELETE"), ctx("000000000000"))).status).toBe(404)
     expect((await DELETE(jsonReq("/x", "DELETE"), ctx("nope"))).status).toBe(400)
   })
-  it("POST reboot → 200 host dengan status baru", async () => {
-    const a = await reboot(jsonReq("/x", "POST"), ctx("ac1f6b227d40"))
-    expect(a.status).toBe(200)
-    expect((await a.json()).status).toBe("booting")
-    const b = await reboot(jsonReq("/x", "POST"), ctx("3ca82a10447c"))
-    const hb = HostSchema.parse(await b.json())
-    expect(hb.status).toBe("discovered")
-    const persisted = await (await oneGET(jsonReq("/x", "GET"), ctx("3ca82a10447c"))).json()
-    expect(persisted.status).toBe("discovered")
+  it("DEC-012: POST reboot → 501 {error} 'butuh IPMI/Redfish', status host TIDAK berubah", async () => {
+    for (const id of ["ac1f6b227d40", "3ca82a10447c"]) {
+      const before = dbSnapshot()
+      const statusBefore = getHost(id)!.status
+      const res = await reboot(jsonReq("/x", "POST"), ctx(id))
+      expect(res.status).toBe(501)
+      const body = await res.json()
+      expect(Object.keys(body)).toEqual(["error"])
+      expect(body.error).toMatch(/IPMI\/Redfish/)
+      expect(dbSnapshot()).toBe(before)
+      const persisted = HostSchema.parse(await (await oneGET(jsonReq("/x", "GET"), ctx(id))).json())
+      expect(persisted.status).toBe(statusBefore)
+    }
   })
   it("POST reboot id tak dikenal → 404; id invalid → 400", async () => {
     expect((await reboot(jsonReq("/x", "POST"), ctx("000000000000"))).status).toBe(404)

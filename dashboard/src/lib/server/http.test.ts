@@ -2,9 +2,12 @@
 import { describe, expect, it } from "vitest"
 import { z } from "zod"
 
+import { isolateEnv } from "@/test/env"
+
 import {
   guardMutation,
   hostIdParam,
+  isHostAllowed,
   hostNotFound,
   INVALID_HOST_ID,
   jsonNoStore,
@@ -14,6 +17,8 @@ import {
   readJson,
   validationFailed,
 } from "./http"
+
+isolateEnv()
 
 const req = (body: string) => new Request("http://x", { method: "POST", body })
 
@@ -81,10 +86,40 @@ describe("iter2 http: batas body, no-store, guardMutation", () => {
   })
   it("guardMutation: null bila same-origin + JSON; host dibandingkan case-insensitive", () => {
     const mk = (h: Record<string, string>) => new Request("http://Pxe.Lab:3000/api", { method: "POST", headers: h })
+    // SR-3-5 (M4): host pxe.lab harus terdaftar di PXE_ALLOWED_HOSTS; tanpa itu → 403.
+    expect(guardMutation(mk({ "content-type": "application/json" }), "json")!.status).toBe(403)
+    process.env.PXE_ALLOWED_HOSTS = "PXE.lab"
     expect(guardMutation(mk({ origin: "http://pxe.lab:3000", "content-type": "application/json" }), "json")).toBeNull()
     expect(guardMutation(mk({ "content-type": "application/json" }), "json")).toBeNull()
     expect(guardMutation(mk({}), "none")).toBeNull()
     expect(guardMutation(mk({ origin: "http://pxe.lab", "content-type": "application/json" }), "json")!.status).toBe(403)
     expect(guardMutation(mk({}), "json")!.status).toBe(415)
+  })
+})
+
+describe("SR-3-5 isHostAllowed / allowlist default", () => {
+  it("entri tanpa port cocok port apa pun; entri berport harus persis; IPv6 berkurung", () => {
+    const allow = ["localhost", "10.99.0.2:80", "[::1]"]
+    expect(isHostAllowed("localhost", allow)).toBe(true)
+    expect(isHostAllowed("LOCALHOST:3100", allow)).toBe(true)
+    expect(isHostAllowed("10.99.0.2:80", allow)).toBe(true)
+    expect(isHostAllowed("10.99.0.2", allow)).toBe(false)
+    expect(isHostAllowed("10.99.0.2:8080", allow)).toBe(false)
+    expect(isHostAllowed("[::1]:3000", allow)).toBe(true)
+    expect(isHostAllowed("localhost.evil.example", allow)).toBe(false)
+    expect(isHostAllowed("", allow)).toBe(false)
+    expect(isHostAllowed("a:b:c", allow)).toBe(false)
+  })
+  it("default: localhost, 127.0.0.1, [::1], IP PXE server, host PXE_BASE_URL; domain asing → 403", async () => {
+    process.env.PXE_BASE_URL = "http://pxe.lab.example:8080"
+    const mk = (host: string) =>
+      new Request(`http://${host}/api/x`, { method: "POST", headers: { "content-type": "application/json", "x-forwarded-host": host } })
+    for (const h of ["localhost:3100", "127.0.0.1", "[::1]:3000", "10.10.10.1", "pxe.lab.example:8080"])
+      expect(guardMutation(mk(h), "json"), h).toBeNull()
+    for (const h of ["evil.example", "pxe.lab.example:9999", "10.10.10.2"]) {
+      const r = guardMutation(mk(h), "json")!
+      expect(r.status, h).toBe(403)
+      expect(await r.json()).toEqual({ error: "Host tidak diizinkan" })
+    }
   })
 })
