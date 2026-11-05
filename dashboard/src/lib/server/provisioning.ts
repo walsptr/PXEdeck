@@ -8,9 +8,12 @@
 //
 // `POST /boot/{mac}/{token}/status` (`stage=installing|configuring|done|
 // failed`): token cocok, job belum final, belum expired, IP ∈ lease ∪
-// current_ip ∪ IP statis host. Maju saja (`failed` dari mana pun); sama →
-// 200 no-op; mundur → 409; stage tak dikenal → 400. `done`/`failed` mencabut
-// token.
+// current_ip ∪ IP statis host ∪ mgmt_ip (DEC-013). Maju saja (`failed` dari
+// mana pun → failure_reason `installer-error`); sama → 200 no-op; mundur → 409;
+// stage tak dikenal → 400. `done`/`failed` mencabut token.
+//
+// M5 (DEC-014): sapuan timeout host pemilik token sebelum otorisasi; setiap
+// akses sah/transisi dicatat sebagai event job (tanpa token).
 import { configOrDefault, peekConfig } from "@/lib/server/db/repos/configs"
 import { getHost, setHostStatus } from "@/lib/server/db/repos/hosts"
 import {
@@ -25,6 +28,7 @@ import { getKey } from "@/lib/server/db/repos/ssh-keys"
 import { getDb, tx } from "@/lib/server/db"
 import { parseBootMac } from "@/lib/server/discovery"
 import { buildContext, installerFile, InstallerInputError } from "@/lib/server/installers"
+import { failJob, logJobEvent, STAGE_LABEL, sweepJobs } from "@/lib/server/job-lifecycle"
 import { ipMatchesLease } from "@/lib/server/leases"
 import { getSettings } from "@/lib/server/settings"
 import { hashToken, isTokenShape } from "@/lib/server/tokens"
@@ -38,13 +42,20 @@ function deny(reason: string): Denied {
   return { ok: false, status: 404, reason }
 }
 
-/** Cek token + MAC + TTL (tanpa IP/status). Panggil di dalam `tx`. */
+/**
+ * Cek token + MAC + TTL (tanpa IP/status). Panggil di dalam `tx`. Sapuan timeout host pemilik
+ * token dijalankan lebih dulu (DEC-014 §2): token job yang baru gagal karena timeout ikut dicabut,
+ * sehingga callback terlambat → 404.
+ */
 function authorize(rawMac: string, token: string, now: Date): Authorized | Denied {
   const mac = parseBootMac(rawMac)
   if (!mac) return deny("mac-invalid")
   if (!isTokenShape(token)) return deny("token-shape")
-  const job = getJobByTokenHash(hashToken(token))
-  if (!job) return deny("token-unknown")
+  const hash = hashToken(token)
+  const pre = getJobByTokenHash(hash)
+  if (pre) sweepJobs(now, pre.hostId)
+  const job = getJobByTokenHash(hash)
+  if (!job) return deny(pre ? "token-revoked" : "token-unknown")
   const host = getHost(job.hostId)
   if (!host || host.mac !== mac) return deny("mac-mismatch")
   if (!job.tokenExpiresAt || Date.parse(job.tokenExpiresAt) <= now.getTime())
@@ -102,8 +113,15 @@ export function serveConfigFile(input: {
       if (e instanceof InstallerInputError) return deny(`generator: ${e.message}`)
       throw e
     }
+    const at = now.toISOString()
+    logJobEvent(job.id, {
+      at,
+      kind: "system",
+      level: "info",
+      source: "config-fetch",
+      message: `File ${input.file} diambil dari IP ${input.ip}`,
+    })
     if (file.primary && job.status === "booting") {
-      const at = now.toISOString()
       updateJob(
         job.id,
         {
@@ -113,6 +131,13 @@ export function serveConfigFile(input: {
         at,
       )
       setHostStatus(host.id, "installing", at)
+      logJobEvent(job.id, {
+        at,
+        kind: "stage",
+        level: "info",
+        source: "config-fetch",
+        message: `${STAGE_LABEL.installing}: konfigurasi ${input.file} diambil installer`,
+      })
     }
     return { ok: true, body, contentType: file.contentType }
   })
@@ -168,7 +193,12 @@ export function handleStatusCallback(input: {
     if (t === "noop") return { ok: true, status: 200, changed: false }
     if (t === "conflict") return { ok: false, status: 409, reason: "backward" }
     const at = now.toISOString()
-    const final = stage === "done" || stage === "failed"
+    if (stage === "failed") {
+      failJob(job, "installer-error", at, "callback", `${STAGE_LABEL.failed}: installer melaporkan gagal (callback dari IP ${input.ip})`)
+      setHostStatus(host.id, "failed", at, { lastSeen: at })
+      return { ok: true, status: 200, changed: true }
+    }
+    const final = stage === "done"
     updateJob(
       job.id,
       {
@@ -178,6 +208,13 @@ export function handleStatusCallback(input: {
       },
       at,
     )
+    logJobEvent(job.id, {
+      at,
+      kind: "stage",
+      level: "info",
+      source: "callback",
+      message: `${STAGE_LABEL[stage]} (callback dari IP ${input.ip})`,
+    })
     if (stage === "done") {
       setHostStatus(host.id, "done", at, {
         osInstalled: job.osImageId,

@@ -72,12 +72,12 @@ describe("SR-4-2 / DEC-013 fail-closed", () => {
   it("onServerStart mencatat peringatan satu baris dan melempar bila env invalid", () => {
     const warn = vi.fn()
     process.env.PXE_INSECURE_NO_LEASE_CHECK = "1"
-    onServerStart({ warn })
+    onServerStart({ warn, error: vi.fn() }, false)
     expect(warn).toHaveBeenCalledTimes(1)
     expect(String(warn.mock.calls[0][0])).not.toContain("\n")
     process.env.PXE_INSECURE_NO_LEASE_CHECK = "0"
     process.env.PXE_TRUST_PROXY = "1"
-    expect(() => onServerStart({ warn })).toThrow(/PXE_DNSMASQ_LEASES/)
+    expect(() => onServerStart({ warn, error: vi.fn() }, false)).toThrow(/PXE_DNSMASQ_LEASES/)
   })
 })
 

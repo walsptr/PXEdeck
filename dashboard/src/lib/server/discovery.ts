@@ -5,10 +5,12 @@
 //     boot lokal (tanpa token).
 //  3. Upsert host (discovered bila baru; vendor OUI, firmware, current_ip,
 //     last_seen).
-//  4. Job aktif `booting|installing` + image bootable & tersedia → script
-//     installer dengan token BARU (hash disimpan, token lama tak berlaku;
-//     plaintext hanya ada di script ini). Selain itu → boot lokal (atau loop
-//     tunggu bila PXE_UNKNOWN_HOST_ACTION=wait dan host belum punya OS).
+//  4. M5 (DEC-013/014): sapuan timeout host ini, lalu job `booting` + lease
+//     terverifikasi + `installer_boots < N` + image tersedia → script installer
+//     dengan token BARU (hash disimpan, token lama tak berlaku; plaintext hanya
+//     ada di script ini). `installing`/`configuring` → boot lokal tanpa rotasi.
+//     Selain itu → boot lokal (atau loop tunggu bila PXE_UNKNOWN_HOST_ACTION=wait
+//     dan host belum punya OS).
 import { normalizeMac } from "@/lib/credentials"
 import { lookupVendor } from "@/lib/oui"
 import type { Firmware, Host } from "@/lib/types"
@@ -27,6 +29,7 @@ import {
 } from "@/lib/server/db/repos/hosts"
 import { getActiveJob, updateJob } from "@/lib/server/db/repos/jobs"
 import { getImage, imageAvailability } from "@/lib/server/db/repos/os-images"
+import { failJob, logJobEvent, sweepJobs } from "@/lib/server/job-lifecycle"
 import { currentLeases, ipMatchesLease } from "@/lib/server/leases"
 import { getSettings } from "@/lib/server/settings"
 import { newToken } from "@/lib/server/tokens"
@@ -95,28 +98,67 @@ export function upsertSeenHost(
   return getHost(id)!
 }
 
-/** Tangani `GET /boot/{mac}.ipxe` (MAC sudah dinormalisasi). */
+/** Pesan event boot ulang saat Installing (identik → digabung, CR-4-1). */
+export const REBOOT_WHILE_INSTALLING =
+  "PXE boot ulang saat Installing: boot lokal, instalasi tidak diulang"
+export const NO_LEASE_CHECK_MESSAGE =
+  "Installer tidak dilayani: verifikasi lease dnsmasq tidak dikonfigurasi (PXE_DNSMASQ_LEASES kosong, DEC-013); boot lokal"
+
+/**
+ * Tangani `GET /boot/{mac}.ipxe` (MAC sudah dinormalisasi). Lihat header modul dan plan M5 §2.3:
+ *  - IP sumber bukan IP lease MAC (lease dikonfigurasi) → boot lokal tanpa mengubah DB.
+ *  - Tanpa file lease dan tanpa `PXE_INSECURE_NO_LEASE_CHECK=1` → tidak pernah menerbitkan
+ *    installer/token, `current_ip` tidak diperbarui (DEC-013).
+ *  - Job `booting`: installer dengan token BARU selama `installer_boots < N`; batas tercapai → job
+ *    & host `failed` (`installer-boot-limit`) + boot lokal (CR-4-1).
+ *  - Job `installing` → boot lokal tanpa rotasi token (event `warn` digabung); `configuring` →
+ *    boot lokal.
+ */
 export function decideBoot(req: BootRequest): BootDecision {
   const s = getSettings()
-  const now = (req.now ?? new Date()).toISOString()
-  if (ipMatchesLease(req.mac, req.ip) === false) {
+  const nowDate = req.now ?? new Date()
+  const now = nowDate.toISOString()
+  const lease = ipMatchesLease(req.mac, req.ip)
+  if (lease === false) {
     return { kind: "unverified", script: localBootScript() }
   }
+  const verified = lease === true || s.insecureNoLeaseCheck
   getDb()
   return tx(() => {
     const host = upsertSeenHost(
       req.mac,
       firmwareFromPlatform(req.platform),
-      req.ip,
+      verified ? req.ip : null,
       now,
     )
+    sweepJobs(nowDate, host.id)
     const job = getActiveJob(host.id)
-    if (job && (job.status === "booting" || job.status === "installing")) {
+    const local = (): BootDecision => ({ kind: "local", script: localBootScript(), host: getHost(host.id)! })
+    if (job?.status === "installing") {
+      logJobEvent(job.id, { at: now, kind: "system", level: "warn", source: "boot-script", message: REBOOT_WHILE_INSTALLING })
+      return local()
+    }
+    if (job?.status === "booting") {
+      if (!verified) {
+        logJobEvent(job.id, { at: now, kind: "system", level: "warn", source: "boot-script", message: NO_LEASE_CHECK_MESSAGE })
+        return local()
+      }
+      if (job.installerBoots >= s.maxInstallerBoots) {
+        failJob(
+          job,
+          "installer-boot-limit",
+          now,
+          "boot-script",
+          `Batas penyajian installer tercapai (${job.installerBoots}/${s.maxInstallerBoots}): boot lokal, job gagal`,
+        )
+        return local()
+      }
       const img = getImage(job.osImageId)
-      if (img && imageAvailability(img, s.mediaRoot).available) {
+      const avail = img ? imageAvailability(img, s.mediaRoot) : null
+      if (img && avail?.available) {
         const { token, hash } = newToken()
         const expires = new Date(
-          Date.parse(now) + s.tokenTtlMin * 60_000,
+          nowDate.getTime() + s.tokenTtlMin * 60_000,
         ).toISOString()
         const script = installerScript({
           method: img.method,
@@ -127,12 +169,14 @@ export function decideBoot(req: BootRequest): BootDecision {
           source: img.source,
           extraArgs: s.kernelExtraArgs,
         })
+        const k = job.installerBoots + 1
         updateJob(
           job.id,
           {
             tokenHash: hash,
             tokenExpiresAt: expires,
             bootServedAt: now,
+            installerBoots: k,
             stages: [
               ...job.stages,
               { stage: "booting", at: now, source: "boot-script" },
@@ -140,8 +184,23 @@ export function decideBoot(req: BootRequest): BootDecision {
           },
           now,
         )
+        logJobEvent(job.id, {
+          at: now,
+          kind: "system",
+          level: "info",
+          source: "boot-script",
+          message: `Script installer dilayani (ke-${k}/${s.maxInstallerBoots}, platform ${req.platform ?? "?"}, IP ${req.ip ?? "?"})`,
+        })
         return { kind: "installer", script, host, jobId: job.id }
       }
+      logJobEvent(job.id, {
+        at: now,
+        kind: "system",
+        level: "warn",
+        source: "boot-script",
+        message: `Installer tidak dilayani: ${avail?.reason ?? `OS image ${job.osImageId} tidak dikenal`}; boot lokal`,
+      })
+      return local()
     }
     if (
       s.unknownHostAction === "wait" &&
@@ -154,7 +213,7 @@ export function decideBoot(req: BootRequest): BootDecision {
         host,
       }
     }
-    return { kind: "local", script: localBootScript(), host }
+    return local()
   })
 }
 

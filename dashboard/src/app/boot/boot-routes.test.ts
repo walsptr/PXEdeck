@@ -439,7 +439,10 @@ describe("AC-4.23 GET /boot/{mac}/{token}/{file}", () => {
     expect((await file(MAC, token, "meta-data", "10.99.0.140")).res.status).toBe(200)
     expect((await file(MAC, token, "meta-data", LEASE_IP)).res.status).toBe(200) // current_ip host
     await deny("IP lease MAC lain", file(MAC, token, "meta-data", "10.99.0.160"))
-    // Token expired (jam injeksi).
+    // Semua penolakan di atas tanpa efek pada status host.
+    expect(getHost(ID)!.status).toBe("booting")
+    // Token expired (jam injeksi). M5 (DEC-014 §2): TTL ≥ jumlah timeout tahap, jadi pada titik ini
+    // watchdog (sapuan lazy) sudah menandai job gagal `timeout-booting` dan mencabut token → 404.
     vi.setSystemTime(new Date(T0.getTime() + 361 * 60_000))
     await deny("token expired", file(MAC, token, "meta-data", LEASE_IP))
     for (const [name, r] of bodies) {
@@ -448,7 +451,8 @@ describe("AC-4.23 GET /boot/{mac}/{token}/{file}", () => {
       expect(r.res.headers.get("content-type"), name).toBe("text/plain; charset=utf-8")
       expect(r.res.headers.get("cache-control"), name).toBe("no-store")
     }
-    expect(getHost(ID)!.status).toBe("booting")
+    expect(getHost(ID)!.status).toBe("failed")
+    expect(listJobsForHost(ID)[0]).toMatchObject({ status: "failed", failureReason: "timeout-booting", tokenHash: null })
   })
 
   it("job configuring / done / failed → 404", async () => {
