@@ -72,22 +72,33 @@ function NameCell({
 
   if (!editing) {
     return (
-      <div className="flex items-center gap-1">
-        <span className="text-foreground" data-testid="key-name">
-          {k.name}
+      <div className="flex min-w-0 flex-col gap-0.5">
+        <div className="flex min-w-0 items-center gap-1">
+          {/* DR-5-2: nama panjang dipotong (nama lengkap di `title`) agar kolom aksi tetap terlihat. */}
+          <span
+            className="max-w-48 truncate text-foreground"
+            title={k.comment ? `${k.name} (${k.comment})` : k.name}
+            data-testid="key-name"
+          >
+            {k.name}
+          </span>
+          <Button
+            variant="ghost"
+            size="icon-xs"
+            aria-label={`Ubah nama ${k.name}`}
+            onClick={() => {
+              setDraft(k.name)
+              setError(null)
+              onEdit()
+            }}
+          >
+            <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} />
+          </Button>
+        </div>
+        {/* Kolom Tipe disembunyikan di bawah xl → tipe tampil di bawah nama. */}
+        <span className="type-data text-xs text-muted-foreground xl:hidden" data-testid="key-type-inline">
+          {k.type}
         </span>
-        <Button
-          variant="ghost"
-          size="icon-xs"
-          aria-label={`Ubah nama ${k.name}`}
-          onClick={() => {
-            setDraft(k.name)
-            setError(null)
-            onEdit()
-          }}
-        >
-          <HugeiconsIcon icon={Edit02Icon} strokeWidth={2} />
-        </Button>
       </div>
     )
   }
@@ -146,13 +157,16 @@ export function SshKeysView() {
   const keys = useSshKeyLibrary()
   const [addOpen, setAddOpen] = React.useState(false)
   const [editingId, setEditingId] = React.useState<string | null>(null)
+  // I-5-3: `toDelete` dipertahankan setelah dialog ditutup agar judul tidak kosong selama
+  // animasi tutup; visibilitas dikendalikan `deleteOpen`.
   const [toDelete, setToDelete] = React.useState<SshKeyInfo | null>(null)
+  const [deleteOpen, setDeleteOpen] = React.useState(false)
   const [deleteError, setDeleteError] = React.useState<string | null>(null)
   const del = useDeleteSshKey()
   const list = keys.data ?? []
 
   function closeDelete() {
-    setToDelete(null)
+    setDeleteOpen(false)
     setDeleteError(null)
     del.reset()
   }
@@ -221,9 +235,9 @@ export function SshKeysView() {
             <TableHeader>
               <TableRow>
                 <TableHead className="pl-4">Nama</TableHead>
-                <TableHead>Tipe</TableHead>
+                <TableHead className="max-xl:hidden">Tipe</TableHead>
                 <TableHead>Fingerprint</TableHead>
-                <TableHead>Komentar</TableHead>
+                <TableHead className="max-2xl:hidden">Komentar</TableHead>
                 <TableHead>Dibuat</TableHead>
                 <TableHead>Dipakai</TableHead>
                 <TableHead className="w-12 pr-4">
@@ -236,7 +250,10 @@ export function SshKeysView() {
                 ? Array.from({ length: 3 }, (_, i) => (
                     <TableRow key={i} className="hover:bg-transparent">
                       {Array.from({ length: COLS }, (_, j) => (
-                        <TableCell key={j}>
+                        <TableCell
+                          key={j}
+                          className={j === 1 ? "max-xl:hidden" : j === 3 ? "max-2xl:hidden" : undefined}
+                        >
                           <Skeleton className="h-4 w-20" />
                         </TableCell>
                       ))}
@@ -244,7 +261,7 @@ export function SshKeysView() {
                   ))
                 : list.map((k) => (
                     <TableRow key={k.id} data-testid="ssh-key-row" data-key-id={k.id}>
-                      <TableCell className="pl-4">
+                      <TableCell className="pl-4 align-top">
                         <NameCell
                           k={k}
                           editing={editingId === k.id}
@@ -252,17 +269,26 @@ export function SshKeysView() {
                           onDone={() => setEditingId(null)}
                         />
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="max-xl:hidden">
                         <span className="type-data text-xs">{k.type}</span>
                       </TableCell>
                       <TableCell>
-                        <span className="type-data text-xs" data-testid="key-fingerprint">
+                        {/* DR-5-2: fingerprint boleh wrap (hash base64 tanpa spasi). */}
+                        <span
+                          className="type-data block max-w-48 text-xs break-all whitespace-normal"
+                          data-testid="key-fingerprint"
+                        >
                           {k.fingerprint}
                         </span>
                       </TableCell>
-                      <TableCell>
+                      <TableCell className="max-2xl:hidden">
                         {k.comment ? (
-                          <span className="type-data text-xs text-body">{k.comment}</span>
+                          <span
+                            className="type-data block max-w-40 truncate text-xs text-body"
+                            title={k.comment}
+                          >
+                            {k.comment}
+                          </span>
                         ) : (
                           <span className="text-muted-soft">—</span>
                         )}
@@ -284,7 +310,10 @@ export function SshKeysView() {
                           variant="ghost"
                           size="icon-sm"
                           aria-label={`Hapus ${k.name}`}
-                          onClick={() => setToDelete(k)}
+                          onClick={() => {
+                            setToDelete(k)
+                            setDeleteOpen(true)
+                          }}
                         >
                           <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} />
                         </Button>
@@ -298,7 +327,7 @@ export function SshKeysView() {
 
       <AddKeyDialog open={addOpen} onOpenChange={setAddOpen} />
 
-      <AlertDialog open={toDelete !== null} onOpenChange={(o) => !o && closeDelete()}>
+      <AlertDialog open={deleteOpen} onOpenChange={(o) => !o && closeDelete()}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
