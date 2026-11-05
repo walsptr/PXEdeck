@@ -1,0 +1,3 @@
+POST /boot/<mac11>/<acak-43>/log dari host -> 404
+POST /boot/<mac11>/<acak-43>/status dari host -> 404
+GET /boot/%25zz.ipxe -> 400

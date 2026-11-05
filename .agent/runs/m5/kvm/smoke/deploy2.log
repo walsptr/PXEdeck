@@ -1,0 +1,2 @@
+[2026-11-05T15:45:40Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261105T154530Z
+[2026-11-05T15:45:44Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm/smoke/deploy-dashboard.txt)

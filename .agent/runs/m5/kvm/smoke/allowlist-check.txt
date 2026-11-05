@@ -1,0 +1,9 @@
+/api/hosts                   403
+/api/settings                403
+/api/jobs                    403
+/hosts                       403
+/api/jobs/job-x/logs         403
+/boot/52:54:00:99:00:77.ipxe 200
+HEAD /media/.../vmlinuz      200
+# host 10.99.0.1:
+/api/settings 200

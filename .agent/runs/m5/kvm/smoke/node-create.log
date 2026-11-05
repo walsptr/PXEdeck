@@ -1,0 +1,6 @@
+[2026-11-05T15:34:24Z] create pxe-test-m5-node11 (uefi, 52:54:00:99:00:11, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.

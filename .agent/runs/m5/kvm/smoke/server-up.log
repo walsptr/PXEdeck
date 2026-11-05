@@ -1,0 +1,12 @@
+[2026-11-05T15:33:45Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-05T15:33:45Z] network pxe-test sudah terdefinisi
+[2026-11-05T15:33:45Z] network pxe-test sudah aktif
+[2026-11-05T15:33:45Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T15:33:45Z] network pxe-test-nat sudah aktif
+[2026-11-05T15:33:45Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-05T15:33:55Z] SSH siap dalam 10s
+[2026-11-05T15:33:56Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm/smoke/server-listen.txt
