@@ -1,0 +1,90 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(git status*)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git branch*)",
+      "Bash(git checkout *)",
+      "Bash(git switch *)",
+      "Bash(git merge *)",
+      "Bash(git tag*)",
+      "Bash(git diff*)",
+      "Bash(git log*)",
+      "Bash(git show *)",
+      "Bash(git rev-parse *)",
+      "Bash(git stash *)",
+      "Bash(virsh *)",
+      "Bash(virt-install *)",
+      "Bash(virt-xml *)",
+      "Bash(qemu-img *)",
+      "Bash(ssh *)",
+      "Bash(scp *)",
+      "Bash(ssh-keygen *)",
+      "Bash(cloud-localds *)",
+      "Bash(xorriso *)",
+      "Bash(bsdtar *)",
+      "Bash(7z *)",
+      "Bash(sha256sum *)",
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(free *)",
+      "Bash(nproc)",
+      "Bash(ls *)",
+      "Bash(cat *)",
+      "Bash(grep *)",
+      "Bash(find *)",
+      "Bash(mkdir *)",
+      "Bash(python3 *)",
+      "Bash(jq *)",
+      "Read",
+      "Glob",
+      "Grep"
+    ],
+    "deny": [
+      "Bash(git push*)",
+      "Bash(git * push*)",
+      "Bash(sudo *)",
+      "Bash(su *)",
+      "Bash(pkexec *)",
+      "Bash(rm -rf /)",
+      "Bash(rm -rf /*)",
+      "Bash(rm -rf ~*)",
+      "Bash(dnsmasq *)",
+      "Bash(brctl *)",
+      "Bash(nmcli *)",
+      "Bash(ip link set *)",
+      "Bash(ip addr add *)",
+      "Bash(ip addr del *)",
+      "Bash(virsh * destroy pxe-test-node01*)",
+      "Bash(virsh * undefine pxe-test-node01*)",
+      "Read(~/.ssh/**)",
+      "Edit(~/.ssh/**)",
+      "Read(~/.aws/**)",
+      "Read(~/.gnupg/**)",
+      "Read(~/.netrc)",
+      "Read(//dev/sd*)",
+      "Read(//dev/nvme*)",
+      "Edit(//dev/**)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/guard_bash.py\"",
+            "timeout": 15,
+            "onFailure": "block",
+            "statusMessage": "Guard: batas keras PXE"
+          }
+        ]
+      }
+    ]
+  }
+}

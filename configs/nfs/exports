@@ -1,0 +1,2 @@
+# /etc/exports.d/pxe.exports — isi ISO (loop mount) untuk casper netboot=nfs
+/srv/pxe/nfs/ubuntu-24.04 10.10.10.0/24(ro,no_subtree_check,no_root_squash,fsid=1001)

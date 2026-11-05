@@ -1,0 +1,2 @@
+# Inventaris node PXE: mac,ip,hostname (hostname opsional). Setelah edit: sudo pxe-nodes apply
+mac,ip,hostname

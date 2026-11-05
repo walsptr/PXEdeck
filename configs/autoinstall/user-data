@@ -1,0 +1,63 @@
+#cloud-config
+# /srv/pxe/http/autoinstall/user-data — konfigurasi Subiquity autoinstall
+autoinstall:
+  version: 1
+  locale: en_US.UTF-8
+  keyboard:
+    layout: us
+  timezone: Asia/Jakarta
+
+  network:
+    version: 2
+    ethernets:
+      primary:
+        match:
+          name: "en*"
+        dhcp4: true
+
+  identity:
+    hostname: ubuntu-node
+    username: ubuntu
+    # password: "ubuntu" (hash SHA-512, buat baru dengan: openssl passwd -6)
+    password: "$6$pxelab$EzRdg/3FWt3YwSUFK8NZ5TXl/GP93OzXhv47DpBlRfQUclTe83eSkgjhetCGkJq9rvLGisqfUKTvGlTxXWMbp/"
+
+  ssh:
+    install-server: true
+    allow-pw: true
+    authorized-keys:
+      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDN3rlfsi1FiKjSGlnBCcDks6VDPwSHn7a+TRpDNSySTNTHglgxx+skVxFnnZLqGcLZXVs/bk7nHyTOJnk7hPLfekonynnWNiF1M10ei8pvrVROIxL/rMJ+5rS3Kt6upjG5NDZ5ImTccudR1csMnB2VoScsX3xfFOBYT/s+nW2J4Kxs9yAsoKyCP0VakhNsMQSNYx1y+BJwW1ByojIPKtLgxoaAJwhGBZLdfMbez2ZkSuAwFzm58pSoBPHF/9o6RObsjFnhTYhjJi/92zawv99/sPnQfR+F7rA1MQhIaAaMiy1AoCKIR8k9AWL50kkmNJwZrj+ylvpkWCLxfEwJN9jGxUW2pgFO8YW2xm8dkCSD6mkTV9Pu6J76E0AIIWAsl3lfpq1SxpV19uj2uQBDjsVtfIz7pZTg9yC3S9WC/TIKC7//t/8oBGSsPhn880KpEkKCMVYuGImmLS105XIUiWe4Aman4IfnBMjMbhKO02LuPJgxiVxWHzqyEzSgoUUNa40= wals@wal"
+
+  storage:
+    layout:
+      name: lvm
+      sizing-policy: all
+
+  packages:
+    - curl
+    - vim
+    - net-tools
+
+  updates: security
+
+  late-commands:
+    # Sudo tanpa password untuk user ubuntu
+    - echo 'ubuntu ALL=(ALL) NOPASSWD:ALL' > /target/etc/sudoers.d/90-ubuntu && chmod 440 /target/etc/sudoers.d/90-ubuntu
+    # UEFI: taruh entry "ubuntu" di urutan boot pertama agar tidak PXE-install berulang
+    - |
+      if [ -d /sys/firmware/efi ]; then
+        n=$(efibootmgr | awk '/[Uu]buntu/ {print substr($1,5,4); exit}')
+        o=$(efibootmgr | awk -F': ' '/^BootOrder/ {print $2}')
+        if [ -n "$n" ]; then
+          efibootmgr -o "$(echo "$n,$o" | tr ',' '\n' | awk '!s[$0]++' | paste -sd,)" || true
+        fi
+      fi
+
+    # Netboot NFS: shutdown live installer bisa macet di "Failed unmounting /cdrom"
+    # (root NFS masih dipakai saat jaringan dimatikan). Guard ini hanya aktif saat
+    # sistem sudah dalam status "stopping": tunggu 45 detik, sync, lalu reboot paksa.
+    - >-
+      systemd-run --unit=pxe-force-reboot -p DefaultDependencies=no
+      /bin/sh -c 'until [ "$(systemctl is-system-running)" = stopping ]; do sleep 2; done;
+      sleep 45; echo s > /proc/sysrq-trigger; sleep 3; echo b > /proc/sysrq-trigger'
+
+  shutdown: reboot

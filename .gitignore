@@ -1,0 +1,31 @@
+# deps / build
+node_modules/
+.next/
+out/
+coverage/
+*.tsbuildinfo
+next-env.d.ts
+playwright-report/
+test-results/
+
+# secrets
+.env
+.env.*
+!.env.example
+
+# agent artefak besar / rahasia (bukti teks di .agent/runs tetap di-commit)
+.agent/media/
+.agent/vms/
+.agent/keys/
+.agent/archive/
+.agent/runs/**/*.qcow2
+.agent/runs/**/*.iso
+.agent/runs/**/node_modules/
+*.db
+*.db-journal
+*.sqlite
+
+# editor / OS
+.DS_Store
+*.swp
+.claude/settings.local.json

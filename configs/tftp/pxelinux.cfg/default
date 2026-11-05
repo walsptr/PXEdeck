@@ -1,0 +1,22 @@
+# /srv/pxe/tftp/pxelinux.cfg/default — menu BIOS (legacy) PXE
+DEFAULT menu.c32
+PROMPT 0
+TIMEOUT 100
+ONTIMEOUT autoinstall
+MENU TITLE PXE Lab - Ubuntu 24.04.5
+
+LABEL autoinstall
+  MENU LABEL Ubuntu 24.04.5 - Autoinstall (MENGHAPUS DISK!)
+  KERNEL ubuntu-24.04/vmlinuz
+  INITRD ubuntu-24.04/initrd
+  APPEND ip=dhcp netboot=nfs nfsroot=10.10.10.1:/srv/pxe/nfs/ubuntu-24.04 autoinstall ds=nocloud-net;s=http://10.10.10.1/pxe/autoinstall/ cloud-config-url=/dev/null ---
+
+LABEL manual
+  MENU LABEL Ubuntu 24.04.5 - Install manual (interaktif)
+  KERNEL ubuntu-24.04/vmlinuz
+  INITRD ubuntu-24.04/initrd
+  APPEND ip=dhcp netboot=nfs nfsroot=10.10.10.1:/srv/pxe/nfs/ubuntu-24.04 cloud-config-url=/dev/null ---
+
+LABEL local
+  MENU LABEL Boot dari disk lokal
+  LOCALBOOT 0

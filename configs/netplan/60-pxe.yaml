@@ -1,0 +1,12 @@
+# /etc/netplan/60-pxe.yaml
+network:
+  version: 2
+  ethernets:
+    enp1s0:
+      nameservers:
+        addresses: [192.168.122.1, 1.1.1.1]
+    enp7s0:
+      dhcp4: false
+      dhcp6: false
+      addresses:
+        - 10.10.10.1/24
