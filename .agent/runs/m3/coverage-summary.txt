@@ -1,0 +1,38 @@
+# Coverage DEC-004 (include: src/lib/**, src/app/api/**, src/app/boot/**, src/hooks/**, src/components/**/*.ts)
+# Catatan: `npm run test` exit 1 karena 1 test gagal (AC-2.2, temuan bug format.ts), dan Vitest
+# tidak mencetak laporan coverage bila ada test gagal. Laporan di bawah dari run yang sama
+# dengan flag CLI --coverage.reportOnFailure (config, ambang, include, exclude TIDAK diubah).
+$ npx vitest run --coverage --coverage.reportOnFailure  # 2026-11-05T06:59:58Z
+ Test Files  1 failed | 19 passed (20)
+      Tests  1 failed | 243 passed (244)
+   Start at  13:59:59
+   Duration  4.43s (environment 38%, import 29%, tests 17%, setup 7%, worker 7%, transform 3%)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   99.58 |     97.9 |   98.91 |   99.64 |                   
+ ...ts/host-config |     100 |    98.26 |     100 |     100 |                   
+  form-state.ts    |     100 |    98.26 |     100 |     100 | 185,318-319       
+ hooks             |   97.97 |    93.02 |   95.34 |    97.8 |                   
+  ...ost-config.ts |     100 |    95.45 |     100 |     100 | 33                
+  use-mobile.ts    |   88.88 |      100 |      80 |    87.5 | 16                
+  use-now.ts       |   96.87 |    81.81 |      90 |   96.55 | 59                
+ lib               |   99.69 |    98.62 |     100 |   99.64 |                   
+  credentials.ts   |     100 |    97.87 |     100 |     100 | 37                
+  format.ts        |   93.33 |      100 |     100 |   91.66 | 18                
+  net.ts           |     100 |    99.09 |     100 |     100 | 199               
+  ssh-key.ts       |     100 |    93.75 |     100 |     100 | 57                
+ lib/server        |   99.72 |    97.53 |     100 |     100 |                   
+  ...ig-service.ts |   99.59 |    97.36 |     100 |     100 | 86,264,366,493    
+  mock-hosts.ts    |     100 |    97.53 |     100 |     100 | 308,389           
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 99.58% ( 968/972 )
+Branches     : 97.9% ( 700/715 )
+Functions    : 98.91% ( 183/185 )
+Lines        : 99.64% ( 844/847 )
+================================================================================
+EXIT CODE: 1
