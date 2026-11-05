@@ -1,0 +1,3062 @@
+{
+ "after@375": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia ",
+    "(ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml ",
+    "(install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@414": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-",
+    "22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install ",
+    "via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@768": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-",
+    "22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@1024": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@1279": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@1280": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path2",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path2",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 ",
+    "tidak tersedia ",
+    "(ubuntu-",
+    "22.04/casper/vmlinuz ",
+    "tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path0",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya ",
+    "generator ",
+    "unattend.xml (install ",
+    "via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "after@1440": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path2",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path2",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 ",
+    "tidak tersedia ",
+    "(ubuntu-",
+    "22.04/casper/vmlinuz ",
+    "tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path0",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya ",
+    "generator ",
+    "unattend.xml (install ",
+    "via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@375": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia ",
+    "(ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml ",
+    "(install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@414": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-",
+    "22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install ",
+    "via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@768": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-",
+    "22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@1024": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@1279": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya generator unattend.xml (install via PXE belum didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@1280": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path2",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path2",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 ",
+    "tidak tersedia ",
+    "(ubuntu-",
+    "22.04/casper/vmlinuz ",
+    "tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path0",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya ",
+    "generator ",
+    "unattend.xml (install ",
+    "via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ],
+ "before@1440": [
+  {
+   "id": "debian-12",
+   "k": "id",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "name",
+   "lines": [
+    "Debian"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path0",
+   "lines": [
+    "debian-netboot/linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path1",
+   "lines": [
+    "debian-netboot/initrd.gz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path2",
+   "lines": [
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "debian-12",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "debian-12"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "id",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "name",
+   "lines": [
+    "Rocky Linux"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path0",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path1",
+   "lines": [
+    "rocky-9/images/pxeboot/",
+    "initrd.img"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path2",
+   "lines": [
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "rocky-9",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "rocky-9"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-22.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-22.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-22.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-22.04",
+   "k": "reason",
+   "lines": [
+    "Media ubuntu-22.04 ",
+    "tidak tersedia ",
+    "(ubuntu-",
+    "22.04/casper/vmlinuz ",
+    "tidak ada)"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "id",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "name",
+   "lines": [
+    "Ubuntu Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path0",
+   "lines": [
+    "ubuntu-24.04/casper/vmlinuz"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path1",
+   "lines": [
+    "ubuntu-24.04/casper/initrd"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path2",
+   "lines": [
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "ubuntu-24.04",
+   "k": "path3",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "ubuntu-24.04"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "id",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "name",
+   "lines": [
+    "Windows Server"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path0",
+   "lines": [
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "path1",
+   "lines": [
+    "http://10.99.0.2/media/",
+    "windows-2022"
+   ],
+   "mid": 0
+  },
+  {
+   "id": "windows-2022",
+   "k": "reason",
+   "lines": [
+    "Windows: hanya ",
+    "generator ",
+    "unattend.xml (install ",
+    "via PXE belum ",
+    "didukung)"
+   ],
+   "mid": 0
+  }
+ ]
+}

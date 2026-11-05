@@ -1,0 +1,2843 @@
+[
+ {
+  "w": 375,
+  "docSW": 375,
+  "docSH": 2166,
+  "contSW": 841,
+  "contCW": 325,
+  "ths": [
+   "ID@0-0",
+   "Nama@0-0",
+   "Platform@0-0",
+   "Sumber@0-0",
+   "Ketersediaan@0-0",
+   "Dipakai@0-0",
+   "Aksi@0-0"
+  ],
+  "rows": [
+   {
+    "id": "debian-12",
+    "display": "flex",
+    "h": 154,
+    "w": 325,
+    "overlaps": [
+     "Debian <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 72,
+    "idTdW": 145,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 290,
+    "delRight": 334,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+    "display": "flex",
+    "h": 332,
+    "w": 325,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 145,
+    "idTdW": 145,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 290,
+    "delRight": 334,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky-9",
+    "display": "flex",
+    "h": 154,
+    "w": 325,
+    "overlaps": [
+     "Rocky Linux <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 56,
+    "idTdW": 145,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 290,
+    "delRight": 334,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky9customlabimagebuildnumber00000000000000001",
+    "display": "flex",
+    "h": 250,
+    "w": 325,
+    "overlaps": [],
+    "spill": [
+     "TD.p-3 [&:has([role=checkbox])]:p 41-500 vs 25-350",
+     "DIV.flex flex-col gap-0.5 max-xl:f 41-500 vs 25-350",
+     "SPAN.min-w-0 wrap-break-word text-f 41-500 vs 25-350",
+     "TD.p-3 whitespace-nowrap [&:has([ 41-866 vs 25-350",
+     "DIV.flex w-full flex-col whitespac 41-866 vs 25-350",
+     "DIV.flex gap-2 41-866 vs 25-350"
+    ],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 145,
+    "idTdW": 145,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 290,
+    "delRight": 334,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-22.04",
+    "display": "flex",
+    "h": 196,
+    "w": 325,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 145,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 290,
+    "delRight": 334,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-24.04",
+    "display": "flex",
+    "h": 154,
+    "w": 325,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 145,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 290,
+    "delRight": 334,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 8 host"
+   },
+   {
+    "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+    "display": "flex",
+    "h": 485,
+    "w": 325,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 4,
+    "idMono": true,
+    "idW": 145,
+    "idTdW": 145,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 2,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 290,
+    "delRight": 334,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "windows-2022",
+    "display": "flex",
+    "h": 197,
+    "w": 325,
+    "overlaps": [
+     "Windows Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 145,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | unattend | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "unattend",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 290,
+    "delRight": 334,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   }
+  ],
+  "ds": {
+   "bodyBg": "rgb(247, 247, 244)",
+   "h1": {
+    "fs": "26px",
+    "fw": "400",
+    "ls": "-0.325px",
+    "lh": "32.5px"
+   },
+   "drop": [],
+   "rings": 0,
+   "orangeNonCta": [],
+   "orange": [
+    "Daftarkan image|background"
+   ],
+   "pastelOutsidePill": [],
+   "techNonMono": []
+  },
+  "monoFail": [],
+  "radius": "12px",
+  "vis": {
+   "scrollX": 0,
+   "delInViewport": true
+  }
+ },
+ {
+  "w": 414,
+  "docSW": 414,
+  "docSH": 2065,
+  "contSW": 841,
+  "contCW": 364,
+  "ths": [
+   "ID@0-0",
+   "Nama@0-0",
+   "Platform@0-0",
+   "Sumber@0-0",
+   "Ketersediaan@0-0",
+   "Dipakai@0-0",
+   "Aksi@0-0"
+  ],
+  "rows": [
+   {
+    "id": "debian-12",
+    "display": "flex",
+    "h": 154,
+    "w": 364,
+    "overlaps": [
+     "Debian <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 72,
+    "idTdW": 184,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 329,
+    "delRight": 373,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+    "display": "flex",
+    "h": 300,
+    "w": 364,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 184,
+    "idTdW": 184,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 329,
+    "delRight": 373,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky-9",
+    "display": "flex",
+    "h": 154,
+    "w": 364,
+    "overlaps": [
+     "Rocky Linux <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 56,
+    "idTdW": 184,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 329,
+    "delRight": 373,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky9customlabimagebuildnumber00000000000000001",
+    "display": "flex",
+    "h": 250,
+    "w": 364,
+    "overlaps": [],
+    "spill": [
+     "TD.p-3 [&:has([role=checkbox])]:p 41-500 vs 25-389",
+     "DIV.flex flex-col gap-0.5 max-xl:f 41-500 vs 25-389",
+     "SPAN.min-w-0 wrap-break-word text-f 41-500 vs 25-389",
+     "TD.p-3 whitespace-nowrap [&:has([ 41-866 vs 25-389",
+     "DIV.flex w-full flex-col whitespac 41-866 vs 25-389",
+     "DIV.flex gap-2 41-866 vs 25-389"
+    ],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 184,
+    "idTdW": 184,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 329,
+    "delRight": 373,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-22.04",
+    "display": "flex",
+    "h": 196,
+    "w": 364,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 184,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 329,
+    "delRight": 373,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-24.04",
+    "display": "flex",
+    "h": 154,
+    "w": 364,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 184,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 329,
+    "delRight": 373,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 8 host"
+   },
+   {
+    "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+    "display": "flex",
+    "h": 416,
+    "w": 364,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 184,
+    "idTdW": 184,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 2,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 329,
+    "delRight": 373,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "windows-2022",
+    "display": "flex",
+    "h": 197,
+    "w": 364,
+    "overlaps": [
+     "Windows Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 184,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | unattend | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "unattend",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 329,
+    "delRight": 373,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   }
+  ],
+  "ds": {
+   "bodyBg": "rgb(247, 247, 244)",
+   "h1": {
+    "fs": "26px",
+    "fw": "400",
+    "ls": "-0.325px",
+    "lh": "32.5px"
+   },
+   "drop": [],
+   "rings": 0,
+   "orangeNonCta": [],
+   "orange": [
+    "Daftarkan image|background"
+   ],
+   "pastelOutsidePill": [],
+   "techNonMono": []
+  },
+  "monoFail": [],
+  "radius": "12px",
+  "vis": {
+   "scrollX": 0,
+   "delInViewport": true
+  }
+ },
+ {
+  "w": 768,
+  "docSW": 819,
+  "docSH": 2006,
+  "contSW": 841,
+  "contCW": 446,
+  "ths": [
+   "ID@0-0",
+   "Nama@0-0",
+   "Platform@0-0",
+   "Sumber@0-0",
+   "Ketersediaan@0-0",
+   "Dipakai@0-0",
+   "Aksi@0-0"
+  ],
+  "rows": [
+   {
+    "id": "debian-12",
+    "display": "flex",
+    "h": 154,
+    "w": 446,
+    "overlaps": [
+     "Debian <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 72,
+    "idTdW": 266,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 675,
+    "delRight": 719,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+    "display": "flex",
+    "h": 281,
+    "w": 446,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 2,
+    "idMono": true,
+    "idW": 266,
+    "idTdW": 266,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 675,
+    "delRight": 719,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky-9",
+    "display": "flex",
+    "h": 154,
+    "w": 446,
+    "overlaps": [
+     "Rocky Linux <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 56,
+    "idTdW": 266,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 675,
+    "delRight": 719,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky9customlabimagebuildnumber00000000000000001",
+    "display": "flex",
+    "h": 231,
+    "w": 446,
+    "overlaps": [],
+    "spill": [
+     "TD.p-3 [&:has([role=checkbox])]:p 305-764 vs 289-735",
+     "DIV.flex flex-col gap-0.5 max-xl:f 305-764 vs 289-735",
+     "SPAN.min-w-0 wrap-break-word text-f 305-764 vs 289-735",
+     "TD.p-3 whitespace-nowrap [&:has([ 305-1130 vs 289-735",
+     "DIV.flex w-full flex-col whitespac 305-1130 vs 289-735",
+     "DIV.flex gap-2 305-1130 vs 289-735"
+    ],
+    "idText": true,
+    "idLines": 2,
+    "idMono": true,
+    "idW": 266,
+    "idTdW": 266,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 675,
+    "delRight": 719,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-22.04",
+    "display": "flex",
+    "h": 196,
+    "w": 446,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 266,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 675,
+    "delRight": 719,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-24.04",
+    "display": "flex",
+    "h": 154,
+    "w": 446,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 266,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 675,
+    "delRight": 719,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 8 host"
+   },
+   {
+    "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+    "display": "flex",
+    "h": 378,
+    "w": 446,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 2,
+    "idMono": true,
+    "idW": 266,
+    "idTdW": 266,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 2,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 675,
+    "delRight": 719,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "windows-2022",
+    "display": "flex",
+    "h": 197,
+    "w": 446,
+    "overlaps": [
+     "Windows Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 266,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | unattend | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "unattend",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 675,
+    "delRight": 719,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   }
+  ],
+  "ds": {
+   "bodyBg": "rgb(247, 247, 244)",
+   "h1": {
+    "fs": "26px",
+    "fw": "400",
+    "ls": "-0.325px",
+    "lh": "32.5px"
+   },
+   "drop": [],
+   "rings": 0,
+   "orangeNonCta": [],
+   "orange": [
+    "Daftarkan image|background"
+   ],
+   "pastelOutsidePill": [],
+   "techNonMono": []
+  },
+  "monoFail": [],
+  "radius": "12px",
+  "vis": {
+   "scrollX": 0,
+   "delInViewport": true
+  }
+ },
+ {
+  "w": 1024,
+  "docSW": 1024,
+  "docSH": 1708,
+  "contSW": 841,
+  "contCW": 702,
+  "ths": [
+   "ID@0-0",
+   "Nama@0-0",
+   "Platform@0-0",
+   "Sumber@0-0",
+   "Ketersediaan@0-0",
+   "Dipakai@0-0",
+   "Aksi@0-0"
+  ],
+  "rows": [
+   {
+    "id": "debian-12",
+    "display": "flex",
+    "h": 154,
+    "w": 702,
+    "overlaps": [
+     "Debian <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 72,
+    "idTdW": 522,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 931,
+    "delRight": 975,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+    "display": "flex",
+    "h": 203,
+    "w": 702,
+    "overlaps": [
+     "Debian Bookworm Netinst Lab  <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 368,
+    "idTdW": 522,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 931,
+    "delRight": 975,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky-9",
+    "display": "flex",
+    "h": 154,
+    "w": 702,
+    "overlaps": [
+     "Rocky Linux <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 56,
+    "idTdW": 522,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 931,
+    "delRight": 975,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky9customlabimagebuildnumber00000000000000001",
+    "display": "flex",
+    "h": 194,
+    "w": 702,
+    "overlaps": [
+     "RockyLinuxCustomLabImageBuil <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [
+     "TD.p-3 whitespace-nowrap [&:has([ 305-1130 vs 289-991",
+     "DIV.flex w-full flex-col whitespac 305-1130 vs 289-991",
+     "DIV.flex gap-2 305-1130 vs 289-991",
+     "SPAN.type-data min-w-0 text-xs wrap 353-1130 vs 289-991",
+     "SPAN.inline-block max-w-full 353-1130 vs 289-991",
+     "DIV.flex gap-2 305-1130 vs 289-991"
+    ],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 384,
+    "idTdW": 522,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 931,
+    "delRight": 975,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-22.04",
+    "display": "flex",
+    "h": 177,
+    "w": 702,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 522,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 931,
+    "delRight": 975,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-24.04",
+    "display": "flex",
+    "h": 154,
+    "w": 702,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 522,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 931,
+    "delRight": 975,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 8 host"
+   },
+   {
+    "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+    "display": "flex",
+    "h": 254,
+    "w": 702,
+    "overlaps": [
+     "Ubuntu Server Custom HWE Lab <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 384,
+    "idTdW": 522,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 931,
+    "delRight": 975,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "windows-2022",
+    "display": "flex",
+    "h": 178,
+    "w": 702,
+    "overlaps": [
+     "Windows Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 522,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | unattend | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "unattend",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 931,
+    "delRight": 975,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   }
+  ],
+  "ds": {
+   "bodyBg": "rgb(247, 247, 244)",
+   "h1": {
+    "fs": "26px",
+    "fw": "400",
+    "ls": "-0.325px",
+    "lh": "32.5px"
+   },
+   "drop": [],
+   "rings": 0,
+   "orangeNonCta": [],
+   "orange": [
+    "Daftarkan image|background"
+   ],
+   "pastelOutsidePill": [],
+   "techNonMono": []
+  },
+  "monoFail": [],
+  "radius": "12px",
+  "vis": {
+   "scrollX": 0,
+   "delInViewport": true
+  }
+ },
+ {
+  "w": 1279,
+  "docSW": 1279,
+  "docSH": 1572,
+  "contSW": 957,
+  "contCW": 957,
+  "ths": [
+   "ID@0-0",
+   "Nama@0-0",
+   "Platform@0-0",
+   "Sumber@0-0",
+   "Ketersediaan@0-0",
+   "Dipakai@0-0",
+   "Aksi@0-0"
+  ],
+  "rows": [
+   {
+    "id": "debian-12",
+    "display": "flex",
+    "h": 154,
+    "w": 957,
+    "overlaps": [
+     "Debian <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 72,
+    "idTdW": 777,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1186,
+    "delRight": 1230,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+    "display": "flex",
+    "h": 177,
+    "w": 957,
+    "overlaps": [
+     "Debian Bookworm Netinst Lab  <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 368,
+    "idTdW": 777,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 1186,
+    "delRight": 1230,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky-9",
+    "display": "flex",
+    "h": 154,
+    "w": 957,
+    "overlaps": [
+     "Rocky Linux <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 56,
+    "idTdW": 777,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1186,
+    "delRight": 1230,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "rocky9customlabimagebuildnumber00000000000000001",
+    "display": "flex",
+    "h": 194,
+    "w": 957,
+    "overlaps": [
+     "RockyLinuxCustomLabImageBuil <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 384,
+    "idTdW": 777,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1186,
+    "delRight": 1230,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-22.04",
+    "display": "flex",
+    "h": 177,
+    "w": 957,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 777,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1186,
+    "delRight": 1230,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "ubuntu-24.04",
+    "display": "flex",
+    "h": 154,
+    "w": 957,
+    "overlaps": [
+     "Ubuntu Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 777,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1186,
+    "delRight": 1230,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 8 host"
+   },
+   {
+    "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+    "display": "flex",
+    "h": 196,
+    "w": 957,
+    "overlaps": [
+     "Ubuntu Server Custom HWE Lab <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 384,
+    "idTdW": 777,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1186,
+    "delRight": 1230,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   },
+   {
+    "id": "windows-2022",
+    "display": "flex",
+    "h": 178,
+    "w": 957,
+    "overlaps": [
+     "Windows Server <> (aksi) (32.0x1.4)"
+    ],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 777,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | unattend | tidak bootable",
+     "h": 20,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "unattend",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 1186,
+    "delRight": 1230,
+    "delVisibleInCont": true,
+    "usedText": "Dipakai 0 host"
+   }
+  ],
+  "ds": {
+   "bodyBg": "rgb(247, 247, 244)",
+   "h1": {
+    "fs": "26px",
+    "fw": "400",
+    "ls": "-0.325px",
+    "lh": "32.5px"
+   },
+   "drop": [],
+   "rings": 0,
+   "orangeNonCta": [],
+   "orange": [
+    "Daftarkan image|background"
+   ],
+   "pastelOutsidePill": [],
+   "techNonMono": []
+  },
+  "monoFail": [],
+  "radius": "12px",
+  "vis": {
+   "scrollX": 0,
+   "delInViewport": true
+  }
+ },
+ {
+  "w": 1280,
+  "docSW": 1280,
+  "docSH": 1891,
+  "contSW": 1037,
+  "contCW": 958,
+  "ths": [
+   "ID@289-465",
+   "NAMA@465-625",
+   "PLATFORM@625-740",
+   "SUMBER@740-1016",
+   "KETERSEDIAAN@1016-1196",
+   "DIPAKAI@1196-1266!HIDDEN",
+   "AKSI@1266-1326!HIDDEN"
+  ],
+  "rows": [
+   {
+    "id": "debian-12",
+    "display": "table-row",
+    "h": 120,
+    "w": 1037,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 176,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | bootable",
+     "h": 120,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1245,
+    "delRight": 1310,
+    "delVisibleInCont": false,
+    "usedText": "0 host"
+   },
+   {
+    "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+    "display": "table-row",
+    "h": 303,
+    "w": 1037,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 148,
+    "idTdW": 176,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 2,
+    "platform": {
+     "text": "amd64 | preseed | tidak bootable",
+     "h": 303,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 1245,
+    "delRight": 1310,
+    "delVisibleInCont": false,
+    "usedText": "0 host"
+   },
+   {
+    "id": "rocky-9",
+    "display": "table-row",
+    "h": 146,
+    "w": 1037,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 176,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 146,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1245,
+    "delRight": 1310,
+    "delVisibleInCont": false,
+    "usedText": "0 host"
+   },
+   {
+    "id": "rocky9customlabimagebuildnumber00000000000000001",
+    "display": "table-row",
+    "h": 399,
+    "w": 1037,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 148,
+    "idTdW": 176,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 4,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 399,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1245,
+    "delRight": 1310,
+    "delVisibleInCont": false,
+    "usedText": "0 host"
+   },
+   {
+    "id": "ubuntu-22.04",
+    "display": "table-row",
+    "h": 120,
+    "w": 1037,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 176,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 120,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1245,
+    "delRight": 1310,
+    "delVisibleInCont": false,
+    "usedText": "0 host"
+   },
+   {
+    "id": "ubuntu-24.04",
+    "display": "table-row",
+    "h": 120,
+    "w": 1037,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 176,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 120,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1245,
+    "delRight": 1310,
+    "delVisibleInCont": false,
+    "usedText": "8 host"
+   },
+   {
+    "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+    "display": "table-row",
+    "h": 335,
+    "w": 1037,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 4,
+    "idMono": true,
+    "idW": 148,
+    "idTdW": 176,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 4,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 335,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1245,
+    "delRight": 1310,
+    "delVisibleInCont": false,
+    "usedText": "0 host"
+   },
+   {
+    "id": "windows-2022",
+    "display": "table-row",
+    "h": 121,
+    "w": 1037,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 176,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | unattend | tidak bootable",
+     "h": 121,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "unattend",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 1245,
+    "delRight": 1310,
+    "delVisibleInCont": false,
+    "usedText": "0 host"
+   }
+  ],
+  "ds": {
+   "bodyBg": "rgb(247, 247, 244)",
+   "h1": {
+    "fs": "26px",
+    "fw": "400",
+    "ls": "-0.325px",
+    "lh": "32.5px"
+   },
+   "drop": [],
+   "rings": 0,
+   "orangeNonCta": [],
+   "orange": [
+    "Daftarkan image|background"
+   ],
+   "pastelOutsidePill": [],
+   "techNonMono": []
+  },
+  "monoFail": [],
+  "radius": "12px",
+  "vis": {
+   "scrollX": 0,
+   "delInViewport": false
+  }
+ },
+ {
+  "w": 1440,
+  "docSW": 1440,
+  "docSH": 1891,
+  "contSW": 1118,
+  "contCW": 1118,
+  "ths": [
+   "ID@289-480",
+   "NAMA@480-653",
+   "PLATFORM@653-777",
+   "SUMBER@777-1076",
+   "KETERSEDIAAN@1076-1271",
+   "DIPAKAI@1271-1347",
+   "AKSI@1347-1407"
+  ],
+  "rows": [
+   {
+    "id": "debian-12",
+    "display": "table-row",
+    "h": 120,
+    "w": 1118,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 191,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | preseed | bootable",
+     "h": 120,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1320,
+    "delRight": 1391,
+    "delVisibleInCont": true,
+    "usedText": "0 host"
+   },
+   {
+    "id": "debian-12.7-bookworm-netinst-lab-cluster-b-arm",
+    "display": "table-row",
+    "h": 303,
+    "w": 1118,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 163,
+    "idTdW": 191,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 2,
+    "platform": {
+     "text": "amd64 | preseed | tidak bootable",
+     "h": 303,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "preseed",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 1320,
+    "delRight": 1391,
+    "delVisibleInCont": true,
+    "usedText": "0 host"
+   },
+   {
+    "id": "rocky-9",
+    "display": "table-row",
+    "h": 146,
+    "w": 1118,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 191,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 146,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1320,
+    "delRight": 1391,
+    "delVisibleInCont": true,
+    "usedText": "0 host"
+   },
+   {
+    "id": "rocky9customlabimagebuildnumber00000000000000001",
+    "display": "table-row",
+    "h": 399,
+    "w": 1118,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 163,
+    "idTdW": 191,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 4,
+    "platform": {
+     "text": "amd64 | kickstart | bootable",
+     "h": 399,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "kickstart",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1320,
+    "delRight": 1391,
+    "delVisibleInCont": true,
+    "usedText": "0 host"
+   },
+   {
+    "id": "ubuntu-22.04",
+    "display": "table-row",
+    "h": 120,
+    "w": 1118,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 191,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 120,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1320,
+    "delRight": 1391,
+    "delVisibleInCont": true,
+    "usedText": "0 host"
+   },
+   {
+    "id": "ubuntu-24.04",
+    "display": "table-row",
+    "h": 120,
+    "w": 1118,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 191,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 120,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1320,
+    "delRight": 1391,
+    "delVisibleInCont": true,
+    "usedText": "8 host"
+   },
+   {
+    "id": "ubuntu-24.04-custom-hwe-lab-rack07-node-image-02",
+    "display": "table-row",
+    "h": 335,
+    "w": 1118,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 3,
+    "idMono": true,
+    "idW": 163,
+    "idTdW": 191,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 4,
+    "platform": {
+     "text": "amd64 | autoinstall | bootable",
+     "h": 335,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "autoinstall",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      }
+     ]
+    },
+    "usedRight": 1320,
+    "delRight": 1391,
+    "delVisibleInCont": true,
+    "usedText": "0 host"
+   },
+   {
+    "id": "windows-2022",
+    "display": "table-row",
+    "h": 121,
+    "w": 1118,
+    "overlaps": [],
+    "spill": [],
+    "idText": true,
+    "idLines": 1,
+    "idMono": true,
+    "idW": 96,
+    "idTdW": 191,
+    "idClip": false,
+    "idEllipsis": "clip",
+    "nameLines": 1,
+    "platform": {
+     "text": "amd64 | unattend | tidak bootable",
+     "h": 121,
+     "parts": [
+      {
+       "t": "amd64",
+       "ff": "\"JetBrains Mono ",
+       "fs": "13px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "unattend",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(90, 88, 82)"
+      },
+      {
+       "t": "tidak bootable",
+       "ff": "\"Inter Variable\"",
+       "fs": "14px",
+       "color": "rgb(128, 125, 114)"
+      }
+     ]
+    },
+    "usedRight": 1320,
+    "delRight": 1391,
+    "delVisibleInCont": true,
+    "usedText": "0 host"
+   }
+  ],
+  "ds": {
+   "bodyBg": "rgb(247, 247, 244)",
+   "h1": {
+    "fs": "26px",
+    "fw": "400",
+    "ls": "-0.325px",
+    "lh": "32.5px"
+   },
+   "drop": [],
+   "rings": 0,
+   "orangeNonCta": [],
+   "orange": [
+    "Daftarkan image|background"
+   ],
+   "pastelOutsidePill": [],
+   "techNonMono": []
+  },
+  "monoFail": [],
+  "radius": "12px",
+  "vis": {
+   "scrollX": 0,
+   "delInViewport": true
+  }
+ }
+]
