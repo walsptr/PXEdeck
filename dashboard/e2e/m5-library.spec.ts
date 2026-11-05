@@ -219,8 +219,24 @@ const BUILTIN_CARD_MAX = 200
 /** Batas terpisah kartu image panjang (iter3, lihat test-migration.md): terukur 466 px @375, 416 px @414. */
 const LONG_CARD_MAX = 520
 
-async function registerLongImages(request: APIRequestContext) {
-  for (const x of LONG_IMAGES) {
+type ImageFixture = { readonly id: string; readonly name: string; readonly version: string; readonly seg: string }
+
+/**
+ * DR-5-12/DR-5-13 (iter3 lanjutan): token tanpa titik pecah (pola probe design-reviewer
+ * `design-shots-iter3/iso1280.mjs`) — ID 48 karakter tanpa "-", nama ber-underscore ±40 karakter,
+ * nama 60 karakter tanpa spasi, segmen path ±110 karakter tanpa "/"/"-"/".".
+ */
+const EXTREME_IMAGES = [
+  { id: "rocky9customlabimagebuildnumber00000000000000001", name: "Rocky Custom Build", version: "9.4", seg: "rocky9-custom-lab" },
+  { id: "ubuntu-underscore-name", name: "Ubuntu_Server_24_04_Custom_HWE_Lab_Rack07", version: "24.04", seg: "ubuntu-underscore-media" },
+  { id: "ubuntu-name-nospace-60", name: "UbuntuServerCustomHweLabRack07NodeImageEdisiPanjangTanpaSpasi".slice(0, 60), version: "24.04", seg: "ubuntu-nospace-media" },
+  { id: "ubuntu-path-nobreak-110", name: "Ubuntu Path Panjang", version: "24.04", seg: `ubuntu2404customhwelabrack07nodeimagemediaroot${"x".repeat(64)}` },
+] as const satisfies readonly ImageFixture[]
+const EXTREME_IDS: readonly string[] = EXTREME_IMAGES.map((x) => x.id)
+
+/** Daftarkan image uji lewat API (dipanggil DI DALAM `try` — cleanup di `finally`, CR-5-26). */
+async function registerImages(request: APIRequestContext, images: readonly ImageFixture[]) {
+  for (const x of images) {
     expect(x.id.length).toBeLessThanOrEqual(48)
     const r = await request.post("/api/os-images", {
       headers: { "content-type": "application/json" },
@@ -231,14 +247,40 @@ async function registerLongImages(request: APIRequestContext) {
     })
     expect(r.status(), await r.text()).toBe(201)
   }
+}
+
+async function registerLongImages(request: APIRequestContext) {
+  await registerImages(request, LONG_IMAGES)
   expect(LONG_IMAGES[0].id).toHaveLength(48)
 }
 
-async function removeLongImages(request: APIRequestContext) {
-  for (const id of LONG_IDS) {
+async function registerExtremeImages(request: APIRequestContext) {
+  await registerImages(request, EXTREME_IMAGES)
+  expect(EXTREME_IMAGES[0].id).toHaveLength(48)
+  expect(EXTREME_IMAGES[0].id).not.toContain("-")
+  expect(EXTREME_IMAGES[1].name).toContain("_")
+  expect(EXTREME_IMAGES[1].name).not.toContain(" ")
+  expect(EXTREME_IMAGES[1].name.length).toBeGreaterThanOrEqual(38)
+  expect(EXTREME_IMAGES[2].name).toHaveLength(60)
+  expect(EXTREME_IMAGES[2].name).not.toMatch(/[\s_-]/)
+  expect(EXTREME_IMAGES[3].seg.length).toBeGreaterThanOrEqual(110)
+  expect(EXTREME_IMAGES[3].seg).not.toMatch(/[/.\s_-]/)
+}
+
+/** Hapus image uji lalu verifikasi lewat API bahwa semuanya sudah hilang (CR-5-26). */
+async function removeImages(request: APIRequestContext, ids: readonly string[]) {
+  for (const id of ids) {
     const r = await request.delete(`/api/os-images/${id}`)
     expect([204, 404]).toContain(r.status())
   }
+  const list = await request.get("/api/os-images")
+  expect(list.status()).toBe(200)
+  const left = ((await list.json()) as { id: string }[]).map((i) => i.id).filter((id) => ids.includes(id))
+  expect(left, "image uji tersisa setelah cleanup").toEqual([])
+}
+
+async function removeLongImages(request: APIRequestContext) {
+  await removeImages(request, LONG_IDS)
 }
 
 type RowGeometry = {
@@ -252,6 +294,10 @@ type RowGeometry = {
   usedRight: number
   delRight: number
   containerRight: number
+  /** Sisi kiri/kanan kotak baris/kartu (DR-5-13: kartu tidak boleh lebih lebar dari kontainer). */
+  rowLeft: number
+  rowRight: number
+  containerLeft: number
   /** ID tampil utuh (tidak terpotong/ellipsis) dan textContent = id. */
   idFull: boolean
 }
@@ -283,13 +329,25 @@ async function rowGeometry(page: Page): Promise<{ rows: RowGeometry[]; docScroll
       for (let i = 0; i < cells.length; i++)
         for (let j = i + 1; j < cells.length; j++)
           if (hit(cells[i][1], cells[j][1])) overlaps.push(`${cells[i][0]}<>${cells[j][0]}`)
-      const spill = Array.from(tr.querySelectorAll<HTMLElement>("*"))
+      const spill: string[] = Array.from(tr.querySelectorAll<HTMLElement>("*"))
         .filter((e) => {
           const r = e.getBoundingClientRect()
           if (r.width === 0 && r.height === 0) return false
           return r.left < rr.l - 0.5 || r.right > rr.r + 0.5 || r.top < rr.t - 0.5 || r.bottom > rr.b + 0.5
         })
         .map((e) => `${e.tagName.toLowerCase()}${e.dataset.testid ? `[${e.dataset.testid}]` : ""}`)
+      // DR-5-12/13: teks yang meluber dari kotak elemennya (mis. token tanpa titik pecah di span
+      // `max-w-full`) tidak mengubah kotak elemen → periksa juga kotak setiap node teks.
+      const walker = document.createTreeWalker(tr, NodeFilter.SHOW_TEXT)
+      for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+        if (!n.textContent?.trim()) continue
+        const range = document.createRange()
+        range.selectNodeContents(n)
+        const r = range.getBoundingClientRect()
+        if (r.width === 0 && r.height === 0) continue
+        if (r.left < rr.l - 0.5 || r.right > rr.r + 0.5 || r.top < rr.t - 0.5 || r.bottom > rr.b + 0.5)
+          spill.push(`#text "${n.textContent.slice(0, 24)}"`)
+      }
       const st = getComputedStyle(idSpan)
       return {
         id: tr.dataset.imageId ?? "",
@@ -299,6 +357,9 @@ async function rowGeometry(page: Page): Promise<{ rows: RowGeometry[]; docScroll
         usedRight: Math.round(cells[1][1].r),
         delRight: Math.round(cells[2][1].r),
         containerRight: Math.round(cr.right),
+        rowLeft: Math.round(rr.l),
+        rowRight: Math.round(rr.r),
+        containerLeft: Math.round(cr.left),
         idFull: idSpan.textContent === tr.dataset.imageId && st.textOverflow !== "ellipsis" && idSpan.scrollWidth <= idSpan.clientWidth + 1,
       }
     })
@@ -312,8 +373,8 @@ async function rowGeometry(page: Page): Promise<{ rows: RowGeometry[]; docScroll
 }
 
 test("DR-5-8 OS Images 375/414: ID 48 karakter + path panjang — ID, Dipakai, Hapus tidak tumpang-tindih, tidak meluber, tanpa scroll horizontal", async ({ page, request }) => {
-  await registerLongImages(request)
   try {
+    await registerLongImages(request)
     for (const [width, height] of [[375, 812], [414, 896]] as const) {
       await page.setViewportSize({ width, height })
       await page.goto("/os-images")
@@ -360,8 +421,8 @@ test("DR-5-8 OS Images 375/414: ID 48 karakter + path panjang — ID, Dipakai, H
 })
 
 test("DR-5-9 OS Images 1280/1440: ID/nama/path panjang — tabel muat tanpa scroll horizontal, Dipakai + Hapus di dalam kontainer", async ({ page, request }) => {
-  await registerLongImages(request)
   try {
+    await registerLongImages(request)
     for (const [width, height] of [[1280, 800], [1440, 900]] as const) {
       await page.setViewportSize({ width, height })
       await page.goto("/os-images")
@@ -395,6 +456,98 @@ test("DR-5-9 OS Images 1280/1440: ID/nama/path panjang — tabel muat tanpa scro
   } finally {
     await removeLongImages(request)
   }
+  await page.goto("/os-images")
+  for (const id of LONG_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toHaveCount(0)
+})
+
+// ---- iter3 lanjutan: DR-5-12 (tabel 1280/1440) + DR-5-13 (kartu 375/414) dengan token tanpa titik pecah ----
+
+const STRESS_IDS: readonly string[] = [...LONG_IDS, ...EXTREME_IDS]
+
+test("DR-5-12 OS Images 1280/1440: ID 48 tanpa '-', nama ber-underscore/tanpa spasi, segmen path 110 — tabel tanpa overflow, Dipakai + Hapus di dalam kontainer", async ({ page, request }) => {
+  try {
+    await registerLongImages(request)
+    await registerExtremeImages(request)
+    for (const [width, height] of [[1280, 800], [1440, 900]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/os-images")
+      for (const id of STRESS_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toBeVisible()
+      await expect(page.getByRole("columnheader", { name: "Dipakai" })).toBeVisible()
+      const g = await rowGeometry(page)
+      const table = await page.getByTestId("os-images-table").evaluate((t) => Math.round(t.getBoundingClientRect().width))
+      test.info().annotations.push({ type: `dr-5-12-${width}`, description: JSON.stringify({ table, tableOverflow: g.tableOverflow, scrollWidth: g.docScrollWidth, rowHeights: Object.fromEntries(g.rows.map((r) => [r.id, r.height])) }) })
+      expect(g.rows.length).toBeGreaterThanOrEqual(5 + STRESS_IDS.length)
+      expect(g.tableOverflow, `@${width}: scroll horizontal di dalam tabel (tabel ${table} px)`).toBeLessThanOrEqual(0)
+      expect(g.docScrollWidth, `@${width}: scroll horizontal halaman`).toBeLessThanOrEqual(width)
+      for (const r of g.rows) {
+        expect(r.rowRight, `@${width} ${r.id}: baris lebih lebar dari kontainer`).toBeLessThanOrEqual(r.containerRight)
+        expect(r.usedRight, `@${width} ${r.id}: kolom Dipakai di luar kontainer`).toBeLessThanOrEqual(r.containerRight)
+        expect(r.delRight, `@${width} ${r.id}: tombol Hapus di luar kontainer`).toBeLessThanOrEqual(r.containerRight)
+        expect(r.overlaps, `@${width} ${r.id}`).toEqual([])
+        expect(r.spill, `@${width} ${r.id}: elemen/teks meluber keluar baris`).toEqual([])
+        expect(r.idFull, `@${width} ${r.id}: ID harus terbaca utuh`).toBe(true)
+      }
+      for (const id of STRESS_IDS) {
+        const row = page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)
+        await row.scrollIntoViewIfNeeded()
+        expect(await page.evaluate(() => window.scrollX)).toBe(0)
+        await expect(row.getByRole("button", { name: `Hapus ${id}`, exact: true })).toBeInViewport()
+        await expect(row.getByTestId("img-used-by")).toBeInViewport()
+        await expect(row.getByTestId("img-id")).toHaveText(id)
+      }
+      // Nama tetap terbaca utuh (wrap, bukan dipotong).
+      for (const x of EXTREME_IMAGES)
+        await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${x.id}"]`).getByTestId("img-name")).toHaveText(x.name)
+      // `ubuntu-24.04` tetap satu baris (tidak dipecah di "-") walau ada token panjang di kolom yang sama.
+      const u24 = page.locator('[data-testid="os-image-row"][data-image-id="ubuntu-24.04"]').getByTestId("img-id").locator("span")
+      const lh = await u24.evaluate((e) => parseFloat(getComputedStyle(e).lineHeight))
+      expect((await u24.boundingBox())!.height).toBeLessThanOrEqual(lh + 1)
+      // Design system: ID mono, tanpa drop shadow, oranye hanya tombol primary.
+      expect(await page.locator(`[data-testid="os-image-row"][data-image-id="${EXTREME_IDS[0]}"]`).getByTestId("img-id").locator("span").evaluate((e) => getComputedStyle(e).fontFamily)).toMatch(/JetBrains Mono/)
+      expect(await dropShadowViolations(page)).toEqual([])
+      for (const o of await orangeElements(page)) expect(o, "oranye hanya untuk CTA utama").toMatchObject({ slot: "button", variant: "default" })
+      await page.screenshot({ path: SHOTS(5, `dr-5-12-os-images-extreme-${width}`), fullPage: true })
+    }
+  } finally {
+    await removeImages(request, STRESS_IDS)
+  }
+  await page.goto("/os-images")
+  for (const id of STRESS_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toHaveCount(0)
+})
+
+test("DR-5-13 OS Images 375/414: nama tanpa spasi + segmen path tanpa titik pecah — tidak ada elemen kartu meluber, scrollWidth kontainer = clientWidth", async ({ page, request }) => {
+  try {
+    await registerLongImages(request)
+    await registerExtremeImages(request)
+    for (const [width, height] of [[375, 812], [414, 896]] as const) {
+      await page.setViewportSize({ width, height })
+      await page.goto("/os-images")
+      for (const id of STRESS_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toBeVisible()
+      const g = await rowGeometry(page)
+      const cont = await page.locator('[data-testid="os-images-page"] [data-slot="table-container"]').evaluate((c) => ({ scrollWidth: c.scrollWidth, clientWidth: c.clientWidth }))
+      test.info().annotations.push({ type: `dr-5-13-${width}`, description: JSON.stringify({ container: cont, scrollWidth: g.docScrollWidth, cardHeights: Object.fromEntries(g.rows.map((r) => [r.id, r.height])) }) })
+      expect(g.rows.length).toBeGreaterThanOrEqual(5 + STRESS_IDS.length)
+      for (const r of g.rows) {
+        expect(r.overlaps, `@${width} ${r.id}: sel saling tumpang-tindih`).toEqual([])
+        expect(r.spill, `@${width} ${r.id}: elemen/teks meluber keluar kartu`).toEqual([])
+        expect(r.idFull, `@${width} ${r.id}: ID harus terbaca utuh`).toBe(true)
+        expect(r.rowLeft, `@${width} ${r.id}: kartu keluar kiri kontainer`).toBeGreaterThanOrEqual(r.containerLeft)
+        expect(r.rowRight, `@${width} ${r.id}: kartu lebih lebar dari kontainer`).toBeLessThanOrEqual(r.containerRight)
+        expect(r.delRight, `@${width} ${r.id}: tombol Hapus di luar kartu`).toBeLessThanOrEqual(r.containerRight)
+      }
+      expect(cont.scrollWidth, `@${width}: scrollWidth kontainer = clientWidth`).toBe(cont.clientWidth)
+      expect(g.docScrollWidth, `@${width}: scrollWidth halaman = lebar viewport`).toBe(width)
+      for (const x of EXTREME_IMAGES)
+        await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${x.id}"]`).getByTestId("img-name")).toHaveText(x.name)
+      expect(await dropShadowViolations(page)).toEqual([])
+      for (const o of await orangeElements(page)) expect(o, "oranye hanya untuk CTA utama").toMatchObject({ slot: "button", variant: "default" })
+      await page.screenshot({ path: SHOTS(5, `dr-5-13-os-images-extreme-${width}`), fullPage: true })
+    }
+  } finally {
+    await removeImages(request, STRESS_IDS)
+  }
+  await page.goto("/os-images")
+  for (const id of STRESS_IDS) await expect(page.locator(`[data-testid="os-image-row"][data-image-id="${id}"]`)).toHaveCount(0)
 })
 
 test("DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900", async ({ page }) => {

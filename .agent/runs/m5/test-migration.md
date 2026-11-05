@@ -292,3 +292,53 @@ Ukuran terukur (anotasi Playwright):
 Mutasi: komponen di-revert ke `7af8d05` (hanya ditambah `data-testid="img-id"`). DR-5-8 merah dengan
 "@375 debian-12.7-…: sel saling tumpang-tindih". DR-5-9 merah dengan "@1280: scroll horizontal di
 dalam tabel" (773 px).
+
+## Iterasi 3 — frontend-dev, lanjutan (DR-5-12, DR-5-13, CR-5-26, I-5-15)
+
+Perubahan UI di `dashboard/src/components/os-images/os-images-view.tsx`:
+- DR-5-12: span ID, span nama, `PathText`, dan alasan "tidak tersedia" memakai `wrap-anywhere`, bukan
+  `wrap-break-word`. Hanya `overflow-wrap: anywhere` yang ikut mengecilkan lebar min-content, sehingga
+  token tanpa titik pecah tidak lagi menjadi lebar minimum kolom di `table-layout: auto`.
+  `xl:min-w-[12ch]` pada ID tetap ada, jadi `ubuntu-24.04` tetap satu baris.
+- DR-5-13: sel kartu Nama, Sumber, dan Ketersediaan diberi `max-xl:min-w-0`.
+- I-5-15: sel Hapus di kartu memakai `-mt-1.5 -mb-1` (sebelumnya `-my-1.5`), sehingga kotak tombol
+  tidak lagi beririsan 1,4 px dengan baris nama. Akibatnya kartu bawaan bertambah 2 px:
+  154 → 156 dan 197 → 199. Batas DR-5-1 200 px tetap dan lulus, tetapi marginnya tinggal 1 px.
+
+Test lama yang diubah (diperketat, tidak dilonggarkan):
+- CR-5-26: di DR-5-8 dan DR-5-9, `registerLongImages` kini berada **di dalam** `try`. Cleanup
+  `removeImages` di `finally` kini memverifikasi lewat `GET /api/os-images` bahwa tidak ada image uji
+  yang tersisa. DR-5-9 juga ditambah verifikasi UI setelah `finally` (baris hilang), sama seperti DR-5-8.
+- `rowGeometry.spill` kini juga memeriksa kotak **setiap node teks**. Teks yang meluber dari span
+  `max-w-full` tidak mengubah kotak elemennya, sehingga sebelumnya lolos. Field baru `rowLeft`,
+  `rowRight`, dan `containerLeft` diasersikan di test baru.
+- Asersi, batas, dan data DR-5-1, DR-5-8, serta DR-5-9 lainnya tidak berubah.
+
+Test baru di `dashboard/e2e/m5-library.spec.ts`:
+- `EXTREME_IMAGES`:
+  - `rocky9customlabimagebuildnumber00000000000000001` (48 karakter, tanpa "-")
+  - nama `Ubuntu_Server_24_04_Custom_HWE_Lab_Rack07` (41 karakter, underscore, tanpa spasi)
+  - nama 60 karakter tanpa spasi, "_", atau "-"
+  - segmen path 110 karakter tanpa `/ . _ -`
+
+  Bentuk data ini diasersikan di `registerExtremeImages`. Data didaftarkan bersama `LONG_IMAGES`.
+
+| Test | Isi |
+|---|---|
+| DR-5-12 OS Images 1280/1440 | Tabel tanpa overflow; `scrollWidth` halaman ≤ lebar. Setiap baris: sisi kanan baris, Dipakai, dan Hapus ≤ sisi kanan kontainer; overlap 0; elemen/teks meluber 0; ID utuh. Untuk setiap image stres: `scrollX` = 0 setelah gulir vertikal; Hapus dan Dipakai di viewport; teks ID dan nama utuh. `ubuntu-24.04` satu baris; ID mono; tanpa drop shadow; oranye hanya CTA. Pendaftaran di dalam `try`; `finally` menghapus dan memverifikasi lewat API, lalu UI. |
+| DR-5-13 OS Images 375/414 | Setiap kartu: overlap 0, elemen/teks meluber 0, ID utuh, kartu di dalam kontainer (kiri dan kanan), Hapus di dalam. `scrollWidth` kontainer **=** `clientWidth`; `scrollWidth` halaman **=** lebar viewport; nama utuh; tanpa drop shadow; oranye hanya CTA. Cleanup sama dengan DR-5-12. |
+
+Ukuran terukur (anotasi Playwright):
+- 1280: tabel 958 di kontainer 958, overflow 0. Sebelum perbaikan: 1037 px, overflow 79.
+- 1440: tabel 1118 = 1118.
+- 375: kontainer 325/325, halaman 375. Kartu stres 327/330/522/330 px.
+- 414: kontainer 364/364. Kartu 314/296/389/276 px.
+
+Mutasi:
+1. Komponen di-revert ke `HEAD` `0c61ed8`:
+   - DR-5-12 merah: "@1280: scroll horizontal di dalam tabel (tabel 1037 px)", overflow 79.
+   - DR-5-13 merah: "@375 rocky9customlab…: elemen/teks meluber keluar kartu".
+   - DR-5-8 dan DR-5-9 tetap hijau, seperti yang diharapkan.
+2. Hanya `wrap-anywhere` → `wrap-break-word`: DR-5-12 merah (1037 px).
+3. Hanya `max-xl:min-w-0` dihapus: DR-5-13 **tetap hijau**. `wrap-anywhere` sudah cukup untuk
+   mengecilkan min-content item flex. `min-w-0` adalah pengaman tambahan, bukan satu-satunya perbaikan.

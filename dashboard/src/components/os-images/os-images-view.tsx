@@ -57,6 +57,8 @@ const COLS = 7
  * ketersediaan (sebaris bila tersedia; alasan tidak tersedia di baris sendiri), (4) sumber.
  * DR-5-9: batas kartu dinaikkan dari `md` ke `xl` — tabel butuh kontainer ≥ ~950 px (1280 px ke
  * atas); di 768–1279 px tabel sebelumnya hanya bisa di-scroll horizontal.
+ * DR-5-13: sel kartu `basis-full` (Nama, Sumber, Ketersediaan) diberi `min-w-0` — tanpa itu item
+ * flex tidak bisa lebih sempit dari token terpanjangnya dan kartu meluber.
  */
 const ROW_MOBILE =
   "max-xl:flex max-xl:flex-wrap max-xl:items-start max-xl:gap-x-3 max-xl:gap-y-1 max-xl:px-4 max-xl:py-3"
@@ -65,12 +67,16 @@ const ROW_MOBILE =
  * Path/URL mono yang dipenggal di "/" (DR-5-1): setiap segmen (beserta "/" penutupnya) adalah
  * `inline-block` sehingga baris hanya pecah di batas segmen — bukan per karakter atau di "-"
  * (`ubuntu-` / `24.04`). Segmen yang sendirian lebih lebar dari kolom tetap dipecah
- * (`wrap-break-word`) agar tidak melebar keluar. textContent tidak berubah.
+ * (`wrap-anywhere`) agar tidak melebar keluar. DR-5-12/DR-5-13: `wrap-anywhere` (bukan
+ * `wrap-break-word`) karena hanya `anywhere` yang ikut mengecilkan lebar min-content — di tabel
+ * `table-layout: auto` dan item flex kartu, `break-word` tetap memakai lebar token utuh sebagai
+ * batas bawah sehingga tabel/kartu melebar. Pemisahan tetap mengutamakan "/" (segmen inline-block).
+ * textContent tidak berubah.
  */
 function PathText({ value, className, ...props }: React.ComponentProps<"span"> & { value: string }) {
   const parts = value.split("/")
   return (
-    <span className={cn("type-data min-w-0 text-xs wrap-break-word", className)} {...props}>
+    <span className={cn("type-data min-w-0 text-xs wrap-anywhere", className)} {...props}>
       {parts.map((p, i) => (
         <span key={i} className="inline-block max-w-full">
           {p}
@@ -125,8 +131,9 @@ function AvailabilityCell({ img }: { img: OsImageInfo }) {
       data-available="false"
     >
       <HugeiconsIcon icon={InformationCircleIcon} strokeWidth={2} className="mt-0.5 size-4 shrink-0" />
-      {/* Alasan bisa memuat id/path panjang tanpa titik pecah → dipecah di dalam kata agar tidak meluber. */}
-      <span className="min-w-0 wrap-break-word">{img.reason ?? "Media tidak tersedia"}</span>
+      {/* Alasan bisa memuat id/path panjang tanpa titik pecah → dipecah di dalam kata agar tidak meluber
+          (`wrap-anywhere`: juga mengecilkan min-content, DR-5-12). */}
+      <span className="min-w-0 wrap-anywhere">{img.reason ?? "Media tidak tersedia"}</span>
     </span>
   )
 }
@@ -259,14 +266,18 @@ export function OsImagesView() {
                         className="pl-4 align-top whitespace-normal xl:max-w-44 max-xl:order-1 max-xl:min-w-0 max-xl:flex-1 max-xl:p-0"
                         data-testid="img-id"
                       >
-                        {/* min 12ch: id pendek (`ubuntu-24.04`) tidak dipecah di "-" di desktop. */}
-                        <span className="type-data inline-block max-w-full min-w-0 wrap-break-word xl:min-w-[12ch]">
+                        {/*
+                          min 12ch: id pendek (`ubuntu-24.04`) tidak dipecah di "-" di desktop.
+                          DR-5-12: `wrap-anywhere` — ID tanpa "-" (48 karakter) tidak lagi menjadi
+                          lebar minimum kolom sehingga tabel tetap muat di 1280 px.
+                        */}
+                        <span className="type-data inline-block max-w-full min-w-0 wrap-anywhere xl:min-w-[12ch]">
                           {img.id}
                         </span>
                       </TableCell>
-                      <TableCell className="align-top whitespace-normal xl:max-w-40 max-xl:order-3 max-xl:basis-full max-xl:p-0">
+                      <TableCell className="align-top whitespace-normal xl:max-w-40 max-xl:order-3 max-xl:min-w-0 max-xl:basis-full max-xl:p-0">
                         <div className="flex flex-col gap-0.5 max-xl:flex-row max-xl:flex-wrap max-xl:items-baseline max-xl:gap-x-1.5">
-                          <span className="min-w-0 wrap-break-word text-foreground" data-testid="img-name">
+                          <span className="min-w-0 wrap-anywhere text-foreground" data-testid="img-name">
                             {img.name}
                           </span>
                           <span className="type-caption text-muted-foreground">{img.version}</span>
@@ -285,12 +296,12 @@ export function OsImagesView() {
                           </span>
                         </div>
                       </TableCell>
-                      <TableCell className="align-top max-xl:order-6 max-xl:basis-full max-xl:p-0">
+                      <TableCell className="align-top max-xl:order-6 max-xl:min-w-0 max-xl:basis-full max-xl:p-0">
                         <SourceCell img={img} />
                       </TableCell>
                       <TableCell
                         className={cn(
-                          "align-top max-xl:order-5 max-xl:p-0",
+                          "align-top max-xl:order-5 max-xl:min-w-0 max-xl:p-0",
                           !img.available && "max-xl:basis-full",
                         )}
                       >
@@ -303,7 +314,8 @@ export function OsImagesView() {
                         <span className="text-muted-foreground xl:hidden">Dipakai </span>
                         <span className="type-data text-xs">{img.usedBy ?? 0}</span> host
                       </TableCell>
-                      <TableCell className="pr-4 text-right align-top max-xl:order-2 max-xl:-my-1.5 max-xl:p-0">
+                      {/* I-5-15: margin bawah -1 (bukan -1.5) agar kotak tombol tidak menyentuh baris nama. */}
+                      <TableCell className="pr-4 text-right align-top max-xl:order-2 max-xl:-mt-1.5 max-xl:-mb-1 max-xl:p-0">
                         <Button
                           variant="ghost"
                           size="icon-sm"
