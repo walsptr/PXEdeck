@@ -1,0 +1,97 @@
+{
+  "run": "m4",
+  "generatedAt": "2026-11-05T12:20:52.721Z",
+  "nodes": [
+    "pxe-test-m4-node11",
+    "pxe-test-m4-node12"
+  ],
+  "harnessResults": [
+    {
+      "ac": "AC-4.32",
+      "node": "pxe-test-m4-node11",
+      "status": "PASS",
+      "evidence": [
+        "pxe-test-m4-node11-negative.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.34-scan",
+      "status": "PASS",
+      "note": "0 temuan",
+      "evidence": [
+        "evidence-scan.txt"
+      ]
+    }
+  ],
+  "source": "harnessResults = ditulis dashboard/e2e-kvm (record/writeResults); acSummary = konsolidasi test-engineer dari kvm-run.txt, server-check.txt, cleanup.txt, playwright-kvm.log",
+  "attempts": [
+    {
+      "id": "attempt1-20261105T115847Z",
+      "dir": "attempt1-20261105T115847Z/",
+      "result": "FAIL",
+      "exit": 1,
+      "cause": "bug test: m4-install.spec.ts menegaskan firmware segera saat host muncul dari lease dnsmasq (firmware masih null sebelum iPXE meminta ?platform=). Diperbaiki dengan expect.poll (nilai yang dituntut tetap)."
+    },
+    {
+      "id": "attempt2-20261105T120018Z",
+      "dir": "./",
+      "result": "FAIL",
+      "exit": 130,
+      "cause": "bug infra B-3: VM node dibuat virt-install --pxe --noautoconsole -> XML live fase install on_reboot=destroy; harness `node.sh reset` (virsh reset) mematikan node11 (domstate 'shut off (shutdown)') sehingga installer tidak pernah boot. Run dihentikan (SIGINT ke Playwright) pukul 12:20:52Z setelah 20 menit tanpa progres; cleanup trap berjalan. Lihat diag-B3-reset-shutdown.txt."
+    }
+  ],
+  "acSummary": [
+    {
+      "ac": "AC-4.29",
+      "status": "PASS",
+      "durationS": 29,
+      "evidence": [
+        "server-check.txt",
+        "server-listen.txt"
+      ],
+      "note": "verify-listen RESULT PASS; layanan aktif; Next 127.0.0.1:3000; /api/settings cidr 10.99.0.0/24; vmlinuz 200; sha256 snponly/undionly = media.log"
+    },
+    {
+      "ac": "AC-4.30",
+      "node": "pxe-test-m4-node11",
+      "status": "FAIL",
+      "durationS": null,
+      "evidence": [
+        "playwright-kvm.log",
+        "pxe-test-m4-node11-console.txt",
+        "diag-B3-reset-shutdown.txt"
+      ],
+      "note": "discovery + konfigurasi + Install 200 + booting OK; setelah virsh reset node mati (B-3); tidak mencapai installing/configuring/done"
+    },
+    {
+      "ac": "AC-4.31",
+      "status": "NOT_RUN",
+      "note": "bergantung AC-4.30 (mode serial)"
+    },
+    {
+      "ac": "AC-4.32",
+      "node": "pxe-test-m4-node11",
+      "status": "PASS",
+      "evidence": [
+        "pxe-test-m4-node11-negative.txt"
+      ]
+    },
+    {
+      "ac": "AC-4.33",
+      "node": "pxe-test-m4-node12",
+      "status": "NOT_RUN",
+      "note": "tidak dijalankan (mode serial, AC-4.30 gagal); node12 juga punya on_reboot=destroy live (diag-B3)"
+    },
+    {
+      "ac": "AC-4.34",
+      "status": "PASS",
+      "evidence": [
+        "cleanup.txt",
+        "evidence-scan.txt",
+        "kvm-run.txt",
+        "../secret-scan.txt"
+      ],
+      "note": "cleanup: tanpa VM pxe-test-m4-*/pxe-test-server, disk node+overlay server terhapus, key run dihapus, pxe-test tetap; redact-evidence ok; scan bersih. Status per AC lengkap bergantung run sukses."
+    }
+  ]
+}

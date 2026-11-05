@@ -1,0 +1,28 @@
+# 2026-11-05T12:20:52Z diagnosa B-3: virsh reset mematikan node (on_reboot=destroy pada XML live install-phase virt-install --pxe)
+## virsh list --all
+ Id   Name                 State
+-------------------------------------
+ 4    pxe-test-server      running
+ 6    pxe-test-m4-node12   running
+ -    pxe-test-m4-node11   shut off
+ -    ubuntu24.04          shut off
+
+## domstate --reason pxe-test-m4-node11
+shut off (shutdown)
+
+## node12 LIVE XML (on_*)
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>destroy</on_reboot>
+  <on_crash>destroy</on_crash>
+## node12 PERSISTENT (--inactive) XML (on_*)
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+## node11 PERSISTENT XML (on_*)
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+## node11 console: last write
+2026-11-05 19:01:10.265592326 +0700
+## results.json AC-4.32 generatedAt (resetNode dipanggil sesudahnya)
+  "generatedAt": "2026-11-05T12:01:10.203Z",

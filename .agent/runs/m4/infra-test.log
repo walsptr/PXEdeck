@@ -1,4 +1,4 @@
-infra/test/run.sh — 2026-11-05T11:47:50Z
+infra/test/run.sh — 2026-11-05T11:58:14Z
   ok   bash -n semua script infra
   ok   set -euo pipefail di setiap script
   ok   PATH test hanya berisi virsh/ssh palsu, tanpa sudo
@@ -13,19 +13,7 @@ infra/test/run.sh — 2026-11-05T11:47:50Z
   ok   cleanup.sh hanya resource run + snapshot
   ok   cleanup.sh --server
   ok   cleanup.sh dry-run tanpa mutasi
-    ASSERT: cleanup.sh 'default' harus ditolak (exit ≠ 0) expected not '0'
-    ASSERT: cleanup.sh 'default' memanggil virsh harus kosong, berisi: virsh -c qemu:///system list --all
-virsh -c qemu:///system net-list --all
-virsh -c qemu:///system list --all --name
-virsh -c qemu:///system list --all
-virsh -c qemu:///system net-list --all
-    ASSERT: cleanup.sh 'int' harus ditolak (exit ≠ 0) expected not '0'
-    ASSERT: cleanup.sh 'int' memanggil virsh harus kosong, berisi: virsh -c qemu:///system list --all
-virsh -c qemu:///system net-list --all
-virsh -c qemu:///system list --all --name
-virsh -c qemu:///system list --all
-virsh -c qemu:///system net-list --all
-  FAIL cleanup.sh menolak nama terlindungi (exit≠0, tanpa virsh)
+  ok   cleanup.sh menolak nama terlindungi (exit≠0, tanpa virsh)
   ok   cleanup.sh opsi tak dikenal
   ok   server-down dry-run & palsu
   ok   net-down hanya pxe-test*
@@ -36,6 +24,8 @@ virsh -c qemu:///system net-list --all
   ok   dnsmasq.conf terikat pxe0 (bind-interfaces)
   ok   tanpa sudo, ssh hanya dengan key, tanpa ~/.ssh
   ok   verify-node.sh: symlink, gagal cepat tanpa env, cek AC-4.31
-hasil: 24 lulus, 1 gagal
-  gagal: cleanup.sh menolak nama terlindungi (exit≠0, tanpa virsh)
-exit=1
+  ok   redact-evidence: token path/token=/$6$ disamarkan, exit 0
+  ok   redact-evidence: header private key → exit 1 tanpa isi
+  ok   redact-evidence: argumen salah → exit 2
+  ok   kvm-run.sh finish() memanggil redact-evidence (gagal = FAIL)
+hasil: 29 lulus, 0 gagal

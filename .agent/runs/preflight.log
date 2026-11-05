@@ -93,3 +93,58 @@ Filesystem      Size  Used Avail Use% Mounted on
 /dev/nvme0n1p5  474G  117G  356G  25% /home
 --- max_parallel_vms = clamp(floor((9583-4096)/2048),1,3) = 2
 --- RESULT: PASS
+
+=== Preflight KVM 2026-11-05T11:58:27Z host=local (re-run, M4 KVM) ===
+--- /dev/kvm
+crw-rw-rw- 1 root kvm 10, 232 Nov  5 18:15 /dev/kvm
+kvm rw: OK
+--- id
+uid=1000(syawal) gid=1000(syawal) groups=1000(syawal),10(wheel),962(docker),967(ollama),968(libvirt)
+--- cpu flags vmx/svm count
+24
+vmx
+--- virsh
+/usr/bin/virsh
+--- virt-install
+/usr/bin/virt-install
+--- qemu-img
+/usr/bin/qemu-img
+--- qemu-system-x86_64
+/usr/bin/qemu-system-x86_64
+--- ssh
+/usr/bin/ssh
+--- cloud-localds
+/usr/bin/cloud-localds
+--- socat
+/usr/bin/socat
+--- curl
+/usr/bin/curl
+--- npx
+/usr/bin/npx
+--- OVMF
+-rw-r--r--. 1 root root 1966080 Jul  8 07:00 /usr/share/edk2/ovmf/OVMF_CODE.fd
+-rw-r--r--. 1 root root  131072 Jul  8 07:00 /usr/share/edk2/ovmf/OVMF_VARS.fd
+--- virsh list --all
+ Id   Name              State
+----------------------------------
+ -    pxe-test-server   shut off
+ -    ubuntu24.04       shut off
+
+rc=0
+--- virsh net-list --all
+ Name           State      Autostart   Persistent
+---------------------------------------------------
+ default        active     yes         yes
+ int            active     yes         yes
+ pxe-test       inactive   no          yes
+ pxe-test-nat   inactive   no          yes
+
+rc=0
+--- free -m
+               total        used        free      shared  buff/cache   available
+Mem:           23719        4573       12326         572        7759       19146
+Swap:           8191           0        8191
+--- nproc
+12
+--- max_parallel_vms = clamp(floor((19146-4096)/2048),1,3) = 3
+--- RESULT: PASS

@@ -63,8 +63,15 @@ for (const node of NODES) {
     await page.evaluate(() => ((window as unknown as { __noReload: boolean }).__noReload = true))
     const row = page.locator("main table").first().locator("tbody tr").filter({ has: page.getByText(node.mac, { exact: true }) })
     await expect(row).toHaveCount(1, { timeout: 10 * 60_000 })
-    const discovered = await apiHost(page, node.mac)
-    expect(discovered).toMatchObject({ vendor: "QEMU/KVM", firmware: node.fw })
+    // Host bisa muncul lebih dulu dari lease dnsmasq (DHCP firmware PXE; firmware belum diketahui,
+    // src/lib/server/discovery.ts) lalu firmware terisi saat iPXE meminta /boot/<mac>.ipxe?platform=.
+    // Tunggu (poll) sampai keduanya tercatat; nilai yang dituntut tidak berubah.
+    await expect
+      .poll(async () => {
+        const h = await apiHost(page, node.mac)
+        return h && { vendor: h.vendor, firmware: h.firmware }
+      }, { timeout: 5 * 60_000, intervals: [1_000, 2_000, 5_000] })
+      .toEqual({ vendor: "QEMU/KVM", firmware: node.fw })
     await page.screenshot({ path: shot(`${node.name}-discovered`) })
 
     // ---- 2. konfigurasi lewat Sheet ----

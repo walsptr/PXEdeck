@@ -328,7 +328,8 @@ test_kvm_run_dry_run_end_to_end() {
   OUT="$(unq "$OUT")"
   assert_empty "$(mutating_calls)" "kvm-run dry-run mengeksekusi mutasi"
   # Rencana memuat semua tahap.
-  # (net-up dipanggil dengan stdout dibuang oleh kvm-run; rencana net-up diuji di test net-up.)
+  # (Output net-up dialihkan kvm-run ke stderr dan tidak dicocokkan di sini; rencana net-up
+  # diuji di test_net_up_dry_run.)
   assert_match "$OUT" "DRY-RUN: virt-install .*--name pxe-test-server .*--network network=pxe-test,mac=52:54:00:99:01:02"
   assert_match "$OUT" "DRY-RUN: env PXE_STANDALONE=1 npm --prefix .*/dashboard run build"
   assert_match "$OUT" "DRY-RUN: virt-install .*--name pxe-test-m4-node11 .*mac=52:54:00:99:00:11.*OVMF_CODE"
@@ -448,6 +449,86 @@ test_verify_node_script() {
   assert_no_match "$(grep -v "^\s*#" <<<"$v")" "PASSWORD|TOKEN|\\$\\{?(PASS|TOKEN)"
 }
 
+# Data uji secret dibangun saat runtime (tidak ada token/hash/header key literal di repo).
+_fake_token() { local s=""; while ((${#s} < 43)); do s+="Ab9_-xYz"; done; printf '%s' "${s:0:43}"; }
+_fake_hash() { printf '$6$%s$%s' "saltSALT1234" "$(printf 'h%.0s' {1..86})"; }
+_fake_pkey_header() { printf -- '-----BEGIN %s PRIVATE KEY-----' "OPENSSH"; }
+
+test_redact_evidence_masks_secrets() {
+  local d="$SB/evidence" tok hash
+  tok="$(_fake_token)"; hash="$(_fake_hash)"
+  mkdir -p "$d/sub"
+  {
+    echo "GET /boot/52:54:00:99:00:11/$tok/user-data HTTP/1.1 200"
+    echo "GET /boot/52-54-00-99-00-12/$tok/meta-data 200"
+    echo "GET /boot/52%3A54%3A00%3A99%3A00%3A13/$tok 200"
+    echo "GET /boot/525400990014/$tok?x=1 200"
+    echo "GET /boot/52:54:00:99:00:11.ipxe?platform=efi 200"
+  } > "$d/nginx-access.log"
+  {
+    echo "curl http://10.99.0.2/api/callback?token=$tok&status=done"
+    echo "{\"token\":\"$tok\",\"status\":\"installing\"}"
+    echo "TOKEN = '$tok'"
+  } > "$d/sub/journal.txt"
+  printf 'password: %s\nuser m4admin\n' "$hash" > "$d/sub/console.log"
+  run_infra redact-evidence.sh "$d"
+  assert_eq "$RC" 0 "$OUT"
+  assert_contains "$OUT" "bersih"
+  local all; all="$(cat "$d/nginx-access.log" "$d/sub/journal.txt" "$d/sub/console.log")"
+  assert_not_contains "$all" "$tok" "token tersisa"
+  assert_not_contains "$all" "$hash" "hash tersisa"
+  assert_no_match "$all" '\$6\$saltSALT'
+  # Bentuk redaksi + konteks dipertahankan.
+  assert_contains "$all" "/boot/52:54:00:99:00:11/REDACTED-TOKEN/user-data"
+  assert_contains "$all" "/boot/52-54-00-99-00-12/REDACTED-TOKEN/meta-data"
+  assert_contains "$all" "/boot/52%3A54%3A00%3A99%3A00%3A13/REDACTED-TOKEN 200"
+  assert_contains "$all" "/boot/525400990014/REDACTED-TOKEN?x=1"
+  assert_contains "$all" "token=REDACTED-TOKEN&status=done"
+  assert_contains "$all" "\"token\":\"REDACTED-TOKEN\""
+  assert_contains "$all" "TOKEN = 'REDACTED-TOKEN'"
+  assert_contains "$all" 'password: $6$REDACTED'
+  # Baris non-secret tidak berubah.
+  assert_contains "$all" "GET /boot/52:54:00:99:00:11.ipxe?platform=efi 200"
+  assert_contains "$all" "user m4admin"
+  # Idempoten: dijalankan ulang tetap bersih dan isi identik.
+  local before; before="$(cat "$d/nginx-access.log" "$d/sub/journal.txt" "$d/sub/console.log")"
+  run_infra redact-evidence.sh "$d"
+  assert_eq "$RC" 0 "$OUT"
+  assert_eq "$(cat "$d/nginx-access.log" "$d/sub/journal.txt" "$d/sub/console.log")" "$before" "redaksi ulang mengubah isi"
+}
+
+test_redact_evidence_private_key_fails() {
+  local d="$SB/evidence"
+  mkdir -p "$d"
+  { echo "log biasa"; _fake_pkey_header; echo; echo "b3BlbnNzaC1rZXktdjEAAAAA"; } > "$d/leak.txt"
+  echo "baris aman" > "$d/ok.txt"
+  run_infra redact-evidence.sh "$d"
+  assert_ne "$RC" 0 "header private key harus menggagalkan redaksi"
+  assert_eq "$RC" 1 "$OUT"
+  assert_contains "$OUT" "TEMUAN"
+  assert_match "$OUT" "leak\.txt:2"
+  assert_not_contains "$OUT" "ok.txt" "file bersih ikut dilaporkan"
+  # Isi tidak dibocorkan ke output (hanya file:baris).
+  assert_not_contains "$OUT" "b3BlbnNzaC1rZXktdjEAAAAA"
+}
+
+test_redact_evidence_bad_args() {
+  run_infra redact-evidence.sh
+  assert_eq "$RC" 2 "tanpa argumen: $OUT"
+  assert_contains "$OUT" "pakai:"
+  run_infra redact-evidence.sh "$SB/tidak-ada"
+  assert_eq "$RC" 2 "direktori tak ada: $OUT"
+  mkdir -p "$SB/a" "$SB/b"
+  run_infra redact-evidence.sh "$SB/a" "$SB/b"
+  assert_eq "$RC" 2 "dua argumen: $OUT"
+}
+
+test_kvm_run_calls_redact_in_finish() {
+  local k; k="$(sed -n '/^finish()/,/^}/p' "$INFRA_DIR_UNDER_TEST/kvm-run.sh")"
+  assert_contains "$k" 'redact-evidence.sh" "$RUNS_DIR"'
+  assert_contains "$k" "step redact FAIL"
+}
+
 # ---------------------------------------------------------------------------------------------
 _build_safe_bin
 echo "infra/test/run.sh — $(date -u +%FT%TZ)"
@@ -476,6 +557,10 @@ t "deploy-dashboard dry-run + dashboard.env tanpa secret"         test_deploy_dr
 t "dnsmasq.conf terikat pxe0 (bind-interfaces)"                   test_dnsmasq_conf_bound
 t "tanpa sudo, ssh hanya dengan key, tanpa ~/.ssh"                test_no_sudo_and_ssh_targets
 t "verify-node.sh: symlink, gagal cepat tanpa env, cek AC-4.31"   test_verify_node_script
+t "redact-evidence: token path/token=/\$6\$ disamarkan, exit 0"     test_redact_evidence_masks_secrets
+t "redact-evidence: header private key → exit 1 tanpa isi"        test_redact_evidence_private_key_fails
+t "redact-evidence: argumen salah → exit 2"                       test_redact_evidence_bad_args
+t "kvm-run.sh finish() memanggil redact-evidence (gagal = FAIL)"  test_kvm_run_calls_redact_in_finish
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"

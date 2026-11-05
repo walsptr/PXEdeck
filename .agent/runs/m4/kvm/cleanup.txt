@@ -1,7 +1,7 @@
-## before 2026-11-05T07:19:27Z
+## before 2026-11-05T12:20:54Z
  Id   Name              State
 ----------------------------------
- 13   pxe-test-server   running
+ 4    pxe-test-server   running
  -    ubuntu24.04       shut off
 
  Name           State    Autostart   Persistent
@@ -14,11 +14,10 @@
 pxe-test-server-base.qcow2
 pxe-test-server-base.ready
 pxe-test-server.qcow2
-## after 2026-11-05T07:19:27Z
- Id   Name              State
-----------------------------------
- 13   pxe-test-server   running
- -    ubuntu24.04       shut off
+## after 2026-11-05T12:20:56Z
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
 
  Name           State    Autostart   Persistent
 -------------------------------------------------
@@ -29,4 +28,3 @@ pxe-test-server.qcow2
 
 pxe-test-server-base.qcow2
 pxe-test-server-base.ready
-pxe-test-server.qcow2

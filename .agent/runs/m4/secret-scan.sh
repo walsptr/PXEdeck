@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Scan secret/password plaintext pada bukti .agent/runs/m4/** dan file yang diubah di commit ini.
 set -uo pipefail
-cd "$(dirname "$0")/../.."
+cd "$(dirname "$0")/../../.."
 R=.agent/runs/m4
 echo "# secret-scan $(date -u +%FT%TZ) — target: $R/** (teks), file test/infra yang diubah branch ini"
 echo "# pola: password dummy test, hash SHA-512 crypt, token 43 char pada path /boot/, header private key, AWS/GH token generik"

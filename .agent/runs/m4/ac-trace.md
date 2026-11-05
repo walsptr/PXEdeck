@@ -49,18 +49,18 @@ belum dikonfirmasi user).
 | AC-4.25 | integration (+e2e) | `cfg` › AC-3.11 + M4 (tanpa credentials ditolak, media tidak tersedia, Windows "hanya generator", bulk job+host booting, tanpa token); `boot` › `AC-4.25 install (service)` (job+host booting+osAssigned, host berjalan gagal, partisi custom/user SSH beda/OS tak dikenal); E2E `m3-bulk.spec.ts` AC-3.15 | PASS |
 | AC-4.26 | integration (+e2e) | `boot` › `AC-4.26 callback` (maju + stages + status_since; sama → 200 tanpa perubahan; mundur → 409; tak dikenal → 400; IP statis untuk done, IP asing → 404; done → osInstalled/osAssigned null/current_ip/job selesai/token dicabut; failed → boot lokal; body rusak/terlalu besar) | PASS |
 | AC-4.27 | e2e | `m4-discovery.spec.ts` › `AC-4.27 Install dari Sheet → pill Booting → Installing → Configuring → Done tanpa refresh` (+ OS tab: ubuntu-22.04 nonaktif + alasan, Windows nonaktif + catatan password + alert peringatan); `hk` › installBlockReason | PASS |
-| AC-4.28 | unit-shell | `infra/test/run.sh` (25 test, virsh/virt-install/qemu-img/ssh PALSU, PATH terisolasi): idempotensi net-up, XML, nama `^pxe-test-`, node.sh menolak nama terlindungi tanpa virsh, path disk, `bash -n`, kvm-run dry-run end-to-end — **1 gagal**: `cleanup.sh default` / `cleanup.sh int` exit 0 (lihat Bug B-2) | **FAIL (1 test)** |
-| AC-4.29 | kvm | Dihasilkan `infra/kvm-run.sh` (`server-check.txt`, `server-listen.txt` dari `infra/server/verify-listen.sh`); prasyarat statis `infra/test/run.sh` › dnsmasq.conf terikat pxe0 | SIAP / TIDAK DIJALANKAN |
-| AC-4.30 | kvm | `dashboard/e2e-kvm/m4-install.spec.ts` › `AC-4.30 pxe-test-m4-node11 (uefi) install via dashboard → Done ≤ 30 menit` | SIAP / TIDAK DIJALANKAN |
-| AC-4.31 | kvm | `m4-install.spec.ts` › `AC-4.31 …: SSH key login, verifikasi, password ditolak, reboot dari disk` + `dashboard/e2e-kvm/verify-node.sh` (symlink `infra/verify-node.sh`); kvm-run juga menjalankan verify-node + cek password | SIAP / TIDAK DIJALANKAN |
-| AC-4.32 | kvm | `m4-install.spec.ts` (bagian AC-4.32 di test AC-4.30/4.33); versi lokal: `boot` › `AC-4.32 (lokal) negatif selama job aktif` (PASS) | SIAP / TIDAK DIJALANKAN |
-| AC-4.33 | kvm | `m4-install.spec.ts` › `AC-4.33 pxe-test-m4-node12 (bios) …` + AC-4.31 untuk node12 | SIAP / TIDAK DIJALANKAN |
-| AC-4.34 | kvm | `kvm-run.sh` (cleanup trap, snapshot `cleanup.txt`, hapus key) + `m4-install.spec.ts` afterAll (`results.json`, `evidence-scan.txt`: samarkan token di path `/boot/`, cari password run & private key); cleanup diuji dengan virsh palsu di `infra/test/run.sh` | SIAP / TIDAK DIJALANKAN |
+| AC-4.28 | unit-shell | `infra/test/run.sh` (29 test, virsh/virt-install/qemu-img/ssh PALSU, PATH terisolasi): idempotensi net-up, XML, nama `^pxe-test-`, node.sh/cleanup.sh menolak nama terlindungi tanpa virsh, path disk, `bash -n`, kvm-run dry-run end-to-end; + `redact-evidence` (token path/`token=`/`$6$` disamarkan exit 0, header private key exit 1, argumen salah exit 2, dipanggil di `finish()`) — `infra-test.log` 29/29 (iter 2, B-2 diperbaiki di `3658754`) | PASS |
+| AC-4.29 | kvm | `infra/kvm-run.sh` → `kvm/server-check.txt` (+ `server/verify-listen.sh` RESULT PASS, layanan aktif, Next `127.0.0.1:3000`, `/api/settings` cidr `10.99.0.0/24`, vmlinuz 200, sha256 TFTP = `media.log`) — run 2026-11-05T12:00Z | PASS |
+| AC-4.30 | kvm | `dashboard/e2e-kvm/m4-install.spec.ts` › `AC-4.30 pxe-test-m4-node11 (uefi) …` — discovery/konfigurasi/Install/booting OK, lalu `virsh reset` mematikan node (Bug B-3) → tidak mencapai Done; `kvm/playwright-kvm.log`, `kvm/diag-B3-reset-shutdown.txt` | **FAIL (B-3)** |
+| AC-4.31 | kvm | `m4-install.spec.ts` › `AC-4.31 …` + `dashboard/e2e-kvm/verify-node.sh`; kvm-run juga verify-node + cek password | NOT_RUN (bergantung AC-4.30) |
+| AC-4.32 | kvm | `m4-install.spec.ts` (bagian AC-4.32 di test AC-4.30) — `kvm/pxe-test-m4-node11-negative.txt`: `/boot/<mac>.ipxe` dari host → script lokal tanpa token, token acak → 404, current_ip tetap; versi lokal `boot` › `AC-4.32 (lokal)` | PASS |
+| AC-4.33 | kvm | `m4-install.spec.ts` › `AC-4.33 pxe-test-m4-node12 (bios) …` — tidak dijalankan (mode serial setelah AC-4.30 gagal); node12 juga ber-`on_reboot=destroy` live (B-3) | NOT_RUN (B-3) |
+| AC-4.34 | kvm | `kvm-run.sh` (trap cleanup, `kvm/cleanup.txt`, key run dihapus) + `redact-evidence.sh` + `m4-install.spec.ts` afterAll (`kvm/results.json`, `kvm/evidence-scan.txt`) + `secret-scan.txt` — cleanup bersih, scan bersih; status+durasi per AC lengkap menunggu run sukses | PASS (bagian cleanup/scan) |
 
 ## AC tanpa test yang lulus
 
-- AC-4.22: 1 kasus gagal (B-1). AC-4.28: 1 test gagal (B-2).
-- AC-4.29..4.34: suite siap, belum dijalankan (KVM ditahan). Gate M4 mensyaratkan bukti KVM.
+- (iter 1) AC-4.22: 1 kasus gagal (B-1). AC-4.28: 1 test gagal (B-2) — keduanya diperbaiki di `3658754`.
+- (KVM 2026-11-05) AC-4.30 FAIL karena B-3; AC-4.31 dan AC-4.33 NOT_RUN. Gate M4 mensyaratkan bukti KVM.
 
 ## Carry-over gate M3 (diperiksa)
 
@@ -121,3 +121,25 @@ Observasi (minor, untuk reviewer):
   `infra/verify-node.sh` → disediakan sebagai symlink ke file yang sama.
 - Alert `windows-warning` di tab OS hanya terjangkau bila config tersimpan sudah Windows (radio
   Windows selalu nonaktif karena `bootable=false`); E2E menguji jalur itu.
+
+## Uji KVM nyata 2026-11-05 (test-engineer)
+
+- Attempt 1 (`kvm/attempt1-20261105T115847Z/`): gagal karena **bug test** di
+  `dashboard/e2e-kvm/m4-install.spec.ts:67` — firmware ditegaskan seketika saat host muncul dari
+  lease dnsmasq (`discovery.ts` menyimpan `firmware: null` sampai iPXE meminta `?platform=`).
+  Diperbaiki dengan `expect.poll` (≤ 5 menit) dengan nilai yang dituntut sama
+  (`{vendor: "QEMU/KVM", firmware: node.fw}`); bukan pelemahan.
+- Attempt 2 (`kvm/`): **B-3 (infra, blocker AC-4.30/4.31/4.33)** `infra/node.sh:40-45` —
+  `virt-install ... --pxe --boot network,hd --noautoconsole` menjalankan domain dengan XML fase
+  install (`<on_reboot>destroy</on_reboot>`, QEMU `-no-reboot`); XML persisten `restart`. Karena
+  virt-install tidak menunggu, XML live tetap `destroy`, sehingga `infra/node.sh reset`
+  (`virsh reset`, dipanggil harness setelah Install) **mematikan** node: `domstate --reason` =
+  `shut off (shutdown)`, console berhenti 12:01:10Z tepat setelah reset, status host tetap
+  `booting`. Reboot akhir installer juga akan mematikan VM. Bukti `kvm/diag-B3-reset-shutdown.txt`.
+  Repro: `infra/node.sh create pxe-test-m4-node11 52:54:00:99:00:11 uefi` → `virsh dumpxml
+  pxe-test-m4-node11 | grep on_reboot` (live: destroy) → `infra/node.sh reset pxe-test-m4-node11`
+  → `virsh domstate --reason` = shut off. Usulan (backend-dev): definisikan node tanpa fase
+  install (mis. `--install no_install=yes` atau `--import` + `--boot network,hd`), atau restart
+  domain setelah virt-install; test infra perlu menegaskan `on_reboot=restart` pada XML live.
+  Run dihentikan setelah 20 menit tanpa progres (SIGINT Playwright); trap cleanup berjalan.
+

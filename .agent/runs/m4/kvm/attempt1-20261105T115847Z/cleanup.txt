@@ -1,0 +1,62 @@
+## before 2026-11-05T07:19:27Z
+ Id   Name              State
+----------------------------------
+ 13   pxe-test-server   running
+ -    ubuntu24.04       shut off
+
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+pxe-test-server-base.qcow2
+pxe-test-server-base.ready
+pxe-test-server.qcow2
+## after 2026-11-05T07:19:27Z
+ Id   Name              State
+----------------------------------
+ 13   pxe-test-server   running
+ -    ubuntu24.04       shut off
+
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+pxe-test-server-base.qcow2
+pxe-test-server-base.ready
+pxe-test-server.qcow2
+## before 2026-11-05T11:59:34Z
+ Id   Name              State
+----------------------------------
+ 1    pxe-test-server   running
+ -    ubuntu24.04       shut off
+
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+pxe-test-server-base.qcow2
+pxe-test-server-base.ready
+pxe-test-server.qcow2
+## after 2026-11-05T11:59:36Z
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+pxe-test-server-base.qcow2
+pxe-test-server-base.ready
