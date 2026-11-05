@@ -88,3 +88,40 @@ export async function orangeElements(page: Page) {
       }))
   }, ORANGE)
 }
+
+/**
+ * CR-1-4: seperti `orangeElements`, plus kelas elemen dan caption swatch (teks elemen saudara
+ * berikutnya) agar pengecualian di /design bisa dibatasi ke swatch token primary.
+ */
+export async function orangeElementsDetailed(page: Page) {
+  return page.evaluate((orange) => {
+    return Array.from(document.querySelectorAll<HTMLElement>("body *"))
+      .filter((el) => {
+        const r = el.getBoundingClientRect()
+        return r.width > 0 && r.height > 0 && getComputedStyle(el).backgroundColor === orange
+      })
+      .map((el) => ({
+        tag: el.tagName.toLowerCase(),
+        slot: el.dataset.slot ?? null,
+        variant: el.dataset.variant ?? null,
+        text: (el.textContent ?? "").trim(),
+        classes: typeof el.className === "string" ? el.className : "",
+        caption: (el.nextElementSibling?.textContent ?? "").replace(/\s+/g, ""),
+      }))
+  }, ORANGE)
+}
+
+/** CR-1-3: tunggu semua animasi/transisi Web Animations di dokumen selesai (tanpa jeda tetap). */
+export async function waitForAnimations(page: Page) {
+  await expect
+    .poll(
+      () =>
+        page.evaluate(async () => {
+          const running = document.getAnimations().filter((a) => a.playState === "running" || a.pending)
+          await Promise.all(running.map((a) => a.finished.catch(() => undefined)))
+          return document.getAnimations().filter((a) => a.playState === "running" || a.pending).length
+        }),
+      { timeout: 5_000 },
+    )
+    .toBe(0)
+}

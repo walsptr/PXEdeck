@@ -1,6 +1,11 @@
 // AC-2.3 (store mock, fake timers) + AC-2.4 (deleteHost, rebootToPxe) + seam DEC-005.
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
+import { readFileSync } from "node:fs"
+import path from "node:path"
+
+import { verify } from "unixcrypt"
+
 import { isolateEnv } from "@/test/env"
 import { lookupVendor } from "@/lib/oui"
 
@@ -237,5 +242,26 @@ describe("defaultConfig", () => {
     process.env.PXE_DYNAMIC_RANGE = "10.99.0.100-10.99.0.200"
     const c = defaultConfig(getHost("525400101011")!)
     expect(c.network).toMatchObject({ gateway: "10.99.0.1", dns: ["10.99.0.1"] })
+  })
+})
+
+// ---- Iterasi 2: G-SEC-2 (tanpa password plaintext untuk hash seed) ----
+describe("iter2 G-SEC-2 hash seed demo", () => {
+  const SRC = readFileSync(path.join(__dirname, "mock-hosts.ts"), "utf8")
+  const LAB_HASH_SALT = "$6$pxelab$"
+
+  it("hash seed bukan hash lab lama dan tidak cocok dengan password lab/umum", () => {
+    const hash = defaultConfig(getHost("525400101011")!).passwordHash!
+    expect(hash).toMatch(/^\$6\$[^$]{1,16}\$[./0-9A-Za-z]{86}$/)
+    expect(hash.startsWith(LAB_HASH_SALT)).toBe(false)
+    for (const guess of ["ubuntu", "password", "admin", "root", "changeme", "pxelab", "demo", "seed"])
+      expect(verify(guess, hash), guess).toBe(false)
+  })
+  it("source tidak memuat hash lab lama maupun penyebutan password plaintext", () => {
+    expect(SRC).not.toContain(LAB_HASH_SALT)
+    expect(SRC).not.toMatch(/LAB_PASSWORD_HASH/)
+    // Komentar tidak boleh menyebut plaintext di dekat hash (pola: crypt diikuti string berkutip).
+    expect(SRC).not.toMatch(/crypt\s+"[^"]+"/i)
+    expect(SRC).toMatch(/DEMO_SEED_PASSWORD_HASH/)
   })
 })

@@ -1,4 +1,5 @@
 // M3 E2E Sheet single host: AC-3.12 (isi Sheet & simpan), AC-3.13 (validasi UI + 422 server).
+// CR-2-9: server sendiri (project "m3-sheet"), store segar dari seed.
 import { expect, test } from "@playwright/test"
 
 import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ED25519, SSH_RSA } from "../src/test/fixtures"
@@ -72,12 +73,28 @@ test("AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toas
   await key.fill(SSH_ED25519.publicKey)
   await expect(sheet.getByText(SSH_ED25519.fingerprint)).toBeVisible()
   // Tipe key tampil sebagai badge (library hanya berisi key ssh-rsa).
-  await expect(sheet.locator('[data-slot="badge"]').filter({ hasText: /^ssh-ed25519$/ })).toBeVisible()
+  const edBadge = sheet.locator('[data-slot="badge"]').filter({ hasText: /^ssh-ed25519$/ })
+  await expect(edBadge).toBeVisible()
+  // DR-3-1 (iter2): badge tipe key (key baru & library) memakai font mono.
+  for (const badge of [edBadge, sheet.locator('[data-slot="badge"]').filter({ hasText: /^ssh-rsa$/ }).first()]) {
+    const font = await badge.evaluate((el) => getComputedStyle(el).fontFamily)
+    expect(font.startsWith('"JetBrains Mono Variable"')).toBe(true)
+  }
+  const keyError = sheet.locator('[data-slot="field-error"]')
+  const saveBtn = sheet.getByRole("button", { name: "Simpan konfigurasi" })
   await key.fill(FAKE_PRIVATE_KEY)
-  await expect(sheet.getByText("Ini private key — tempel public key (.pub) saja")).toBeVisible()
+  // Iter2: pesan muncul di field DAN di ringkasan error tab; locator dipersempit ke field-error.
+  await expect(keyError).toHaveText("Ini private key — tempel public key (.pub) saja")
   await expect(key).toHaveAttribute("aria-invalid", "true")
+  // CR-3-5: key yang gagal di-parse memblokir simpan dan tercantum di ringkasan error tab SSH.
+  await expect(sheet.getByRole("alert").filter({ hasText: "Perlu diperbaiki" })).toContainText(
+    "Key baru #1: Ini private key — tempel public key (.pub) saja",
+  )
+  await expect(sheet.getByRole("tab", { name: /^SSH Keys/ })).toContainText("(ada error)")
+  await expect(saveBtn).toBeDisabled()
   await key.fill("teks acak bukan key")
-  await expect(sheet.getByText("Tipe harus ssh-ed25519, ssh-rsa, atau ecdsa-sha2-nistp*")).toBeVisible()
+  await expect(keyError).toHaveText("Tipe harus ssh-ed25519, ssh-rsa, atau ecdsa-sha2-nistp*")
+  await expect(saveBtn).toBeDisabled()
   // Upload file .pub mengisi key (+ nama dari nama file).
   await sheet.locator('input[type="file"][accept=".pub,text/plain"]').setInputFiles({
     name: "ops-laptop.pub",
@@ -87,6 +104,8 @@ test("AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toas
   await expect(key).toHaveValue(SSH_RSA.publicKey)
   await expect(sheet.getByText(SSH_RSA.fingerprint)).toBeVisible()
   await expect(sheet.locator("#key-name-0")).toHaveValue("ops-laptop")
+  await expect(keyError).toHaveCount(0)
+  await expect(saveBtn).toBeEnabled()
   await page.screenshot({ path: SHOTS(3, "ac-3.12-tab-ssh") })
 
   // ---- Simpan ----

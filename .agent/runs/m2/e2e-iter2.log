@@ -1,0 +1,175 @@
+
+> dashboard@0.1.0 test:e2e
+> playwright test
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 build
+[WebServer] > next build
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5 (Turbopack)
+[WebServer] ✓ Running next.config.ts took 34ms
+[WebServer] - Cache Components enabled
+[WebServer] - Partial Prefetching enabled
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 190ms
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 2.3s ...
+[WebServer]   Collecting page data using 11 workers ...
+[WebServer]   Generating static pages using 11 workers (0/15) ...
+[WebServer]   Generating static pages using 11 workers (3/15) 
+[WebServer]   Generating static pages using 11 workers (7/15) 
+[WebServer]   Generating static pages using 11 workers (11/15) 
+[WebServer] ✓ Generating static pages using 11 workers (15/15) in 671ms
+[WebServer]   Finalizing page optimization ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ○ /_not-found
+[WebServer] ├ ƒ /api/credentials/import
+[WebServer] ├ ƒ /api/hosts
+[WebServer] ├ ƒ /api/hosts/[id]
+[WebServer] ├ ƒ /api/hosts/[id]/config
+[WebServer] ├ ƒ /api/hosts/[id]/install
+[WebServer] ├ ƒ /api/hosts/[id]/reboot
+[WebServer] ├ ƒ /api/hosts/bulk
+[WebServer] ├ ƒ /api/hosts/bulk/install
+[WebServer] ├ ƒ /api/network
+[WebServer] ├ ƒ /api/ssh-keys
+[WebServer] ├ ○ /design
+[WebServer] ├ ○ /hosts
+[WebServer] ├ ○ /jobs
+[WebServer] ├ ○ /os-images
+[WebServer] ├ ○ /settings
+[WebServer] └ ○ /ssh-keys
+[WebServer] 
+[WebServer] 
+[WebServer] ○  (Static)   prerendered as static content
+[WebServer] ƒ  (Dynamic)  server-rendered on demand
+[WebServer] 
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3100
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3100
+[WebServer] - Network:       http://10.24.10.19:3100
+[WebServer] ✓ Ready in 171ms
+[WebServer] ✓ Running next.config.ts took 34ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3101
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3101
+[WebServer] - Network:       http://10.24.10.19:3101
+[WebServer] ✓ Ready in 215ms
+[WebServer] ✓ Running next.config.ts took 39ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3102
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3102
+[WebServer] - Network:       http://10.24.10.19:3102
+[WebServer] ✓ Ready in 177ms
+[WebServer] ✓ Running next.config.ts took 34ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3103
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3103
+[WebServer] - Network:       http://10.24.10.19:3103
+[WebServer] ✓ Ready in 202ms
+[WebServer] ✓ Running next.config.ts took 43ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3104
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3104
+[WebServer] - Network:       http://10.24.10.19:3104
+[WebServer] ✓ Ready in 186ms
+[WebServer] ✓ Running next.config.ts took 39ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3105
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3105
+[WebServer] - Network:       http://10.24.10.19:3105
+[WebServer] ✓ Ready in 161ms
+[WebServer] ✓ Running next.config.ts took 32ms
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3106
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3106
+[WebServer] - Network:       http://10.24.10.19:3106
+[WebServer] ✓ Ready in 203ms
+[WebServer] ✓ Running next.config.ts took 37ms
+
+Running 58 tests using 1 worker
+
+  ✓   1 [chromium] › e2e/m1-design-system.spec.ts:18:9 › AC-1.2 warna dasar & font › body bg/teks, font Inter + JetBrains Mono di /hosts (475ms)
+  ✓   2 [chromium] › e2e/m1-design-system.spec.ts:18:9 › AC-1.2 warna dasar & font › body bg/teks, font Inter + JetBrains Mono di /design (312ms)
+  ✓   3 [chromium] › e2e/m1-design-system.spec.ts:49:7 › AC-1.3 tanpa drop shadow › /hosts, dropdown aksi baris, dan Sheet konfigurasi (1.3s)
+  ✓   4 [chromium] › e2e/m1-design-system.spec.ts:69:7 › AC-1.3 tanpa drop shadow › /design (435ms)
+  ✓   5 [chromium] › e2e/m1-design-system.spec.ts:78:7 › AC-1.4 bentuk & ukuran di /design › Button 40px/8px, Input 44px/8px border hairline, Card 12px putih, pill 9999px, placeholder muted-soft (479ms)
+  ✓   6 [chromium] › e2e/m1-design-system.spec.ts:123:7 › AC-1.4 bentuk & ukuran di /design › G1-3: pemetaan varian tombol ke SPEC terdokumentasi (346ms)
+  ✓   7 [chromium] › e2e/m1-design-system.spec.ts:134:7 › AC-1.5 tipografi › judul top bar, label kolom tabel, sel MAC mono (542ms)
+  ✓   8 [chromium] › e2e/m1-design-system.spec.ts:162:5 › oranye hanya pada tombol primary (/hosts, /design) (711ms)
+  ✓   9 [chromium] › e2e/m1-layout.spec.ts:20:7 › AC-1.8 layout › sidebar 5 link, item aktif, border hairline, top bar 64px, padding main 32px (665ms)
+  ✓  10 [chromium] › e2e/m1-layout.spec.ts:46:7 › AC-1.8 layout › item aktif & judul mengikuti halaman (383ms)
+  ✓  11 [chromium] › e2e/m1-layout.spec.ts:59:9 › AC-1.8 layout › viewport < 768 › padding main 24px, top bar tetap 64px (466ms)
+  ✓  12 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /hosts: tepat satu <main>/role=main, konten berada di dalamnya (422ms)
+  ✓  13 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /design: tepat satu <main>/role=main, konten berada di dalamnya (347ms)
+  ✓  14 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /settings: tepat satu <main>/role=main, konten berada di dalamnya (293ms)
+  ✓  15 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /ssh-keys: tepat satu <main>/role=main, konten berada di dalamnya (297ms)
+  ✓  16 [chromium] › e2e/m1-layout.spec.ts:82:7 › AC-1.9 navigasi › GET / redirect ke /hosts (546ms)
+  ✓  17 [chromium] › e2e/m1-layout.spec.ts:91:7 › AC-1.9 navigasi › klik tiap item sidebar membuka halaman benar dengan <title> dan isi (938ms)
+  ✓  18 [chromium] › e2e/m1-layout.spec.ts:109:9 › AC-1.9 navigasi › placeholder /os-images menampilkan judul + deskripsi (292ms)
+  ✓  19 [chromium] › e2e/m1-layout.spec.ts:109:9 › AC-1.9 navigasi › placeholder /ssh-keys menampilkan judul + deskripsi (313ms)
+  ✓  20 [chromium] › e2e/m1-layout.spec.ts:109:9 › AC-1.9 navigasi › placeholder /jobs menampilkan judul + deskripsi (254ms)
+  ✓  21 [chromium] › e2e/m1-layout.spec.ts:109:9 › AC-1.9 navigasi › placeholder /settings menampilkan judul + deskripsi (275ms)
+  ✓  22 [chromium] › e2e/m1-layout.spec.ts:122:7 › AC-1.10 pencarian global › Ctrl+K buka dialog, cari halaman + Enter bernavigasi, Escape menutup (1.2s)
+  ✓  23 [chromium] › e2e/m1-layout.spec.ts:140:7 › AC-1.10 pencarian global › memilih host → /hosts?q=<mac> dan tabel terfilter ke host itu (670ms)
+  ✓  24 [chromium] › e2e/m1-layout.spec.ts:156:7 › AC-1.11 status server PXE › top bar menampilkan DHCP, TFTP, HTTP dengan teks aksesibel online/offline (517ms)
+  ✓  25 [chromium] › e2e/smoke.spec.ts:4:5 › halaman /hosts terbuka (418ms)
+  ✓  26 [m2-polling] › e2e/m2-polling.spec.ts:10:5 › AC-2.9 host baru discovery muncul ≤ 6 dtk tanpa reload; polling ~5 dtk (16.5s)
+  ✓  27 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:40:7 › AC-2.8 kolom & isi tabel › header kolom, satu baris per host API, '—', font mono, pill data-status (1.2s)
+  ✓  28 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:78:7 › AC-2.10 pencarian & filter › pencarian MAC/hostname/IP mempersempit baris (637ms)
+  ✓  29 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:95:7 › AC-2.10 pencarian & filter › filter status (hitungan + hanya status itu), filter OS, Reset, tanpa hasil (1.7s)
+  ✓  30 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:150:7 › AC-2.10 pencarian & filter › /hosts?q=<mac> mengisi pencarian awal (373ms)
+  ✓  31 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:159:7 › AC-2.11 seleksi & bulk bar › 2 baris → toolbar, tombol, hanya Install OS primary; batal mengosongkan (774ms)
+  ✓  32 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:181:7 › AC-2.11 seleksi & bulk bar › Shift+klik memilih rentang (576ms)
+  ✓  33 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:192:7 › AC-2.11 seleksi & bulk bar › checkbox header: semua / indeterminate; tersembunyi oleh filter (914ms)
+  ✓  34 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:220:7 › AC-2.12 menu aksi baris › berisi tepat lima aksi (468ms)
+  ✓  35 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:226:7 › AC-2.12 menu aksi baris › Hapus: Batal tidak mengubah apa pun; konfirmasi menghapus baris + toast (1.8s)
+  ✓  36 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:251:7 › AC-2.12 menu aksi baris › Reboot ke PXE → AlertDialog → status baris berubah (1.7s)
+  ✓  37 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:271:7 › AC-2.12 menu aksi baris › Lihat log → /jobs?host=<id> (633ms)
+  ✓  38 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:278:7 › AC-2.12 menu aksi baris › Install OS / Edit konfigurasi membuka Sheet (1.5s)
+  ✓  39 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:295:7 › AC-2.13 empty & error state › {hosts: []} → 'Belum ada host' + penjelasan PXE boot (398ms)
+  ✓  40 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:304:7 › AC-2.13 empty & error state › GET /api/hosts 500 → Alert 'Gagal memuat data host' (1.7s)
+  ✓  41 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:315:7 › AC-2.14 copy MAC › tombol copy terlihat saat fokus keyboard dan menulis MAC ke clipboard (802ms)
+  ✓  42 [m3-sheet] › e2e/m3-sheet.spec.ts:10:5 › AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toast + tabel ter-update (3.5s)
+  ✓  43 [m3-sheet] › e2e/m3-sheet.spec.ts:134:5 › AC-3.13 validasi UI per tab menonaktifkan simpan; 422 server tampil di tab yang benar (3.0s)
+  ✓  44 [m3-bulk] › e2e/m3-bulk.spec.ts:47:5 › AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password acak sekali tampil + CSV (5.7s)
+  ✓  45 [m3-bulk] › e2e/m3-bulk.spec.ts:187:5 › AC-3.15 Simpan & Install: dialog konfirmasi, Batal tanpa request, install → Booting (3.8s)
+  ✓  46 [m3-bulk] › e2e/m3-bulk.spec.ts:228:5 › AC-3.15 bulk: dialog menyebut jumlah host; Batal tidak mengirim request (3.3s)
+  ✓  47 [iter2-ui] › e2e/iter2-ui.spec.ts:44:7 › CR-3-6 dialog password sekali tampil › tidak bisa ditutup (Escape/overlay/tanpa tombol X) sebelum unduh atau konfirmasi; Selesai aktif setelah centang (2.4s)
+  ✓  48 [iter2-ui] › e2e/iter2-ui.spec.ts:82:7 › CR-3-6 dialog password sekali tampil › Selesai aktif setelah unduh CSV; batch berikutnya terkunci lagi (state di-reset); CSV aman formula (3.3s)
+  ✓  49 [iter2-ui] › e2e/iter2-ui.spec.ts:114:7 › CR-3-13 Sheet error state + Coba lagi › GET config host gagal → alert, form tidak dirender; Coba lagi memuat ulang form (2.4s)
+  ✓  50 [iter2-ui] › e2e/iter2-ui.spec.ts:147:7 › CR-3-13 Sheet error state + Coba lagi › GET /api/network gagal → alert 'Gagal memuat parameter jaringan'; Coba lagi → form dengan default subnet (1.9s)
+  ✓  51 [iter2-ui] › e2e/iter2-ui.spec.ts:178:7 › CR-3-2 form & tampilan memakai GET /api/network › server lab: /api/network = env PXE_MGMT_* lab; sidebar & empty state memakai nilainya (360ms)
+  ✓  52 [iter2-ui] › e2e/iter2-ui.spec.ts:196:7 › CR-3-2 form & tampilan memakai GET /api/network › respons /api/network lain → default range, gateway, DNS, preview IP, validasi, deskripsi, sidebar ikut (2.2s)
+  ✓  53 [iter2-ui] › e2e/iter2-ui.spec.ts:242:7 › CR-2-4 / CR-2-3 tabel host › pencarian MAC Cisco 5254.0010.1011 → hanya node01; query IP tidak cocok dengan digit MAC (514ms)
+  ✓  54 [iter2-ui] › e2e/iter2-ui.spec.ts:256:7 › CR-2-4 / CR-2-3 tabel host › sort Hostname naik & turun: host tanpa hostname ('—') selalu di akhir (555ms)
+  ✓  55 [iter2-ui] › e2e/iter2-ui.spec.ts:279:7 › DR-2-1/2-2, DR-3-2, DR-3-3 ukuran & radius › toolbar & bulk bar 36px; Sheet radius 12px di sisi konten; tombol kecil Sheet ≥ 32px (1.2s)
+  ✓  56 [iter2-network-env] › e2e/iter2-network-env.spec.ts:10:5 › GET /api/network mencerminkan env server (subnet KVM) (97ms)
+  ✓  57 [iter2-network-env] › e2e/iter2-network-env.spec.ts:24:5 › bulk Set IP: default & preview dari subnet env, simpan diterima server (200) dengan IP 10.99.0.x (1.4s)
+  ✓  58 [iter2-network-env] › e2e/iter2-network-env.spec.ts:60:5 › single host: IP lab ditolak UI ('Di luar subnet 10.99.0.0/24') dan API (422); IP KVM diterima keduanya (1.5s)
+
+  58 passed (1.7m)
+exit 0

@@ -1,4 +1,5 @@
 // M3 E2E bulk: AC-3.14 (preview & password sekali tampil), AC-3.15 (Simpan & Install).
+// CR-2-9: server sendiri (project "m3-bulk"), store segar dari seed.
 import { readFileSync } from "node:fs"
 
 import { expect, test, type Page, type Request } from "@playwright/test"
@@ -19,6 +20,23 @@ function trackSaves(page: Page) {
   return saves
 }
 
+/**
+ * CR-3-11: buktikan TIDAK ada request simpan/instal dalam jendela `ms` dengan menunggu event
+ * request (gagal begitu request terkirim), bukan jeda tetap lalu cek daftar.
+ */
+async function expectNoSaveRequest(page: Page, saves: string[], ms = 1_500) {
+  const isSave = (r: Request) => {
+    const u = new URL(r.url())
+    return r.method() === "PATCH" || (r.method() === "POST" && /^\/api\/hosts(\/|$)/.test(u.pathname))
+  }
+  const got = await page.waitForRequest(isSave, { timeout: ms }).then(
+    (r) => `${r.method()} ${new URL(r.url()).pathname}`,
+    () => null,
+  )
+  expect(got).toBeNull()
+  expect(saves).toEqual([])
+}
+
 async function selectBulk(page: Page) {
   for (const mac of BULK) await page.getByRole("checkbox", { name: `Pilih ${mac}` }).click()
   const bar = page.getByRole("toolbar", { name: "Aksi untuk host terpilih" })
@@ -36,7 +54,7 @@ test("AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password ac
     const text = (await row.locator("td").nth(1).textContent())!.trim()
     if (BULK.includes(text)) order.push(text)
   }
-  expect(order.sort()).toEqual([...BULK].sort())
+  expect([...order].sort()).toEqual([...BULK].sort())
 
   // ---- Set IP: preview MAC → IP (range lalu IP awal + increment) ----
   await bar.getByRole("button", { name: "Set IP" }).click()
@@ -45,8 +63,9 @@ test("AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password ac
   const ipPreview = sheet.getByRole("table", { name: "Preview IP baru" })
   const ipRows = ipPreview.locator("tbody tr")
   await expect(ipRows).toHaveCount(3)
-  const macsInPreview = await ipRows.locator("td:first-child").allTextContents()
-  expect(macsInPreview.sort()).toEqual([...BULK].sort())
+  const macsInPreview = (await ipRows.locator("td:first-child").allTextContents()).map((t) => t.trim())
+  // CR-3-10: urutan baris preview = urutan tampilan tabel (tanpa sort di kedua sisi).
+  expect(macsInPreview).toEqual(order)
   // Range default 10.10.10.11–99: .11 dipakai node01 → dilewati.
   await expect(ipRows.locator("td:nth-child(3)")).toHaveText(["10.10.10.12", "10.10.10.13", "10.10.10.14"])
   await expect(ipRows.locator('[data-state="ok"]')).toHaveCount(0)
@@ -65,6 +84,7 @@ test("AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password ac
   await bar.getByRole("button", { name: "Set Hostname" }).click()
   await expect(sheet.getByRole("tab", { name: /^Hostname/ })).toHaveAttribute("aria-selected", "true")
   const hnRows = sheet.getByRole("table", { name: "Preview Hostname baru" }).locator("tbody tr")
+  expect((await hnRows.locator("td:first-child").allTextContents()).map((t) => t.trim())).toEqual(order)
   await expect(sheet.locator("#hn-template")).toHaveValue("node-{index:02}")
   await expect(hnRows.locator("td:nth-child(3) span.type-data")).toHaveText(["node-01", "node-02", "node-03"])
   await sheet.locator("#hn-start").fill("7")
@@ -110,7 +130,8 @@ test("AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password ac
   const saveReq = page.waitForRequest((r) => r.method() === "POST" && r.url().endsWith("/api/hosts/bulk"))
   await sheet.getByRole("button", { name: "Simpan konfigurasi" }).click()
   const body = (await saveReq).postDataJSON()
-  expect(body.hostIds.sort()).toEqual(BULK.map((m) => m.replaceAll(":", "")).sort())
+  // Urutan hostIds di payload juga mengikuti urutan tabel.
+  expect(body.hostIds).toEqual(order.map((m) => m.replaceAll(":", "")))
   expect(body.credentials).toMatchObject({ mode: "random", username: "opsbulk", length: 16 })
   expect(Object.keys(body)).toEqual(["hostIds", "credentials"])
 
@@ -185,8 +206,7 @@ test("AC-3.15 Simpan & Install: dialog konfirmasi, Batal tanpa request, install 
   await page.screenshot({ path: SHOTS(3, "ac-3.15-confirm") })
   await confirm.getByRole("button", { name: "Batal" }).click()
   await expect(confirm).toBeHidden()
-  await page.waitForTimeout(300)
-  expect(saves).toEqual([])
+  await expectNoSaveRequest(page, saves)
   await expect(row.locator("[data-status]")).toHaveAttribute("data-status", "done")
 
   await installBtn.click()
@@ -221,6 +241,6 @@ test("AC-3.15 bulk: dialog menyebut jumlah host; Batal tidak mengirim request", 
   await expect(confirm).toContainText("Seluruh isi disk target akan dihapus")
   await expect(confirm.locator("li")).toHaveCount(2)
   await confirm.getByRole("button", { name: "Batal" }).click()
-  await page.waitForTimeout(300)
-  expect(saves).toEqual([])
+  await expect(confirm).toBeHidden()
+  await expectNoSaveRequest(page, saves)
 })

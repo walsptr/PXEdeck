@@ -1,9 +1,20 @@
 // M2 E2E /hosts (simulasi mock off): AC-2.8, 2.10, 2.11, 2.12, 2.13, 2.14.
-// Urutan test penting: store server dibagi antar test (workers: 1); test yang mengubah data
-// (hapus/reboot) memakai host yang tidak dipakai test lain.
+// CR-2-9: file ini punya server sendiri (project "m2-hosts-table", store segar dari seed per run);
+// tidak bergantung pada file lain. Di dalam file, test yang mengubah data (hapus/reboot) memakai
+// host yang tidak dipakai test lain di file ini.
 import { expect, test, type Page } from "@playwright/test"
 
 import { gotoHosts, hostRows, hostsTable, ORANGE, rowByMac, SHOTS } from "./helpers"
+
+const STATUS_LABELS = [
+  ["Discovered", "discovered"],
+  ["Booting", "booting"],
+  ["Installing", "installing"],
+  ["Configuring", "configuring"],
+  ["Done", "done"],
+  ["Failed", "failed"],
+  ["Offline", "offline"],
+] as const
 
 type ApiHost = {
   id: string
@@ -88,9 +99,16 @@ test.describe("AC-2.10 pencarian & filter", () => {
 
     await statusFilter(page).click()
     const menu = page.getByRole("menu")
-    for (const [label, s] of [["Discovered", "discovered"], ["Done", "done"], ["Failed", "failed"], ["Offline", "offline"]]) {
-      await expect(menu.getByRole("menuitemcheckbox", { name: new RegExp(`^${label}`) })).toContainText(String(count(s)))
-    }
+    // CR-2-8: ketujuh status, urutan PROVISION_STATUSES, teks persis "<Label><hitungan>" (tanpa
+    // kecocokan digit di tempat lain); hitungan dari API dan totalnya = jumlah host.
+    const items = menu.getByRole("menuitemcheckbox")
+    await expect(items).toHaveCount(7)
+    await expect(items).toHaveText(STATUS_LABELS.map(([label, s]) => new RegExp(`^${label}\\s*${count(s)}$`)))
+    for (const [i, [, s]] of STATUS_LABELS.entries())
+      await expect(items.nth(i).locator(".type-data")).toHaveText(String(count(s)))
+    expect(STATUS_LABELS.reduce((n, [, s]) => n + count(s), 0)).toBe(hosts.length)
+    // Seed memuat lebih dari satu status (hitungan bukan nol semua).
+    expect(new Set(hosts.map((h) => h.status)).size).toBeGreaterThanOrEqual(5)
     await page.screenshot({ path: SHOTS(2, "ac-2.10-status-filter") })
     await menu.getByRole("menuitemcheckbox", { name: /^Done/ }).click()
     await page.keyboard.press("Escape")

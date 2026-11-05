@@ -1,0 +1,369 @@
+
+ RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/dashboard
+
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 validateUsername > menerima username Linux valid 11ms
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 validateUsername > menolak kosong, huruf besar, diawali angka, > 32, root 3ms
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 validatePassword > menolak < 8, > 128, newline 2ms
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 validatePassword > menerima 8 dan 128 karakter 1ms
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 generatePassword > panjang n, alfabet tanpa karakter ambigu/kutip 23ms
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 generatePassword > 100 panggilan → 100 nilai unik 4ms
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 parseCsv/toCsv > round-trip field berkoma, berkutip, dan CRLF 5ms
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 parseCsv/toCsv > LF/CRLF campuran, baris kosong diabaikan, baris terakhir tanpa newline 1ms
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 normalizeMac > menerima berbagai format → aa:bb:… 2ms
+ ✓ |node| src/lib/credentials.test.ts > AC-3.3 normalizeMac > menolak panjang salah/karakter non-hex 1ms
+ ✓ |node| src/lib/credentials.test.ts > iter2 SR-3-1 generatePassword: karakter pertama alfanumerik > 10.000 password: tidak ada yang diawali = + - @ (atau non-alfanumerik lain) 229ms
+ ✓ |node| src/lib/credentials.test.ts > iter2 SR-3-1 generatePassword: karakter pertama alfanumerik > karakter simbol tetap dipakai di posisi selain pertama 13ms
+ ✓ |node| src/lib/credentials.test.ts > iter2 SR-3-1 generatePassword: karakter pertama alfanumerik > panjang 1 → satu karakter alfanumerik; panjang 0 → string kosong 8ms
+ ✓ |node| src/lib/credentials.test.ts > iter2 SR-3-1 neutralizeCsvCell / toCsv > sel berawalan = + - @ TAB CR diberi prefiks ' 1ms
+ ✓ |node| src/lib/credentials.test.ts > iter2 SR-3-1 neutralizeCsvCell / toCsv > sel lain tidak berubah (termasuk simbol di tengah dan string kosong) 0ms
+ ✓ |node| src/lib/credentials.test.ts > iter2 SR-3-1 neutralizeCsvCell / toCsv > toCsv menetralkan sebelum quoting; sel biasa tetap round-trip 1ms
+ ✓ |node| src/lib/server/http.test.ts > http helpers > hostIdParam: valid → id kecil; invalid → 400 120ms
+ ✓ |node| src/components/host-config/form-state.test.ts > konstanta > lima tab berurutan 10ms
+ ✓ |node| src/components/host-config/form-state.test.ts > initialForm > dari konfigurasi tersimpan (single host) 7ms
+ ✓ |node| src/components/host-config/form-state.test.ts > initialForm > default tanpa konfigurasi (bulk) 1ms
+ ✓ |node| src/components/host-config/form-state.test.ts > initialForm > single tanpa config: OS & IP dari host; config dhcp 1ms
+ ✓ |node| src/components/host-config/form-state.test.ts > ipUsageFor / takenHostnames > di luar batch; lease host offline diabaikan 2ms
+ ✓ |node| src/components/host-config/form-state.test.ts > ipPlan (AC-3.14 preview) > single: IP dari input divalidasi 3ms
+ ✓ |node| src/components/host-config/form-state.test.ts > ipPlan (AC-3.14 preview) > bulk range melewati IP terpakai; increment 2ms
+ ✓ |node| src/components/host-config/form-state.test.ts > hostnamePlan (AC-3.14 preview) > single: nama huruf kecil, dipakai host lain → error 2ms
+ ✓ |node| src/components/host-config/form-state.test.ts > hostnamePlan (AC-3.14 preview) > bulk template; {ip_last_octet} memakai rencana IP bila network ikut disimpan 3ms
+ ✓ |node| src/components/host-config/form-state.test.ts > hostnamePlan (AC-3.14 preview) > bulk duplikat ditandai 3ms
+ ✓ |node| src/components/host-config/form-state.test.ts > sectionErrors (AC-3.13 validasi UI) > form default single yang valid → tanpa error 4ms
+ ✓ |node| src/components/host-config/form-state.test.ts > sectionErrors (AC-3.13 validasi UI) > OS: belum dipilih, disk invalid, custom kosong 2ms
+ ✓ |node| src/components/host-config/form-state.test.ts > sectionErrors (AC-3.13 validasi UI) > Credentials: username invalid, password pendek / wajib, CSV 4ms
+ ✓ |node| src/components/host-config/form-state.test.ts > sectionErrors (AC-3.13 validasi UI) > Network: IP bentrok (single), host tanpa IP (bulk), prefix/gateway/DNS/VLAN/interface 4ms
+ ✓ |node| src/components/host-config/form-state.test.ts > sectionErrors (AC-3.13 validasi UI) > Hostname: single invalid, bulk jumlah invalid 1ms
+ ✓ |node| src/components/host-config/form-state.test.ts > sectionErrors (AC-3.13 validasi UI) > SSH: tanpa key, user invalid, key baru kosong / tanpa nama 1ms
+ ✓ |node| src/components/host-config/form-state.test.ts > buildPayload > hanya bagian dirty; hasil lolos skema configPayload 20ms
+ ✓ |node| src/components/host-config/form-state.test.ts > buildPayload > bulk: random/csv credentials, dhcp, mac iface, customStorage hanya untuk custom, nama key dipangkas 2ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-2 defaultIpRange (subnet aktif) > lab: .11 sampai sebelum range dinamis 0ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-2 defaultIpRange (subnet aktif) > range dinamis di bawah .11 → sampai broadcast-1; /16 dan /28 0ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-2 defaultIpRange (subnet aktif) > subnet sangat kecil (/29): start dijepit ke broadcast-1 0ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-2 initialForm/mgmtOf/validasi memakai subnet aktif > default bulk dari subnet KVM: prefix, gateway, DNS, start/end 1ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-2 initialForm/mgmtOf/validasi memakai subnet aktif > config tersimpan menang atas default subnet 1ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-2 initialForm/mgmtOf/validasi memakai subnet aktif > mgmtOf: ctx.net bila ada, default lab bila tidak 0ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-2 initialForm/mgmtOf/validasi memakai subnet aktif > ipPlan/sectionErrors memakai ctx.net: IP 10.99.0.x valid di KVM, IP lab ditolak 'Di luar subnet' 1ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-2 initialForm/mgmtOf/validasi memakai subnet aktif > CR-3-9 di klien: gateway di range dinamis ditolak 0ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-5 key yang gagal di-parse memblokir simpan; private key tidak ikut payload > private key / teks acak → error SSH per key 4ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-5 key yang gagal di-parse memblokir simpan; private key tidak ikut payload > key valid → tanpa error SSH 1ms
+ ✓ |node| src/components/host-config/form-state.test.ts > iter2 CR-3-5 key yang gagal di-parse memblokir simpan; private key tidak ikut payload > buildPayload membuang key berisi 'PRIVATE KEY' (pertahanan berlapis) 0ms
+ ✓ |node| src/lib/server/http.test.ts > http helpers > hostNotFound → 404 {error} 2ms
+ ✓ |node| src/lib/server/http.test.ts > http helpers > readJson: bukan JSON → 400 {error}; skema gagal → 400 errors[] dengan section 18ms
+ ✓ |node| src/lib/server/http.test.ts > http helpers > validationFailed → 422; pesan default bila errors kosong 3ms
+ ✓ |node| src/lib/server/http.test.ts > iter2 http: batas body, no-store, guardMutation > MAX_JSON_BODY_BYTES = 1 MiB; NO_STORE 4ms
+ ✓ |node| src/lib/server/http.test.ts > iter2 http: batas body, no-store, guardMutation > readBodyLimited: tanpa body → ''; tepat di batas → teks; lewat batas → null 6ms
+ ✓ |node| src/lib/server/http.test.ts > iter2 http: batas body, no-store, guardMutation > readJson > batas → 413 {error} 10ms
+ ✓ |node| src/lib/server/http.test.ts > iter2 http: batas body, no-store, guardMutation > jsonNoStore mempertahankan status & header lain 3ms
+ ✓ |node| src/lib/server/http.test.ts > iter2 http: batas body, no-store, guardMutation > guardMutation: null bila same-origin + JSON; host dibandingkan case-insensitive 3ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.3 store mock > setelah reset: 14 host seed, id = MAC tanpa ':', vendor = OUI 23ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.3 store mock > booting → installing (20 dtk) → configuring (+60) → done (+20); OS dipindah 6ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.3 store mock > discovery menambah host `discovered` tiap 40 dtk sampai maks 4 6ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.3 store mock > discovery tidak menambah ulang host yang sudah ada 8ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.3 store mock > lease host online diperbarui bila last seen > 3 menit 2ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.3 store mock > listHosts mengembalikan salinan (mutasi hasil tidak mengubah store) 4ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > seam DEC-005 > PXE_MOCK_SIMULATION=off: tanpa tick tahap maupun discovery 2ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > seam DEC-005 > PXE_MOCK_DISCOVER_EVERY_MS memperpendek interval discovery 2ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > seam DEC-005 > seed empty: tanpa host dan tanpa key; PXE_MOCK_SEED dipakai sebagai default 4ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > seam DEC-005 > store lama tanpa field baru dibangun ulang 3ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > seam DEC-005 > mockOptionsFromEnv 3ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.4 deleteHost & rebootToPxe > deleteHost menghapus host + konfigurasinya 5ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.4 deleteHost & rebootToPxe > deleteHost id tak dikenal → false 2ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.4 deleteHost & rebootToPxe > rebootToPxe: osAssigned ada → booting; statusSince/lastSeen diperbarui 2ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.4 deleteHost & rebootToPxe > rebootToPxe: tanpa osAssigned → discovered 1ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > AC-2.4 deleteHost & rebootToPxe > rebootToPxe id tak dikenal → null 2ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > defaultConfig > host terpasang: OS, user ubuntu, hash, key admin, network statis dari subnet management 4ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > defaultConfig > host discovered: tanpa OS/credentials, network DHCP 1ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > defaultConfig > mengikuti env PXE_MGMT_* (DEC-006) 3ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > iter2 G-SEC-2 hash seed demo > hash seed bukan hash lab lama dan tidak cocok dengan password lab/umum 311ms
+ ✓ |node| src/lib/server/mock-hosts.test.ts > iter2 G-SEC-2 hash seed demo > source tidak memuat hash lab lama maupun penyebutan password plaintext 2ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.5 GET /api/hosts > 200, Cache-Control no-store, {hosts, serverTime} lolos skema Host 130ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.5 GET /api/hosts > seed empty → hosts [] 3ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.5 GET /api/hosts/:id > 200 host 7ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.5 GET /api/hosts/:id > id huruf besar dinormalisasi 3ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.5 GET /api/hosts/:id > 404 {error} untuk id tak dikenal 3ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.5 GET /api/hosts/:id > 400 {error} untuk id bukan 12 hex 6ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.6 DELETE & reboot > DELETE → 204 tanpa body, lalu GET → 404 5ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.6 DELETE & reboot > DELETE id tak dikenal → 404; id invalid → 400 2ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.6 DELETE & reboot > POST reboot → 200 host dengan status baru 5ms
+ ✓ |node| src/app/api/hosts/hosts-routes.test.ts > AC-2.6 DELETE & reboot > POST reboot id tak dikenal → 404; id invalid → 400 2ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-2 GET /api/network > tanpa env → default lab {cidr,prefix,gateway,dns,dynamicRange,pxeServer} + no-store 109ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-2 GET /api/network > override env PXE_MGMT_* (subnet KVM) tercermin di respons 5ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-2 GET /api/network > prefix mengikuti CIDR env (/16) 5ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-2 GET /api/network > env tidak konsisten → 500 {error} yang menyebut variabelnya, tetap no-store 3ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-2 GET /api/network > validasi server memakai subnet yang sama dengan /api/network (UI = API, DEC-006) 26ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-2-5 Cache-Control: no-store di semua GET API > hosts, host/:id, host/:id 404, config, ssh-keys, network 6ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > PATCH /api/hosts/:id: Origin asing → 403 4ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > PATCH /api/hosts/:id: Origin port beda → 403 2ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > PATCH /api/hosts/:id: Origin: null → 403 6ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > PATCH /api/hosts/:id: Origin rusak → 403 2ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > PATCH /api/hosts/:id: Sec-Fetch-Site: cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > PATCH /api/hosts/:id: Origin sama tetapi Sec-Fetch-Site cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk: Origin asing → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk: Origin port beda → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk: Origin: null → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk: Origin rusak → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk: Sec-Fetch-Site: cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk: Origin sama tetapi Sec-Fetch-Site cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk/install: Origin asing → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk/install: Origin port beda → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk/install: Origin: null → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk/install: Origin rusak → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk/install: Sec-Fetch-Site: cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/bulk/install: Origin sama tetapi Sec-Fetch-Site cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/credentials/import: Origin asing → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/credentials/import: Origin port beda → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/credentials/import: Origin: null → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/credentials/import: Origin rusak → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/credentials/import: Sec-Fetch-Site: cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/credentials/import: Origin sama tetapi Sec-Fetch-Site cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > DELETE /api/hosts/:id: Origin asing → 403 2ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > DELETE /api/hosts/:id: Origin port beda → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > DELETE /api/hosts/:id: Origin: null → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > DELETE /api/hosts/:id: Origin rusak → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > DELETE /api/hosts/:id: Sec-Fetch-Site: cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > DELETE /api/hosts/:id: Origin sama tetapi Sec-Fetch-Site cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/reboot: Origin asing → 403 2ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/reboot: Origin port beda → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/reboot: Origin: null → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/reboot: Origin rusak → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/reboot: Sec-Fetch-Site: cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/reboot: Origin sama tetapi Sec-Fetch-Site cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/install: Origin asing → 403 2ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/install: Origin port beda → 403 2ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/install: Origin: null → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/install: Origin rusak → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/install: Sec-Fetch-Site: cross-site → 403 8ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > POST /api/hosts/:id/install: Origin sama tetapi Sec-Fetch-Site cross-site → 403 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: request lintas-origin → 403 tanpa efek > Origin sama (Host / X-Forwarded-Host) dan Sec-Fetch-Site same-origin diterima 3ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: Content-Type → 415 > PATCH /api/hosts/:id: tanpa Content-Type / text/plain / form → 415 tanpa efek; application/json; charset=utf-8 diterima 4ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: Content-Type → 415 > POST /api/hosts/bulk: tanpa Content-Type / text/plain / form → 415 tanpa efek; application/json; charset=utf-8 diterima 8ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: Content-Type → 415 > POST /api/hosts/bulk/install: tanpa Content-Type / text/plain / form → 415 tanpa efek; application/json; charset=utf-8 diterima 8ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: Content-Type → 415 > POST /api/credentials/import: tanpa Content-Type / text/plain / form → 415 tanpa efek; application/json; charset=utf-8 diterima 9ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: Content-Type → 415 > body JSON benar-benar tanpa header Content-Type → 415 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: Content-Type → 415 > DELETE /api/hosts/:id: tanpa Content-Type diterima; Content-Type non-JSON → 415 5ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: Content-Type → 415 > POST /api/hosts/:id/reboot: tanpa Content-Type diterima; Content-Type non-JSON → 415 8ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: Content-Type → 415 > POST /api/hosts/:id/install: tanpa Content-Type diterima; Content-Type non-JSON → 415 3ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-2 guardMutation: Content-Type → 415 > endpoint tanpa body menerima Content-Type application/json 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-3 body > 1 MB → 413 > Content-Length > 1 MB → 413 tanpa membaca body 1ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-3 body > 1 MB → 413 > body stream > 1 MB tanpa Content-Length → 413 tanpa efek (bulk, PATCH, CSV import) 20ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-3 body > 1 MB → 413 > body sedikit di bawah 1 MB tidak ditolak 413 14ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-4 / AC-3.9: CSV import tidak memantulkan password > baris 1 kolom berisi password → mac "", respons tidak memuat password 3ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-4 / AC-3.9: CSV import tidak memantulkan password > kolom tertukar (password di kolom MAC / username) → tidak di-echo 3ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-4 / AC-3.9: CSV import tidak memantulkan password > username invalid di-kosongkan; username valid tetap tampil 2ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 SR-3-4 / AC-3.9: CSV import tidak memantulkan password > 422 bulk mode csv tidak memuat password dari baris invalid 4ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.5 validasi struktural & semantik > body bukan JSON → 400 {error} 125ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.5 validasi struktural & semantik > prefix 40 → 400 errors[].section = network 18ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.5 validasi struktural & semantik > hostIds: [] → 400 section hostIds 6ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.5 validasi struktural & semantik > mode credentials asing → 400 section credentials 5ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.5 validasi struktural & semantik > semantik gagal → 422 errors[] per bagian 8ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.5 validasi struktural & semantik > payload tanpa bagian apa pun → 422 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.5 validasi struktural & semantik > PATCH id invalid → 400, host tak ada → 404; bulk id tak dikenal → 422 hostIds 6ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.5 validasi struktural & semantik > GET config: id invalid → 400, tak ada → 404 2ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.6 atomik > network valid + hostname bentrok satu host → 422, tidak ada perubahan 14ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.6 atomik > payload valid → 200 {updated: N} dan semua host berubah 7ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.7 network > IP bentrok dengan IP management host lain → 422, pesan menyebut pemakai 4ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.7 network > IP bentrok dengan lease aktif host lain → 422 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.7 network > duplikat dalam batch ditolak 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.7 network > gateway/DNS bukan IPv4 ditolak; prefix ≠ subnet (DEC-006) ditolak 4ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.7 network > host tanpa assignment → 'IP wajib diisi' 2ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.7 network > mode DHCP menghapus mgmtIp 4ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.7 network > host di batch tidak bentrok dengan dirinya sendiri (termasuk tukar IP) 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.7 network > subnet dari env PXE_MGMT_* (DEC-006) 3ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-3 mode CSV: updated/updatedAt hanya host yang diubah > 3 host terpilih, CSV 1 host → updated 1; updatedAt hanya host itu 61ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-3 mode CSV: updated/updatedAt hanya host yang diubah > mode CSV + bagian lain di request yang sama → semua host batch dihitung 49ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-9 gateway payload > IP host = gateway payload → 422 'Bentrok dengan gateway <gw>' tanpa efek 4ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-9 gateway payload > bulk: hanya host dengan IP = gateway payload yang ditandai 4ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-9 gateway payload > gateway di dalam range DHCP dinamis → 422 section network 2ms
+ ✓ |node| src/app/api/iter2-routes.test.ts > iter2 CR-3-9 gateway payload > gateway valid di luar range dinamis dan ≠ IP host → 200 2ms
+ ✓ |node| src/app/globals-tokens.test.ts > CR-1-8 parser semua blok :root > menangkap :root kedua, :root di @layer, dan selector list; nilai terakhir menang 8ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > minimal satu blok :root; jumlah blok = jumlah selector :root di sumber 1ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --background = #f7f7f4 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --canvas-soft = #fafaf7 1ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --card = #ffffff 1ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --popover = #ffffff 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --foreground = #26251e 1ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --body = #5a5852 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --muted-foreground = #807d72 1ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --muted-soft = #a09c92 1ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --border = #e6e5e0 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --input = #e6e5e0 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --hairline-soft = #efeee8 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --hairline-strong = #cfcdc4 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --secondary = #e6e5e0 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --muted = #e6e5e0 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --primary = #f54e00 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --ring = #f54e00 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --primary-active = #d04200 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --primary-foreground = #ffffff 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --destructive = #cf2d56 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --success = #1f8a65 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --stage-discovered = #9fbbe0 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --stage-booting = #dfa88f 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --stage-installing = #c0a8dd 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --stage-configuring = #9fc9a2 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > :root --stage-done = #c08532 0ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > lima token --stage-* didefinisikan, tidak lebih 1ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > semua --shadow-* di blok @theme bernilai nol (tanpa drop shadow) 2ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.1 token globals.css > tidak ada token warna dark aktif (.dark) di globals.css 1ms
+ ✓ |node| src/app/globals-tokens.test.ts > AC-1.6 pemakaian stage-* terbatas > `stage-` hanya muncul di globals.css, status-pill.tsx, design/page.tsx 15ms
+ ✓ |node| src/app/globals-tokens.test.ts > CR-1-5 / AC-1.6 pastel lewat --chart-* atau hex mentah > token chart tidak dipakai di luar globals.css 16ms
+ ✓ |node| src/app/globals-tokens.test.ts > CR-1-5 / AC-1.6 pastel lewat --chart-* atau hex mentah > hex pastel hanya di globals.css, dan di sana hanya sebagai nilai --stage-* / --chart-* 15ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.8 credentials & keamanan password > mode same: hash SHA-512 crypt terverifikasi, salt berbeda antar host 175ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.8 credentials & keamanan password > password kosong ditolak bila ada host tanpa password; diterima bila semua punya 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.8 credentials & keamanan password > username/password invalid → 422 1ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 isIpv4 > menolak 256.1.1.1, 01.2.3.4, 1.2.3 8ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 isIpv4 > menerima IPv4 valid (spasi di tepi dipangkas) 1ms
+ ✓ |node| src/lib/net.test.ts > utilitas subnet > ipToInt/intToIp round-trip 1ms
+ ✓ |node| src/lib/net.test.ts > utilitas subnet > parseCidr / subnetBounds / inSubnet / isCidr / isHostInSubnet 6ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 validateStaticIp (pesan berbeda per aturan) > menolak tiap kasus dengan pesan berbeda 2ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 validateStaticIp (pesan berbeda per aturan) > PXE server terpisah dari gateway juga ditolak 3ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 validateStaticIp (pesan berbeda per aturan) > IP valid → null; subnet sebagai string CIDR 1ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 planIps > mode range menghasilkan pemetaan berurutan 6ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 planIps > mode increment memakai step 6ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 planIps > skipUsed=true melewati IP terpakai 3ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 planIps > skipUsed=false menandai error per host 1ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 planIps > range habis → "Range IP tidak cukup" 1ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 planIps > IP awal/akhir tidak valid 0ms
+ ✓ |node| src/lib/net.test.ts > AC-3.1 validateIpAssignments > mendeteksi duplikat dalam batch dan bentrok 1ms
+ ✓ |node| src/lib/net.test.ts > DEC-006 validateStaticNetwork > valid → [] 1ms
+ ✓ |node| src/lib/net.test.ts > DEC-006 validateStaticNetwork > prefix berbeda, gateway invalid/di luar subnet, DNS invalid 1ms
+ ✓ |node| src/lib/net.test.ts > DEC-006 mgmtNetworkFromEnv > tanpa env → default 1ms
+ ✓ |node| src/lib/net.test.ts > DEC-006 mgmtNetworkFromEnv > subnet KVM lengkap 1ms
+ ✓ |node| src/lib/net.test.ts > DEC-006 mgmtNetworkFromEnv > kombinasi tidak konsisten melempar Error yang menyebut variabelnya 5ms
+ ✓ |node| src/lib/net.test.ts > iter2 CR-3-1 planIps: IP awal di luar subnet ditolak tanpa loop > di bawah network (range & increment) → semua host error 'IP awal di luar subnet <cidr>' 1ms
+ ✓ |node| src/lib/net.test.ts > iter2 CR-3-1 planIps: IP awal di luar subnet ditolak tanpa loop > di atas broadcast dan dengan subnet aktif non-default 1ms
+ ✓ |node| src/lib/net.test.ts > iter2 CR-3-1 planIps: IP awal di luar subnet ditolak tanpa loop > jarak jauh ke subnet (1.1.1.1, 0.0.0.1) selesai < 50 ms (tanpa iterasi linear) 1ms
+ ✓ |node| src/lib/net.test.ts > iter2 CR-3-1 planIps: IP awal di luar subnet ditolak tanpa loop > iterasi dibatasi ukuran subnet: semua IP terpakai → 'Range IP tidak cukup' 0ms
+ ✓ |node| src/lib/net.test.ts > iter2 CR-3-9 validateStaticNetwork: gateway di range DHCP dinamis ditolak > gateway .150 (default lab) dan batas range 3ms
+ ✓ |node| src/lib/net.test.ts > iter2 CR-3-9 validateStaticNetwork: gateway di range DHCP dinamis ditolak > memakai range dinamis subnet aktif 3ms
+ ✓ |node| src/lib/net.test.ts > iter2 CR-3-2 NetworkResponse > toNetworkResponse menambah prefix; fromNetworkResponse kebalikannya 3ms
+ ✓ |node| src/lib/server/config-service.test.ts > config-service > toPublicConfig membuang passwordHash dan menambah hasPassword 16ms
+ ✓ |node| src/lib/server/config-service.test.ts > config-service > prepareNewKeys: parse + fingerprint, error dibawa per key 19ms
+ ✓ |node| src/lib/server/config-service.test.ts > config-service > applyConfigPrepared menolak preparedKeys yang tidak sesuai 8ms
+ ✓ |node| src/lib/server/config-service.test.ts > config-service > G3-2: dua request paralel dengan IP sama → hanya satu yang lolos 21ms
+ ✓ |node| src/lib/server/config-service.test.ts > config-service > id duplikat di hostIds disatukan 4ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.8 credentials & keamanan password > mode random: generatedPasswords satu per host, unik, panjang sesuai — hanya sekali 205ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.8 credentials & keamanan password > GET config tidak pernah memuat passwordHash/password (hanya hasPassword) 29ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.9 CSV import > hasil per baris (nomor baris memperhitungkan header) dengan error tiap kasus 5ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.9 CSV import > tanpa header: baris mulai 1; CSV kosong → error 5ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.9 CSV import > payload invalid → 400 2ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.9 CSV import > bulk mode csv dengan ≥ 1 baris invalid → 422 tanpa efek (termasuk baris valid) 9ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.9 CSV import > bulk mode csv valid → hash per host 97ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.10 hostname & SSH > hostname invalid/duplikat/dipakai host lain → 422 per host 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.10 hostname & SSH > keyIds tidak ada di library → 422 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.10 hostname & SSH > key baru invalid → 422 dengan nomor key 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.10 hostname & SSH > saveToLibrary tanpa nama → 422 12ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.10 hostname & SSH > key valid + saveToLibrary → muncul di GET /api/ssh-keys dengan fingerprint benar 31ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.10 hostname & SSH > key valid tanpa saveToLibrary → extraKeys, library tetap 4ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.10 hostname & SSH > fingerprint duplikat (library / dalam request) → 422 (G3-3) 5ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.10 hostname & SSH > tanpa key sama sekali → 422; user target invalid → 422 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.11 install > POST /api/hosts/:id/install: host siap → 200 started, status booting 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.11 install > host tanpa OS/credentials, sedang provisioning, id tak dikenal → failed + 422 1ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.11 install > host dengan OS tapi tanpa credentials → failed 'belum ada credentials' 2ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.11 install > OS tidak mengubah osAssigned host yang sedang provisioning 1ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.11 install > bulk install: campuran → 200 dengan started & failed; tidak ada yang mulai → 422 3ms
+ ✓ |node| src/app/api/config-routes.test.ts > AC-3.11 install > storage-02 (offline, terpasang) bisa install ulang 1ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 parseSshKey > menerima ssh-ed25519 7ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 parseSshKey > menerima ssh-rsa 1ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 parseSshKey > menerima ecdsa-sha2-nistp256 1ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 parseSshKey > tanpa komentar + spasi berlebih dinormalisasi 1ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 parseSshKey > menolak private key 2ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 parseSshKey > menolak tipe lain (ssh-dss) dan input kosong 1ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 parseSshKey > menolak base64 rusak 1ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 parseSshKey > menolak blob yang tipe dalamnya tidak cocok dengan prefix 1ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 sshFingerprint = ssh-keygen -lf > ed25519 17ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 sshFingerprint = ssh-keygen -lf > rsa 1ms
+ ✓ |node| src/lib/ssh-key.test.ts > AC-3.4 sshFingerprint = ssh-keygen -lf > ecdsa 3ms
+ ✓ |node| src/lib/server/net-config.test.ts > getMgmtNetwork > default lab tanpa env; env baru dibaca tanpa reload modul 13ms
+ ✓ |node| src/lib/server/net-config.test.ts > getMgmtNetwork > env tidak konsisten → Error (fail fast) 4ms
+ ✓ |node| src/lib/host-config.test.ts > parseHostId > 12 hex → huruf kecil; selain itu null 10ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > payload lengkap valid 29ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > prefix 40 → ditolak pada bagian yang benar 3ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > disk bukan /dev → ditolak pada bagian yang benar 2ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > mode credentials asing → ditolak pada bagian yang benar 1ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > random length 8 → ditolak pada bagian yang benar 3ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > iface name invalid → ditolak pada bagian yang benar 2ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > DNS kosong → ditolak pada bagian yang benar 1ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > IP > 15 char → ditolak pada bagian yang benar 2ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > hostname > 63 → ditolak pada bagian yang benar 1ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > keyIds > 100 → ditolak pada bagian yang benar 1ms
+ ✓ |node| src/lib/host-config.test.ts > skema configPayload > assignments > LIMITS.hosts ditolak 7ms
+ ✓ |node| src/lib/host-config.test.ts > skema bulk/install > hostIds kosong / terlalu banyak / id terlalu panjang ditolak 4ms
+ ✓ |node| src/lib/format.test.ts > AC-2.2 formatRelative > selisih < 45 dtk → 'baru saja' 8ms
+ ✓ |node| src/lib/format.test.ts > AC-2.2 formatRelative > 2 menit → '2 menit yang lalu' 1ms
+ ✓ |node| src/lib/format.test.ts > AC-2.2 formatRelative > 45 dtk dibulatkan ke menit 1ms
+ ✓ |node| src/lib/format.test.ts > AC-2.2 formatRelative > 3 jam → '3 jam yang lalu' 1ms
+ ✓ |node| src/lib/format.test.ts > AC-2.2 formatRelative > 2 hari → '2 hari yang lalu' 1ms
+ ✓ |node| src/lib/format.test.ts > AC-2.2 formatRelative > iter2 (CR-2-1): 1 hari → '1 hari yang lalu' (bukan 'kemarin'); 1 jam/1 menit numerik 0ms
+ ✓ |node| src/lib/format.test.ts > AC-2.2 formatRelative > iter2: masa depan memakai numerik ('dalam 1 hari', bukan 'besok') 2ms
+ ✓ |node| src/lib/format.test.ts > AC-2.2 ipToNumber > urutan numerik benar 1ms
+ ✓ |node| src/lib/format.test.ts > AC-2.2 ipToNumber > null → -1 2ms
+ ✓ |node| src/lib/format.test.ts > formatDateTime > memformat ISO dengan locale id 1ms
+ ✓ |node| src/lib/oui.test.ts > AC-2.1 lookupVendor > prefix OUI dikenal → vendor 7ms
+ ✓ |node| src/lib/oui.test.ts > AC-2.1 lookupVendor > huruf besar diterima 1ms
+ ✓ |node| src/lib/oui.test.ts > AC-2.1 lookupVendor > tidak dikenal → null 1ms
+ ✓ |node| src/lib/oui.test.ts > AC-2.1 osLabel > id katalog → 'Nama Versi' 2ms
+ ✓ |node| src/lib/oui.test.ts > AC-2.1 osLabel > id asing → id itu sendiri 2ms
+ ✓ |node| src/lib/oui.test.ts > AC-2.1 osLabel > null/undefined/kosong → null 1ms
+ ✓ |node| src/lib/hostname.test.ts > AC-3.2 validateHostname > menerima node-01 dan 63 karakter 6ms
+ ✓ |node| src/lib/hostname.test.ts > AC-3.2 validateHostname > menolak kosong, > 63, huruf besar, -a, a-, a_b 2ms
+ ✓ |node| src/lib/hostname.test.ts > AC-3.2 renderHostnames > node-{index:02} → node-01, node-02, … 2ms
+ ✓ |node| src/lib/hostname.test.ts > AC-3.2 renderHostnames > startIndex dihormati; {index} tanpa padding 1ms
+ ✓ |node| src/lib/hostname.test.ts > AC-3.2 renderHostnames > web-{mac_suffix} → 4 hex terakhir MAC 1ms
+ ✓ |node| src/lib/hostname.test.ts > AC-3.2 renderHostnames > {prefix}-{ip_last_octet}; host tanpa IP → error per baris 1ms
+ ✓ |node| src/lib/hostname.test.ts > AC-3.2 renderHostnames > token asing → error per baris 1ms
+ ✓ |node| src/lib/hostname.test.ts > AC-3.2 renderHostnames > hasil invalid (kosong) memakai pesan validateHostname 1ms
+ ✓ |node| src/lib/hostname.test.ts > AC-3.2 renderHostnames > duplikat dalam batch & nama dipakai host lain → error per baris 2ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-hosts > useHosts: GET /api/hosts, interval polling 5 dtk, sinkron jam server 126ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > tujuh status tersedia 5ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > status discovered → label + data-status 48ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > status booting → label + data-status 7ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > status installing → label + data-status 6ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > status configuring → label + data-status 4ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > status done → label + data-status 5ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > status failed → label + data-status 3ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > status offline → label + data-status 2ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > done & failed memakai teks putih 6ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > offline memakai kelas netral (tanpa pastel stage) 3ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > discovered memakai pastel bg-stage-* dengan teks ink 2ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > booting memakai pastel bg-stage-* dengan teks ink 2ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > installing memakai pastel bg-stage-* dengan teks ink 1ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > configuring memakai pastel bg-stage-* dengan teks ink 2ms
+ ✓ |dom| src/components/status-pill.test.tsx > AC-1.6 StatusPill > className tambahan digabung 2ms
+ ✓ |dom| src/components/server-status.test.tsx > AC-1.11 ServerStatus > default: tiga indikator DHCP/TFTP/HTTP online dengan titik success 255ms
+ ✓ |dom| src/components/server-status.test.tsx > AC-1.11 ServerStatus > online: false → teks offline + titik bg-destructive 11ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-hosts > useHosts: error membawa pesan server; enabled=false tidak fetch 142ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-hosts > useDeleteHost: DELETE lalu buang host dari cache 8ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-hosts > useDeleteHost tanpa cache; useRebootHost POST 6ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-host-config > useHostConfig & useSshKeys 82ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-host-config > useSaveConfig: single → PATCH, bulk → POST /api/hosts/bulk; 422 → ApiError dengan errors 8ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-host-config > useInstall: single/bulk; 422 tetap mengembalikan hasil; error lain dilempar 7ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-host-config > useCsvImport POST /api/credentials/import 3ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-now > syncServerClock: abaikan jitter < 1 dtk dan ISO invalid; useNow ikut offset & tick 15 dtk 7ms
+ ✓ |dom| src/hooks/hooks.test.ts > use-mobile > mengikuti matchMedia (max-width: 767px) dan berlangganan perubahan 2ms
+ ✓ |dom| src/hooks/hooks.test.ts > iter2 use-network-config > toActiveNetwork: NetworkResponse → MgmtNetwork + prefix 1ms
+ ✓ |dom| src/hooks/hooks.test.ts > iter2 use-network-config > useNetworkConfig: GET /api/network no-store, data = toActiveNetwork, key ['network'] 55ms
+ ✓ |dom| src/hooks/hooks.test.ts > iter2 use-network-config > useNetworkConfig: 500 {error} → error membawa pesan server; body non-JSON → status 109ms
+ ✓ |node| src/lib/nav.test.ts > AC-1.7 navigasi > NAV_ITEMS berisi tepat 5 item berurutan 6ms
+ ✓ |node| src/lib/nav.test.ts > AC-1.7 navigasi > cocok untuk path persis dan sub-path 1ms
+ ✓ |node| src/lib/nav.test.ts > AC-1.7 navigasi > undefined untuk /design, /hostsx, dan / 0ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > AC-2.7 pencarian global > format MAC 52-54-00, 525400, 52:54:00 setara 47ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > AC-2.7 pencarian global > cocok pada hostname, IP lease, IP management (case-insensitive) 11ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > AC-2.7 pencarian global > query kosong = semua; tanpa kecocokan = kosong 12ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > AC-2.7 filter kolom > filter status multi-nilai 4ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > AC-2.7 filter kolom > filter OS cocok dengan terpasang ATAU ditugaskan 6ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > AC-2.7 filter kolom > "none" = host tanpa OS 2ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > AC-2.7 filter kolom > kombinasi filter + pencarian 2ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > AC-2.7 sorting > sort status mengikuti urutan PROVISION_STATUSES 3ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > AC-2.7 sorting > sort IP numerik (lease, fallback mgmt); tanpa IP paling awal 8ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > iter2 CR-2-4 pencarian MAC gaya Cisco > 5254.0010.1011 dan prefiks 5254.0010 cocok dengan node01 10ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > iter2 CR-2-4 pencarian MAC gaya Cisco > query IP bertitik tidak mencocokkan digit MAC 6ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > iter2 CR-2-3 sort hostname: host tanpa hostname di akhir > naik: hostname terurut, host tanpa hostname paling akhir 2ms
+ ✓ |dom| src/components/hosts/columns.test.tsx > iter2 CR-2-3 sort hostname: host tanpa hostname di akhir > turun: host tanpa hostname tetap di akhir 2ms
+
+ Test Files  21 passed (21)
+      Tests  359 passed (359)
+   Start at  14:36:57
+   Duration  4.06s (environment 38%, import 30%, tests 21%, setup 6%, transform 4%, worker 2%)
+
+exit 0

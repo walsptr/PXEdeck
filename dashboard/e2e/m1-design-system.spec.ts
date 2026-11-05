@@ -2,7 +2,16 @@
 // AC-1.5 (tipografi), plus oranye hanya untuk tombol primary.
 import { expect, test } from "@playwright/test"
 
-import { dropShadowViolations, gotoHosts, hostRows, hostsTable, orangeElements, SHOTS } from "./helpers"
+import {
+  dropShadowViolations,
+  gotoHosts,
+  hostRows,
+  hostsTable,
+  orangeElements,
+  orangeElementsDetailed,
+  SHOTS,
+  waitForAnimations,
+} from "./helpers"
 
 test.describe("AC-1.2 warna dasar & font", () => {
   for (const url of ["/hosts", "/design"]) {
@@ -50,7 +59,9 @@ test.describe("AC-1.3 tanpa drop shadow", () => {
     const sheet = page.getByRole("dialog", { name: /Konfigurasi node01/ })
     await expect(sheet).toBeVisible()
     await expect(sheet.getByRole("tab", { name: /^OS/ })).toBeVisible()
-    await page.waitForTimeout(600) // animasi slide-in selesai
+    // CR-1-3: tunggu animasi slide-in benar-benar selesai (bukan jeda tetap).
+    await waitForAnimations(page)
+    await expect(sheet).toHaveAttribute("data-state", "open")
     expect(await dropShadowViolations(page)).toEqual([])
     await page.screenshot({ path: SHOTS(1, "ac-1.3-sheet") })
   })
@@ -156,11 +167,15 @@ test("oranye hanya pada tombol primary (/hosts, /design)", async ({ page }) => {
   const withBar = await orangeElements(page)
   expect(withBar).toEqual([{ tag: "button", slot: "button", variant: "default", text: "Install OS" }])
   await page.goto("/design")
-  const design = await orangeElements(page)
-  // Swatch token "primary" di style guide boleh oranye; selain itu hanya Button default.
-  for (const el of design) {
-    if (el.tag === "button") expect(el).toMatchObject({ slot: "button", variant: "default" })
-    else expect(el.tag).toBe("div")
-  }
-  expect(design.filter((e) => e.tag === "button")).toHaveLength(1)
+  await page.evaluate(() => document.fonts.ready)
+  const design = await orangeElementsDetailed(page)
+  // CR-1-4: selain tepat satu Button default, satu-satunya elemen oranye yang boleh adalah swatch
+  // token "primary" (div bg-primary dengan caption "primary" + hex #f54e00) — bukan div sembarang.
+  const buttons = design.filter((e) => e.tag === "button")
+  expect(buttons).toHaveLength(1)
+  expect(buttons[0]).toMatchObject({ slot: "button", variant: "default" })
+  const others = design.filter((e) => e.tag !== "button")
+  expect(others).toEqual([
+    { tag: "div", slot: null, variant: null, text: "", classes: expect.stringMatching(/(^|\s)bg-primary(\s|$)/), caption: "primary#f54e00" },
+  ])
 })

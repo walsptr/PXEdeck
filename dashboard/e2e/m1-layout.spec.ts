@@ -3,8 +3,10 @@ import { expect, test } from "@playwright/test"
 
 import { gotoHosts, hostRows, SHOTS } from "./helpers"
 
-// Elemen konten: `<main>` di dalam SidebarInset (yang juga `<main>`, lihat temuan nested main).
-const CONTENT = "main[data-slot=sidebar-inset] > main"
+// Elemen konten. Iter2 (CR-1-2): SidebarInset adalah satu-satunya `<main>`; konten halaman kini
+// `<div data-slot="page-content">` di dalamnya (sebelumnya `main > main` bersarang). Selector ikut
+// struktur DOM baru; asersi padding/isi tidak berubah.
+const CONTENT = "main[data-slot=sidebar-inset] > [data-slot=page-content]"
 
 const NAV = [
   ["Hosts", "/hosts"],
@@ -61,6 +63,19 @@ test.describe("AC-1.8 layout", () => {
       await page.screenshot({ path: SHOTS(1, "ac-1.8-layout-mobile") })
     })
   })
+})
+
+test.describe("CR-1-2 satu landmark main", () => {
+  for (const url of ["/hosts", "/design", "/settings", "/ssh-keys"]) {
+    test(`${url}: tepat satu <main>/role=main, konten berada di dalamnya`, async ({ page }) => {
+      await page.goto(url)
+      await expect(page.locator(CONTENT)).toBeVisible()
+      await expect(page.locator("main")).toHaveCount(1)
+      await expect(page.getByRole("main")).toHaveCount(1)
+      await expect(page.locator("main main")).toHaveCount(0)
+      await expect(page.locator("[data-slot=page-content]")).toHaveCount(1)
+    })
+  }
 })
 
 test.describe("AC-1.9 navigasi", () => {

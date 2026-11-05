@@ -32,6 +32,15 @@ describe("AC-2.2 formatRelative", () => {
     expect(out).toBe(rtf.format(-2, "day"))
     expect(out).toBe("2 hari yang lalu")
   })
+  it("iter2 (CR-2-1): 1 hari → '1 hari yang lalu' (bukan 'kemarin'); 1 jam/1 menit numerik", () => {
+    expect(formatRelative(ago(86_400_000), NOW)).toBe("1 hari yang lalu")
+    expect(formatRelative(ago(3_600_000), NOW)).toBe("1 jam yang lalu")
+    expect(formatRelative(ago(60_000), NOW)).toBe("1 menit yang lalu")
+  })
+  it("iter2: masa depan memakai numerik ('dalam 1 hari', bukan 'besok')", () => {
+    expect(formatRelative(new Date(NOW + 86_400_000).toISOString(), NOW)).toBe(rtf.format(1, "day"))
+    expect(formatRelative(new Date(NOW + 86_400_000).toISOString(), NOW)).not.toBe("besok")
+  })
 })
 
 describe("AC-2.2 ipToNumber", () => {

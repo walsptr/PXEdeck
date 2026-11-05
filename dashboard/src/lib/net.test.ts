@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   MGMT_NETWORK,
+  fromNetworkResponse,
   inSubnet,
   intToIp,
   ipToInt,
@@ -13,6 +14,7 @@ import {
   parseCidr,
   planIps,
   subnetBounds,
+  toNetworkResponse,
   validateIpAssignments,
   validateStaticIp,
   validateStaticNetwork,
@@ -186,5 +188,92 @@ describe("DEC-006 mgmtNetworkFromEnv", () => {
       [{ PXE_DYNAMIC_RANGE: "10.10.10.200-10.10.10.100" }, /terbalik/],
     ]
     for (const [env, re] of cases) expect(() => mgmtNetworkFromEnv(env), JSON.stringify(env)).toThrow(re)
+  })
+})
+
+// ---- Iterasi 2 ----
+
+const KVM_NET = {
+  cidr: "10.99.0.0/24",
+  gateway: "10.99.0.1",
+  dns: ["10.99.0.1"],
+  pxeServer: "10.99.0.2",
+  dynamicRange: ["10.99.0.100", "10.99.0.200"] as const,
+}
+
+describe("iter2 CR-3-1 planIps: IP awal di luar subnet ditolak tanpa loop", () => {
+  it("di bawah network (range & increment) → semua host error 'IP awal di luar subnet <cidr>'", () => {
+    for (const spec of [
+      { kind: "range" as const, start: "10.0.0.0", end: "10.10.10.20" },
+      { kind: "increment" as const, start: "10.0.0.0", step: 1 },
+      { kind: "range" as const, start: "1.1.1.1", end: "10.10.10.99" },
+    ]) {
+      expect(planIps(["a", "b", "c"], spec, usage(), true), JSON.stringify(spec)).toEqual([
+        { hostId: "a", ip: null, error: "IP awal di luar subnet 10.10.10.0/24" },
+        { hostId: "b", ip: null, error: "IP awal di luar subnet 10.10.10.0/24" },
+        { hostId: "c", ip: null, error: "IP awal di luar subnet 10.10.10.0/24" },
+      ])
+    }
+  })
+  it("di atas broadcast dan dengan subnet aktif non-default", () => {
+    expect(planIps(["a"], { kind: "increment", start: "10.10.11.5", step: 1 }, usage(), true)).toEqual([
+      { hostId: "a", ip: null, error: "IP awal di luar subnet 10.10.10.0/24" },
+    ])
+    expect(planIps(["a"], { kind: "range", start: "10.10.10.11", end: "10.10.10.20" }, usage(), true, KVM_NET)).toEqual([
+      { hostId: "a", ip: null, error: "IP awal di luar subnet 10.99.0.0/24" },
+    ])
+    expect(planIps(["a"], { kind: "range", start: "10.99.0.11", end: "10.99.0.20" }, usage(), true, KVM_NET)).toEqual([
+      { hostId: "a", ip: "10.99.0.11", error: null },
+    ])
+  })
+  it("jarak jauh ke subnet (1.1.1.1, 0.0.0.1) selesai < 50 ms (tanpa iterasi linear)", () => {
+    const t = performance.now()
+    for (let i = 0; i < 20; i++) {
+      planIps(["a", "b", "c"], { kind: "increment", start: "1.1.1.1", step: 1 }, usage(), true)
+      planIps(["a", "b", "c"], { kind: "range", start: "0.0.0.1", end: "10.10.10.99" }, usage(), true)
+    }
+    expect(performance.now() - t).toBeLessThan(50)
+  })
+  it("iterasi dibatasi ukuran subnet: semua IP terpakai → 'Range IP tidak cukup'", () => {
+    const net = { ...MGMT_NETWORK, cidr: "10.10.10.0/29", dynamicRange: ["10.10.10.6", "10.10.10.6"] as const }
+    const used = usage([["10.10.10.2", "x"], ["10.10.10.3", "y"], ["10.10.10.4", "z"], ["10.10.10.5", "w"]])
+    const rows = planIps(["a"], { kind: "increment", start: "10.10.10.2", step: 1 }, used, true, net)
+    expect(rows).toEqual([{ hostId: "a", ip: null, error: "Range IP tidak cukup" }])
+  })
+})
+
+describe("iter2 CR-3-9 validateStaticNetwork: gateway di range DHCP dinamis ditolak", () => {
+  it("gateway .150 (default lab) dan batas range", () => {
+    expect(validateStaticNetwork({ prefix: 24, gateway: "10.10.10.150", dns: ["1.1.1.1"] })).toEqual([
+      "Gateway 10.10.10.150 di dalam range DHCP dinamis 10.10.10.100–10.10.10.200",
+    ])
+    expect(validateStaticNetwork({ prefix: 24, gateway: "10.10.10.100", dns: [] })).toHaveLength(1)
+    expect(validateStaticNetwork({ prefix: 24, gateway: "10.10.10.200", dns: [] })).toHaveLength(1)
+    expect(validateStaticNetwork({ prefix: 24, gateway: "10.10.10.99", dns: [] })).toEqual([])
+    expect(validateStaticNetwork({ prefix: 24, gateway: "10.10.10.201", dns: [] })).toEqual([])
+  })
+  it("memakai range dinamis subnet aktif", () => {
+    expect(validateStaticNetwork({ prefix: 24, gateway: "10.99.0.150", dns: [] }, KVM_NET)).toEqual([
+      "Gateway 10.99.0.150 di dalam range DHCP dinamis 10.99.0.100–10.99.0.200",
+    ])
+    expect(validateStaticNetwork({ prefix: 24, gateway: "10.99.0.1", dns: [] }, KVM_NET)).toEqual([])
+  })
+})
+
+describe("iter2 CR-3-2 NetworkResponse", () => {
+  it("toNetworkResponse menambah prefix; fromNetworkResponse kebalikannya", () => {
+    const r = toNetworkResponse(KVM_NET)
+    expect(r).toEqual({
+      cidr: "10.99.0.0/24",
+      prefix: 24,
+      gateway: "10.99.0.1",
+      dns: ["10.99.0.1"],
+      dynamicRange: ["10.99.0.100", "10.99.0.200"],
+      pxeServer: "10.99.0.2",
+    })
+    expect(fromNetworkResponse(r)).toEqual({ ...KVM_NET, dynamicRange: ["10.99.0.100", "10.99.0.200"] })
+    // Salinan, bukan referensi ke array internal.
+    expect(r.dns).not.toBe(KVM_NET.dns)
+    expect(toNetworkResponse(MGMT_NETWORK).prefix).toBe(24)
   })
 })

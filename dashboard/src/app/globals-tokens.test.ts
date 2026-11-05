@@ -57,8 +57,63 @@ const ROOT_EXPECTED: Record<string, string> = {
   "--stage-done": "#c08532",
 }
 
+/**
+ * Isi SEMUA blok yang selector-list-nya memuat `:root` (termasuk yang bersarang di `@layer`/
+ * `@media`), berurutan sesuai sumber (CR-1-8). Komentar dibuang lebih dulu.
+ */
+function allBlocks(source: string, selector: string): string[] {
+  const src = source.replace(/\/\*[\s\S]*?\*\//g, "")
+  const out: string[] = []
+  let segStart = 0
+  for (let i = 0; i < src.length; i++) {
+    const ch = src[i]
+    if (ch === "{") {
+      const sel = src.slice(segStart, i).trim()
+      const parts = sel.split(",").map((p) => p.trim())
+      if (parts.includes(selector)) {
+        let depth = 0
+        for (let j = i; j < src.length; j++) {
+          if (src[j] === "{") depth++
+          if (src[j] === "}" && --depth === 0) {
+            out.push(src.slice(i + 1, j))
+            break
+          }
+        }
+      }
+      segStart = i + 1
+    } else if (ch === "}" || ch === ";") {
+      segStart = i + 1
+    }
+  }
+  return out
+}
+
+describe("CR-1-8 parser semua blok :root", () => {
+  it("menangkap :root kedua, :root di @layer, dan selector list; nilai terakhir menang", () => {
+    const sample = `:root { --a: #111; --b: #222; }
+      @layer base { :root { --a: #333; } }
+      /* :root { --a: #999; } */
+      html, :root { --b: #444; }
+      .x { --a: #555; }`
+    const blocks = allBlocks(sample, ":root")
+    expect(blocks).toHaveLength(3)
+    const merged = new Map(blocks.flatMap((b) => [...vars(b)]))
+    expect(merged.get("--a")).toBe("#333")
+    expect(merged.get("--b")).toBe("#444")
+  })
+})
+
 describe("AC-1.1 token globals.css", () => {
-  const root = vars(block(css, ":root"))
+  // CR-1-8: gabungkan SEMUA blok :root (urutan sumber; deklarasi terakhir menang) agar override
+  // token di blok :root kedua / @layer ikut terdeteksi.
+  const rootBlocks = allBlocks(css, ":root")
+  const root = new Map(rootBlocks.flatMap((b) => [...vars(b)]))
+
+  it("minimal satu blok :root; jumlah blok = jumlah selector :root di sumber", () => {
+    expect(rootBlocks.length).toBeGreaterThanOrEqual(1)
+    const selectorCount = (css.replace(/\/\*[\s\S]*?\*\//g, "").match(/:root\b[^{;}]*\{/g) ?? []).length
+    expect(rootBlocks.length).toBe(selectorCount)
+  })
 
   it.each(Object.entries(ROOT_EXPECTED))(":root %s = %s", (name, value) => {
     expect(root.get(name)).toBe(value)
@@ -104,6 +159,43 @@ describe("AC-1.6 pemakaian stage-* terbatas", () => {
       .filter((f) => !allowed.has(f))
       .filter((f) => readFileSync(f, "utf8").includes("stage-"))
       .map((f) => path.relative(SRC, f))
+    expect(offenders).toEqual([])
+  })
+})
+
+// CR-1-5: token --chart-* saat ini memakai hex pastel tahap provisioning. SPEC: pastel HANYA untuk
+// status pill/timeline, jadi token chart (dan hex pastel mentah) tidak boleh dipakai di luar
+// globals.css. Guard ini menangkap `bg-chart-*`, `var(--chart-*)`, dll. yang lolos dari grep `stage-`.
+const PASTEL = ["#9fbbe0", "#dfa88f", "#c0a8dd", "#9fc9a2", "#c08532"]
+
+describe("CR-1-5 / AC-1.6 pastel lewat --chart-* atau hex mentah", () => {
+  const sources = () =>
+    walk(SRC)
+      .filter((f) => /\.(tsx?|css)$/.test(f) && !/\.test\.tsx?$/.test(f))
+      .map((f) => ({ f, rel: path.relative(SRC, f), text: readFileSync(f, "utf8") }))
+
+  it("token chart tidak dipakai di luar globals.css", () => {
+    const offenders = sources()
+      .filter(({ rel }) => rel !== "app/globals.css")
+      .filter(({ text }) => /(?:^|[^\w-])(?:[a-z]+-)?chart-[1-9]\b|--chart-|--color-chart-/.test(text))
+      .map(({ rel }) => rel)
+    expect(offenders).toEqual([])
+  })
+
+  it("hex pastel hanya di globals.css, dan di sana hanya sebagai nilai --stage-* / --chart-*", () => {
+    const offenders: string[] = []
+    for (const { rel, text } of sources()) {
+      const lower = text.toLowerCase()
+      for (const hex of PASTEL) {
+        if (!lower.includes(hex)) continue
+        if (rel !== "app/globals.css") {
+          offenders.push(`${rel}: ${hex}`)
+          continue
+        }
+        for (const line of lower.split("\n").filter((l) => l.includes(hex)))
+          if (!/^\s*--(stage-[a-z]+|chart-[1-5])\s*:\s*#[0-9a-f]{6}\s*;\s*$/.test(line)) offenders.push(`${rel}: ${line.trim()}`)
+      }
+    }
     expect(offenders).toEqual([])
   })
 })

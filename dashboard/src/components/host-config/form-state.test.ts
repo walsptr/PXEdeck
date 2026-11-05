@@ -3,14 +3,18 @@
 import { describe, expect, it } from "vitest"
 
 import { configPayload, type PublicHostConfig, type SectionKey } from "@/lib/host-config"
+import { MGMT_NETWORK, type MgmtNetwork } from "@/lib/net"
 import type { Host } from "@/lib/types"
+import { FAKE_PRIVATE_KEY, SSH_ED25519 } from "@/test/fixtures"
 
 import {
   buildPayload,
+  defaultIpRange,
   hostnamePlan,
   initialForm,
   ipPlan,
   ipUsageFor,
+  mgmtOf,
   sectionErrors,
   SECTION_LABEL,
   SECTION_ORDER,
@@ -219,5 +223,107 @@ describe("buildPayload", () => {
     const n = buildPayload(edit(f, { network: { start: "10.10.10.13", end: "10.10.10.13" }, ssh: { newKeys: [{ name: " k ", publicKey: "p", saveToLibrary: true }] } }), dirty("network", "ssh"), bulk)
     expect(n.network).toMatchObject({ assignments: { [B.id]: "10.10.10.13", [C.id]: "" }, vlan: null, iface: { by: "mac" } })
     expect(n.ssh?.newKeys[0].name).toBe("k")
+  })
+})
+
+// ---- Iterasi 2 ----
+
+const KVM: MgmtNetwork = {
+  cidr: "10.99.0.0/24",
+  gateway: "10.99.0.1",
+  dns: ["10.99.0.1"],
+  pxeServer: "10.99.0.2",
+  dynamicRange: ["10.99.0.100", "10.99.0.200"],
+}
+
+describe("iter2 CR-3-2 defaultIpRange (subnet aktif)", () => {
+  it("lab: .11 sampai sebelum range dinamis", () => {
+    expect(defaultIpRange(MGMT_NETWORK)).toEqual({ start: "10.10.10.11", end: "10.10.10.99" })
+    expect(defaultIpRange(KVM)).toEqual({ start: "10.99.0.11", end: "10.99.0.99" })
+  })
+  it("range dinamis di bawah .11 → sampai broadcast-1; /16 dan /28", () => {
+    expect(defaultIpRange({ ...KVM, dynamicRange: ["10.99.0.2", "10.99.0.9"] })).toEqual({ start: "10.99.0.11", end: "10.99.0.254" })
+    expect(defaultIpRange({ ...KVM, cidr: "172.16.0.0/16", dynamicRange: ["172.16.200.1", "172.16.200.254"] })).toEqual({
+      start: "172.16.0.11",
+      end: "172.16.200.0",
+    })
+    // /28: start .11; range dinamis mulai .12 → lo-1 = .11 tidak > start → end = broadcast-1 (.14).
+    expect(defaultIpRange({ ...KVM, cidr: "10.99.0.0/28", dynamicRange: ["10.99.0.12", "10.99.0.14"] })).toEqual({ start: "10.99.0.11", end: "10.99.0.14" })
+  })
+  it("subnet sangat kecil (/29): start dijepit ke broadcast-1", () => {
+    expect(defaultIpRange({ ...KVM, cidr: "10.99.0.0/29", dynamicRange: ["10.99.0.5", "10.99.0.6"] }).start).toBe("10.99.0.6")
+  })
+})
+
+describe("iter2 CR-3-2 initialForm/mgmtOf/validasi memakai subnet aktif", () => {
+  it("default bulk dari subnet KVM: prefix, gateway, DNS, start/end", () => {
+    const f = initialForm([B, C], undefined, KVM)
+    expect(f.network).toMatchObject({ prefix: 24, gateway: "10.99.0.1", dns: ["10.99.0.1"], start: "10.99.0.11", end: "10.99.0.99" })
+    // Salinan DNS, bukan referensi.
+    expect(f.network.dns).not.toBe(KVM.dns)
+    const f16 = initialForm([B, C], undefined, { ...KVM, cidr: "10.99.0.0/16", dynamicRange: ["10.99.200.1", "10.99.200.9"] })
+    expect(f16.network.prefix).toBe(16)
+  })
+  it("config tersimpan menang atas default subnet", () => {
+    const f = initialForm([A], CONFIG, KVM)
+    expect(f.network).toMatchObject({ ip: "10.10.10.11", gateway: "10.10.10.1", dns: ["1.1.1.1"] })
+  })
+  it("mgmtOf: ctx.net bila ada, default lab bila tidak", () => {
+    expect(mgmtOf({ ...bulk, net: KVM })).toBe(KVM)
+    expect(mgmtOf(bulk)).toBe(MGMT_NETWORK)
+  })
+  it("ipPlan/sectionErrors memakai ctx.net: IP 10.99.0.x valid di KVM, IP lab ditolak 'Di luar subnet'", () => {
+    const kctx: Context = { hosts: [B], allHosts: [B], net: KVM }
+    const f = initialForm([B], undefined, KVM)
+    expect(ipPlan({ ...f.network, ip: "10.99.0.20" }, kctx)).toEqual([{ hostId: B.id, ip: "10.99.0.20", error: null }])
+    expect(ipPlan({ ...f.network, ip: "10.10.10.50" }, kctx)[0].error).toBe("Di luar subnet 10.99.0.0/24")
+    expect(ipPlan({ ...f.network, ip: "10.99.0.150" }, kctx)[0].error).toBe("Di dalam range DHCP dinamis 10.99.0.100–10.99.0.200")
+    expect(sectionErrors(edit(f, { network: { ip: "10.99.0.20" } }), dirty(), kctx, null).network).toBeUndefined()
+    // Gateway lab di subnet KVM → error yang sama dengan server.
+    const g = sectionErrors(edit(f, { network: { ip: "10.99.0.20", gateway: "10.10.10.1" } }), dirty(), kctx, null).network
+    expect(g).toEqual(["Gateway 10.10.10.1 di luar subnet management 10.99.0.0/24"])
+    // Bulk range default dari subnet KVM menghasilkan IP KVM.
+    const bctx: Context = { hosts: [B, C], allHosts: [B, C], net: KVM }
+    const bf = initialForm([B, C], undefined, KVM)
+    expect(ipPlan(bf.network, bctx).map((r) => r.ip)).toEqual(["10.99.0.11", "10.99.0.12"])
+    // IP awal di luar subnet aktif → pesan CR-3-1.
+    expect(ipPlan({ ...bf.network, start: "10.10.10.11", end: "10.10.10.99" }, bctx)[0].error).toBe("IP awal di luar subnet 10.99.0.0/24")
+  })
+  it("CR-3-9 di klien: gateway di range dinamis ditolak", () => {
+    const f = edit(initialForm([A], CONFIG), { network: { gateway: "10.10.10.150" } })
+    expect(sectionErrors(f, dirty(), single, null).network).toEqual(["Gateway 10.10.10.150 di dalam range DHCP dinamis 10.10.10.100–10.10.10.200"])
+  })
+})
+
+describe("iter2 CR-3-5 key yang gagal di-parse memblokir simpan; private key tidak ikut payload", () => {
+  it("private key / teks acak → error SSH per key", () => {
+    const pk = edit(initialForm([B, C]), { ssh: { newKeys: [{ name: "x", publicKey: FAKE_PRIVATE_KEY, saveToLibrary: false }] } })
+    expect(sectionErrors(pk, dirty(), bulk, null).ssh).toEqual(["Key baru #1: Ini private key — tempel public key (.pub) saja"])
+    const junk = edit(initialForm([B, C]), {
+      ssh: {
+        newKeys: [
+          { name: "ok", publicKey: SSH_ED25519.publicKey, saveToLibrary: false },
+          { name: "j", publicKey: "teks acak", saveToLibrary: false },
+        ],
+      },
+    })
+    expect(sectionErrors(junk, dirty(), bulk, null).ssh).toEqual([expect.stringMatching(/^Key baru #2: Tipe harus/)])
+  })
+  it("key valid → tanpa error SSH", () => {
+    const ok = edit(initialForm([B, C]), { ssh: { newKeys: [{ name: "ok", publicKey: SSH_ED25519.publicKey, saveToLibrary: true }] } })
+    expect(sectionErrors(ok, dirty(), bulk, null).ssh).toBeUndefined()
+  })
+  it("buildPayload membuang key berisi 'PRIVATE KEY' (pertahanan berlapis)", () => {
+    const f = edit(initialForm([B, C]), {
+      ssh: {
+        newKeys: [
+          { name: "priv", publicKey: FAKE_PRIVATE_KEY, saveToLibrary: true },
+          { name: " pub ", publicKey: SSH_ED25519.publicKey, saveToLibrary: false },
+        ],
+      },
+    })
+    const p = buildPayload(f, dirty("ssh"), bulk)
+    expect(p.ssh?.newKeys).toEqual([{ name: "pub", publicKey: SSH_ED25519.publicKey, saveToLibrary: false }])
+    expect(JSON.stringify(p)).not.toContain("PRIVATE KEY")
   })
 })

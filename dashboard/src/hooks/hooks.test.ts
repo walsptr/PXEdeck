@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { ApiError, configKey, useCsvImport, useHostConfig, useInstall, useSaveConfig, useSshKeys } from "./use-host-config"
 import { HOSTS_KEY, HOSTS_POLL_MS, useDeleteHost, useHosts, useRebootHost } from "./use-hosts"
 import { useIsMobile } from "./use-mobile"
+import { NETWORK_KEY, toActiveNetwork, useNetworkConfig } from "./use-network-config"
 import { serverClockOffset, syncServerClock, useNow } from "./use-now"
 
 type Call = { url: string; init?: RequestInit }
@@ -185,5 +186,48 @@ describe("use-mobile", () => {
     expect(result.current).toBe(false)
     unmount()
     expect(listeners.size).toBe(0)
+  })
+})
+
+// ---- Iterasi 2: CR-3-2 use-network-config ----
+describe("iter2 use-network-config", () => {
+  const KVM = {
+    cidr: "10.99.0.0/24",
+    prefix: 24,
+    gateway: "10.99.0.1",
+    dns: ["10.99.0.1"],
+    dynamicRange: ["10.99.0.100", "10.99.0.200"] as [string, string],
+    pxeServer: "10.99.0.2",
+  }
+  it("toActiveNetwork: NetworkResponse → MgmtNetwork + prefix", () => {
+    expect(toActiveNetwork(KVM)).toEqual({
+      cidr: "10.99.0.0/24",
+      gateway: "10.99.0.1",
+      dns: ["10.99.0.1"],
+      pxeServer: "10.99.0.2",
+      dynamicRange: ["10.99.0.100", "10.99.0.200"],
+      prefix: 24,
+    })
+  })
+  it("useNetworkConfig: GET /api/network no-store, data = toActiveNetwork, key ['network']", async () => {
+    responder = () => json(KVM)
+    const { wrapper, qc } = setup()
+    const { result } = renderHook(() => useNetworkConfig(), { wrapper })
+    await waitFor(() => expect(result.current.isSuccess).toBe(true))
+    expect(calls).toHaveLength(1)
+    expect(calls[0].url).toBe("/api/network")
+    expect(calls[0].init?.cache).toBe("no-store")
+    expect(result.current.data).toEqual(toActiveNetwork(KVM))
+    expect(qc.getQueryData(NETWORK_KEY)).toEqual(toActiveNetwork(KVM))
+  })
+  it("useNetworkConfig: 500 {error} → error membawa pesan server; body non-JSON → status", async () => {
+    responder = () => json({ error: "PXE_MGMT_GATEWAY di luar subnet" }, 500)
+    const r1 = renderHook(() => useNetworkConfig(), { wrapper: setup().wrapper })
+    await waitFor(() => expect(r1.result.current.isError).toBe(true))
+    expect(r1.result.current.error?.message).toBe("PXE_MGMT_GATEWAY di luar subnet")
+    responder = () => new Response("x", { status: 502, statusText: "Bad Gateway" })
+    const r2 = renderHook(() => useNetworkConfig(), { wrapper: setup().wrapper })
+    await waitFor(() => expect(r2.result.current.isError).toBe(true))
+    expect(r2.result.current.error?.message).toBe("502 Bad Gateway")
   })
 })

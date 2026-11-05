@@ -32,12 +32,12 @@ const HOSTS: Host[] = [
   host({ id: "9440c96e01ab", mac: "94:40:c9:6e:01:ab", hostname: "storage-02", status: "offline" }),
 ]
 
-function rows(state: Partial<TableState<typeof features>>) {
+function rows(state: Partial<TableState<typeof features>>, data: Host[] = HOSTS) {
   const { result } = renderHook(() =>
     useTable({
       features,
       columns,
-      data: HOSTS,
+      data,
       getRowId: (h) => h.id,
       initialState: state,
       globalFilterFn: hostGlobalFilter,
@@ -107,5 +107,37 @@ describe("AC-2.7 sorting", () => {
     expect(ids).toEqual(["9440c96e01ab", "b083fe5c19e2", "525400101011", "14187740ab01", "0cc47a915e10"])
     const desc = rows({ sorting: [{ id: "ip", desc: true }] })
     expect(desc[0]).toBe("0cc47a915e10")
+  })
+})
+
+// ---- Iterasi 2 ----
+describe("iter2 CR-2-4 pencarian MAC gaya Cisco", () => {
+  it("5254.0010.1011 dan prefiks 5254.0010 cocok dengan node01", () => {
+    expect(rows({ globalFilter: "5254.0010.1011" })).toEqual(["525400101011"])
+    expect(rows({ globalFilter: "5254.0010" })).toEqual(["525400101011"])
+    expect(rows({ globalFilter: "0CC4.7A91.5E10" })).toEqual(["0cc47a915e10"])
+    expect(rows({ globalFilter: "b083.fe5c.19e2" })).toEqual(["b083fe5c19e2"])
+  })
+  it("query IP bertitik tidak mencocokkan digit MAC", () => {
+    // MAC 52:54:00:10:10:10 memuat "101010"; host ini tidak punya IP → "10.10.10" tidak boleh cocok.
+    const noIp = host({ id: "525400101010", mac: "52:54:00:10:10:10" })
+    expect(rows({ globalFilter: "10.10.10" }, [noIp])).toEqual([])
+    expect(rows({ globalFilter: "0.10.1" }, [noIp])).toEqual([])
+    // Format MAC lain tetap cocok untuk host yang sama.
+    expect(rows({ globalFilter: "5254.0010.1010" }, [noIp])).toEqual(["525400101010"])
+    expect(rows({ globalFilter: "52-54-00-10-10-10" }, [noIp])).toEqual(["525400101010"])
+  })
+})
+
+describe("iter2 CR-2-3 sort hostname: host tanpa hostname di akhir", () => {
+  it("naik: hostname terurut, host tanpa hostname paling akhir", () => {
+    const ids = rows({ sorting: [{ id: "hostname", desc: false }] })
+    const names = ids.map((id) => HOSTS.find((h) => h.id === id)!.hostname)
+    expect(names).toEqual(["ctrl-01", "node01", "storage-02", null, null])
+  })
+  it("turun: host tanpa hostname tetap di akhir", () => {
+    const ids = rows({ sorting: [{ id: "hostname", desc: true }] })
+    const names = ids.map((id) => HOSTS.find((h) => h.id === id)!.hostname)
+    expect(names).toEqual(["storage-02", "node01", "ctrl-01", null, null])
   })
 })

@@ -3,6 +3,7 @@ import { describe, expect, it } from "vitest"
 
 import {
   generatePassword,
+  neutralizeCsvCell,
   normalizeMac,
   parseCsv,
   toCsv,
@@ -87,5 +88,49 @@ describe("AC-3.3 normalizeMac", () => {
     expect(normalizeMac("aa:bb:cc:dd:ee:ff:00")).toBeNull()
     expect(normalizeMac("gg:bb:cc:dd:ee:ff")).toBeNull()
     expect(normalizeMac("")).toBeNull()
+  })
+})
+
+// ---- Iterasi 2: SR-3-1 / CR-3-7 (formula injection CSV) ----
+
+describe("iter2 SR-3-1 generatePassword: karakter pertama alfanumerik", () => {
+  it("10.000 password: tidak ada yang diawali = + - @ (atau non-alfanumerik lain)", () => {
+    const bad: string[] = []
+    for (let i = 0; i < 10_000; i++) {
+      const p = generatePassword(16)
+      if (!/^[a-zA-Z0-9]/.test(p) || /^[=+\-@]/.test(p)) bad.push(p[0])
+    }
+    expect(bad).toEqual([])
+  })
+  it("karakter simbol tetap dipakai di posisi selain pertama", () => {
+    const all = Array.from({ length: 500 }, () => generatePassword(32).slice(1)).join("")
+    expect(all).toMatch(/[-_@#%+=]/)
+  })
+  it("panjang 1 → satu karakter alfanumerik; panjang 0 → string kosong", () => {
+    for (let i = 0; i < 200; i++) expect(generatePassword(1)).toMatch(/^[a-zA-Z2-9]$/)
+    expect(generatePassword(0)).toBe("")
+  })
+})
+
+describe("iter2 SR-3-1 neutralizeCsvCell / toCsv", () => {
+  it("sel berawalan = + - @ TAB CR diberi prefiks '", () => {
+    for (const v of ["=1+2", "+cmd", "-abc", "@SUM(A1)", "\tx", "\rx"]) expect(neutralizeCsvCell(v), JSON.stringify(v)).toBe(`'${v}`)
+  })
+  it("sel lain tidak berubah (termasuk simbol di tengah dan string kosong)", () => {
+    for (const v of ["abc=1", "a-b", "52:54:00:10:10:11", "", "'kutip", " =spasi"]) expect(neutralizeCsvCell(v)).toBe(v)
+  })
+  it("toCsv menetralkan sebelum quoting; sel biasa tetap round-trip", () => {
+    const csv = toCsv([
+      ["mac", "hostname", "username", "password"],
+      ["52:54:00:00:00:01", "", "ops", "=HYPERLINK(\"http://x\",\"a\")"],
+      ["52:54:00:00:00:02", "", "ops", "-2+3,4"],
+      ["52:54:00:00:00:03", "", "ops", "aman-123"],
+    ])
+    const lines = csv.split("\r\n")
+    expect(lines[1]).toBe(`52:54:00:00:00:01,,ops,"'=HYPERLINK(""http://x"",""a"")"`)
+    expect(lines[2]).toBe(`52:54:00:00:00:02,,ops,"'-2+3,4"`)
+    expect(lines[3]).toBe("52:54:00:00:00:03,,ops,aman-123")
+    // Tidak ada sel hasil parse yang diawali karakter formula.
+    for (const row of parseCsv(csv)) for (const cell of row) expect(cell).not.toMatch(/^[=+\-@\t\r]/)
   })
 })
