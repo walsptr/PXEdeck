@@ -1,12 +1,12 @@
 #!/usr/bin/env bash
-# infra/node.sh create|destroy <name> <mac> [uefi|bios]
+# infra/node.sh create|destroy <name> <mac> [uefi|bios]  |  infra/node.sh reset <name>
 # VM node uji: qcow2 20G di .agent/vms/<name>.qcow2, 2 GB RAM, 2 vCPU, NIC pxe-test,
 # --pxe --boot network,hd (UEFI: OVMF non-secure-boot). Serial console -> <runs>/<name>-console.log.
 # Nama wajib ^pxe-test-, tidak boleh pxe-test-node01 / nama milik user.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 
-usage() { echo "pakai: $0 create|destroy <name> <mac> [uefi|bios]" >&2; exit 2; }
+usage() { echo "pakai: $0 create|destroy <name> <mac> [uefi|bios] | reset <name>" >&2; exit 2; }
 [[ $# -ge 2 ]] || usage
 action="$1"; name="$2"; mac="${3:-}"; fw="${4:-uefi}"
 assert_name "$name"
@@ -28,7 +28,7 @@ case "$action" in
       serial_capture_start "$(serial_port_for_mac "$mac")" "$console" append >/dev/null
       log "start $name (sudah ada)"; virsh_m start "$name"; exit 0
     fi
-    net_active "$NET_PXE" || die "network $NET_PXE belum aktif (net-up.sh)"
+    net_active "$NET_PXE" || is_dry || die "network $NET_PXE belum aktif (net-up.sh)"
     run rm -f "$disk"
     run qemu-img create -q -f qcow2 "$disk" 20G
     serial_arg="$(serial_capture_start "$(serial_port_for_mac "$mac")" "$console")"
@@ -43,6 +43,12 @@ case "$action" in
       --network "network=$NET_PXE,mac=$mac,model=virtio" \
       --pxe --boot "$boot" \
       --graphics none --noautoconsole --serial "$serial_arg"
+    ;;
+  reset)
+    # Harness KVM (Playwright e2e-kvm): reboot paksa node yang berjalan agar PXE boot ulang
+    # setelah Install di dashboard. Hanya satu VM node bernama, bukan server.
+    dom_running "$name" || is_dry || die "$name tidak berjalan"
+    log "reset $name"; virsh_m reset "$name"
     ;;
   destroy)
     if dom_exists "$name"; then

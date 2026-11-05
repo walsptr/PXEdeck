@@ -1,0 +1,31 @@
+# /etc/systemd/system/pxe-dashboard.service — dashboard Next (standalone) di VM pxe-test-server.
+# Hanya listen 127.0.0.1:3000; akses dari luar lewat nginx 10.99.0.2:80 (X-Real-IP).
+[Unit]
+Description=PXE dashboard (Next.js standalone)
+After=network-online.target dnsmasq.service
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=pxe
+Group=pxe
+WorkingDirectory=/opt/pxe-dashboard/current
+EnvironmentFile=/etc/pxe-dashboard.env
+Environment=HOSTNAME=127.0.0.1
+Environment=PORT=3000
+ExecStart=/opt/node/bin/node server.js
+Restart=on-failure
+RestartSec=2
+# /var/lib/pxe-dashboard (DB SQLite) milik user pxe.
+StateDirectory=pxe-dashboard
+StateDirectoryMode=0750
+NoNewPrivileges=yes
+PrivateTmp=yes
+ProtectSystem=full
+ProtectHome=yes
+ProtectKernelTunables=yes
+ProtectControlGroups=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_UNIX
+
+[Install]
+WantedBy=multi-user.target
