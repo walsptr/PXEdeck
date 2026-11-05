@@ -50,15 +50,17 @@ import {
   useInstall,
   useSaveConfig,
 } from "@/hooks/use-host-config"
-import { useNetworkConfig } from "@/hooks/use-network-config"
+import { installBlockReason, useOsImages } from "@/hooks/use-os-images"
+import { useActiveNetwork } from "@/hooks/use-settings"
 import type {
   CsvRowResult,
+  InstallResult,
   PublicHostConfig,
   SaveResult,
   SectionKey,
 } from "@/lib/host-config"
 import type { MgmtNetwork } from "@/lib/net"
-import { osLabel } from "@/lib/os-images"
+import { canonicalOsImageId, osLabel } from "@/lib/os-images"
 import type { Host } from "@/lib/types"
 import { cn } from "@/lib/utils"
 
@@ -116,7 +118,7 @@ function SheetBody({
   }, [allHosts, target.hostIds])
   const single = hosts.length === 1 ? hosts[0] : null
   const config = useHostConfig(single?.id ?? null)
-  const network = useNetworkConfig()
+  const network = useActiveNetwork()
   const failed = (single && config.isError) || network.isError
   const loading = (single && config.isPending) || network.isPending
 
@@ -217,6 +219,10 @@ function ConfigForm({
     Partial<Record<SectionKey, string[]>>
   >({})
   const [confirmInstall, setConfirmInstall] = React.useState(false)
+  /** Host yang gagal di-install pada percobaan terakhir (ditampilkan per host di Sheet). */
+  const [installFailed, setInstallFailed] = React.useState<
+    InstallResult["failed"]
+  >([])
 
   const save = useSaveConfig()
   const install = useInstall()
@@ -254,15 +260,29 @@ function ConfigForm({
   )
   const dirtyList = SECTION_ORDER.filter((k) => dirty.has(k))
 
-  const installOs = dirty.has("os")
-    ? osLabel(form.os.osImageId)
+  const installOsId = dirty.has("os")
+    ? form.os.osImageId
     : hosts.length === 1
-      ? osLabel(config?.os?.osImageId ?? hosts[0].osAssigned)
+      ? (config?.os?.osImageId ?? hosts[0].osAssigned)
       : null
+  const installOs = osLabel(installOsId)
+  // Image yang pasti ditolak server (media tidak tersedia / Windows): Install dinonaktifkan.
+  const images = useOsImages()
+  const installBlocked = installOsId
+    ? installBlockReason(
+        images.data?.find((i) => i.id === canonicalOsImageId(installOsId)),
+      )
+    : null
+  const hostLabel = (id: string) => {
+    const h = hosts.find((x) => x.id === id)
+    return h ? (h.hostname ?? h.mac) : id
+  }
 
   async function submit(andInstall: boolean) {
     const ids = hosts.map((h) => h.id)
     setServerErrors({})
+    if (andInstall) setInstallFailed([])
+    let phase: "save" | "install" = "save"
     try {
       if (dirtyList.length > 0) {
         const result = await save.mutateAsync({
@@ -280,6 +300,7 @@ function ConfigForm({
         }
       }
       if (andInstall) {
+        phase = "install"
         const r = await install.mutateAsync(ids)
         if (r.started.length) {
           toast.success(`Instalasi dimulai di ${r.started.length} host`, {
@@ -288,9 +309,23 @@ function ConfigForm({
           })
         }
         if (r.failed.length) {
+          setInstallFailed(r.failed)
           toast.error(`${r.failed.length} host tidak bisa di-install`, {
-            description: r.failed.map((f) => f.message).join("\n"),
+            description: (
+              <ul className="flex flex-col gap-0.5">
+                {r.failed.slice(0, 5).map((f) => (
+                  <li key={f.hostId}>
+                    <span className="type-data">{hostLabel(f.hostId)}</span>:{" "}
+                    {f.message}
+                  </li>
+                ))}
+                {r.failed.length > 5 && (
+                  <li>… dan {r.failed.length - 5} host lainnya</li>
+                )}
+              </ul>
+            ),
           })
+          // Sheet tetap terbuka agar alasan per host bisa dibaca.
           if (!r.started.length) return
         }
       }
@@ -313,7 +348,11 @@ function ConfigForm({
           description: other.length ? other.join("\n") : e.message,
         })
       } else {
-        toast.error("Gagal menyimpan", { description: (e as Error).message })
+        // Mis. 403 "Host tidak diizinkan" (guardMutation) atau 5xx.
+        toast.error(
+          phase === "install" ? "Gagal memulai instalasi" : "Gagal menyimpan",
+          { description: (e as Error).message },
+        )
       }
     }
   }
@@ -355,6 +394,24 @@ function ConfigForm({
           </TabsList>
         </div>
         <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5">
+          {installFailed.length > 0 && (
+            <Alert variant="destructive" className="mb-5" data-slot="install-errors">
+              <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} />
+              <AlertTitle>
+                Install ditolak untuk {installFailed.length} host
+              </AlertTitle>
+              <AlertDescription>
+                <ul className="flex flex-col gap-1">
+                  {installFailed.map((f) => (
+                    <li key={f.hostId}>
+                      <span className="type-data">{hostLabel(f.hostId)}</span>
+                      : {f.message}
+                    </li>
+                  ))}
+                </ul>
+              </AlertDescription>
+            </Alert>
+          )}
           {SECTION_ORDER.map((k) => (
             <TabsContent key={k} value={k} className="flex flex-col gap-5">
               <SectionErrors errors={serverErrors[k]} title="Ditolak server" />
@@ -431,6 +488,14 @@ function ConfigForm({
             </Badge>
           ))}
         </div>
+        {installBlocked && (
+          <p
+            id="install-blocked"
+            className="type-caption text-destructive"
+          >
+            Install tidak tersedia: {installBlocked}.
+          </p>
+        )}
         <div className="flex flex-col-reverse gap-2 sm:flex-row sm:justify-end">
           <Button variant="ghost" onClick={onClose} disabled={busy}>
             Batal
@@ -446,7 +511,8 @@ function ConfigForm({
             Simpan konfigurasi
           </Button>
           <Button
-            disabled={busy || blocking.length > 0}
+            disabled={busy || blocking.length > 0 || Boolean(installBlocked)}
+            aria-describedby={installBlocked ? "install-blocked" : undefined}
             onClick={() => setConfirmInstall(true)}
           >
             {dirtyList.length ? "Simpan & Install" : "Install"}

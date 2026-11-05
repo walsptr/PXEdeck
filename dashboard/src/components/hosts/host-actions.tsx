@@ -54,7 +54,7 @@ export function RowActions({ host }: { host: Host }) {
           <HugeiconsIcon icon={MoreHorizontalIcon} strokeWidth={2} />
         </Button>
       </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-52">
+      <DropdownMenuContent align="end" className="w-60">
         <DropdownMenuGroup>
           <DropdownMenuItem onSelect={() => onHostAction("install", host)}>
             <HugeiconsIcon icon={DiscIcon} strokeWidth={2} />
@@ -68,9 +68,15 @@ export function RowActions({ host }: { host: Host }) {
             <HugeiconsIcon icon={ComputerTerminal01Icon} strokeWidth={2} />
             Lihat log
           </DropdownMenuItem>
-          <DropdownMenuItem onSelect={() => onHostAction("reboot", host)}>
-            <HugeiconsIcon icon={RefreshIcon} strokeWidth={2} />
-            Reboot ke PXE
+          {/* Reboot jarak jauh butuh IPMI/Redfish — di luar M4 (API 501). Nonaktif + alasan. */}
+          <DropdownMenuItem disabled className="items-start">
+            <HugeiconsIcon icon={RefreshIcon} strokeWidth={2} className="mt-0.5" />
+            <span className="flex flex-col gap-0.5">
+              Reboot ke PXE{" "}
+              <span className="text-xs text-muted-foreground">
+                Belum didukung (butuh IPMI/Redfish) — reboot host manual
+              </span>
+            </span>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

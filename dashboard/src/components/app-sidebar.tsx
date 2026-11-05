@@ -17,13 +17,13 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
 import { NAV_ITEMS, navItemFor } from "@/lib/nav"
-import { useNetworkConfig } from "@/hooks/use-network-config"
+import { useActiveNetwork } from "@/hooks/use-settings"
 
 export function AppSidebar() {
   const pathname = usePathname()
   const active = navItemFor(pathname)
   // IP PXE server dari subnet aktif di server (CR-3-2), bukan nilai lab hard-coded.
-  const network = useNetworkConfig()
+  const network = useActiveNetwork()
 
   return (
     <Sidebar collapsible="icon">

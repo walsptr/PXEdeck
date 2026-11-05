@@ -19,6 +19,9 @@ export function toActiveNetwork(r: NetworkResponse): ActiveNetwork {
 }
 
 /**
+ * @deprecated M4: komponen memakai `useActiveNetwork()` dari `use-settings` (`GET /api/settings`).
+ * Hook ini dipertahankan untuk kompatibilitas (kontrak `/api/network` M3 + test lama).
+ *
  * Parameter subnet management yang dipakai server (CR-3-2). Form konfigurasi memvalidasi dan
  * mengisi default dari nilai ini agar UI dan API memakai aturan yang sama (DEC-006).
  */

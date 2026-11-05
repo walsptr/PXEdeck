@@ -25,10 +25,12 @@ function onVisibility() {
 }
 
 function subscribe(onChange: () => void) {
+  // CR-2-2: segarkan saat subscriber pertama masuk (mis. kembali ke /hosts) — useSyncExternalStore
+  // membaca snapshot lagi setelah subscribe — dan saat tab terlihat kembali, tanpa menunggu tick.
+  // CR-2-11: subscriber berikutnya tidak menggeser `now` diam-diam (tanpa notify), supaya teks
+  // "x lalu" antarbaris tetap memakai jam yang sama.
+  if (listeners.size === 0) now = Date.now()
   listeners.add(onChange)
-  // CR-2-2: segarkan saat subscribe (mis. kembali ke /hosts) — useSyncExternalStore membaca
-  // snapshot lagi setelah subscribe — dan saat tab terlihat kembali, tanpa menunggu tick.
-  now = Date.now()
   if (!timer) {
     timer = setInterval(refresh, TICK_MS)
     if (typeof document !== "undefined") {

@@ -17,7 +17,7 @@ import {
 import { Kbd } from "@/components/ui/kbd"
 import { Separator } from "@/components/ui/separator"
 import { SidebarTrigger } from "@/components/ui/sidebar"
-import { ServerStatus } from "@/components/server-status"
+import { LiveServerStatus } from "@/components/server-status"
 import { StatusPill } from "@/components/status-pill"
 import { useHosts } from "@/hooks/use-hosts"
 import { NAV_ITEMS, navItemFor } from "@/lib/nav"
@@ -69,7 +69,7 @@ export function TopBar() {
           <span className="flex-1 truncate">Cari MAC, hostname, IP…</span>
           <Kbd>Ctrl K</Kbd>
         </button>
-        <ServerStatus />
+        <LiveServerStatus />
       </div>
 
       <CommandDialog

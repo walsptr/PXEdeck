@@ -40,9 +40,10 @@ const Toaster = ({ ...props }: ToasterProps) => {
         // DR-1-2: tanpa drop shadow (SPEC §1). Sonner menyetel `box-shadow: 0 4px 12px …` pada
         // `[data-sonner-toast][data-styled=true]` (juga saat :focus-visible) — ditimpa dengan
         // !important; fokus keyboard memakai ring spread-only (offset 0, blur 0). Hairline 1px.
+        // DR-1-3: stylesheet Sonner memakai `ui-sans-serif`; paksa Inter (`font-sans`).
         classNames: {
           toast:
-            "cn-toast shadow-none! border! border-border! rounded-xl! focus-visible:ring-[3px] focus-visible:ring-ring/50",
+            "cn-toast font-sans! shadow-none! border! border-border! rounded-xl! focus-visible:ring-[3px] focus-visible:ring-ring/50",
         },
       }}
       {...props}
