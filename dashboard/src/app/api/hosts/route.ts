@@ -1,7 +1,7 @@
 import { connection } from "next/server"
 
+import { listHosts } from "@/lib/server/db/repos/hosts"
 import { jsonNoStore } from "@/lib/server/http"
-import { listHosts } from "@/lib/server/mock-hosts"
 import type { HostsResponse } from "@/lib/types"
 
 export async function GET() {

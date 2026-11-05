@@ -1,5 +1,5 @@
 import { installPayload } from "@/lib/host-config"
-import { installHosts } from "@/lib/server/config-service"
+import { installHosts } from "@/lib/server/install-service"
 import { guardMutation, readJson } from "@/lib/server/http"
 
 export async function POST(req: Request) {

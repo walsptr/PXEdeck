@@ -1,4 +1,4 @@
-import { installHosts } from "@/lib/server/config-service"
+import { installHosts } from "@/lib/server/install-service"
 import { guardMutation, hostIdParam } from "@/lib/server/http"
 
 /**
