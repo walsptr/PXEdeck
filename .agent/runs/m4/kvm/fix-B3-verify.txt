@@ -1,0 +1,57 @@
+# 2026-11-05T12:25:40Z verifikasi fix B-3 (node.sh: --pxe --install no_install=yes + cek on_reboot live)
+## virt-install --version: 5.1.0
+## node.sh create pxe-test-m4-node19 52:54:00:99:00:19 uefi
+[2026-11-05T12:25:41Z] create pxe-test-m4-node19 (uefi, 52:54:00:99:00:19, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+rc=0
+## LIVE on_*
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+## PERSISTENT on_*
+  <on_poweroff>destroy</on_poweroff>
+  <on_reboot>restart</on_reboot>
+  <on_crash>destroy</on_crash>
+## boot order (live)
+    <loader readonly='yes' secure='no' type='pflash' format='raw'>/usr/share/edk2/ovmf/OVMF_CODE.fd</loader>
+    <nvram template='/usr/share/edk2/ovmf/OVMF_VARS.fd' templateFormat='raw' format='raw'>/var/lib/libvirt/qemu/nvram/pxe-test-m4-node19_VARS.fd</nvram>
+    <boot dev='network'/>
+    <boot dev='hd'/>
+## domstate sebelum reset
+running (booted)
+
+## node.sh reset pxe-test-m4-node19
+[2026-11-05T12:25:42Z] reset pxe-test-m4-node19
+Domain 'pxe-test-m4-node19' was reset
+
+rc=0
+## domstate 5 s setelah reset
+running (booted)
+
+## node.sh reset kedua
+[2026-11-05T12:25:47Z] reset pxe-test-m4-node19
+Domain 'pxe-test-m4-node19' was reset
+
+rc=0
+## domstate 5 s setelah reset kedua
+running (booted)
+
+## cleanup: node.sh destroy (destroy + undefine --nvram + rm disk)
+Domain 'pxe-test-m4-node19' destroyed
+
+Domain 'pxe-test-m4-node19' has been undefined
+
+[2026-11-05T12:25:52Z] pxe-test-m4-node19 dihapus
+rc=0
+## disk masih ada?
+ls: cannot access '.agent/vms/pxe-test-m4-node19.qcow2': No such file or directory
+ls: cannot access '/home/syawal/Project/PXE-BOOT/.git/../.agent/vms/pxe-test-m4-node19.qcow2': No such file or directory
+## virsh list --all akhir
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+

@@ -2,6 +2,9 @@
 # infra/node.sh create|destroy <name> <mac> [uefi|bios]  |  infra/node.sh reset <name>
 # VM node uji: qcow2 20G di .agent/vms/<name>.qcow2, 2 GB RAM, 2 vCPU, NIC pxe-test,
 # --pxe --boot network,hd (UEFI: OVMF non-secure-boot). Serial console -> <runs>/<name>-console.log.
+# B-3: `--install no_install=yes` wajib — tanpa itu virt-install --pxe memulai VM dalam "tahap
+# install" dengan XML live <on_reboot>destroy</on_reboot> sehingga `virsh reset`/reboot akhir
+# installer mematikan node. Setelah create, XML live diperiksa harus on_reboot=restart.
 # Nama wajib ^pxe-test-, tidak boleh pxe-test-node01 / nama milik user.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
@@ -41,8 +44,19 @@ case "$action" in
       --osinfo linux2022 \
       --disk "path=$disk,format=qcow2,bus=virtio" \
       --network "network=$NET_PXE,mac=$mac,model=virtio" \
-      --pxe --boot "$boot" \
+      --pxe --boot "$boot" --install no_install=yes \
       --graphics none --noautoconsole --serial "$serial_arg"
+    if ! is_dry; then
+      # XML ditampung dulu: `virsh | grep -q` + pipefail bisa gagal palsu karena SIGPIPE.
+      live_xml="$(virsh_q dumpxml "$name" 2>/dev/null || true)"
+      if [[ "$live_xml" != *"<on_reboot>restart</on_reboot>"* ]]; then
+        log "XML live $name tanpa on_reboot=restart (reset/reboot akan mematikan VM) -> hapus"
+        if dom_running "$name"; then virsh_m destroy "$name"; fi
+        virsh_m undefine --nvram "$name" || virsh_m undefine "$name" || true
+        assert_path_in_vms "$disk"; run rm -f "$disk"
+        die "$name: on_reboot live bukan restart"
+      fi
+    fi
     ;;
   reset)
     # Harness KVM (Playwright e2e-kvm): reboot paksa node yang berjalan agar PXE boot ulang
@@ -53,7 +67,8 @@ case "$action" in
   destroy)
     if dom_exists "$name"; then
       if dom_running "$name"; then virsh_m destroy "$name"; fi
-      if virsh_q dumpxml "$name" | grep -q '<nvram'; then
+      xml="$(virsh_q dumpxml "$name" 2>/dev/null || true)"
+      if [[ "$xml" == *"<nvram"* ]]; then
         virsh_m undefine --nvram "$name"
       else
         virsh_m undefine "$name"

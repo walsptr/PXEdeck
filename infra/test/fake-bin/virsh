@@ -14,7 +14,7 @@ mkdir -p "$D" "$N"
 case "$cmd" in
   dominfo) [[ -f "$D/$a1" ]] || { echo "error: failed to get domain '$a1'" >&2; exit 1; }; echo "Name: $a1"; echo "State: $(cat "$D/$a1")" ;;
   domstate) [[ -f "$D/$a1" ]] || exit 1; cat "$D/$a1" ;;
-  dumpxml) [[ -f "$D/$a1" ]] || exit 1; echo "<domain><name>$a1</name>"; [[ -f "$D/$a1.nvram" ]] && echo "<nvram>/var/lib/libvirt/qemu/nvram/${a1}_VARS.fd</nvram>"; echo "</domain>" ;;
+  dumpxml) [[ -f "$D/$a1" ]] || exit 1; echo "<domain><name>$a1</name>"; [[ -f "$D/$a1.nvram" ]] && echo "<nvram>/var/lib/libvirt/qemu/nvram/${a1}_VARS.fd</nvram>"; echo "  <on_reboot>$(cat "$FAKE_STATE/onreboot/$a1" 2>/dev/null || echo restart)</on_reboot>"; echo "</domain>" ;;
   list)
     if [[ " ${args[*]} " == *" --name "* ]]; then
       for f in "$D"/*; do [[ -f "$f" && "$f" != *.nvram ]] && basename "$f"; done; echo
@@ -29,11 +29,13 @@ case "$cmd" in
   net-undefine) rm -f "$N/$a1" ;;
   start) [[ -f "$D/$a1" ]] || exit 1; echo running > "$D/$a1" ;;
   destroy|shutdown) [[ -f "$D/$a1" ]] || exit 1; echo "shut off" > "$D/$a1" ;;
-  reset) [[ "$(cat "$D/$a1" 2>/dev/null)" == running ]] || exit 1 ;;
+  # reset dengan XML live on_reboot=destroy mematikan VM (perilaku libvirt asli, B-3).
+  reset) [[ "$(cat "$D/$a1" 2>/dev/null)" == running ]] || exit 1
+    if [[ "$(cat "$FAKE_STATE/onreboot/$a1" 2>/dev/null)" == destroy ]]; then echo "shut off" > "$D/$a1"; fi ;;
   undefine)
     name="$a1"; [[ "$a1" == --nvram ]] && name="$a2"
     [[ -f "$D/$name" ]] || exit 1
     if [[ -f "$D/$name.nvram" && "$a1" != --nvram ]]; then echo "error: cannot undefine domain with nvram" >&2; exit 1; fi
-    rm -f "$D/$name" "$D/$name.nvram" ;;
+    rm -f "$D/$name" "$D/$name.nvram" "$FAKE_STATE/onreboot/$name" ;;
   *) echo "fake virsh: perintah '$cmd' tidak dimodelkan" >&2; exit 3 ;;
 esac

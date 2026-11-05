@@ -537,12 +537,52 @@ t "set -euo pipefail di setiap script"                            test_set_euo_p
 t "PATH test hanya berisi virsh/ssh palsu, tanpa sudo"            test_fake_path_isolated
 t "XML pxe-test tanpa forward/dhcp, dns off; pxe-test-nat NAT"    test_net_xml
 t "net-up dry-run: rencana define/start, tanpa mutasi"            test_net_up_dry_run
+# B-3: node harus didefinisikan TANPA tahap install virt-install (XML live on_reboot=restart),
+# tetap PXE-first (network sebelum hd) untuk UEFI dan BIOS.
+test_node_create_no_install_phase() {
+  export INFRA_DRY_RUN=1
+  local fw vi
+  for fw in uefi bios; do
+    run_infra node.sh create pxe-test-m4-node11 52:54:00:99:00:11 "$fw"
+    assert_eq "$RC" 0 "$OUT"
+    vi="$(unq "$(grep '^DRY-RUN: virt-install' <<<"$OUT")")"
+    assert_match "$vi" "(--import|--install no_install=yes)" "$fw: virt-install memicu tahap install"
+    assert_match "$vi" "--boot network,hd" "$fw: PXE-first"
+    assert_not_contains "$vi" "--wait" "$fw"
+  done
+}
+
+test_node_reset_keeps_running_fake() {
+  echo yes > "$FAKE_STATE/net/pxe-test"
+  run_infra node.sh create pxe-test-m4-node11 52:54:00:99:00:11 uefi
+  assert_eq "$RC" 0 "$OUT"
+  assert_match "$(cat "$FAKE_LOG")" "virsh -c qemu:///system dumpxml pxe-test-m4-node11" "pemeriksaan pasca-create"
+  assert_eq "$(cat "$FAKE_STATE/onreboot/pxe-test-m4-node11")" restart
+  run_infra node.sh reset pxe-test-m4-node11
+  assert_eq "$RC" 0 "$OUT"
+  assert_eq "$(cat "$FAKE_STATE/dom/pxe-test-m4-node11")" running "VM mati setelah reset"
+}
+
+test_node_create_fails_on_live_onreboot_destroy() {
+  # virt-install (palsu) memaksa XML live on_reboot=destroy → node.sh create exit≠0 dan
+  # membersihkan domain + disk miliknya.
+  echo yes > "$FAKE_STATE/net/pxe-test"
+  FAKE_VIRT_INSTALL_ONREBOOT=destroy run_infra node.sh create pxe-test-m4-node11 52:54:00:99:00:11 uefi
+  assert_ne "$RC" 0 "create harus gagal bila on_reboot live bukan restart"
+  assert_contains "$OUT" "on_reboot"
+  assert_no_file "$FAKE_STATE/dom/pxe-test-m4-node11"
+  assert_no_file "$PXE_AGENT_DIR/vms/pxe-test-m4-node11.qcow2"
+}
+
 t "net-up dua kali idempoten (virsh palsu ber-state)"             test_net_up_idempotent_fake
 t "assert_name / assert_path_in_vms / assert_mac"                 test_assert_name_and_path
 t "node.sh menolak nama terlindungi tanpa perintah virsh"         test_node_rejects_protected
 t "operasi disk VM selalu didahului assert_path_in_vms"         test_disk_ops_guarded_by_assert_path
 t "node.sh create dry-run UEFI/BIOS sesuai spesifikasi"           test_node_create_dry_run
 t "node.sh create/reset/destroy (palsu) idempoten"                test_node_lifecycle_fake
+t "node.sh create tanpa tahap install virt-install (B-3)"         test_node_create_no_install_phase
+t "node.sh reset: VM tetap running (on_reboot=restart, B-3)"      test_node_reset_keeps_running_fake
+t "node.sh create gagal bila XML live on_reboot=destroy (B-3)"    test_node_create_fails_on_live_onreboot_destroy
 t "cleanup.sh hanya resource run + snapshot"                      test_cleanup_only_run_resources
 t "cleanup.sh --server"                                           test_cleanup_server_flag
 t "cleanup.sh dry-run tanpa mutasi"                               test_cleanup_dry_run
