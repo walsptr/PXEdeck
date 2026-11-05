@@ -1,7 +1,41 @@
 #!/usr/bin/env bash
 # Setup PXE server Ubuntu 24.04 (dnsmasq + apache2 + autoinstall).
-# Jalankan di PXE server dari root project:  sudo bash scripts/setup-pxe-server.sh
+# Jalankan di PXE server dari root project (sebagai root):
+#   PXE_PASSWORD_HASH="$(openssl passwd -6)" \
+#   PXE_ADMIN_SSH_KEY="$(cat ~/.ssh/id_ed25519.pub)" bash scripts/setup-pxe-server.sh
+# configs/autoinstall/user-data adalah TEMPLATE: placeholder @PXE_PASSWORD_HASH@ dan
+# @PXE_ADMIN_SSH_KEY@ diisi dari env di langkah 7 (tidak ada hash/key di repo).
 set -euo pipefail
+
+: "${PXE_PASSWORD_HASH:?set PXE_PASSWORD_HASH (hash SHA-512 crypt, mis. openssl passwd -6)}"
+: "${PXE_ADMIN_SSH_KEY:?set PXE_ADMIN_SSH_KEY (public key OpenSSH admin)}"
+case "$PXE_PASSWORD_HASH" in
+  '$6$'*) ;;
+  *) echo 'PXE_PASSWORD_HASH harus hash SHA-512 crypt ($6$...)' >&2; exit 1 ;;
+esac
+case "$PXE_ADMIN_SSH_KEY" in
+  *$'\n'*|*'"'*) echo "PXE_ADMIN_SSH_KEY harus satu baris tanpa tanda kutip" >&2; exit 1 ;;
+  'ssh-ed25519 '*|'ssh-rsa '*|'ecdsa-sha2-nistp'*) ;;
+  *) echo "PXE_ADMIN_SSH_KEY bukan public key OpenSSH" >&2; exit 1 ;;
+esac
+export PXE_PASSWORD_HASH PXE_ADMIN_SSH_KEY
+
+# Render template user-data: ganti placeholder dari env (tanpa sed agar $ / & di
+# hash tidak ditafsirkan).
+render_user_data() {
+  python3 - "$1" "$2" <<'PY'
+import os, sys
+src, dst = sys.argv[1], sys.argv[2]
+text = open(src).read()
+for k in ("PXE_PASSWORD_HASH", "PXE_ADMIN_SSH_KEY"):
+    text = text.replace("@%s@" % k, os.environ[k])
+if "@PXE_" in text:
+    sys.exit("placeholder belum terisi di " + src)
+fd = os.open(dst, os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o644)
+os.write(fd, text.encode())
+os.close(fd)
+PY
+}
 
 ISO_NAME="ubuntu-24.04.5-live-server-amd64.iso"
 ISO_URL="https://releases.ubuntu.com/24.04/${ISO_NAME}"
@@ -53,7 +87,8 @@ install -m 644 "$SRC/tftp/grub/grub.cfg" "$TFTP/grub/grub.cfg"
 install -m 644 "$SRC/tftp/pxelinux.cfg/default" "$TFTP/pxelinux.cfg/default"
 
 echo "[7/9] Autoinstall (HTTP) & Apache"
-install -m 644 "$SRC/autoinstall/user-data" "$SRC/autoinstall/meta-data" "$SRC/autoinstall/vendor-data" "$HTTP/autoinstall/"
+render_user_data "$SRC/autoinstall/user-data" "$HTTP/autoinstall/user-data"
+install -m 644 "$SRC/autoinstall/meta-data" "$SRC/autoinstall/vendor-data" "$HTTP/autoinstall/"
 install -m 644 "$SRC/apache/pxe.conf" /etc/apache2/conf-available/pxe.conf
 a2enmod -q rewrite
 a2enconf -q pxe

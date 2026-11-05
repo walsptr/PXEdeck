@@ -1,5 +1,7 @@
 #cloud-config
 # /srv/pxe/http/autoinstall/user-data — konfigurasi Subiquity autoinstall
+# TEMPLATE: placeholder hash password & public key admin (lihat identity/ssh) diisi oleh
+# scripts/setup-pxe-server.sh (render-user-data) dari env saat deploy.
 autoinstall:
   version: 1
   locale: en_US.UTF-8
@@ -18,14 +20,16 @@ autoinstall:
   identity:
     hostname: ubuntu-node
     username: ubuntu
-    # password: "ubuntu" (hash SHA-512, buat baru dengan: openssl passwd -6)
-    password: "$6$pxelab$EzRdg/3FWt3YwSUFK8NZ5TXl/GP93OzXhv47DpBlRfQUclTe83eSkgjhetCGkJq9rvLGisqfUKTvGlTxXWMbp/"
+    # Hash SHA-512 crypt diisi saat deploy dari env PXE_PASSWORD_HASH (openssl passwd -6).
+    # Jangan commit hash/password sungguhan ke repo.
+    password: "@PXE_PASSWORD_HASH@"
 
   ssh:
     install-server: true
     allow-pw: true
     authorized-keys:
-      - "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQDN3rlfsi1FiKjSGlnBCcDks6VDPwSHn7a+TRpDNSySTNTHglgxx+skVxFnnZLqGcLZXVs/bk7nHyTOJnk7hPLfekonynnWNiF1M10ei8pvrVROIxL/rMJ+5rS3Kt6upjG5NDZ5ImTccudR1csMnB2VoScsX3xfFOBYT/s+nW2J4Kxs9yAsoKyCP0VakhNsMQSNYx1y+BJwW1ByojIPKtLgxoaAJwhGBZLdfMbez2ZkSuAwFzm58pSoBPHF/9o6RObsjFnhTYhjJi/92zawv99/sPnQfR+F7rA1MQhIaAaMiy1AoCKIR8k9AWL50kkmNJwZrj+ylvpkWCLxfEwJN9jGxUW2pgFO8YW2xm8dkCSD6mkTV9Pu6J76E0AIIWAsl3lfpq1SxpV19uj2uQBDjsVtfIz7pZTg9yC3S9WC/TIKC7//t/8oBGSsPhn880KpEkKCMVYuGImmLS105XIUiWe4Aman4IfnBMjMbhKO02LuPJgxiVxWHzqyEzSgoUUNa40= wals@wal"
+      # Public key admin diisi saat deploy dari env PXE_ADMIN_SSH_KEY.
+      - "@PXE_ADMIN_SSH_KEY@"
 
   storage:
     layout:

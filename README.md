@@ -134,8 +134,13 @@ Dari mesin lokal (root project ini):
 
 ```bash
 rsync -a --delete configs scripts ubuntu@192.168.122.180:~/pxe-lab/
-ssh ubuntu@192.168.122.180 'cd ~/pxe-lab && sudo bash scripts/setup-pxe-server.sh'
+HASH="$(openssl passwd -6)"            # password user 'ubuntu' node (tidak disimpan di repo)
+KEY="$(cat ~/.ssh/id_ed25519.pub)"     # public key admin
+ssh ubuntu@192.168.122.180 "cd ~/pxe-lab && sudo PXE_PASSWORD_HASH='$HASH' PXE_ADMIN_SSH_KEY='$KEY' bash scripts/setup-pxe-server.sh"
 ```
+
+`configs/autoinstall/user-data` adalah **template**: placeholder `@PXE_PASSWORD_HASH@` dan
+`@PXE_ADMIN_SSH_KEY@` diisi dari env saat langkah 7 (script gagal bila env kosong/tidak valid).
 
 Script melakukan 9 langkah (aman dijalankan berulang):
 
@@ -153,12 +158,9 @@ Script melakukan 9 langkah (aman dijalankan berulang):
 > Setelah mengubah `configs/autoinstall/user-data` (template dasar), jalankan `sudo pxe-nodes apply`
 > agar `user-data` per node ikut di-generate ulang. Script sudah melakukannya di langkah 9.
 
-Mengubah template autoinstall saja tidak perlu menjalankan ulang seluruh script:
-
-```bash
-scp configs/autoinstall/user-data ubuntu@192.168.122.180:/tmp/ &&
-ssh ubuntu@192.168.122.180 'sudo install -m644 /tmp/user-data /srv/pxe/http/autoinstall/user-data && sudo pxe-nodes apply'
-```
+Mengubah template autoinstall cukup dengan menjalankan ulang script di atas (idempoten; langkah 7
+me-render template dengan env yang sama, langkah 9 menjalankan `pxe-nodes apply`). Jangan menyalin
+template mentah ke `/srv/pxe/http/autoinstall/` — placeholder-nya belum terisi.
 
 ## 6. IP Management per Node (`pxe-nodes`)
 
@@ -225,8 +227,8 @@ dan `network`.
 |---|---|
 | Locale / keyboard / timezone | `en_US.UTF-8` / `us` / `Asia/Jakarta` |
 | Hostname | `ubuntu-node` (default) / dari inventaris (per node) |
-| User / password | `ubuntu` / `ubuntu` (hash SHA-512) — **ganti untuk non-lab** (`openssl passwd -6`) |
-| SSH | OpenSSH terpasang, login password diizinkan, authorized key `~/.ssh/id_rsa.pub` milik workstation admin |
+| User / password | `ubuntu` / hash SHA-512 dari env `PXE_PASSWORD_HASH` saat deploy (`openssl passwd -6`); template memuat placeholder `@PXE_PASSWORD_HASH@` |
+| SSH | OpenSSH terpasang, login password diizinkan, authorized key admin dari env `PXE_ADMIN_SSH_KEY` saat deploy (placeholder `@PXE_ADMIN_SSH_KEY@`) |
 | Sudo | `ubuntu` NOPASSWD (`/etc/sudoers.d/90-ubuntu`) |
 | Network | default: DHCP pada `en*`; per node: statis hanya pada NIC management (match MAC) |
 | Storage | layout `lvm`, `sizing-policy: all` (disk terbesar, **seluruh disk dihapus**) |
