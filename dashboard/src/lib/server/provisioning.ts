@@ -229,6 +229,97 @@ export function handleStatusCallback(input: {
   })
 }
 
+// ---- Log installer (M5-T4, plan §2.4, DEC-014 §4) ----
+
+/** Batas body log (byte); diperiksa sebelum otorisasi (route, `readBodyLimited`). */
+export const LOG_MAX_BODY_BYTES = 16 * 1024
+/** Batas baris per request log. */
+export const LOG_MAX_LINES = 200
+/** Batas request log per job per menit. */
+export const LOG_RATE_PER_MIN = 60
+
+const RATE_KEY = Symbol.for("pxe.logRate")
+const rateStore = (): Map<string, number[]> => {
+  const g = globalThis as typeof globalThis & { [RATE_KEY]?: Map<string, number[]> }
+  return (g[RATE_KEY] ??= new Map())
+}
+
+/** Kosongkan penghitung laju (test). */
+export function resetLogRate(): void {
+  rateStore().clear()
+}
+
+/** Catat request di jendela 60 dtk; false bila melewati batas (tidak dicatat). */
+function rateAllow(jobId: string, nowMs: number): boolean {
+  const store = rateStore()
+  const recent = (store.get(jobId) ?? []).filter((t) => nowMs - t < 60_000)
+  if (recent.length >= LOG_RATE_PER_MIN) {
+    store.set(jobId, recent)
+    return false
+  }
+  recent.push(nowMs)
+  store.set(jobId, recent)
+  // Bersihkan entri basi job lain agar peta tidak tumbuh tanpa batas.
+  if (store.size > 1000) {
+    for (const [k, v] of store) if (!v.some((t) => nowMs - t < 60_000)) store.delete(k)
+  }
+  return true
+}
+
+/** Pecah body log menjadi baris (tanpa \r); baris kosong (setelah trim) dibuang. */
+export function splitLogLines(text: string): string[] {
+  return text
+    .split("\n")
+    .map((l) => l.replaceAll("\r", ""))
+    .filter((l) => l.trim() !== "")
+}
+
+export type LogResult =
+  | { ok: true; status: 200; accepted: number }
+  | { ok: false; status: 413 | 429; reason: string }
+  | Denied
+
+/**
+ * `POST /boot/{mac}/{token}/log` (body teks, ukuran sudah dibatasi route). Otorisasi identik
+ * dengan callback status (token + MAC + TTL + job aktif + IP ∈ lease ∪ current_ip ∪ IP statis ∪
+ * mgmt_ip) → selain itu 404 seragam. > LOG_MAX_LINES baris → 413; > LOG_RATE_PER_MIN request/menit
+ * per job → 429. Setiap baris → event `installer` (diredaksi, dibersihkan, dipotong 2048 di repo);
+ * baris berawalan `ERROR` → level `error`.
+ */
+export function handleLogPost(input: {
+  mac: string
+  token: string
+  text: string
+  ip: string | null
+  now?: Date
+}): LogResult {
+  const now = input.now ?? new Date()
+  getDb()
+  return tx((): LogResult => {
+    const a = authorize(input.mac, input.token, now)
+    if (!a.ok) return a
+    const { job, host } = a
+    if (!ACTIVE_JOB_STATUSES.includes(job.status)) return deny(`job-${job.status}`)
+    const cfg = configOrDefault(host)
+    const staticIp = cfg.network.mode === "static" ? cfg.network.ip : null
+    if (!ipAllowed(host, input.ip, [staticIp, host.mgmtIp])) return deny("ip")
+    const lines = splitLogLines(input.text)
+    if (lines.length > LOG_MAX_LINES) return { ok: false, status: 413, reason: "lines" }
+    if (!rateAllow(job.id, now.getTime())) return { ok: false, status: 429, reason: "rate" }
+    const at = now.toISOString()
+    for (const line of lines) {
+      logJobEvent(job.id, {
+        at,
+        kind: "installer",
+        level: /^\s*ERROR\b/.test(line) ? "error" : "info",
+        source: "installer",
+        message: line,
+      })
+    }
+    return { ok: true, status: 200, accepted: lines.length }
+  })
+}
+
 /** Ambil `stage` dari body form (`stage=done`) atau JSON (`{"stage":"done"}`). */
 export function parseStageBody(text: string, contentType: string | null): string | null {
   const ct = (contentType ?? "").split(";")[0].trim().toLowerCase()

@@ -19,7 +19,7 @@ export async function POST(
   const r = handleStatusCallback({ mac: name, token, stage: stage ?? "", ip: requestIp(req) })
   if (!r.ok) {
     if (r.status === 404) {
-      logBootDenied("status", name.slice(0, 17), r.reason)
+      logBootDenied("status", name, r.reason)
       return notFoundUniform()
     }
     return textResponse(r.status === 409 ? "conflict\n" : "bad request\n", r.status)

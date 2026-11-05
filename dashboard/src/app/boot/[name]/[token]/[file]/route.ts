@@ -18,7 +18,7 @@ export async function GET(
   const { name, token, file } = await ctx.params
   const r = serveConfigFile({ mac: name, token, file, ip: requestIp(req) })
   if (!r.ok) {
-    logBootDenied("file", name.slice(0, 17), r.reason)
+    logBootDenied("file", name, r.reason)
     return notFoundUniform()
   }
   return textResponse(r.body, 200, r.contentType)
