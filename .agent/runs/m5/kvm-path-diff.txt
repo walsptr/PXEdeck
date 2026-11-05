@@ -86,3 +86,17 @@ $ git diff 543cf5a..HEAD -- redact.ts job-events.ts | baris +/- yang memuat thro
   `app/boot/**`, `boot-script.ts`, `infra/`) tidak tersentuh. Sesuai DEC-016 §Konsekuensi, bukti KVM M5
   (543cf5a) tetap berlaku; **KVM tidak dijalankan ulang**. Perubahan ingest log dilaporkan ke Orchestrator
   untuk diputuskan (run ulang hanya dengan arahan).
+
+## Run KVM konfirmasi atas kode final iterasi 3 (arahan Orchestrator, CR-5-29) — 2026-11-05
+- Run-id `20261105T194821Z`, `infra/kvm-run.sh m5 --nodes "12:bios"` dengan
+  `PXE_RUNS_DIR=.agent/runs/m5/kvm-confirm` (bukti run resmi `20261105T164801Z` di `kvm/` tidak ditimpa).
+- Rilis yang di-deploy ke `pxe-test-server`: build standalone dari worktree bersih @ `079d39c`
+  (`kvm-confirm/deploy-dashboard.txt`); `git diff 40ef24d 079d39c -- dashboard/src infra` kosong, jadi kode
+  produk = kode final iterasi 3 (termasuk `provisioning.ts`/`redact.ts`/`job-events.ts` di `0ed047b`).
+- Hasil: PASS (exit 0). Node12 BIOS PXE boot (DHCP dnsmasq `pxe0` → ROM iPXE → `/boot/<mac>.ipxe`) →
+  booting → installing → configuring → done dalam 394 s. Node mengirim log lewat jalur ingest yang berubah:
+  12 event, seq 1..12 naik tanpa celah, penanda installer `autoinstall mulai` (seq 7), `late-commands mulai`
+  (seq 8), `konfigurasi target selesai` (seq 10), `first-boot: OS terpasang` (seq 11) utuh. Tidak ada
+  `[REDACTED]` di event job (`kvm-confirm/jobs-pxe-test-m5-node12.json`, `-sse.txt`: 0 kemunculan).
+- Kesimpulan: perubahan ingest log iterasi 3 tidak mengganggu node nyata. Ini menjawab CR-5-29 dengan
+  bukti KVM, bukan hanya analisis diff.

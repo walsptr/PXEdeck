@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 e2e-kvm/m5-jobs.spec.ts:497:9 › AC-5.41 + AC-5.42 pxe-test-m5-node12 (bios): jalur positif, log live SSE, token acak ditolak (7.0m)
+  ✓  2 e2e-kvm/m5-jobs.spec.ts:639:7 › AC-5.38 server-check + allowlist nginx (host vs pxe-test-m5-node12) (220ms)
+
+  Slow test file: e2e-kvm/m5-jobs.spec.ts (7.0m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  2 passed (7.0m)

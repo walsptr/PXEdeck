@@ -1,0 +1,45 @@
+2026-11-05T19:48:09Z preflight          ok max_nodes=3 avail_mb=13591
+[2026-11-05T19:48:09Z] network pxe-test sudah terdefinisi
+[2026-11-05T19:48:10Z] network pxe-test sudah aktif
+[2026-11-05T19:48:10Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T19:48:10Z] network pxe-test-nat sudah aktif
+2026-11-05T19:48:10Z net-up             ok 
+[2026-11-05T19:48:10Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-05T19:48:10Z] network pxe-test sudah terdefinisi
+[2026-11-05T19:48:10Z] network pxe-test sudah aktif
+[2026-11-05T19:48:10Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T19:48:10Z] network pxe-test-nat sudah aktif
+DRY-RUN: rm -f /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server.qcow2
+DRY-RUN: qemu-img create -q -f qcow2 -b /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 -F qcow2 /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server.qcow2
+[2026-11-05T19:48:10Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=/home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=/home/syawal/Project/PXE-BOOT/.agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=/home/syawal/Project/PXE-BOOT/.agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=/home/syawal/Project/PXE-BOOT/.agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-05T19:48:10Z] SSH siap dalam 0s
+DRY-RUN: scp -i /home/syawal/Project/PXE-BOOT/.agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes /home/syawal/Project/PXE-BOOT/.agent/wt-m5/infra/tftp/snponly.efi /home/syawal/Project/PXE-BOOT/.agent/wt-m5/infra/tftp/undionly.kpxe pxe@10.99.0.2:/srv/pxe/tftp/
+DRY-RUN: scp -i /home/syawal/Project/PXE-BOOT/.agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes /home/syawal/Project/PXE-BOOT/.agent/media/debian-netboot/linux /home/syawal/Project/PXE-BOOT/.agent/media/debian-netboot/initrd.gz pxe@10.99.0.2:/srv/pxe/media/debian-netboot/
+DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes root@10.99.0.2 mount\ -a\ 2\>/dev/null\;\ exportfs\ -ra\;\ systemctl\ restart\ dnsmasq
+DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes root@10.99.0.2 bash\ -s
+2026-11-05T19:48:10Z server-up          ok 
+[2026-11-05T19:48:10Z] build standalone (PXE_STANDALONE=1 npm run build)
+DRY-RUN: env PXE_STANDALONE=1 npm --prefix /home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard run build
+DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes pxe@10.99.0.2 mkdir\ -m\ 700\ \'/tmp/pxe-test-deploy.20261105T194810Z\'
+DRY-RUN: scp -i /home/syawal/Project/PXE-BOOT/.agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes /tmp/pxe-test-deploy.6CZA3c/release.tar.xz /tmp/pxe-test-deploy.6CZA3c/dashboard.env /tmp/pxe-test-deploy.6CZA3c/pxe-dashboard.service /tmp/pxe-test-deploy.6CZA3c/nginx-pxe.conf pxe@10.99.0.2:/tmp/pxe-test-deploy.20261105T194810Z/
+DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes root@10.99.0.2 RELEASE_TS=20261105T194810Z\ STAGE=/tmp/pxe-test-deploy.20261105T194810Z\ bash\ -s
+2026-11-05T19:48:10Z deploy             ok 
+DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes root@10.99.0.2 bash\ -s
+2026-11-05T19:48:10Z server-check       ok 
+DRY-RUN: ssh-keygen -q -t ed25519 -N '' -C pxe-test-m5-20261105T194809Z -f /home/syawal/Project/PXE-BOOT/.agent/keys/pxe-test-m5-20261105T194809Z-node_ed25519
+DRY-RUN: rm -f /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-m5-node12.qcow2
+DRY-RUN: qemu-img create -q -f qcow2 /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-m5-node12.qcow2 20G
+[2026-11-05T19:48:10Z] create pxe-test-m5-node12 (bios, 52:54:00:99:00:12, 2048 MB)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-m5-node12 --memory 2048 --vcpus 2 --osinfo linux2022 --disk path=/home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-m5-node12.qcow2\,format=qcow2\,bus=virtio --network network=pxe-test\,mac=52:54:00:99:00:12\,model=virtio --pxe --boot network\,hd\,bios.useserial=on --install no_install=yes --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45018\,mode=connect\,protocol.type=raw
+2026-11-05T19:48:10Z node-create        ok pxe-test-m5-node12 bios 52:54:00:99:00:12
+DRY-RUN: env PXE_KVM_BASE_URL=http://10.99.0.2 PXE_KVM_RUN=m5 PXE_KVM_RUNS_DIR=/home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm-confirm PXE_KVM_NODES=pxe-test-m5-node12=52:54:00:99:00:12=bios=10.99.0.22 PXE_KVM_NODE_USER=m5admin PXE_KVM_SSH_KEY=/home/syawal/Project/PXE-BOOT/.agent/keys/pxe-test-m5-20261105T194809Z-node_ed25519 PXE_KVM_SSH_PUBKEY=/home/syawal/Project/PXE-BOOT/.agent/keys/pxe-test-m5-20261105T194809Z-node_ed25519.pub PXE_KVM_RESET_CMD=/home/syawal/Project/PXE-BOOT/.agent/wt-m5/infra/node.sh PXE_KVM_GATEWAY=10.99.0.1 PXE_KVM_DNS=10.99.0.2 PXE_KVM_PREFIX=24 PXE_KVM_SPEC=m5 PXE_KVM_POWER_CMD=/home/syawal/Project/PXE-BOOT/.agent/wt-m5/infra/node.sh PXE_KVM_DESTROY_NODES= npx --prefix /home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard playwright test -c /home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard/e2e-kvm/playwright.config.ts
+DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/keys/pxe-test-m5-20261105T194809Z-node_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=10 -o BatchMode=yes -o IdentitiesOnly=yes m5admin@10.99.0.22 EXPECT_HOSTNAME=m5-node12\ EXPECT_IP=10.99.0.22\ EXPECT_PREFIX=24\ EXPECT_MAC=52:54:00:99:00:12\ EXPECT_GW=10.99.0.1\ EXPECT_DNS=10.99.0.2\ EXPECT_USER=m5admin\ EXPECT_PUBKEY=DRY-RUN-KEY\ bash\ -s
+2026-11-05T19:48:10Z evidence           start 
+2026-11-05T19:48:10Z evidence           done 
+redact-evidence: 2 file di /home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm-confirm bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-05T19:48:10Z redact             ok 
+[2026-11-05T19:48:10Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-05T19:48:10Z] cleanup run m5 selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm-confirm/cleanup.txt)
+2026-11-05T19:48:10Z cleanup            done 
+2026-11-05T19:48:10Z result             PASS exit=0

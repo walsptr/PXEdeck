@@ -1,0 +1,22 @@
+# AC-5.41 pxe-test-m5-node12 job job-052cd011-ea11-4bc9-91d6-32997a9c1f90
+status (UI Jobs, tanpa reload): booting → installing → configuring → done dalam 394s
+state koneksi log teramati: live, ended
+penanda "installer: autoinstall mulai": seq=7 tampil=+68s koneksi=live status=installing
+penanda "installer: late-commands mulai": seq=8 tampil=+365s koneksi=live status=configuring
+penanda "first-boot: OS terpasang": seq=11 tampil=+394s koneksi=ended status=done
+timeline: booting:true@02:49:13 installing:true@02:49:48 configuring:true@02:54:59 done:true@02:55:28
+halaman Jobs tanpa reload: true
+jumlah job setelah reboot: 1
+# baris log (UI)
+02:49:13installJob install dibuat (OS ubuntu-24.04); menunggu PXE boot
+02:49:28boot-scriptScript installer dilayani (ke-1/3, platform pcbios, IP 10.99.0.185)
+02:49:48config-fetchFile meta-data diambil dari IP 10.99.0.185
+02:49:48config-fetchFile user-data diambil dari IP 10.99.0.185
+02:49:48config-fetchInstalling: konfigurasi user-data diambil installer
+02:49:48config-fetchFile vendor-data diambil dari IP 10.99.0.185
+02:50:01installerinstaller: autoinstall mulai
+02:54:59installerinstaller: late-commands mulai
+02:54:59callbackConfiguring (callback dari IP 10.99.0.22)
+02:55:00installerinstaller: konfigurasi target selesai
+02:55:28installerfirst-boot: OS terpasang boot dari disk: m5-node12 enp1s0=10.99.0.22/24 
+02:55:28callbackDone (callback dari IP 10.99.0.22)

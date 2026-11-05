@@ -1,0 +1,12 @@
+# sebelum run 2026-11-05T19:48:21Z HEAD=079d39c05069eb0f4bf03d069ff9be700701d3fd
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+

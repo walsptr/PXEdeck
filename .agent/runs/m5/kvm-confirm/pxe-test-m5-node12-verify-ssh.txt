@@ -1,0 +1,57 @@
+# verify-node.sh sebelum reboot
+# verify-node 2026-11-05T19:55:29Z on m5-node12
+# uname: 6.8.0-139-generic
+OK   hostname = m5-node12 (aktual: m5-node12)
+OK   NIC dengan MAC 52:54:00:99:00:12 ditemukan (enp1s0)
+# ip -4 addr (enp1s0): 10.99.0.22/24
+OK   ip -4 addr enp1s0 memuat 10.99.0.22/24
+OK   tidak ada IPv4 di NIC lain (—)
+OK   default via 10.99.0.1 (aktual: 10.99.0.1)
+OK   DNS memuat 10.99.0.2 (aktual: 10.99.0.2 127.0.0.53 2 )
+OK   login sebagai m5admin (aktual: m5admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m5admin (aktual: 600 m5admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   root fs dari disk lokal (/dev/mapper/ubuntu--vg-ubuntu--lv), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+
+# exit=0
+# login password (PreferredAuthentications=password)
+m5admin@10.99.0.22: Permission denied (publickey).
+# ditolak=true
+# reboot: kembali=true
+# verify-node.sh sesudah reboot
+# verify-node 2026-11-05T19:55:55Z on m5-node12
+# uname: 6.8.0-139-generic
+OK   hostname = m5-node12 (aktual: m5-node12)
+OK   NIC dengan MAC 52:54:00:99:00:12 ditemukan (enp1s0)
+# ip -4 addr (enp1s0): 10.99.0.22/24
+OK   ip -4 addr enp1s0 memuat 10.99.0.22/24
+OK   tidak ada IPv4 di NIC lain (—)
+OK   default via 10.99.0.1 (aktual: 10.99.0.1)
+OK   DNS memuat 10.99.0.2 (aktual: 10.99.0.2 127.0.0.53 2 )
+OK   login sebagai m5admin (aktual: m5admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m5admin (aktual: 600 m5admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   root fs dari disk lokal (/dev/mapper/ubuntu--vg-ubuntu--lv), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+
+# exit=0
+# kernel installer di serial log: sebelum reboot=4 sesudah=4
+# status host sesudah reboot: done osInstalled=ubuntu-24.04 osAssigned=null
+# jumlah job: sebelum reboot=1 sesudah=1 (done)
+# /boot/52:54:00:99:00:12.ipxe sesudah reboot:
+#!ipxe
+echo Tidak ada instalasi aktif: boot dari disk lokal
+iseq ${platform} efi && exit 1 ||
+sanboot --no-describe --drive 0x80 || exit 1
+

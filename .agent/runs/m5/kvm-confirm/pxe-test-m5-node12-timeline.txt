@@ -1,0 +1,10 @@
+2026-11-05T19:49:11.239Z discovered firmware=bios
+2026-11-05T19:49:13.050Z install dibuat (UI): booting
+2026-11-05T19:49:13.474Z node.sh reset
+2026-11-05T19:49:13.479Z job: booting (UI Jobs, koneksi log live)
+2026-11-05T19:49:49.683Z job: installing (UI Jobs, koneksi log live)
+2026-11-05T19:50:03.810Z penanda log tampil (tanpa reload): "installer: autoinstall mulai" (koneksi live, status installing)
+2026-11-05T19:55:01.018Z job: configuring (UI Jobs, koneksi log live)
+2026-11-05T19:55:01.083Z penanda log tampil (tanpa reload): "installer: late-commands mulai" (koneksi live, status configuring)
+2026-11-05T19:55:29.195Z job: done (UI Jobs, koneksi log ended)
+2026-11-05T19:55:29.253Z penanda log tampil (tanpa reload): "first-boot: OS terpasang" (koneksi ended, status done)
