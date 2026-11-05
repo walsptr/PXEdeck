@@ -2,6 +2,7 @@
 
 import * as React from "react"
 import { toast } from "sonner"
+import { cn } from "cn"
 import { HugeiconsIcon } from "@hugeicons/react"
 import {
   Alert02Icon,
@@ -50,30 +51,56 @@ import {
 
 const COLS = 9
 
+/**
+ * DR-5-1: baris tabel → kartu di bawah `md` (flex-wrap; urutan sel lewat `order`):
+ * (1) ID · dipakai · hapus, (2) nama + versi, (3) arsitektur · metode · bootable, lalu
+ * ketersediaan (sebaris bila tersedia; alasan tidak tersedia di baris sendiri), (4) sumber.
+ */
+const ROW_MOBILE =
+  "max-md:flex max-md:flex-wrap max-md:items-start max-md:gap-x-3 max-md:gap-y-1 max-md:px-4 max-md:py-3"
+
+/**
+ * Path/URL mono yang dipenggal di "/" (DR-5-1): setiap segmen (beserta "/" penutupnya) adalah
+ * `inline-block` sehingga baris hanya pecah di batas segmen — bukan per karakter atau di "-"
+ * (`ubuntu-` / `24.04`). Segmen yang sendirian lebih lebar dari kolom tetap dipecah
+ * (`wrap-break-word`) agar tidak melebar keluar. textContent tidak berubah.
+ */
+function PathText({ value, className, ...props }: React.ComponentProps<"span"> & { value: string }) {
+  const parts = value.split("/")
+  return (
+    <span className={cn("type-data min-w-0 text-xs wrap-break-word", className)} {...props}>
+      {parts.map((p, i) => (
+        <span key={i} className="inline-block max-w-full">
+          {p}
+          {i < parts.length - 1 && "/"}
+        </span>
+      ))}
+    </span>
+  )
+}
+
 function SourceCell({ img }: { img: OsImageInfo }) {
   const s = img.source
   if (!s) return <span className="text-muted-soft">—</span>
-  const row = (label: string, v: string) => (
-    <div className="flex gap-2">
-      <span className="type-caption w-12 shrink-0 text-muted-foreground">{label}</span>
-      {v ? (
-        <span className="type-data text-xs wrap-anywhere">{v}</span>
-      ) : (
-        <span className="text-muted-soft">—</span>
-      )}
+  const row = (label: string, v: string, className?: string) => (
+    <div className={cn("flex gap-2", className)}>
+      <span className="type-caption w-10 shrink-0 text-muted-foreground">{label}</span>
+      {v ? <PathText value={v} /> : <span className="text-muted-soft">—</span>}
     </div>
   )
   return (
-    <div className="flex max-w-80 flex-col gap-0.5 whitespace-normal" data-testid="img-source">
+    <div
+      className="flex w-full flex-col whitespace-normal md:w-64 md:gap-0.5"
+      data-testid="img-source"
+    >
       {row("kernel", s.kernel)}
       {row("initrd", s.initrd)}
-      {row("repo", s.repo)}
+      {/* Mobile: URL repo sudah berakhiran path repo → baris "repo" disembunyikan (DR-5-1). */}
+      {row("repo", s.repo, img.repoUrl ? "max-md:hidden" : undefined)}
       {img.repoUrl && (
         <div className="flex gap-2">
-          <span className="type-caption w-12 shrink-0 text-muted-foreground">URL</span>
-          <span className="type-data text-xs wrap-anywhere text-body" data-testid="img-repo-url">
-            {img.repoUrl}
-          </span>
+          <span className="type-caption w-10 shrink-0 text-muted-foreground">URL</span>
+          <PathText value={img.repoUrl} className="text-body" data-testid="img-repo-url" />
         </div>
       )}
     </div>
@@ -91,7 +118,7 @@ function AvailabilityCell({ img }: { img: OsImageInfo }) {
     )
   return (
     <span
-      className="type-caption flex max-w-56 items-start gap-1.5 whitespace-normal text-muted-foreground"
+      className="type-caption flex items-start md:max-w-40 gap-1.5 whitespace-normal text-muted-foreground"
       data-testid="img-available"
       data-available="false"
     >
@@ -105,12 +132,15 @@ function AvailabilityCell({ img }: { img: OsImageInfo }) {
 export function OsImagesView() {
   const images = useOsImages()
   const [registerOpen, setRegisterOpen] = React.useState(false)
+  // I-5-3: `toDelete` dipertahankan setelah dialog ditutup agar judul tidak kosong selama
+  // animasi tutup; visibilitas dikendalikan `deleteOpen`.
   const [toDelete, setToDelete] = React.useState<OsImageInfo | null>(null)
+  const [deleteOpen, setDeleteOpen] = React.useState(false)
   const del = useDeleteOsImage()
   const [deleteError, setDeleteError] = React.useState<string | null>(null)
 
   function closeDelete() {
-    setToDelete(null)
+    setDeleteOpen(false)
     setDeleteError(null)
     del.reset()
   }
@@ -174,8 +204,18 @@ export function OsImagesView() {
         </Empty>
       ) : (
         <div className="overflow-hidden rounded-xl border border-border bg-card">
-          <Table data-testid="os-images-table">
-            <TableHeader>
+          {/*
+            DR-5-1: di bawah `md` tabel dirender sebagai daftar kartu (satu DOM, tanpa duplikasi
+            testid) — header disembunyikan, tiap baris jadi flex-wrap dengan label inline;
+            kolom Sumber selebar kartu sehingga path tidak dipecah per karakter.
+          */}
+          <Table
+            data-testid="os-images-table"
+            // Padding horizontal sel tengah sedikit dirapatkan agar 9 kolom muat di 1440 px tanpa
+            // scroll horizontal (kolom aksi tetap terlihat).
+            className="max-md:block md:[&_td:not(:first-child):not(:last-child)]:px-2.5 md:[&_th:not(:first-child):not(:last-child)]:px-2.5"
+          >
+            <TableHeader className="max-md:hidden">
               <TableRow>
                 <TableHead className="pl-4">ID</TableHead>
                 <TableHead>Nama</TableHead>
@@ -190,50 +230,70 @@ export function OsImagesView() {
                 </TableHead>
               </TableRow>
             </TableHeader>
-            <TableBody>
+            <TableBody className="max-md:block">
               {images.isPending
                 ? Array.from({ length: 4 }, (_, i) => (
-                    <TableRow key={i} className="hover:bg-transparent">
+                    <TableRow key={i} className={cn(ROW_MOBILE, "hover:bg-transparent")}>
                       {Array.from({ length: COLS }, (_, j) => (
-                        <TableCell key={j}>
+                        <TableCell key={j} className="max-md:p-0">
                           <Skeleton className="h-4 w-20" />
                         </TableCell>
                       ))}
                     </TableRow>
                   ))
                 : list.map((img) => (
-                    <TableRow key={img.id} data-testid="os-image-row" data-image-id={img.id}>
-                      <TableCell className="pl-4 align-top">
+                    <TableRow
+                      key={img.id}
+                      className={ROW_MOBILE}
+                      data-testid="os-image-row"
+                      data-image-id={img.id}
+                    >
+                      <TableCell className="pl-4 align-top max-md:order-1 max-md:min-w-0 max-md:flex-1 max-md:p-0">
                         <span className="type-data">{img.id}</span>
                       </TableCell>
-                      <TableCell className="align-top">
-                        <div className="flex flex-col gap-0.5">
+                      <TableCell className="align-top max-md:order-3 max-md:basis-full max-md:p-0">
+                        <div className="flex flex-col gap-0.5 max-md:flex-row max-md:flex-wrap max-md:items-baseline max-md:gap-x-1.5">
                           <span className="text-foreground">{img.name}</span>
                           <span className="type-caption text-muted-foreground">{img.version}</span>
                         </div>
                       </TableCell>
-                      <TableCell className="align-top">
+                      <TableCell className="align-top max-md:order-4 max-md:p-0">
                         <span className="type-data">{img.arch}</span>
                       </TableCell>
-                      <TableCell className="align-top text-body">{img.method}</TableCell>
-                      <TableCell className="align-top">
+                      <TableCell className="align-top text-body max-md:order-4 max-md:p-0">
+                        {img.method}
+                      </TableCell>
+                      <TableCell className="align-top max-md:order-6 max-md:basis-full max-md:p-0">
                         <SourceCell img={img} />
                       </TableCell>
-                      <TableCell className="align-top">
+                      <TableCell
+                        className={cn(
+                          "align-top max-md:order-5 max-md:p-0",
+                          !img.available && "max-md:basis-full",
+                        )}
+                      >
                         <AvailabilityCell img={img} />
                       </TableCell>
-                      <TableCell className="align-top text-body">
-                        {img.bootable ? "Ya" : "Tidak"}
+                      <TableCell className="align-top text-body max-md:order-4 max-md:p-0">
+                        <span className="max-md:hidden">{img.bootable ? "Ya" : "Tidak"}</span>
+                        <span className="md:hidden">{img.bootable ? "bootable" : "tidak bootable"}</span>
                       </TableCell>
-                      <TableCell className="align-top text-body" data-testid="img-used-by">
+                      <TableCell
+                        className="align-top text-body max-md:order-1 max-md:p-0"
+                        data-testid="img-used-by"
+                      >
+                        <span className="text-muted-foreground md:hidden">Dipakai </span>
                         <span className="type-data text-xs">{img.usedBy ?? 0}</span> host
                       </TableCell>
-                      <TableCell className="pr-4 text-right align-top">
+                      <TableCell className="pr-4 text-right align-top max-md:order-2 max-md:-my-1.5 max-md:p-0">
                         <Button
                           variant="ghost"
                           size="icon-sm"
                           aria-label={`Hapus ${img.id}`}
-                          onClick={() => setToDelete(img)}
+                          onClick={() => {
+                            setToDelete(img)
+                            setDeleteOpen(true)
+                          }}
                         >
                           <HugeiconsIcon icon={Delete02Icon} strokeWidth={2} />
                         </Button>
@@ -247,7 +307,7 @@ export function OsImagesView() {
 
       <RegisterImageDialog open={registerOpen} onOpenChange={setRegisterOpen} />
 
-      <AlertDialog open={toDelete !== null} onOpenChange={(o) => !o && closeDelete()}>
+      <AlertDialog open={deleteOpen} onOpenChange={(o) => !o && closeDelete()}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>
