@@ -349,13 +349,38 @@ describe("AC-5.7 CR-4-1 batas penyajian installer (route)", () => {
 })
 
 describe("AC-5.8 watchdog per tahap (jam injeksi, timeout 60/120/60)", () => {
+  // DEC-016 §1 (iter2): fixture dengan selisih waktu nyata antar-langkah. Install di T0, penyajian
+  // installer ke-1 di +10 mnt dan ke-2 di +25 mnt (token berotasi), lalu (bila perlu) user-data di
+  // +35 mnt dan callback configuring di +45 mnt. Timeout tahap dihitung dari entri PERTAMA tahap itu;
+  // untuk Booting = entri `booting` saat install (T0), BUKAN penyajian installer terakhir (+25 mnt).
   async function toStage(stage: "booting" | "installing" | "configuring") {
-    const token = await installAndBoot()
-    if (stage !== "booting") expect((await file(token, "user-data")).res.status).toBe(200)
-    if (stage === "configuring") expect((await status(token, "configuring")).res.status).toBe(200)
+    await readyHost()
+    expect((await install()).status).toBe(200)
+    const tokenOf = (body: string) => {
+      const m = TOKEN_RE.exec(body)
+      expect(m, body).not.toBeNull()
+      return m![1]
+    }
+    setNow(T0 + 10 * MIN)
+    const first = tokenOf((await boot()).body)
+    setNow(T0 + 25 * MIN)
+    const token = tokenOf((await boot()).body)
+    expect(token).not.toBe(first)
+    if (stage !== "booting") {
+      setNow(T0 + 35 * MIN)
+      expect((await file(token, "user-data")).res.status).toBe(200)
+    }
+    if (stage === "configuring") {
+      setNow(T0 + 45 * MIN)
+      expect((await status(token, "configuring")).res.status).toBe(200)
+    }
     const j = getActiveJob(ID)!
     expect(j.status).toBe(stage)
-    const entered = Date.parse(j.stages.filter((s) => s.stage === stage).at(-1)!.at)
+    expect(j.installerBoots).toBe(2)
+    const bootingAt = j.stages.filter((s) => s.stage === "booting").map((s) => Date.parse(s.at))
+    expect(bootingAt).toEqual([T0, T0 + 10 * MIN, T0 + 25 * MIN])
+    const entered = { booting: T0, installing: T0 + 35 * MIN, configuring: T0 + 45 * MIN }[stage]
+    expect(Date.parse(j.stages.find((s) => s.stage === stage)!.at)).toBe(entered)
     return { token, j, entered }
   }
   it.each([
