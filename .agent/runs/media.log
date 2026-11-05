@@ -1,0 +1,20 @@
+[2026-11-05T06:22:51Z] === media download start
+[2026-11-05T06:22:51Z] Ubuntu releases/24.04 SHA256SUMS lists ubuntu-24.04.5-live-server-amd64.iso (still present)
+[2026-11-05T06:22:51Z] GET https://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/linux -> debian-netboot/linux
+[2026-11-05T06:22:52Z] OK debian-netboot/linux size=8222656 sha256=d8808aa4ca188560da1e6d749dcb930c87a5fd8b11ebff1f3fa6d728af35203d
+[2026-11-05T06:22:52Z] GET https://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz -> debian-netboot/initrd.gz
+[2026-11-05T06:22:53Z] OK debian-netboot/initrd.gz size=40810276 sha256=cb24a28a5ba13dfb22e6e75bdd8ab997dbdee6e3ec6c1102f6c7f93044bd817d
+[2026-11-05T06:22:53Z] GET https://archive.ubuntu.com/ubuntu/pool/main/i/ipxe/ipxe_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb -> ipxe_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb
+[2026-11-05T06:22:55Z] OK ipxe_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb size=1401914 sha256=30ff9a37be08193f018436a5611e357b2e065ae251155b7f95a1d4bdd4d2ad39
+[2026-11-05T06:22:55Z] GET https://cloud-images.ubuntu.com/releases/24.04/release/ubuntu-24.04-server-cloudimg-amd64.img -> ubuntu-24.04-server-cloudimg-amd64.img
+[2026-11-05T06:23:06Z] IPXE extracted from noble ipxe_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb (only snponly.efi + undionly.kpxe in package; no ipxe.efi):
+    13f8e6a6b87af04a2f289729122d8b25330328584b613359fc0e2ab2924cf2e0  snponly.efi
+    a1a4644405c9dd430ef2832ce0c357cc22dfe3df7af5f099a39e52d326f99924  undionly.kpxe
+[2026-11-05T06:23:06Z] OK ubuntu-24.04-server-cloudimg-amd64.img size=621284352 sha256=04e8f2461a16a44e78a370284471f29616cdd9baf1893df25807b71f985b6c94
+[2026-11-05T06:23:06Z] GET https://download.rockylinux.org/pub/rocky/9/isos/x86_64/Rocky-9-latest-x86_64-minimal.iso -> Rocky-9-latest-x86_64-minimal.iso
+[2026-11-05T06:24:07Z] OK Rocky-9-latest-x86_64-minimal.iso size=2755067904 sha256=d338032cd1cdd41c67139f2f71b4c832c8e4a21943106519db9c7137df7a63d4
+[2026-11-05T06:24:07Z] GET https://releases.ubuntu.com/24.04/ubuntu-24.04.5-live-server-amd64.iso -> ubuntu-24.04.5-live-server-amd64.iso
+[2026-11-05T06:25:02Z] OK ubuntu-24.04.5-live-server-amd64.iso size=4080486400 sha256=97f3d7ffb032c3eb3b23d2c8be9cc76e60c2c1f2c0146ba5ba9fe01cafae0fd8
+[2026-11-05T06:25:02Z] GET https://cdimage.debian.org/cdimage/archive/12.15.0/amd64/iso-dvd/debian-12.15.0-amd64-DVD-1.iso -> debian-12.15.0-amd64-DVD-1.iso
+[2026-11-05T06:25:55Z] OK debian-12.15.0-amd64-DVD-1.iso size=3989078016 sha256=484e1250d3dd29c8d7f83f30a08efb22f922830b8fe9f1e299e89a21c895955f
+[2026-11-05T06:25:55Z] === media download end

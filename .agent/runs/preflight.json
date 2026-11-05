@@ -1,0 +1,4 @@
+{"kvm": true, "libvirt_nosudo": true, "ovmf_code": "/usr/share/edk2/ovmf/OVMF_CODE.fd", "ovmf_vars": "/usr/share/edk2/ovmf/OVMF_VARS.fd",
+ "max_parallel_vms": 2, "mem_available_mb": 9583, "cpus": 12,
+ "tools": {"virsh": "12.0.0", "virt-install": "5.1.0", "qemu-img": "10.2.2", "qemu-system-x86_64": "10.2.2", "ssh": "OpenSSH_10.2p1", "cloud-localds": true, "bsdtar": true, "cpu_virt_flag": "vmx"},
+ "pass": true}

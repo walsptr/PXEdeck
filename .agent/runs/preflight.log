@@ -1,0 +1,95 @@
+=== Preflight KVM 2026-11-05T06:22:00Z host=local ===
+--- /dev/kvm
+crw-rw-rw- 1 root kvm 10, 232 Nov  5 11:17 /dev/kvm
+kvm rw: OK
+--- id
+uid=1000(syawal) gid=1000(syawal) groups=1000(syawal),10(wheel),962(docker),967(ollama),968(libvirt)
+--- cpu flags vmx/svm count
+24
+vmx
+--- virsh
+/usr/bin/virsh
+--- virt-install
+/usr/bin/virt-install
+--- qemu-img
+/usr/bin/qemu-img
+--- qemu-system-x86_64
+/usr/bin/qemu-system-x86_64
+--- ssh
+/usr/bin/ssh
+--- cloud-localds
+/usr/bin/cloud-localds
+--- bsdtar
+/usr/bin/bsdtar
+--- curl
+/usr/bin/curl
+--- versions
+12.0.0
+5.1.0
+qemu-img version 10.2.2 (qemu-10.2.2-1.fc44)
+QEMU emulator version 10.2.2 (qemu-10.2.2-1.fc44)
+OpenSSH_10.2p1, OpenSSL 3.5.7 9 Jun 2026
+--- OVMF
+/usr/share/edk2/ovmf:
+total 47476
+-rw-r--r--. 1 root root   24629 Jul  8 07:00 DBXUpdate-20260630.x64.bin
+-rw-r--r--. 1 root root   32768 Jul  8 07:00 EnrollDefaultKeys.efi
+-rw-r--r--. 1 root root 4194304 Jul  8 07:00 MICROVM.fd
+-rw-r--r--. 1 root root 4194304 Jul  8 07:00 OVMF.amdsev.fd
+-rw-r--r--. 1 root root 3678208 Jul  8 07:00 OVMF_CODE_4M.qcow2
+-rw-r--r--. 1 root root    2091 Jul  8 07:00 OVMF_CODE_4M.secboot.pcrlock
+-rw-r--r--. 1 root root 3678208 Jul  8 07:00 OVMF_CODE_4M.secboot.qcow2
+lrwxrwxrwx. 1 root root      12 Jul  8 07:00 OVMF_CODE.cc.fd -> OVMF_CODE.fd
+-rw-r--r--. 1 root root 1966080 Jul  8 07:00 OVMF_CODE.fd
+-rw-r--r--. 1 root root 1966080 Jul  8 07:00 OVMF_CODE.secboot.fd
+-rw-r--r--. 1 root root    2091 Jul  8 07:00 OVMF_CODE.secboot.pcrlock
+-rw-r--r--. 1 root root 2251416 Jul  8 07:00 OVMF.igvm
+-rw-r--r--. 1 root root 4194304 Jul  8 07:00 OVMF.inteltdx.fd
+-rw-r--r--. 1 root root 4194304 Jul  8 07:00 OVMF.inteltdx.secboot.fd
+-rw-r--r--. 1 root root 4194304 Jul  8 07:00 OVMF.qemuvars.fd
+-rw-r--r--. 1 root root 4194304 Jul  8 07:00 OVMF.stateless.fd
+-rw-r--r--. 1 root root 4194304 Jul  8 07:00 OVMF.stateless.secboot.fd
+-rw-r--r--. 1 root root   74234 Jul  8 07:00 OVMF.stateless.secboot.pcrlock
+-rw-r--r--. 1 root root  561152 Jul  8 07:00 OVMF_VARS_4M.qcow2
+-rw-r--r--. 1 root root  561152 Jul  8 07:00 OVMF_VARS_4M.secboot.qcow2
+-rw-r--r--. 1 root root  131072 Jul  8 07:00 OVMF_VARS.fd
+-rw-r--r--. 1 root root  131072 Jul  8 07:00 OVMF_VARS.secboot.fd
+-rw-r--r--. 1 root root 1208320 Jul  8 07:00 Shell.efi
+-rw-r--r--. 1 root root 2895872 Jul  8 07:00 UefiShell.iso
+-rw-r--r--. 1 root root      41 Jul  8 07:00 vars.blank.json
+-rw-r--r--. 1 root root   69111 Jul  8 07:00 vars.secboot.json
+
+/usr/share/OVMF:
+total 20
+lrwxrwxrwx. 1 root root 25 Jul  8 07:00 OVMF_CODE.fd -> ../edk2/ovmf/OVMF_CODE.fd
+lrwxrwxrwx. 1 root root 33 Jul  8 07:00 OVMF_CODE.secboot.fd -> ../edk2/ovmf/OVMF_CODE.secboot.fd
+lrwxrwxrwx. 1 root root 25 Jul  8 07:00 OVMF_VARS.fd -> ../edk2/ovmf/OVMF_VARS.fd
+lrwxrwxrwx. 1 root root 33 Jul  8 07:00 OVMF_VARS.secboot.fd -> ../edk2/ovmf/OVMF_VARS.secboot.fd
+lrwxrwxrwx. 1 root root 26 Jul  8 07:00 UefiShell.iso -> ../edk2/ovmf/UefiShell.iso
+--- virsh list --all
+ Id   Name              State
+---------------------------------
+ 1    ubuntu24.04       running
+ 2    pxe-test-node01   running
+
+rc=0
+--- virsh net-list --all
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+ int       active   yes         yes
+
+rc=0
+--- free -m
+               total        used        free      shared  buff/cache   available
+Mem:           23719       14202         466        1107       10592        9517
+Swap:           8191           0        8191
+--- MemAvailable
+MemAvailable:    9746012 kB
+--- nproc
+12
+--- df -h project
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/nvme0n1p5  474G  117G  356G  25% /home
+--- max_parallel_vms = clamp(floor((9583-4096)/2048),1,3) = 2
+--- RESULT: PASS
