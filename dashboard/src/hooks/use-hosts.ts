@@ -2,6 +2,7 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
+import { syncServerClock } from "@/hooks/use-now"
 import type { Host, HostsResponse } from "@/lib/types"
 
 export const HOSTS_KEY = ["hosts"] as const
@@ -20,7 +21,11 @@ async function request<T>(url: string, init?: RequestInit): Promise<T> {
 export function useHosts({ enabled = true }: { enabled?: boolean } = {}) {
   return useQuery({
     queryKey: HOSTS_KEY,
-    queryFn: () => request<HostsResponse>("/api/hosts"),
+    queryFn: async () => {
+      const data = await request<HostsResponse>("/api/hosts")
+      syncServerClock(data.serverTime)
+      return data
+    },
     refetchInterval: HOSTS_POLL_MS,
     refetchIntervalInBackground: false,
     enabled,

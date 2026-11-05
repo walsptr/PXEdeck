@@ -414,7 +414,7 @@ function CsvPreview({ rows, hosts }: { rows: CsvRowResult[]; hosts: Host[] }) {
   return (
     <div className="flex flex-col gap-2">
       <div className="max-h-64 overflow-auto rounded-xl border border-border bg-card">
-        <Table>
+        <Table aria-label="Preview CSV credentials">
           <TableHeader>
             <TableRow>
               <TableHead className="w-12">Baris</TableHead>
@@ -425,7 +425,11 @@ function CsvPreview({ rows, hosts }: { rows: CsvRowResult[]; hosts: Host[] }) {
           </TableHeader>
           <TableBody>
             {rows.map((r) => (
-              <TableRow key={r.line}>
+              <TableRow
+                key={r.line}
+                data-line={r.line}
+                data-state={r.errors.length ? "error" : "ok"}
+              >
                 <TableCell className="type-data text-xs text-muted-foreground">
                   {r.line}
                 </TableCell>

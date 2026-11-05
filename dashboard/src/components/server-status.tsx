@@ -27,22 +27,35 @@ export function ServerStatus({
   services?: ServiceStatus[]
 }) {
   return (
-    <div className="flex items-center gap-1.5">
+    <div
+      role="group"
+      aria-label="Status server PXE"
+      className="flex items-center gap-1.5"
+    >
       {services.map((s) => (
         <Tooltip key={s.name}>
           <TooltipTrigger asChild>
-            <Badge variant="outline" className="h-6 gap-1.5 bg-card px-2 sm:px-2.5">
+            <Badge
+              variant="outline"
+              data-service={s.name}
+              data-online={s.online}
+              className="h-6 gap-1.5 bg-card px-2 sm:px-2.5"
+            >
               <span
                 aria-hidden
+                data-slot="status-dot"
                 className={cn(
                   "size-1.5 rounded-full",
                   s.online ? "bg-success" : "bg-destructive",
                 )}
               />
-              <span className="type-data hidden text-[11px] font-medium sm:inline">
+              <span className="type-data sr-only text-[11px] font-medium sm:not-sr-only">
                 {s.name}
               </span>
-              <span className="sr-only">{s.online ? "online" : "offline"}</span>
+              <span className="sr-only">
+                {" "}
+                {s.online ? "online" : "offline"}
+              </span>
             </Badge>
           </TooltipTrigger>
           <TooltipContent>

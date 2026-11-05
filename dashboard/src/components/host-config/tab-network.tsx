@@ -30,7 +30,7 @@ import {
   type NetForm,
 } from "@/components/host-config/form-state"
 import { PlanTable } from "@/components/host-config/plan-table"
-import { isIpv4, MGMT_NETWORK } from "@/lib/net"
+import { isHostInSubnet, isIpv4, MGMT_NETWORK, parseCidr } from "@/lib/net"
 
 export function TabNetwork({
   value,
@@ -45,6 +45,9 @@ export function TabNetwork({
   const [dnsDraft, setDnsDraft] = React.useState("")
   const plan = value.mode === "static" ? ipPlan(value, ctx) : []
   const [lo, hi] = MGMT_NETWORK.dynamicRange
+  // Sama dengan aturan server (DEC-006); pesan lengkap tampil di ringkasan error tab.
+  const prefixInvalid = value.prefix !== parseCidr(MGMT_NETWORK.cidr).prefix
+  const gatewayInvalid = !isHostInSubnet(value.gateway, MGMT_NETWORK.cidr)
 
   function addDns() {
     const v = dnsDraft.trim()
@@ -188,7 +191,7 @@ export function TabNetwork({
           )}
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field>
+            <Field data-invalid={prefixInvalid || undefined}>
               <FieldLabel htmlFor="net-prefix">Prefix</FieldLabel>
               <InputGroup>
                 <InputGroupAddon>
@@ -200,6 +203,7 @@ export function TabNetwork({
                   min={8}
                   max={30}
                   className="type-data"
+                  aria-invalid={prefixInvalid || undefined}
                   value={value.prefix}
                   onChange={(e) =>
                     onChange({ prefix: Number(e.target.value) || 24 })
@@ -207,13 +211,13 @@ export function TabNetwork({
                 />
               </InputGroup>
             </Field>
-            <Field data-invalid={!isIpv4(value.gateway) || undefined}>
+            <Field data-invalid={gatewayInvalid || undefined}>
               <FieldLabel htmlFor="net-gw">Gateway</FieldLabel>
               <Input
                 id="net-gw"
                 className="type-data"
                 value={value.gateway}
-                aria-invalid={!isIpv4(value.gateway) || undefined}
+                aria-invalid={gatewayInvalid || undefined}
                 onChange={(e) => onChange({ gateway: e.target.value })}
               />
             </Field>

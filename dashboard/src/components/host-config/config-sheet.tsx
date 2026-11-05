@@ -262,14 +262,20 @@ function ConfigForm({
     } catch (e) {
       if (e instanceof ApiError && e.errors.length) {
         const grouped: Partial<Record<SectionKey, string[]>> = {}
+        // Error di luar lima tab (mis. `hostIds`: id host invalid/tidak dikenal) tidak
+        // punya tab; tampilkan di toast agar tidak hilang.
+        const other: string[] = []
         for (const err of e.errors) {
-          if (err.section === "hostIds") continue
-          ;(grouped[err.section] ??= []).push(err.message)
+          if ((SECTION_ORDER as readonly string[]).includes(err.section))
+            (grouped[err.section as SectionKey] ??= []).push(err.message)
+          else other.push(err.message)
         }
         setServerErrors(grouped)
         const first = SECTION_ORDER.find((k) => grouped[k])
         if (first) setTab(first)
-        toast.error("Konfigurasi ditolak server", { description: e.message })
+        toast.error("Konfigurasi ditolak server", {
+          description: other.length ? other.join("\n") : e.message,
+        })
       } else {
         toast.error("Gagal menyimpan", { description: (e as Error).message })
       }
@@ -286,20 +292,26 @@ function ConfigForm({
         <div className="overflow-x-auto border-b border-border px-6 py-3">
           <TabsList>
             {SECTION_ORDER.map((k) => {
-              const hasErr =
-                dirty.has(k) &&
-                (clientErrors[k]?.length || serverErrors[k]?.length)
+              const hasErr = Boolean(
+                (dirty.has(k) && clientErrors[k]?.length) ||
+                  serverErrors[k]?.length,
+              )
               return (
                 <TabsTrigger key={k} value={k} className="gap-1.5 px-3">
                   {SECTION_LABEL[k]}
                   {(dirty.has(k) || serverErrors[k]) && (
-                    <span
-                      aria-label={hasErr ? "ada error" : "diubah"}
-                      className={cn(
-                        "size-1.5 rounded-full",
-                        hasErr ? "bg-destructive" : "bg-foreground",
-                      )}
-                    />
+                    <>
+                      <span
+                        aria-hidden
+                        className={cn(
+                          "size-1.5 rounded-full",
+                          hasErr ? "bg-destructive" : "bg-foreground",
+                        )}
+                      />
+                      <span className="sr-only">
+                        {hasErr ? "(ada error)" : "(diubah)"}
+                      </span>
+                    </>
                   )}
                 </TabsTrigger>
               )

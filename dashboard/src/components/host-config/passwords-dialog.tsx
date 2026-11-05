@@ -86,7 +86,7 @@ export function PasswordsDialog({
           </AlertDescription>
         </Alert>
         <div className="max-h-72 overflow-auto rounded-xl border border-border bg-card">
-          <Table>
+          <Table aria-label="Password yang dibuat">
             <TableHeader>
               <TableRow>
                 <TableHead>MAC</TableHead>
@@ -96,7 +96,7 @@ export function PasswordsDialog({
             </TableHeader>
             <TableBody>
               {passwords?.map((p) => (
-                <TableRow key={p.mac}>
+                <TableRow key={p.mac} data-mac={p.mac}>
                   <TableCell className="type-data">
                     {p.mac}
                     {p.hostname && (

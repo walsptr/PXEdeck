@@ -32,7 +32,7 @@ export function PlanTable({
         </Badge>
       </div>
       <div className="max-h-72 overflow-auto rounded-xl border border-border bg-card">
-        <Table>
+        <Table aria-label={`Preview ${valueLabel}`}>
           <TableHeader>
             <TableRow>
               <TableHead>MAC</TableHead>
@@ -45,7 +45,11 @@ export function PlanTable({
               const h = byId.get(r.hostId)!
               const cur = currentOf(h)
               return (
-                <TableRow key={r.hostId}>
+                <TableRow
+                  key={r.hostId}
+                  data-host-id={r.hostId}
+                  data-state={r.error ? "error" : "ok"}
+                >
                   <TableCell className="type-data">{h.mac}</TableCell>
                   <TableCell className="type-data text-muted-foreground">
                     {cur ?? "—"}

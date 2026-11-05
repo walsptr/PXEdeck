@@ -15,11 +15,11 @@ import {
   type HostnameRow,
 } from "@/lib/hostname"
 import {
-  isIpv4,
   MGMT_NETWORK,
   parseCidr,
   planIps,
   validateIpAssignments,
+  validateStaticNetwork,
   type IpPlanRow,
   type IpUsage,
 } from "@/lib/net"
@@ -292,10 +292,9 @@ export function sectionErrors(
           ? bad[0].error
           : `${bad.length} host belum dapat IP valid`,
       )
-    if (!isIpv4(n.gateway)) push("network", "Gateway tidak valid")
+    // Aturan sama dengan server (DEC-006): prefix = subnet management, gateway di subnet.
+    for (const m of validateStaticNetwork(n)) push("network", m)
     if (n.dns.length === 0) push("network", "Minimal satu DNS")
-    for (const d of n.dns)
-      if (!isIpv4(d)) push("network", `DNS tidak valid: ${d}`)
     if (n.vlan && !(Number(n.vlan) >= 1 && Number(n.vlan) <= 4094))
       push("network", "VLAN ID 1–4094")
     if (n.ifaceBy === "name" && !/^[a-zA-Z0-9._-]{1,15}$/.test(n.ifaceName))

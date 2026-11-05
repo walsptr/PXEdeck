@@ -57,6 +57,8 @@ export function TopBar() {
         <button
           type="button"
           onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+          aria-keyshortcuts="Control+K Meta+K"
           className="hidden h-9 w-64 items-center gap-2 rounded-lg border border-border bg-card px-3 text-left text-sm text-muted-soft transition-colors hover:border-hairline-strong md:flex"
         >
           <HugeiconsIcon

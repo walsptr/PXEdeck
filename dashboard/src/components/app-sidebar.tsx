@@ -47,23 +47,30 @@ export function AppSidebar() {
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupContent>
-            <SidebarMenu>
-              {NAV_ITEMS.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={active?.href === item.href}
-                    tooltip={item.label}
-                    className="font-medium"
-                  >
-                    <Link href={item.href}>
-                      <HugeiconsIcon icon={item.icon} strokeWidth={2} />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
+            <nav aria-label="Navigasi utama">
+              <SidebarMenu>
+                {NAV_ITEMS.map((item) => (
+                  <SidebarMenuItem key={item.href}>
+                    <SidebarMenuButton
+                      asChild
+                      isActive={active?.href === item.href}
+                      tooltip={item.label}
+                      className="font-medium"
+                    >
+                      <Link
+                        href={item.href}
+                        aria-current={
+                          active?.href === item.href ? "page" : undefined
+                        }
+                      >
+                        <HugeiconsIcon icon={item.icon} strokeWidth={2} />
+                        <span>{item.label}</span>
+                      </Link>
+                    </SidebarMenuButton>
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </nav>
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

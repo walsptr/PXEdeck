@@ -23,6 +23,18 @@ import { PROVISION_STATUSES, StatusPill } from "@/components/status-pill"
 
 export const metadata: Metadata = { title: "Design tokens" }
 
+/**
+ * Pemetaan nama tombol SPEC §1 ke varian `Button` (gap G1-3). Catatan: "secondary" di SPEC
+ * (putih + hairline) = varian `outline`; varian `secondary` shadcn (abu) tidak dipakai untuk aksi.
+ */
+const BUTTON_VARIANTS = [
+  ["default", "primary", "Hanya CTA utama (mis. Install OS). Satu per konteks.", "Install OS"],
+  ["outline", "secondary (putih + hairline)", "Aksi sekunder: simpan, tombol toolbar.", "Simpan konfigurasi"],
+  ["ghost", "ghost", "Aksi tersier: batal, ikon di baris tabel.", "Batal"],
+  ["dark", "dark (ink)", "Aksi netral tegas yang bukan CTA.", "Reboot ke PXE"],
+  ["destructive", "destructive", "Aksi berbahaya; selalu dengan konfirmasi.", "Hapus"],
+] as const
+
 const SWATCHES = [
   ["canvas", "bg-background", "#f7f7f4"],
   ["canvas-soft", "bg-canvas-soft", "#fafaf7"],
@@ -109,19 +121,39 @@ export default function DesignPage() {
           <CardHeader>
             <CardTitle className="type-section-title">Tombol</CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-wrap gap-2">
-            <Button>
-              <HugeiconsIcon
-                icon={PlusSignIcon}
-                strokeWidth={2}
-                data-icon="inline-start"
-              />
-              Install OS
-            </Button>
-            <Button variant="outline">Simpan konfigurasi</Button>
-            <Button variant="ghost">Batal</Button>
-            <Button variant="dark">Reboot ke PXE</Button>
-            <Button variant="destructive">Hapus</Button>
+          <CardContent>
+            <dl
+              aria-label="Pemetaan varian tombol ke SPEC"
+              className="grid grid-cols-[auto_1fr] items-center gap-x-6 gap-y-3"
+            >
+              {BUTTON_VARIANTS.map(([variant, spec, usage, label]) => (
+                <div key={variant} className="contents">
+                  <dt>
+                    <Button variant={variant}>
+                      {variant === "default" && (
+                        <HugeiconsIcon
+                          icon={PlusSignIcon}
+                          strokeWidth={2}
+                          data-icon="inline-start"
+                        />
+                      )}
+                      {label}
+                    </Button>
+                  </dt>
+                  <dd className="flex flex-col gap-0.5">
+                    <span className="type-body text-foreground">
+                      SPEC: {spec}{" "}
+                      <code className="type-data text-muted-foreground">
+                        variant=&quot;{variant}&quot;
+                      </code>
+                    </span>
+                    <span className="type-caption text-muted-foreground">
+                      {usage}
+                    </span>
+                  </dd>
+                </div>
+              ))}
+            </dl>
           </CardContent>
         </Card>
 
