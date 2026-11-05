@@ -30,3 +30,10 @@ export function ipToNumber(ip: string | null): number {
   if (!ip) return -1
   return ip.split(".").reduce((acc, oct) => acc * 256 + Number(oct), 0)
 }
+
+const df = new Intl.DateTimeFormat("id", { dateStyle: "medium" })
+
+/** "5 Nov 2026". */
+export function formatDate(iso: string): string {
+  return df.format(new Date(iso))
+}
