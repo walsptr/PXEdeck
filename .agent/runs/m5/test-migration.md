@@ -151,3 +151,40 @@ Asersi lama tidak diubah.
 
 **Kesimpulan iterasi 2: tidak ada pelemahan. Setiap perbaikan wajib (SR-5-1, SR-5-2, CR-5-1,
 CR-5-2, DR-5-1) punya test yang terbukti merah bila perbaikannya di-revert.**
+
+## Iterasi 3 — backend-dev (CR-5-18, SR-5-12, SR-5-11, CR-5-19)
+
+Tidak ada test lama yang diubah, dihapus, di-skip, atau dilonggarkan. Semua test lama lulus tanpa
+perubahan, termasuk:
+- **AC-5.13** (`m5-te-lifecycle-routes.test.ts:623`, `dua[31m merah\tkolom`) — **tidak berubah**.
+  Pendekatan CR-5-18: `cleanAndRedact` meredaksi salinan yang sekuens ANSI-nya dibuang utuh; salinan
+  bersih itu hanya dipakai bila memuat secret. Teks tanpa secret tetap diproses seperti iterasi 2
+  (hanya karakter kontrol dibuang), jadi `[31m` tetap ada. Tidak ada migrasi ekspektasi.
+- `stripControl(…, true)` tetap mempertahankan `\r` (test `m5-iter2-redact-timeout.test.ts:119-121`
+  tidak berubah). Normalisasi `\r` (SR-5-12) dilakukan di `handleLogPost` sebelum redaksi body,
+  sama dengan `splitLogLines`, sehingga baris yang tersimpan identik dengan iterasi 2.
+- Footer END yatim `\n<b64>\nEND` → `[REDACTED PRIVATE KEY]` (iterasi 2) tetap: baris kosong di awal
+  teks tetap ikut tersamarkan.
+
+Perubahan perilaku (tanpa test lama terdampak):
+- CR-5-19: footer END yatim hanya menelan baris base64 ≥ 16 karakter. Baris pendek tepat di atas footer
+  ikut tertelan bila tidak berbentuk kata (`^[A-Z]?[a-z]+$` / `^[A-Z]+$`). Baris kosong hanya ikut bila
+  di atasnya ada baris isi key atau awal teks. Sisa risiko: baris akhir key yang pendek (< 16) dan
+  hanya berisi huruf kapital (mis. `AQID`, byte padding OpenSSH) tidak teredaksi. Bagian itu adalah
+  padding/komentar, bukan material kunci.
+- SR-5-12: `CONTROL_RE`/`CONTROL_KEEP_NL_RE` kini juga membuang `\p{Cf}` (seluruh kategori, mencakup
+  U+00AD, U+200B–U+200F, U+202A–U+202E, U+2060–U+2064, U+FEFF), sehingga ZWJ dalam emoji juga dibuang.
+
+Test baru: `dashboard/src/lib/server/m5-iter3-redact.test.ts` (84 test).
+| Temuan | Test |
+|---|---|
+| CR-5-18 | `token=`, path `/boot/<mac>/<token>`, dan `$6$` yang disisipi 7 jenis sekuens (`ESC[0m`, `ESC[31;1m`, `ESC[1m`, OSC `ESC]0;…BEL`, OSC `ESC]8;;…ESC\`, CSI 8-bit `\x9b2K`, `ESC(B`). Masing-masing diuji lewat `cleanEventMessage` (dengan asersi kontrol bahwa urutan iterasi 2 bocor) **dan** lewat `handleLogPost` → DB. Juga: secret dan ANSI di baris berbeda, AC-5.13 tetap (unit + `handleLogPost`), `stripAnsi` (OSC tanpa terminator tidak menelan baris), idempoten |
+| SR-5-12 | (a) `PRIV\rATE KEY` tanpa footer dan varian CRLF dengan footer, lewat `handleLogPost`; (b) token path dan `token=` dipecah `\r`, lewat `handleLogPost`; (c) 17 karakter Cf di posisi < 8 token (path, `token=`, hash) + `stripControl`, dan U+200B di posisi 3 lewat `handleLogPost`; karakter non-Cf tidak dibuang |
+| SR-5-11 | 16 KB spasi + `!` + footer, spasi + `!` + spasi, tab + footer di baris yang sama: hasil diasersikan, `redactSecrets` dan `cleanEventMessage` < 20 ms (terbaik dari 5 run untuk meredam jitter CI); `handleLogPost` 16 KB < 50 ms (termasuk transaksi DB). Pola lama: 268–1072 ms (merah) |
+| CR-5-19 | probe review (`Langkah\nSelesai\n\n<b64>…END`); `Done`/`OK`/`DONE`/`Selesai`/`done`/`Traceback`/kosong tepat di atas footer dan di atas baris key tetap utuh; ekor key asli (baris 64 karakter, baris kosong di antara baris key, 6 variasi baris akhir pendek) tetap teredaksi; baris pendek non-adjacent tidak tertelan; `handleLogPost` dua request |
+
+Mutasi cepat (backend-dev, test `m5-iter3` + `m5-iter2` + `m5-te-lifecycle-routes`, 162 test):
+- pola baris key lama → 3 test performa merah, 15 merah bila batas panjang juga di-revert;
+- tanpa salinan ANSI-free → 41 merah;
+- tanpa normalisasi `\r` → 3 merah;
+- tanpa `\p{Cf}` → 18 merah.

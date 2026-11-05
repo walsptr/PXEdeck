@@ -2,7 +2,8 @@
 //  - `appendEvent` membersihkan dan meredaksi pesan sebelum disimpan — pertahanan berlapis walau
 //    pemanggil sudah meredaksi. Urutan (SR-5-1): buang karakter kontrol → redaksi
 //    (`redactSecrets`) → potong panjang. Redaksi setelah pembersihan agar secret yang disisipi
-//    ESC/\x01 tidak lolos lalu "menyatu kembali" setelah karakter kontrolnya dibuang.
+//    ESC/\x01 tidak lolos lalu "menyatu kembali" setelah karakter kontrolnya dibuang. Iterasi 3:
+//    sekuens ANSI utuh (CR-5-18) dan karakter format Unicode Cf (SR-5-12) juga diperhitungkan.
 //  - Penggabungan: event `system` identik (kind, level, source, message) dengan event terakhir job
 //    yang `at`-nya ≤ 60 dtk lalu → `repeat += 1` (seq tidak bertambah; `jobs.updated_at` berubah).
 //  - Cap `PXE_JOB_LOG_MAX_EVENTS`: setelah `event_seq` ≥ cap, event `installer` dibuang dan satu
@@ -37,33 +38,50 @@ export const TRUNCATED_SUFFIX = "…[dipotong]"
 export const MERGE_WINDOW_MS = 60_000
 export const LOG_TRUNCATED_MESSAGE = "Log installer dipotong: batas event per job tercapai, baris berikutnya dibuang"
 
-// C0 (kecuali \t), DEL, C1, U+2028/U+2029 (pemisah baris) — dibangun dari kode titik agar sumber
-// tetap ASCII.
-const CONTROL_RE = new RegExp(
-  "[" +
-    [[0x00, 0x08], [0x0a, 0x1f], [0x7f, 0x9f], [0x2028, 0x2029]]
-      .map(([a, b]) => `${String.fromCharCode(a)}-${String.fromCharCode(b)}`)
-      .join("") +
-    "]",
-  "g",
-)
-
+// C0 (kecuali \t), DEL, C1, U+2028/U+2029 (pemisah baris), dan karakter format Unicode (kategori
+// Cf: U+00AD, U+200B–U+200F, U+202A–U+202E, U+2060–U+2064, U+FEFF, dst. — SR-5-12) yang tak terlihat
+// tetapi memecah pola secret. Ditulis dengan escape agar sumber tetap ASCII.
+const CONTROL_CLASS_BASE = "\\x0b\\x0c\\x0e-\\x1f\\x7f-\\x9f\\u2028\\u2029\\p{Cf}"
+const CONTROL_RE = new RegExp(`[\\x00-\\x08\\x0a\\x0d${CONTROL_CLASS_BASE}]`, "gu")
 // Sama dengan CONTROL_RE tetapi mempertahankan \n dan \r (untuk body log multi-baris).
-const CONTROL_KEEP_NL_RE = new RegExp(
-  "[" +
-    [[0x00, 0x08], [0x0b, 0x0c], [0x0e, 0x1f], [0x7f, 0x9f], [0x2028, 0x2029]]
-      .map(([a, b]) => `${String.fromCharCode(a)}-${String.fromCharCode(b)}`)
-      .join("") +
-    "]",
+const CONTROL_KEEP_NL_RE = new RegExp(`[\\x00-\\x08${CONTROL_CLASS_BASE}]`, "gu")
+
+// Sekuens escape ANSI utuh (CR-5-18): CSI `ESC[ … final`, CSI 8-bit `\x9b … final`, OSC
+// `ESC] … BEL|ESC\` (tidak melewati baris), dan escape dua/tiga byte lain (`ESC(B`, `ESC=`, …).
+const ANSI_RE = new RegExp(
+  [
+    "\\x1b\\[[0-?]*[ -/]*[@-~]",
+    "\\x9b[0-?]*[ -/]*[@-~]",
+    "\\x1b\\][^\\x07\\x1b\\n]*(?:\\x07|\\x1b\\\\)",
+    "\\x1b[ -/]*[0-~]",
+  ].join("|"),
   "g",
 )
 
 /**
- * Buang karakter kontrol (kecuali \t; `keepNewlines` juga mempertahankan \n/\r). Tanpa pemotongan
- * panjang.
+ * Buang karakter kontrol & format (kecuali \t; `keepNewlines` juga mempertahankan \n/\r). Tanpa
+ * pemotongan panjang.
  */
 export function stripControl(raw: string, keepNewlines = false): string {
   return raw.replace(keepNewlines ? CONTROL_KEEP_NL_RE : CONTROL_RE, "")
+}
+
+/** Buang sekuens escape ANSI utuh (CSI/OSC/escape lain), tanpa menyentuh karakter lain. */
+export function stripAnsi(raw: string): string {
+  return raw.replace(ANSI_RE, "")
+}
+
+/**
+ * Bersihkan lalu redaksi (CR-5-18). Redaksi dijalankan atas salinan yang sekuens ANSI-nya dibuang
+ * utuh (`ESC[0m` di tengah token/hash tidak lagi memecah pola). Bila salinan itu memuat secret,
+ * salinan bersih yang sudah diredaksi yang dipakai; bila tidak, teks asli (hanya karakter
+ * kontrolnya dibuang, sisa sekuens seperti `[31m` tetap — AC-5.13) diredaksi seperti biasa.
+ */
+export function cleanAndRedact(raw: string, keepNewlines = false): string {
+  const bare = stripControl(stripAnsi(raw), keepNewlines)
+  const bareRedacted = redactSecrets(bare)
+  if (bareRedacted !== bare) return bareRedacted
+  return redactSecrets(stripControl(raw, keepNewlines))
 }
 
 function truncateMessage(s: string): string {
@@ -75,9 +93,9 @@ export function sanitizeMessage(raw: string): string {
   return truncateMessage(stripControl(raw))
 }
 
-/** Pesan event: bersihkan kontrol → redaksi → potong (SR-5-1, lihat header). */
+/** Pesan event: bersihkan kontrol/ANSI → redaksi → potong (SR-5-1, CR-5-18, lihat header). */
 export function cleanEventMessage(raw: string): string {
-  return truncateMessage(redactSecrets(stripControl(raw)))
+  return truncateMessage(cleanAndRedact(raw))
 }
 
 type Row = Omit<JobEvent, "seq" | "repeat"> & { seq: number; repeat: number }

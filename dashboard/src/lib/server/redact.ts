@@ -7,6 +7,11 @@
 // di node) dan bentuk percent-encoded `%2Fboot%2F<mac>%2F<token>`; hash `$6$` terpotong; ekor blok
 // private key tanpa BEGIN (baris base64 sebelum footer END yatim). Karakter kontrol harus dibuang
 // pemanggil SEBELUM redaksi (`job-events.ts`), agar secret yang disisipi ESC/\x01 tetap dikenali.
+//
+// Iterasi 3 (SR-5-11, CR-5-19): uji baris isi key linear (`trim()` + base64 murni) dan hanya baris
+// base64 ≥ 16 karakter (atau baris pendek non-kata tepat di atas footer) yang ikut tertelan footer
+// END yatim; baris kosong/kata tunggal (`Done`, `OK`, `Selesai`) di atasnya tetap utuh. Sekuens ANSI
+// & karakter format Unicode ditangani pemanggil (`cleanAndRedact`, CR-5-18/SR-5-12).
 
 const B64U = "[A-Za-z0-9_-]"
 /** `/boot/<mac>/<token 43>` (MAC `aa:bb:..`, `aa-bb-..`, `%3A`, atau 12 hex). */
@@ -25,8 +30,15 @@ const HASH_PARTIAL_RE = /\$6\$(?:rounds=\d+\$)?[./A-Za-z0-9]+(?:\$[./A-Za-z0-9]*
 const PKEY_BLOCK_RE = /-----BEGIN [A-Z ]*PRIVATE KEY-----[\s\S]*?(?:-----END [A-Z ]*PRIVATE KEY-----|$)/g
 /** Footer private key tanpa BEGIN sebelumnya (blok terpecah antar-request). */
 const PKEY_END_RE = /-----END [A-Z ]*PRIVATE KEY-----/
-/** Baris isi key (base64 atau kosong). */
-const PKEY_BODY_LINE_RE = /^[ \t]*[A-Za-z0-9+/=]*[ \t]*\r?$/
+/**
+ * Baris isi key (diuji atas baris yang sudah di-`trim()`; pola tanpa kuantor bertumpuk sehingga
+ * linear, SR-5-11): base64 murni + padding opsional.
+ */
+const PKEY_BODY_LINE_RE = /^[A-Za-z0-9+/]+={0,2}$/
+/** Kata biasa (bukan isi key) untuk baris pendek tepat di atas footer. */
+const WORD_RE = /^(?:[A-Z]?[a-z]+|[A-Z]+)$/
+/** Panjang minimum baris isi key (baris OpenSSH/PEM 64/70 karakter; CR-5-19). */
+const PKEY_BODY_MIN = 16
 const B64_RUN_RE = /[A-Za-z0-9+/]{40,}={0,2}/g
 const B64_INNER_RE = /[A-Za-z0-9+/]{16,}={0,2}/g
 const SECRET_IN_DECODED_RE = new RegExp(
@@ -58,9 +70,24 @@ function b64HasSecret(blob: string, depth: number): boolean {
 }
 
 /**
+ * Apakah `line` berbentuk baris isi key (CR-5-19)? Base64 ≥ PKEY_BODY_MIN karakter. Baris tepat di
+ * atas footer (`adjacent`) boleh lebih pendek (baris terakhir isi key; OpenSSH membungkus 70 kolom
+ * sehingga panjangnya bebas) asalkan tidak berbentuk kata (`Done`, `done`, `OK`, `DONE`: huruf
+ * kapital opsional + huruf kecil saja, atau kapital saja). Linear: `trim()` + pola tanpa kuantor
+ * bertumpuk (SR-5-11).
+ */
+function isKeyBodyLine(line: string, adjacent: boolean): boolean {
+  const t = line.trim()
+  if (!PKEY_BODY_LINE_RE.test(t)) return false
+  if (t.length >= PKEY_BODY_MIN) return true
+  return adjacent && !WORD_RE.test(t)
+}
+
+/**
  * Footer END yatim (BEGIN ada di request/baris sebelumnya): samarkan baris footer beserta baris isi
- * key (base64/kosong) yang mendahuluinya secara berurutan. Dijalankan setelah `PKEY_BLOCK_RE`,
- * jadi footer yang tersisa pasti tanpa BEGIN.
+ * key yang mendahuluinya secara berurutan (lihat `isKeyBodyLine`). Baris kosong hanya ikut bila
+ * diapit baris isi key / awal teks; baris kosong yang di atasnya teks biasa tidak ditelan (CR-5-19).
+ * Dijalankan setelah `PKEY_BLOCK_RE`, jadi footer yang tersisa pasti tanpa BEGIN.
  */
 function redactOrphanKeyTail(text: string): string {
   let out = text
@@ -69,9 +96,21 @@ function redactOrphanKeyTail(text: string): string {
     if (!m) break
     const footerEnd = m.index + m[0].length
     let start = out.lastIndexOf("\n", m.index - 1) + 1
-    while (start > 0) {
-      const prevStart = start < 2 ? 0 : out.lastIndexOf("\n", start - 2) + 1
-      if (!PKEY_BODY_LINE_RE.test(out.slice(prevStart, start - 1))) break
+    // `cursor` = awal baris teratas yang sudah diperiksa; `start` hanya maju ke baris isi key (atau
+    // baris kosong yang di atasnya baris isi key / awal teks).
+    let cursor = start
+    let adjacent = true
+    while (cursor > 0) {
+      const prevStart = cursor < 2 ? 0 : out.lastIndexOf("\n", cursor - 2) + 1
+      const line = out.slice(prevStart, cursor - 1)
+      if (line.trim() === "") {
+        if (prevStart === 0) start = 0
+        cursor = prevStart
+        continue
+      }
+      if (!isKeyBodyLine(line, adjacent && cursor === start)) break
+      adjacent = false
+      cursor = prevStart
       start = prevStart
     }
     out = out.slice(0, start) + REDACTED_KEY + out.slice(footerEnd)
