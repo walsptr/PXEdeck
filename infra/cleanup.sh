@@ -16,6 +16,10 @@ for a in "$@"; do
     *) run_id="$a" ;;
   esac
 done
+# Nama terlindungi (default, int, ...) ditolak sebelum virsh apa pun dipanggil (AC-4.28).
+for p in "${PROTECTED_NAMES[@]}"; do
+  [[ "$run_id" == "$p" ]] && die "run id '$run_id' adalah nama terlindungi milik user"
+done
 [[ "$run_id" =~ ^[a-z0-9]+$ ]] || die "run id tidak valid: $run_id"
 ensure_dirs
 rep="$RUNS_DIR/cleanup.txt"

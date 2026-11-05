@@ -77,8 +77,10 @@ export function sanitizeKey(raw: string): string {
 export function validateContext(c: InstallContext): InstallContext {
   if (!/^[A-Za-z0-9-]{1,64}$/.test(c.jobId)) bad("jobId tidak valid")
   if (!MAC_RE.test(c.mac)) bad("MAC tidak valid")
+  // validateHostname men-trim; generator memakai nilai mentah, jadi spasi/CR/LF di tepi
+  // harus ditolak di sini (mis. ComputerName unattend menjadi "n1\n").
   const hErr = validateHostname(c.hostname)
-  if (hErr) bad(`Hostname: ${hErr}`)
+  if (hErr || c.hostname !== c.hostname.trim()) bad(`Hostname: ${hErr ?? "spasi"}`)
   const uErr = validateUsername(c.username)
   if (uErr || c.username !== c.username.trim()) bad(`Username: ${uErr ?? "spasi"}`)
   if (!HASH_RE.test(c.passwordHash)) bad("Hash password harus SHA-512 crypt ($6$)")

@@ -91,6 +91,14 @@ finish() {
   step evidence start
   collect_evidence
   step evidence done
+  # AC-4.34: samarkan token job (/boot/<mac>/<token>/...) dan hash $6$ di SEMUA bukti (console,
+  # nginx, journal, Playwright), lalu scan ulang; masih ada secret -> run gagal.
+  if "$INFRA_DIR/redact-evidence.sh" "$RUNS_DIR"; then
+    step redact ok
+  else
+    step redact FAIL "secret tersisa di bukti $RUNS_DIR"
+    ((rc != 0)) || rc=1
+  fi
   # Cleanup terpisah per VM node yang dibuat run ini (nama eksplisit), lalu cleanup.sh untuk sisa
   # milik run (^pxe-test-<m>-) dan server bila tidak --keep-server.
   for i in "${!NODE_NAMES[@]}"; do
@@ -145,7 +153,8 @@ done
 step preflight ok "max_nodes=$max_nodes avail_mb=$avail_mb"
 
 # --- server + dashboard --------------------------------------------------------------------
-"$INFRA_DIR/net-up.sh" >/dev/null; step net-up ok
+# Output net-up (rencana DRY-RUN / status network) ditampilkan di stderr agar terlihat.
+"$INFRA_DIR/net-up.sh" >&2; step net-up ok
 server_started=1
 "$INFRA_DIR/server-up.sh"; step server-up ok
 "$INFRA_DIR/deploy-dashboard.sh"; step deploy ok
