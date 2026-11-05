@@ -497,6 +497,48 @@ test_redact_evidence_masks_secrets() {
   assert_eq "$(cat "$d/nginx-access.log" "$d/sub/journal.txt" "$d/sub/console.log")" "$before" "redaksi ulang mengubah isi"
 }
 
+# B-5: blob base64 (late-command dicetak installer ke console) berisi token/hash disamarkan.
+_b64() { printf '%s' "$1" | base64 -w0; }
+_utf16le_b64() { local i s="$1"; for ((i = 0; i < ${#s}; i++)); do printf '%s\0' "${s:i:1}"; done | base64 -w0; }
+test_redact_evidence_masks_base64_secrets() {
+  local d="$SB/evidence" tok hash url u1 u2 u3 u4 u5 benign all before
+  tok="$(_fake_token)"; hash="$(_fake_hash)"
+  url="http://10.99.0.2/boot/52:54:00:99:00:11/$tok/status"
+  u1="$(_b64 "$url"$'\n')"
+  u2="$(_b64 "#!/bin/sh"$'\n'"printf %s '$u1' | base64 -d > /etc/pxe-callback/url && chmod 600 /etc/pxe-callback/url"$'\n')"
+  u3="$(_b64 "user:$hash:20000:0:99999:7:::")"
+  u4="$(_utf16le_b64 "try { Invoke-WebRequest -Method Post -Body 'stage=done' -Uri '$url' } catch {}")"
+  u5="$(_b64 "$(_fake_pkey_header)"$'\n'"AAAA"$'\n')"
+  benign="$(_b64 "# Dipasang PXE dashboard: login hanya dengan key"$'\n'"PasswordAuthentication no"$'\n')"
+  mkdir -p "$d/sub"
+  {
+    printf "start:  subiquity/Late/run/command_5: printf %%s '%s' | base64 -d > /target/etc/pxe-callback/url\r\n" "$u1"
+    printf "d-i preseed/late_command string in-target sh -c 'echo %s | base64 -d > /tmp/pxe-late.sh'\n" "$u2"
+    printf 'blob=%s\n' "$u3"
+    printf 'x%s y\n' "$u1"
+    printf '\x1b[0m%s\x1b[0m\n' "$u3"
+    printf 'start: command_3: printf %%s %s | base64 -d > /target/etc/ssh/sshd_config.d/60.conf\n' "$benign"
+  } > "$d/console.log"
+  printf 'powershell -EncodedCommand %s\nkey %s\n' "$u4" "$u5" > "$d/sub/unattend.txt"
+  run_infra redact-evidence.sh "$d"
+  assert_eq "$RC" 0 "$OUT"
+  all="$(cat "$d/console.log" "$d/sub/unattend.txt")"
+  for b in "$u1" "$u2" "$u3" "$u4" "$u5"; do assert_not_contains "$all" "$b" "blob ber-secret tersisa"; done
+  assert_contains "$all" "printf %s 'REDACTED-B64-SECRET' | base64 -d > /target/etc/pxe-callback/url"
+  assert_contains "$all" "sh -c 'echo REDACTED-B64-SECRET | base64 -d"
+  assert_contains "$all" "blob=REDACTED-B64-SECRET"
+  assert_match "$all" "^REDACTED-B64-SECRET y$" "blob tak sejajar (prefix alnum) tetap terdeteksi"
+  assert_contains "$all" "-EncodedCommand REDACTED-B64-SECRET"
+  assert_contains "$all" "key REDACTED-B64-SECRET"
+  # Blob tanpa secret dibiarkan apa adanya.
+  assert_contains "$all" "printf %s $benign | base64 -d"
+  # Idempoten.
+  before="$all"
+  run_infra redact-evidence.sh "$d"
+  assert_eq "$RC" 0 "$OUT"
+  assert_eq "$(cat "$d/console.log" "$d/sub/unattend.txt")" "$before" "redaksi ulang mengubah isi"
+}
+
 test_redact_evidence_private_key_fails() {
   local d="$SB/evidence"
   mkdir -p "$d"
@@ -598,6 +640,7 @@ t "dnsmasq.conf terikat pxe0 (bind-interfaces)"                   test_dnsmasq_c
 t "tanpa sudo, ssh hanya dengan key, tanpa ~/.ssh"                test_no_sudo_and_ssh_targets
 t "verify-node.sh: symlink, gagal cepat tanpa env, cek AC-4.31"   test_verify_node_script
 t "redact-evidence: token path/token=/\$6\$ disamarkan, exit 0"     test_redact_evidence_masks_secrets
+t "redact-evidence: blob base64 berisi token/\$6\$/key disamarkan (B-5)" test_redact_evidence_masks_base64_secrets
 t "redact-evidence: header private key → exit 1 tanpa isi"        test_redact_evidence_private_key_fails
 t "redact-evidence: argumen salah → exit 2"                       test_redact_evidence_bad_args
 t "kvm-run.sh finish() memanggil redact-evidence (gagal = FAIL)"  test_kvm_run_calls_redact_in_finish

@@ -5,6 +5,8 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import { readdirSync, readFileSync, rmSync, utimesSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
+import { parse as parseYaml } from "yaml"
+
 import { applyConfig } from "@/lib/server/config-service"
 import { closeDb, getDb } from "@/lib/server/db"
 import { peekConfig } from "@/lib/server/db/repos/configs"
@@ -14,6 +16,7 @@ import { installHosts } from "@/lib/server/install-service"
 import { clearLeaseCache } from "@/lib/server/leases"
 import { hashToken } from "@/lib/server/tokens"
 import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
+import { containsSecret, evalCallbackUrl } from "@/test/cmdline"
 import { DUMMY_PASSWORD, SSH_ED25519 } from "@/test/fixtures"
 
 import { GET as hostsGET } from "../api/hosts/route"
@@ -255,14 +258,14 @@ describe("AC-4.13 GET /boot/entry.ipxe", () => {
     expect(body.startsWith("#!ipxe\n")).toBe(true)
     const chains = body.split("\n").filter((l) => l.startsWith("chain "))
     expect(chains).toHaveLength(3)
-    for (const c of chains) expect(c).toMatch(/^chain --autofree http:\/\/10\.99\.0\.2\/boot\/\$\{mac\}\.ipxe\?platform=\$\{platform\} \|\| goto (try\d|fail)$/)
-    expect(body.trimEnd().endsWith("exit")).toBe(true)
+    for (const c of chains) expect(c).toMatch(/^chain --replace --autofree http:\/\/10\.99\.0\.2\/boot\/\$\{mac\}\.ipxe\?platform=\$\{platform\} \|\| goto (try\d|fail)$/)
+    expect(body.trimEnd().endsWith("\nexit 1")).toBe(true)
     expect(getDb().prepare("SELECT count(*) AS n FROM hosts").get()).toEqual({ n: 0 })
   })
 })
 
 describe("AC-4.14 boot lokal & mode wait", () => {
-  const isLocal = (b: string) => b.includes("iseq ${platform} efi && exit") && b.includes("sanboot --no-describe --drive 0x80") && !/\bkernel\b/.test(b)
+  const isLocal = (b: string) => b.includes("iseq ${platform} efi && exit 1 ||") && b.includes("sanboot --no-describe --drive 0x80 || exit 1") && !/\bkernel\b/.test(b)
   it("host tanpa job dan berstatus discovered/done/failed/offline → boot lokal", async () => {
     expect(isLocal((await boot(MAC)).body)).toBe(true)
     for (const st of ["discovered", "done", "failed", "offline"] as const) {
@@ -274,7 +277,7 @@ describe("AC-4.14 boot lokal & mode wait", () => {
     process.env.PXE_UNKNOWN_HOST_ACTION = "wait"
     const w = (await boot(MAC)).body
     expect(w).toContain("sleep 30")
-    expect(w).toContain(`chain --autofree http://10.99.0.2/boot/${MAC}.ipxe?platform=\${platform}&wait=1 || exit`)
+    expect(w).toContain(`chain --autofree http://10.99.0.2/boot/${MAC}.ipxe?platform=\${platform}&wait=1 || exit 1`)
     expect((await boot(MAC, LEASE_IP, "efi", "wait=5")).body).toContain("&wait=6")
     expect(isLocal((await boot(MAC, LEASE_IP, "efi", "wait=20")).body)).toBe(true)
     // wait tidak valid → 0.
@@ -379,7 +382,7 @@ describe("AC-4.17 setelah configuring → boot lokal (tanpa reinstall)", () => {
 
 describe("AC-4.23 GET /boot/{mac}/{token}/{file}", () => {
   it("200 bila semua syarat O2 terpenuhi; no-store; user-data pertama → installing; meta/vendor-data tidak mengubah status", async () => {
-    const { token } = await installAndBoot()
+    const { token, script } = await installAndBoot()
     const meta = await file(MAC, token, "meta-data")
     expect(meta.res.status).toBe(200)
     expect(meta.res.headers.get("cache-control")).toBe("no-store")
@@ -393,7 +396,12 @@ describe("AC-4.23 GET /boot/{mac}/{token}/{file}", () => {
     expect(ud.res.headers.get("content-type")).toBe("text/plain; charset=utf-8")
     expect(ud.res.headers.get("cache-control")).toBe("no-store")
     expect(ud.body.startsWith("#cloud-config\n")).toBe(true)
-    expect(ud.body).toContain(`/boot/${MAC}/${token}/status`)
+    // B-5: token tidak ditulis di user-data (subiquity mencetak late-commands ke console); URL
+    // callback diturunkan dari cmdline kernel script iPXE yang dilayani untuk job ini.
+    expect(containsSecret(ud.body, token)).toBe(false)
+    const kcmd = script.split("\n").find((l) => l.startsWith("kernel "))!.split(" ").slice(2).join(" ")
+    const late = (parseYaml(ud.body) as { autoinstall: { "late-commands": string[] } }).autoinstall["late-commands"]
+    expect(evalCallbackUrl(late[0], kcmd)).toBe(`http://10.99.0.2/boot/${MAC}/${token}/status`)
     expect(ud.body).not.toContain(DUMMY_PASSWORD)
     expect(ud.body).toContain(peekConfig(ID)!.passwordHash!)
     expect(getHost(ID)).toMatchObject({ status: "installing", statusSince: "2026-11-05T10:01:00.000Z" })

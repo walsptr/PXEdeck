@@ -44,7 +44,11 @@ export type InstallContext = {
   /** Direktori image relatif media (mis. "rocky-9", "debian-12"). */
   imageRepo: string
   serverIp: string
-  /** URL callback status `…/boot/{mac}/{token}/status`. */
+  /**
+   * URL callback status `…/boot/{mac}/{token}/status`. Hanya Windows
+   * (unattend, belum dilayani M4) yang menyisipkannya; Ubuntu/Debian/Rocky
+   * menurunkannya dari argumen kernel installer (`callbackUrlCmd`, B-5).
+   */
   callbackUrl: string
 }
 

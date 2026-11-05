@@ -73,6 +73,9 @@ function firstLogonCommands(c: InstallContext): string[] {
   }
   cmds.push(
     ps("Set-Service -Name sshd -StartupType Automatic; Start-Service sshd; New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server' -Protocol TCP -LocalPort 22 -Action Allow -ErrorAction SilentlyContinue | Out-Null"),
+    // B-5: Windows tidak punya argumen kernel untuk menurunkan URL callback, jadi token ikut
+    // tertulis (base64 UTF-16LE -EncodedCommand) di unattend. Unattend belum dilayani M4
+    // (INSTALLER_FILES.unattend kosong); wajib dirancang ulang sebelum dilayani.
     ps(`try { Invoke-WebRequest -UseBasicParsing -Method Post -Body 'stage=done' -Uri '${c.callbackUrl}' | Out-Null } catch {}`),
   )
   return cmds

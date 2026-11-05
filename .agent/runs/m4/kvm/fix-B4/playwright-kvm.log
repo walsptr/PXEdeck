@@ -1,0 +1,9 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 e2e-kvm/m4-install.spec.ts:58:7 › AC-4.30 pxe-test-m4-node19 (uefi) install via dashboard → Done ≤ 30 menit (10.0m)
+  ✓  2 e2e-kvm/m4-install.spec.ts:149:7 › AC-4.31 pxe-test-m4-node19: SSH key login, verifikasi, password ditolak, reboot dari disk (3.6m)
+
+  Slow test file: e2e-kvm/m4-install.spec.ts (13.6m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  2 passed (13.6m)

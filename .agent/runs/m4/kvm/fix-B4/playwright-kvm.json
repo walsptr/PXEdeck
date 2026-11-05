@@ -1,0 +1,232 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node-22",
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/playwright.config.ts"
+    ],
+    "configFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/playwright.config.ts",
+    "rootDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/fix-B4/playwright-kvm-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm",
+        "testIgnore": [],
+        "testMatch": [
+          "/m4-.*\\.spec\\.ts/"
+        ],
+        "timeout": 3000000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/fix-B4/playwright-kvm-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm",
+        "snapshotDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 3000000,
+        "use": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "baseURL": "http://10.99.0.2",
+          "locale": "id-ID",
+          "trace": "off",
+          "video": "off",
+          "screenshot": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/.agent/runs/m4/kvm/fix-B4/playwright-kvm.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "m4-install.spec.ts",
+      "file": "m4-install.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "AC-4.30 pxe-test-m4-node19 (uefi) install via dashboard → Done ≤ 30 menit",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 3000000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 597573,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T13:13:22.492Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "34a6ce291a0331cb14e1-7211ae0d56689f8b81b5",
+          "file": "m4-install.spec.ts",
+          "line": 58,
+          "column": 7
+        },
+        {
+          "title": "AC-4.31 pxe-test-m4-node19: SSH key login, verifikasi, password ditolak, reboot dari disk",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 3000000,
+              "annotations": [
+                {
+                  "type": "serial",
+                  "location": {
+                    "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts",
+                    "line": 0,
+                    "column": 0
+                  }
+                }
+              ],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 217470,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T13:23:20.158Z",
+                  "annotations": [
+                    {
+                      "type": "serial",
+                      "location": {
+                        "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m4/dashboard/e2e-kvm/m4-install.spec.ts",
+                        "line": 0,
+                        "column": 0
+                      }
+                    }
+                  ],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "34a6ce291a0331cb14e1-ab149454de7cf7fcce53",
+          "file": "m4-install.spec.ts",
+          "line": 149,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T13:13:21.798Z",
+    "duration": 815883.216,
+    "expected": 2,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

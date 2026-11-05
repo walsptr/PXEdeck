@@ -16,7 +16,7 @@ export function rockyPostScript(ctx: InstallContext): string {
   const c = validateContext(ctx)
   const lines = [
     "#!/bin/sh",
-    callbackCmd(c.callbackUrl, "configuring"),
+    callbackCmd("kickstart", c.mac, "configuring"),
     ...authorizedKeysCmds("", c.username, c.authorizedKeys),
   ]
   if (c.sudo) lines.push(b64write(`/etc/sudoers.d/90-${c.username}`, "440", sudoersText(c.username)))
@@ -26,7 +26,7 @@ export function rockyPostScript(ctx: InstallContext): string {
       b64write("/etc/ssh/sshd_config.d/60-pxe-no-password.conf", "644", SSHD_NO_PASSWORD_TEXT),
     )
   }
-  lines.push(...firstbootInstallCmds("", c.callbackUrl), "restorecon -R /etc /usr/local/sbin /home 2>/dev/null || true")
+  lines.push(...firstbootInstallCmds("", "kickstart", c.mac), "restorecon -R /etc /usr/local/sbin /home 2>/dev/null || true")
   return `${lines.join("\n")}\n`
 }
 
@@ -72,7 +72,7 @@ export function rockyKickstart(ctx: InstallContext): string {
     "%end",
     "",
     "%onerror",
-    callbackCmd(c.callbackUrl, "failed"),
+    callbackCmd("kickstart", c.mac, "failed"),
     "%end",
   ].map((l) => singleLine(l, "kickstart"))
   return `${out.join("\n")}\n`

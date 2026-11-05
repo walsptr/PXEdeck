@@ -1,0 +1,8 @@
+GET /boot/52:54:00:99:00:19.ipxe dari host:
+#!ipxe
+echo Tidak ada instalasi aktif: boot dari disk lokal
+iseq ${platform} efi && exit 1 ||
+sanboot --no-describe --drive 0x80 || exit 1
+
+GET /boot/52:54:00:99:00:19/<token-acak>/user-data → 404
+current_ip sebelum=10.99.0.192 sesudah=10.99.0.192

@@ -44,7 +44,7 @@ export function debianLateScript(ctx: InstallContext): string {
   const lines = [
     "#!/bin/sh",
     "set -e",
-    callbackCmd(c.callbackUrl, "configuring"),
+    callbackCmd("preseed", c.mac, "configuring"),
     ...authorizedKeysCmds("", c.username, c.authorizedKeys),
   ]
   if (c.sudo) lines.push(b64write(`/etc/sudoers.d/90-${c.username}`, "440", sudoersText(c.username)))
@@ -60,7 +60,7 @@ export function debianLateScript(ctx: InstallContext): string {
     b64write("/etc/network/interfaces", "644", "auto lo\niface lo inet loopback\n\nsource /etc/network/interfaces.d/*\n"),
     "mkdir -p /etc/network/interfaces.d",
     `printf %s '${b64(interfacesText(c))}' | base64 -d | sed "s/\\$IF/$IF/g" > /etc/network/interfaces.d/mgmt`,
-    ...firstbootInstallCmds("", c.callbackUrl),
+    ...firstbootInstallCmds("", "preseed", c.mac),
   )
   return `${lines.join("\n")}\n`
 }

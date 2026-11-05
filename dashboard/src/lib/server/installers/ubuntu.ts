@@ -65,7 +65,7 @@ function storage(c: InstallContext) {
 /** Objek autoinstall (dipakai `ubuntuUserData`; diekspor untuk test). */
 export function ubuntuAutoinstall(ctx: InstallContext) {
   const c = validateContext(ctx)
-  const late: string[] = [callbackCmd(c.callbackUrl, "configuring")]
+  const late: string[] = [callbackCmd("autoinstall", c.mac, "configuring")]
   if (c.sudo) {
     late.push(b64write(`/target/etc/sudoers.d/90-${c.username}`, "440", sudoersText(c.username)))
   }
@@ -75,7 +75,7 @@ export function ubuntuAutoinstall(ctx: InstallContext) {
       b64write("/target/etc/ssh/sshd_config.d/60-pxe-no-password.conf", "644", SSHD_NO_PASSWORD_TEXT),
     )
   }
-  late.push(...firstbootInstallCmds("/target", c.callbackUrl))
+  late.push(...firstbootInstallCmds("/target", "autoinstall", c.mac))
   late.push(BOOTORDER_SNIPPET, FORCE_REBOOT_GUARD)
   return {
     version: 1,
@@ -97,7 +97,7 @@ export function ubuntuAutoinstall(ctx: InstallContext) {
     },
     storage: storage(c),
     "late-commands": late,
-    "error-commands": [callbackCmd(c.callbackUrl, "failed")],
+    "error-commands": [callbackCmd("autoinstall", c.mac, "failed")],
     shutdown: "reboot",
   }
 }

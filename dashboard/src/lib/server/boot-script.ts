@@ -22,8 +22,22 @@ function lines(...ls: string[]): string {
 }
 
 /**
+ * Keluar dari iPXE agar firmware lanjut ke opsi boot berikutnya (disk).
+ * Status WAJIB ≠ 0 (B-4): `exit` tanpa argumen = 0 → snponly.efi kembali
+ * `EFI_SUCCESS`, dan BdsDxe OVMF/EDK2 lalu berhenti memproses BootOrder dan
+ * membuka menu boot manager (spesifikasi UEFI §3.1.1), sehingga entri disk
+ * tidak pernah dicoba. Status gagal → BDS mencoba Boot#### berikutnya. BIOS
+ * (ROM iPXE / undionly) tidak memakai status ini: BIOS lanjut ke perangkat
+ * berikutnya apa pun nilainya.
+ */
+export const IPXE_EXIT_TO_NEXT = "exit 1"
+
+/**
  * `GET /boot/entry.ipxe`: chain ke script per-MAC dengan retry terbatas,
- * lalu exit (boot lokal) bila dashboard tidak bisa dihubungi.
+ * lalu exit (boot lokal) bila dashboard tidak bisa dihubungi. `--replace`:
+ * script per-MAC menggantikan script ini, sehingga `exit 1` dari script boot
+ * lokal langsung kembali ke firmware (tanpa dianggap gagal-unduh lalu
+ * di-retry) dan keberhasilan chain tidak jatuh ke label retry berikutnya.
  */
 export function entryScript(baseUrl: string): string {
   const url = `${ipxeSafe(baseUrl, "base URL")}/boot/\${mac}.ipxe?platform=\${platform}`
@@ -32,19 +46,22 @@ export function entryScript(baseUrl: string): string {
     out.push(`:try${i}`)
     if (i > 1) out.push("sleep 5")
     out.push(
-      `chain --autofree ${url} || goto ${i < ENTRY_RETRIES ? `try${i + 1}` : "fail"}`,
+      `chain --replace --autofree ${url} || goto ${i < ENTRY_RETRIES ? `try${i + 1}` : "fail"}`,
     )
   }
-  out.push(":fail", "echo PXE dashboard tidak dapat dihubungi, boot lokal", "exit")
+  out.push(":fail", "echo PXE dashboard tidak dapat dihubungi, boot lokal", IPXE_EXIT_TO_NEXT)
   return lines(...out)
 }
 
-/** Boot lokal: EFI → exit ke opsi boot berikutnya; BIOS → sanboot disk pertama. */
+/**
+ * Boot lokal: EFI → `exit 1` ke opsi boot berikutnya (disk, lihat
+ * `IPXE_EXIT_TO_NEXT`); BIOS → sanboot disk pertama, gagal → exit.
+ */
 export function localBootScript(): string {
   return lines(
     "echo Tidak ada instalasi aktif: boot dari disk lokal",
-    "iseq ${platform} efi && exit ||",
-    "sanboot --no-describe --drive 0x80 || exit",
+    `iseq \${platform} efi && ${IPXE_EXIT_TO_NEXT} ||`,
+    `sanboot --no-describe --drive 0x80 || ${IPXE_EXIT_TO_NEXT}`,
   )
 }
 
@@ -58,7 +75,7 @@ export function waitScript(baseUrl: string, mac: string, iteration: number): str
   return lines(
     `echo Menunggu tugas instalasi (${iteration + 1}/${WAIT_MAX_ITERATIONS})`,
     "sleep 30",
-    `chain --autofree ${next} || exit`,
+    `chain --autofree ${next} || ${IPXE_EXIT_TO_NEXT}`,
   )
 }
 

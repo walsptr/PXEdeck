@@ -9,6 +9,7 @@ import {
   ENTRY_RETRIES,
   entryScript,
   installerScript,
+  IPXE_EXIT_TO_NEXT,
   ipxeSafe,
   localBootScript,
   WAIT_MAX_ITERATIONS,
@@ -39,22 +40,22 @@ describe("entryScript (AC-4.13)", () => {
     expect(s.startsWith("#!ipxe\n")).toBe(true)
     const chains = s.split("\n").filter((l) => l.startsWith("chain "))
     expect(chains).toHaveLength(ENTRY_RETRIES)
-    for (const c of chains) expect(c).toContain("chain --autofree http://10.99.0.2/boot/${mac}.ipxe?platform=${platform} || goto ")
+    for (const c of chains) expect(c).toContain("chain --replace --autofree http://10.99.0.2/boot/${mac}.ipxe?platform=${platform} || goto ")
     expect(s.match(/sleep 5/g)).toHaveLength(ENTRY_RETRIES - 1)
-    expect(s.trimEnd().endsWith("exit")).toBe(true)
+    expect(s.trimEnd().endsWith("\nexit 1")).toBe(true)
     expect(s).toMatchInlineSnapshot(`
       "#!ipxe
       :try1
-      chain --autofree http://10.99.0.2/boot/\${mac}.ipxe?platform=\${platform} || goto try2
+      chain --replace --autofree http://10.99.0.2/boot/\${mac}.ipxe?platform=\${platform} || goto try2
       :try2
       sleep 5
-      chain --autofree http://10.99.0.2/boot/\${mac}.ipxe?platform=\${platform} || goto try3
+      chain --replace --autofree http://10.99.0.2/boot/\${mac}.ipxe?platform=\${platform} || goto try3
       :try3
       sleep 5
-      chain --autofree http://10.99.0.2/boot/\${mac}.ipxe?platform=\${platform} || goto fail
+      chain --replace --autofree http://10.99.0.2/boot/\${mac}.ipxe?platform=\${platform} || goto fail
       :fail
       echo PXE dashboard tidak dapat dihubungi, boot lokal
-      exit
+      exit 1
       "
     `)
   })
@@ -68,14 +69,30 @@ describe("localBootScript / waitScript (AC-4.14)", () => {
   it("boot lokal: EFI exit, BIOS sanboot drive 0x80, tanpa kernel", () => {
     const s = localBootScript()
     expect(s.startsWith("#!ipxe\n")).toBe(true)
-    expect(s).toContain("iseq ${platform} efi && exit")
-    expect(s).toContain("sanboot --no-describe --drive 0x80")
+    expect(s).toContain("iseq ${platform} efi && exit 1 ||")
+    expect(s).toContain("sanboot --no-describe --drive 0x80 || exit 1")
     expect(s).not.toMatch(/\bkernel\b/)
+    expect(s).toMatchInlineSnapshot(`
+      "#!ipxe
+      echo Tidak ada instalasi aktif: boot dari disk lokal
+      iseq \${platform} efi && exit 1 ||
+      sanboot --no-describe --drive 0x80 || exit 1
+      "
+    `)
+  })
+  it("B-4: setiap exit berstatus ≠ 0 (EFI_SUCCESS membuat BDS OVMF berhenti di menu boot, disk tak dicoba)", () => {
+    expect(IPXE_EXIT_TO_NEXT).toBe("exit 1")
+    const scripts = [entryScript("http://10.99.0.2"), localBootScript(), waitScript("http://10.99.0.2", "52:54:00:99:00:11", 0)]
+    for (const sc of scripts) {
+      const exits = sc.match(/\bexit\b(?: \S+)?/g) ?? []
+      expect(exits.length, sc).toBeGreaterThan(0)
+      for (const e of exits) expect(e, sc).toBe("exit 1")
+    }
   })
   it("wait: sleep 30 lalu chain dengan wait=n+1; batas iterasi → boot lokal", () => {
     const s = waitScript("http://10.99.0.2", "52:54:00:99:00:11", 3)
     expect(s).toContain("sleep 30")
-    expect(s).toContain("chain --autofree http://10.99.0.2/boot/52:54:00:99:00:11.ipxe?platform=${platform}&wait=4 || exit")
+    expect(s).toContain("chain --autofree http://10.99.0.2/boot/52:54:00:99:00:11.ipxe?platform=${platform}&wait=4 || exit 1")
     expect(s).toContain(`(4/${WAIT_MAX_ITERATIONS})`)
     expect(waitScript("http://10.99.0.2", "52:54:00:99:00:11", WAIT_MAX_ITERATIONS)).toBe(localBootScript())
     expect(waitScript("http://10.99.0.2", "52:54:00:99:00:11", WAIT_MAX_ITERATIONS + 5)).toBe(localBootScript())

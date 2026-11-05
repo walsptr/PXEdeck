@@ -66,7 +66,7 @@ test("AC-4.9/4.11/4.12 discovery: IP asing ditolak; MAC di lease muncul ≤ 10 d
 
   // Request iPXE dari IP lease → terverifikasi: firmware & vendor tercatat, tetap satu baris.
   const local = await ipxe(page.request, MAC.replaceAll(":", "-").toUpperCase(), "10.99.0.150")
-  expect(local).toContain("iseq ${platform} efi && exit")
+  expect(local).toContain("iseq ${platform} efi && exit 1 ||")
   const host = await (await page.request.get("/api/hosts/525400990031")).json()
   expect(host).toMatchObject({ mac: MAC, status: "discovered", firmware: "uefi", vendor: "QEMU/KVM", currentIp: "10.99.0.150" })
   await expect(row).toHaveCount(1)

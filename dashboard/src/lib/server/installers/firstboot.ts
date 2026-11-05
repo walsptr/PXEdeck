@@ -1,8 +1,10 @@
 // Unit first-boot `pxe-callback-done.service` (O7): berjalan sekali di OS
 // terpasang, mengirim `stage=done`, lalu menghapus dirinya. URL callback
 // (berisi token) disimpan di /etc/pxe-callback/url (0600 root) dan ikut
-// terhapus. Konten file ditulis lewat base64 (`b64write`).
-import { b64write, shQuote } from "./shell"
+// terhapus. URL itu diturunkan saat runtime dari argumen kernel installer
+// (`callbackUrlCmd`), tidak pernah tertulis di perintah yang dicetak installer
+// (B-5); konten file lain ditulis lewat base64 (`b64write`).
+import { b64write, callbackUrlCmd, shQuote, type CmdlineMethod } from "./shell"
 
 export const FIRSTBOOT_UNIT = "pxe-callback-done.service"
 export const FIRSTBOOT_SCRIPT = "/usr/local/sbin/pxe-callback-done"
@@ -42,13 +44,15 @@ exit 1
 
 /**
  * Perintah sh yang memasang unit first-boot di root `root` ("/target" untuk
- * Ubuntu/Debian di luar chroot, "" untuk chroot/%post).
+ * Ubuntu di luar chroot, "" untuk chroot/%post/in-target). URL callback
+ * diturunkan dari argumen kernel installer `method` untuk host `mac`.
  */
-export function firstbootInstallCmds(root: string, callbackUrl: string): string[] {
+export function firstbootInstallCmds(root: string, method: CmdlineMethod, mac: string): string[] {
   if (root !== "" && !/^\/[a-z]+$/.test(root)) throw new Error("root tidak valid")
+  const urlFile = `${root}${CALLBACK_URL_FILE}`
   return [
     `mkdir -p ${root}/etc/pxe-callback ${root}/usr/local/sbin ${root}/etc/systemd/system/multi-user.target.wants && chmod 700 ${root}/etc/pxe-callback`,
-    b64write(`${root}${CALLBACK_URL_FILE}`, "600", `${callbackUrl}\n`),
+    `${callbackUrlCmd(method, mac)}; if [ -n "$u" ]; then (umask 077; printf '%s\\n' "$u" > ${urlFile}) && chmod 600 ${urlFile}; fi`,
     b64write(`${root}${FIRSTBOOT_SCRIPT}`, "755", FIRSTBOOT_SCRIPT_TEXT),
     b64write(`${root}/etc/systemd/system/${FIRSTBOOT_UNIT}`, "644", FIRSTBOOT_UNIT_TEXT),
     `ln -sf /etc/systemd/system/${FIRSTBOOT_UNIT} ${root}/etc/systemd/system/multi-user.target.wants/${FIRSTBOOT_UNIT}`,

@@ -12,6 +12,7 @@ import { parse as parseYaml, parseDocument } from "yaml"
 import type { HostConfig, SshKey } from "@/lib/host-config"
 import type { OsImageRecord } from "@/lib/server/db/repos/os-images"
 import type { Host } from "@/lib/types"
+import { containsSecret, evalCallbackUrl, runUrlFileCmd, urlExpr } from "@/test/cmdline"
 import { DUMMY_PASSWORD, SSH_ECDSA, SSH_ED25519, SSH_ED25519_B, SSH_RSA } from "@/test/fixtures"
 
 import {
@@ -35,15 +36,29 @@ import {
 import { INSTALLER_FILES, installerFile } from "./index"
 import { di, singleLine } from "./lines"
 import { rockyKickstart, rockyPostScript } from "./rocky"
-import { b64write, callbackCmd, shQuote } from "./shell"
+import { b64write, callbackCmd, callbackUrlCmd, CMDLINE_CONFIG_PARAM, shQuote } from "./shell"
 import { BOOTORDER_SNIPPET, FORCE_REBOOT_GUARD, ubuntuAutoinstall, ubuntuMetaData, ubuntuUserData, ubuntuVendorData } from "./ubuntu"
 import { windowsMac, windowsUnattend } from "./windows"
 import { xmlEscape } from "./xml"
 
 const FAKE_HASH = `$6$fixturesalt$${"AbCdEfGhIjKlMnOpQrStUvWxYz0123456789./".repeat(3).slice(0, 86)}`
-const TOKEN = "FIXTURE-token-not-real_0000000000000000000"
+const TOKEN = "FIXTURE-token-not-real_00000000000000000000" // 43 karakter seperti token asli (32 byte base64url)
 const CALLBACK = `http://10.99.0.2/boot/52:54:00:99:00:11/${TOKEN}/status`
 const MAC = "52:54:00:99:00:11"
+if (TOKEN.length !== 43) throw new Error("fixture TOKEN harus 43 karakter")
+const CONFIG_PREFIX = CALLBACK.replace(/status$/, "")
+/** Cmdline kernel installer seperti dibuat installerScript (boot-script.ts) untuk tiap metode. */
+const KCMD = {
+  autoinstall: `initrd=initrd ip=dhcp netboot=nfs nfsroot=10.99.0.2:/srv/pxe/media/ubuntu-24.04 autoinstall ds=nocloud-net;s=${CONFIG_PREFIX} cloud-config-url=/dev/null console=ttyS0,115200n8 ---`,
+  preseed: `initrd=initrd auto=true priority=critical url=${CONFIG_PREFIX}preseed.cfg interface=auto netcfg/dhcp_timeout=60`,
+  kickstart: `initrd=initrd ip=dhcp inst.repo=http://10.99.0.2/media/rocky-9 inst.ks=${CONFIG_PREFIX}ks.cfg inst.text`,
+} as const
+/** Perintah firstboot penulis file URL callback. */
+const urlFileCmd = (cmds: string[]) => {
+  const c = cmds.filter((l) => l.includes(`/etc/pxe-callback/url`) && urlExpr(l) !== null)
+  expect(c).toHaveLength(1)
+  return c[0]
+}
 
 function ctx(over: Partial<InstallContext> = {}): InstallContext {
   return {
@@ -164,10 +179,12 @@ describe("AC-4.18 Ubuntu autoinstall", () => {
   })
   it("late-commands: callback configuring, unit first-boot done, BootOrder UEFI, guard pxe-force-reboot", () => {
     const late = ai["late-commands"]
-    expect(late[0]).toBe(callbackCmd(CALLBACK, "configuring"))
-    expect(late[0]).toContain(`-d stage=configuring '${CALLBACK}'`)
+    expect(late[0]).toBe(callbackCmd("autoinstall", MAC, "configuring"))
+    expect(late[0]).toContain(`-d stage=configuring "$u"`)
+    expect(evalCallbackUrl(late[0], KCMD.autoinstall)).toBe(CALLBACK)
     const files = b64Files(late.join("\n"))
-    expect(files[`/target${CALLBACK_URL_FILE}`]).toEqual({ mode: "600", content: `${CALLBACK}\n` })
+    expect(files[`/target${CALLBACK_URL_FILE}`]).toBeUndefined()
+    expect(runUrlFileCmd(urlFileCmd(late), "/target", KCMD.autoinstall)).toEqual({ mode: "600", content: `${CALLBACK}\n` })
     expect(files[`/target${FIRSTBOOT_SCRIPT}`].content).toContain("-d stage=done")
     expect(files[`/target/etc/systemd/system/${FIRSTBOOT_UNIT}`].content).toContain(`ExecStart=${FIRSTBOOT_SCRIPT}`)
     expect(late.some((l) => l.includes(`multi-user.target.wants/${FIRSTBOOT_UNIT}`))).toBe(true)
@@ -177,7 +194,8 @@ describe("AC-4.18 Ubuntu autoinstall", () => {
     expect(FORCE_REBOOT_GUARD).toContain("--unit=pxe-force-reboot")
   })
   it("error-commands: callback failed", () => {
-    expect(ai["error-commands"]).toEqual([callbackCmd(CALLBACK, "failed")])
+    expect(ai["error-commands"]).toEqual([callbackCmd("autoinstall", MAC, "failed")])
+    expect(evalCallbackUrl(ai["error-commands"][0], KCMD.autoinstall)).toBe(CALLBACK)
   })
   it("meta-data: instance-id = jobId + local-hostname; vendor-data kosong", () => {
     expect(parseYaml(ubuntuMetaData(ctx()))).toEqual({ "instance-id": ctx().jobId, "local-hostname": "m4-node11" })
@@ -214,7 +232,8 @@ describe("AC-4.19 Debian preseed", () => {
     expect(lines.at(-1)).toBe("d-i finish-install/reboot_in_progress note")
   })
   it("late_command (didekode): authorized_keys 0600 milik user, sudoers, sshd drop-in, interface via MAC, first-boot, callback", () => {
-    expect(late.split("\n")[2]).toBe(callbackCmd(CALLBACK, "configuring"))
+    expect(late.split("\n")[2]).toBe(callbackCmd("preseed", MAC, "configuring"))
+    expect(evalCallbackUrl(late.split("\n")[2], KCMD.preseed)).toBe(CALLBACK)
     const files = b64Files(late)
     expect(files["/home/ops/.ssh/authorized_keys"]).toEqual({ mode: "600", content: `${SSH_ED25519.publicKey}\n${SSH_ED25519_B.publicKey}\n` })
     expect(late).toContain("chown -R 'ops': /home/ops/.ssh")
@@ -225,7 +244,8 @@ describe("AC-4.19 Debian preseed", () => {
     expect(Buffer.from(ifaces[1], "base64").toString()).toBe(
       "auto $IF\niface $IF inet static\n    address 10.99.0.21/24\n    netmask 255.255.255.0\n    gateway 10.99.0.1\n    dns-nameservers 10.99.0.2\n",
     )
-    expect(files[CALLBACK_URL_FILE].content).toBe(`${CALLBACK}\n`)
+    expect(files[CALLBACK_URL_FILE]).toBeUndefined()
+    expect(runUrlFileCmd(urlFileCmd(late.split("\n")), "", KCMD.preseed)).toEqual({ mode: "600", content: `${CALLBACK}\n` })
     expect(files[FIRSTBOOT_SCRIPT].content).toContain("stage=done")
     expect(late).toBe(debianLateScript(c))
   })
@@ -284,15 +304,18 @@ describe("AC-4.20 Rocky kickstart", () => {
     expect(opens.map((l) => l.split(" ")[0])).toEqual(["%packages", "%post", "%onerror"])
     expect(ends).toHaveLength(opens.length)
     const onerr = lines.indexOf("%onerror")
-    expect(lines[onerr + 1]).toBe(callbackCmd(CALLBACK, "failed"))
+    expect(lines[onerr + 1]).toBe(callbackCmd("kickstart", MAC, "failed"))
+    expect(evalCallbackUrl(lines[onerr + 1], KCMD.kickstart)).toBe(CALLBACK)
     const post = echoPayload(lines[lines.indexOf("%post --log=/root/pxe-post.log") + 1])
     expect(post).toBe(rockyPostScript(c))
-    expect(post).toContain(callbackCmd(CALLBACK, "configuring"))
+    expect(post).toContain(callbackCmd("kickstart", MAC, "configuring"))
+    expect(evalCallbackUrl(post.split("\n")[1], KCMD.kickstart)).toBe(CALLBACK)
     const files = b64Files(post)
     expect(files["/home/ops/.ssh/authorized_keys"].mode).toBe("600")
     expect(files["/etc/sudoers.d/90-ops"].content).toBe(sudoersText("ops"))
     expect(files["/etc/ssh/sshd_config.d/60-pxe-no-password.conf"].content).toContain("PasswordAuthentication no")
-    expect(files[CALLBACK_URL_FILE].content).toBe(`${CALLBACK}\n`)
+    expect(files[CALLBACK_URL_FILE]).toBeUndefined()
+    expect(runUrlFileCmd(urlFileCmd(post.split("\n")), "", KCMD.kickstart)).toEqual({ mode: "600", content: `${CALLBACK}\n` })
     expect(post).toContain("restorecon")
   })
   it("VLAN + iface by name", () => {
@@ -548,8 +571,13 @@ describe("buildContext / helper", () => {
     expect(() => b64write("/etc/../x", "644", "")).toThrow(/Path tidak aman/)
     expect(() => b64write("/etc/x y", "644", "")).toThrow(/Path tidak aman/)
     expect(() => b64write("/etc/x", "999", "")).toThrow(/Mode/)
-    expect(() => callbackCmd(CALLBACK, "done;reboot")).toThrow(/stage/)
-    expect(callbackCmd("http://x/'a", "done")).toContain(`'http://x/'\\''a'`)
+    expect(() => callbackCmd("autoinstall", MAC, "done;reboot")).toThrow(/stage/)
+    expect(() => callbackCmd("unattend" as "preseed", MAC, "done")).toThrow(/metode/)
+    expect(() => callbackCmd("toString" as "preseed", MAC, "done")).toThrow(/metode/)
+    expect(() => callbackUrlCmd("preseed", "52:54:00:99:00:1G")).toThrow(/MAC/)
+    expect(() => callbackUrlCmd("preseed", "52-54-00-99-00-11")).toThrow(/MAC/)
+    expect(() => callbackUrlCmd("preseed", MAC, "/proc/cmdline;id")).toThrow(/Path/)
+    expect(callbackCmd("preseed", MAC, "done")).toMatch(/^u=\$\(.*\); curl .* -d stage=done "\$u" >\/dev\/null 2>&1 \|\| wget .*--post-data=stage=done "\$u" \|\| true$/)
   })
   it("xmlEscape / singleLine / di / firstboot", () => {
     expect(xmlEscape(`<a href="x">'&'</a>`)).toBe("&lt;a href=&quot;x&quot;&gt;&apos;&amp;&apos;&lt;/a&gt;")
@@ -561,8 +589,8 @@ describe("buildContext / helper", () => {
     expect(di("a/b", "note")).toBe("d-i a/b note")
     expect(() => di("a b", "string", "x")).toThrow(/kunci preseed/)
     expect(() => di("a/b", "String", "x")).toThrow(/kunci preseed/)
-    expect(() => firstbootInstallCmds("/tar get", CALLBACK)).toThrow(/root/)
-    expect(firstbootInstallCmds("", CALLBACK)[0]).toContain("mkdir -p /etc/pxe-callback")
+    expect(() => firstbootInstallCmds("/tar get", "autoinstall", MAC)).toThrow(/root/)
+    expect(firstbootInstallCmds("", "preseed", MAC)[0]).toContain("mkdir -p /etc/pxe-callback")
     expect(authorizedKeysCmds("/target", "ops", ["k"])[2]).toBe("chroot /target chown -R 'ops': /home/ops/.ssh")
   })
   it("installerFile: hanya file yang dikenal per metode; Windows tidak dilayani", () => {
@@ -578,5 +606,47 @@ describe("buildContext / helper", () => {
     expect(installerFile("kickstart", "user-data")).toBeNull()
     expect(Object.keys(INSTALLER_FILES.unattend)).toEqual([])
     expect(installerFile("unattend", "unattend.xml")).toBeNull()
+  })
+})
+
+describe("B-5 token callback tidak pernah tertulis di konfigurasi installer", () => {
+  it("Ubuntu/Debian/Rocky: token tidak muncul plaintext maupun di payload base64 (bertingkat)", () => {
+    const outputs = {
+      "ubuntu user-data": ubuntuUserData(ctx()),
+      "ubuntu user-data dhcp": ubuntuUserData(ctx({ network: DHCP, sudo: false, disableSshPassword: false })),
+      "ubuntu meta-data": ubuntuMetaData(ctx()),
+      "debian preseed": debianPreseed(ctx({ imageRepo: "debian-12" })),
+      "debian late": debianLateScript(ctx({ imageRepo: "debian-12" })),
+      "rocky ks": rockyKickstart(ctx({ imageRepo: "rocky-9" })),
+      "rocky post": rockyPostScript(ctx({ imageRepo: "rocky-9" })),
+    }
+    for (const [name, text] of Object.entries(outputs)) {
+      expect(containsSecret(text, TOKEN), name).toBe(false)
+      expect(text, name).not.toContain("/status'")
+    }
+    // Kontrol positif pemindai: Windows (belum dilayani M4) masih menyisipkan URL di
+    // -EncodedCommand UTF-16LE → terdeteksi.
+    expect(containsSecret(windowsUnattend(ctx()), TOKEN)).toBe(true)
+    expect(containsSecret(b64write("/x", "600", Buffer.from(`a ${CALLBACK}`).toString("base64")), TOKEN)).toBe(true)
+  })
+  it("parameter cmdline per metode selaras dengan installerScript; URL diturunkan hanya untuk MAC & token valid", () => {
+    expect(CMDLINE_CONFIG_PARAM).toEqual({ autoinstall: "ds=nocloud-net;s=", preseed: "url=", kickstart: "inst.ks=" })
+    for (const m of ["autoinstall", "preseed", "kickstart"] as const) {
+      const cmd = callbackCmd(m, MAC, "done")
+      expect(evalCallbackUrl(cmd, KCMD[m])).toBe(CALLBACK)
+      // Hanya argumen sendiri yang cocok (bukan substring argumen lain).
+      expect(evalCallbackUrl(cmd, `x${KCMD[m].split(" ").find((a) => a.startsWith(CMDLINE_CONFIG_PARAM[m]))}`)).toBe("")
+      // MAC lain, token bukan 43 karakter, tanpa argumen → kosong (callback tidak dikirim).
+      expect(evalCallbackUrl(cmd, KCMD[m].replace(`/boot/${MAC}/`, "/boot/52:54:00:99:00:12/"))).toBe("")
+      expect(evalCallbackUrl(cmd, KCMD[m].replace(`/${TOKEN}/`, `/${TOKEN}x/`))).toBe("")
+      expect(evalCallbackUrl(cmd, KCMD[m].replace(`/${TOKEN}/`, `/${TOKEN.slice(1)}/`))).toBe("")
+      expect(evalCallbackUrl(cmd, "initrd=initrd quiet")).toBe("")
+      // https + base URL ber-path tetap didukung.
+      expect(evalCallbackUrl(cmd, KCMD[m].replaceAll("http://10.99.0.2/", "https://pxe.lab/x/"))).toBe(CALLBACK.replace("http://10.99.0.2/", "https://pxe.lab/x/"))
+    }
+    expect(evalCallbackUrl(callbackCmd("kickstart", MAC, "done"), KCMD.kickstart.replace("inst.ks=", "instXks="))).toBe("")
+  })
+  it("URL tidak ditemukan → file URL tidak ditulis (unit first-boot tidak aktif, ConditionPathExists)", () => {
+    expect(runUrlFileCmd(firstbootInstallCmds("", "preseed", MAC)[1], "", "initrd=initrd")).toBeNull()
   })
 })
