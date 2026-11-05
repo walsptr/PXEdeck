@@ -1,15 +1,17 @@
 # M5 — trace AC → test → status
 
 Branch `milestone/5-callback-jobs`. Status = hasil run di `.agent/runs/m5/` (unit.log, e2e.log,
-infra-test.log, kvm/results.json). **Iterasi 2 (CR-5-12):** typecheck, lint, unit+coverage, E2E
-(`PXE_E2E_MILESTONE=5`), dan infra dijalankan ulang di commit **`fb8077e`**. Hash tercantum di baris pertama
-setiap log. Commit sesudahnya hanya menambah bukti di `.agent/runs/m5/`. Singkatan file:
+infra-test.log, kvm/results.json). **Iterasi 3 (final):** typecheck, lint, unit+coverage, E2E
+(`PXE_E2E_MILESTONE=5`, suite penuh 2×), dan infra dijalankan ulang di commit **`909e2e7`** (HEAD kode + test
+final). Hash tercantum di baris pertama setiap log. Commit sesudahnya hanya menambah bukti di `.agent/runs/m5/`.
+(Iterasi 2: `fb8077e`.) Singkatan file:
 - `TE-LIFE` = `dashboard/src/app/boot/m5-te-lifecycle-routes.test.ts` (integration route /boot + /api)
 - `TE-API` = `dashboard/src/app/api/m5-te-api.test.ts` (integration route /api)
 - `TE-UNIT` = `dashboard/src/lib/server/m5-te-unit.test.ts`
 - `TE-HOOK` = `dashboard/src/lib/server/installers/m5-te-hooks.test.ts`
 - `TE-MIG` = `dashboard/src/lib/server/db/m5-te-migration.test.ts`
 - `I2` = `dashboard/src/lib/server/m5-iter2-redact-timeout.test.ts` (iter2 backend-dev: SR-5-1, SR-5-2, CR-5-1/SR-5-5a, CR-5-2)
+- `I3` = `dashboard/src/lib/server/m5-iter3-redact.test.ts` (iter3 backend-dev: CR-5-18, SR-5-12, SR-5-11, CR-5-19, SR-5-16/CR-5-24, SR-5-17/CR-5-23, CR-5-25; 144 test)
 - `E2E-JOBS` / `E2E-TO` / `E2E-LIB` / `E2E-UI` = `dashboard/e2e/m5-{jobs,timeout,library,ui-fixes}.spec.ts`
 - `INFRA` = `infra/test/m5.sh` (via `infra/test/run.sh`)
 - `KVM` = `dashboard/e2e-kvm/m5-jobs.spec.ts` (via `infra/kvm-run.sh m5 --nodes "11:uefi:destroy 12:bios"`)
@@ -31,8 +33,8 @@ setiap log. Commit sesudahnya hanya menambah bukti di `.agent/runs/m5/`. Singkat
 | AC-5.10 | int | TE-LIFE › "AC-5.10 install ulang setelah failed" (timeout, installer-boot-limit, installer-error → 200, job baru 0 boot, 2 job, token lama 404, installer job baru; host aktif → 422) | PASS |
 | AC-5.11 | int | TE-LIFE › "AC-5.11 token job failed (watchdog) → 404 seragam, tanpa event baru" | PASS |
 | AC-5.12 | int | TE-LIFE › "AC-5.12 siklus simulasi lengkap…" (seq 1..n ketat, kind/source, IP, tanpa token/hash/$6$ di DB) | PASS |
-| AC-5.13 | int | TE-LIFE › "AC-5.13 POST /boot/{mac}/{token}/log" (8 test: 3 baris/sanitasi/ERROR, >2048, otorisasi 404 identik + expired, job final, >16 KB 413 juga token salah, >200 baris, 429, cap); I2 › "SR-5-1 sanitasi sebelum redaksi" (appendEvent, redaksi sebelum potong 2048) + "SR-5-2 …" handleLogPost (blok key dengan/tanpa footer, terpecah 2 request, 200 baris dari body mentah) | PASS |
-| AC-5.14 | unit+int | TE-UNIT › "AC-5.14 redactSecrets (tabel)" (path ×4 bentuk MAC, kv ×3, hash ×2, key ×2, base64 UTF-8/UTF-16LE/offset/2 lapis/key, teks bersih identik, idempoten); TE-API › "AC-5.14 (integration)…"; I2 › SR-5-1 (token/hash/header key bersisip ESC/\x01), SR-5-2 (multi-baris, footer yatim), "CR-5-1 + SR-5-5(a) …" (token terpotong 8..43, percent-encoded, `$6$` terpotong, negatif, base64, handleLogPost) | PASS |
+| AC-5.13 | int | TE-LIFE › "AC-5.13 POST /boot/{mac}/{token}/log" (8 test: 3 baris/sanitasi/ERROR, >2048, otorisasi 404 identik + expired, job final, >16 KB 413 juga token salah, >200 baris, 429, cap); I2 › "SR-5-1 sanitasi sebelum redaksi" (appendEvent, redaksi sebelum potong 2048) + "SR-5-2 …" handleLogPost (blok key dengan/tanpa footer, terpecah 2 request, 200 baris dari body mentah); iter3: I3 › "CR-5-18 …" › "AC-5.13 tetap: tanpa secret, sisa sekuens (`[31m`) dipertahankan…" (unit + handleLogPost; ekspektasi AC-5.13 tidak berubah), I3 › "SR-5-11 … 16 KB lewat handleLogPost < 50 ms" | PASS |
+| AC-5.14 | unit+int | TE-UNIT › "AC-5.14 redactSecrets (tabel)" (path ×4 bentuk MAC, kv ×3, hash ×2, key ×2, base64 UTF-8/UTF-16LE/offset/2 lapis/key, teks bersih identik, idempoten); TE-API › "AC-5.14 (integration)…"; I2 › SR-5-1 (token/hash/header key bersisip ESC/\x01), SR-5-2 (multi-baris, footer yatim), "CR-5-1 + SR-5-5(a) …" (token terpotong 8..43, percent-encoded, `$6$` terpotong, negatif, base64, handleLogPost); iter3: I3 › "CR-5-18 sekuens ANSI di tengah secret" (7 sekuens × token=/path/`$6$`, cleanEventMessage + handleLogPost → DB), "SR-5-12 `\r` dan karakter format Unicode (Cf)" ((a)/(b)/(c), 17 karakter Cf), "SR-5-11 baris isi key linear" (16 KB < 20 ms), "CR-5-19 footer END yatim…", "SR-5-16 / CR-5-24 secret terpotong `stripAnsi` + secret kedua…", "SR-5-17 / CR-5-23 baris akhir key pendek berbentuk kata" (42 kombinasi + handleLogPost). Setiap perbaikan merah bila di-revert (`mutation-iter3.txt`). Sisa risiko CR-5-30/SR-5-19/SR-5-18/SR-5-20 → M6 (`test-migration.md`) | PASS |
 | AC-5.15 | int | TE-MIG › "AC-5.15 migrasi 2 pada DB v1…" (2 test); TE-API › "AC-5.15 retensi riwayat per host + cascade" (2 test) | PASS |
 | AC-5.16 | int | TE-API › "AC-5.16 GET /api/jobs + /:id + lastJob" (urutan, filter, bentuk persis, tanpa kunci token rekursif, cursor tanpa duplikat, 10× 400, /:id 200/400/404, lastJob) | PASS |
 | AC-5.17 | int | TE-API › "AC-5.17 SSE GET /api/jobs/:id/logs" (header, backlog, live ≤ 2 dtk, ping 15 dtk, stage, end, Last-Event-ID/?after, gabungan id sama + repeat, abort, umur 30 mnt, 51 → 503, 404/400, JSON konsisten) | PASS |
@@ -45,7 +47,7 @@ setiap log. Commit sesudahnya hanya menambah bukti di `.agent/runs/m5/`. Singkat
 | AC-5.24 | e2e | E2E-JOBS › "AC-5.24 log streaming SSE…" (≤ 3 dtk, JetBrains Mono 13 px, redaksi, autoscroll, putus via page.route → Terputus → resume `after`, tanpa ganda, Selesai) | PASS |
 | AC-5.25 | e2e | E2E-JOBS › "AC-5.25 Hosts: Lihat log → riwayat host…" (+ iter2 DR-5-7/I-5-8: warna baris terpilih, indikator kiri, kontras ≥ 4,5:1, `title` OS) | PASS |
 | AC-5.26 | e2e (webserver kedua) | E2E-TO › "AC-5.26 timeout Booting (1 mnt) → Failed ≤ 90 dtk…" (server `m5-timeout`, port 3111) | PASS |
-| AC-5.27 | e2e+unit | E2E-LIB › "AC-5.27/5.32 OS Images…" + "AC-5.27 Daftarkan image…" (angka 409 = usedBy, BUG-M5-1 fixed); iter2: E2E-LIB › "DR-5-1 OS Images 375×812…" (kartu ≤ 200 px, halaman ≤ 300 + 200·n, tanpa scroll horizontal; merah 751 px pada kode iter1), "DR-5-1 OS Images 1440×900…" (path ≤ 2 baris; merah 3 baris pada kode iter1), "DR-5-5/DR-5-6 Daftarkan image…"; m5-library-hooks.test.ts › "DR-5-5 osImageFieldErrors…" | PASS |
+| AC-5.27 | e2e+unit | E2E-LIB › "AC-5.27/5.32 OS Images…" + "AC-5.27 Daftarkan image…" (angka 409 = usedBy, BUG-M5-1 fixed); iter2: E2E-LIB › "DR-5-1 OS Images 375×812…" (kartu ≤ 200 px, halaman ≤ 300 + 200·n, tanpa scroll horizontal; merah 751 px pada kode iter1), "DR-5-1 OS Images 1440×900…" (path ≤ 2 baris; merah 3 baris pada kode iter1), "DR-5-5/DR-5-6 Daftarkan image…"; m5-library-hooks.test.ts › "DR-5-5 osImageFieldErrors…"; iter3: E2E-LIB › "DR-5-8 OS Images 375/414: ID 48 karakter + path panjang…", "DR-5-9 OS Images 1280/1440: ID/nama/path panjang…", "DR-5-12 OS Images 1280/1440: ID 48 tanpa '-'…", "DR-5-13 OS Images 375/414: nama tanpa spasi + segmen path…" (semua geometri menunggu `document.fonts.ready`, CR-5-31); merah bila komponen di-revert (`mutation-iter3.txt`) | PASS |
 | AC-5.28 | e2e | E2E-LIB › "AC-5.28/5.32 SSH Keys…" (paste, unggah .pub, fingerprint = `ssh-keygen -lf`, invalid, 409, rename+reload, hapus 409/204, library Sheet); iter2: E2E-LIB › "DR-5-2 SSH Keys 1280/1440…" | PASS |
 | AC-5.29 | e2e | E2E-UI › "AC-5.29 DR-4-1/4-2…" (hostname & MAC) | PASS |
 | AC-5.30 | e2e+unit | E2E-UI › "AC-5.30 DR-4-3…" + "AC-5.30 DR-4-4…" (+ iter2 DR-5-3: label host tepat sekali per item); `src/lib/install-errors.test.ts` › "stripHostPrefix (DR-5-3)" (4 test) | PASS |
@@ -76,3 +78,17 @@ KVM tidak dijalankan ulang di iterasi 2: `kvm-path-diff.txt` (`git diff 543cf5a.
 `app/boot/**`, `boot-script.ts`, dan `infra/` non-test tidak berubah. Di `installers/` hanya teks
 pesan error partisi `custom` di `context.ts` yang berubah, dan golden installer tidak berubah. Ini
 sesuai DEC-016 §Konsekuensi.
+
+Ringkasan iterasi 3 (final) @ `909e2e7`: **43/43 AC PASS**.
+- typecheck exit 0, lint exit 0.
+- unit+integration **1266/1266** (48 file; +144 dibanding iterasi 2 = file baru I3 dengan 144 test; tidak ada file test lama yang berubah), 0 skip/todo.
+- E2E **90/90** (`PXE_E2E_MILESTONE=5`) pada **dua run penuh berturut-turut** (run1 dan run2 sama-sama 90 passed,
+  0 failed, 0 skipped, daftar test identik; tidak ada flaky): iterasi 2 86, ditambah DR-5-8, DR-5-9, DR-5-12, DR-5-13.
+  Run 3 (m5-library saja, 11/11) setelah mutasi untuk menimpa screenshot.
+- infra **47/47**.
+- coverage kode baru M5 (`23e508e..HEAD`): lines **98.43%** (1564/1589), branches 95.95% (1162/1211); tidak ada file < 80%.
+- `mutation-iter3.txt`: semua perbaikan iterasi 3 (CR-5-18, SR-5-12, SR-5-11, CR-5-19, SR-5-16/CR-5-24,
+  SR-5-17/CR-5-23, DR-5-8, DR-5-9/DR-5-12, DR-5-13) merah bila di-revert dan dipulihkan identik.
+- KVM tidak dijalankan ulang: `kvm-path-diff.txt` @ `909e2e7` — jalur boot/installer/infra tidak berubah di iterasi 3;
+  jalur ingest log (`provisioning.ts`, `redact.ts`, `job-events.ts`) berubah tetapi kontrak HTTP ke node dan byte yang
+  dilayani ke node tidak berubah (dilaporkan ke Orchestrator, CR-5-29).

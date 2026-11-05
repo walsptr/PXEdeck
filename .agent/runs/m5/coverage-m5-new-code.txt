@@ -1,4 +1,4 @@
-# Coverage kode baru/berubah M5 (git diff --diff-filter=AM 23e508e..HEAD -- dashboard/src, non-test) @ fb8077e
+# Coverage kode baru/berubah M5 (git diff --diff-filter=AM 23e508e..HEAD -- dashboard/src, non-test) @ 909e2e7
 # Sumber: dashboard/coverage/coverage-summary.json (npm run test = vitest run --coverage, v8, include DEC-004)
    (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/app/(dashboard)/jobs/page.tsx
    (di luar include DEC-004: komponen .tsx/halaman/tipe) dashboard/src/app/(dashboard)/os-images/page.tsx
@@ -46,7 +46,7 @@
  100.00% lines  100.00% branches  dashboard/src/lib/server/boot-http.ts
  100.00% lines  100.00% branches  dashboard/src/lib/server/boot-script.ts
  100.00% lines  100.00% branches  dashboard/src/lib/server/db/migrations.ts
-  95.24% lines   93.55% branches  dashboard/src/lib/server/db/repos/job-events.ts
+  97.67% lines   94.23% branches  dashboard/src/lib/server/db/repos/job-events.ts
  100.00% lines   94.12% branches  dashboard/src/lib/server/db/repos/jobs.ts
  100.00% lines   90.00% branches  dashboard/src/lib/server/db/repos/os-images.ts
  100.00% lines  100.00% branches  dashboard/src/lib/server/db/repos/ssh-keys.ts
@@ -64,14 +64,14 @@
  100.00% lines   96.30% branches  dashboard/src/lib/server/jobs-service.ts
   94.23% lines   91.30% branches  dashboard/src/lib/server/library-service.ts
   96.72% lines   91.26% branches  dashboard/src/lib/server/provisioning.ts
- 100.00% lines   81.25% branches  dashboard/src/lib/server/redact.ts
+ 100.00% lines   97.37% branches  dashboard/src/lib/server/redact.ts
  100.00% lines   99.03% branches  dashboard/src/lib/server/settings.ts
   90.24% lines   82.98% branches  dashboard/src/lib/server/sse.ts
   88.89% lines   66.67% branches  dashboard/src/lib/server/startup.ts
  100.00% lines  100.00% branches  dashboard/src/lib/server/watchdog.ts
  100.00% lines  100.00% branches  dashboard/src/lib/types.ts
 
-TOTAL kode baru M5 (dalam include DEC-004): lines 1485/1510 = 98.34%  branches 1118/1168 = 95.72%
-Repo (All files): lines 98.65%  branches 96.04%  functions 98.5%  statements 97.86%
+TOTAL kode baru M5 (dalam include DEC-004): lines 1564/1589 = 98.43%  branches 1162/1211 = 95.95%
+Repo (All files): lines 98.69%  branches 96.17%  functions 98.55%  statements 97.96%
 File kode baru < 80% lines: tidak ada
 Komponen .tsx di luar include DEC-004 dibuktikan per AC lewat E2E (m5-*.spec.ts) dan test komponen jsdom.
