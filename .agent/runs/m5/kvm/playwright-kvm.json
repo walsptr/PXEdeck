@@ -1,0 +1,264 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node-22",
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard/e2e-kvm/playwright.config.ts"
+    ],
+    "configFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard/e2e-kvm/playwright.config.ts",
+    "rootDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard/e2e-kvm",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm/playwright-kvm-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard/e2e-kvm",
+        "testIgnore": [],
+        "testMatch": [
+          "/(^|\\/)m5-[^/]*\\.spec\\.ts$/"
+        ],
+        "timeout": 3000000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm/playwright-kvm-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard/e2e-kvm",
+        "snapshotDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/dashboard/e2e-kvm",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 3000000,
+        "use": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "baseURL": "http://10.99.0.2",
+          "locale": "id-ID",
+          "trace": "off",
+          "video": "off",
+          "screenshot": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m5/.agent/runs/m5/kvm/playwright-kvm.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "m5-jobs.spec.ts",
+      "file": "m5-jobs.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "AC-5.39 pxe-test-m5-node11 (uefi): virsh destroy saat Installing → boot lokal → Failed timeout-installing",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 3000000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 950635,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T16:48:36.985Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b8a80bf861a1bdc182c-f1c64a8d5de0a8d9645c",
+          "file": "m5-jobs.spec.ts",
+          "line": 270,
+          "column": 9
+        },
+        {
+          "title": "AC-5.40 pxe-test-m5-node11: install ulang dari UI → Done → SSH key, 2 job, reboot dari disk",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 3000000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 794082,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T17:04:27.701Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b8a80bf861a1bdc182c-0cf2d7c34587bc90e1d7",
+          "file": "m5-jobs.spec.ts",
+          "line": 435,
+          "column": 9
+        },
+        {
+          "title": "AC-5.41 + AC-5.42 pxe-test-m5-node12 (bios): jalur positif, log live SSE, token acak ditolak",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 3000000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 421727,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T17:17:41.796Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b8a80bf861a1bdc182c-d0a7f1641a5094363762",
+          "file": "m5-jobs.spec.ts",
+          "line": 497,
+          "column": 9
+        },
+        {
+          "title": "AC-5.38 server-check + allowlist nginx (host vs pxe-test-m5-node12)",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 3000000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 227,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-05T17:24:43.535Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "9b8a80bf861a1bdc182c-eb66e75d57e49df456c1",
+          "file": "m5-jobs.spec.ts",
+          "line": 639,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-05T16:48:36.372Z",
+    "duration": 2167485.343,
+    "expected": 4,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

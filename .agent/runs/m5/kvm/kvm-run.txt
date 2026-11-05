@@ -1,0 +1,17 @@
+# kvm-run m5 20261105T164801Z nodes=[11:uefi:destroy 12:bios] keep_server=0 dry=0
+2026-11-05T16:48:01Z preflight          ok max_nodes=3 avail_mb=13584
+2026-11-05T16:48:01Z net-up             ok 
+2026-11-05T16:48:12Z server-up          ok 
+2026-11-05T16:48:33Z deploy             ok 
+2026-11-05T16:48:33Z server-check       ok 
+2026-11-05T16:48:34Z node-create        ok pxe-test-m5-node11 uefi 52:54:00:99:00:11
+2026-11-05T16:48:35Z node-create        ok pxe-test-m5-node12 bios 52:54:00:99:00:12
+2026-11-05T17:24:43Z playwright         ok exit=0 (playwright-kvm.log)
+2026-11-05T17:24:44Z verify             ok pxe-test-m5-node11 (pxe-test-m5-node11-verify.txt)
+2026-11-05T17:24:44Z verify             ok pxe-test-m5-node12 (pxe-test-m5-node12-verify.txt)
+2026-11-05T17:24:44Z evidence           start 
+2026-11-05T17:24:45Z evidence           done 
+2026-11-05T17:24:45Z server-logs        ok 
+2026-11-05T17:24:54Z redact             ok 
+2026-11-05T17:24:58Z cleanup            done 
+2026-11-05T17:24:58Z result             PASS exit=0

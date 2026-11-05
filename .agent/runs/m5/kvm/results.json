@@ -1,0 +1,126 @@
+{
+  "run": "m5",
+  "session": "1793897316368-ea3e9765",
+  "generatedAt": "2026-11-05T17:24:43.816Z",
+  "results": [
+    {
+      "ac": "CR-4-12-dnsmasq",
+      "node": "pxe-test-m5-node11",
+      "status": "PASS",
+      "note": "TFTP snponly.efi terkirim ke 10.99.0.184 (lease 52:54:00:99:00:11)",
+      "evidence": [
+        "server-dnsmasq.txt"
+      ]
+    },
+    {
+      "ac": "CR-4-12-nginx",
+      "node": "pxe-test-m5-node11",
+      "status": "PASS",
+      "note": "user-data 200 x2 (min 2)",
+      "evidence": [
+        "server-nginx.txt"
+      ]
+    },
+    {
+      "ac": "CR-4-12-nginx",
+      "node": "pxe-test-m5-node12",
+      "status": "PASS",
+      "note": "user-data 200 x1 (min 1)",
+      "evidence": [
+        "server-nginx.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.39",
+      "node": "pxe-test-m5-node11",
+      "status": "PASS",
+      "durationS": 951,
+      "note": "Installing\u2192Failed server +900s, UI +902s (timeout 15 mnt); installerBoots 1; kernel serial 4\u21924; nginx .ipxe 2\u21923",
+      "evidence": [
+        "pxe-test-m5-node11-destroy.txt",
+        "pxe-test-m5-node11-timeline.txt",
+        "pxe-test-m5-node11-after-start-ipxe.txt",
+        "pxe-test-m5-node11-console.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.40",
+      "node": "pxe-test-m5-node11",
+      "status": "PASS",
+      "durationS": 794,
+      "note": "install ulang booting \u2192 installing \u2192 configuring \u2192 done dalam 577s; job: done, failed/timeout-installing; kernel serial reboot 8\u21928",
+      "evidence": [
+        "pxe-test-m5-node11-verify-ssh.txt",
+        "pxe-test-m5-node11-timeline.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.42",
+      "node": "pxe-test-m5-node12",
+      "status": "PASS",
+      "note": "log 404, status 404, event 1\u21921",
+      "evidence": [
+        "pxe-test-m5-node12-negative.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.41",
+      "node": "pxe-test-m5-node12",
+      "status": "PASS",
+      "durationS": 422,
+      "note": "booting \u2192 installing \u2192 configuring \u2192 done dalam 394s; penanda seq 7<8<11; koneksi live/ended; job setelah reboot 1",
+      "evidence": [
+        "pxe-test-m5-node12-sse.txt",
+        "pxe-test-m5-node12-verify-ssh.txt",
+        "pxe-test-m5-node12-timeline.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.38",
+      "node": "pxe-test-m5-node12",
+      "status": "PASS",
+      "durationS": 0,
+      "evidence": [
+        "allowlist-check.txt",
+        "server-check.txt",
+        "deploy-dashboard.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.43-scan",
+      "status": "PASS",
+      "note": "0 temuan (scan harness)",
+      "evidence": [
+        "evidence-scan.txt"
+      ]
+    },
+    {
+      "ac": "AC-5.43",
+      "status": "PASS",
+      "note": "cleanup + resource terlindungi + key + scan bukti (post-run-checks.txt)",
+      "evidence": [
+        "post-run-checks.txt",
+        "cleanup.txt",
+        "evidence-scan.txt"
+      ]
+    }
+  ],
+  "jobTimeouts": {
+    "bootingMin": 60,
+    "installingMin": 15,
+    "configuringMin": 60
+  },
+  "maxInstallerBoots": 3,
+  "nodes": [
+    {
+      "name": "pxe-test-m5-node11",
+      "fw": "uefi",
+      "role": "destroy"
+    },
+    {
+      "name": "pxe-test-m5-node12",
+      "fw": "bios",
+      "role": "install"
+    }
+  ]
+}

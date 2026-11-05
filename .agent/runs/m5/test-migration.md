@@ -27,3 +27,28 @@ Tidak ada asersi yang dihapus, di-skip, atau dilonggarkan. Perubahan semantik (b
 | 14 | `dashboard/e2e/m1-layout.spec.ts` (test "placeholder /jobs menampilkan judul + deskripsi") | Entri `/jobs` dikeluarkan dari daftar `PLACEHOLDERS` dan diganti test `"/jobs: konten nyata (bukan placeholder)"`: penanda halaman `[data-testid="jobs-page"]` terlihat di konten, konten tidak memuat "dibangun di tahap", tidak ada judul empty state "dibangun…". Header `h1` = "Provisioning Jobs" tetap diuji test navigasi yang ada. | DR-4-7 (carry-over gate M4) + AC-5.32 + plan §2.8: halaman Jobs dibangun di M5, placeholder dihapus. Asersi lama (judul "… — dibangun di tahap 5") bertentangan langsung dengan AC-5.32. **[semantik → test-engineer]** (AC-5.22/5.32 penuh tetap tugas T13) | Ekspektasi diubah (UI disengaja) |
 | 15 | `dashboard/e2e/m1-layout.spec.ts` (test "placeholder /os-images …" dan "placeholder /ssh-keys …") | Daftar `PLACEHOLDERS` dihapus seluruhnya; `/os-images` dan `/ssh-keys` masuk daftar `BUILT_PAGES` (lihat #14) dengan penanda `[data-testid="os-images-page"]` / `[data-testid="ssh-keys-page"]`, tanpa "dibangun di tahap". Komponen `PagePlaceholder` dihapus karena tidak dipakai lagi. | DR-4-7 + AC-5.32 + plan §2.8 (M5-T9: halaman OS Images & SSH Keys dibangun, placeholder hilang). **[semantik → test-engineer]** (AC-5.27/5.28 penuh = T13) | Ekspektasi diubah (UI disengaja) |
 | 16 | `dashboard/e2e/m4-settings.spec.ts` (AC-4.6, `toEqual` respons `GET /api/settings`) | Objek harapan + `jobTimeouts {60,120,60}`, `maxInstallerBoots: 3`, `insecureNoLeaseCheck: false` (nilai default server E2E). Pemeriksaan "tanpa path DB/seed/allowlist" dan semua asersi halaman Settings tetap. Padanan E2E dari #6 yang terlewat: test ini merah di HEAD `3a799d2` sebelum perubahan UI M5. | AC-5.1 / DEC-014: respons wajib memuat ketiga kunci itu. **[semantik → test-engineer]** (perluasan kontrak) | Ekspektasi diperluas |
+
+## Tinjauan test-engineer (M5-T12) — butir semantik
+
+Ditinjau terhadap `git diff main..HEAD` (bukan hanya deskripsi di atas), DEC-013/014/015, dan
+M5-plan §4. Kriteria: asersi lama dihapus/dilonggarkan tanpa dasar decision = **pelemahan
+(critical)**; asersi dipindah/diganti oleh perilaku yang ditetapkan decision dengan kekuatan setara
+atau lebih ketat = **sah**.
+
+| # | Kesimpulan | Alasan |
+|---|---|---|
+| 6 | **Sah** (perluasan kontrak) | `toEqual` tetap persis (bukan `toMatchObject`), hanya ditambah 3 kunci yang diwajibkan AC-5.1; pemeriksaan "tanpa path DB/rahasia" tidak berubah. Ditambah test baru `m5-te-api.test.ts` (AC-5.1: nilai env tercermin, default, 500 menyebut variabel, tanpa `dbPath`/`allowedHosts`/`dnsmasqLeases`/`watchdogIntervalSec`). |
+| 9 | **Sah, dengan test pengganti** | Asersi "host tetap `booting`" tidak dihapus — dipindah ke sebelum lompatan jam (semua penolakan tetap tanpa efek) dan setelah lompatan kini diasersikan `failed` + `timeout-booting` + `tokenHash null` (lebih ketat). Bertentangan langsung dengan DEC-014 §2 bila dipertahankan (TTL ≥ jumlah timeout → watchdog selalu lebih dulu). Konsekuensi: 404 "token expired" di test itu kini berasal dari token yang dicabut, bukan cabang `token_expires_at`. Cabang expiry diuji ulang dengan fixture DB (job aktif, token lewat masa berlaku) untuk file/status/log di `m5-te-lifecycle-routes.test.ts` › "Token kedaluwarsa pada job yang masih aktif" dan AC-5.13 (log). |
+| 11 | **Sah** | Setiap asersi callback lama (`callbackCmd` + `evalCallbackUrl(...) === CALLBACK`) tetap ada, hanya indeks bergeser karena hook log baru (DEC-014 §4, plan §2.5); setiap baris baru di posisi lama diasersikan eksplisit (`logCmd`/`logTailCmd`). `error-commands` tetap `toEqual` daftar persis. Tidak ada asersi yang dihapus. Diperkuat oleh `m5-te-hooks.test.ts` (AC-5.19/5.20: perintah dijalankan `sh` dengan cmdline dari `installerScript()` nyata). |
+| 13 | **Sah** (pengetatan) | Skema `HostSchema` tetap `strict`; `lastJob` ditambahkan sebagai kunci wajib (strictObject + nullable), sehingga respons tanpa `lastJob` atau dengan kunci liar kini gagal — lebih ketat dari sebelumnya. Isi `lastJob` diuji di `m5-te-api.test.ts` (AC-5.16: = job terbaru, `null` untuk host tanpa job, konsisten `/api/hosts/:id`). |
+| 14 | **Sah** | Placeholder `/jobs` ("dibangun di tahap 5") bertentangan langsung dengan AC-5.32/DR-4-7. Judul `h1` per route tetap diuji test navigasi `m1-layout.spec.ts` (`NAV` → `header h1`). Konten nyata `/jobs` diuji penuh di `m5-jobs.spec.ts` (AC-5.22: empty state berteks, judul 26 px/400, daftar, detail). |
+| 15 | **Sah** | Sama dengan #14 untuk `/os-images` & `/ssh-keys`; konten nyata diuji `m5-library.spec.ts` (AC-5.27/5.28/5.32: judul 26 px, tabel, dialog, CRUD). Komponen `PagePlaceholder` dihapus; test statis `m5-te-unit.test.ts` › AC-5.32 memastikan tidak ada "dibangun di tahap" di `src/` dan halaman tidak memakai `PagePlaceholder`. |
+| 16 | **Sah** (perluasan kontrak) | Padanan E2E #6: `toEqual` tetap persis + 3 kunci AC-5.1 dengan nilai default server E2E; pemeriksaan "tanpa .db/seed/allowed/PXE_DB" dan semua asersi halaman Settings tetap. |
+
+Butir non-semantik (#1–#5, #7, #8, #10, #12) diperiksa sekilas: mekanis (signature `getReq`),
+fixture lease/flag eksplisit sesuai Konsekuensi DEC-013, ekspektasi carry-over CR-4-5 (`--replace`),
+skema migrasi 2, golden file (hanya test "golden file", `containsSecret` token tetap). Tidak ada
+`skip`/`only`/`todo`, `retries`, atau ambang coverage yang diubah.
+
+**Kesimpulan: tidak ditemukan pelemahan test. 7/7 butir semantik sah menurut DEC-013/014/015; #9
+dilengkapi test pengganti untuk cabang token kedaluwarsa.**

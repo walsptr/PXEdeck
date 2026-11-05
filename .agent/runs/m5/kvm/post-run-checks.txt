@@ -1,0 +1,40 @@
+# post-run checks 2026-11-05T17:25:23Z
+# virsh -c qemu:///system list --all
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+# virsh -c qemu:///system net-list --all
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+# ls .agent/vms
+pxe-test-server-base.qcow2
+pxe-test-server-base.ready
+# ls .agent/keys
+infra_ed25519
+infra_ed25519.pub
+OK   tidak ada VM pxe-test-m5-*
+OK   VM pxe-test-server sudah dimatikan & undefine
+OK   tidak ada disk pxe-test-m5-*
+OK   overlay server dihapus
+OK   base disk server tetap (CR-4-13)
+OK   key sekali pakai node dihapus
+OK   tanpa listener serial socat tersisa
+OK   VM ubuntu24.04 identik (sebelum='ubuntu24.04 shut off' sesudah='ubuntu24.04 shut off')
+OK   VM pxe-test-node01 identik (sebelum='tidak ada' sesudah='tidak ada')
+OK   network default identik (default active yes yes)
+OK   network int identik (int active yes yes)
+OK   network pxe-test identik (pxe-test active no yes)
+OK   network pxe-test-nat identik (pxe-test-nat active no yes)
+OK   ekspor log job ada (jobs-*.json)
+# b64-scan (teks+base64) .agent/runs/m5:
+# runs: 180 file/blob dipindai, 0 hit
+OK   scan bukti bersih (teks+base64)
+OK   scanEvidence harness bersih (password run, token, key)
+OK   redact-evidence.sh ok di kvm-run
+# post-run exit=0

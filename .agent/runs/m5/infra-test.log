@@ -1,0 +1,49 @@
+infra/test/run.sh — 2026-11-05T17:14:17Z
+  ok   bash -n semua script infra
+  ok   set -euo pipefail di setiap script
+  ok   PATH test hanya berisi virsh/ssh palsu, tanpa sudo
+  ok   XML pxe-test tanpa forward/dhcp, dns off; pxe-test-nat NAT
+  ok   net-up dry-run: rencana define/start, tanpa mutasi
+  ok   net-up dua kali idempoten (virsh palsu ber-state)
+  ok   assert_name / assert_path_in_vms / assert_mac
+  ok   node.sh menolak nama terlindungi tanpa perintah virsh
+  ok   operasi disk VM selalu didahului assert_path_in_vms
+  ok   node.sh create dry-run UEFI/BIOS sesuai spesifikasi
+  ok   node.sh create/reset/destroy (palsu) idempoten
+  ok   node.sh create tanpa tahap install virt-install (B-3)
+  ok   node.sh reset: VM tetap running (on_reboot=restart, B-3)
+  ok   node.sh create gagal bila XML live on_reboot=destroy (B-3)
+  ok   cleanup.sh hanya resource run + snapshot
+  ok   cleanup.sh --server
+  ok   cleanup.sh dry-run tanpa mutasi
+  ok   cleanup.sh menolak nama terlindungi (exit≠0, tanpa virsh)
+  ok   cleanup.sh opsi tak dikenal
+  ok   server-down dry-run & palsu
+  ok   net-down hanya pxe-test*
+  ok   kvm-run.sh m4 dry-run end-to-end (semua nama pxe-test-)
+  ok   kvm-run.sh argumen invalid ditolak tanpa mutasi
+  ok   kvm-run.sh node sisa run → batal tanpa menyentuh
+  ok   deploy-dashboard dry-run + dashboard.env tanpa secret
+  ok   dnsmasq.conf terikat pxe0 (bind-interfaces)
+  ok   tanpa sudo, ssh hanya dengan key, tanpa ~/.ssh
+  ok   verify-node.sh: symlink, gagal cepat tanpa env, cek AC-4.31
+  ok   redact-evidence: token path/token=/$6$ disamarkan, exit 0
+  ok   redact-evidence: blob base64 berisi token/$6$/key disamarkan (B-5)
+  ok   redact-evidence: header private key → exit 1 tanpa isi
+  ok   redact-evidence: argumen salah → exit 2
+  ok   kvm-run.sh finish() memanggil redact-evidence (gagal = FAIL)
+  ok   M5 node.sh poweroff=destroy saja, start=listener append + start (AC-5.33)
+  ok   M5 node.sh poweroff/start dry-run (AC-5.33)
+  ok   M5 node.sh poweroff/start menolak nama terlindungi (AC-5.33)
+  ok   M5 cleanup.sh run id server*/nat* ditolak tanpa virsh/rm (AC-5.34)
+  ok   M5 cleanup.sh m5 tidak menyentuh disk server (AC-5.34)
+  ok   M5 redact: PNG bersih utuh, teks disamarkan (AC-5.35)
+  ok   M5 redact: biner bersecret tidak diubah, exit 1 (AC-5.35)
+  ok   M5 assert-server-logs PASS → results.json (AC-5.36)
+  ok   M5 assert-server-logs FAIL → exit≠0 (AC-5.36)
+  ok   M5 kvm-run dry-run: poweroff/start hanya node destroy (AC-5.36)
+  ok   M5 kvm-run finish: asersi log + ekspor job sebelum redaksi
+  ok   M5 nginx-pxe.conf allowlist admin + SSE (AC-5.37)
+  ok   M5 deploy PXE_ADMIN_ALLOW divalidasi (AC-5.37)
+  ok   M5 bash -n semua script infra + e2e-kvm (AC-5.37)
+hasil: 47 lulus, 0 gagal

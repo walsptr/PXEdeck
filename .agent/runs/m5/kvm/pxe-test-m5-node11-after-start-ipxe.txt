@@ -1,0 +1,6 @@
+GET /boot/52:54:00:99:00:11.ipxe (host, job installing):
+#!ipxe
+echo Tidak ada instalasi aktif: boot dari disk lokal
+iseq ${platform} efi && exit 1 ||
+sanboot --no-describe --drive 0x80 || exit 1
+
