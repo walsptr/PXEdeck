@@ -1,0 +1,337 @@
+"use client"
+
+import * as React from "react"
+import { HugeiconsIcon } from "@hugeicons/react"
+import { Cancel01Icon, PlusSignIcon } from "@hugeicons/core-free-icons"
+
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
+import {
+  Field,
+  FieldDescription,
+  FieldError,
+  FieldGroup,
+  FieldLabel,
+  FieldLegend,
+  FieldSet,
+} from "@/components/ui/field"
+import { Input } from "@/components/ui/input"
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+} from "@/components/ui/input-group"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import {
+  ipPlan,
+  type Context,
+  type NetForm,
+} from "@/components/host-config/form-state"
+import { PlanTable } from "@/components/host-config/plan-table"
+import { isIpv4, MGMT_NETWORK } from "@/lib/net"
+
+export function TabNetwork({
+  value,
+  onChange,
+  ctx,
+}: {
+  value: NetForm
+  onChange: (v: Partial<NetForm>) => void
+  ctx: Context
+}) {
+  const bulk = ctx.hosts.length > 1
+  const [dnsDraft, setDnsDraft] = React.useState("")
+  const plan = value.mode === "static" ? ipPlan(value, ctx) : []
+  const [lo, hi] = MGMT_NETWORK.dynamicRange
+
+  function addDns() {
+    const v = dnsDraft.trim()
+    if (!isIpv4(v) || value.dns.includes(v) || value.dns.length >= 4) return
+    onChange({ dns: [...value.dns, v] })
+    setDnsDraft("")
+  }
+
+  return (
+    <FieldGroup>
+      <Field>
+        <FieldLabel>Mode</FieldLabel>
+        <ToggleGroup
+          type="single"
+          variant="outline"
+          value={value.mode}
+          onValueChange={(v) => v && onChange({ mode: v as NetForm["mode"] })}
+        >
+          <ToggleGroupItem value="static" className="px-4">
+            Static
+          </ToggleGroupItem>
+          <ToggleGroupItem value="dhcp" className="px-4">
+            DHCP
+          </ToggleGroupItem>
+        </ToggleGroup>
+        <FieldDescription>
+          {value.mode === "static"
+            ? "IP management statis di NIC yang dipilih; dipakai juga sebagai reservasi DHCP saat PXE."
+            : "Host memakai IP dinamis dari dnsmasq. IP bisa berubah antar boot."}
+        </FieldDescription>
+      </Field>
+
+      {value.mode === "static" && (
+        <>
+          {!bulk ? (
+            <Field data-invalid={plan[0]?.error ? true : undefined}>
+              <FieldLabel htmlFor="net-ip">IP address</FieldLabel>
+              <Input
+                id="net-ip"
+                className="type-data"
+                placeholder="10.10.10.11"
+                value={value.ip}
+                aria-invalid={plan[0]?.error ? true : undefined}
+                onChange={(e) => onChange({ ip: e.target.value })}
+              />
+              {plan[0]?.error && value.ip ? (
+                <FieldError>{plan[0].error}</FieldError>
+              ) : (
+                <FieldDescription>
+                  Di dalam{" "}
+                  <span className="type-data text-xs">{MGMT_NETWORK.cidr}</span>
+                  , di luar range dinamis{" "}
+                  <span className="type-data text-xs">
+                    {lo}–{hi}
+                  </span>
+                  .
+                </FieldDescription>
+              )}
+            </Field>
+          ) : (
+            <FieldSet>
+              <FieldLegend variant="label">Alokasi IP</FieldLegend>
+              <FieldGroup className="gap-4">
+                <ToggleGroup
+                  type="single"
+                  variant="outline"
+                  value={value.planKind}
+                  onValueChange={(v) =>
+                    v && onChange({ planKind: v as NetForm["planKind"] })
+                  }
+                >
+                  <ToggleGroupItem value="range" className="px-3">
+                    Range IP
+                  </ToggleGroupItem>
+                  <ToggleGroupItem value="increment" className="px-3">
+                    IP awal + increment
+                  </ToggleGroupItem>
+                </ToggleGroup>
+                <div className="grid gap-4 sm:grid-cols-2">
+                  <Field>
+                    <FieldLabel htmlFor="net-start">IP awal</FieldLabel>
+                    <Input
+                      id="net-start"
+                      className="type-data"
+                      value={value.start}
+                      onChange={(e) => onChange({ start: e.target.value })}
+                    />
+                  </Field>
+                  {value.planKind === "range" ? (
+                    <Field>
+                      <FieldLabel htmlFor="net-end">IP akhir</FieldLabel>
+                      <Input
+                        id="net-end"
+                        className="type-data"
+                        value={value.end}
+                        onChange={(e) => onChange({ end: e.target.value })}
+                      />
+                    </Field>
+                  ) : (
+                    <Field>
+                      <FieldLabel htmlFor="net-step">Increment</FieldLabel>
+                      <Input
+                        id="net-step"
+                        type="number"
+                        min={1}
+                        max={64}
+                        className="type-data"
+                        value={value.step}
+                        onChange={(e) =>
+                          onChange({
+                            step: Math.max(1, Number(e.target.value) || 1),
+                          })
+                        }
+                      />
+                    </Field>
+                  )}
+                </div>
+                <Field orientation="horizontal">
+                  <Checkbox
+                    id="net-skip"
+                    checked={value.skipUsed}
+                    onCheckedChange={(v) => onChange({ skipUsed: v === true })}
+                  />
+                  <FieldLabel htmlFor="net-skip" className="font-normal">
+                    Lewati IP yang sudah dipakai host lain, lease aktif, atau
+                    range dinamis
+                  </FieldLabel>
+                </Field>
+                <PlanTable
+                  hosts={ctx.hosts}
+                  rows={plan.map((r) => ({
+                    hostId: r.hostId,
+                    value: r.ip,
+                    error: r.error,
+                  }))}
+                  valueLabel="IP baru"
+                  currentOf={(h) => h.mgmtIp ?? h.currentIp}
+                />
+              </FieldGroup>
+            </FieldSet>
+          )}
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field>
+              <FieldLabel htmlFor="net-prefix">Prefix</FieldLabel>
+              <InputGroup>
+                <InputGroupAddon>
+                  <span className="type-data">/</span>
+                </InputGroupAddon>
+                <InputGroupInput
+                  id="net-prefix"
+                  type="number"
+                  min={8}
+                  max={30}
+                  className="type-data"
+                  value={value.prefix}
+                  onChange={(e) =>
+                    onChange({ prefix: Number(e.target.value) || 24 })
+                  }
+                />
+              </InputGroup>
+            </Field>
+            <Field data-invalid={!isIpv4(value.gateway) || undefined}>
+              <FieldLabel htmlFor="net-gw">Gateway</FieldLabel>
+              <Input
+                id="net-gw"
+                className="type-data"
+                value={value.gateway}
+                aria-invalid={!isIpv4(value.gateway) || undefined}
+                onChange={(e) => onChange({ gateway: e.target.value })}
+              />
+            </Field>
+          </div>
+
+          <Field>
+            <FieldLabel htmlFor="net-dns">DNS server</FieldLabel>
+            <div className="flex flex-wrap gap-1.5">
+              {value.dns.map((d) => (
+                <Badge
+                  key={d}
+                  variant="outline"
+                  className="type-data h-7 gap-1 bg-card pr-1"
+                >
+                  {d}
+                  <Button
+                    variant="ghost"
+                    size="icon-xs"
+                    aria-label={`Hapus DNS ${d}`}
+                    onClick={() =>
+                      onChange({ dns: value.dns.filter((x) => x !== d) })
+                    }
+                  >
+                    <HugeiconsIcon icon={Cancel01Icon} strokeWidth={2} />
+                  </Button>
+                </Badge>
+              ))}
+            </div>
+            <InputGroup>
+              <InputGroupInput
+                id="net-dns"
+                className="type-data"
+                placeholder="1.1.1.1"
+                value={dnsDraft}
+                onChange={(e) => setDnsDraft(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault()
+                    addDns()
+                  }
+                }}
+              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton
+                  size="xs"
+                  disabled={!isIpv4(dnsDraft.trim()) || value.dns.length >= 4}
+                  onClick={addDns}
+                >
+                  <HugeiconsIcon
+                    icon={PlusSignIcon}
+                    strokeWidth={2}
+                    data-icon="inline-start"
+                  />
+                  Tambah
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
+            <FieldDescription>
+              Maksimal 4. Tekan Enter untuk menambah.
+            </FieldDescription>
+          </Field>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            <Field>
+              <FieldLabel htmlFor="net-vlan">VLAN ID (opsional)</FieldLabel>
+              <Input
+                id="net-vlan"
+                inputMode="numeric"
+                className="type-data"
+                placeholder="tanpa VLAN"
+                value={value.vlan}
+                onChange={(e) =>
+                  onChange({ vlan: e.target.value.replace(/\D/g, "") })
+                }
+              />
+            </Field>
+            <Field>
+              <FieldLabel>Interface</FieldLabel>
+              <ToggleGroup
+                type="single"
+                variant="outline"
+                value={value.ifaceBy}
+                onValueChange={(v) =>
+                  v && onChange({ ifaceBy: v as NetForm["ifaceBy"] })
+                }
+              >
+                <ToggleGroupItem value="mac" className="px-3">
+                  By MAC
+                </ToggleGroupItem>
+                <ToggleGroupItem value="name" className="px-3">
+                  By nama
+                </ToggleGroupItem>
+              </ToggleGroup>
+            </Field>
+          </div>
+          {value.ifaceBy === "name" ? (
+            <Field>
+              <FieldLabel htmlFor="net-iface">Nama interface</FieldLabel>
+              <Input
+                id="net-iface"
+                className="type-data"
+                placeholder="eno1"
+                value={value.ifaceName}
+                onChange={(e) => onChange({ ifaceName: e.target.value })}
+              />
+              <FieldDescription>
+                Harus sama di semua host yang dikonfigurasi.
+              </FieldDescription>
+            </Field>
+          ) : (
+            <FieldDescription>
+              NIC dipilih dari MAC PXE masing-masing host (
+              <span className="type-data text-xs">match: macaddress</span>). NIC
+              lain dibiarkan tanpa konfigurasi untuk automation berikutnya.
+            </FieldDescription>
+          )}
+        </>
+      )}
+    </FieldGroup>
+  )
+}

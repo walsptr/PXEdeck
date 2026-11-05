@@ -1,0 +1,191 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
+@import "@fontsource-variable/inter";
+@import "@fontsource-variable/jetbrains-mono";
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: "Inter Variable", -apple-system, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, "SFMono-Regular", monospace;
+  --font-heading: var(--font-sans);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+
+  /* Design system: token tambahan di luar slot shadcn */
+  --color-primary-active: var(--primary-active);
+  --color-canvas-soft: var(--canvas-soft);
+  --color-body: var(--body);
+  --color-muted-soft: var(--muted-soft);
+  --color-hairline-soft: var(--hairline-soft);
+  --color-hairline-strong: var(--hairline-strong);
+  --color-success: var(--success);
+
+  /* Pastel tahap provisioning: HANYA untuk status pill / timeline */
+  --color-stage-discovered: var(--stage-discovered);
+  --color-stage-booting: var(--stage-booting);
+  --color-stage-installing: var(--stage-installing);
+  --color-stage-configuring: var(--stage-configuring);
+  --color-stage-done: var(--stage-done);
+
+  /* Radius: tombol & input 8px, card/dialog/panel 12px, pill 9999px */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-2xl: 12px;
+  --radius-3xl: 12px;
+  --radius-4xl: 9999px;
+}
+
+/* Tanpa drop shadow sama sekali: kedalaman hanya dari hairline 1px */
+@theme {
+  --shadow-2xs: 0 0 #0000;
+  --shadow-xs: 0 0 #0000;
+  --shadow-sm: 0 0 #0000;
+  --shadow: 0 0 #0000;
+  --shadow-md: 0 0 #0000;
+  --shadow-lg: 0 0 #0000;
+  --shadow-xl: 0 0 #0000;
+  --shadow-2xl: 0 0 #0000;
+}
+
+:root {
+  --background: #f7f7f4;
+  --foreground: #26251e;
+  --card: #ffffff;
+  --card-foreground: #26251e;
+  --popover: #ffffff;
+  --popover-foreground: #26251e;
+  --primary: #f54e00;
+  --primary-foreground: #ffffff;
+  --primary-active: #d04200;
+  --secondary: #e6e5e0;
+  --secondary-foreground: #26251e;
+  --muted: #e6e5e0;
+  --muted-foreground: #807d72;
+  --accent: #efeee8;
+  --accent-foreground: #26251e;
+  --destructive: #cf2d56;
+  --border: #e6e5e0;
+  --input: #e6e5e0;
+  --ring: #f54e00;
+
+  --canvas-soft: #fafaf7;
+  --body: #5a5852;
+  --muted-soft: #a09c92;
+  --hairline-soft: #efeee8;
+  --hairline-strong: #cfcdc4;
+  --success: #1f8a65;
+
+  --stage-discovered: #9fbbe0;
+  --stage-booting: #dfa88f;
+  --stage-installing: #c0a8dd;
+  --stage-configuring: #9fc9a2;
+  --stage-done: #c08532;
+
+  --chart-1: #9fbbe0;
+  --chart-2: #dfa88f;
+  --chart-3: #c0a8dd;
+  --chart-4: #9fc9a2;
+  --chart-5: #c08532;
+  --radius: 8px;
+
+  --sidebar: #f7f7f4;
+  --sidebar-foreground: #26251e;
+  --sidebar-primary: #26251e;
+  --sidebar-primary-foreground: #f7f7f4;
+  --sidebar-accent: #efeee8;
+  --sidebar-accent-foreground: #26251e;
+  --sidebar-border: #e6e5e0;
+  --sidebar-ring: #f54e00;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-size: 14px;
+    font-feature-settings: "cv11", "ss01";
+  }
+  html {
+    @apply font-sans;
+  }
+  ::placeholder {
+    color: var(--muted-soft);
+  }
+}
+
+/* ---- Tipografi ---- */
+@utility type-page-title {
+  font-size: 26px;
+  font-weight: 400;
+  line-height: 1.25;
+  letter-spacing: -0.325px;
+}
+
+@utility type-section-title {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: -0.015em;
+}
+
+@utility type-body {
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.5;
+}
+
+@utility type-caption {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.45;
+}
+
+@utility type-column-label {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.88px;
+  text-transform: uppercase;
+}
+
+/* Data teknis: MAC, IP, hostname, key, log */
+@utility type-data {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  letter-spacing: 0;
+  font-variant-ligatures: none;
+}
