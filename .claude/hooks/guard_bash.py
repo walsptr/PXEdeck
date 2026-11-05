@@ -105,6 +105,10 @@ def check(cmd: str) -> None:
         if re.search(r"(~|%s)/(\.netrc|\.aws|\.gnupg)" % re.escape(HOME), cmd):
             deny("file secret di luar project dilarang")
 
+    # Mutasi massal libvirt (loop/xargs atas hasil `virsh list`) tidak bisa diperiksa per nama.
+    if re.search(r"virsh", cmd) and re.search(r"\b(destroy|undefine|shutdown|reboot|reset)\b", cmd) and re.search(r"(xargs|while\s+read|for\s+\w+\s+in\s+\$\(\s*virsh|list\s+--name|list\s+--all\s*\|)", cmd):
+        deny("mutasi libvirt massal (loop/xargs atas virsh list) dilarang; sebut nama pxe-test-* secara eksplisit")
+
     for toks in segments(cmd):
         prog = os.path.basename(toks[0])
         args = toks[1:]
