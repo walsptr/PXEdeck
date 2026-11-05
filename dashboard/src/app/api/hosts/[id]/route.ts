@@ -10,6 +10,8 @@ import {
   validationFailed,
 } from "@/lib/server/http"
 import { deleteHost, getHost } from "@/lib/server/db/repos/hosts"
+import { sweepJobs } from "@/lib/server/job-lifecycle"
+import { lastJobForHost } from "@/lib/server/jobs-service"
 
 // Id bukan 12 hex → 400; host tidak ada → 404; mutasi lewat guardMutation
 // (403/415) — lihat lib/server/http.ts. DELETE meng-cascade config, join key,
@@ -20,9 +22,10 @@ export async function GET(req: Request, ctx: RouteContext<"/api/hosts/[id]">) {
   if (denied) return denied
   const p = hostIdParam((await ctx.params).id)
   if ("response" in p) return p.response
-  const host = getHost(p.id)
-  if (!host) return hostNotFound()
-  return jsonNoStore(host)
+  if (!getHost(p.id)) return hostNotFound()
+  // M5: sapuan timeout host ini lalu `lastJob` (sama dengan GET /api/hosts).
+  sweepJobs(new Date(), p.id)
+  return jsonNoStore({ ...getHost(p.id)!, lastJob: lastJobForHost(p.id) })
 }
 
 /** Terapkan konfigurasi ke satu host. */

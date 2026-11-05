@@ -39,7 +39,17 @@ export type Host = {
   lastSeen: string
 }
 
+/** Ringkasan job terbaru host (M5, `GET /api/hosts`). */
+export type HostLastJob = {
+  id: string
+  status: "booting" | "installing" | "configuring" | "done" | "failed"
+  /** timeout-booting | timeout-installing | timeout-configuring | installer-boot-limit | installer-error | superseded */
+  failureReason: string | null
+  createdAt: string
+}
+
 export type HostsResponse = {
-  hosts: Host[]
+  /** M5: `lastJob` selalu ada di respons API (null bila host belum pernah punya job). */
+  hosts: (Host & { lastJob?: HostLastJob | null })[]
   serverTime: string
 }

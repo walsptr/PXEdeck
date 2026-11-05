@@ -18,8 +18,18 @@ import {
   getKeyByFingerprint,
   insertKey,
   keyUsage,
+  listKeys,
+  renameKey,
 } from "@/lib/server/db/repos/ssh-keys"
 import { getSettings } from "@/lib/server/settings"
+
+/** Item `GET /api/ssh-keys` (M5): key + jumlah host pemakai. */
+export type SshKeyInfo = SshKey & { usedBy: number }
+
+/** Library key + `usedBy`. */
+export function listSshKeyInfos(): SshKeyInfo[] {
+  return listKeys().map((k) => ({ ...k, usedBy: keyUsage(k.id) }))
+}
 
 export type LibraryResult<T> =
   | { ok: true; value: T }
@@ -34,7 +44,7 @@ export const newSshKeyPayload = z.object({
 
 export async function createSshKey(
   p: z.infer<typeof newSshKeyPayload>,
-): Promise<LibraryResult<SshKey>> {
+): Promise<LibraryResult<SshKeyInfo>> {
   const parsed = parseSshKey(p.publicKey)
   if ("error" in parsed) return { ok: false, status: 422, error: parsed.error }
   const fingerprint = await sshFingerprint(parsed.blob)
@@ -49,7 +59,7 @@ export async function createSshKey(
           status: 409 as const,
           error: `Key sudah ada di library sebagai "${existing.name}"`,
         }
-      const key: SshKey = {
+      const key: SshKeyInfo = {
         id: `key-${crypto.randomUUID().slice(0, 8)}`,
         name: p.name,
         type: parsed.type,
@@ -57,6 +67,7 @@ export async function createSshKey(
         fingerprint,
         comment: parsed.comment,
         createdAt: new Date().toISOString(),
+        usedBy: 0,
       }
       insertKey(key)
       return { ok: true as const, value: key }
@@ -66,6 +77,19 @@ export async function createSshKey(
       return { ok: false, status: 409, error: "Key sudah ada di library" }
     throw e
   }
+}
+
+/** Body `PATCH /api/ssh-keys/:id`: hanya `name` (field lain → 400). */
+export const renameSshKeyPayload = z
+  .object({ name: z.string().trim().min(1, "Nama wajib").max(64) })
+  .strict()
+
+export function renameSshKey(id: string, name: string): LibraryResult<SshKeyInfo> {
+  getDb()
+  return tx(() => {
+    if (!renameKey(id, name)) return { ok: false, status: 404, error: "Key tidak ditemukan" }
+    return { ok: true, value: { ...getKey(id)!, usedBy: keyUsage(id) } }
+  })
 }
 
 export function removeSshKey(id: string): LibraryResult<null> {
@@ -134,7 +158,8 @@ export function createOsImage(
       createdAt: new Date().toISOString(),
     }
     insertImage(rec)
-    return { ok: true, value: toImageInfo(rec, getSettings().mediaRoot) }
+    const st = getSettings()
+    return { ok: true, value: toImageInfo(rec, st.mediaRoot, st.mediaUrl, 0) }
   })
 }
 

@@ -23,6 +23,13 @@ export type OsImageInfo = OsImage & {
   /** Alasan tidak tersedia (null bila tersedia). */
   reason: string | null
   builtin: boolean
+  /** M5: path media relatif PXE_MEDIA_ROOT (UI OS Images). */
+  source: OsImageSource
+  /** M5: `${PXE_MEDIA_URL}/${source.repo}`. */
+  repoUrl: string
+  /** M5: jumlah host yang mereferensikan image (assigned, config, job aktif). */
+  usedBy: number
+  createdAt: string
 }
 
 type Row = {
@@ -123,7 +130,27 @@ export function imageAvailability(
   return { available: true, reason: null }
 }
 
-export function toImageInfo(img: OsImageRecord, mediaRoot: string): OsImageInfo {
+/** Jumlah host berbeda yang mereferensikan image (assigned, config, atau job aktif). */
+export function imageHostCount(id: string): number {
+  const r = getDb()
+    .prepare(
+      `SELECT count(*) AS n FROM (
+        SELECT id AS h FROM hosts WHERE os_assigned = ?1
+        UNION SELECT host_id FROM host_configs WHERE json_extract(os_profile, '$.osImageId') = ?1
+        UNION SELECT host_id FROM jobs WHERE os_image_id = ?1
+          AND status IN ('booting','installing','configuring')
+      )`,
+    )
+    .get(id) as { n: number }
+  return Number(r.n)
+}
+
+export function toImageInfo(
+  img: OsImageRecord,
+  mediaRoot: string,
+  mediaUrl: string,
+  usedBy: number = imageHostCount(img.id),
+): OsImageInfo {
   const { available, reason } = imageAvailability(img, mediaRoot)
   return {
     id: img.id,
@@ -135,5 +162,9 @@ export function toImageInfo(img: OsImageRecord, mediaRoot: string): OsImageInfo 
     builtin: img.builtin,
     available,
     reason,
+    source: { ...img.source },
+    repoUrl: `${mediaUrl}/${img.source.repo}`,
+    usedBy,
+    createdAt: img.createdAt,
   }
 }

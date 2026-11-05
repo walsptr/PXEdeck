@@ -34,6 +34,15 @@ const HostSchema = z.strictObject({
   status: z.enum(PROVISION_STATUSES),
   statusSince: iso,
   lastSeen: iso,
+  // M5 (AC-5.16): ringkasan job terbaru host di GET /api/hosts.
+  lastJob: z
+    .strictObject({
+      id: z.string(),
+      status: z.enum(["booting", "installing", "configuring", "done", "failed"]),
+      failureReason: z.string().nullable(),
+      createdAt: iso,
+    })
+    .nullable(),
 })
 
 describe("AC-2.5 GET /api/hosts", () => {
