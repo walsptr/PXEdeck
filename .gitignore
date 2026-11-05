@@ -29,3 +29,6 @@ test-results/
 .DS_Store
 *.swp
 .claude/settings.local.json
+
+# worktree agent
+.agent/wt-*/

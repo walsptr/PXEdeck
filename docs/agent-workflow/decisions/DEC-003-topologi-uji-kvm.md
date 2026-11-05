@@ -1,7 +1,7 @@
 # DEC-003: PXE server test berjalan di VM `pxe-test-server`, bukan di host
 - Tanggal: 2026-11-05T05:45:00Z
 - Milestone: 4
-- Status: Accepted
+- Status: Accepted (detail port, media, dan NAT diperbarui oleh DEC-009)
 ## Konteks
 Hasil pemeriksaan awal (Orchestrator, read-only):
 - KVM dan `virsh -c qemu:///system` tersedia tanpa sudo (user di grup `libvirt`). RAM tersedia
