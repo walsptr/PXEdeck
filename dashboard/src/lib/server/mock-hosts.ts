@@ -253,9 +253,12 @@ const ADMIN_KEY: SshKey = {
   createdAt: "2026-11-04T03:00:00.000Z",
 }
 
-// Hash SHA-512 crypt "ubuntu" dari user-data lab (README §7).
-const LAB_PASSWORD_HASH =
-  "$6$pxelab$EzRdg/3FWt3YwSUFK8NZ5TXl/GP93OzXhv47DpBlRfQUclTe83eSkgjhetCGkJq9rvLGisqfUKTvGlTxXWMbp/"
+// SEED DEMO (mock, bukan credentials lab): hash SHA-512 crypt dari string acak
+// sekali pakai yang tidak disimpan di mana pun, sehingga tidak ada password
+// yang bisa login dengan hash ini. Hanya agar host seed tampak "punya
+// password"; jangan dibawa ke persistence M4.
+const DEMO_SEED_PASSWORD_HASH =
+  "$6$Y2yXR19q.NLsVJMG$mWyK3Ci6on00tnvwMbe3IcC4XDfA8IJPyNock6dPI7OPteFjypNl2DFVwJECjWRPqyNzOkXwuO67YSkXHz1Gb/"
 
 export function defaultConfig(h: Host): HostConfig {
   const installed = Boolean(h.osInstalled)
@@ -272,7 +275,7 @@ export function defaultConfig(h: Host): HostConfig {
           }
         : null,
     username: installed || h.osAssigned ? "ubuntu" : null,
-    passwordHash: installed || h.osAssigned ? LAB_PASSWORD_HASH : null,
+    passwordHash: installed || h.osAssigned ? DEMO_SEED_PASSWORD_HASH : null,
     sudo: true,
     disableSshPassword: false,
     network: h.mgmtIp

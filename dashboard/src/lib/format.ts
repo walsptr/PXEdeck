@@ -1,4 +1,4 @@
-const rtf = new Intl.RelativeTimeFormat("id", { numeric: "auto" })
+const rtf = new Intl.RelativeTimeFormat("id", { numeric: "always" })
 
 const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
   ["day", 86_400_000],
@@ -10,12 +10,10 @@ const UNITS: [Intl.RelativeTimeFormatUnit, number][] = [
 export function formatRelative(iso: string, now: number): string {
   const diff = Date.parse(iso) - now
   if (Math.abs(diff) < 45_000) return "baru saja"
-  for (const [unit, ms] of UNITS) {
-    if (Math.abs(diff) >= ms || unit === "minute") {
-      return rtf.format(Math.round(diff / ms), unit)
-    }
-  }
-  return "baru saja"
+  // Unit terbesar yang muat; menit sebagai fallback (|diff| ≥ 45 dtk).
+  const [unit, ms] =
+    UNITS.find(([, size]) => Math.abs(diff) >= size) ?? UNITS[UNITS.length - 1]
+  return rtf.format(Math.round(diff / ms), unit)
 }
 
 const dtf = new Intl.DateTimeFormat("id", {

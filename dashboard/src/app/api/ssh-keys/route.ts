@@ -1,5 +1,6 @@
 import { connection } from "next/server"
 
+import { jsonNoStore } from "@/lib/server/http"
 import { mockDb } from "@/lib/server/mock-hosts"
 
 export async function GET() {
@@ -7,5 +8,5 @@ export async function GET() {
   const keys = [...mockDb().sshKeys.values()].sort((a, b) =>
     a.name.localeCompare(b.name),
   )
-  return Response.json(keys)
+  return jsonNoStore(keys)
 }

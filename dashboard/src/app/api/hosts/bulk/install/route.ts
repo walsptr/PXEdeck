@@ -1,8 +1,10 @@
 import { installPayload } from "@/lib/host-config"
 import { installHosts } from "@/lib/server/config-service"
-import { readJson } from "@/lib/server/http"
+import { guardMutation, readJson } from "@/lib/server/http"
 
 export async function POST(req: Request) {
+  const g = guardMutation(req, "json")
+  if (g) return g
   const body = await readJson(req, installPayload)
   if ("response" in body) return body.response
   const result = installHosts(body.data.hostIds)

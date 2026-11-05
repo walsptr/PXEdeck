@@ -72,6 +72,11 @@ export function isHostInSubnet(ip: string, cidr: string): boolean {
   return n !== network && n !== broadcast
 }
 
+function inRange(ip: string, [lo, hi]: readonly [string, string]): boolean {
+  const n = ipToInt(ip)
+  return n >= ipToInt(lo) && n <= ipToInt(hi)
+}
+
 function resolveNet(net: string | MgmtNetwork | undefined): MgmtNetwork {
   if (net === undefined) return MGMT_NETWORK
   return typeof net === "string" ? { ...MGMT_NETWORK, cidr: net } : net
@@ -79,8 +84,8 @@ function resolveNet(net: string | MgmtNetwork | undefined): MgmtNetwork {
 
 /**
  * Validasi parameter jaringan statis bersama (DEC-006): prefix wajib sama
- * dengan subnet management, gateway wajib IPv4 host di subnet management,
- * DNS wajib IPv4 (boleh di luar subnet). Mengembalikan daftar pesan error.
+ * dengan subnet management, gateway wajib IPv4 host di subnet management
+ * dan di luar range DHCP dinamis, DNS wajib IPv4 (boleh di luar subnet). Mengembalikan daftar pesan error.
  */
 export function validateStaticNetwork(
   v: { prefix: number; gateway: string; dns: readonly string[] },
@@ -97,6 +102,10 @@ export function validateStaticNetwork(
   if (!isIpv4(gw)) errors.push("Gateway tidak valid")
   else if (!isHostInSubnet(gw, net.cidr))
     errors.push(`Gateway ${gw} di luar subnet management ${net.cidr}`)
+  else if (inRange(gw, net.dynamicRange))
+    errors.push(
+      `Gateway ${gw} di dalam range DHCP dinamis ${net.dynamicRange[0]}–${net.dynamicRange[1]}`,
+    )
   for (const d of v.dns) {
     if (!isIpv4(d)) errors.push(`DNS tidak valid: ${d}`)
   }
@@ -131,8 +140,8 @@ export function validateStaticIp(
   if (v === net.gateway || v === net.pxeServer) {
     return "Dipakai gateway/PXE server"
   }
-  const [lo, hi] = net.dynamicRange
-  if (n >= ipToInt(lo) && n <= ipToInt(hi)) {
+  if (inRange(v, net.dynamicRange)) {
+    const [lo, hi] = net.dynamicRange
     return `Di dalam range DHCP dinamis ${lo}–${hi}`
   }
   const owner = usage?.used.get(v)
@@ -179,18 +188,30 @@ export function planIps(
     }
     end = ipToInt(spec.end)
   }
+  // IP awal di luar subnet: tolak tanpa iterasi (CR-3-1). Tanpa ini loop
+  // berjalan satu per satu dari IP awal sampai masuk subnet (bisa ratusan
+  // juta langkah dan membekukan tab browser).
+  if (!inSubnet(spec.start.trim(), net.cidr)) {
+    return hostIds.map((hostId) => ({
+      hostId,
+      ip: null,
+      error: `IP awal di luar subnet ${net.cidr}`,
+    }))
+  }
   const step =
     spec.kind === "increment" ? Math.max(1, Math.floor(spec.step)) : 1
-  const { broadcast } = subnetBounds(net.cidr)
+  const { broadcast, network } = subnetBounds(net.cidr)
   end = Math.min(end, broadcast)
 
   const rows: IpPlanRow[] = []
   const taken = new Set<string>()
   let cur = ipToInt(spec.start)
+  // Batas keras: total kandidat yang diperiksa tidak melebihi ukuran subnet.
+  let budget = broadcast - network + 1
   for (const hostId of hostIds) {
     let assigned: IpPlanRow | null = null
     while (!assigned) {
-      if (cur > end) {
+      if (cur > end || budget-- <= 0) {
         assigned = { hostId, ip: null, error: "Range IP tidak cukup" }
         break
       }
@@ -299,4 +320,39 @@ export function mgmtNetworkFromEnv(
     fail(`range dinamis ${lo}–${hi} (PXE_DYNAMIC_RANGE) terbalik`)
 
   return { cidr, gateway, dns, pxeServer, dynamicRange }
+}
+
+/**
+ * Bentuk respons `GET /api/network` (kontrak klien, CR-3-2): parameter subnet
+ * management aktif dari server.
+ */
+export type NetworkResponse = {
+  cidr: string
+  prefix: number
+  gateway: string
+  dns: string[]
+  dynamicRange: [string, string]
+  pxeServer: string
+}
+
+export function toNetworkResponse(net: MgmtNetwork): NetworkResponse {
+  return {
+    cidr: net.cidr,
+    prefix: parseCidr(net.cidr).prefix,
+    gateway: net.gateway,
+    dns: [...net.dns],
+    dynamicRange: [net.dynamicRange[0], net.dynamicRange[1]],
+    pxeServer: net.pxeServer,
+  }
+}
+
+/** Kebalikan `toNetworkResponse` (untuk klien yang memanggil planIps dsb.). */
+export function fromNetworkResponse(r: NetworkResponse): MgmtNetwork {
+  return {
+    cidr: r.cidr,
+    gateway: r.gateway,
+    dns: r.dns,
+    pxeServer: r.pxeServer,
+    dynamicRange: r.dynamicRange,
+  }
 }
