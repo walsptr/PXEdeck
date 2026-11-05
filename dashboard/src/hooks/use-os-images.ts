@@ -153,9 +153,26 @@ export function osImageFieldErrors(
     const path = i > 0 ? fe.message.slice(0, i) : ""
     const msg = i > 0 ? fe.message.slice(i + 2) : fe.message
     if ((OS_IMAGE_FIELDS as readonly string[]).includes(path))
-      add(path as OsImageField, msg)
+      add(path as OsImageField, localizeValidationMessage(msg))
     else add("form", fe.message)
   }
   if (!e.errors.length) add("form", e.message)
   return out
+}
+
+/**
+ * DR-5-5: pesan bawaan zod (bahasa Inggris, mis. `"Too small: expected string to have >=1
+ * characters"`) diterjemahkan ke bahasa Indonesia. Pesan kustom server (sudah berbahasa
+ * Indonesia) dikembalikan apa adanya.
+ */
+export function localizeValidationMessage(msg: string): string {
+  let m: RegExpExecArray | null
+  if ((m = /^Too small: expected string to have >=(\d+) characters?$/.exec(msg)))
+    return m[1] === "1" ? "Wajib diisi" : `Minimal ${m[1]} karakter`
+  if ((m = /^Too big: expected string to have <=(\d+) characters?$/.exec(msg)))
+    return `Maksimal ${m[1]} karakter`
+  if (/^Invalid option\b/.test(msg)) return "Pilihan tidak valid"
+  if (/^Invalid input: expected \w+, received undefined$/.test(msg)) return "Wajib diisi"
+  if (/^Invalid (input|string|format)\b/.test(msg)) return "Nilai tidak valid"
+  return msg
 }

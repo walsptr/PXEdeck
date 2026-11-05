@@ -108,6 +108,21 @@ function toPayload(f: Form): NewOsImagePayload {
 
 type Errors = Partial<Record<OsImageField | "form", string[]>>
 
+/** Field teks wajib: bila kosong, apa pun pesan server diganti "Wajib diisi" (DR-5-5). */
+const REQUIRED: { key: "id" | "name" | "version" | "repo"; field: OsImageField }[] = [
+  { key: "id", field: "id" },
+  { key: "name", field: "name" },
+  { key: "version", field: "version" },
+  { key: "repo", field: "source.repo" },
+]
+
+function withRequired(errors: Errors, f: Form): Errors {
+  const out = { ...errors }
+  for (const { key, field } of REQUIRED)
+    if (out[field]?.length && !f[key].trim()) out[field] = ["Wajib diisi"]
+  return out
+}
+
 /**
  * Dialog "Daftarkan image" (DEC-015 §3: path media lokal relatif `PXE_MEDIA_ROOT`, tanpa unduh
  * URL). Validasi di server; error 400/409 ditampilkan per field.
@@ -151,7 +166,7 @@ function RegisterForm({ onDone }: { onDone: () => void }) {
         )
         onDone()
       },
-      onError: (err) => setErrors(osImageFieldErrors(err)),
+      onError: (err) => setErrors(withRequired(osImageFieldErrors(err), form)),
     })
   }
 
@@ -161,7 +176,13 @@ function RegisterForm({ onDone }: { onDone: () => void }) {
   const text = (
     k: "id" | "name" | "version" | "kernel" | "initrd" | "repo",
     label: string,
-    opts: { mono?: boolean; placeholder?: string; description?: React.ReactNode } = {},
+    opts: {
+      mono?: boolean
+      placeholder?: string
+      description?: React.ReactNode
+      /** Tampilkan deskripsi juga saat field invalid (mis. pratinjau URL repo). */
+      keepDescription?: boolean
+    } = {},
   ) => {
     const field: OsImageField =
       k === "kernel" || k === "initrd" || k === "repo" ? `source.${k}` : k
@@ -180,7 +201,10 @@ function RegisterForm({ onDone }: { onDone: () => void }) {
           autoComplete="off"
           spellCheck={false}
         />
-        {opts.description && <FieldDescription>{opts.description}</FieldDescription>}
+        {/* DR-5-5: hint disembunyikan saat field invalid agar tidak dobel dengan pesan error. */}
+        {opts.description && (opts.keepDescription || !invalid(field)) && (
+          <FieldDescription data-testid={`img-hint-${field}`}>{opts.description}</FieldDescription>
+        )}
         <FieldError errors={err(field)} data-testid={`img-error-${field}`} />
       </Field>
     )
@@ -291,6 +315,7 @@ function RegisterForm({ onDone }: { onDone: () => void }) {
             {text("repo", "Repo / root installer", {
               mono: true,
               placeholder: method.hint.repo,
+              keepDescription: true,
               description: (
                 <>
                   URL:{" "}
@@ -305,7 +330,15 @@ function RegisterForm({ onDone }: { onDone: () => void }) {
         </FieldSet>
       </FieldGroup>
 
-      <DialogFooter>
+      {/*
+        DR-5-6: footer sticky — tombol submit tetap terlihat walau form lebih tinggi dari layar.
+        `-bottom-6` + `-mb-6`: menempel rata di tepi bawah dialog (menutup padding p-6 konten
+        yang di-scroll), bukan 24 px di atasnya.
+      */}
+      <DialogFooter
+        data-testid="img-dialog-footer"
+        className="sticky -bottom-6 -mx-6 -mb-6 border-t border-border bg-card px-6 py-4"
+      >
         <Button type="button" variant="ghost" onClick={onDone} disabled={create.isPending}>
           Batal
         </Button>

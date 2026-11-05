@@ -7,6 +7,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 
 import { ApiError } from "./use-host-config"
 import {
+  localizeValidationMessage,
   OS_IMAGES_KEY,
   osImageFieldErrors,
   useCreateOsImage,
@@ -170,6 +171,24 @@ describe("use-os-images mutasi", () => {
     expect(osImageFieldErrors(new ApiError("OS image x sudah ada", 409))).toEqual({ id: ["OS image x sudah ada"] })
     expect(osImageFieldErrors(new ApiError("Body bukan JSON yang valid", 400))).toEqual({ form: ["Body bukan JSON yang valid"] })
     expect(osImageFieldErrors(new Error("jaringan"))).toEqual({ form: ["jaringan"] })
+  })
+
+  it("DR-5-5 osImageFieldErrors: pesan zod bahasa Inggris → bahasa Indonesia per field", () => {
+    const e400 = new ApiError("Input tidak valid", 400, [
+      { section: "name" as never, message: "name: Too small: expected string to have >=1 characters" },
+      { section: "version" as never, message: "version: Too big: expected string to have <=32 characters" },
+      { section: "arch" as never, message: 'arch: Invalid option: expected one of "amd64"|"arm64"' },
+    ])
+    expect(osImageFieldErrors(e400)).toEqual({
+      name: ["Wajib diisi"],
+      version: ["Maksimal 32 karakter"],
+      arch: ["Pilihan tidak valid"],
+    })
+    expect(localizeValidationMessage("Too small: expected string to have >=3 characters")).toBe("Minimal 3 karakter")
+    expect(localizeValidationMessage("Invalid input: expected boolean, received undefined")).toBe("Wajib diisi")
+    expect(localizeValidationMessage("Invalid input: expected string, received number")).toBe("Nilai tidak valid")
+    // Pesan kustom server (sudah bahasa Indonesia) tidak diubah.
+    expect(localizeValidationMessage("Path tidak boleh memuat ..")).toBe("Path tidak boleh memuat ..")
   })
 
   it("useOsLabel: katalog server (image terdaftar) lalu fallback bawaan / id", async () => {
