@@ -2,7 +2,8 @@
 //
 // Mesin status: booting → installing → configuring → done; status aktif apa pun → failed.
 // `sweepJobs(now)` menandai job aktif yang melewati timeout tahap (absolut sejak "masuk tahap" =
-// `at` entri `stages` terakhir yang statusnya = status job) sebagai `failed` dengan
+// `at` entri `stages` PERTAMA yang statusnya = status job, DEC-016 §1: penyajian ulang installer
+// menambah entri `booting` tetapi tidak mereset timer Booting) sebagai `failed` dengan
 // `failure_reason = timeout-<tahap>`, mencabut token, dan mencatat satu event `error`. Idempoten,
 // sinkron, di dalam `tx` (BEGIN IMMEDIATE). Dipanggil secara lazy di setiap baca status (API/boot)
 // dan oleh timer `startWatchdog()` (watchdog.ts).
@@ -60,12 +61,14 @@ export function failJob(
   logJobEvent(job.id, { at, kind: "stage", level: "error", source, message })
 }
 
-/** Waktu masuk tahap status job saat ini (ms epoch). */
+/**
+ * Waktu masuk tahap status job saat ini (ms epoch) = entri `stages` pertama untuk status itu
+ * (DEC-016 §1). Booting: entri `booting` pertama (job dibuat), bukan penyajian installer terakhir.
+ * Mesin status hanya maju, jadi tiap tahap lain hanya punya satu entri.
+ */
 export function stageEnteredAt(job: Job): number {
-  for (let i = job.stages.length - 1; i >= 0; i--) {
-    if (job.stages[i].stage === job.status) return Date.parse(job.stages[i].at)
-  }
-  return Date.parse(job.createdAt)
+  const first = job.stages.find((s) => s.stage === job.status)
+  return first ? Date.parse(first.at) : Date.parse(job.createdAt)
 }
 
 /** Timeout (menit) tahap aktif, atau null untuk status final. */
