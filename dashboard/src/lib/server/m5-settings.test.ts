@@ -4,7 +4,7 @@ import { describe, expect, it, vi } from "vitest"
 
 import { entryScript, installerScript } from "@/lib/server/boot-script"
 import { guardRead, requestHost } from "@/lib/server/http"
-import { onServerStart } from "@/lib/server/startup"
+import { onServerStart, startOrExit } from "@/lib/server/startup"
 import { isolateEnv } from "@/test/env"
 
 import { settingsFromEnv, settingsWarnings, type SettingsEnv } from "./settings"
@@ -127,5 +127,17 @@ describe("CR-4-15 requestHost & DEC-015 guardRead", () => {
     const err = guardRead(r({}))!
     expect(err.status).toBe(500)
     expect((await err.json()).error).toMatch(/PXE_TOKEN_TTL_MIN/)
+  })
+})
+
+describe("startOrExit", () => {
+  it("env invalid → error satu baris + exit(1)", () => {
+    const error = vi.fn()
+    const exit = vi.fn((c: number) => {
+      throw new Error(`exit ${c}`)
+    }) as unknown as (c: number) => never
+    process.env.PXE_TRUST_PROXY = "1"
+    expect(() => startOrExit({ warn: vi.fn(), error }, exit)).toThrow("exit 1")
+    expect(String(error.mock.calls[0][0])).toMatch(/^\[pxe\] start ditolak: .*PXE_DNSMASQ_LEASES/)
   })
 })

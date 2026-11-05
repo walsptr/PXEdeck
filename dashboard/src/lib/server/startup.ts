@@ -15,3 +15,19 @@ export function onServerStart(logger: StartupLogger = console, watchdog = true):
   if (watchdog) startWatchdog(logger)
   return s
 }
+
+/**
+ * Dipanggil `instrumentation.ts`: konfigurasi tidak valid → pesan satu baris lalu proses keluar
+ * (exit 1) sehingga server benar-benar menolak start (DEC-013), bukan tetap listen dan membalas 500.
+ */
+export function startOrExit(
+  logger: StartupLogger = console,
+  exit: (code: number) => never = (c) => process.exit(c),
+): Settings {
+  try {
+    return onServerStart(logger)
+  } catch (e) {
+    logger.error(`[pxe] start ditolak: ${(e as Error).message}`)
+    return exit(1)
+  }
+}
