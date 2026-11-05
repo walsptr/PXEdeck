@@ -65,6 +65,7 @@ import type { MgmtNetwork } from "@/lib/net"
 import { canonicalOsImageId, osLabel } from "@/lib/os-images"
 import type { Host, HostWithJob } from "@/lib/types"
 import { jobsHref } from "@/lib/jobs"
+import { stripHostPrefix } from "@/lib/install-errors"
 import { cn } from "@/lib/utils"
 
 export type ConfigSheetTarget = {
@@ -318,6 +319,11 @@ function ConfigForm({
     const h = hosts.find((x) => x.id === id)
     return h ? (h.hostname ?? h.mac) : id
   }
+  /** Label yang mungkin dipakai server sebagai prefix pesan (DR-5-3). */
+  const hostPrefixes = (id: string) => {
+    const h = hosts.find((x) => x.id === id)
+    return h ? [h.hostname, h.mac] : [id]
+  }
 
   async function submit(andInstall: boolean) {
     const ids = hosts.map((h) => h.id)
@@ -442,9 +448,9 @@ function ConfigForm({
               <AlertDescription className="flex flex-col gap-2">
                 <ul className="flex flex-col gap-1">
                   {installFailed.map((f) => (
-                    <li key={f.hostId}>
-                      <span className="type-data">{hostLabel(f.hostId)}</span>
-                      : {f.message}
+                    <li key={f.hostId} data-slot="install-error-item">
+                      <span className="type-data">{hostLabel(f.hostId)}</span>:{" "}
+                      {stripHostPrefix(f.message, hostPrefixes(f.hostId))}
                     </li>
                   ))}
                 </ul>

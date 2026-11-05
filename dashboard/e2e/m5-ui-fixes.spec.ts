@@ -80,6 +80,12 @@ test("AC-5.30 DR-4-3 install single ditolak: Alert di Sheet, tanpa toast yang me
   await expect(alert).toBeVisible()
   await expect(alert).toContainText("Install ditolak untuk 1 host")
   await expect(alert).toContainText(/credentials|Credentials|password|kredensial/i)
+  // DR-5-3: label host (prefix pesan server) tampil tepat sekali, dalam span mono.
+  const soloItem = alert.locator('[data-slot="install-error-item"]')
+  await expect(soloItem).toHaveCount(1)
+  const soloLabel = (await soloItem.locator(".type-data").innerText()).trim()
+  expect(soloLabel.length).toBeGreaterThan(0)
+  expect((await soloItem.innerText()).split(soloLabel).length - 1, "label host muncul dua kali").toBe(1)
   await page.waitForTimeout(800) // beri waktu toast (bila ada) untuk muncul
   const footer = await sheet.locator('[data-slot="sheet-footer"]').boundingBox()
   expect(footer).not.toBeNull()
@@ -115,6 +121,10 @@ test("AC-5.30 DR-4-4 bulk 1 sukses + 2 gagal: Sheet tetap terbuka, Alert per hos
     const name = alert.locator("li .type-data", { hasText: h.hostname })
     await expect(name).toHaveCount(1)
     expect(await fontFamily(name)).toMatch(/^"?JetBrains Mono/)
+    // DR-5-3: prefix "<label>: " dari server dibuang → label tampil tepat sekali per item.
+    const item = alert.locator('[data-slot="install-error-item"]', { hasText: h.hostname })
+    await expect(item).toHaveCount(1)
+    expect((await item.innerText()).split(h.hostname).length - 1, `label ${h.hostname} muncul dua kali`).toBe(1)
   }
   const started = alert.locator('[data-slot="install-started"]')
   await expect(started).toContainText("1 host mulai diinstal")
