@@ -79,9 +79,21 @@ describe("AC-4.6 GET /api/settings", () => {
       jobTimeouts: { bootingMin: 60, installingMin: 120, configuringMin: 60 },
       maxInstallerBoots: 3,
       insecureNoLeaseCheck: false,
+      // M6 (AC-6.1): blok "Akses" non-rahasia; hash admin tidak pernah disajikan.
+      insecureConfirmed: false,
+      auth: {
+        adminUsername: "testadmin",
+        adminConfigured: true,
+        sessionIdleMin: 120,
+        sessionMaxHours: 12,
+        loginMaxFailures: 5,
+        loginWindowMin: 15,
+        apiRatePerMin: 600,
+      },
     })
     const raw = JSON.stringify(body)
     for (const s of ["memory", "dnsmasq.leases", MEDIA, "seed", "allowed", "dbPath"]) expect(raw).not.toContain(s)
+    expect(raw).not.toContain(process.env.PXE_ADMIN_PASSWORD_HASH!)
     // /api/network (kontrak M3) = subset yang sama.
     const net = await (await networkGET(getReq("/api/network"))).json()
     expect(net).toEqual({ cidr: body.cidr, prefix: 24, gateway: body.gateway, dns: body.dns, dynamicRange: body.dynamicRange, pxeServer: body.pxeServer })

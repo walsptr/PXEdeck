@@ -87,8 +87,9 @@ describe("migrasi 2", () => {
     db.prepare(
       `INSERT INTO jobs (id, host_id, os_image_id, status, stages, created_at, updated_at) VALUES ('j', ?, 'ubuntu-24.04', 'installing', ?, ?, ?)`,
     ).run(H, JSON.stringify(stages), at(0), at(0))
-    expect(runMigrations(db)).toEqual([2])
-    expect(runMigrations(db)).toEqual([])
+    // M6: migrasi dibatasi ≤ v2 agar test ini tetap menguji transisi v1 → v2 saja (v3 diuji terpisah).
+    expect(runMigrations(db, MIGRATIONS.filter((m) => m.version <= 2))).toEqual([2])
+    expect(runMigrations(db, MIGRATIONS.filter((m) => m.version <= 2))).toEqual([])
     expect(db.prepare("SELECT installer_boots, event_seq, failure_reason, stages FROM jobs").get()).toEqual({
       installer_boots: 2,
       event_seq: 0,
@@ -108,13 +109,19 @@ describe("job_events", () => {
     const w = { kind: "system", level: "warn", source: "boot-script", message: "PXE boot ulang" } as const
     expect(appendEvent("j1", { ...w, at: at(2) }, 100)).toEqual({ status: "appended", seq: 3 })
     expect(appendEvent("j1", { ...w, at: at(30) }, 100)).toEqual({ status: "merged", seq: 3, repeat: 2 })
-    expect(appendEvent("j1", { ...w, at: at(63) }, 100)).toEqual({ status: "appended", seq: 4 })
+    // M6 CR-5-7 (AC-6.22): jendela 60 dtk dihitung dari kemunculan TERAKHIR (`last_at` = at(30)),
+    // jadi at(63) masih digabung; at(124) (> 60 dtk dari at(63)) → event baru.
+    expect(appendEvent("j1", { ...w, at: at(63) }, 100)).toEqual({ status: "merged", seq: 3, repeat: 3 })
+    expect(appendEvent("j1", { ...w, at: at(124) }, 100)).toEqual({ status: "appended", seq: 4 })
     const ev = eventsAfter("j1", 0)
     expect(ev.map((e) => e.seq)).toEqual([1, 2, 3, 4])
     expect(ev[1].message).toBe("x /boot/52:54:00:99:00:11/[REDACTED]/status")
-    expect(ev[2].repeat).toBe(2)
+    expect(ev[2].repeat).toBe(3)
+    expect(ev[2].at).toBe(at(2))
+    expect(ev[2].lastAt).toBe(at(63))
+    expect(ev[3].lastAt).toBe(at(124))
     expect(getJob("j1")!.eventSeq).toBe(4)
-    expect(getJob("j1")!.updatedAt).toBe(at(63))
+    expect(getJob("j1")!.updatedAt).toBe(at(124))
     expect(eventsAfter("j1", 2).map((e) => e.seq)).toEqual([3, 4])
     expect(appendEvent("tidak-ada", { ...w, at: at(0) }, 100)).toEqual({ status: "dropped" })
   })

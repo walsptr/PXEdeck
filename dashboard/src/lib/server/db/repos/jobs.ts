@@ -127,14 +127,36 @@ export type ListJobsQuery = {
   status?: JobStatus
   /** 1–200. */
   limit: number
-  /** Id job terakhir halaman sebelumnya (cursor). */
+  /** Cursor opak `nextBefore` halaman sebelumnya (CR-5-4). */
   before?: string
+}
+
+const CURSOR_AT_RE = /^[0-9][0-9T:.+Z -]{0,39}$/
+const CURSOR_ID_RE = /^[A-Za-z0-9_-]{1,64}$/
+
+/** Cursor opak (CR-5-4): base64url(`created_at|id`) item terakhir halaman. */
+export function encodeJobCursor(j: Pick<Job, "createdAt" | "id">): string {
+  return Buffer.from(`${j.createdAt}|${j.id}`, "utf8").toString("base64url")
+}
+
+/** Decode cursor; null bila bentuknya tidak valid. Tidak butuh lookup DB (tidak bisa basi). */
+export function decodeJobCursor(c: string): { createdAt: string; id: string } | null {
+  if (!/^[A-Za-z0-9_-]{1,200}$/.test(c)) return null
+  const raw = Buffer.from(c, "base64url").toString("utf8")
+  const bar = raw.indexOf("|")
+  if (bar < 0) return null
+  const createdAt = raw.slice(0, bar)
+  const id = raw.slice(bar + 1)
+  if (!CURSOR_AT_RE.test(createdAt) || !CURSOR_ID_RE.test(id)) return null
+  if (encodeJobCursor({ createdAt, id }) !== c) return null
+  return { createdAt, id }
 }
 
 /**
  * Daftar job terbaru dulu (`created_at DESC, id DESC`), opsional filter host/status, cursor
- * `before` = id job terakhir halaman sebelumnya. `before` yang tidak dikenal → `null`
- * (pemanggil membalas 400). `nextBefore` null bila tidak ada halaman berikutnya.
+ * `before` = cursor opak (`encodeJobCursor`) item terakhir halaman sebelumnya — berbasis nilai
+ * `(created_at, id)`, jadi tetap sah walau job itu sudah terhapus retensi (CR-5-4). Cursor rusak →
+ * `null` (pemanggil membalas 400). `nextBefore` null bila tidak ada halaman berikutnya.
  */
 export function listJobs(q: ListJobsQuery): { jobs: Job[]; nextBefore: string | null } | null {
   const db = getDb()
@@ -148,20 +170,18 @@ export function listJobs(q: ListJobsQuery): { jobs: Job[]; nextBefore: string | 
     where.push("status = ?")
     args.push(q.status)
   }
-  if (q.before) {
-    const c = db.prepare("SELECT created_at, id FROM jobs WHERE id = ?").get(q.before) as
-      | { created_at: string; id: string }
-      | undefined
+  if (q.before !== undefined) {
+    const c = decodeJobCursor(q.before)
     if (!c) return null
     where.push("(created_at < ? OR (created_at = ? AND id < ?))")
-    args.push(c.created_at, c.created_at, c.id)
+    args.push(c.createdAt, c.createdAt, c.id)
   }
   const sql = `SELECT * FROM jobs ${where.length ? `WHERE ${where.join(" AND ")}` : ""}
     ORDER BY created_at DESC, id DESC LIMIT ?`
   const rows = db.prepare(sql).all(...args, q.limit + 1) as Row[]
   const more = rows.length > q.limit
   const jobs = rows.slice(0, q.limit).map(toJob)
-  return { jobs, nextBefore: more ? jobs[jobs.length - 1].id : null }
+  return { jobs, nextBefore: more ? encodeJobCursor(jobs[jobs.length - 1]) : null }
 }
 
 /** Job terbaru per host (untuk `lastJob` di `GET /api/hosts`). */

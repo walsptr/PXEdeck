@@ -53,7 +53,7 @@ const DISC1 = "b083fe5c19e2"
 const T = "2026-11-05T10:00:00.000Z"
 
 // M5: migrasi 2 menambah `job_events` (DEC-014, lihat .agent/runs/m5/test-migration.md).
-const TABLES = ["schema_migrations", "meta", "settings", "hosts", "host_configs", "ssh_keys", "host_ssh_keys", "os_images", "jobs", "job_events"]
+const TABLES = ["schema_migrations", "meta", "settings", "hosts", "host_configs", "ssh_keys", "host_ssh_keys", "os_images", "jobs", "job_events", "sessions"] // + sessions (M6, migrasi 3)
 
 const DB_DIR = tmpDir("db")
 withDb("demo")
@@ -107,10 +107,11 @@ describe("AC-4.1 migrasi", () => {
     const db = openDbAt(":memory:", "empty")
     expect(tables(db)).toEqual([...TABLES].sort())
     const idx = (db.prepare("SELECT name FROM sqlite_master WHERE type = 'index' AND name NOT LIKE 'sqlite_%' ORDER BY name").all() as { name: string }[]).map((r) => r.name)
-    expect(idx).toEqual(expect.arrayContaining(["hosts_hostname_uq", "host_configs_ip_uq", "jobs_active_uq", "host_ssh_keys_key", "jobs_host"]))
+    expect(idx).toEqual(expect.arrayContaining(["hosts_hostname_uq", "host_configs_ip_uq", "jobs_active_uq", "host_ssh_keys_key", "jobs_host", "sessions_expires"]))
     expect(db.prepare("SELECT version, name FROM schema_migrations").all()).toEqual([
       { version: 1, name: "init" },
       { version: 2, name: "job-events" }, // M5 (DEC-014)
+      { version: 3, name: "sessions" }, // M6 (DEC-017)
     ])
     expect(db.prepare("PRAGMA foreign_keys").get()).toEqual({ foreign_keys: 1 })
     db.close()
@@ -148,7 +149,7 @@ describe("AC-4.1 migrasi", () => {
     const bad = [...MIGRATIONS, { version: 99, name: "rusak", sql: "CREATE TABLE x (a INTEGER); INSERT INTO tidak_ada VALUES (1);" }]
     expect(() => runMigrations(db, bad)).toThrow()
     expect(tables(db)).not.toContain("x")
-    expect((db.prepare("SELECT version FROM schema_migrations").all() as { version: number }[]).map((r) => r.version)).toEqual([1, 2])
+    expect((db.prepare("SELECT version FROM schema_migrations").all() as { version: number }[]).map((r) => r.version)).toEqual([1, 2, 3]) // M6: + migrasi 3
     db.close()
   })
 

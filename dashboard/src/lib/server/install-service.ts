@@ -17,7 +17,7 @@ import {
   getImage,
   imageAvailability,
 } from "@/lib/server/db/repos/os-images"
-import { logJobEvent } from "@/lib/server/job-lifecycle"
+import { logJobEvent, sweepJobs } from "@/lib/server/job-lifecycle"
 import { getSettings } from "@/lib/server/settings"
 import { newToken } from "@/lib/server/tokens"
 
@@ -64,6 +64,9 @@ export function installHosts(
     const result: InstallResult = { started: [], failed: [] }
     const at = now.toISOString()
     for (const id of new Set(hostIds)) {
+      // CR-5-8: job yang sudah lewat timeout tetapi belum disapu (tanpa GET di antaranya) ditandai
+      // gagal dulu di transaksi yang sama → install ulang tidak ditolak "sedang berjalan".
+      sweepJobs(now, id)
       const h = getHost(id)
       if (!h) {
         result.failed.push({ hostId: id, message: "Host tidak ditemukan" })

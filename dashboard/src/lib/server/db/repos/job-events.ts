@@ -6,7 +6,8 @@
 //    sekuens ANSI utuh (CR-5-18) dan karakter format Unicode Cf (SR-5-12) juga diperhitungkan;
 //    deteksi dari salinan dengan dan tanpa sekuens ANSI digabung per karakter (SR-5-16/CR-5-24).
 //  - Penggabungan: event `system` identik (kind, level, source, message) dengan event terakhir job
-//    yang `at`-nya ≤ 60 dtk lalu → `repeat += 1` (seq tidak bertambah; `jobs.updated_at` berubah).
+//    yang kemunculan terakhirnya (`last_at`, CR-5-7) ≤ 60 dtk lalu → `repeat += 1`, `last_at` = waktu
+//    event baru (seq tidak bertambah; `jobs.updated_at` berubah).
 //  - Cap `PXE_JOB_LOG_MAX_EVENTS`: setelah `event_seq` ≥ cap, event `installer` dibuang dan satu
 //    event `warn` "log dipotong" dicatat sekali; event `stage`/`system` tetap dicatat.
 // Semua fungsi sinkron; panggil di dalam `tx` bila digabung dengan perubahan lain.
@@ -28,9 +29,11 @@ export type JobEvent = {
   source: string
   message: string
   repeat: number
+  /** Waktu kemunculan terakhir (CR-5-7); = `at` bila `repeat` 1. */
+  lastAt: string
 }
 
-export type NewJobEvent = Omit<JobEvent, "seq" | "repeat">
+export type NewJobEvent = Omit<JobEvent, "seq" | "repeat" | "lastAt">
 
 /** Panjang maksimum pesan (karakter) sebelum dipotong. */
 export const EVENT_MESSAGE_MAX = 2048
@@ -158,7 +161,7 @@ export function cleanEventMessage(raw: string): string {
   return truncateMessage(cleanAndRedact(raw))
 }
 
-type Row = Omit<JobEvent, "seq" | "repeat"> & { seq: number; repeat: number }
+type Row = Omit<JobEvent, "seq" | "repeat" | "lastAt"> & { seq: number; repeat: number; last_at: string | null }
 
 function toEvent(r: Row): JobEvent {
   return {
@@ -169,6 +172,7 @@ function toEvent(r: Row): JobEvent {
     source: r.source,
     message: r.message,
     repeat: Number(r.repeat),
+    lastAt: r.last_at ?? r.at,
   }
 }
 
@@ -210,10 +214,10 @@ export type AppendResult =
 function insertRow(jobId: string, seq: number, e: NewJobEvent) {
   getDb()
     .prepare(
-      `INSERT INTO job_events (job_id, seq, at, kind, level, source, message, repeat)
-       VALUES (?, ?, ?, ?, ?, ?, ?, 1)`,
+      `INSERT INTO job_events (job_id, seq, at, kind, level, source, message, repeat, last_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?)`,
     )
-    .run(jobId, seq, e.at, e.kind, e.level, e.source, e.message)
+    .run(jobId, seq, e.at, e.kind, e.level, e.source, e.message, e.at)
   getDb().prepare("UPDATE jobs SET event_seq = ?, updated_at = ? WHERE id = ?").run(seq, e.at, jobId)
 }
 
@@ -241,10 +245,12 @@ export function appendEvent(jobId: string, input: NewJobEvent, maxEvents: number
       last.level === e.level &&
       last.source === e.source &&
       last.message === e.message &&
-      Date.parse(e.at) - Date.parse(last.at) <= MERGE_WINDOW_MS &&
-      Date.parse(e.at) >= Date.parse(last.at)
+      // CR-5-7: jendela dihitung dari kemunculan TERAKHIR (`last_at`), bukan yang pertama.
+      Date.parse(e.at) - Date.parse(last.lastAt) <= MERGE_WINDOW_MS &&
+      Date.parse(e.at) >= Date.parse(last.lastAt)
     ) {
-      db.prepare("UPDATE job_events SET repeat = repeat + 1 WHERE job_id = ? AND seq = ?").run(
+      db.prepare("UPDATE job_events SET repeat = repeat + 1, last_at = ? WHERE job_id = ? AND seq = ?").run(
+        e.at,
         jobId,
         last.seq,
       )

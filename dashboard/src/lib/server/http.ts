@@ -1,6 +1,8 @@
 import type { z } from "zod"
 
 import { parseHostId, type ApiFieldError } from "@/lib/host-config"
+import { takeApiRequest } from "@/lib/server/auth/rate-limit"
+import { readCookie, sessionFromId, type Session } from "@/lib/server/auth/session"
 import { getSettings } from "@/lib/server/settings"
 
 // Konvensi kode status API host:
@@ -41,6 +43,13 @@ import { getSettings } from "@/lib/server/settings"
 //    karakter, termasuk escape JSON/UTF-8).
 //  - Semua GET API mengirim `Cache-Control: no-store` (`NO_STORE`) dan memanggil
 //    `guardRead(req)` (allowlist Host yang sama, DEC-015) sebagai langkah pertama.
+//
+// Autentikasi (M6, DEC-017 §4): `guardRead` dan `guardMutation` memanggil `requireSession`
+// SETELAH pemeriksaan Host/Origin/Content-Type (request lintas-origin tetap 403/415 apa pun
+// cookie-nya). Tanpa sesi valid → 401 `{"error":"Perlu login"}` (no-store); sesi melewati
+// `PXE_API_RATE_PER_MIN` → 429 `{"error":"Terlalu banyak request"}` + `Retry-After`.
+// Satu-satunya pengecualian: `POST /api/auth/login` (`guardMutation(req, "json", { session: false })`).
+// Tidak ada env/flag yang melewati pemeriksaan ini. `/boot/**` tidak memakai sesi (token per-MAC).
 
 /** Batas ukuran body JSON request (byte). */
 export const MAX_JSON_BODY_BYTES = 1024 * 1024
@@ -93,6 +102,38 @@ export function isHostAllowed(host: string, allowed: readonly string[]): boolean
   })
 }
 
+export const LOGIN_REQUIRED = "Perlu login"
+export const TOO_MANY_REQUESTS = "Terlalu banyak request"
+
+/**
+ * Sesi admin dari cookie `pxe_session` request + rate limit API per sesi. Mengembalikan sesi atau
+ * Response 401/429 (no-store). `touch` memperpanjang idle (maks 1 tulis / 60 dtk).
+ */
+export function requireSession(
+  req: Request,
+  now: Date = new Date(),
+): { session: Session } | { response: Response } {
+  const session = sessionFromId(readCookie(req.headers.get("cookie")), now)
+  if (!session) return { response: jsonNoStore({ error: LOGIN_REQUIRED }, { status: 401 }) }
+  const v = takeApiRequest(session.idHash, now.getTime())
+  if (!v.ok)
+    return {
+      response: jsonNoStore(
+        { error: TOO_MANY_REQUESTS },
+        { status: 429, headers: { "Retry-After": String(v.retryAfterSec) } },
+      ),
+    }
+  return { session }
+}
+
+/**
+ * Sesi request yang SUDAH lolos `guardRead`/`guardMutation` (mis. SSE butuh kunci sesi). Tidak
+ * menghitung rate limit dan tidak memperpanjang idle. null bila tidak valid.
+ */
+export function currentSession(req: Request, now: Date = new Date()): Session | null {
+  return sessionFromId(readCookie(req.headers.get("cookie")), now, false)
+}
+
 /**
  * Allowlist Host untuk request baca `GET /api/**` (DEC-015, O9): Host di luar
  * `PXE_ALLOWED_HOSTS` → 403 "Host tidak diizinkan" (menutup DNS rebinding
@@ -110,7 +151,8 @@ export function guardRead(req: Request): Response | null {
   if (!isHostAllowed(requestHost(req, s.trustProxy), s.allowedHosts)) {
     return errorResponse(403, "Host tidak diizinkan")
   }
-  return null
+  const auth = requireSession(req)
+  return "response" in auth ? auth.response : null
 }
 
 /**
@@ -120,6 +162,7 @@ export function guardRead(req: Request): Response | null {
 export function guardMutation(
   req: Request,
   body: "json" | "none",
+  opts: { session?: boolean } = {},
 ): Response | null {
   const s = getSettings()
   const host = requestHost(req, s.trustProxy)
@@ -149,7 +192,9 @@ export function guardMutation(
   ) {
     return errorResponse(415, "Content-Type harus application/json")
   }
-  return null
+  if (opts.session === false) return null
+  const auth = requireSession(req)
+  return "response" in auth ? auth.response : null
 }
 
 const TOO_LARGE = `Body melebihi batas ${MAX_JSON_BODY_BYTES / 1024 / 1024} MB`

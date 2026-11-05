@@ -5,24 +5,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import { ApiError } from "@/hooks/use-host-config"
 
 import { canonicalOsImageId, osLabel, type OsImage } from "@/lib/os-images"
+import type { OsImageInfo } from "@/lib/types"
 
-/** Item `GET /api/os-images` (salinan klien `OsImageInfo`). */
-export type OsImageInfo = OsImage & {
-  bootable: boolean
-  available: boolean
-  /** Alasan tidak tersedia (null bila tersedia). */
-  reason: string | null
-  builtin?: boolean
-  // Field M5 selalu dikirim `GET /api/os-images`; opsional di tipe klien agar data parsial
-  // (cache lama / fixture M4) tetap aman dirender.
-  /** M5: path media relatif `PXE_MEDIA_ROOT`. */
-  source?: { kernel: string; initrd: string; repo: string }
-  /** M5: `${PXE_MEDIA_URL}/${source.repo}`. */
-  repoUrl?: string
-  /** M5: jumlah host yang mereferensikan image. */
-  usedBy?: number
-  createdAt?: string
-}
+/** Item `GET /api/os-images` — satu sumber di `lib/types.ts` (CR-5-9). */
+export type { OsImageInfo }
 
 /** Body `POST /api/os-images` (salinan klien `newOsImagePayload`, DEC-015: path lokal saja). */
 export type NewOsImagePayload = {

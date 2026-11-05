@@ -144,6 +144,27 @@ UPDATE jobs SET installer_boots = (
 );
 `,
   },
+  {
+    // M6 (DEC-017 §1): sesi admin server-side + waktu kemunculan terakhir event gabungan
+    // (CR-5-7). Hanya menambah.
+    version: 3,
+    name: "sessions",
+    sql: `
+CREATE TABLE sessions (
+  id_hash TEXT PRIMARY KEY CHECK (length(id_hash) = 64),
+  username TEXT NOT NULL,
+  cred_fp TEXT NOT NULL,
+  created_at TEXT NOT NULL,
+  last_seen_at TEXT NOT NULL,
+  expires_at TEXT NOT NULL,
+  ip TEXT
+);
+CREATE INDEX sessions_expires ON sessions (expires_at);
+
+ALTER TABLE job_events ADD COLUMN last_at TEXT;
+UPDATE job_events SET last_at = at WHERE last_at IS NULL;
+`,
+  },
 ]
 
 /**

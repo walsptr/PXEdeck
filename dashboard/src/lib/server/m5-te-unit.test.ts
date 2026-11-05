@@ -18,6 +18,7 @@ import { requestHost } from "@/lib/server/http"
 import { HASH_REDACTED, REDACTED, REDACTED_B64, REDACTED_KEY, redactSecrets } from "@/lib/server/redact"
 import { FAKE_PRIVATE_KEY } from "@/test/fixtures"
 import { isolateEnv } from "@/test/env"
+import { testAdminHash } from "@/test/auth"
 
 import { settingsFromEnv, settingsWarnings, type SettingsEnv } from "./settings"
 
@@ -71,7 +72,11 @@ describe("AC-5.1 env job baru (unit)", () => {
       const m = /^([A-Z_]+)=(.*)$/.exec(l.trim())
       if (m) env[m[1]] = m[2].replace(/^"(.*)"$/, "$1")
     }
-    const s = settingsFromEnv({ ...env, PXE_DB_PATH: ":memory:" })
+    // M6: hash admin di file repo hanya placeholder (disisipkan saat deploy, AC-6.53) → ditolak
+    // apa adanya; dengan hash runtime (test) konfigurasi lainnya lolos.
+    expect(env.PXE_ADMIN_PASSWORD_HASH).toBe("@PXE_ADMIN_PASSWORD_HASH@")
+    expect(() => settingsFromEnv({ ...env, PXE_DB_PATH: ":memory:" })).toThrow(/PXE_ADMIN_PASSWORD_HASH/)
+    const s = settingsFromEnv({ ...env, PXE_ADMIN_PASSWORD_HASH: testAdminHash(), PXE_DB_PATH: ":memory:" })
     expect(s.jobTimeouts).toEqual({ bootingMin: 60, installingMin: 15, configuringMin: 60 })
     expect(s).toMatchObject({ maxInstallerBoots: 3, watchdogIntervalSec: 15, jobLogMaxEvents: 5000, jobHistoryPerHost: 20, insecureNoLeaseCheck: false, trustProxy: true })
     expect(s.dnsmasqLeases).not.toBeNull()
@@ -272,7 +277,7 @@ describe("AC-5.14 redactSecrets (tabel)", () => {
     "installer: autoinstall mulai",
     "File user-data diambil dari IP 10.99.0.150",
     "/boot/52:54:00:99:00:11.ipxe?platform=efi",
-    "token=terlalu-pendek",
+    "token=pendek7", // M6 (CR-5-21): `token=<8..43>` kini disamarkan; batas negatif = 7 karakter
     `/boot/52:54:00:99:00:11/${TOK}x/status`, // 44 karakter → bukan token
     "$6$ tanpa hash lengkap",
     b64("teks base64 biasa tanpa rahasia apa pun di dalamnya, cukup panjang"),

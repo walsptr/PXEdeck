@@ -172,6 +172,7 @@ export function parseLogEvent(data: string): JobLogEvent | null {
       source: typeof e.source === "string" ? e.source : "",
       message: e.message,
       repeat: typeof e.repeat === "number" && e.repeat > 0 ? e.repeat : 1,
+      lastAt: typeof e.lastAt === "string" ? e.lastAt : e.at,
     }
   } catch {
     return null

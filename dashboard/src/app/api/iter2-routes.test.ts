@@ -18,6 +18,7 @@ import { applyConfig } from "@/lib/server/config-service"
 import { peekConfig } from "@/lib/server/db/repos/configs"
 import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { DUMMY_PASSWORD, SSH_ED25519 } from "@/test/fixtures"
+import { authHeaders } from "@/test/auth"
 import { ctx, getReq, jsonReq } from "@/test/route"
 
 import { POST as csvImport } from "./credentials/import/route"
@@ -50,9 +51,12 @@ const LEGACY01 = "3ca82a10447c"
 
 const URL_BASE = "http://localhost"
 
-/** Request mentah dengan header bebas (Host = localhost dari URL). */
+/**
+ * Request mentah dengan header bebas (Host = localhost dari URL). M6: + cookie sesi admin
+ * sungguhan (DEC-017 §4) agar pemeriksaan setelah guard (413/422/200) tetap teruji.
+ */
 function rawReq(path: string, method: string, headers: Record<string, string>, body?: string) {
-  return new Request(`${URL_BASE}${path}`, { method, headers, body })
+  return new Request(`${URL_BASE}${path}`, { method, headers: { ...authHeaders(), ...headers }, body })
 }
 
 const staticNet = (assignments: Record<string, string>, gateway = "10.10.10.1") => ({
@@ -374,7 +378,7 @@ describe("iter2 SR-3-3 body > 1 MB → 413", () => {
         },
       })
     const mk = (path: string, method: string, body: string) =>
-      new Request(`${URL_BASE}${path}`, { method, headers: JSON_CT, body: stream(body), duplex: "half" } as RequestInit)
+      new Request(`${URL_BASE}${path}`, { method, headers: { ...JSON_CT, ...authHeaders() }, body: stream(body), duplex: "half" } as RequestInit)
     const payload = big(1024 * 1024)
     expect((await bulk(mk("/api/hosts/bulk", "POST", payload))).status).toBe(413)
     expect((await PATCH(mk(`/api/hosts/${NODE01}`, "PATCH", payload), ctx(NODE01))).status).toBe(413)

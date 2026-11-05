@@ -18,6 +18,7 @@ import { hashToken } from "@/lib/server/tokens"
 import { dbSnapshot, makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { containsSecret, evalCallbackUrl } from "@/test/cmdline"
 import { DUMMY_PASSWORD, SSH_ED25519 } from "@/test/fixtures"
+import { authHeaders } from "@/test/auth"
 import { getReq } from "@/test/route"
 
 import { GET as hostsGET } from "../api/hosts/route"
@@ -518,6 +519,9 @@ describe("AC-4.24 siklus token", () => {
       vi.spyOn(console, k).mockImplementation((...a: unknown[]) => void logs.push(a.map(String).join(" "))),
     )
     vi.stubEnv("VITEST", "") // aktifkan logBootDenied
+    // M6: tanpa VITEST, PXE_DB_PATH kosong = ./data/pxe.db (file persisten) → test bergantung pada
+    // sisa run sebelumnya. Kunci DB tetap :memory: (DB yang sama yang di-reset withDb).
+    vi.stubEnv("PXE_DB_PATH", ":memory:")
     try {
       const { token } = await installAndBoot()
       await file(MAC, token, "user-data")
@@ -527,7 +531,7 @@ describe("AC-4.24 siklus token", () => {
       expect(getJob(listJobsForHost(ID)[0].id)).toMatchObject({ tokenHash: null, tokenExpiresAt: null })
       expect((await cb(MAC, token, "done", STATIC_IP)).res.status).toBe(404)
       const t2 = (await installAndBoot(MAC2, ID2, "ubuntu-24.04", "10.99.0.160")).token
-      const del = await hostDELETE(new Request(`http://localhost/api/hosts/${ID2}`, { method: "DELETE" }), p({ id: ID2 }))
+      const del = await hostDELETE(new Request(`http://localhost/api/hosts/${ID2}`, { method: "DELETE", headers: authHeaders() }), p({ id: ID2 })) // M6: + sesi
       expect(del.status).toBe(204)
       expect((await file(MAC2, t2, "user-data", "10.99.0.160")).res.status).toBe(404)
       expect(logs.some((l) => l.includes("[boot] tolak"))).toBe(true)
