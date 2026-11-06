@@ -167,6 +167,15 @@ const FILE_SERVERS = [
       PXE_VLAN_NETWORKS: M7_VLAN_NETWORKS,
     },
   },
+  {
+    // DEC-027 §1: form login tidak pernah menaruh kredensial di URL (submit sebelum hydration / tanpa
+    // JS). Server sendiri (`fresh`): percobaan login tidak berbagi kuota rate limit dengan m6-auth.
+    name: "m7-login-no-url-creds",
+    port: 3119,
+    testMatch: /m7-login-no-url-creds\.spec\.ts/,
+    fresh: true,
+    env: { ...LAB_ENV, ...dbEnv("m7-login-no-url-creds") },
+  },
 ] as const
 
 const chromium = { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }

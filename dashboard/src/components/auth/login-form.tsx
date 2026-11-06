@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { HugeiconsIcon } from "@hugeicons/react"
 import { Alert02Icon, ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons"
 
+import { cn } from "cn"
+
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
 import { Button } from "@/components/ui/button"
 import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
@@ -33,6 +35,31 @@ export function lockoutText(retryAfterSec: number): string {
  * Pesan error login dari respons server. 401 → teks seragam (tanpa membedakan username ada/tidak);
  * 429 → lockout dengan N menit; lainnya → pesan server bila ada.
  */
+const noopSubscribe = () => () => {}
+
+/**
+ * `false` saat render server dan selama hydration, `true` setelah React mengambil alih di klien
+ * (DEC-027 §1). Tanpa effect/state → tombol aktif pada commit hydration pertama.
+ */
+export function useHydrated(): boolean {
+  return React.useSyncExternalStore(
+    noopSubscribe,
+    () => true,
+    () => false,
+  )
+}
+
+/** Path route fallback submit native (DEC-027 §1, `src/app/login/submit/route.ts`). */
+export const LOGIN_NATIVE_ACTION = "/login/submit"
+
+/**
+ * `action` form login untuk submit native (tanpa JS): POST ke route fallback yang membuang body dan
+ * mengalihkan kembali ke `/login`. `next` ikut di query (bukan kredensial) agar tujuan tetap terjaga.
+ */
+export function loginNativeAction(next: string | null): string {
+  return next === null ? LOGIN_NATIVE_ACTION : `${LOGIN_NATIVE_ACTION}?next=${encodeURIComponent(next)}`
+}
+
 export async function loginErrorText(res: Response): Promise<string> {
   if (res.status === 401) return LOGIN_FAILED_TEXT
   if (res.status === 429) return lockoutText(parseRetryAfter(res.headers.get("retry-after")))
@@ -54,6 +81,7 @@ export function LoginForm() {
   const [busy, setBusy] = React.useState(false)
   const [show, setShow] = React.useState(false)
   const alertRef = React.useRef<HTMLDivElement>(null)
+  const hydrated = useHydrated()
 
   // Fokus ke Alert setiap kali error (juga bila teksnya sama dengan sebelumnya — `n` berubah).
   React.useEffect(() => {
@@ -91,7 +119,20 @@ export function LoginForm() {
   }
 
   return (
-    <form onSubmit={onSubmit} aria-labelledby="login-title" className="flex flex-col gap-6">
+    // DEC-027 §1: kredensial tidak boleh pernah masuk URL. `method="post"` → submit native (sebelum
+    // hydration / tanpa JS) mengirim body urlencoded ke `/login/submit` (route yang membuang body lalu
+    // 303 ke `/login`), bukan `GET /login?username=…&password=…`. POST langsung ke halaman `/login`
+    // tidak dipakai: dengan Cache Components Next membalas sisa render dinamis tanpa shell (halaman
+    // kosong). Ditambah tombol Masuk nonaktif sampai hydration sehingga submit native (klik / Enter =
+    // implicit submission) tidak terjadi sama sekali.
+    <form
+      method="post"
+      action={loginNativeAction(params.get("next"))}
+      onSubmit={onSubmit}
+      aria-labelledby="login-title"
+      className="flex flex-col gap-6"
+      data-hydrated={hydrated || undefined}
+    >
       {error && (
         <Alert
           ref={alertRef}
@@ -149,7 +190,14 @@ export function LoginForm() {
           </InputGroup>
         </Field>
       </FieldGroup>
-      <Button type="submit" className="w-full" disabled={busy} data-testid="login-submit">
+      {/* Sebelum hydration tombol nonaktif tetapi tanpa efek pudar (`disabled:opacity-100`) agar
+          tidak berkedip pudar pada muat normal (lih. DR-6-11); aktif tepat saat hydration. */}
+      <Button
+        type="submit"
+        className={cn("w-full", !hydrated && "disabled:opacity-100")}
+        disabled={busy || !hydrated}
+        data-testid="login-submit"
+      >
         {busy && <Spinner data-icon="inline-start" aria-label="Memproses" />}
         Masuk
       </Button>
