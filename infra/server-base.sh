@@ -97,10 +97,14 @@ write_files:
     content: $(b64 "$INFRA_DIR/server/provision-root.sh")
 package_update: true
 package_upgrade: false
-packages: [dnsmasq, nginx, nfs-kernel-server, nftables]
+# tcpdump: capture DHCP relay M7 (infra/vlan/relay.sh capture-start|stop).
+packages: [dnsmasq, nginx, nfs-kernel-server, nftables, tcpdump]
 runcmd:
   - [/usr/local/sbin/pxe-provision-root.sh]
 UD
+# Seed sisa run gagal bisa milik qemu (dynamic ownership libvirt) -> hapus dulu, bukan ditimpa.
+assert_path_in_vms "$BASE_SEED"
+run rm -f "$BASE_SEED"
 run cloud-localds --network-config="$work/network-config" "$BASE_SEED" "$work/user-data" "$work/meta-data"
 
 # --- boot VM sementara -----------------------------------------------------------------
@@ -132,7 +136,7 @@ log "memasang Node dari $(basename "$NODE_TGZ")"
 scp_server "$NODE_TGZ" "/tmp/$(basename "$NODE_TGZ")"
 ssh_root "NODE_TARBALL=/tmp/$(basename "$NODE_TGZ") bash -s" < "$INFRA_DIR/server/install-node.sh"
 
-ssh_root 'cloud-init status --long | head -5; dpkg -l dnsmasq nginx nfs-kernel-server nftables | tail -4; node --version' \
+ssh_root 'cloud-init status --long | head -5; dpkg -l dnsmasq nginx nfs-kernel-server nftables tcpdump | tail -5; node --version' \
   | tee "$RUNS_DIR/server-base-provision.txt"
 
 log "mematikan $BASE_VM"

@@ -1,0 +1,10 @@
+<!-- M7 (DEC-023 §3, DEC-024 O1-A): Port node: VLAN 10 (PXE) native/untagged, VLAN 20 (management) ber-tag.
+     Terisolasi total: tanpa elemen ip (host tidak punya alamat L3 di segmen ini), tanpa elemen forward,
+     tanpa elemen dhcp, DNS libvirt mati, tanpa interface fisik. DHCP/TFTP hanya dnsmasq di VM
+     pxe-test-server (pxe10, VLAN 10). Linux bridge host (vlan_filtering=0) meneruskan frame ber-tag
+     apa adanya; VLAN dipisahkan oleh VM pxe-test-switch. -->
+<network>
+  <name>pxe-test-port1</name>
+  <bridge name='virbr-pxep1' stp='off' delay='0'/>
+  <dns enable='no'/>
+</network>

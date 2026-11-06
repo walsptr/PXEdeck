@@ -1,0 +1,32 @@
+[2026-11-06T10:29:58Z] node-v22.23.4-linux-x64.tar.xz sudah ada (sha256 cocok)
+[2026-11-06T10:29:58Z] network pxe-test sudah terdefinisi
+[2026-11-06T10:29:59Z] network pxe-test sudah aktif
+[2026-11-06T10:29:59Z] network pxe-test-nat sudah terdefinisi
+[2026-11-06T10:29:59Z] network pxe-test-nat sudah aktif
+[2026-11-06T10:29:59Z] membuat base disk dari ubuntu-24.04-server-cloudimg-amd64.img
+Image resized.
+[2026-11-06T10:30:01Z] virt-install pxe-test-server-base (RAM 3072 MB)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-06T10:30:02Z] menunggu SSH 10.99.0.2
+[2026-11-06T10:30:16Z] menunggu cloud-init selesai
+[2026-11-06T10:30:57Z] memasang Node dari node-v22.23.4-linux-x64.tar.xz
+v22.23.4
+status: disabled
+extended_status: disabled
+boot_status_code: disabled-by-marker-file
+last_update: Thu, 01 Jan 1970 00:00:50 +0000
+detail: DataSourceNoCloud [seed=/dev/sr0]
+ii  dnsmasq           2.91-0ubuntu0.24.04.2   all          Small caching DNS proxy and DHCP/TFTP server - system daemon
+ii  nfs-kernel-server 1:2.6.4-3ubuntu5.1      amd64        support for NFS kernel server
+ii  nftables          1.0.9-1ubuntu0.1        amd64        Program to control packet filtering rules by Netfilter project
+ii  nginx             1.24.0-2ubuntu7.19      amd64        small, powerful, scalable web/proxy server
+ii  tcpdump           4.99.4-3ubuntu4.24.04.1 amd64        command-line network traffic analyzer
+v22.23.4
+[2026-11-06T10:31:01Z] mematikan pxe-test-server-base
+Domain 'pxe-test-server-base' has been undefined
+
+[2026-11-06T10:31:03Z] base siap dalam 65s
+exit=0

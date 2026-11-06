@@ -1,0 +1,27 @@
+[2026-11-06T10:31:13Z] network pxe-test sudah terdefinisi
+[2026-11-06T10:31:13Z] network pxe-test sudah aktif
+[2026-11-06T10:31:13Z] network pxe-test-nat sudah terdefinisi
+[2026-11-06T10:31:13Z] network pxe-test-nat sudah aktif
+Network pxe-test-trunk defined from /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/net/pxe-test-trunk.xml
+
+Network pxe-test-trunk started
+
+Network pxe-test-port1 defined from /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/net/pxe-test-port1.xml
+
+Network pxe-test-port1 started
+
+Network pxe-test-port2 defined from /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/net/pxe-test-port2.xml
+
+Network pxe-test-port2 started
+
+ Name             State    Autostart   Persistent
+---------------------------------------------------
+ default          active   yes         yes
+ int              active   yes         yes
+ pxe-test         active   no          yes
+ pxe-test-nat     active   no          yes
+ pxe-test-port1   active   no          yes
+ pxe-test-port2   active   no          yes
+ pxe-test-trunk   active   no          yes
+
+net-up exit=0

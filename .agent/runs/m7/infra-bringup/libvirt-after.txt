@@ -1,0 +1,23 @@
+# setelah bring-up + teardown VM 2026-11-06T10:33:40Z
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+ Name             State    Autostart   Persistent
+---------------------------------------------------
+ default          active   yes         yes
+ int              active   yes         yes
+ pxe-test         active   no          yes
+ pxe-test-nat     active   no          yes
+ pxe-test-port1   active   no          yes
+ pxe-test-port2   active   no          yes
+ pxe-test-trunk   active   no          yes
+
+total 4361424
+drwxr-xr-x 1 syawal syawal        264 Nov  6 17:33 .
+drwxr-xr-x 1 syawal syawal         72 Nov  6 16:20 ..
+drwxr-xr-x 1 syawal syawal         28 Nov  6 17:31 pxe-test-debian-disk-modules
+-rw-r--r-- 1 qemu   qemu   2587033600 Nov  6 17:31 pxe-test-server-base.qcow2
+-rw-r--r-- 1 syawal syawal         76 Nov  6 17:31 pxe-test-server-base.ready
+-rw-r--r-- 1 qemu   qemu   1879179264 Nov  6 17:13 pxe-test-switch-base.qcow2
+-rw-r--r-- 1 syawal syawal         75 Nov  6 17:13 pxe-test-switch-base.ready

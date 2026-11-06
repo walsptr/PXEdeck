@@ -1,0 +1,20 @@
+# bring-up M7-T3/T4 2026-11-06T10:13:02Z (backend-dev)
+# free -m
+               total        used        free      shared  buff/cache   available
+Mem:           23719       10276        6259         842        8434       13443
+Swap:           8191        4942        3249
+# nproc 12
+# virsh list --all
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+# virsh net-list --all
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+ int       active   yes         yes
+
+# ip route get 10.99.10.2 (baca saja)
+10.99.10.2 via 192.168.0.1 dev wlo1 src 192.168.0.207 uid 1000 
+    cache 

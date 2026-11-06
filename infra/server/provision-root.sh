@@ -34,7 +34,11 @@ systemctl enable dnsmasq nginx nfs-server
 systemctl restart dnsmasq nginx
 mount -a || true
 exportfs -ra || true
-systemctl restart nfs-server
+# M7: nfs-server-generator menambah RequiresMountsFor= untuk path ekspor (/srv/pxe/media/rocky-9 =
+# /dev/sr2). VM base tidak punya CD-ROM ISO (hanya seed di sr0) -> mount sr1/sr2 timeout -> start
+# nfs-server gagal "dependency". Bukan kesalahan base: di overlay (ISO terpasang) nfs-server start
+# saat boot dan server-up.sh memasang ulang ekspor. Jangan gagalkan provisioning karenanya.
+systemctl restart nfs-server || echo "nfs-server: belum bisa start di VM base (ISO media belum terpasang) — normal"
 
 # Base selesai: cloud-init tidak dijalankan lagi pada overlay (konfigurasi sudah permanen).
 touch /etc/cloud/cloud-init.disabled

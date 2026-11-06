@@ -1,0 +1,21 @@
+[2026-11-06T10:31:39Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-switch-base.qcow2 sudah siap (converted 2026-11-06T10:13:17Z from ubuntu-24.04-server-cloudimg-amd64.img)
+[2026-11-06T10:31:39Z] network pxe-test sudah terdefinisi
+[2026-11-06T10:31:39Z] network pxe-test sudah aktif
+[2026-11-06T10:31:39Z] network pxe-test-nat sudah terdefinisi
+[2026-11-06T10:31:39Z] network pxe-test-nat sudah aktif
+[2026-11-06T10:31:39Z] network pxe-test-trunk sudah terdefinisi
+[2026-11-06T10:31:39Z] network pxe-test-trunk sudah aktif
+[2026-11-06T10:31:39Z] network pxe-test-port1 sudah terdefinisi
+[2026-11-06T10:31:39Z] network pxe-test-port1 sudah aktif
+[2026-11-06T10:31:39Z] network pxe-test-port2 sudah terdefinisi
+[2026-11-06T10:31:39Z] network pxe-test-port2 sudah aktif
+[2026-11-06T10:31:40Z] virt-install pxe-test-switch (RAM 768 MB, overlay pxe-test-switch.qcow2)
+WARNING  Requested memory 768 MiB is less than the recommended 2048 MiB for OS linux2022
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-06T10:31:54Z] SSH switch siap dalam 15s
+pxe-switch: apply OK (sw-p2=access20)
+[2026-11-06T10:32:30Z] switch-check PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/infra-bringup/switch-check.txt
+exit=0

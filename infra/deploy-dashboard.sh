@@ -18,18 +18,38 @@
 # PXE_ADMIN_ALLOW (IP/CIDR admin untuk UI + /api/** di nginx, default 10.99.0.1, DEC-015),
 # PXE_ADMIN_USERNAME (default pxeadmin), PXE_ADMIN_PASS_FILE,
 # PXE_DEPLOY_BOOTING_TIMEOUT_MIN (opsional, 1-1440: override PXE_JOB_BOOTING_TIMEOUT_MIN, bulk O12).
+# --topology vlan (M7, docs/design/M7-plan.md §2.3): env server/dashboard-vlan.env (subnet PXE
+# 10.99.10.0/24, PXE_SERVER_IP/BASE/MEDIA 10.99.10.2, PXE_VLAN_NETWORKS VLAN 20) dan nginx
+# server/vlan/nginx-pxe-vlan.conf (10.99.0.2:80 + 10.99.10.2:80) dipasang dengan nama file stage yang
+# sama; verifikasi dari host TETAP lewat http://10.99.0.2 dan mengasersi cidr 10.99.10.0/24 +
+# vlanNetworks memuat VLAN 20 10.99.20.0/24. Default flat = perilaku M6.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 
-EXPECT_CIDR="10.99.0.0/24"
+topology=flat
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --topology) [[ $# -ge 2 ]] || die "--topology butuh nilai"; topology="$(parse_topology "$2")"; shift 2 ;;
+    *) die "argumen tidak dikenal: $1 (pakai: deploy-dashboard.sh [--topology flat|vlan])" ;;
+  esac
+done
+if [[ "$topology" == vlan ]]; then
+  EXPECT_CIDR="10.99.10.0/24"
+  ENV_SRC="$INFRA_DIR/server/dashboard-vlan.env"
+  NGINX_SRC="$INFRA_DIR/server/vlan/nginx-pxe-vlan.conf"
+else
+  EXPECT_CIDR="10.99.0.0/24"
+  ENV_SRC="$INFRA_DIR/server/dashboard.env"
+  NGINX_SRC="$INFRA_DIR/server/nginx-pxe.conf"
+fi
 assert_name "$SERVER_NAME"
 ensure_dirs
 out="$RUNS_DIR/deploy-dashboard.txt"
 ts="$(date -u +%Y%m%dT%H%M%SZ)"
 remote_stage="/tmp/pxe-test-deploy.$ts"
 
-for f in dashboard.env pxe-dashboard.service nginx-pxe.conf install-dashboard.sh; do
-  [[ -f "$INFRA_DIR/server/$f" ]] || die "infra/server/$f tidak ada"
+for f in "$ENV_SRC" "$INFRA_DIR/server/pxe-dashboard.service" "$NGINX_SRC" "$INFRA_DIR/server/install-dashboard.sh"; do
+  [[ -f "$f" ]] || die "${f#"$REPO_DIR"/} tidak ada"
 done
 if ! is_dry; then
   dom_running "$SERVER_NAME" || die "$SERVER_NAME belum berjalan (server-up.sh)"
@@ -42,7 +62,7 @@ if [[ -n "$booting_min" ]]; then
     || die "PXE_DEPLOY_BOOTING_TIMEOUT_MIN '$booting_min' harus 1-1440"
 fi
 # dashboard.env di repo tidak boleh memuat hash nyata (hanya placeholder; AC-6.53).
-! grep -qE 'scrypt\$[0-9]' "$INFRA_DIR/server/dashboard.env" || die "infra/server/dashboard.env memuat hash scrypt nyata"
+! grep -qE 'scrypt\$[0-9]' "$ENV_SRC" || die "${ENV_SRC#"$REPO_DIR"/} memuat hash scrypt nyata"
 
 # --- password + hash admin (host) ---------------------------------------------------------
 admin_pass="${PXE_ADMIN_PASS_FILE:-$KEYS_DIR/$PXE_RUN-admin.pass}"
@@ -81,8 +101,10 @@ if ! is_dry; then
   tar -C "$stage/app" -cJf "$stage/release.tar.xz" .
   log "rilis $(du -h "$stage/release.tar.xz" | cut -f1) -> $SERVER_IP:$remote_stage"
 fi
-cp "$INFRA_DIR/server/dashboard.env" "$INFRA_DIR/server/pxe-dashboard.service" \
-  "$INFRA_DIR/server/nginx-pxe.conf" "$stage/"
+# Nama file stage tetap (install-dashboard.sh): dashboard.env + nginx-pxe.conf untuk kedua topologi.
+cp "$ENV_SRC" "$stage/dashboard.env"
+cp "$NGINX_SRC" "$stage/nginx-pxe.conf"
+cp "$INFRA_DIR/server/pxe-dashboard.service" "$stage/"
 # DEC-015: allowlist admin nginx untuk UI + /api/** (IPv4 atau CIDR IPv4; default host lab).
 admin_allow="${PXE_ADMIN_ALLOW:-10.99.0.1}"
 [[ "$admin_allow" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}(/([0-9]|[12][0-9]|3[0-2]))?$ ]] \
@@ -142,4 +164,11 @@ rm -f "$jar"
 [[ "$noauth" == 401 ]] || die "GET /api/settings tanpa sesi harus 401 (aktual $noauth, lihat $out)"
 grep -q "\"cidr\":\"$EXPECT_CIDR\"" <<<"$body" || die "api/settings cidr bukan $EXPECT_CIDR (lihat $out)"
 grep -q '"adminConfigured":true' <<<"$body" || die "api/settings: adminConfigured bukan true (lihat $out)"
+if [[ "$topology" == vlan ]]; then
+  # M7: VLAN management terdaftar (PXE_VLAN_NETWORKS) terbaca dashboard.
+  python3 -I -c 'import json,sys
+d = json.loads(sys.argv[1])
+ok = any(v.get("vlan") == 20 and v.get("cidr") == "10.99.20.0/24" and v.get("gateway") == "10.99.20.1" for v in d.get("vlanNetworks") or [])
+sys.exit(0 if ok else 1)' "$body" 2>/dev/null || die "api/settings: vlanNetworks tanpa VLAN 20 10.99.20.0/24 gw 10.99.20.1 (lihat $out)"
+fi
 log "dashboard aktif di http://$SERVER_IP (bukti $out)"

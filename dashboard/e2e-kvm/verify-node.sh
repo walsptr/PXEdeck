@@ -14,6 +14,12 @@
 # (/var/log/installer) sengaja tidak diasersi (dicatat di infra/README.md).
 # Opsional (test infra): VERIFY_SCAN_ROOT=<dir> (prefix path, default "") dan
 # VERIFY_ONLY=token-scan (hanya bagian bebas token, tanpa env EXPECT_*).
+# M7 (docs/design/M7-plan.md §2.6, AC-7.18): EXPECT_VLAN=<id> opsional (dijalankan lewat relay
+# infra/vlan/relay.sh di VM server). Bila ada: parent = interface ber-MAC EXPECT_MAC yang BUKAN
+# perangkat VLAN; anak = perangkat `vlan protocol 802.1Q id EXPECT_VLAN` dengan link parent itu
+# (dibaca dari `ip -d -o link`, bukan dari nama — mgmt.20/ens3.20/vlan20 semua sah); anak memuat
+# EXPECT_IP/EXPECT_PREFIX; parent tanpa IPv4; tidak ada IPv4 di interface lain. Tanpa EXPECT_VLAN
+# perilaku M6 identik.
 set -uo pipefail
 fails=0
 ok() { printf 'OK   %s\n' "$*"; }
@@ -64,6 +70,7 @@ echo "# uname: $(uname -r)"
 h="$(hostname)"
 [[ "$h" == "$EXPECT_HOSTNAME" ]]; check "hostname = $EXPECT_HOSTNAME (aktual: $h)" $?
 
+if [[ -z "${EXPECT_VLAN:-}" ]]; then
 # --- NIC ber-MAC EXPECT_MAC punya EXPECT_IP/EXPECT_PREFIX ---
 iface=""
 for d in /sys/class/net/*; do
@@ -75,6 +82,28 @@ echo "# ip -4 addr ($iface): ${addrs//$'\n'/ }"
 grep -qx "$EXPECT_IP/$EXPECT_PREFIX" <<<"$addrs"; check "ip -4 addr $iface memuat $EXPECT_IP/$EXPECT_PREFIX" $?
 others="$(ip -4 -o addr show | awk '$2 != "lo" {print $2" "$4}' | grep -v "^${iface:-x} " || true)"
 [[ -z "$others" ]]; check "tidak ada IPv4 di NIC lain (${others:-—})" $?
+
+else
+# --- M7: anak VLAN EXPECT_VLAN di parent ber-MAC EXPECT_MAC punya EXPECT_IP/EXPECT_PREFIX ---
+[[ "$EXPECT_VLAN" =~ ^[0-9]{1,4}$ ]] || { echo "FAIL env EXPECT_VLAN tidak valid"; exit 99; }
+# Baris `ip -d -o link`: "<idx>: <nama>[@<link>]: <...> ... link/ether <mac> ... [vlan protocol 802.1Q id <n>]"
+links="$(ip -d -o link show 2>/dev/null)"
+parent="$(awk -v mac="${EXPECT_MAC,,}" '{ n = $2; sub(/:$/, "", n); split(n, a, "@")
+  m = ""; for (i = 1; i < NF; i++) if ($i == "link/ether") m = tolower($(i + 1))
+  if (m == mac && $0 !~ / vlan protocol /) print a[1] }' <<<"$links" | head -n 1)"
+[[ -n "$parent" ]]; check "parent NIC dengan MAC $EXPECT_MAC (bukan VLAN) ditemukan (${parent:-tidak ada})" $?
+child="$(awk -v p="${parent:-x}" -v id="$EXPECT_VLAN" '{ n = $2; sub(/:$/, "", n); split(n, a, "@")
+  if (a[2] == p && match($0, / vlan protocol 802\.1Q id [0-9]+/)) { v = substr($0, RSTART, RLENGTH); sub(/.* id /, "", v); if (v == id) print a[1] } }' <<<"$links" | head -n 1)"
+[[ -n "$child" ]]; check "anak VLAN 802.1Q id $EXPECT_VLAN di $parent ditemukan (${child:-tidak ada})" $?
+iface="${child:-}"
+addrs="$(ip -4 -o addr show dev "${child:-lo}" 2>/dev/null | awk '{print $4}')"
+echo "# ip -4 addr ($child): ${addrs//$'\n'/ }"
+[[ -n "$child" ]] && grep -qx "$EXPECT_IP/$EXPECT_PREFIX" <<<"$addrs"; check "ip -4 addr $child memuat $EXPECT_IP/$EXPECT_PREFIX" $?
+paddrs="$(ip -4 -o addr show dev "${parent:-lo}" 2>/dev/null | awk '{print $4}')"
+[[ -n "$parent" && -z "$paddrs" ]]; check "parent $parent tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: ${paddrs:-—})" $?
+others="$(ip -4 -o addr show | awk '$2 != "lo" {print $2" "$4}' | grep -v "^${child:-x} " || true)"
+[[ -z "$others" ]]; check "tidak ada IPv4 di interface lain selain $child (${others:-—})" $?
+fi
 
 # --- default route & DNS ---
 gw="$(ip -4 route show default | awk '{print $3; exit}')"

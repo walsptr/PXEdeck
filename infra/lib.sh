@@ -47,6 +47,31 @@ SERVER_BASE="$VMS_DIR/pxe-test-server-base.qcow2"
 SERVER_DISK="$VMS_DIR/pxe-test-server.qcow2"
 SERVER_SEED="$VMS_DIR/pxe-test-server-seed.iso"
 CLOUD_IMG="$MEDIA_DIR/ubuntu-24.04-server-cloudimg-amd64.img"
+# --- Topologi VLAN (M7, DEC-023/DEC-024, docs/design/M7-plan.md §2.1–2.2) ---------------------
+# Tiga network tambahan TANPA <ip>/<forward>/<dhcp> (host tidak punya kehadiran L3 di VLAN 10/20;
+# host TIDAK PERNAH menyasar 10.99.10.*/10.99.20.* — tidak ada route, paket akan keluar lewat
+# default route fisik). Akses ke VLAN hanya lewat relay di VM server (infra/vlan/relay.sh).
+NET_TRUNK="pxe-test-trunk"
+NET_PORT1="pxe-test-port1"
+NET_PORT2="pxe-test-port2"
+NETS_FLAT=("$NET_PXE" "$NET_NAT")
+NETS_VLAN=("$NET_PXE" "$NET_NAT" "$NET_TRUNK" "$NET_PORT1" "$NET_PORT2")
+# Network yang boleh dipakai NIC VM node (node.sh --net).
+NODE_NETS=("$NET_PXE" "$NET_PORT1" "$NET_PORT2")
+SERVER_MAC_TRUNK="52:54:00:99:01:04"
+SERVER_PXE_VLAN_IP="10.99.10.2"
+SERVER_MGMT_VLAN_IP="10.99.20.1"
+SWITCH_NAME="pxe-test-switch"
+SWITCH_IP="10.99.0.3"
+SWITCH_MAC_MGMT="52:54:00:99:02:01"
+SWITCH_MAC_UP="52:54:00:99:02:02"
+SWITCH_MAC_P1="52:54:00:99:02:03"
+SWITCH_MAC_P2="52:54:00:99:02:04"
+SWITCH_BASE="$VMS_DIR/pxe-test-switch-base.qcow2"
+SWITCH_READY="$VMS_DIR/pxe-test-switch-base.ready"
+SWITCH_DISK="$VMS_DIR/pxe-test-switch.qcow2"
+SWITCH_SEED="$VMS_DIR/pxe-test-switch-seed.iso"
+SWITCH_SERIAL_PORT=45902
 OVMF_CODE="/usr/share/edk2/ovmf/OVMF_CODE.fd"
 OVMF_VARS="/usr/share/edk2/ovmf/OVMF_VARS.fd"
 
@@ -131,6 +156,9 @@ ssh_server() { run ssh "${SSH_OPTS[@]}" "$SERVER_USER@$SERVER_IP" "$@"; }
 # ssh_root <args...>: operasi admin DI DALAM VM pxe-test-server (bukan host) via login root
 # key-only ke VM uji itu sendiri — tanpa sudo di mana pun.
 ssh_root() { run ssh "${SSH_OPTS[@]}" "root@$SERVER_IP" "$@"; }
+# ssh_switch_root <args...>: operasi admin DI DALAM VM pxe-test-switch (10.99.0.3, segmen admin)
+# via login root key-only ke VM uji itu sendiri (M7).
+ssh_switch_root() { run ssh "${SSH_OPTS[@]}" "root@$SWITCH_IP" "$@"; }
 scp_server() { # scp_server <src...> <remote-dest>
   local dest="${*: -1}" srcs=("${@:1:$#-1}")
   run scp "${SSH_OPTS[@]}" "${srcs[@]}" "$SERVER_USER@$SERVER_IP:$dest"
@@ -231,4 +259,36 @@ admin_login() {
       --data-binary @- "http://$SERVER_IP/api/auth/login" 2>/dev/null)" || true
   printf '%s\n' "${code:-000}"
   [[ "$code" == 204 ]] && grep -qE $'(^|\t)pxe_session\t[^\t]+$' "$jar"
+}
+
+# --- topologi (M7) -------------------------------------------------------------------------------
+# parse_topology <nilai>: flat (default, perilaku M6 utuh) | vlan. Selain itu die.
+parse_topology() {
+  case "${1:-}" in
+    flat|vlan) echo "$1" ;;
+    *) die "topologi '${1:-}' harus flat|vlan" ;;
+  esac
+}
+
+# strip_xml_comments <file>: isi XML tanpa komentar <!-- ... --> (juga multi-baris).
+strip_xml_comments() {
+  awk 'BEGIN { c = 0 }
+    { line = $0; out = ""
+      while (length(line) > 0) {
+        if (c) { i = index(line, "-->"); if (i == 0) { line = ""; break } line = substr(line, i + 3); c = 0 }
+        else { i = index(line, "<!--"); if (i == 0) { out = out line; line = ""; break }
+               out = out substr(line, 1, i - 1); line = substr(line, i + 4); c = 1 }
+      }
+      print out }' "$1"
+}
+
+# wait_ssh_host <user@ip> <timeout-s>: tunggu ssh (key infra) ke VM uji di 10.99.0.* siap.
+wait_ssh_host() {
+  local dest="$1" t="${2:-300}" i=0
+  [[ "$dest" =~ @10\.99\.0\.[0-9]{1,3}$ ]] || die "wait_ssh_host hanya ke 10.99.0.* ($dest)"
+  is_dry && return 0
+  until ssh "${SSH_OPTS[@]}" "$dest" true 2>/dev/null; do
+    i=$((i + 5)); ((i >= t)) && return 1
+    sleep 5
+  done
 }

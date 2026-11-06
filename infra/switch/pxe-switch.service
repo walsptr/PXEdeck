@@ -1,0 +1,14 @@
+# /etc/systemd/system/pxe-switch.service — VM pxe-test-switch (M7): bridge br0 vlan_filtering=1
+# (infra/switch/pxe-switch.sh apply) setelah systemd-networkd me-rename NIC sw-*.
+[Unit]
+Description=pxe-test switch: Linux bridge br0 vlan_filtering (M7)
+Wants=systemd-networkd.service
+After=systemd-networkd.service systemd-udev-settle.service
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/usr/local/sbin/pxe-switch.sh apply
+
+[Install]
+WantedBy=multi-user.target

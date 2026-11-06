@@ -662,6 +662,8 @@ source "$(dirname "$0")/m6-nfs.sh"
 source "$(dirname "$0")/m6-debian-modules.sh"
 # M6 (BUG-M6-10): verifikasi semua node saat Playwright lulus (set -e).
 source "$(dirname "$0")/m6-bug10.sh"
+# M7 (M7-T3/T4/T5): topologi VLAN — network, switch, profil server, relay, kvm-run skenario vlan*.
+source "$(dirname "$0")/m7-infra.sh"
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"
