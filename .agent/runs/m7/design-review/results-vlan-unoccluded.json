@@ -1,0 +1,635 @@
+{
+ "vlan20-valid@375": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 8
+   },
+   "[data-testid=net-ip-hint]": {
+    "violations": [],
+    "filtered": 6
+   }
+  },
+  "summary": null
+ },
+ "vlan20-outside@375": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 7
+   },
+   "[data-slot=field-error]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       ".group\\/field.data-\\[invalid\\=true\\]\\:text-destructive.\\*\\:w-full:nth-child(4) > .leading-normal.group-has-data-horizontal\\/field\\:text-balance.\\[\\[data-variant\\=legend\\]\\+\\&\\]\\:-mt-1\\.5"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 2
+   }
+  },
+  "summary": []
+ },
+ "vlan30-auto@375": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 8
+   },
+   "[data-testid=net-ip-hint]": {
+    "violations": [],
+    "filtered": 6
+   }
+  },
+  "summary": null
+ },
+ "vlan99-unregistered@375": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 8
+   },
+   "[data-testid=net-ip-hint]": {
+    "violations": [],
+    "filtered": 7
+   },
+   "[data-testid=vlan-unregistered]": {
+    "violations": [],
+    "filtered": 8
+   }
+  },
+  "summary": null
+ },
+ "vlan99-outside@375": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 7
+   },
+   "[data-slot=field-error]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       ".group\\/field.data-\\[invalid\\=true\\]\\:text-destructive.\\*\\:w-full:nth-child(4) > .leading-normal.group-has-data-horizontal\\/field\\:text-balance.\\[\\[data-variant\\=legend\\]\\+\\&\\]\\:-mt-1\\.5"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 2
+   },
+   "[data-testid=vlan-unregistered]": {
+    "violations": [],
+    "filtered": 7
+   }
+  },
+  "summary": []
+ },
+ "vlan20-valid@768": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 11
+   },
+   "[data-testid=net-ip-hint]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(1)",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 6
+   }
+  },
+  "summary": null
+ },
+ "vlan20-outside@768": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 8
+   },
+   "[data-slot=field-error]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(1)",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 3
+   }
+  },
+  "summary": []
+ },
+ "vlan30-auto@768": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 11
+   },
+   "[data-testid=net-ip-hint]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(1)",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 6
+   }
+  },
+  "summary": null
+ },
+ "vlan99-unregistered@768": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 12
+   },
+   "[data-testid=net-ip-hint]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 8
+   },
+   "[data-testid=vlan-unregistered]": {
+    "violations": [],
+    "filtered": 12
+   }
+  },
+  "summary": null
+ },
+ "vlan99-outside@768": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 7
+   },
+   "[data-slot=field-error]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 4
+   },
+   "[data-testid=vlan-unregistered]": {
+    "violations": [],
+    "filtered": 7
+   }
+  },
+  "summary": []
+ },
+ "vlan20-valid@1440": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 11
+   },
+   "[data-testid=net-ip-hint]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(1)",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 6
+   }
+  },
+  "summary": null
+ },
+ "vlan20-outside@1440": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 8
+   },
+   "[data-slot=field-error]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(1)",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 3
+   }
+  },
+  "summary": []
+ },
+ "vlan30-auto@1440": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 11
+   },
+   "[data-testid=net-ip-hint]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(1)",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 6
+   }
+  },
+  "summary": null
+ },
+ "vlan99-unregistered@1440": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 12
+   },
+   "[data-testid=net-ip-hint]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 8
+   },
+   "[data-testid=vlan-unregistered]": {
+    "violations": [],
+    "filtered": 12
+   }
+  },
+  "summary": null
+ },
+ "vlan99-outside@1440": {
+  "regions": {
+   "[data-testid=vlan-registered]": {
+    "violations": [],
+    "filtered": 7
+   },
+   "[data-slot=field-error]": {
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "p[data-testid=\"vlan-registered\"]",
+       ".text-xs.type-data[data-slot=\"vlan-hint\"]:nth-child(2)"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 4
+   },
+   "[data-testid=vlan-unregistered]": {
+    "violations": [],
+    "filtered": 7
+   }
+  },
+  "summary": []
+ },
+ "pwdialog-scrolled@375": {
+  "violations": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "targets": [
+     ".gap-2.type-caption.text-muted-foreground > span:nth-child(2)",
+     ".gap-2.type-caption.text-muted-foreground > span:nth-child(2) > .text-xs.type-data:nth-child(1)",
+     "th[aria-sort=\"none\"]:nth-child(2) > .rounded-md.uppercase.-ml-1",
+     "th[aria-sort=\"none\"]:nth-child(3) > .rounded-md.uppercase.-ml-1"
+    ],
+    "detail": [
+     {
+      "category": "kept",
+      "why": "di luar Sheet dan bukan pasangan pengecualian",
+      "fg": "#807d72",
+      "bg": "#333333",
+      "ratio": 3.06,
+      "inSheet": false
+     },
+     {
+      "category": "kept",
+      "why": "di luar Sheet dan bukan pasangan pengecualian",
+      "fg": "#807d72",
+      "bg": "#333333",
+      "ratio": 3.06,
+      "inSheet": false
+     },
+     {
+      "category": "kept",
+      "why": "di luar Sheet dan bukan pasangan pengecualian",
+      "fg": "#807d72",
+      "bg": "#333333",
+      "ratio": 3.06,
+      "inSheet": false
+     },
+     {
+      "category": "kept",
+      "why": "di luar Sheet dan bukan pasangan pengecualian",
+      "fg": "#807d72",
+      "bg": "#333333",
+      "ratio": 3.06,
+      "inSheet": false
+     }
+    ]
+   }
+  ],
+  "filtered": 5
+ },
+ "pwdialog-alert": {
+  "text": "Hanya ditampilkan sekali\nUnduh CSV sekarang. Setelah dialog ditutup, password tidak bisa dilihat lagi — buat ulang jika hilang.",
+  "title": "rgb(38, 37, 30)",
+  "desc": "rgb(128, 125, 114)"
+ }
+}

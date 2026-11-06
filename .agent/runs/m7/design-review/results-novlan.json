@@ -1,0 +1,653 @@
+{
+ "settings-375": {
+  "empty": {
+   "text": "Tidak ada VLAN management terdaftar (PXE_VLAN_NETWORKS)",
+   "color": "rgb(128, 125, 114)",
+   "fs": "14px",
+   "codeFont": "\"JetBrains Mono Va",
+   "codeColor": "rgb(128, 125, 114)",
+   "tables": 0
+  },
+  "probe": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section]{tid=settings-vlan} \"VLAN management IP statis host dengan VLAN terdaftar divalid\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "IP statis host dengan VLAN terdaftar divalidasi terhadap subnet VLAN i",
+    "Tidak ada VLAN management terdaftar ()",
+    "PXE_VLAN_NETWORKS",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "settings-axe-375": {
+  "violations": [],
+  "filtered": 35
+ },
+ "settings-414": {
+  "empty": {
+   "text": "Tidak ada VLAN management terdaftar (PXE_VLAN_NETWORKS)",
+   "color": "rgb(128, 125, 114)",
+   "fs": "14px",
+   "codeFont": "\"JetBrains Mono Va",
+   "codeColor": "rgb(128, 125, 114)",
+   "tables": 0
+  },
+  "probe": {
+   "bodyBg": "#f7f7f4",
+   "vw": 414,
+   "docScrollWidth": 414,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section]{tid=settings-vlan} \"VLAN management IP statis host dengan VLAN terdaftar divalid\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "IP statis host dengan VLAN terdaftar divalidasi terhadap subnet VLAN i",
+    "Tidak ada VLAN management terdaftar ()",
+    "PXE_VLAN_NETWORKS",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "settings-768": {
+  "empty": {
+   "text": "Tidak ada VLAN management terdaftar (PXE_VLAN_NETWORKS)",
+   "color": "rgb(128, 125, 114)",
+   "fs": "14px",
+   "codeFont": "\"JetBrains Mono Va",
+   "codeColor": "rgb(128, 125, 114)",
+   "tables": 0
+  },
+  "probe": {
+   "bodyBg": "#f7f7f4",
+   "vw": 768,
+   "docScrollWidth": 768,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section]{tid=settings-vlan} \"VLAN management IP statis host dengan VLAN terdaftar divalid\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.10.10.1",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "IP statis host dengan VLAN terdaftar divalidasi terhadap subnet VLAN i",
+    "Tidak ada VLAN management terdaftar ()",
+    "PXE_VLAN_NETWORKS",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "settings-1024": {
+  "empty": {
+   "text": "Tidak ada VLAN management terdaftar (PXE_VLAN_NETWORKS)",
+   "color": "rgb(128, 125, 114)",
+   "fs": "14px",
+   "codeFont": "\"JetBrains Mono Va",
+   "codeColor": "rgb(128, 125, 114)",
+   "tables": 0
+  },
+  "probe": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1024,
+   "docScrollWidth": 1024,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section]{tid=settings-vlan} \"VLAN management IP statis host dengan VLAN terdaftar divalid\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.10.10.1",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "IP statis host dengan VLAN terdaftar divalidasi terhadap subnet VLAN i",
+    "Tidak ada VLAN management terdaftar ()",
+    "PXE_VLAN_NETWORKS",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "settings-1280": {
+  "empty": {
+   "text": "Tidak ada VLAN management terdaftar (PXE_VLAN_NETWORKS)",
+   "color": "rgb(128, 125, 114)",
+   "fs": "14px",
+   "codeFont": "\"JetBrains Mono Va",
+   "codeColor": "rgb(128, 125, 114)",
+   "tables": 0
+  },
+  "probe": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1280,
+   "docScrollWidth": 1280,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section]{tid=settings-vlan} \"VLAN management IP statis host dengan VLAN terdaftar divalid\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.10.10.1",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "IP statis host dengan VLAN terdaftar divalidasi terhadap subnet VLAN i",
+    "Tidak ada VLAN management terdaftar ()",
+    "PXE_VLAN_NETWORKS",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "settings-1440": {
+  "empty": {
+   "text": "Tidak ada VLAN management terdaftar (PXE_VLAN_NETWORKS)",
+   "color": "rgb(128, 125, 114)",
+   "fs": "14px",
+   "codeFont": "\"JetBrains Mono Va",
+   "codeColor": "rgb(128, 125, 114)",
+   "tables": 0
+  },
+  "probe": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section]{tid=settings-vlan} \"VLAN management IP statis host dengan VLAN terdaftar divalid\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.10.10.1",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "IP statis host dengan VLAN terdaftar divalidasi terhadap subnet VLAN i",
+    "Tidak ada VLAN management terdaftar ()",
+    "PXE_VLAN_NETWORKS",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "settings-axe-1440": {
+  "violations": [],
+  "filtered": 38
+ },
+ "sheet-375": {
+  "u": {
+   "registered": 0,
+   "unreg": "VLAN 20 tidak terdaftar di PXE_VLAN_NETWORKS; IP, prefix, dan gateway mengikuti subnet PXE 10.10.10.0/24. | rgb(38, 37, 30)"
+  },
+  "probe": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [
+    "div[slot=tabs-list] \"OS Credentials Network (diubah) Hostname SSH Keys\" .group/tabs-list inline-flex w-fit items-center justify-center rounded- right=459",
+    "button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce right=456"
+   ],
+   "shadows": [],
+   "rings": [
+    "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input] \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+   ],
+   "orange": [
+    "border=#f54e00 :: input[slot=input] \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+    "shadow=#f54d00@0.40 :: input[slot=input] \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+    "bg=#f54e00 :: button[slot=button] \"Simpan & Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42",
+    "94:40:c9:6e:01:aa",
+    "IP management statis di NIC yang dipilih; dipakai juga sebagai reserva",
+    "Di dalam , di luar range dinamis .",
+    "10.10.10.0/24",
+    "10.10.10.100–10.10.10.200",
+    "/",
+    "Tambah",
+    "Maksimal 4. Tekan Enter untuk menambah.",
+    "NIC dipilih dari MAC PXE masing-masing host (). NIC lain dibiarkan tan",
+    "match: macaddress"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "sheet-axe-375": {
+  "violations": [],
+  "filtered": 7
+ },
+ "sheet-1440": {
+  "u": {
+   "registered": 0,
+   "unreg": "VLAN 20 tidak terdaftar di PXE_VLAN_NETWORKS; IP, prefix, dan gateway mengikuti subnet PXE 10.10.10.0/24. | rgb(38, 37, 30)"
+  },
+  "probe": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input] \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+   ],
+   "orange": [
+    "border=#f54e00 :: input[slot=input] \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+    "shadow=#f54d00@0.40 :: input[slot=input] \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+    "bg=#f54e00 :: button[slot=button] \"Simpan & Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.10.10.1",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42",
+    "94:40:c9:6e:01:aa",
+    "IP management statis di NIC yang dipilih; dipakai juga sebagai reserva",
+    "Di dalam , di luar range dinamis .",
+    "10.10.10.0/24",
+    "10.10.10.100–10.10.10.200",
+    "/",
+    "Tambah",
+    "Maksimal 4. Tekan Enter untuk menambah.",
+    "NIC dipilih dari MAC PXE masing-masing host (). NIC lain dibiarkan tan",
+    "match: macaddress"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "sheet-axe-1440": {
+  "violations": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "targets": [
+     ".group\\/field-group > .leading-normal.font-normal.group-has-data-horizontal\\/field\\:text-balance > .text-xs.type-data"
+    ],
+    "detail": [
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     }
+    ]
+   }
+  ],
+  "filtered": 7
+ }
+}
