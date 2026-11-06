@@ -1,0 +1,20 @@
+{
+  "run": "m7vlansmoke",
+  "session": "1793968688612-383bcacf",
+  "generatedAt": "2026-11-06T12:51:23.814Z",
+  "results": [
+    {"ac": "smoke-settings", "status": "PASS", "note": "cidr=10.99.10.0/24 vlanNetworks=[{\"vlan\":20,\"cidr\":\"10.99.20.0/24\",\"prefix\":24,\"gateway\":\"10.99.20.1\"}]", "evidence": ["smoke-settings.txt"]},
+    {"ac": "smoke-vlan-debian", "node": "pxe-test-m7vlansmoke-node43", "status": "PASS", "durationS": 794, "note": "Done 551s; verify 0/0; MTU=PASS O10=PASS parentNoIPv4=true", "evidence": ["pxe-test-m7vlansmoke-node43-timeline.txt", "pxe-test-m7vlansmoke-node43-job-events.txt", "pxe-test-m7vlansmoke-node43-nginx-by-ip.txt", "pxe-test-m7vlansmoke-node43-mtu.txt", "pxe-test-m7vlansmoke-node43-dhcp-after.txt", "pxe-test-m7vlansmoke-node43-relay-verify.txt"]},
+    {"ac": "smoke-MTU", "node": "pxe-test-m7vlansmoke-node43", "status": "PASS", "note": "PASS: ping DF 1472 B (frame 1518 B ber-tag) 3/3; 1473 ditolak", "evidence": ["pxe-test-m7vlansmoke-node43-timeline.txt", "pxe-test-m7vlansmoke-node43-job-events.txt", "pxe-test-m7vlansmoke-node43-nginx-by-ip.txt", "pxe-test-m7vlansmoke-node43-mtu.txt", "pxe-test-m7vlansmoke-node43-dhcp-after.txt", "pxe-test-m7vlansmoke-node43-relay-verify.txt"]},
+    {"ac": "smoke-O10", "node": "pxe-test-m7vlansmoke-node43", "status": "PASS", "note": "PASS: anak VLAN ifupdown naik sebelum reboot=true sesudah=true (tanpa paket vlan tambahan)", "evidence": ["pxe-test-m7vlansmoke-node43-timeline.txt", "pxe-test-m7vlansmoke-node43-job-events.txt", "pxe-test-m7vlansmoke-node43-nginx-by-ip.txt", "pxe-test-m7vlansmoke-node43-mtu.txt", "pxe-test-m7vlansmoke-node43-dhcp-after.txt", "pxe-test-m7vlansmoke-node43-relay-verify.txt"]},
+    {"ac": "smoke-scan", "status": "PASS", "note": "0 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m7vlansmoke-node43", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.10.133 (lease 52:54:00:99:00:43)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m7vlansmoke-node43", "status": "PASS", "note": "preseed.cfg 200 x1 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m7vlansmoke-node43", "status": "PASS", "note": "verify-node.sh (EXPECT_VLAN=20) lewat relay exit=0 + cek login password", "evidence": ["pxe-test-m7vlansmoke-node43-verify.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "topology": "vlan", "switchStopped": true, "relayClean": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "smoke": "vlansmoke",
+  "vlan": 20,
+  "nodes": [{"name": "pxe-test-m7vlansmoke-node43", "fw": "uefi", "os": "debian", "ip": "10.99.20.53", "hostname": "m7-node43"}],
+  "harness": {"milestone": "m7", "scenario": "vlansmoke", "runId": "m7vlansmoke", "nodes": "43:uefi:os=debian", "maxNodes": 2, "memAvailableMb": 13180, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "", "exit": 0, "dryRun": false, "startedAt": "2026-11-06T12:36:38Z", "durationSec": 900}
+}
