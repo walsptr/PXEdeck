@@ -1,0 +1,2 @@
+121a122
+>   sleep 0.3  # REPRO: penulis pipe lambat

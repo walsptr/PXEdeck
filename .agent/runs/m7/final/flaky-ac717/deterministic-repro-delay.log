@@ -1,0 +1,19 @@
+    ASSERT: vlansmoke: 2026-11-06T16:20:23Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di <scratchpad>/flk/repro/.agent/tmp/infra-test/sandbox.lNsDlG/runs/smoke bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T16:20:23Z redact             ok 
+2026-11-06T16:20:23Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T16:20:23Z result             FAIL exit=141 stage=deploy expected '0' got '141'
+  FAIL test_m7_host_never_targets_vlan_subnets #1
+    ASSERT: vlansmoke: 2026-11-06T16:20:24Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di <scratchpad>/flk/repro/.agent/tmp/infra-test/sandbox.bBlByr/runs/smoke bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T16:20:25Z redact             ok 
+2026-11-06T16:20:25Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T16:20:25Z result             FAIL exit=141 stage=deploy expected '0' got '141'
+  FAIL test_m7_host_never_targets_vlan_subnets #2
+    ASSERT: vlansmoke: 2026-11-06T16:20:26Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di <scratchpad>/flk/repro/.agent/tmp/infra-test/sandbox.qnQbKg/runs/smoke bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T16:20:26Z redact             ok 
+2026-11-06T16:20:26Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T16:20:26Z result             FAIL exit=141 stage=deploy expected '0' got '141'
+  FAIL test_m7_host_never_targets_vlan_subnets #3
+hasil: 0 lulus, 3 gagal

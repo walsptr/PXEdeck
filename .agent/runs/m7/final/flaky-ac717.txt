@@ -1,0 +1,95 @@
+# Flake "M7 host tidak pernah menyasar 10.99.10.*/10.99.20.* (AC-7.17)" — diagnosis test-engineer
+# gate final M7 iter1, 2026-11-06, HEAD 339f234 (worktree .agent/wt-m7, branch milestone/7-vlan)
+
+## Kesimpulan
+Akar masalah ada di KODE INFRA (produk), bukan di test, bukan di urutan test, reuse sandbox, file bukti,
+timestamp, atau globbing file untracked. Test TIDAK diubah (sesuai instruksi: penyebab produk/infra
+-> laporkan, jangan perbaiki).
+
+Lokasi: infra/deploy-dashboard.sh:121-125 (sejak 4f958af, M6-T7; ada di m6-approved):
+
+    {
+      printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+      printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+      [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+    } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
+
+Di dry-run (INFRA_DRY_RUN=1) `ssh_server` -> `run` hanya mencetak baris `DRY-RUN: ssh ...` dan keluar
+TANPA membaca stdin. Bila sisi kanan pipe sudah keluar sebelum blok `{ printf ...; }` menulis, printf
+mendapat SIGPIPE (exit 141). Dengan `set -euo pipefail` pipeline bernilai 141 -> deploy-dashboard.sh
+mati -> kvm-run.sh gagal di tahap `deploy` dengan `result FAIL exit=141 stage=deploy`. Ini race
+penjadwalan murni (siapa duluan: penulis atau pembaca pipe), jadi jarang dan tidak bisa direproduksi
+sesuka hati tanpa mengubah timing. Di run KVM nyata `ssh` membaca stdin sehingga jalur non-dry tidak
+terkena (kecuali ssh gagal sebelum membaca — lalu toh sudah gagal).
+
+Mengapa justru test AC-7.17 yang terlihat flaky: test ini menjalankan kvm-run.sh dry-run EMPAT kali
+(vlansmoke, vlanneg, vlancore, vlandistro), masing-masing melewati deploy-dashboard.sh, dan
+`assert_eq "$RC" 0` langsung gagal pada exit 141. Test lain yang menjalankan kvm-run/deploy dry-run
+(run.sh: test_kvm_run_dry_run_end_to_end, test_deploy_dry_run_no_secrets, m6.sh, m7-infra.sh
+skenario VLAN, m7-te.sh, dst. — ~50 pemanggilan run_infra kvm-run/deploy) sama rentannya; peluang per
+test sebanding dengan jumlah pemanggilan deploy dry-run di dalamnya.
+
+Hanya satu tempat di infra yang mem-pipe ke konsumen dry-run:
+  $ grep -nE '\|\s*(ssh_server|ssh_root|ssh_switch_root|run |relay_exec|scp_server)' infra/*.sh infra/vlan/*.sh infra/server/*.sh
+  infra/deploy-dashboard.sh:125:} | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
+  (fetch-node.sh:12 `||` bukan pipe)
+
+## Hipotesis yang diperiksa dan disingkirkan
+- File bukti/untracked ikut ter-scan: glob statis hanya `infra/*.sh` + `dashboard/e2e-kvm/*.ts`; tidak ada
+  file untracked/ignored di sana (`git status --ignored` hanya infra/tftp/*.efi|*.kpxe, bukan *.sh).
+- Isi pernah melanggar di commit perantara: scan statis yang sama dijalankan terhadap SETIAP commit
+  main..HEAD yang menyentuh infra/ atau dashboard/e2e-kvm/ (10 commit) -> semua `clean`.
+- RAM host (/proc/meminfo asli, mis. saat VM KVM berjalan): di dry-run tanpa PXE_KVM_MEMINFO kekurangan
+  RAM hanya di-log (kvm-run.sh:459-463), tidak ada --waves di test ini -> tidak memengaruhi rencana.
+- Sandbox/urutan: tiap `t` memakai mktemp sandbox baru; test lulus terisolasi berulang.
+- Timestamp/run id: run id dari skenario (bukan waktu); PXE_RUNS_DIR dihapus+dibuat ulang tiap skenario.
+- (Bahaya laten terpisah, BUKAN penyebab yang direproduksi:) dua `infra/test/run.sh` paralel di worktree
+  yang sama berbagi `$SANDBOX_PARENT/safe-bin` (harness `_build_safe_bin` rm -rf + bangun ulang, akhir
+  run.sh `rm -rf "$SAFE_BIN"`) -> test apa pun di run lain bisa gagal "command not found". Semua run di
+  bawah dijalankan BERURUTAN untuk menghindarinya.
+
+## Reproduksi
+1. Alami (kode HEAD, tanpa perubahan): fungsi test dijalankan terisolasi 40x
+   (`flaky-ac717/driver.sh test_m7_host_never_targets_vlan_subnets 40`) -> 39 lulus, 1 gagal (#10):
+     ASSERT: vlanneg: ... admin-pass ok password admin tidak ada di bukti
+     ... result FAIL exit=141 stage=deploy expected '0' got '141'
+   Log: flaky-ac717/natural-repro-isolated-40x.log
+2. Deterministik (salinan scratch infra/, BUKAN repo): satu baris `sleep 0.3` disisipkan di awal blok
+   `{ ... }` deploy-dashboard.sh (flaky-ac717/deterministic-repro.patch) agar penulis pipe selalu kalah
+   cepat -> 3/3 gagal dengan tanda tangan identik `FAIL exit=141 stage=deploy`.
+   Log: flaky-ac717/deterministic-repro-delay.log
+3. Mekanisme minimal: `set -o pipefail; { sleep 0.1; printf 'x\n'; } | printf 'DRY-RUN\n'; echo $?` -> 141 (3/3).
+
+## Saran perbaikan (untuk backend-dev; perlu ditugaskan Orchestrator)
+Di deploy-dashboard.sh, jalur dry-run tidak boleh mem-pipe ke perintah yang tidak membaca stdin, mis.
+  if is_dry; then ssh_server "umask 077 && cat > '$remote_stage/admin.env'" </dev/null
+  else { printf ...; } | ssh_server "..."; fi
+atau `run()` di dry-run menguras stdin (`cat >/dev/null`) bila stdin bukan TTY/kosong. Test regresi yang
+diusulkan: jalankan deploy-dashboard.sh dry-run dengan penulis lambat (mis. PATH printf/env palsu atau
+hook delay) dan tuntut exit 0. Test AC-7.17 sendiri sudah benar dan tidak perlu dilonggarkan.
+
+## Hasil 10x infra/test/run.sh pada HEAD (berurutan, tanpa run paralel)
+Log: infra-test-run{1..10}.log (berurutan, 2026-11-06T16:22Z–16:38Z, HEAD 339f234, tanpa perubahan kode/test).
+
+  run  hasil               test gagal
+  1    113 lulus, 0 gagal  -
+  2    113 lulus, 0 gagal  -
+  3    113 lulus, 0 gagal  -
+  4    112 lulus, 1 gagal  "M6 BUG-M6-10 verify node1 gagal -> node2 tetap diverifikasi, FAIL"
+                           -> `result FAIL exit=141 stage=deploy expected '1' got '141'`
+  5    113 lulus, 0 gagal  -
+  6    113 lulus, 0 gagal  -
+  7    113 lulus, 0 gagal  -
+  8    112 lulus, 1 gagal  "M6 verifikasi parsial setelah Playwright gagal (node done saja)"
+                           -> `expected '3' got '141'` (kvm-run.sh m6 --scenario core dry-run keluar 141;
+                              asersi ini tidak mencetak OUT, tahap disimpulkan dari kode 141 = SIGPIPE
+                              dan satu-satunya pipe ke konsumen dry-run)
+  9    113 lulus, 0 gagal  -
+  10   113 lulus, 0 gagal  -
+
+Ringkasan: 8/10 run hijau penuh; 2/10 run masing-masing 1 gagal, keduanya exit 141 dari kvm-run dry-run.
+Test AC-7.17 sendiri lulus di 10/10 run penuh (dan 39/40 terisolasi). Kegagalan ini berpindah ke test lain
+yang juga memanggil kvm-run/deploy dry-run, sesuai diagnosis. Jadi ini bukan flake test AC-7.17,
+melainkan race SIGPIPE di infra/deploy-dashboard.sh (dry-run) yang muncul ~1x per 5 run suite.
+Status gate: infra/test/run.sh BELUM deterministik hijau. Perlu perbaikan infra (backend-dev), lalu
+ulangi 10x. Test tidak diubah.
