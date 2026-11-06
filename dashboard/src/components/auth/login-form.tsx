@@ -31,10 +31,6 @@ export function lockoutText(retryAfterSec: number): string {
   return `Terlalu banyak percobaan. Coba lagi dalam ${n} menit.`
 }
 
-/**
- * Pesan error login dari respons server. 401 → teks seragam (tanpa membedakan username ada/tidak);
- * 429 → lockout dengan N menit; lainnya → pesan server bila ada.
- */
 const noopSubscribe = () => () => {}
 
 /**
@@ -60,6 +56,10 @@ export function loginNativeAction(next: string | null): string {
   return next === null ? LOGIN_NATIVE_ACTION : `${LOGIN_NATIVE_ACTION}?next=${encodeURIComponent(next)}`
 }
 
+/**
+ * Pesan error login dari respons server. 401 → teks seragam (tanpa membedakan username ada/tidak);
+ * 429 → lockout dengan N menit; lainnya → pesan server bila ada.
+ */
 export async function loginErrorText(res: Response): Promise<string> {
   if (res.status === 401) return LOGIN_FAILED_TEXT
   if (res.status === 429) return lockoutText(parseRetryAfter(res.headers.get("retry-after")))
