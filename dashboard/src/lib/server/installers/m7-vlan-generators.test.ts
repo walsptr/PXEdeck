@@ -75,6 +75,7 @@ const KF = {
   parentByMac: `[connection]\nid=Wired connection 1\nuuid=22222222-2222-4222-8222-222222222222\ntype=ethernet\n\n[ethernet]\nmac-address=${MAC.toUpperCase()}\n\n[ipv4]\nmethod=auto\n`,
   vlan: (parent: string) =>
     `[connection]\nid=enp1s0.20\nuuid=33333333-3333-4333-8333-333333333333\ntype=vlan\ninterface-name=enp1s0.20\n\n[vlan]\nflags=1\nid=20\nparent=${parent}\n\n[ipv4]\naddress1=10.99.20.41/24,10.99.20.1\ndns=10.99.10.2;\nmethod=manual\n\n[ipv6]\nmethod=auto\n`,
+  vlanMac: `[connection]\nid=vlan-mac\nuuid=77777777-7777-4777-8777-777777777777\ntype=vlan\n\n[ethernet]\nmac-address=${MAC}\n\n[vlan]\nid=30\nparent=enp1s0\n\n[ipv4]\nmethod=disabled\n`,
   other: `[connection]\nid=enp2s0\nuuid=44444444-4444-4444-8444-444444444444\ntype=ethernet\ninterface-name=enp2s0\n\n[ipv4]\nmethod=auto\n`,
   otherMac: `[connection]\nid=other-mac\nuuid=55555555-5555-4555-8555-555555555555\ntype=ethernet\n\n[ethernet]\nmac-address=${OTHER_MAC}\n\n[ipv4]\nmethod=auto\n`,
 }
@@ -171,6 +172,8 @@ describe("AC-7.9 Rocky %post native tanpa IPv4 (fixture NetworkManager, sh)", ()
         "enp1s0.20.nmconnection": KF.vlan("enp1s0"),
         "enp2s0.nmconnection": KF.other,
         "other-mac.nmconnection": KF.otherMac,
+        // Profil VLAN yang ikut membawa mac-address parent tetap tidak disentuh (type=vlan).
+        "vlan-mac.nmconnection": KF.vlanMac,
       },
       {
         "ifcfg-enp1s0": `DEVICE=enp1s0\nBOOTPROTO=dhcp\nONBOOT=yes\n`,
@@ -181,8 +184,9 @@ describe("AC-7.9 Rocky %post native tanpa IPv4 (fixture NetworkManager, sh)", ()
     )
     runLines(rockyNativeNoIpv4Lines(ctx(), fx.paths))
     expect(readdirSync(fx.paths.nmDir).sort()).toEqual(
-      ["enp1s0.20.nmconnection", "enp2s0.nmconnection", "other-mac.nmconnection", `${ROCKY_NATIVE_PROFILE}.nmconnection`].sort(),
+      ["enp1s0.20.nmconnection", "enp2s0.nmconnection", "other-mac.nmconnection", "vlan-mac.nmconnection", `${ROCKY_NATIVE_PROFILE}.nmconnection`].sort(),
     )
+    expect(fx.nm("vlan-mac.nmconnection")).toBe(KF.vlanMac)
     expect(fx.nm("enp1s0.20.nmconnection")).toBe(KF.vlan("enp1s0"))
     expect(fx.nm("enp2s0.nmconnection")).toBe(KF.other)
     expect(fx.nm("other-mac.nmconnection")).toBe(KF.otherMac)
