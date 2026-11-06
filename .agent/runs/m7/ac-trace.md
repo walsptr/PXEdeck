@@ -1,0 +1,57 @@
+# M7 — AC → test (trace)
+
+Diperbarui test-engineer M7-T7/T9, 2026-11-06. Status: **PASS** = test ada dan lulus pada run ini
+(`unit.log`: 83 file / 2087 test lulus; `infra-test.log`: 107/107 lulus); **pending** = menunggu task
+lain (T8 E2E, T11 KVM, T12 teardown). Singkatan file:
+
+- `net-vlan` = `dashboard/src/lib/m7-net-vlan.test.ts` (dev T1)
+- `api-vlan` = `dashboard/src/app/api/m7-vlan-api.test.ts` (dev T1)
+- `gen-vlan` = `dashboard/src/lib/server/installers/m7-vlan-generators.test.ts` (dev T2)
+- `deb-noroute` = `dashboard/src/lib/server/m7-debian-no-route.test.ts` (dev T2b, DEC-025 §1)
+- `fs-vlan` = `dashboard/src/components/host-config/form-state-vlan.test.ts` (dev T6)
+- `ui-vlan` = `dashboard/src/components/host-config/m7-vlan-ui.test.tsx` (dev T6)
+- `hooks-vlan` = `dashboard/src/hooks/m7-settings-hooks.test.ts` (dev T6)
+- **`te-cb`** = `dashboard/src/app/boot/m7-te-vlan-callback.test.ts` (baru, T7)
+- **`te-env`** = `dashboard/src/lib/server/m7-te-vlan-env.test.ts` (baru, T7)
+- **`te-gen`** = `dashboard/src/lib/server/installers/m7-te-generators.test.ts` (baru, T7)
+- `infra` = `infra/test/m7-infra.sh` (dev T3–T5), **`infra-te`** = `infra/test/m7-te.sh` (baru, T9);
+  keduanya dijalankan `infra/test/run.sh`
+
+| AC | Jenis | Test (file : nama) | Status |
+|---|---|---|---|
+| AC-7.1 | unit | net-vlan : "AC-7.1 vlanNetworksFromEnv (murni)" — satu entri; CIDR dinormalisasi; kosong → []; 16 diterima / 17 ditolak; `it.each` VLAN 0/4095/teks/negatif/desimal, VLAN ganda, /7, /31, gateway network/broadcast/luar CIDR, tumpang tindih PXE_MGMT_CIDR, dua entri tumpang tindih, pemisah koma/kosong/field kurang → "Error berawalan PXE_VLAN_NETWORKS"; api-vlan : "AC-7.1 settings PXE_VLAN_NETWORKS" — settingsFromEnv, fail fast, "SETTINGS_ENV_KEYS memuat PXE_VLAN_NETWORKS: ganti env → getSettings() berubah", contoh .env.example | PASS |
+| AC-7.2 | integration | api-vlan : "AC-7.2 GET /api/settings & /api/network" — "dengan env: kedua respons memuat vlanNetworks identik; no-store" (bentuk penuh `toEqual`), "tanpa env: tanpa kunci vlanNetworks (bentuk M6 persis)" (DEC-025 §3: key tidak ada), "env tidak valid → 500", "tanpa sesi → 401 (regresi AC-6.7)"; api-vlan : "toSettingsResponse: vlanNetworks hanya bila ada entri; field lain identik tanpa/dengan VLAN"; hooks-vlan : `vlanNetworks ?? []` | PASS |
+| AC-7.3 | unit | net-vlan : "AC-7.3 validasi IP statis VLAN terdaftar (VLAN 20)" (valid, luar subnet, .0/.255, = gateway, prefix, gateway VLAN, bentrok, .150 valid tanpa aturan range, planIps .41/.43/.44 skipUsed) + "AC-7.3 regresi DEC-006: vlan null / VLAN 99 tidak terdaftar = subnet management apa adanya"; `net.test.ts` & `net-carryover.test.ts` lama tidak berubah (`git diff main...HEAD` kosong) dan lulus | PASS |
+| AC-7.4 | integration | api-vlan : "AC-7.4 PATCH /api/hosts/:id + POST /api/hosts/bulk dengan VLAN terdaftar" — 200 + tersimpan; `it.each` luar subnet / prefix / gateway / = gateway / VLAN 99 + 10.99.20.50 / VLAN null → "422 section network, DB tidak berubah"; bentrok mgmt_ip & lease; bulk 3 host; "dua request paralel dengan IP VLAN sama → tepat satu sukses" | PASS |
+| AC-7.5 | integration | **te-cb** : "AC-7.5 regresi binding IP (F6) dengan host ber-VLAN 20" — "GET user-data dari IP statis VLAN (bukan lease/current_ip) → 404 seragam; dari IP lease → 200"; "status configuring/done + log dari 10.99.20.41 → 200; done menyetel current_ip = 10.99.20.41"; "status/log dari %s (%s) → 404 seragam, tanpa efek" (10.99.20.99, 10.99.0.1, 10.99.20.1); "MAC salah (token host lain) dari IP VLAN pemilik → 404 seragam; IP VLAN host lain tidak berlaku silang"; "setelah done: token dicabut → callback ulang dari IP VLAN 404" | PASS |
+| AC-7.6 | unit (+integration) | **te-env** : "AC-7.6 infra/server/dashboard-vlan.env di-parse settingsFromEnv (production)" — placeholder hash ditolak; "dengan hash admin uji → tanpa error …; isLocalMedia true"; "install Debian diizinkan: preseed VLAN 20 …"; "varian PXE_MEDIA_URL=http://10.99.0.2/media + PXE_SERVER_IP=10.99.10.2 → debianExternalMediaError (fail-closed)"; "PXE_SERVER_IP=10.99.20.1 … → settings ditolak (DEC-006)"; "startOrExit … → `[pxe] start ditolak:` + exit 1"; "selain blok jaringan VLAN, dashboard-vlan.env identik dashboard.env (M6)". **te-cb** : "AC-7.6 (integration) …" — install Debian 200 dengan media lokal 10.99.10.2; varian 10.99.0.2 → 422 + pesan debianExternalMediaError, tanpa job | PASS |
+| AC-7.7 | unit, golden | gen-vlan : "AC-7.7 Ubuntu netplan VLAN" (ethernets.mgmt tanpa alamat + vlans.mgmt.20; golden `ubuntu-user-data-vlan.yaml` bebas token); **te-gen** : "AC-7.7 Ubuntu netplan VLAN (iface by name, id lain, tanpa VLAN)" — iface by name, VLAN 300, tanpa VLAN → bentuk M6 tanpa `vlans`; golden M6 `ubuntu-user-data*.yaml` tidak berubah (installers.test.ts) | PASS |
+| AC-7.8 | unit | gen-vlan : "AC-7.8 Debian ifupdown VLAN" (stanza, substitusi `$IF` sungguhan, late_command < batas, golden `debian-late-vlan.sh`); **te-gen** : "AC-7.8 Debian VLAN: tanpa paket tambahan (O10), perbedaan hanya di stanza" — `pkgsel/include` identik & tanpa `vlan`, preseed hanya beda di late_command, VLAN 300; deb-noroute : DEC-025 §1 (`netcfg/no_default_route`) | PASS |
+| AC-7.9 | unit | gen-vlan : "AC-7.9 Rocky kickstart VLAN" + "AC-7.9 Rocky %post native tanpa IPv4 (fixture NetworkManager, sh)"; **te-gen** : "AC-7.9 Rocky VLAN pelengkap" (tepat satu baris network + flag lengkap, iface by name, tanpa VLAN → tanpa --vlanid) | PASS |
+| AC-7.10 | e2e | sisi komponen: ui-vlan "TabNetwork VLAN-aware (AC-7.10 sisi komponen)", fs-vlan "validasi klien & pratinjau …"; E2E Playwright | **pending (T8)** |
+| AC-7.11 | e2e | sisi komponen: ui-vlan "TabNetwork bulk VLAN (AC-7.11 sisi komponen)", fs-vlan "bulk range .41–.44 …"; E2E | **pending (T8)** |
+| AC-7.12 | e2e | sisi komponen: ui-vlan "Settings blok VLAN management (AC-7.12 sisi komponen)"; E2E + axe + lebar layar | **pending (T8)** |
+| AC-7.13 | e2e regresi | suite M1–M6 + hitung asersi | **pending (T8)** |
+| AC-7.14 | static-shell | infra : "M7 XML network trunk/port1/port2 tanpa ip/forward/dhcp", "M7 net-up/net-down --topology vlan, idempoten, flat tetap", "M7 net-up menolak XML berisi ip/forward/dhcp/nama salah"; **infra-te** : "M7te assert_name menolak nama terlindungi/tanpa prefix", "M7te net-up/net-down vlan (palsu): lima network hilang, default/int utuh" | PASS |
+| AC-7.15 | unit-shell | infra : "M7 switch-up dry-run: overlay/seed, 4 NIC, RAM<=1024, tanpa NAT", "M7 pxe-switch.sh apply/apply-port: perintah tabel §2.2", "M7 pxe-switch.sh verify PASS/FAIL" | PASS |
+| AC-7.16 | static-shell + unit-shell | infra : "M7 profil server VLAN statis …", "M7 verify-listen-vlan.sh: PASS / FAIL + stop dnsmasq" (%pxe0, 0.0.0.0:67, 10.99.20.1:53, nfsd 10.99.0.2, nginx mgmt20), "M7 server-up --topology vlan dry-run", "M7 deploy-dashboard --topology vlan"; **infra-te** : "M7te nginx VLAN: ACL hanya / + SSE, /boot & /media terbuka; rpcbind 10.99.10.2", "M7te verify-listen-vlan: kasus FAIL tambahan + stop dnsmasq" (nfsd 0.0.0.0, tftp/dns 10.99.0.2, dnsmasq %nat0/%mgmt20, dnsmasq inactive) | PASS |
+| AC-7.17 | unit-shell + static | infra : "M7 relay.sh: mode/NODE_IP ditolak, key 0600 tidak dicetak", "M7 host tidak pernah menyasar 10.99.10.*/10.99.20.*" (statis + dry-run 4 skenario), "M7 kvm-run gagal tiap tahap VLAN: cleanup, relay teardown, switch"; **infra-te** : "M7te relay key via stdin 0600, urutan setup→key→status→teardown", "M7te statis: script server/switch & Playwright tidak menyasar VLAN" | PASS |
+| AC-7.18 | unit-shell | infra : "M7 verify-node.sh EXPECT_VLAN OK/FAIL" (OK, IP di parent, parent IPv4 tambahan, id 30, parent lain); **infra-te** : "M7te verify-node tanpa EXPECT_VLAN = jalur M6", "M7te verify-node EXPECT_VLAN invalid → 99; nama anak bebas; prefix/IP lain FAIL"; regresi infra M6 (`m6.sh`, `m6-bug10.sh`) lulus | PASS |
+| AC-7.19 | unit-shell | infra : "M7 kvm-run skenario VLAN: run id, node, IP, network, neg", "M7 kvm-run max_nodes kurangi RAM server+switch" (10240→1, 12288→2, 16384→3), "M7 cleanup.sh --switch, run id switch* ditolak, node.sh --net", "M7 kvm-run gagal tiap tahap VLAN …"; **infra-te** : "M7te kvm-run gagal di SETIAP tahap → entri cleanup (vlancore+vlanneg)" (preflight … verify), "M7te cleanup.sh --switch dry-run: rencana destroy/undefine + disk", "M7te skenario flat core/distro/bulk tanpa artefak VLAN"; regresi `m6.sh` lulus | PASS |
+| AC-7.20 | kvm | `vlancore` (switch-check, server-listen-vlan, perimeter) | **pending (T11)** |
+| AC-7.21 | kvm (gate) | `vlancore` node31 UEFI Ubuntu | **pending (T11)** — smoke T10 node41 (DEC-025) bukan pengganti |
+| AC-7.22 | kvm (gate) | `vlancore` node32 BIOS Ubuntu | **pending (T11)** |
+| AC-7.23 | kvm | `vlancore` validasi VLAN server nyata | **pending (T11)**; logika sama diuji api-vlan AC-7.4 |
+| AC-7.24 | kvm | `vlandistro` node33 Debian | **pending (T11)** |
+| AC-7.25 | kvm | `vlandistro` node34 Rocky | **pending (T11)** |
+| AC-7.26 | kvm | `vlanneg` N1 | **pending (T11)** |
+| AC-7.27 | kvm | `vlanneg` N2 | **pending (T11)** |
+| AC-7.28 | kvm | `vlanneg` N3 | **pending (T11)** |
+| AC-7.29 | kvm | `vlancore` isolasi lapis 3 | **pending (T11)** |
+| AC-7.30 | kvm | results.json + cleanup + scan semua run M7 | **pending (T11)**; struktur entri `cleanup` diuji infra/infra-te AC-7.19 |
+| AC-7.31 | static | **infra-te** : "M7te README §Topologi VLAN + .env.example", "M7te diff M7 tanpa hash/private key nyata"; api-vlan : "contoh (dikomentari) di .env.example valid …" | PASS |
+| AC-7.32 | infra | teardown setelah APR | **pending (T12)** |
+
+Ringkasan (32 AC): 16 AC unit/integration/shell/static (AC-7.1–7.9, 7.14–7.19, 7.31) punya test lulus;
+4 E2E (7.10–7.13) menunggu T8 (sisi komponen sudah diuji); 11 KVM (7.20–7.30) menunggu T11; AC-7.32
+menunggu T12.

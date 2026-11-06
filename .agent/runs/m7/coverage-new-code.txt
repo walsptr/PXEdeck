@@ -1,0 +1,17 @@
+# Coverage kode baru M7 (git diff -U0 main...HEAD -- dashboard/src, tanpa test/golden), 2026-11-06T12:00:51Z, HEAD=17d383d + test T7/T9 belum di-commit
+# Sumber: vitest run --coverage --coverage.reporter=json (CLI, config DEC-004 tidak diubah); statement/branch yang baris awalnya ditambahkan M7
+dashboard/src/app/api/network/route.ts: +5 baris  stmt 2/2  branch 0/0  uncovered-lines []
+dashboard/src/components/host-config/config-sheet.tsx: +2 baris  tidak di-instrumentasi (di luar include coverage DEC-004)
+dashboard/src/components/host-config/form-state.ts: +84 baris  stmt 31/31  branch 23/23  uncovered-lines []
+dashboard/src/components/host-config/tab-network.tsx: +108 baris  tidak di-instrumentasi (di luar include coverage DEC-004)
+dashboard/src/components/settings/settings-view.tsx: +66 baris  tidak di-instrumentasi (di luar include coverage DEC-004)
+dashboard/src/hooks/use-settings.ts: +19 baris  stmt 2/2  branch 2/2  uncovered-lines []
+dashboard/src/lib/net.ts: +155 baris  stmt 76/76  branch 70/70  uncovered-lines []
+dashboard/src/lib/server/boot-script.ts: +6 baris  stmt 0/0  branch 0/0  uncovered-lines []
+dashboard/src/lib/server/config-service.ts: +7 baris  stmt 1/1  branch 0/0  uncovered-lines []
+dashboard/src/lib/server/installers/debian.ts: +14 baris  stmt 1/1  branch 0/0  uncovered-lines []
+dashboard/src/lib/server/installers/rocky.ts: +95 baris  stmt 9/9  branch 11/11  uncovered-lines []
+dashboard/src/lib/server/installers/ubuntu.ts: +11 baris  stmt 0/0  branch 0/0  uncovered-lines []
+dashboard/src/lib/server/net-config.ts: +20 baris  stmt 3/3  branch 0/0  uncovered-lines []
+dashboard/src/lib/server/settings.ts: +20 baris  stmt 3/3  branch 0/0  uncovered-lines []
+TOTAL kode baru M7 (dashboard/src, non-test, ter-instrumentasi): statements 128/128 = 100.00%  branches 106/106 = 100.00%
