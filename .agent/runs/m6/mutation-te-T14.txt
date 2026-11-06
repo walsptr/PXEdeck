@@ -5,3 +5,8 @@ di posisi baris biasa).
 Hasil: src/lib/server/m6-kvm-installer-logs.test.ts → 3 failed | 13 passed (anaconda.log LF/CRLF/7 baris:
 baris yang seharusnya biasa ikut tersamar → checkStored melapor baris biasa tidak identik).
 Pulih: berkas dikembalikan dari salinan, `sha256sum -c` OK; test kembali 16/16 lulus.
+
+# Mutasi iter2 — e2e-kvm/apt-trust.ts (DEC-021 §2 fail-closed), 2026-11-06
+1. `^trusted_rc=1$` → `^trusted_rc=\d+$` (trusted=yes dianggap bersih): m6-kvm-apt-trust.test.ts 1 failed | 6 passed.
+2. `^allow_file=TIDAK$` → `^allow_file=\w+$` (00AllowUnauthenticated dianggap bersih): 1 failed | 6 passed.
+Pulih: salinan dikembalikan, `sha256sum -c` OK; 7/7 lulus.

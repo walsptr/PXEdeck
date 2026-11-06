@@ -290,3 +290,27 @@ test yang dihapus/di-skip; jumlah test di file tetap 28.
 
 Mutasi generator (in-place, dipulihkan, sha256 identik): `.agent/runs/m6/mutation-te-iter2.txt` — 4/4 merah
 (hapus `virtio_scsi`, tukar urutan modul, `udevadm settle` dipindah sebelum unduhan, `insmod` dihapus).
+
+## DEC-022 §1 (gate M6 R3 / DR-6-3) — warna alasan "tidak tersedia" `muted` → `body` (frontend-dev, c67d438; dicatat test-engineer, iter2)
+
+Perubahan ekspektasi oleh frontend-dev di commit `c67d438`, diperiksa ulang test-engineer (diff `2b90cf5..9f07836`).
+Jumlah asersi tidak berubah: `m5-library.spec.ts` `expect(` 185 → 185 (token `expect(`+`toHave*(` 220 → 220);
+`m5-ui-fixes.spec.ts` 44 → 44 (55 → 55). Tidak ada test yang dihapus/di-skip; asersi "bukan merah"
+(`not.toBe(HEX.failed)`) tetap ada di kedua test.
+
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `e2e/m5-library.spec.ts` › "AC-5.27/5.32 OS Images: … tidak tersedia …" | `img-available` ubuntu-22.04 `toHaveCSS("color", HEX.muted)`; judul/komentar "muted" | `toHaveCSS("color", HEX.body)`; judul/komentar "body (DEC-022 §1)"; `not.toBe(HEX.failed)` tetap | DEC-022 §1: informasi penting tidak `muted` (DEC-017 §9); DR-4-5 tetap berarti "bukan error" (tidak merah) |
+| `e2e/m5-ui-fixes.spec.ts` › "AC-5.31 DR-4-5 'tidak tersedia' …" | catatan `os-ubuntu-22.04-note` `toHaveCSS("color", HEX.muted)` (#807d72) | `toHaveCSS("color", HEX.body)` (#5a5852); judul diperbarui; `not.toBe(HEX.failed)` tetap | sama |
+
+Catatan: nama berkas screenshot `ac-5.31-os-unavailable-muted` tidak diganti (hanya nama bukti).
+
+## DEC-021 §2 / DEC-022 §2 — pemeriksaan `/etc/apt` target di suite KVM `m6-distro` dibuat fail-closed (test-engineer, iter2)
+
+| File | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `e2e-kvm/m6-distro.spec.ts` | `n=$(sudo -n grep -rl 'trusted=yes' /etc/apt 2>/dev/null \| wc -l)` → `trusted_files=0`; `if sudo -n test -e …00AllowUnauthenticated; … else allow_unauth=tidak-ada` (hanya Debian) | `e2e-kvm/apt-trust.ts`: penanda eksplisit `trusted_rc=1` (grep tanpa kecocokan), `allow_file=TIDAK`, `allow_grep_rc=1` untuk `grep -ril AllowUnauthenticated /etc/apt` (baru); Debian wajib `/etc/apt` ada; Rocky: tidak relevan bila `/etc/apt` tidak ada, wajib bersih bila ada | versi lama hampa bila `sudo`/grep gagal (0 berkas / "tidak-ada"); gate-iter1 meminta bukti `/etc/apt` tanpa `trusted=yes`/`AllowUnauthenticated` |
+
+Test unit baru `src/lib/server/m6-kvm-apt-trust.test.ts` (7 test) menjalankan script yang sama terhadap root palsu:
+bersih → lulus; `trusted=yes`, `00AllowUnauthenticated`, `allowunauthenticated` (huruf kecil) di berkas lain,
+`sudo` gagal, `/etc/apt` tidak ada (Debian), keluaran kosong → semuanya gagal. Mutasi: `.agent/runs/m6/mutation-te-T14.txt`.

@@ -6,14 +6,16 @@
 // event installer berurutan (Debian: preseed mulai → modul disk virtio → disk target → late_command →
 // konfigurasi target selesai → first-boot; Rocky: kickstart mulai → disk target → post mulai → konfigurasi
 // target selesai → first-boot); verify-node.sh (termasuk target bebas token) + login password ditolak +
-// fakta (locale, sudo) + DEC-021 §2 (Debian: tanpa `trusted=yes` di /etc/apt, tanpa
-// 00AllowUnauthenticated) + `\EFI\BOOT\BOOTX64.EFI` (fallback UEFI) → reboot dari disk (cmdline tanpa
+// fakta (locale, sudo) + DEC-021 §2 / DEC-022 §2 (apt-trust.ts, fail-closed: Debian /etc/apt wajib ada dan
+// tanpa `trusted=yes`, tanpa 00AllowUnauthenticated, `grep -ri AllowUnauthenticated /etc/apt` kosong;
+// Rocky: tidak relevan bila /etc/apt tidak ada, wajib bersih bila ada) + `\EFI\BOOT\BOOTX64.EFI` (fallback UEFI) → reboot dari disk (cmdline tanpa
 // parameter installer, status tetap Done, jumlah job tetap). Log installer nyata → installer-logs/.
 import { appendFileSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
 import { expect, test, type BrowserContext, type Locator, type Page } from "@playwright/test"
 
+import { aptTrustScript, evalAptTrust } from "./apt-trust"
 import {
   adminCredentials,
   KVM,
@@ -217,13 +219,14 @@ if (DISTRO) {
           'echo "# hostname: $(hostname)"',
           "echo '# locale'; localectl status 2>&1 | head -n 3",
           "echo '# sudo'; sudo -n true && echo sudo-ok",
-          "echo '# apt trusted=yes (DEC-021 §2)'; n=$(sudo -n grep -rl 'trusted=yes' /etc/apt 2>/dev/null | wc -l); echo \"trusted_files=$n\"",
-          "echo '# 00AllowUnauthenticated'; if sudo -n test -e /etc/apt/apt.conf.d/00AllowUnauthenticated; then echo allow_unauth=ADA; else echo allow_unauth=tidak-ada; fi",
           "echo '# UEFI fallback'; if sudo -n test -f /boot/efi/EFI/BOOT/BOOTX64.EFI; then echo bootx64=ADA; else echo bootx64=TIDAK; fi",
           "echo '# cmdline'; cat /proc/cmdline",
           "echo '# lsblk'; lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT",
         ].join("\n") + "\n",
       )
+      // DEC-021 §2 / DEC-022 §2: /etc/apt target tanpa trusted=yes / AllowUnauthenticated (fail-closed, apt-trust.ts).
+      const apt = ssh(n.ip, "bash -s", aptTrustScript())
+      const aptEval = evalAptTrust(apt.out, n.os === "debian")
       // Log installer nyata (bahan fixture AC-6.17; disamarkan redact-evidence.sh oleh kvm-run.sh).
       const dir = path.join(KVM.runsDir, "installer-logs")
       mkdirSync(dir, { recursive: true })
@@ -252,8 +255,7 @@ if (DISTRO) {
       if (!f.includes(`# hostname: ${n.hostname}`)) problems.push("hostname")
       if (!f.includes("sudo-ok")) problems.push("sudo")
       if (!/en_US\.UTF-8/.test(f)) problems.push("locale")
-      if (n.os === "debian" && !f.includes("trusted_files=0")) problems.push("trusted=yes tersisa di /etc/apt (DEC-021 §2)")
-      if (n.os === "debian" && !f.includes("allow_unauth=tidak-ada")) problems.push("00AllowUnauthenticated tersisa (DEC-021 §2)")
+      for (const p of aptEval.problems) problems.push(`DEC-021 §2: ${p}`)
       if (!f.includes("bootx64=ADA")) problems.push("\\EFI\\BOOT\\BOOTX64.EFI tidak ada")
       if (!back || !after.out.startsWith(n.hostname) || INSTALLER_CMDLINE.test(after.out) || v2.code !== 0) problems.push(`reboot: kembali=${back} v2=${v2.code}`)
       if (host.status !== "done" || jobsAfter !== jobsBefore) problems.push(`sesudah reboot status=${host.status} job ${jobsBefore}->${jobsAfter}`)
@@ -266,6 +268,8 @@ if (DISTRO) {
           "# verify-node.sh sebelum reboot", v1.out, `# exit=${v1.code}`,
           "# login password", pw.out.trim(), `# ditolak=${pw.ok}`,
           "# fakta node", f,
+          `# /etc/apt (DEC-021 §2, ${n.os === "debian" ? "wajib ada & bersih" : "tidak relevan bila tidak ada"}; ssh exit=${apt.code})`, apt.out.trim(),
+          `# /etc/apt masalah: ${aptEval.problems.join("; ") || "tidak ada"}`,
           `# reboot: kembali=${back}`, after.out, "# verify-node.sh sesudah reboot", v2.out, `# exit=${v2.code}`,
           `# host sesudah reboot: status=${host.status} hostname=${host.hostname} mgmtIp=${host.mgmtIp}; job ${jobsBefore}->${jobsAfter}`,
           `# masalah: ${problems.join("; ") || "tidak ada"}`,
