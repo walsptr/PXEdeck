@@ -1,0 +1,65 @@
+## 2026-11-06T00:30:05.211Z job1(/dev/vdz) installing (ssh exit=0)
+# exportfs -v
+/srv/pxe/media/ubuntu-24.04
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash)
+/srv/pxe/media/rocky-9
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash)
+# koneksi NFS (ss -tn sport = :2049)
+0      0      10.99.0.2:2049 10.99.0.136:739
+# nginx GET install.img (harus 0)
+0
+# nginx GET Minimal/Packages
+0
+# nginx GET AppStream
+0
+
+## 2026-11-06T00:30:36.002Z job2 installing (ssh exit=0)
+# exportfs -v
+/srv/pxe/media/ubuntu-24.04
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash)
+/srv/pxe/media/rocky-9
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash)
+# koneksi NFS (ss -tn sport = :2049)
+0      0      10.99.0.2:2049 10.99.0.136:739
+0      0      10.99.0.2:2049 10.99.0.136:944
+# nginx GET install.img (harus 0)
+0
+# nginx GET Minimal/Packages
+0
+# nginx GET AppStream
+0
+
+## 2026-11-06T00:37:47.362Z job2 configuring (ssh exit=0)
+# exportfs -v
+/srv/pxe/media/ubuntu-24.04
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash)
+/srv/pxe/media/rocky-9
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash)
+# koneksi NFS (ss -tn sport = :2049)
+0      0      10.99.0.2:2049 10.99.0.136:739
+0      0      10.99.0.2:2049 10.99.0.136:944
+0      0      10.99.0.2:2049  10.99.0.56:944
+# nginx GET install.img (harus 0)
+0
+# nginx GET Minimal/Packages
+342
+# nginx GET AppStream
+0
+
+## 2026-11-06T00:41:29.430Z akhir (ssh exit=0)
+# exportfs -v
+/srv/pxe/media/ubuntu-24.04
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash)
+/srv/pxe/media/rocky-9
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash)
+# koneksi NFS (ss -tn sport = :2049)
+0      0      10.99.0.2:2049 10.99.0.136:739
+0      0      10.99.0.2:2049 10.99.0.136:944
+0      0      10.99.0.2:2049  10.99.0.56:944
+# nginx GET install.img (harus 0)
+0
+# nginx GET Minimal/Packages
+342
+# nginx GET AppStream
+0
+

@@ -169,3 +169,33 @@ Dicatat test-engineer; tidak diperbaiki test-engineer (kode produk/infra milik d
   Smoke ulang Rocky failpath sesudahnya.
 - Catatan suite: `m6-smoke.spec.ts` membatasi job gagal 15 mnt (`FAIL_TIMEOUT_MS`) sesuai AC-6.45; job
   yang belum final pada batas itu tidak diinstal ulang (instal ulang ditolak selama job aktif).
+
+## BUG-M6-8 — Debian: `partman/early_command` selalu melapor "disk target tidak ditemukan", juga untuk disk eksplisit `/dev/vda`
+
+- Ditemukan: smoke ulang attempt 7/8/9, 2026-11-06T00:17Z–00:44Z, commit `f2f848d`, node UEFI 2048 MB.
+- Komponen: `dashboard/src/lib/server/installers/debian.ts` (`partman/early_command` pemilih disk), dan/atau
+  ketersediaan disk virtio di lingkungan d-i netboot.
+- Severity (usulan): **critical untuk AC-6.48** — Debian tidak bisa diinstal sama sekali (otomatis maupun
+  eksplisit); job gagal cepat `failed/installer-error` (±70 dtk) dengan event
+  `ERROR installer gagal: disk target tidak ditemukan`.
+- Reproduksi:
+  1. Disk otomatis: `infra/kvm-run.sh m6 --nodes "41:uefi:os=debian 42:uefi:os=rocky"` (attempt7) →
+     node41 gagal 70 dtk.
+  2. Failpath + install ulang otomatis: `--nodes "45:uefi:failpath:os=debian …"` (attempt8) → job1
+     `/dev/vdz` gagal 70 dtk (benar), job2 disk otomatis gagal 70 dtk dengan pesan yang sama (salah).
+  3. Disk eksplisit: `PXE_KVM_SMOKE_DISK=/dev/vda infra/kvm-run.sh m6 --nodes "41:uefi:os=debian"`
+     (attempt9) → `d='/dev/vda'` tetap masuk cabang ERROR, artinya `[ -b /dev/vda ]` gagal saat
+     `partman/early_command`.
+- Bukti: `attempt7-debian-rocky-auto/pxe-test-m6-node41-{timeline,job1-events,console}.txt` (log d-i
+  di console: `preseed: running preseed command partman/early_command: d=''; …` lalu tidak ada
+  `disk target dipilih`); `attempt9-debian-explicit-vda/pxe-test-m6-node41-*` (`d='/dev/vda'`);
+  `attempt8-failpath-debian-rocky/pxe-test-m6-node45-*`. Pada node, Rocky dan Ubuntu di VM yang sama
+  (definisi `node.sh` sama) melihat `vda` 20G.
+- Dugaan (belum terverifikasi): d-i tidak melihat disk virtio sama sekali saat partman (konsisten dengan
+  attempt5: partman-auto tanpa disk → "No root file system" alih-alih memilih satu-satunya disk), mis.
+  modul `virtio_blk`/node `/dev/vda` tidak tersedia; atau ada kesalahan logika/kutipan di perintah
+  yang berjalan di `log-output … sh -c`.
+- Saran: buat cabang ERROR mencetak data diagnosis ke `/log` (mis. `ls /sys/block`, `list-devices disk`,
+  `grep -c virtio /proc/modules`, `ls -l /dev/vd* /dev/sd*`) supaya smoke berikutnya menunjukkan akar
+  masalahnya; tambahkan unit test yang menjalankan perintah early_command di sandbox busybox/sh dengan
+  `/sys/block` palsu. Debian d-i syslog untuk fixture AC-6.17 masih belum bisa diambil.

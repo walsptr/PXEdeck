@@ -2,7 +2,7 @@
   "task": "M6-T15 smoke KVM dini",
   "commit": "30c88c9",
   "worktree": ".agent/wt-m6-smoke (detached)",
-  "generatedAt": "2026-11-06T00:10:00Z",
+  "generatedAt": "2026-11-06T00:50:00Z",
   "memAvailableMbAtStart": 15317,
   "maxNodes": 3,
   "attempts": [
@@ -123,6 +123,84 @@
           "note": "BUG-M6-7: /dev/vdz -> setelah %pre tidak ada request lagi; %onerror tidak mengirim stage=failed/tail log; job masih installing pada 15 mnt (watchdog)"
         }
       ]
+    },
+    {
+      "dir": "attempt7-debian-rocky-auto",
+      "commit": "f2f848d",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 42:uefi:os=rocky'",
+      "maxNodes": 2,
+      "memAvailableMb": 12489,
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "disk": "otomatis",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 87,
+          "note": "BUG-M6-8: ERROR disk target tidak ditemukan dalam 70 dtk (failed/installer-error)"
+        },
+        {
+          "node": "pxe-test-m6-node42",
+          "os": "rocky-9",
+          "disk": "otomatis",
+          "ramMb": 2048,
+          "status": "PASS",
+          "durationS": 682,
+          "note": "regresi disk otomatis: event 'disk target dipilih', NFS stage2 (GET install.img 0, Minimal/Packages 342), Done 662 dtk, verify-node fails=0, lsblk vda1 ESP vfat /boot/efi + xfs /boot + swap + xfs /"
+        }
+      ]
+    },
+    {
+      "dir": "attempt8-failpath-debian-rocky",
+      "commit": "f2f848d",
+      "cmd": "infra/kvm-run.sh m6 --nodes '45:uefi:failpath:os=debian 46:uefi:failpath:os=rocky'",
+      "maxNodes": 2,
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node45",
+          "os": "debian-12",
+          "role": "failpath",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 158,
+          "note": "job1 /dev/vdz -> failed/installer-error 70 dtk dengan event ERROR (benar, cepat); job2 disk otomatis -> gagal sama (BUG-M6-8)"
+        },
+        {
+          "node": "pxe-test-m6-node46",
+          "os": "rocky-9",
+          "role": "failpath",
+          "ramMb": 2048,
+          "status": "PASS",
+          "durationS": 732,
+          "note": "job1 /dev/vdz -> %pre: ERROR disk target tidak ditemukan + tail /tmp/anaconda.log + stage=failed -> failed/installer-error dalam 41 dtk; pesan anaconda/traceback preScriptPass di serial; job2 otomatis -> Done, verify-node fails=0; ks.cfg 200 x2"
+        }
+      ]
+    },
+    {
+      "dir": "attempt9-debian-explicit-vda",
+      "commit": "f2f848d",
+      "cmd": "PXE_KVM_SMOKE_DISK=/dev/vda infra/kvm-run.sh m6 --nodes '41:uefi:os=debian'",
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "disk": "/dev/vda",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 87,
+          "note": "diagnostik BUG-M6-8: disk eksplisit /dev/vda juga 'tidak ditemukan' -> [ -b /dev/vda ] gagal di d-i"
+        }
+      ]
     }
   ],
   "cr-4-6": {
@@ -132,7 +210,8 @@
     "rocky inst.ks= ':' path": "PASS (node 4 GB)",
     "rocky %pre /proc/cmdline": "PASS (node 4 GB)",
     "rocky %post": "NOT_RUN (BUG-M6-5)",
-    "rocky %post (node 2 GB, NFS stage2)": "PASS"
+    "rocky %post (node 2 GB, NFS stage2)": "PASS",
+    "rocky %pre --erroronfail + stage=failed": "PASS (attempt8)"
   },
   "o11": {
     "debian kernel netboot == DVD": "PASS (sha256 d8808aa4... sama)",
@@ -141,6 +220,6 @@
   },
   "sr-5-5c": "PASS (attempt2 node43: Failed installer-error + event error-commands)",
   "libvirtAfter": "hanya ubuntu24.04 (shut off); network default/int/pxe-test/pxe-test-nat aktif (pxe-test* dipertahankan sampai T16)",
-  "installerLogs": "installer-logs/: Ubuntu (subiquity-server-debug, curtin-install, event error-commands) + Rocky (anaconda.log, program.log dari attempt5); Debian d-i syslog BELUM (BUG-M6-6)",
+  "installerLogs": "installer-logs/: Ubuntu (subiquity-server-debug, curtin-install, event error-commands), Rocky (anaconda.log, program.log, event %pre ERROR + tail anaconda.log), Debian (event ERROR disk). Debian d-i syslog BELUM (BUG-M6-8)",
   "dec-020": "PASS: node Rocky 2 GB, stage2 NFS (attempt5)"
 }

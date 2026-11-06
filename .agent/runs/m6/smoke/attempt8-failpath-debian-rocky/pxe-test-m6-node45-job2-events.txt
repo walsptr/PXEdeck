@@ -1,0 +1,7 @@
+1 2026-11-06T00:30:44.699Z info stage/install Job install dibuat (OS debian-12); menunggu PXE boot
+2 2026-11-06T00:30:56.243Z info system/boot-script Script installer dilayani (ke-1/3, platform efi, IP 10.99.0.135)
+3 2026-11-06T00:31:13.991Z info system/config-fetch File preseed.cfg diambil dari IP 10.99.0.135
+4 2026-11-06T00:31:13.991Z info stage/config-fetch Installing: konfigurasi preseed.cfg diambil installer
+5 2026-11-06T00:31:14.536Z info installer/installer installer: preseed mulai
+6 2026-11-06T00:31:51.192Z error installer/installer ERROR installer gagal: disk target tidak ditemukan
+7 2026-11-06T00:31:51.206Z error stage/callback Failed: installer melaporkan gagal (callback dari IP 10.99.0.135)

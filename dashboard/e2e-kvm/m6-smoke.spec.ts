@@ -45,6 +45,9 @@ const OS_IMAGE: Record<KvmNode["os"], string> = { ubuntu: "ubuntu-24.04", debian
 const INSTALL_TIMEOUT_MS = 30 * 60_000
 const FAIL_TIMEOUT_MS = 15 * 60_000
 const hostId = (mac: string) => mac.replaceAll(":", "")
+/** Disk target untuk install (non-failpath). Default "" = otomatis; diagnostik: PXE_KVM_SMOKE_DISK=/dev/vda. */
+const INSTALL_DISK = process.env.PXE_KVM_SMOKE_DISK ?? ""
+if (!/^$|^\/dev\/[a-z0-9]+$/.test(INSTALL_DISK)) throw new Error(`PXE_KVM_SMOKE_DISK ${INSTALL_DISK}`)
 
 /** Log installer di target (dibaca `sudo -n cat`) per OS → installer-logs/<node>-<nama>. */
 const INSTALLER_LOGS: Record<KvmNode["os"], string[]> = {
@@ -228,10 +231,10 @@ async function runInstallNode(node: KvmNode): Promise<Outcome> {
     if (f.job.status !== "failed") {
       return { node: node.name, ok: false, note: problems.join("; "), durationS: Math.round((Date.now() - t0) / 1000), evidence }
     }
-    // Install ulang dengan disk otomatis.
-    await configure(node, "")
+    // Install ulang dengan disk otomatis (atau PXE_KVM_SMOKE_DISK).
+    await configure(node, INSTALL_DISK)
   } else {
-    await configure(node, "")
+    await configure(node, INSTALL_DISK)
   }
 
   const j = await install(node)
@@ -245,13 +248,15 @@ async function runInstallNode(node: KvmNode): Promise<Outcome> {
   // Event installer per tahap (CR-4-6: callback dari /proc/cmdline di d-i/chroot, %pre/%post).
   const inst = evs.filter((e) => e.kind === "installer").map((e) => e.message.split("\n")[0].slice(0, 100))
   note(node, `event installer (${inst.length}): ${inst.join(" | ")}`)
+  // M6-T15 (BUG-M6-6/7): disk otomatis Debian/Rocky dipilih saat runtime → event installer.
+  if (node.os !== "ubuntu" && INSTALL_DISK === "" && r.job.status === "done" && !inst.some((m) => /disk target dipilih/.test(m))) problems.push("event 'disk target dipilih' tidak ada")
   if (r.job.status === "done") {
     const up = await waitSsh(node, 10 * 60_000)
     note(node, `ssh key yang di-inject: ${up ? "OK" : "TIDAK tersambung dalam 10 mnt"}`)
     if (!up) problems.push("SSH key gagal")
     else {
       evidence.push(...fetchInstallerLogs(node))
-      const f = ssh(node.ip, "echo \"# hostname: $(hostname)\"; echo '# locale'; localectl status 2>&1; cat /etc/default/locale /etc/locale.conf 2>/dev/null; echo '# timezone'; timedatectl show -p Timezone 2>&1; echo '# id'; id; echo '# sudo -n true'; sudo -n true && echo sudo-ok; echo '# os-release'; head -n 3 /etc/os-release")
+      const f = ssh(node.ip, "echo \"# hostname: $(hostname)\"; echo '# locale'; localectl status 2>&1; cat /etc/default/locale /etc/locale.conf 2>/dev/null; echo '# timezone'; timedatectl show -p Timezone 2>&1; echo '# id'; id; echo '# sudo -n true'; sudo -n true && echo sudo-ok; echo '# os-release'; head -n 3 /etc/os-release; echo '# lsblk'; lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT 2>&1")
       writeFileSync(path.join(KVM.runsDir, `${node.name}-facts.txt`), f.out)
       evidence.push(`${node.name}-facts.txt`)
       if (!new RegExp(`# hostname: ${node.hostname}\\b`).test(f.out)) problems.push("hostname target tidak sesuai config")

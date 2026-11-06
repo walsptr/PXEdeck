@@ -1,0 +1,666 @@
+00:16:47,929 INF core.configuration.product: Loading information about products from /etc/anaconda/product.d.
+00:16:47,934 INF core.configuration.product: Found AlmaLinux at /etc/anaconda/product.d/almalinux.conf.
+00:16:47,934 INF core.configuration.product: Found CentOS Stream at /etc/anaconda/product.d/centos-stream.conf.
+00:16:47,935 INF core.configuration.product: Found CentOS Linux at /etc/anaconda/product.d/centos.conf.
+00:16:47,935 INF core.configuration.product: Found Circle Linux at /etc/anaconda/product.d/circle.conf.
+00:16:47,935 INF core.configuration.product: Found Fedora-ELN at /etc/anaconda/product.d/fedora-eln.conf.
+00:16:47,936 INF core.configuration.product: Found Fedora-IoT IoT at /etc/anaconda/product.d/fedora-iot.conf.
+00:16:47,936 INF core.configuration.product: Found Fedora Server at /etc/anaconda/product.d/fedora-server.conf.
+00:16:47,937 INF core.configuration.product: Found Fedora Silverblue at /etc/anaconda/product.d/fedora-silverblue.conf.
+00:16:47,937 INF core.configuration.product: Found Fedora Workstation Live at /etc/anaconda/product.d/fedora-workstation-live.conf.
+00:16:47,937 INF core.configuration.product: Found Fedora Workstation at /etc/anaconda/product.d/fedora-workstation.conf.
+00:16:47,938 INF core.configuration.product: Found Fedora at /etc/anaconda/product.d/fedora.conf.
+00:16:47,938 INF core.configuration.product: Found oVirt Node Next at /etc/anaconda/product.d/ovirt.conf.
+00:16:47,938 INF core.configuration.product: Found Red Hat Enterprise Linux at /etc/anaconda/product.d/rhel.conf.
+00:16:47,939 INF core.configuration.product: Found RHVH at /etc/anaconda/product.d/rhvh.conf.
+00:16:47,939 INF core.configuration.product: Found Rocky Linux at /etc/anaconda/product.d/rocky.conf.
+00:16:47,939 INF core.configuration.product: Found Scientific Linux at /etc/anaconda/product.d/scientific-linux.conf.
+00:16:47,940 INF core.configuration.product: Found Virtuozzo Linux at /etc/anaconda/product.d/virtuozzo-linux.conf.
+00:16:47,940 WRN core.configuration.product: No support for the product Rocky Linux Minimal Minimal.
+00:16:47,940 WRN core.configuration.product: No support for the product Rocky Linux Minimal.
+00:16:47,940 INF core.configuration.product: The product Rocky Linux is supported.
+00:16:47,941 WRN misc: /usr/lib64/python3.9/site-packages/pyanaconda/core/configuration/anaconda.py:89: DeprecationWarning: The kickstart_modules configuration option is deprecated and will be removed in in the future.
+  warnings.warn(
+
+00:16:47,943 INF main: /sbin/anaconda 34.25.7.14-1.el9.rocky.0.6
+00:16:47,966 INF core.util: Reporting the IPMI event: 7
+00:16:48,007 WRN misc: /usr/lib64/python3.9/site-packages/dbus/connection.py:337: DeprecationWarning: invalid escape sequence \ 
+  """Arrange for the given function to be called when a signal matching
+
+00:16:48,012 WRN misc: /usr/lib64/python3.9/site-packages/dbus/proxies.py:307: DeprecationWarning: invalid escape sequence \ 
+  """Arrange for the given function to be called when the given signal
+
+00:16:48,305 INF isys: 2138076 kB (2087 MB) are available
+00:16:48,306 WRN misc: /usr/lib64/python3.9/subprocess.py:941: RuntimeWarning: line buffering (buffering=1) isn't supported in binary mode, the default buffer size will be used
+  self.stdout = io.open(c2pread, 'rb', bufsize)
+
+00:16:48,317 INF startup_utils: check_memory(): total:2087, needed:320, graphical:410
+00:16:48,318 DBG startup_utils: Don't set up proxy variables.
+00:16:48,326 INF main: anaconda called with cmdline = ['/sbin/anaconda']
+00:16:48,327 INF main: Default encoding = utf-8 
+00:16:48,327 INF misc: Writing a temporary configuration loaded from: ['/etc/anaconda/anaconda.conf', '/etc/anaconda/product.d/rhel.conf', '/etc/anaconda/product.d/rocky.conf', '/etc/anaconda/conf.d/00-do-nothing.conf', '/etc/anaconda/conf.d/01-still-do-nothing.conf']
+00:16:48,346 INF core.dbus: Connecting to the Anaconda bus at unix:abstract=/tmp/dbus-N50AMVhFu3,guid=f0f0ac405f28f473e08ce7426aed1c70.
+00:16:52,609 INF main: Found a kickstart file: /run/install/ks.cfg
+00:16:52,641 INF kickstart.script: Running kickstart %%pre script(s)
+00:16:52,642 INF stdout: Running pre-installation scripts
+00:16:52,722 INF kickstart.script: All kickstart %%pre script(s) have been run
+00:16:52,727 INF startup_utils: Parsing kickstart: /run/install/ks.cfg
+00:16:53,027 WRN kickstart: Command url will be parsed in DBus module.
+00:16:53,028 WRN kickstart: Command lang will be parsed in DBus module.
+00:16:53,028 WRN kickstart: Command keyboard will be parsed in DBus module.
+00:16:53,028 WRN kickstart: Command timezone will be parsed in DBus module.
+00:16:53,028 WRN kickstart: Command network will be parsed in DBus module.
+00:16:53,028 WRN kickstart: Command rootpw will be parsed in DBus module.
+00:16:53,029 WRN kickstart: Command user will be parsed in DBus module.
+00:16:53,029 WRN kickstart: Command sshkey will be parsed in DBus module.
+00:16:53,029 WRN kickstart: Command firstboot will be parsed in DBus module.
+00:16:53,029 WRN kickstart: Command selinux will be parsed in DBus module.
+00:16:53,029 WRN kickstart: Command firewall will be parsed in DBus module.
+00:16:53,029 WRN kickstart: Command ignoredisk will be parsed in DBus module.
+00:16:53,030 WRN kickstart: Command clearpart will be parsed in DBus module.
+00:16:53,030 WRN kickstart: Command zerombr will be parsed in DBus module.
+00:16:53,030 WRN kickstart: Command autopart will be parsed in DBus module.
+00:16:53,030 WRN kickstart: Command bootloader will be parsed in DBus module.
+00:16:53,032 DBG pwpolicy: Using the password policy from the configuration.
+00:16:54,124 DBG modules.payloads.payload.dnf.dnf_manager: The DNF base has been reset.
+00:16:54,174 DBG modules.payloads.payload.dnf.utils: Release version of Rocky Linux Minimal is 9.8.
+00:16:54,176 DBG modules.payloads.payload.dnf.dnf_manager: The DNF base has been created.
+00:16:54,182 DBG modules.payloads.payload.dnf.dnf_manager: DNF configuration:
+[main]
+allow_vendor_change = 1
+assumeno = 0
+assumeyes = 0
+autocheck_running_kernel = 1
+bandwidth = 0
+best = 1
+bugtracker_url = https://bugs.rockylinux.org/
+cachedir = /tmp/dnf.cache
+cacheonly = 0
+check_config_file_age = 1
+clean_requirements_on_remove = 1
+color = auto
+color_list_available_downgrade = magenta
+color_list_available_install = bold,cyan
+color_list_available_reinstall = bold,underline,green
+color_list_available_upgrade = bold,blue
+color_list_installed_extra = bold,red
+color_list_installed_newer = bold,yellow
+color_list_installed_older = yellow
+color_list_installed_reinstall = cyan
+color_search_match = bold,magenta
+color_update_installed = red
+color_update_local = green
+color_update_remote = bold,green
+config_file_path = /etc/dnf/dnf.conf
+countme = 0
+debug_solver = 0
+debuglevel = 2
+defaultyes = 0
+deltarpm = 1
+deltarpm_percentage = 75
+disable_excludes = 
+diskspacecheck = 1
+enabled = 1
+enablegroups = 1
+errorlevel = 3
+exclude = 
+exclude_from_weak = 
+exclude_from_weak_autodetect = 1
+excludepkgs = 
+exit_on_lock = 0
+fastestmirror = 0
+gpgcheck = 0
+gpgkey_dns_verification = 0
+group_package_types = mandatory, default, conditional
+history_list_view = commands
+history_record = 1
+history_record_packages = dnf, rpm
+ignorearch = 0
+includepkgs = 
+install_weak_deps = 1
+installonly_limit = 3
+installonlypkgs = kernel, kernel-PAE, installonlypkg(kernel), installonlypkg(kernel-module), installonlypkg(vm), multiversion(kernel)
+installroot = /mnt/sysroot
+ip_resolve = whatever
+keepcache = 0
+localpkg_gpgcheck = 0
+log_compress = 0
+log_rotate = 4
+log_size = 1048576
+logdir = /tmp/
+logfilelevel = 9
+max_downloads_per_mirror = 3
+max_parallel_downloads = 3
+metadata_expire = 172800
+metadata_timer_sync = 10800
+minrate = 1000
+module_obsoletes = 0
+module_platform_id = platform:el9
+module_stream_switch = 0
+multilib_policy = best
+obsoletes = 1
+password = 
+persistdir = /mnt/sysroot/var/lib/dnf
+persistence = auto
+pluginconfpath = /tmp/dnf.pluginconf
+pluginpath = /usr/lib/python3.9/site-packages/dnf-plugins
+plugins = 1
+protect_running_kernel = 1
+protected_packages = dnf, dnf, grub2-tools-minimal, setup, shim-aa64, shim-arm, shim-ia32, shim-x64, systemd, systemd-udev
+proxy = 
+proxy_auth_method = any
+proxy_password = 
+proxy_sslcacert = 
+proxy_sslclientcert = 
+proxy_sslclientkey = 
+proxy_sslverify = 1
+proxy_username = 
+recent = 7
+repo_gpgcheck = 0
+reposdir = /etc/yum.repos.d, /etc/anaconda.repos.d
+reset_nice = 1
+retries = 10
+rpmverbosity = info
+showdupesfromrepos = 0
+skip_broken = 0
+skip_if_unavailable = 0
+sslcacert = 
+sslclientcert = 
+sslclientkey = 
+sslverify = 1
+sslverifystatus = 0
+strict = 1
+system_cachedir = /var/cache/dnf
+throttle = 0
+timeout = 30
+transformdb = 1
+tsflags = 
+upgrade_group_objects_upgrade = 1
+user_agent = libdnf (Rocky Linux 9.8; generic; Linux.x86_64)
+username = 
+usr_drift_protected_paths = 
+varsdir = /etc/yum/vars, /etc/dnf/vars
+zchunk = 1
+
+00:16:54,206 DBG modules.payloads.payload.dnf.dnf_manager: The DNF base has been reset.
+00:16:54,209 DBG modules.payloads.payload.dnf.utils: Release version of Rocky Linux Minimal is 9.8.
+00:16:54,210 DBG modules.payloads.payload.dnf.dnf_manager: The DNF base has been created.
+00:16:54,213 DBG modules.payloads.payload.dnf.dnf_manager: DNF configuration:
+[main]
+allow_vendor_change = 1
+assumeno = 0
+assumeyes = 0
+autocheck_running_kernel = 1
+bandwidth = 0
+best = 1
+bugtracker_url = https://bugs.rockylinux.org/
+cachedir = /tmp/dnf.cache
+cacheonly = 0
+check_config_file_age = 1
+clean_requirements_on_remove = 1
+color = auto
+color_list_available_downgrade = magenta
+color_list_available_install = bold,cyan
+color_list_available_reinstall = bold,underline,green
+color_list_available_upgrade = bold,blue
+color_list_installed_extra = bold,red
+color_list_installed_newer = bold,yellow
+color_list_installed_older = yellow
+color_list_installed_reinstall = cyan
+color_search_match = bold,magenta
+color_update_installed = red
+color_update_local = green
+color_update_remote = bold,green
+config_file_path = /etc/dnf/dnf.conf
+countme = 0
+debug_solver = 0
+debuglevel = 2
+defaultyes = 0
+deltarpm = 1
+deltarpm_percentage = 75
+disable_excludes = 
+diskspacecheck = 1
+enabled = 1
+enablegroups = 1
+errorlevel = 3
+exclude = 
+exclude_from_weak = 
+exclude_from_weak_autodetect = 1
+excludepkgs = 
+exit_on_lock = 0
+fastestmirror = 0
+gpgcheck = 0
+gpgkey_dns_verification = 0
+group_package_types = mandatory, default, conditional
+history_list_view = commands
+history_record = 1
+history_record_packages = dnf, rpm
+ignorearch = 0
+includepkgs = 
+install_weak_deps = 1
+installonly_limit = 3
+installonlypkgs = kernel, kernel-PAE, installonlypkg(kernel), installonlypkg(kernel-module), installonlypkg(vm), multiversion(kernel)
+installroot = /mnt/sysroot
+ip_resolve = whatever
+keepcache = 0
+localpkg_gpgcheck = 0
+log_compress = 0
+log_rotate = 4
+log_size = 1048576
+logdir = /tmp/
+logfilelevel = 9
+max_downloads_per_mirror = 3
+max_parallel_downloads = 3
+metadata_expire = 172800
+metadata_timer_sync = 10800
+minrate = 1000
+module_obsoletes = 0
+module_platform_id = platform:el9
+module_stream_switch = 0
+multilib_policy = best
+obsoletes = 1
+password = 
+persistdir = /mnt/sysroot/var/lib/dnf
+persistence = auto
+pluginconfpath = /tmp/dnf.pluginconf
+pluginpath = /usr/lib/python3.9/site-packages/dnf-plugins
+plugins = 1
+protect_running_kernel = 1
+protected_packages = dnf, dnf, grub2-tools-minimal, setup, shim-aa64, shim-arm, shim-ia32, shim-x64, systemd, systemd-udev
+proxy = 
+proxy_auth_method = any
+proxy_password = 
+proxy_sslcacert = 
+proxy_sslclientcert = 
+proxy_sslclientkey = 
+proxy_sslverify = 1
+proxy_username = 
+recent = 7
+repo_gpgcheck = 0
+reposdir = /etc/yum.repos.d, /etc/anaconda.repos.d
+reset_nice = 1
+retries = 10
+rpmverbosity = info
+showdupesfromrepos = 0
+skip_broken = 0
+skip_if_unavailable = 0
+sslcacert = 
+sslclientcert = 
+sslclientkey = 
+sslverify = 1
+sslverifystatus = 0
+strict = 1
+system_cachedir = /var/cache/dnf
+throttle = 0
+timeout = 30
+transformdb = 1
+tsflags = 
+upgrade_group_objects_upgrade = 1
+user_agent = libdnf (Rocky Linux 9.8; generic; Linux.x86_64)
+username = 
+usr_drift_protected_paths = 
+varsdir = /etc/yum/vars, /etc/dnf/vars
+zchunk = 1
+
+00:16:54,219 DBG anaconda: setting display mode to TUI
+00:16:54,223 DBG localization: scripts found for locale en_US.UTF-8: ['Latn']
+00:16:54,223 DBG localization: console fonts found for locale en_US.UTF-8: ['eurlatgr']
+00:16:54,223 DBG localization: setting console font to eurlatgr
+00:16:54,233 DBG localization: console font set successfully to eurlatgr
+00:16:54,233 DBG localization: setting locale to: en_US.UTF-8
+00:16:54,243 DBG network: Initialization started.
+00:16:54,248 DBG network: Devices found: ['enp1s0']
+00:16:54,250 DBG network: Running task Apply kickstart
+00:16:55,256 DBG network: Apply kickstart result: ['enp1s0']
+00:16:55,261 DBG network: Running task Dump missing config files
+00:16:56,266 DBG network: Dump missing config files result: []
+00:16:56,267 DBG network: Creating network configurations.
+00:16:56,270 DBG network: Initialization finished.
+00:16:56,270 INF threading: Running Thread: AnaWaitForConnectingNMThread (140125584275008)
+00:16:56,270 DBG anaconda: changing display mode from TUI to TUI
+00:16:56,270 DBG anaconda: working in noninteractive mode
+00:16:56,282 WRN stdout: Not asking for VNC because of an automated install
+00:16:56,283 INF anaconda: Display mode is set to 'noninteractive text mode'.
+00:16:56,283 INF isys: 2138076 kB (2087 MB) are available
+00:16:56,284 WRN misc: /usr/lib64/python3.9/subprocess.py:941: RuntimeWarning: line buffering (buffering=1) isn't supported in binary mode, the default buffer size will be used
+  self.stdout = io.open(c2pread, 'rb', bufsize)
+
+00:16:56,289 INF network: got 0 NTP servers from DHCP
+00:16:56,290 INF startup_utils: check_memory(): total:2087, needed:320, graphical:410
+00:16:56,292 DBG ui.lib.addons: Loading spokes into module path for addon com_redhat_kdump
+00:16:56,294 INF threading: Thread Done: AnaWaitForConnectingNMThread (140125584275008)
+00:16:56,296 DBG startup_utils: no default systemd target set & in text/vnc mode - setting multi-user.target.
+00:16:56,384 DBG core.storage: LABEL=OEMDRV matches [] for devicetree=None and disks_only=True
+00:16:56,396 INF threading: Running Thread: AnaStorageThread (140125584275008)
+00:16:56,399 INF threading: Running Thread: AnaTimeInitThread (140125555463744)
+00:19:59,997 DBG payload.manager: Restarting payload thread
+00:19:59,997 INF threading: Running Thread: AnaPayloadRestartThread (140125568337472)
+00:19:59,998 WRN startup_utils: Geolocation is disabled due to text mode.
+00:19:59,998 DBG startup_utils: Geoloc: should be used: False
+00:20:00,002 INF threading: Running Thread: AnaPayloadThread (140125546546752)
+00:20:00,002 DBG payload.manager: Updating payload thread state: STARTED
+00:20:00,004 DBG payload.manager: Updating payload thread state: WAITING_STORAGE
+00:20:00,089 DBG simpleline: GLib event loop is used!
+00:20:00,104 WRN misc: /usr/lib64/python3.9/site-packages/pyanaconda/core/util.py:1256: DeprecationWarning: the imp module is deprecated in favour of importlib; see the module's documentation for alternative uses
+  import imp
+
+00:20:00,144 INF core.util: Skipping detection of unsupported hardware.
+00:20:00,144 INF core.util: Skipping detection of SMT.
+00:20:00,152 INF lifecycle: Adding controller: SummaryHub
+00:20:00,245 INF lifecycle: Module initialized: LangSpoke
+00:20:00,251 INF lifecycle: Module initialized: TimeSpoke
+00:20:00,252 INF threading: Running Thread: AnaSourceWatcher (140125537367616)
+00:20:00,256 INF threading: Running Thread: AnaSoftwareWatcher (140125119968832)
+00:20:00,258 INF lifecycle: Module initialized: NetworkSpoke
+00:20:00,262 INF threading: Running Thread: AnaStorageWatcher (140125111576128)
+00:20:00,265 INF lifecycle: Module initialized: PasswordSpoke
+00:20:00,266 WRN ui.tui.hubs: Spoke PasswordSpoke initialization failure!
+00:20:00,269 INF lifecycle: Module initialized: UserSpoke
+00:20:00,271 WRN ui.tui.hubs: Spoke UserSpoke initialization failure!
+00:20:00,271 INF lifecycle: Initialization of all modules (8) has been started.
+00:20:00,001 INF threading: Thread Done: AnaTimeInitThread (140125555463744)
+00:20:00,525 INF threading: Thread Done: AnaStorageThread (140125584275008)
+00:20:00,528 DBG ui.tui.spokes.storage: Saving storage configuration...
+00:20:01,539 DBG ui.tui.spokes.storage: Checking storage configuration...
+00:20:02,576 DBG ui.tui.spokes.storage: Partitioning has been applied: ValidationReport(error_messages=[], warning_messages=[])
+00:20:02,577 INF lifecycle: Module initialized: StorageSpoke
+00:20:02,577 INF threading: Thread Done: AnaStorageWatcher (140125111576128)
+00:20:02,577 DBG payload.manager: Updating payload thread state: WAITING_NETWORK
+00:20:02,577 DBG payload.manager: Updating payload thread state: DOWNLOADING_PKG_METADATA
+00:20:02,580 DBG modules.payloads.payload.dnf.dnf_manager: The DNF cache has been cleared.
+00:20:02,639 DBG payload.manager: Updating payload thread state: DOWNLOADING_GROUP_METADATA
+00:20:02,854 DBG payload.manager: Updating payload thread state: FINISHED
+00:20:02,854 INF threading: Thread Done: AnaPayloadThread (140125546546752)
+00:20:02,854 DBG payload.manager: Updating payload thread state: PAYLOAD_THREAD_TERMINATED
+00:20:02,854 INF threading: Thread Done: AnaPayloadRestartThread (140125568337472)
+00:20:02,890 INF lifecycle: Module initialized: SourceSpoke
+00:20:02,890 INF threading: Thread Done: AnaSourceWatcher (140125537367616)
+00:20:02,892 INF threading: Running Thread: AnaCheckSoftwareThread (140125537367616)
+00:20:02,894 INF modules.payloads.payload.dnf.utils: selected environment: minimal-environment
+00:20:02,894 INF modules.payloads.payload.dnf.utils: selected group: core
+00:20:02,894 INF modules.payloads.payload.dnf.utils: selected package: curl
+00:20:02,894 INF modules.payloads.payload.dnf.utils: selected package: openssh-server
+00:20:02,895 INF modules.payloads.payload.dnf.utils: selected package: sudo
+00:20:02,895 INF modules.payloads.payload.dnf.utils: kernel: selected kernel
+00:20:02,895 DBG modules.payloads.payload.dnf.requirements: Applying requirements: []
+00:20:02,895 DBG modules.payloads.payload.dnf.dnf_manager: Transaction include list:
+['@minimal-environment', '@core', 'curl', 'openssh-server', 'sudo', 'kernel']
+00:20:02,895 DBG modules.payloads.payload.dnf.dnf_manager: Transaction exclude list:
+[]
+00:20:02,940 DBG modules.payloads.payload.dnf.dnf_manager: Space required for packages: 1.5 GiB
+00:20:02,941 DBG modules.payloads.payload.dnf.dnf_manager: Space required for installed files: 300.11 MiB
+00:20:02,941 DBG modules.payloads.payload.dnf.dnf_manager: Total required size: 1.98 GiB
+00:20:02,945 DBG modules.payloads.payload.dnf.dnf_manager: Total download size: 1.08 GiB
+00:20:02,972 INF threading: Thread Done: AnaCheckSoftwareThread (140125537367616)
+00:20:02,972 INF lifecycle: Module initialized: SoftwareSpoke
+00:20:02,972 INF lifecycle: All modules have been initialized.
+00:20:02,972 INF threading: Thread Done: AnaSoftwareWatcher (140125119968832)
+00:20:03,978 DBG simpleline: Scheduling screen SummaryHub
+00:20:03,979 DBG simpleline: New signal RenderScreenSignal enqueued with source ScreenScheduler
+00:20:03,979 DBG simpleline: Scheduling screen ProgressSpoke
+00:20:03,979 DBG simpleline: Starting main loop
+00:20:03,979 DBG simpleline: Processing screen ScreenData(SummaryHub,None,False)
+00:20:04,013 DBG simpleline: Input is required by ScreenData(SummaryHub,None,False) screen
+00:20:04,022 DBG simpleline: New signal CloseScreenSignal enqueued with source SummaryHub
+00:20:04,023 DBG simpleline: Closing screen ScreenData(SummaryHub,None,False) from SummaryHub
+00:20:04,023 DBG simpleline: New signal RenderScreenSignal enqueued with source ScreenScheduler
+00:20:04,023 DBG simpleline: Processing screen ScreenData(ProgressSpoke,None,False)
+00:20:04,030 INF threading: Running Thread: AnaInstallThread (140125537367616)
+00:20:04,093 INF installation: Top-level task queue: Complete installation queue
+Number of task queues: 17
+Number of tasks: 41
+Task & task group listing:
+ Task queue: Installation queue
+  Task: Save system time to HW clock
+  Task queue: Installation environment setup
+  Task queue: Early storage configuration
+   Task: Create storage layout
+   Task: Mount filesystems
+   Task: Write the storage configuration
+  Task queue: Pre-install scripts
+   Task: Run %pre-install scripts
+  Task queue: Pre install tasks
+   Task: Copy resolv.conf to sysroot
+   Task: Discover information about a realm
+   Task: Set up FIPS for the payload installation
+   Task: Import CA certificates
+   Task: Find additional packages & run pre_install()
+  Task queue: Payload installation
+   Task: Install the payload
+  Task queue: Bootloader installation
+   Task: Configure bootloader
+   Task: Install bootloader
+  Task queue: Post-installation setup tasks
+   Task: Run post-installation setup tasks
+ Task queue: Configuration queue
+  Task queue: Certificates import
+   Task: Import CA certificates
+  Task queue: Installed system configuration
+   Task: Configure SELinux
+   Task: Authconfig configuration
+   Task: Configure time zone
+   Task: Configure NTP
+   Task: Configure Initial Setup
+   Task: Configure post-installation tools
+   Task: Configure services
+   Task: Configure systemd default target
+   Task: Configure default desktop
+   Task: Configure language
+   Task: Configure keyboard
+   Task: Configure firewall
+  Task queue: Network configuration
+   Task: Network configuration
+  Task queue: User creation
+   Task: Create groups
+   Task: Create users
+   Task: Configure root password
+   Task: Set SSH keys
+   Task: Configure optional root password SSH login
+  Task queue: Anaconda addon configuration
+   Task: Enable the kdump.service
+   Task: Setup crypttab for kdump
+  Task queue: Initramfs generation
+   Task: Generate initramfs
+  Task: Configure FIPS
+  Task: Join a realm
+  Task: Rerun zipl
+  Task queue: Write configs and kickstarts
+   Task: Store kickstarts
+  Task queue: Post installation scripts
+   Task: Run post installation scripts
+00:20:04,094 INF installation: Queue started: Installation queue (1/17)
+00:20:04,094 INF installation: Task started: Save system time to HW clock (1/41)
+00:20:04,501 INF progress: Save system time to HW clock
+00:20:04,501 DBG installation: Task completed: Save system time to HW clock (1/41) (0.4 s)
+00:20:04,501 WRN installation_tasks: Attempting to start an empty task queue (Installation environment setup).
+00:20:04,501 INF progress: Setting up the installation environment
+00:20:04,502 INF installation: Queue started: Installation environment setup (2/17)
+00:20:04,502 WRN installation_tasks: The task group Installation environment setup is empty.
+00:20:04,503 INF progress: Configuring storage
+00:20:04,503 INF installation: Queue started: Early storage configuration (3/17)
+00:20:04,503 INF installation: Task started: Create storage layout (2/41)
+00:20:05,504 INF progress: Creating disklabel on /dev/vda
+00:20:05,504 INF progress: Creating swap on /dev/vda3
+00:20:05,504 INF progress: Creating xfs on /dev/vda4
+00:20:05,504 INF progress: Creating xfs on /dev/vda2
+00:20:05,504 INF progress: Creating efi on /dev/vda1
+00:20:05,507 INF progress: Create storage layout
+00:20:05,508 DBG installation: Task completed: Create storage layout (2/41) (1.0 s)
+00:20:05,508 INF installation: Task started: Mount filesystems (3/41)
+00:20:07,518 INF progress: Mount filesystems
+00:20:07,519 DBG installation: Task completed: Mount filesystems (3/41) (2.0 s)
+00:20:07,520 INF installation: Task started: Write the storage configuration (4/41)
+00:20:08,537 INF progress: Write the storage configuration
+00:20:08,538 DBG installation: Task completed: Write the storage configuration (4/41) (1.0 s)
+00:20:08,540 INF progress: Running pre-installation scripts
+00:20:08,540 INF installation: Queue started: Pre-install scripts (4/17)
+00:20:08,540 INF installation: Task started: Run %pre-install scripts (5/41)
+00:20:08,541 INF progress: Run %pre-install scripts
+00:20:08,542 DBG installation: Task completed: Run %pre-install scripts (5/41) (0.0 s)
+00:20:08,543 INF progress: Running pre-installation tasks
+00:20:08,543 INF installation: Queue started: Pre install tasks (5/17)
+00:20:08,543 INF installation: Task started: Copy resolv.conf to sysroot (6/41)
+00:20:08,548 INF progress: Copy resolv.conf to sysroot
+00:20:08,548 DBG installation: Task completed: Copy resolv.conf to sysroot (6/41) (0.0 s)
+00:20:08,548 INF installation: Task started: Discover information about a realm (7/41)
+00:20:08,550 INF progress: Discover information about a realm
+00:20:08,551 DBG installation: Task completed: Discover information about a realm (7/41) (0.0 s)
+00:20:08,551 INF installation: Task started: Set up FIPS for the payload installation (8/41)
+00:20:08,552 INF progress: Set up FIPS for the payload installation
+00:20:08,553 DBG installation: Task completed: Set up FIPS for the payload installation (8/41) (0.0 s)
+00:20:08,553 INF installation: Task started: Import CA certificates (9/41)
+00:20:08,554 INF progress: Import CA certificates
+00:20:08,554 DBG installation: Task completed: Import CA certificates (9/41) (0.0 s)
+00:20:08,555 INF installation: Task started: Find additional packages & run pre_install() (10/41)
+00:20:08,567 WRN modules.payloads.payload.dnf.requirements: Selected locale 'en_US.UTF-8' does not match any available langpacks.
+00:20:08,575 WRN modules.payloads.payload.dnf.requirements: Platform group platform-kvm not available.
+00:20:08,576 INF progress: Find additional packages & run pre_install()
+00:20:08,576 DBG installation: Task completed: Find additional packages & run pre_install() (10/41) (0.0 s)
+00:20:08,576 INF progress: Installing.
+00:20:08,576 INF installation: Queue started: Payload installation (6/17)
+00:20:08,577 INF installation: Task started: Install the payload (11/41)
+00:20:08,577 INF progress: Starting package installation process
+00:20:08,579 DBG modules.payloads.payload.dnf.installation: Set '__dbi_htconfig' to 'hash nofsync %{__dbi_other} %{__dbi_perms}'.
+00:20:08,579 DBG modules.payloads.payload.dnf.installation: Set '__file_context_path' to '/etc/selinux/targeted/contexts/files/file_contexts'.
+00:20:08,582 INF modules.payloads.payload.dnf.utils: selected environment: minimal-environment
+00:20:08,582 INF modules.payloads.payload.dnf.utils: selected group: core
+00:20:08,582 INF modules.payloads.payload.dnf.utils: selected package: curl
+00:20:08,582 INF modules.payloads.payload.dnf.utils: selected package: openssh-server
+00:20:08,582 INF modules.payloads.payload.dnf.utils: selected package: sudo
+00:20:08,583 INF modules.payloads.payload.dnf.utils: kernel: selected kernel
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Applying requirements: [Requirement(name='xfsprogs', reason='Required to manage storage devices.', type='package'), Requirement(name='dosfstools', reason='Required to manage storage devices.', type='package'), Requirement(name='grub2-efi-x64', reason='Necessary for the bootloader configuration.', type='package'), Requirement(name='shim-x64', reason='Necessary for the bootloader configuration.', type='package'), Requirement(name='efibootmgr', reason='Necessary for the bootloader configuration.', type='package'), Requirement(name='grub2-tools', reason='Necessary for the bootloader configuration.', type='package'), Requirement(name='chrony', reason='Needed to run NTP service.', type='package'), Requirement(name='firewalld', reason='Requested by the firewall kickstart command.', type='package'), Requirement(name='kexec-tools', reason='Required by kdump add-on.', type='package')]
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Requirement 'xfsprogs' is applied. Reason: Required to manage storage devices.
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Requirement 'dosfstools' is applied. Reason: Required to manage storage devices.
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Requirement 'grub2-efi-x64' is applied. Reason: Necessary for the bootloader configuration.
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Requirement 'shim-x64' is applied. Reason: Necessary for the bootloader configuration.
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Requirement 'efibootmgr' is applied. Reason: Necessary for the bootloader configuration.
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Requirement 'grub2-tools' is applied. Reason: Necessary for the bootloader configuration.
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Requirement 'chrony' is applied. Reason: Needed to run NTP service.
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Requirement 'firewalld' is applied. Reason: Requested by the firewall kickstart command.
+00:20:08,583 DBG modules.payloads.payload.dnf.requirements: Requirement 'kexec-tools' is applied. Reason: Required by kdump add-on.
+00:20:08,584 DBG modules.payloads.payload.dnf.dnf_manager: Transaction include list:
+['@minimal-environment', '@core', 'curl', 'openssh-server', 'sudo', 'kernel', 'xfsprogs', 'dosfstools', 'grub2-efi-x64', 'shim-x64', 'efibootmgr', 'grub2-tools', 'chrony', 'firewalld', 'kexec-tools']
+00:20:08,584 DBG modules.payloads.payload.dnf.dnf_manager: Transaction exclude list:
+[]
+00:20:08,644 DBG modules.payloads.payload.dnf.dnf_manager: Space required for packages: 1.56 GiB
+00:20:08,644 DBG modules.payloads.payload.dnf.dnf_manager: Space required for installed files: 308.12 MiB
+00:20:08,644 DBG modules.payloads.payload.dnf.dnf_manager: Total required size: 2.05 GiB
+00:20:08,647 DBG modules.payloads.payload.dnf.dnf_manager: Total download size: 1.1 GiB
+00:20:08,659 DBG modules.payloads.payload.dnf.dnf_manager: Total download size: 1.1 GiB
+00:20:08,682 DBG modules.payloads.payload.dnf.dnf_manager: Space required for packages: 1.56 GiB
+00:20:08,682 DBG modules.payloads.payload.dnf.dnf_manager: Space required for installed files: 308.12 MiB
+00:20:08,683 DBG modules.payloads.payload.dnf.dnf_manager: Total required size: 2.05 GiB
+00:20:14,905 INF progress: Preparing transaction from installation source
+00:22:48,382 INF progress: Install the payload
+00:22:48,382 DBG installation: Task completed: Install the payload (11/41) (159.8 s)
+00:22:48,382 INF progress: Installing boot loader
+00:22:48,382 INF installation: Queue started: Bootloader installation (7/17)
+00:22:48,382 INF installation: Task started: Configure bootloader (12/41)
+00:22:49,437 INF progress: Configure bootloader
+00:22:49,438 DBG installation: Task completed: Configure bootloader (12/41) (1.1 s)
+00:22:49,439 INF installation: Task started: Install bootloader (13/41)
+00:22:54,484 INF progress: Install bootloader
+00:22:54,484 DBG installation: Task completed: Install bootloader (13/41) (5.0 s)
+00:22:54,484 INF progress: Performing post-installation setup tasks
+00:22:54,485 INF installation: Queue started: Post-installation setup tasks (8/17)
+00:22:54,485 INF installation: Task started: Run post-installation setup tasks (14/41)
+00:22:54,526 DBG modules.payloads.payload.dnf.installation: No GPG keys to import.
+00:22:54,528 INF progress: Run post-installation setup tasks
+00:22:54,528 DBG installation: Task completed: Run post-installation setup tasks (14/41) (0.0 s)
+00:22:54,528 INF installation: Queue started: Configuration queue (9/17)
+00:22:54,529 INF progress: Importing certificates
+00:22:54,529 INF installation: Queue started: Certificates import (10/17)
+00:22:54,529 INF installation: Task started: Import CA certificates (15/41)
+00:22:54,532 INF progress: Import CA certificates
+00:22:54,532 DBG installation: Task completed: Import CA certificates (15/41) (0.0 s)
+00:22:54,533 INF progress: Configuring installed system
+00:22:54,533 INF installation: Queue started: Installed system configuration (11/17)
+00:22:54,533 INF installation: Task started: Configure SELinux (16/41)
+00:22:55,538 INF progress: Configure SELinux
+00:22:55,538 DBG installation: Task completed: Configure SELinux (16/41) (1.0 s)
+00:22:55,538 INF installation: Task started: Authconfig configuration (17/41)
+00:22:55,540 INF progress: Authconfig configuration
+00:22:55,540 DBG installation: Task completed: Authconfig configuration (17/41) (0.0 s)
+00:22:55,541 INF installation: Task started: Configure time zone (18/41)
+00:22:56,545 INF progress: Configure time zone
+00:22:56,545 DBG installation: Task completed: Configure time zone (18/41) (1.0 s)
+00:22:56,545 INF installation: Task started: Configure NTP (19/41)
+00:22:57,550 INF progress: Configure NTP
+00:22:57,551 DBG installation: Task completed: Configure NTP (19/41) (1.0 s)
+00:22:57,551 INF installation: Task started: Configure Initial Setup (20/41)
+00:22:57,553 INF progress: Configure Initial Setup
+00:22:57,553 DBG installation: Task completed: Configure Initial Setup (20/41) (0.0 s)
+00:22:57,553 INF installation: Task started: Configure post-installation tools (21/41)
+00:22:58,557 INF progress: Configure post-installation tools
+00:22:58,557 DBG installation: Task completed: Configure post-installation tools (21/41) (1.0 s)
+00:22:58,557 INF installation: Task started: Configure services (22/41)
+00:22:58,559 INF progress: Configure services
+00:22:58,559 DBG installation: Task completed: Configure services (22/41) (0.0 s)
+00:22:58,559 INF installation: Task started: Configure systemd default target (23/41)
+00:22:58,561 INF progress: Configure systemd default target
+00:22:58,561 DBG installation: Task completed: Configure systemd default target (23/41) (0.0 s)
+00:22:58,561 INF installation: Task started: Configure default desktop (24/41)
+00:22:58,562 INF progress: Configure default desktop
+00:22:58,562 DBG installation: Task completed: Configure default desktop (24/41) (0.0 s)
+00:22:58,562 INF installation: Task started: Configure language (25/41)
+00:22:59,572 INF progress: Configure language
+00:22:59,573 DBG installation: Task completed: Configure language (25/41) (1.0 s)
+00:22:59,573 INF installation: Task started: Configure keyboard (26/41)
+00:23:00,585 INF progress: Configure keyboard
+00:23:00,585 DBG installation: Task completed: Configure keyboard (26/41) (1.0 s)
+00:23:00,585 INF installation: Task started: Configure firewall (27/41)
+00:23:01,595 INF progress: Configure firewall
+00:23:01,595 DBG installation: Task completed: Configure firewall (27/41) (1.0 s)
+00:23:01,597 INF progress: Writing network configuration
+00:23:01,598 INF installation: Queue started: Network configuration (12/17)
+00:23:01,598 INF installation: Task started: Network configuration (28/41)
+00:23:03,710 INF progress: Network configuration
+00:23:03,710 DBG installation: Task completed: Network configuration (28/41) (2.1 s)
+00:23:03,711 INF progress: Creating users
+00:23:03,711 INF installation: Queue started: User creation (13/17)
+00:23:03,711 INF installation: Task started: Create groups (29/41)
+00:23:03,719 INF progress: Create groups
+00:23:03,719 DBG installation: Task completed: Create groups (29/41) (0.0 s)
+00:23:03,719 INF installation: Task started: Create users (30/41)
+00:23:04,728 INF progress: Create users
+00:23:04,729 DBG installation: Task completed: Create users (30/41) (1.0 s)
+00:23:04,730 INF installation: Task started: Configure root password (31/41)
+00:23:05,746 INF progress: Configure root password
+00:23:05,746 DBG installation: Task completed: Configure root password (31/41) (1.0 s)
+00:23:05,746 INF installation: Task started: Set SSH keys (32/41)
+00:23:06,751 INF progress: Set SSH keys
+00:23:06,751 DBG installation: Task completed: Set SSH keys (32/41) (1.0 s)
+00:23:06,751 INF installation: Task started: Configure optional root password SSH login (33/41)
+00:23:06,753 INF progress: Configure optional root password SSH login
+00:23:06,753 DBG installation: Task completed: Configure optional root password SSH login (33/41) (0.0 s)
+00:23:06,753 INF progress: Configuring addons
+00:23:06,754 INF installation: Queue started: Anaconda addon configuration (14/17)
+00:23:06,754 INF installation: Task started: Enable the kdump.service (34/41)
+00:23:07,758 INF progress: Enable the kdump.service
+00:23:07,758 DBG installation: Task completed: Enable the kdump.service (34/41) (1.0 s)
+00:23:07,758 INF installation: Task started: Setup crypttab for kdump (35/41)
+00:23:08,769 INF progress: Setup crypttab for kdump
+00:23:08,770 DBG installation: Task completed: Setup crypttab for kdump (35/41) (1.0 s)
+00:23:08,771 INF progress: Generating initramfs
+00:23:08,772 INF installation: Queue started: Initramfs generation (15/17)
+00:23:08,772 INF installation: Task started: Generate initramfs (36/41)
+00:23:30,827 INF progress: Generate initramfs
+00:23:30,827 DBG installation: Task completed: Generate initramfs (36/41) (22.1 s)
+00:23:30,827 INF installation: Task started: Configure FIPS (37/41)
+00:23:30,829 INF progress: Configure FIPS
+00:23:30,829 DBG installation: Task completed: Configure FIPS (37/41) (0.0 s)
+00:23:30,829 INF installation: Task started: Join a realm (38/41)
+00:23:30,831 INF progress: Join a realm
+00:23:30,831 DBG installation: Task completed: Join a realm (38/41) (0.0 s)
+00:23:30,831 INF installation: Task started: Rerun zipl (39/41)
+00:23:30,833 INF progress: Rerun zipl
+00:23:30,833 DBG installation: Task completed: Rerun zipl (39/41) (0.0 s)
+00:23:30,833 INF progress: Storing configuration files and kickstarts
+00:23:30,833 INF installation: Queue started: Write configs and kickstarts (16/17)
+00:23:30,833 INF installation: Task started: Store kickstarts (40/41)
+00:23:30,865 INF progress: Store kickstarts
+00:23:30,865 DBG installation: Task completed: Store kickstarts (40/41) (0.0 s)
+00:23:30,866 INF progress: Running post-installation scripts
+00:23:30,866 INF installation: Queue started: Post installation scripts (17/17)
+00:23:30,866 INF installation: Task started: Run post installation scripts (41/41)
+00:23:30,866 INF kickstart.script: Running kickstart %%post script(s)

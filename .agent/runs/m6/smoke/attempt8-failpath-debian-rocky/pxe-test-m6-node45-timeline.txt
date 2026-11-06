@@ -1,0 +1,18 @@
+2026-11-06T00:29:34.221Z discovered firmware=uefi
+2026-11-06T00:29:34.262Z konfigurasi tersimpan os=debian-12 disk=/dev/vdz ip=10.99.0.55 hostname=m6-node45
+2026-11-06T00:29:34.309Z install dibuat job=job-d2cc27e5-bbdf-4c12-a1ca-0d01f2c7db27 status=booting
+2026-11-06T00:29:34.386Z node.sh reset
+2026-11-06T00:29:34.467Z job1(/dev/vdz): booting (+0 dtk, installerBoots=0)
+2026-11-06T00:30:04.519Z job1(/dev/vdz): installing (+30 dtk, installerBoots=1)
+2026-11-06T00:30:44.601Z job1(/dev/vdz): failed/installer-error (+70 dtk, installerBoots=1)
+2026-11-06T00:30:44.630Z job1 akhir=failed/installer-error dalam 70 dtk; event installer error-commands=1; urutan=booting>installing>failed
+2026-11-06T00:30:44.708Z konfigurasi tersimpan os=debian-12 disk=(otomatis) ip=10.99.0.55 hostname=m6-node45
+2026-11-06T00:30:44.779Z install dibuat job=job-5a34ec0e-2927-4703-a343-84e29501741f status=booting
+2026-11-06T00:30:45.082Z node.sh reset
+2026-11-06T00:30:45.100Z job2: booting (+0 dtk, installerBoots=0)
+2026-11-06T00:31:15.144Z job2: installing (+30 dtk, installerBoots=1)
+2026-11-06T00:31:55.206Z job2: failed/installer-error (+70 dtk, installerBoots=1)
+2026-11-06T00:31:55.212Z job2 akhir=failed/installer-error dalam 70 dtk; urutan=booting>installing>failed; stages=booting@install,booting@boot-script,installing@config-fetch,failed@callback
+2026-11-06T00:31:55.212Z event installer (2): installer: preseed mulai | ERROR installer gagal: disk target tidak ditemukan
+2026-11-06T00:31:55.213Z console log: 200000 byte terakhir dibaca; kernel panic=false
+2026-11-06T00:31:55.218Z jumlah job host=2

@@ -1,0 +1,11 @@
+2026-11-06T00:43:18.034Z discovered firmware=uefi
+2026-11-06T00:43:18.075Z konfigurasi tersimpan os=debian-12 disk=/dev/vda ip=10.99.0.51 hostname=m6-node41
+2026-11-06T00:43:18.106Z install dibuat job=job-c6663992-1e50-4ff3-bb1e-94c350eef4cb status=booting
+2026-11-06T00:43:18.183Z node.sh reset
+2026-11-06T00:43:18.190Z job1: booting (+0 dtk, installerBoots=0)
+2026-11-06T00:43:48.244Z job1: installing (+30 dtk, installerBoots=1)
+2026-11-06T00:44:28.309Z job1: failed/installer-error (+70 dtk, installerBoots=1)
+2026-11-06T00:44:28.318Z job1 akhir=failed/installer-error dalam 70 dtk; urutan=booting>installing>failed; stages=booting@install,booting@boot-script,installing@config-fetch,failed@callback
+2026-11-06T00:44:28.318Z event installer (2): installer: preseed mulai | ERROR installer gagal: disk target tidak ditemukan
+2026-11-06T00:44:28.318Z console log: 122223 byte terakhir dibaca; kernel panic=false
+2026-11-06T00:44:28.324Z jumlah job host=1
