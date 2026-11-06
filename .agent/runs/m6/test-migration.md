@@ -314,3 +314,16 @@ Catatan: nama berkas screenshot `ac-5.31-os-unavailable-muted` tidak diganti (ha
 Test unit baru `src/lib/server/m6-kvm-apt-trust.test.ts` (7 test) menjalankan script yang sama terhadap root palsu:
 bersih → lulus; `trusted=yes`, `00AllowUnauthenticated`, `allowunauthenticated` (huruf kecil) di berkas lain,
 `sudo` gagal, `/etc/apt` tidak ada (Debian), keluaran kosong → semuanya gagal. Mutasi: `.agent/runs/m6/mutation-te-T14.txt`.
+
+## CR-6-10 — `m6-smoke-fixes.test.ts` (DEC-021 → DEC-022 §2, backend-dev `e273c67`; dicatat test-engineer iter2)
+
+| File › test | Sebelum (`105727e`) | Sesudah (`18913b5`) | Alasan |
+|---|---|---|---|
+| `src/lib/server/installers/m6-smoke-fixes.test.ts:470-488` › "BUG-M6-9 / DEC-021 … media lokal (default) …" | `expect(late.split("\n").at(-3)).toContain("rm -f /etc/apt/apt.conf.d/00AllowUnauthenticated")` (1 expect, posisi tetap dari akhir) | indeks baris untrust dan baris firstboot (`mkdir -p /etc/pxe-callback`): `expect(untrust).toBeGreaterThan(0)` + `expect(firstboot).toBeGreaterThan(untrust)` (2 expect) | SR-6-6 (DEC-022 §2): pembersihan dipindah SEBELUM unit firstboot, sehingga `at(-3)` tidak lagi benar; urutan relatif lebih kuat daripada posisi absolut |
+| idem › "mirror bertanda tangan (mediaSigned): TIDAK ada trusted=yes, by-hash override, hook, maupun untrust" | 8 expect (`not.toContain` trusted=yes/by-hash/post-base-installer/50mirror, `diValue(local0)` null, late tanpa trusted=yes) untuk `ctx({ mediaSigned: true })` | diganti "DEC-022 §2 media eksternal (host ≠ PXE_SERVER_IP): generator menolak, tanpa trusted=yes/allow_unauthenticated": 2 expect (`debianPreseed` dan `debianLateScript` `toThrow(/bukan server PXE lokal/)`) × 3 URL eksternal | DEC-022 §2 / CR-6-3 / SR-6-1: opsi `mediaSigned` dihapus (kode mati); media non-lokal kini fail-closed (generator melempar), jadi tidak ada keluaran preseed untuk diperiksa. Cakupan "tidak ada trusted=yes ke host lain" kini lebih ketat dan diperluas di `m6-iter2-debian.test.ts` (4 URL eksternal + serverIp beda) |
+
+Jumlah statik `expect(` file ini: 113 → 110 (−3; `.agent/runs/m6/final-iter2/skip-weakening.txt` bagian (c)). Terhadap
+`main` file ini file baru M6 (bukan test lama), jadi kriteria "asersi test lama tidak turun" tidak terpengaruh. Penurunan
+statik bukan pelemahan: 8 asersi atas jalur yang dihapus diganti 6 asersi runtime (2 × 3 URL) yang menolak jalur itu, dan
+mutasi `requireLocalMedia` no-op membuat test pengganti merah (`.agent/runs/m6/final-iter2/mutation.txt` R4a; urutan
+SR-6-6: R4c).

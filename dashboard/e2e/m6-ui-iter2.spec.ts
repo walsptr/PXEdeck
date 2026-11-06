@@ -6,6 +6,8 @@ import path from "node:path"
 
 import { expect, test, type Page } from "@playwright/test"
 
+import { AUTHORIZED_KEYS_MAX_BYTES, authorizedKeysBytes } from "../src/lib/host-config"
+import { synthKeysTotal } from "../src/test/synth-keys"
 import { ORANGE, SHOTS } from "./helpers"
 import { auditA11y, writeAxeEvidence } from "./support/axe"
 import { M6_FAILED_JOB, M6_LONG_HOSTNAME } from "./support/m6-seed"
@@ -334,6 +336,59 @@ test("DR-6-8 /jobs?job=<tidak ada>: deskripsi tidak mengulang judul", async ({ p
   const desc = page.getByTestId("job-detail-error-description")
   await expect(desc).toHaveText("Mungkin sudah dihapus oleh retensi riwayat atau host dihapus.")
   await expect(desc).not.toContainText("Job tidak ditemukan")
+})
+
+test("CR-6-9 / CR-6-1 batas total authorized_keys 32 KiB tampil di tab SSH Sheet; config host tidak berubah", async ({ page }) => {
+  // Key SINTETIS (synth-keys.ts, bukan key sungguhan). Total = batas + 1 byte (tanpa key library);
+  // key library yang sudah terpilih di host ikut dihitung server, jadi total yang dilaporkan ≥ 32769.
+  const keys = synthKeysTotal(AUTHORIZED_KEYS_MAX_BYTES + 1, 12_000)
+  expect(authorizedKeysBytes(keys)).toBe(AUTHORIZED_KEYS_MAX_BYTES + 1)
+  expect(keys.length).toBeGreaterThan(1)
+  const HOST = "ac1f6b227d40" // compute-03 (seed demo)
+  const snapshot = async () => ({
+    host: await (await page.request.get(`/api/hosts/${HOST}`)).json(),
+    config: await (await page.request.get(`/api/hosts/${HOST}/config`)).json(),
+    library: await (await page.request.get("/api/ssh-keys")).json(),
+  })
+  const before = await snapshot()
+  expect(before.host.hostname).toBe("compute-03")
+
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.goto("/hosts")
+  await settle(page)
+  await page.getByRole("button", { name: "Aksi untuk compute-03" }).click()
+  await page.getByRole("menuitem", { name: "Edit konfigurasi" }).click()
+  const sheet = page.getByRole("dialog")
+  await sheet.getByRole("tab", { name: /^SSH Keys/ }).click()
+  for (const [i, k] of keys.entries()) {
+    await sheet.getByRole("button", { name: "Tempel / unggah key baru" }).click()
+    await sheet.locator(`#key-${i}`).fill(k)
+    const lib = sheet.locator(`#key-save-${i}`)
+    if ((await lib.getAttribute("aria-checked")) === "true" || (await lib.getAttribute("data-state")) === "checked") await lib.click()
+    await expect(sheet.locator(`#key-${i}`)).not.toHaveAttribute("aria-invalid", "true")
+  }
+  await sheet.getByRole("tab", { name: /^OS/ }).click() // server harus membawa kembali ke tab SSH
+  const res = page.waitForResponse((r) => r.request().method() === "PATCH" && r.url().endsWith(`/api/hosts/${HOST}`))
+  await sheet.getByRole("button", { name: "Simpan konfigurasi" }).click()
+  const resp = await res
+  expect(resp.status()).toBe(422)
+  const body = await resp.json()
+  const sshErr = (body.errors as { section: string; message: string }[]).find((e) => e.section === "ssh" && /melebihi batas/.test(e.message))
+  expect(sshErr, JSON.stringify(body)).toBeTruthy()
+  const reported = Number(/^Total SSH key (\d+) byte/.exec(sshErr!.message)?.[1])
+  expect(reported).toBeGreaterThanOrEqual(AUTHORIZED_KEYS_MAX_BYTES + 1)
+
+  await expect(sheet.getByRole("tab", { name: /^SSH Keys/ })).toHaveAttribute("aria-selected", "true")
+  await expect(sheet.getByRole("tab", { name: /^SSH Keys/ })).toContainText("(ada error)")
+  const alert = sheet.getByRole("tabpanel").getByRole("alert").filter({ hasText: "Ditolak server" })
+  await expect(alert).toContainText(
+    new RegExp(`Total SSH key ${reported} byte melebihi batas 32768 byte \\(32 KiB\\) per host — kurangi jumlah key`),
+  )
+  await expect(page.getByText("Konfigurasi ditolak server")).toBeVisible()
+  await page.screenshot({ path: SHOTS(6, "iter2-cr-6-9-ssh-byte-cap") })
+
+  // Tanpa efek: host, config dan library SSH identik dengan sebelum Simpan.
+  expect(await snapshot()).toEqual(before)
 })
 
 test.describe("axe (filter tidak berubah) pada halaman yang diubah", () => {

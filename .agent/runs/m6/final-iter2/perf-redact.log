@@ -1,0 +1,273 @@
+# Perf watch redaksi @ fdc0abf 2026-11-06T08:08:38Z — 10x per file, sendirian
+# load awal: 1.54 1.91 1.80 3/2613 3089423; nproc 12
+m6-iter2-be.test.ts iter 1: exit=0 total 30/30 lulus, gagal 0
+   passed     32.03 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     34.30 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     30.78 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     50.54 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-iter2-be.test.ts iter 2: exit=0 total 30/30 lulus, gagal 0
+   passed     44.91 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     43.20 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     39.71 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     65.69 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-iter2-be.test.ts iter 3: exit=0 total 30/30 lulus, gagal 0
+   passed     33.32 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     35.55 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     32.16 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     53.46 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-iter2-be.test.ts iter 4: exit=0 total 30/30 lulus, gagal 0
+   passed     34.09 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     36.06 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     32.64 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     52.50 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-iter2-be.test.ts iter 5: exit=0 total 30/30 lulus, gagal 0
+   passed     36.60 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     40.17 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     36.76 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     60.59 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-iter2-be.test.ts iter 6: exit=0 total 30/30 lulus, gagal 0
+   passed     33.96 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     34.69 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     37.46 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     51.50 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-iter2-be.test.ts iter 7: exit=0 total 30/30 lulus, gagal 0
+   passed     43.36 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     39.09 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     35.37 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     57.24 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-iter2-be.test.ts iter 8: exit=0 total 30/30 lulus, gagal 0
+   passed     34.99 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     36.69 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     35.27 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     54.24 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-iter2-be.test.ts iter 9: exit=0 total 30/30 lulus, gagal 0
+   passed     32.24 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     33.78 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     31.44 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     52.08 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-iter2-be.test.ts iter 10: exit=0 total 30/30 lulus, gagal 0
+   passed     37.20 ms  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+   passed     39.96 ms  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+   passed     36.78 ms  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+   passed     60.34 ms  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 1: exit=0 total 306/306 lulus, gagal 0
+   passed     60.64 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.59 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.91 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     21.60 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      5.86 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     30.06 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     26.27 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed      9.57 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     77.50 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 2: exit=0 total 306/306 lulus, gagal 0
+   passed     48.44 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.18 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.28 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     18.70 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      5.34 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     28.56 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     25.48 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed      9.44 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     77.90 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 3: exit=0 total 306/306 lulus, gagal 0
+   passed     25.97 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      1.94 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.02 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     15.81 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      4.52 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     24.94 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     22.23 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed      8.48 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     69.10 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 4: exit=0 total 306/306 lulus, gagal 0
+   passed     43.77 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.15 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.23 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     17.58 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      4.86 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     26.12 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     23.69 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed      8.53 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     68.33 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 5: exit=0 total 306/306 lulus, gagal 0
+   passed     50.27 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.32 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.44 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     18.98 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      5.29 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     30.10 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     24.82 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed      9.02 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     79.26 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 6: exit=0 total 306/306 lulus, gagal 0
+   passed     25.33 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.05 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.25 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     16.45 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      5.06 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     26.66 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     23.94 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed      8.66 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     74.21 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 7: exit=0 total 306/306 lulus, gagal 0
+   passed     48.97 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      1.73 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      1.84 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     15.17 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      4.76 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     24.50 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     22.62 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed      8.24 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     67.66 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 8: exit=0 total 306/306 lulus, gagal 0
+   passed     54.38 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.19 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.39 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     18.58 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      5.62 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     34.74 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     23.44 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed      8.32 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     70.19 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 9: exit=0 total 306/306 lulus, gagal 0
+   passed     14.48 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.22 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.43 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     21.32 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      5.99 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     33.40 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     24.81 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed      8.90 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     75.57 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m6-redact.test.ts iter 10: exit=0 total 306/306 lulus, gagal 0
+   passed     43.85 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.12 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed      2.18 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     18.59 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed      5.01 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed     26.18 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed     24.19 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed     14.20 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed     73.10 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+m5-iter3-redact.test.ts iter 1: exit=0 total 144/144 lulus, gagal 0
+   passed      4.87 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      4.59 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      4.00 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     25.30 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 2: exit=0 total 144/144 lulus, gagal 0
+   passed      4.45 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      4.00 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.57 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     23.61 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 3: exit=0 total 144/144 lulus, gagal 0
+   passed      4.69 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      4.19 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.41 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     23.91 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 4: exit=0 total 144/144 lulus, gagal 0
+   passed      4.48 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.89 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.30 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     22.89 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 5: exit=0 total 144/144 lulus, gagal 0
+   passed      4.61 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      4.13 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.53 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     25.08 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 6: exit=0 total 144/144 lulus, gagal 0
+   passed      4.43 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      4.04 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.39 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     23.01 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 7: exit=0 total 144/144 lulus, gagal 0
+   passed      4.90 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      4.54 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.76 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     25.60 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 8: exit=0 total 144/144 lulus, gagal 0
+   passed      4.46 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      4.01 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.53 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     23.16 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 9: exit=0 total 144/144 lulus, gagal 0
+   passed      5.13 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      4.76 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.93 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     26.48 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 10: exit=0 total 144/144 lulus, gagal 0
+   passed      4.46 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.92 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed      3.55 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed     22.47 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter2-redact-timeout.test.ts iter 1: exit=0 total 37/37 lulus, gagal 0
+m5-iter2-redact-timeout.test.ts iter 2: exit=0 total 37/37 lulus, gagal 0
+m5-iter2-redact-timeout.test.ts iter 3: exit=0 total 37/37 lulus, gagal 0
+m5-iter2-redact-timeout.test.ts iter 4: exit=0 total 37/37 lulus, gagal 0
+m5-iter2-redact-timeout.test.ts iter 5: exit=0 total 37/37 lulus, gagal 0
+m5-iter2-redact-timeout.test.ts iter 6: exit=0 total 37/37 lulus, gagal 0
+m5-iter2-redact-timeout.test.ts iter 7: exit=0 total 37/37 lulus, gagal 0
+m5-iter2-redact-timeout.test.ts iter 8: exit=0 total 37/37 lulus, gagal 0
+m5-iter2-redact-timeout.test.ts iter 9: exit=0 total 37/37 lulus, gagal 0
+m5-iter2-redact-timeout.test.ts iter 10: exit=0 total 37/37 lulus, gagal 0
+
+# Ringkasan per test (n=10)
+  m5-iter3-redact.test.ts          n=10 min=   4.43 median=   4.54 max=   5.13  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+  m5-iter3-redact.test.ts          n=10 min=   3.89 median=   4.09 max=   4.76  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+  m5-iter3-redact.test.ts          n=10 min=   3.30 median=   3.54 max=   4.00  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+  m5-iter3-redact.test.ts          n=10 min=  22.47 median=  23.76 max=  26.48  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+  m6-iter2-be.test.ts              n=10 min=  32.03 median=  34.54 max=  44.91  16 KB base64 ter-wrap 76 kolom tanpa secret (satu rangkaian): linear (≤ 20 ms terbaik dari 5)
+  m6-iter2-be.test.ts              n=10 min=  33.78 median=  36.37 max=  43.20  16 KB banyak rangkaian 2 baris (76 + pendek) tanpa secret: linear (≤ 20 ms terbaik dari 5)
+  m6-iter2-be.test.ts              n=10 min=  30.78 median=  35.32 max=  39.71  16 KB baris 76 kolom bergantian lebar 64: linear (≤ 20 ms terbaik dari 5)
+  m6-iter2-be.test.ts              n=10 min=  50.54 median=  53.85 max=  65.69  16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)
+  m6-redact.test.ts                n=10 min=  14.48 median=  46.14 max=  60.64  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts                n=10 min=   1.73 median=   2.17 max=   2.59  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts                n=10 min=   1.84 median=   2.26 max=   2.91  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts                n=10 min=  15.17 median=  18.58 max=  21.60  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts                n=10 min=   4.52 median=   5.17 max=   5.99  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts                n=10 min=  24.50 median=  27.61 max=  34.74  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts                n=10 min=  22.23 median=  24.06 max=  26.27  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts                n=10 min=   8.24 median=   8.78 max=  14.20  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts                n=10 min=  67.66 median=  73.65 max=  79.26  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)
+status test perf: {'passed': 170}
+
+# Pengukuran langsung redactSecrets (node v22.22.2 --experimental-strip-types, proses terpisah; pelengkap)
+base64 ter-wrap 76 kolom tanpa secret (satu rangkaian) (16753 char, batas test < 20 ms)
+   redactSecrets best-of-5 x10: min 3.80 max 4.40 [4.4 4.2 4.1 4.0 3.8 3.9 4.0 3.9 3.8 3.8]
+banyak rangkaian 2 baris (76 + pendek) tanpa secret (15400 char, batas test < 20 ms)
+   redactSecrets best-of-5 x10: min 4.44 max 4.66 [4.6 4.7 4.6 4.5 4.4 4.5 4.6 4.4 4.5 4.5]
+baris 76 kolom bergantian lebar 64 (16330 char, batas test < 20 ms)
+   redactSecrets best-of-5 x10: min 4.61 max 4.94 [4.8 4.8 4.8 4.6 4.8 4.8 4.9 4.9 4.8 4.9]
+base64 bersarang 2 lapis ter-wrap (BARU, anggaran 50 ms) (15695 char, batas test < 50 ms)
+   redactSecrets best-of-5 x10: min 9.53 max 10.45 [9.5 9.7 9.6 10.0 9.7 10.1 10.5 10.3 10.2 10.0]
+
+# Ambang SR-5-11 tidak berubah
+## dashboard/src/lib/server/m5-iter3-redact.test.ts
+   diff 105727e..HEAD (iter2): 0 baris
+   baris ambang di main (31c506e) vs HEAD yang berbeda (toBeLessThan|< *[0-9]+ ms):
+## dashboard/src/lib/server/m5-iter2-redact-timeout.test.ts
+   diff 105727e..HEAD (iter2): 0 baris
+   baris ambang di main (31c506e) vs HEAD yang berbeda (toBeLessThan|< *[0-9]+ ms):
+## dashboard/src/lib/server/m6-redact.test.ts
+   diff 105727e..HEAD (iter2): 0 baris
+   baris ambang di main (31c506e) vs HEAD yang berbeda (toBeLessThan|< *[0-9]+ ms):
+     0a1,8
+     > //                                idempoten; performa linear (SR-5-11 ≤ 20/50 ms)
+     >   ])("16 KB %s: linear (≤ 20 ms terbaik dari 5)", (_n, input) => {
+     >     expect(bestOf(5, () => redactSecrets(input))).toBeLessThan(20)
+     >     expect(bestOf(5, () => cleanEventMessage(input))).toBeLessThan(20)
+     >   it("16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLogPost ≤ 50 ms (terbaik dari 5)", async () => {
+     >     // Baris digabung per ±2 KB (8 baris): batas 50 ms mengukur redaksi, bukan biaya INSERT per baris.
+     >     expect(best).toBeLessThan(50)
+     >     expect(tail.length).toBeLessThan(16)
+## dashboard/src/app/boot/m5-log-routes.test.ts
+   diff 105727e..HEAD (iter2): 0 baris
+   baris ambang di main (31c506e) vs HEAD yang berbeda (toBeLessThan|< *[0-9]+ ms):
+## dashboard/src/app/boot/m5-te-lifecycle-routes.test.ts
+   diff 105727e..HEAD (iter2): 0 baris
+   baris ambang di main (31c506e) vs HEAD yang berbeda (toBeLessThan|< *[0-9]+ ms):
+## ambang di m6-iter2-be.test.ts (baru iter2):
+   318:    expect(bestOf(5, () => redactSecrets(input))).toBeLessThan(20)
+   319:    expect(bestOf(5, () => cleanEventMessage(input))).toBeLessThan(20)
+   328:    expect(bestOf(5, () => redactSecrets(input))).toBeLessThan(50)
+   329:    expect(bestOf(5, () => cleanEventMessage(input))).toBeLessThan(50)

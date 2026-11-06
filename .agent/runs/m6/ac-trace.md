@@ -85,3 +85,36 @@ Singkatan file: `AR` = `dashboard/src/app/api/auth/auth-routes.test.ts`; `AM` = 
 
 AC tanpa test/bukti: tidak ada. AC-6.1–6.53 masing-masing punya ≥ 1 test atau bukti KVM resmi yang valid di
 105727e; AC-6.54 (teardown) dijadwalkan setelah APR M6 dan tidak dinilai gate M6 (plan §4).
+
+## Iterasi 2 — temuan gate-iter1 (R1–R8) dan DEC-022 §3 → test (test-engineer, rerun gate lokal @ fdc0abf; kode produk = 18913b5)
+
+Bukti mentah iterasi 2: `.agent/runs/m6/final-iter2/` (tabel hasil diserahkan ke Orchestrator di laporan test-engineer; harness subagent memblokir penulisan berkas ringkasan .md). Baris AC-6.1–6.54 di atas tetap
+berlaku; seluruh test yang dirujuk lulus lagi di HEAD ini (unit, proses, infra, E2E 2×). Bukti KVM AC-6.43–6.52 kini dari
+run resmi iterasi 2 di `18913b5` (`kvm/results.json`, core/bulk/distro PASS; DEC-022 §4).
+
+Singkatan tambahan: `UI2` = `src/components/m6-iter2-ui.test.tsx`; `BE2` = `src/lib/server/m6-iter2-be.test.ts`;
+`DEB2` = `src/lib/server/installers/m6-iter2-debian.test.ts`; `SMK` = `src/lib/server/installers/m6-smoke-fixes.test.ts`;
+`HKS` = `src/lib/server/installers/m5-te-hooks.test.ts`; `APT` = `src/lib/server/m6-kvm-apt-trust.test.ts`;
+`TPW` = `dashboard/test/process/trust-proxy-warning.test.ts`; `EI2` = `dashboard/e2e/m6-ui-iter2.spec.ts`.
+
+| Temuan | Jenis | Test (file › nama) | Mutasi merah |
+|---|---|---|---|
+| R1 / DR-6-1 | jsdom + e2e | UI2 › "404 → pesan 'Job tidak ditemukan — …' text-body", "401 → 'Sesi berakhir…' text-body"; EI2 › "Jobs: job-row-failure = body di 375 dan 1440", "Hosts: host-failure-reason = body; Sheet: sheet-last-job-failure seluruh alasan tidak muted", "Log viewer: 'Job tidak ditemukan — …' …", "Log viewer: 'Sesi berakhir…' …"; EI2 › axe "/hosts", "/jobs", "/jobs detail", "/jobs 404" (filter tidak diubah) | `final-iter2/mutation.txt` A:R1, B:R1 ×3 situs; `mutation-dev-iter2-fe.txt` 4 situs |
+| R2 / DR-6-2 | jsdom + e2e | UI2 › "Installing/Configuring/Done belum tercapai → bukan muted"; EI2 › "R2 / DR-6-2 timeline: label tahap belum tercapai = body" | A:R2, B:R2 |
+| R3 / DR-6-3 (DEC-022 §1) | e2e | EI2 › "R3 / DR-6-3 … › /os-images @<lebar>", "Sheet tab OS: catatan kartu image tidak tersedia = body + ikon, tidak merah"; `e2e/m5-library.spec.ts` › "AC-5.27/5.32 …" dan `e2e/m5-ui-fixes.spec.ts` › "AC-5.31 …" (migrasi muted → body, `test-migration.md`) | `mutation-dev-iter2-fe.txt` R3 ×2 |
+| R4 / SR-6-1 / CR-6-3 (DEC-021 fail-closed, DEC-022 §2) | unit + integration + kvm | DEB2 › "DEC-022 §2 isLocalMedia …", "media lokal: trusted=yes, allow_unauthenticated, hook 50mirror, dan pembersihan ada", "media eksternal <url> → InstallerInputError …" (4 URL), "serverIp berbeda dari host media yang sama → ditolak …"; SMK › "DEC-022 §2 media eksternal (host ≠ PXE_SERVER_IP): generator menolak …"; BE2 › "default (… server PXE) → Debian mulai install (200)", "PXE_MEDIA_URL=<url> → install Debian 422 dengan pesan jelas, tanpa job" (3 URL), "media eksternal tidak memblokir OS lain …"; APT (7 test, cek `/etc/apt` target fail-closed); KVM `kvm/distro` AC-6.48 (`/etc/apt` tanpa `trusted=yes`/`AllowUnauthenticated`) | A:R4a, A:R4b; `mutation-dev-iter2-be.txt` M1/M2; `mutation-te-T14.txt` |
+| SR-6-6 (DEC-022 §2) | unit | DEB2 › "baris DEBIAN_UNTRUST_CMD mendahului semua perintah firstboot (pxe-callback) di late script"; SMK › "… media lokal (default) …" (urutan untrust < firstboot) | A:R4c; dev M3 |
+| R5 / SR-6-2 | static | BE2 › "R5 SR-6-2 (AC-6.53) …" (a) DEC-021, (b) DEC-019 §1, (c) SR-6-3, "berkas checksum yang dirujuk ada" | dev M10–M12 |
+| R6 / CR-6-4 | unit (sandbox shell) | HKS › "Debian early_command + late (log sebelum configuring, penanda di akhir)" (`toEqual` persis, `modprobe`/`insmod`/`udevadm`/`uname` di-stub, `/sys/module` dialihkan) | A:R6a, A:R6b; `mutation-te-iter2.txt` M1–M4 |
+| R7 / DR-6-5 | jsdom + e2e | UI2 › "tiap state punya glyph SVG berbeda di indikator; nama layanan bukan sr-only"; EI2 › "R7 / DR-6-5 … › @<375/414/768/800/1024/1279/1280/1440>: glyph berbeda per state, nama DHCP/TFTP/HTTP terlihat, tanpa overflow" | A:R7, B:R7 (8 lebar) |
+| R8 | dokumen | `bugs.md` §Verifikasi final merujuk berkas yang ada di `final/`; bukti iterasi 2 di `final-iter2/` (tanpa rujukan ke berkas yang tidak ada) | — |
+| CR-6-1 (DEC-022 §3) | integration + unit + e2e | BE2 › "tepat 32 KiB (key baru) → 200, tersimpan", "32 KiB + 1 byte → 422 section ssh dengan pesan batas, tanpa efek", "key library terpilih ikut dihitung …", "bulk (applyConfig banyak host) juga ditolak …"; DEB2 › "CR-6-1 batas late_command Debian" (5 test); **EI2 › "CR-6-9 / CR-6-1 batas total authorized_keys 32 KiB tampil di tab SSH Sheet; config host tidak berubah"** (baru, test-engineer iter2: 32 KiB+1 key sintetis lewat Sheet → PATCH 422, alert "Ditolak server" di tab SSH memuat pesan batas, tab "(ada error)", GET host/config/ssh-keys identik) | dev M4/M5; B:CR-6-9 |
+| SR-6-3 / CR-6-6 | unit + proses + static | BE2 › "trustProxyWarnings: …", "onServerStart di production tanpa PXE_TRUST_PROXY → logger.warn …", "… DENGAN PXE_TRUST_PROXY=1 (+ lease) → tanpa peringatan proxy"; TPW › "tanpa PXE_TRUST_PROXY → start … + tepat satu baris peringatan, tanpa hash", "PXE_TRUST_PROXY=1 + file lease → start tanpa peringatan proxy"; BE2 › R5 (c) README | dev M6 |
+| SR-6-4 | unit | BE2 › "SR-6-4: base64 ter-wrap digabung sebelum didekode …" (tertangkap ter-wrap, baris lebar penuh, rahasia terpotong di batas baris, dua lapis, tanpa over-redaksi, baris tidak seragam), "16 KB … linear (≤ 20 ms …)", "16 KB base64 bersarang 2 lapis ter-wrap: ≤ 50 ms (terbaik dari 5)" | dev M7–M9 (M13 ekuivalen) |
+| DR-6-4 | jsdom + e2e | UI2 › "focus-visible: border ring + ring/40 (bukan ring/15)"; EI2 › "DR-6-4 fokus input: border ring + ring ≥ 40% (login, keyboard)" | `mutation-dev-iter2-fe.txt` DR-6-4 ×2 |
+| DR-6-6 | e2e | EI2 › "DR-6-6 hostname 63 karakter dipotong 24ch + title; kolom Status tidak terdorong …" | dev DR-6-6 |
+| DR-6-7 | jsdom + e2e | UI2 › "DR-6-7 IpText: IP/CIDR mono, teks pesan tidak berubah"; EI2 › "DR-6-7 'Di luar subnet …': CIDR mono, teks pesan tetap" | dev DR-6-7 |
+| DR-6-8 | jsdom + e2e | UI2 › "judul 'Job tidak ditemukan', deskripsi = penjelasan log viewer"; EI2 › "DR-6-8 /jobs?job=<tidak ada>: deskripsi tidak mengulang judul" | dev DR-6-8 |
+| CR-6-10 | dokumen | `test-migration.md` §CR-6-10 (`m6-smoke-fixes.test.ts:470-488`, 113 → 110 asersi statik, alasan DEC-022 §2 / CR-6-3 / SR-6-6) | — |
+
+Temuan iterasi 2 tanpa test: tidak ada. Ditunda sesuai DEC-022 §3: CR-6-2 (Windows tidak dilayani) dan temuan info.

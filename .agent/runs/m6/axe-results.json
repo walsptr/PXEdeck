@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T04:53:20.604Z",
+  "generatedAt": "2026-11-06T07:58:51.677Z",
   "tags": [
     "wcag2a",
     "wcag2aa",
@@ -36,11 +36,11 @@
     }
   ],
   "filteredCount": {
-    "total": 607,
+    "total": 549,
     "byCategory": {
-      "exception:muted/white": 444,
+      "exception:muted/white": 380,
       "exception:muted/canvas": 68,
-      "exception:white/stage-done": 85,
+      "exception:white/stage-done": 91,
       "exception:on-primary/primary": 10
     }
   },
@@ -233,7 +233,7 @@
           "bg": "#f7f7f4",
           "ratio": 3.84,
           "inSheet": false,
-          "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+          "target": ".px-2"
         },
         {
           "category": "exception:muted/white",
@@ -306,6 +306,15 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "th[aria-sort=\"none\"]:nth-child(6) > .rounded-md.uppercase.-ml-1"
+        },
+        {
+          "category": "exception:muted/white",
+          "why": "pasangan token terdaftar",
+          "fg": "#807d72",
+          "bg": "#ffffff",
+          "ratio": 4.12,
+          "inSheet": false,
+          "target": "th[aria-sort=\"none\"]:nth-child(7) > .rounded-md.uppercase.-ml-1"
         },
         {
           "category": "exception:muted/white",
@@ -416,6 +425,15 @@
           "target": ".group\\/row:nth-child(6) > td:nth-child(4) > .gap-0\\.5.flex-col > .type-caption.text-muted-foreground"
         },
         {
+          "category": "exception:white/stage-done",
+          "why": "pasangan token terdaftar",
+          "fg": "#ffffff",
+          "bg": "#c08532",
+          "ratio": 3.16,
+          "inSheet": false,
+          "target": ".group\\/row:nth-child(6) > td:nth-child(7) > .items-start.flex-col.gap-1 > .bg-stage-done.text-white[data-status=\"done\"]"
+        },
+        {
           "category": "exception:muted/white",
           "why": "pasangan token terdaftar",
           "fg": "#807d72",
@@ -423,6 +441,15 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": ".group\\/row:nth-child(8) > td:nth-child(4) > .gap-0\\.5.flex-col > .type-caption.text-muted-foreground"
+        },
+        {
+          "category": "exception:white/stage-done",
+          "why": "pasangan token terdaftar",
+          "fg": "#ffffff",
+          "bg": "#c08532",
+          "ratio": 3.16,
+          "inSheet": false,
+          "target": ".group\\/row:nth-child(8) > td:nth-child(7) > .items-start.flex-col.gap-1 > .bg-stage-done.text-white[data-status=\"done\"]"
         },
         {
           "category": "exception:muted/white",
@@ -434,6 +461,15 @@
           "target": ".group\\/row:nth-child(10) > td:nth-child(4) > .gap-0\\.5.flex-col > .type-caption.text-muted-foreground"
         },
         {
+          "category": "exception:white/stage-done",
+          "why": "pasangan token terdaftar",
+          "fg": "#ffffff",
+          "bg": "#c08532",
+          "ratio": 3.16,
+          "inSheet": false,
+          "target": ".group\\/row:nth-child(10) > td:nth-child(7) > .items-start.flex-col.gap-1 > .bg-stage-done.text-white[data-status=\"done\"]"
+        },
+        {
           "category": "exception:muted/white",
           "why": "pasangan token terdaftar",
           "fg": "#807d72",
@@ -443,6 +479,15 @@
           "target": ".group\\/row:nth-child(11) > td:nth-child(4) > .gap-0\\.5.flex-col > .type-caption.text-muted-foreground"
         },
         {
+          "category": "exception:white/stage-done",
+          "why": "pasangan token terdaftar",
+          "fg": "#ffffff",
+          "bg": "#c08532",
+          "ratio": 3.16,
+          "inSheet": false,
+          "target": ".group\\/row:nth-child(11) > td:nth-child(7) > .items-start.flex-col.gap-1 > .bg-stage-done.text-white[data-status=\"done\"]"
+        },
+        {
           "category": "exception:muted/white",
           "why": "pasangan token terdaftar",
           "fg": "#807d72",
@@ -450,6 +495,15 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": ".group\\/row:nth-child(12) > td:nth-child(4) > .gap-0\\.5.flex-col > .type-caption.text-muted-foreground"
+        },
+        {
+          "category": "exception:white/stage-done",
+          "why": "pasangan token terdaftar",
+          "fg": "#ffffff",
+          "bg": "#c08532",
+          "ratio": 3.16,
+          "inSheet": false,
+          "target": ".group\\/row:nth-child(12) > td:nth-child(7) > .items-start.flex-col.gap-1 > .bg-stage-done.text-white[data-status=\"done\"]"
         },
         {
           "category": "exception:muted/white",
@@ -486,6 +540,15 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": ".group\\/row:nth-child(15) > td:nth-child(4) > .gap-0\\.5.flex-col > .type-caption.text-muted-foreground"
+        },
+        {
+          "category": "exception:white/stage-done",
+          "why": "pasangan token terdaftar",
+          "fg": "#ffffff",
+          "bg": "#c08532",
+          "ratio": 3.16,
+          "inSheet": false,
+          "target": ".group\\/row:nth-child(15) > td:nth-child(7) > .items-start.flex-col.gap-1 > .bg-stage-done.text-white[data-status=\"done\"]"
         },
         {
           "category": "exception:muted/white",
@@ -569,7 +632,7 @@
           "bg": "#f7f7f4",
           "ratio": 3.84,
           "inSheet": false,
-          "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+          "target": ".px-2"
         },
         {
           "category": "exception:muted/white",
@@ -776,42 +839,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": "tr[data-image-id=\"ubuntu-22.04\"] > .xl\\:max-w-40.max-xl\\:order-3.max-xl\\:basis-full > .max-xl\\:items-baseline.max-xl\\:gap-x-1\\.5.gap-0\\.5 > .type-caption.text-muted-foreground"
         },
         {
@@ -857,51 +884,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .xl\\:max-w-40.max-xl\\:order-3.max-xl\\:basis-full > .max-xl\\:items-baseline.max-xl\\:gap-x-1\\.5.gap-0\\.5 > .type-caption.text-muted-foreground"
         },
         {
@@ -939,42 +921,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-6.max-xl\\:basis-full.max-xl\\:min-w-0 > .xl\\:gap-0\\.5.xl\\:w-64[data-testid=\"img-source\"] > .gap-2:nth-child(4) > .w-10.type-caption.shrink-0"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -1073,42 +1019,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .xl\\:max-w-40.max-xl\\:order-3.max-xl\\:basis-full > .max-xl\\:items-baseline.max-xl\\:gap-x-1\\.5.gap-0\\.5 > .type-caption.text-muted-foreground"
         },
         {
@@ -1146,33 +1056,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-6.max-xl\\:basis-full.max-xl\\:min-w-0 > .xl\\:gap-0\\.5.xl\\:w-64[data-testid=\"img-source\"] > .gap-2:nth-child(4) > .w-10.type-caption.shrink-0"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -1227,15 +1110,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-6.max-xl\\:basis-full.max-xl\\:min-w-0 > .xl\\:gap-0\\.5.xl\\:w-64[data-testid=\"img-source\"] > .gap-2:nth-child(4) > .w-10.type-caption.shrink-0"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         }
       ]
     },
@@ -1376,51 +1250,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-1.text-body[data-testid=\"img-used-by\"] > .xl\\:hidden.text-muted-foreground"
         },
         {
@@ -1466,51 +1295,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-1.text-body[data-testid=\"img-used-by\"] > .xl\\:hidden.text-muted-foreground"
         },
         {
@@ -1548,51 +1332,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-6.max-xl\\:basis-full.max-xl\\:min-w-0 > .xl\\:gap-0\\.5.xl\\:w-64[data-testid=\"img-source\"] > .gap-2:nth-child(4) > .w-10.type-caption.shrink-0"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
         },
         {
           "category": "exception:muted/white",
@@ -1691,51 +1430,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-1.text-body[data-testid=\"img-used-by\"] > .xl\\:hidden.text-muted-foreground"
         },
         {
@@ -1773,51 +1467,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-6.max-xl\\:basis-full.max-xl\\:min-w-0 > .xl\\:gap-0\\.5.xl\\:w-64[data-testid=\"img-source\"] > .gap-2:nth-child(4) > .w-10.type-caption.shrink-0"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
         },
         {
           "category": "exception:muted/white",
@@ -1880,15 +1529,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-1.text-body[data-testid=\"img-used-by\"] > .xl\\:hidden.text-muted-foreground"
         }
       ]
@@ -1913,7 +1553,7 @@
           "bg": "#f7f7f4",
           "ratio": 3.84,
           "inSheet": false,
-          "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+          "target": ".px-2"
         },
         {
           "category": "exception:muted/white",
@@ -2000,7 +1640,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-9c1ac08a\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
+          "target": "tr[data-key-id=\"key-1cb88480\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
         },
         {
           "category": "exception:muted/white",
@@ -2009,7 +1649,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-9c1ac08a\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-1cb88480\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2018,7 +1658,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-9c1ac08a\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-1cb88480\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2027,7 +1667,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-04abd93a\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
+          "target": "tr[data-key-id=\"key-79abfe75\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
         },
         {
           "category": "exception:muted/white",
@@ -2036,7 +1676,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-04abd93a\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-79abfe75\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2045,7 +1685,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-04abd93a\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-79abfe75\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2054,7 +1694,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-128274ea\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
+          "target": "tr[data-key-id=\"key-aab6d14c\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
         },
         {
           "category": "exception:muted/white",
@@ -2063,7 +1703,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-128274ea\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-aab6d14c\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2072,7 +1712,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-128274ea\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-aab6d14c\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
         }
       ]
     },
@@ -2096,7 +1736,7 @@
           "bg": "#f7f7f4",
           "ratio": 3.84,
           "inSheet": false,
-          "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+          "target": ".px-2"
         },
         {
           "category": "exception:muted/white",
@@ -2759,7 +2399,7 @@
           "bg": "#f7f7f4",
           "ratio": 3.84,
           "inSheet": false,
-          "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+          "target": ".px-2"
         },
         {
           "category": "exception:muted/white",
@@ -2777,7 +2417,7 @@
           "bg": "#f7f7f4",
           "ratio": 3.84,
           "inSheet": false,
-          "target": ".gap-2.items-center.type-caption > span:nth-child(2)"
+          "target": ".justify-between.gap-3.flex-wrap > .gap-2.items-center.text-muted-foreground > span:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -2904,15 +2544,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-056\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-056\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
         },
         {
           "category": "exception:muted/white",
@@ -3066,15 +2697,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-049\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-049\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
         },
         {
           "category": "exception:muted/white",
@@ -3263,15 +2885,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-042\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-042\"] > .pr-4 > .gap-0\\.5.flex-col > .text-muted-foreground.type-data[data-testid=\"job-row-duration\"]"
         },
         {
@@ -3417,15 +3030,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-035\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-035\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
         },
         {
           "category": "exception:muted/white",
@@ -3614,15 +3218,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-028\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-028\"] > .pr-4 > .gap-0\\.5.flex-col > .text-muted-foreground.type-data[data-testid=\"job-row-duration\"]"
         },
         {
@@ -3768,15 +3363,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-021\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-021\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
         },
         {
           "category": "exception:muted/white",
@@ -3965,15 +3551,6 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-014\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-014\"] > .pr-4 > .gap-0\\.5.flex-col > .text-muted-foreground.type-data[data-testid=\"job-row-duration\"]"
         },
         {
@@ -4073,7 +3650,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "time[datetime=\"2026-11-03T04:50:00.000Z\"]"
+          "target": "time[datetime=\"2026-11-03T07:55:00.000Z\"]"
         },
         {
           "category": "exception:muted/white",
@@ -4091,7 +3668,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "li[data-stage=\"booting\"] > .type-caption.text-muted-foreground > .type-data.text-xs"
+          "target": "li[data-stage=\"booting\"] > .text-muted-foreground.type-caption > .type-data.text-xs"
         },
         {
           "category": "exception:muted/white",
@@ -4100,25 +3677,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "li[data-stage=\"installing\"] > .gap-2.items-center > .\\[a\\]\\:hover\\:bg-muted.\\[a\\]\\:hover\\:text-muted-foreground[data-variant=\"outline\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "li[data-stage=\"configuring\"] > .gap-2.items-center > .\\[a\\]\\:hover\\:bg-muted.\\[a\\]\\:hover\\:text-muted-foreground[data-variant=\"outline\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "p > .type-caption.text-muted-foreground > .type-data.text-xs"
+          "target": "p > .text-muted-foreground.type-caption > .type-data.text-xs"
         },
         {
           "category": "exception:muted/white",
@@ -4208,7 +3767,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "time[datetime=\"2026-11-03T04:50:30.000Z\"]"
+          "target": "time[datetime=\"2026-11-03T07:55:30.000Z\"]"
         },
         {
           "category": "exception:muted/white",
@@ -4241,7 +3800,7 @@
           "bg": "#f7f7f4",
           "ratio": 3.84,
           "inSheet": false,
-          "target": ".gap-2.items-center.type-caption > span:nth-child(2)"
+          "target": ".justify-between.gap-3.flex-wrap > .gap-2.items-center.text-muted-foreground > span:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -4368,15 +3927,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-056\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-056\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
         },
         {
           "category": "exception:muted/canvas",
@@ -4530,15 +4080,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-049\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-049\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
         },
         {
           "category": "exception:muted/canvas",
@@ -4721,15 +4262,6 @@
           "target": "tr[data-job-id=\"job-m6ui-042\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
         },
         {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-042\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
-        },
-        {
           "category": "exception:muted/canvas",
           "why": "pasangan token terdaftar",
           "fg": "#807d72",
@@ -4881,15 +4413,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-035\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-035\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
         },
         {
           "category": "exception:muted/canvas",
@@ -5072,15 +4595,6 @@
           "target": "tr[data-job-id=\"job-m6ui-028\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
         },
         {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-028\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
-        },
-        {
           "category": "exception:muted/canvas",
           "why": "pasangan token terdaftar",
           "fg": "#807d72",
@@ -5232,15 +4746,6 @@
           "ratio": 4.12,
           "inSheet": false,
           "target": "tr[data-job-id=\"job-m6ui-021\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-021\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
         },
         {
           "category": "exception:muted/canvas",
@@ -5423,15 +4928,6 @@
           "target": "tr[data-job-id=\"job-m6ui-014\"] > .max-w-48.pl-4 > .min-w-0.gap-0\\.5.flex-col > .text-muted-foreground.truncate.type-data"
         },
         {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "tr[data-job-id=\"job-m6ui-014\"] > td:nth-child(2) > .items-start.gap-1.flex-col > .max-w-56.whitespace-normal[data-testid=\"job-row-failure\"]"
-        },
-        {
           "category": "exception:muted/canvas",
           "why": "pasangan token terdaftar",
           "fg": "#807d72",
@@ -5537,7 +5033,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "time[datetime=\"2026-11-03T04:50:00.000Z\"]"
+          "target": "time[datetime=\"2026-11-03T07:55:00.000Z\"]"
         },
         {
           "category": "exception:muted/white",
@@ -5555,7 +5051,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "li[data-stage=\"booting\"] > .type-caption.text-muted-foreground > .type-data.text-xs"
+          "target": "li[data-stage=\"booting\"] > .text-muted-foreground.type-caption > .type-data.text-xs"
         },
         {
           "category": "exception:muted/white",
@@ -5564,25 +5060,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "li[data-stage=\"installing\"] > .gap-2.items-center > .\\[a\\]\\:hover\\:bg-muted.\\[a\\]\\:hover\\:text-muted-foreground[data-variant=\"outline\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "li[data-stage=\"configuring\"] > .gap-2.items-center > .\\[a\\]\\:hover\\:bg-muted.\\[a\\]\\:hover\\:text-muted-foreground[data-variant=\"outline\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": false,
-          "target": "p > .type-caption.text-muted-foreground > .type-data.text-xs"
+          "target": "p > .text-muted-foreground.type-caption > .type-data.text-xs"
         },
         {
           "category": "exception:muted/white",
@@ -5636,7 +5114,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "time[datetime=\"2026-11-03T04:50:30.000Z\"]"
+          "target": "time[datetime=\"2026-11-03T07:55:30.000Z\"]"
         },
         {
           "category": "exception:muted/white",

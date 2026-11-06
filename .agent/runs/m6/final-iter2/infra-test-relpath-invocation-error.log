@@ -1,0 +1,270 @@
+# infra/test/run.sh @ fdc0abf INFRA_TEST_SANDBOX_PARENT=.agent/tmp/te-iter2-infra 2026-11-06T07:27:44Z
+# LOG INI: run pertama dengan INFRA_TEST_SANDBOX_PARENT RELATIF — kesalahan pemanggilan (path sandbox relatif; script cd ke direktori lain -> exit 127 server-up). Diganti oleh infra-test.log (path absolut, 76/76).
+infra/test/run.sh — 2026-11-06T07:27:45Z
+  ok   bash -n semua script infra
+  ok   set -euo pipefail di setiap script
+  ok   PATH test hanya berisi virsh/ssh palsu, tanpa sudo
+  ok   XML pxe-test tanpa forward/dhcp, dns off; pxe-test-nat NAT
+  ok   net-up dry-run: rencana define/start, tanpa mutasi
+  ok   net-up dua kali idempoten (virsh palsu ber-state)
+  ok   assert_name / assert_path_in_vms / assert_mac
+  ok   node.sh menolak nama terlindungi tanpa perintah virsh
+  ok   operasi disk VM selalu didahului assert_path_in_vms
+  ok   node.sh create dry-run UEFI/BIOS sesuai spesifikasi
+  ok   node.sh create/reset/destroy (palsu) idempoten
+  ok   node.sh create tanpa tahap install virt-install (B-3)
+  ok   node.sh reset: VM tetap running (on_reboot=restart, B-3)
+  ok   node.sh create gagal bila XML live on_reboot=destroy (B-3)
+  ok   cleanup.sh hanya resource run + snapshot
+  ok   cleanup.sh --server
+  ok   cleanup.sh dry-run tanpa mutasi
+  ok   cleanup.sh menolak nama terlindungi (exit≠0, tanpa virsh)
+  ok   cleanup.sh opsi tak dikenal
+  ok   server-down dry-run & palsu
+  ok   net-down hanya pxe-test*
+    ASSERT: kvm-run dry-run: DRY-RUN: virsh -c qemu:///system net-define /home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/net/pxe-test-nat.xml
+DRY-RUN: virsh -c qemu:///system net-start pxe-test-nat
+2026-11-06T07:27:58Z net-up             ok 
+[2026-11-06T07:27:58Z] base .agent/tmp/te-iter2-infra/sandbox.iQrtxT/agent/vms/pxe-test-server-base.qcow2 sudah di-provision (test)
+DRY-RUN: rm -f .agent/tmp/te-iter2-infra/sandbox.iQrtxT/agent/vms/pxe-test-server.qcow2
+DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.iQrtxT/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.iQrtxT/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:27:58Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.iQrtxT/agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.iQrtxT/agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.iQrtxT/agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.iQrtxT/agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-06T07:27:58Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found
+2026-11-06T07:27:58Z evidence           start 
+2026-11-06T07:27:58Z evidence           done 
+2026-11-06T07:27:58Z server-logs        NOT_RUN node belum dibuat (tahap server-up)
+[2026-11-06T07:27:58Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T07:27:58Z] cleanup run m4 selesai (lihat .agent/tmp/te-iter2-infra/sandbox.iQrtxT/runs/cleanup.txt)
+2026-11-06T07:27:58Z cleanup            done 
+2026-11-06T07:27:58Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.iQrtxT/runs bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:27:58Z redact             ok 
+2026-11-06T07:27:58Z result             FAIL exit=127 stage=server-up expected '0' got '127'
+  FAIL kvm-run.sh m4 dry-run end-to-end (semua nama pxe-test-)
+  ok   kvm-run.sh argumen invalid ditolak tanpa mutasi
+  ok   kvm-run.sh node sisa run → batal tanpa menyentuh
+  ok   deploy-dashboard dry-run + dashboard.env tanpa secret
+  ok   dnsmasq.conf terikat pxe0 (bind-interfaces)
+  ok   tanpa sudo, ssh hanya dengan key, tanpa ~/.ssh
+  ok   verify-node.sh: symlink, gagal cepat tanpa env, cek AC-4.31
+  ok   redact-evidence: token path/token=/$6$ disamarkan, exit 0
+  ok   redact-evidence: blob base64 berisi token/$6$/key disamarkan (B-5)
+  ok   redact-evidence: header private key → exit 1 tanpa isi
+  ok   redact-evidence: argumen salah → exit 2
+  ok   kvm-run.sh finish() memanggil redact-evidence (gagal = FAIL)
+  ok   M5 node.sh poweroff=destroy saja, start=listener append + start (AC-5.33)
+  ok   M5 node.sh poweroff/start dry-run (AC-5.33)
+  ok   M5 node.sh poweroff/start menolak nama terlindungi (AC-5.33)
+  ok   M5 cleanup.sh run id server*/nat* ditolak tanpa virsh/rm (AC-5.34)
+  ok   M5 cleanup.sh m5 tidak menyentuh disk server (AC-5.34)
+  ok   M5 redact: PNG bersih utuh, teks disamarkan (AC-5.35)
+  ok   M5 redact: biner bersecret tidak diubah, exit 1 (AC-5.35)
+  ok   M5 assert-server-logs PASS → results.json (AC-5.36)
+  ok   M5 assert-server-logs FAIL → exit≠0 (AC-5.36)
+    ASSERT: DRY-RUN: virsh -c qemu:///system net-define /home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/net/pxe-test-nat.xml
+DRY-RUN: virsh -c qemu:///system net-start pxe-test-nat
+2026-11-06T07:28:08Z net-up             ok 
+[2026-11-06T07:28:08Z] base .agent/tmp/te-iter2-infra/sandbox.xsqc4K/agent/vms/pxe-test-server-base.qcow2 sudah di-provision (test)
+DRY-RUN: rm -f .agent/tmp/te-iter2-infra/sandbox.xsqc4K/agent/vms/pxe-test-server.qcow2
+DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.xsqc4K/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.xsqc4K/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:28:08Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.xsqc4K/agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.xsqc4K/agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.xsqc4K/agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.xsqc4K/agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-06T07:28:08Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found
+2026-11-06T07:28:08Z evidence           start 
+2026-11-06T07:28:08Z evidence           done 
+2026-11-06T07:28:08Z server-logs        NOT_RUN node belum dibuat (tahap server-up)
+[2026-11-06T07:28:08Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T07:28:08Z] cleanup run m5 selesai (lihat .agent/tmp/te-iter2-infra/sandbox.xsqc4K/runs/cleanup.txt)
+2026-11-06T07:28:08Z cleanup            done 
+2026-11-06T07:28:08Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.xsqc4K/runs bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:28:08Z redact             ok 
+2026-11-06T07:28:08Z result             FAIL exit=127 stage=server-up expected '0' got '127'
+  FAIL M5 kvm-run dry-run: poweroff/start hanya node destroy (AC-5.36)
+  ok   M5 kvm-run finish: asersi log + ekspor job sebelum redaksi
+  ok   M5 nginx-pxe.conf allowlist admin + SSE (AC-5.37)
+  ok   M5 deploy PXE_ADMIN_ALLOW divalidasi (AC-5.37)
+  ok   M5 bash -n semua script infra + e2e-kvm (AC-5.37)
+    ASSERT:  expected 'deploy' got 'server-up'
+  FAIL M6 kvm-run: entri cleanup di results.json pada gagal tiap tahap + sukses (AC-6.40)
+  ok   M6 kvm-run: resource terlindungi berubah -> cleanup FAIL (AC-6.40)
+    ASSERT: max_nodes=1: DRY-RUN: virsh -c qemu:///system net-define /home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/net/pxe-test-nat.xml
+DRY-RUN: virsh -c qemu:///system net-start pxe-test-nat
+2026-11-06T07:28:12Z net-up             ok 
+[2026-11-06T07:28:12Z] base .agent/tmp/te-iter2-infra/sandbox.HYnmC8/agent/vms/pxe-test-server-base.qcow2 sudah di-provision (test)
+DRY-RUN: rm -f .agent/tmp/te-iter2-infra/sandbox.HYnmC8/agent/vms/pxe-test-server.qcow2
+DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.HYnmC8/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.HYnmC8/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:28:12Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.HYnmC8/agent/vms/pxe-test-server.qcow2,format=qcow2,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.HYnmC8/agent/media/ubuntu-24.04.5-live-server-amd64.iso,device=cdrom,bus=sata,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.HYnmC8/agent/media/debian-12.15.0-amd64-DVD-1.iso,device=cdrom,bus=sata,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.HYnmC8/agent/media/Rocky-9-latest-x86_64-minimal.iso,device=cdrom,bus=sata,readonly=on --network network=pxe-test,mac=52:54:00:99:01:02,model=virtio --network network=pxe-test-nat,mac=52:54:00:99:01:03,model=virtio --graphics none --noautoconsole --serial tcp,host=127.0.0.1:45900,mode=connect,protocol.type=raw
+[2026-11-06T07:28:12Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found
+2026-11-06T07:28:12Z evidence           start 
+2026-11-06T07:28:12Z evidence           done 
+2026-11-06T07:28:12Z server-logs        NOT_RUN node belum dibuat (tahap server-up)
+[2026-11-06T07:28:12Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T07:28:12Z] cleanup run m6bulk selesai (lihat .agent/tmp/te-iter2-infra/sandbox.HYnmC8/runs/bulk/cleanup.txt)
+2026-11-06T07:28:12Z cleanup            done 
+2026-11-06T07:28:12Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.HYnmC8/runs/bulk bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:28:12Z redact             ok 
+2026-11-06T07:28:12Z result             FAIL exit=127 stage=server-up expected '0' got '127'
+  FAIL M6 kvm-run --waves max_nodes 1/2/3, tanpa --waves ditolak (AC-6.41)
+    ASSERT: DRY-RUN: virsh -c qemu:///system net-define /home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/net/pxe-test-nat.xml
+DRY-RUN: virsh -c qemu:///system net-start pxe-test-nat
+2026-11-06T07:28:12Z net-up             ok 
+[2026-11-06T07:28:12Z] base .agent/tmp/te-iter2-infra/sandbox.BWypYL/agent/vms/pxe-test-server-base.qcow2 sudah di-provision (test)
+DRY-RUN: rm -f .agent/tmp/te-iter2-infra/sandbox.BWypYL/agent/vms/pxe-test-server.qcow2
+DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.BWypYL/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.BWypYL/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:28:12Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.BWypYL/agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.BWypYL/agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.BWypYL/agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.BWypYL/agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-06T07:28:12Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found
+2026-11-06T07:28:12Z evidence           start 
+2026-11-06T07:28:12Z evidence           done 
+2026-11-06T07:28:12Z server-logs        NOT_RUN node belum dibuat (tahap server-up)
+[2026-11-06T07:28:12Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T07:28:12Z] cleanup run m6core selesai (lihat .agent/tmp/te-iter2-infra/sandbox.BWypYL/runs/core/cleanup.txt)
+2026-11-06T07:28:12Z cleanup            done 
+2026-11-06T07:28:13Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.BWypYL/runs/core bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:28:13Z redact             ok 
+2026-11-06T07:28:13Z result             FAIL exit=127 stage=server-up expected '0' got '127'
+  FAIL M6 kvm-run --scenario core/distro/bulk + spec :failpath/:os= (AC-6.41)
+  ok   M6 virsh_m menolak nama terlindungi sebelum virsh
+  ok   M6 deploy admin: password/hash hanya via stdin, tanpa bocor (AC-6.42)
+  ok   M6 deploy admin dry-run: password 0600 24 karakter (AC-6.42)
+    ASSERT: DRY-RUN: virsh -c qemu:///system net-define /home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/net/pxe-test-nat.xml
+DRY-RUN: virsh -c qemu:///system net-start pxe-test-nat
+2026-11-06T07:28:13Z net-up             ok 
+[2026-11-06T07:28:13Z] base .agent/tmp/te-iter2-infra/sandbox.lhA1U4/agent/vms/pxe-test-server-base.qcow2 sudah di-provision (test)
+DRY-RUN: rm -f .agent/tmp/te-iter2-infra/sandbox.lhA1U4/agent/vms/pxe-test-server.qcow2
+DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.lhA1U4/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.lhA1U4/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:28:13Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.lhA1U4/agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.lhA1U4/agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.lhA1U4/agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.lhA1U4/agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-06T07:28:13Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found
+2026-11-06T07:28:13Z evidence           start 
+2026-11-06T07:28:13Z evidence           done 
+2026-11-06T07:28:13Z server-logs        NOT_RUN node belum dibuat (tahap server-up)
+[2026-11-06T07:28:13Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T07:28:13Z] cleanup run m6core selesai (lihat .agent/tmp/te-iter2-infra/sandbox.lhA1U4/runs/core/cleanup.txt)
+2026-11-06T07:28:13Z cleanup            done 
+2026-11-06T07:28:13Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.lhA1U4/runs/core bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:28:13Z redact             ok 
+2026-11-06T07:28:14Z result             FAIL exit=127 stage=server-up expected '0' got '127'
+  FAIL M6 kvm-run: password admin dihapus + discan di bukti (AC-6.42)
+  ok   M6 verify-node: target bebas token, hanya jumlah (AC-6.42)
+  ok   M6 results-json.py: escape benar, rusak dipindah (CR-5-10)
+  ok   M6 assert-server-logs: JSON terpisah + file per OS (CR-5-10)
+  ok   M6 nginx limit_req login + /boot/, allowlist tetap (O5)
+  ok   M6 redact-evidence: hash scrypt teks & base64 (AC-6.52)
+  ok   M6 install-dashboard overlay: statis
+  ok   M6 install-dashboard overlay: merge env di sandbox
+  ok   M6 BUG-M6-1 server-check Rocky memakai repo Minimal/
+    ASSERT:  expected 'node tidak dibuat: run berhenti di tahap server-check' got 'node tidak dibuat: run berhenti di tahap server-up'
+  FAIL M6 BUG-M6-2 gagal sebelum node -> CR-4-12 NOT_RUN, bukan FAIL
+    ASSERT: 2026-11-06T07:28:15Z cleanup            done 
+2026-11-06T07:28:15Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.g57Sgt/runs/core bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:28:15Z redact             ok 
+2026-11-06T07:28:15Z result             FAIL exit=127 stage=server-up expected '1' got '127'
+  FAIL M6 verifikasi parsial setelah Playwright gagal (node done saja)
+  ok   M6 NFS ekspor ro + hanya 10.99.0.0/24, rocky-9 diekspor (DEC-020)
+  ok   M6 NFS validator menolak ekspor rw/wildcard/path lain (kontrol)
+  ok   M6 server-up menyalin exports sebelum exportfs -ra
+infra/test/m6-debian-modules.sh: line 11: bsdtar: command not found
+  FAIL M6 BUG-M6-8 modul disk Debian: salin dari initrd DVD (kver sama)
+infra/test/m6-debian-modules.sh: line 11: bsdtar: command not found
+  FAIL M6 BUG-M6-8 modul disk Debian: kver beda/modul hilang/argumen → gagal
+    ASSERT: DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.krXAIg/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.krXAIg/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:28:15Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.krXAIg/agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.krXAIg/agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.krXAIg/agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.krXAIg/agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-06T07:28:15Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found expected '0' got '127'
+  FAIL M6 BUG-M6-8 server-up menyalin modul disk Debian ke media server
+    ASSERT: DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.Roz14Z/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.Roz14Z/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:28:16Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.Roz14Z/agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.Roz14Z/agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.Roz14Z/agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.Roz14Z/agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-06T07:28:16Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found
+2026-11-06T07:28:16Z evidence           start 
+2026-11-06T07:28:16Z evidence           done 
+2026-11-06T07:28:16Z server-logs        NOT_RUN node belum dibuat (tahap server-up)
+[2026-11-06T07:28:16Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T07:28:16Z] cleanup run m6core selesai (lihat .agent/tmp/te-iter2-infra/sandbox.Roz14Z/runs/core/cleanup.txt)
+2026-11-06T07:28:16Z cleanup            done 
+2026-11-06T07:28:16Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.Roz14Z/runs/core bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:28:16Z redact             ok 
+2026-11-06T07:28:16Z result             FAIL exit=127 stage=server-up expected '0' got '127'
+  FAIL M6 BUG-M6-10 Playwright lulus, 2 node -> keduanya diverifikasi, PASS
+    ASSERT: DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.zE3Ikz/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.zE3Ikz/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:28:16Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.zE3Ikz/agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.zE3Ikz/agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.zE3Ikz/agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.zE3Ikz/agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-06T07:28:16Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found
+2026-11-06T07:28:16Z evidence           start 
+2026-11-06T07:28:16Z evidence           done 
+2026-11-06T07:28:16Z server-logs        NOT_RUN node belum dibuat (tahap server-up)
+[2026-11-06T07:28:16Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T07:28:16Z] cleanup run m6bulk selesai (lihat .agent/tmp/te-iter2-infra/sandbox.zE3Ikz/runs/bulk/cleanup.txt)
+2026-11-06T07:28:16Z cleanup            done 
+2026-11-06T07:28:16Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.zE3Ikz/runs/bulk bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:28:16Z redact             ok 
+2026-11-06T07:28:17Z result             FAIL exit=127 stage=server-up expected '0' got '127'
+  FAIL M6 BUG-M6-10 Playwright lulus, --waves 3 node -> semua diverifikasi
+    ASSERT: DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.0Wfrks/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.0Wfrks/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:28:17Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.0Wfrks/agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.0Wfrks/agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.0Wfrks/agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.0Wfrks/agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-06T07:28:17Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found
+2026-11-06T07:28:17Z evidence           start 
+2026-11-06T07:28:17Z evidence           done 
+2026-11-06T07:28:17Z server-logs        NOT_RUN node belum dibuat (tahap server-up)
+[2026-11-06T07:28:17Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T07:28:17Z] cleanup run m6core selesai (lihat .agent/tmp/te-iter2-infra/sandbox.0Wfrks/runs/core/cleanup.txt)
+2026-11-06T07:28:17Z cleanup            done 
+2026-11-06T07:28:17Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.0Wfrks/runs/core bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:28:17Z redact             ok 
+2026-11-06T07:28:17Z result             FAIL exit=127 stage=server-up expected '1' got '127'
+  FAIL M6 BUG-M6-10 Playwright gagal -> verifikasi parsial + catatan, FAIL
+    ASSERT: DRY-RUN: qemu-img create -q -f qcow2 -b .agent/tmp/te-iter2-infra/sandbox.CnHWw8/agent/vms/pxe-test-server-base.qcow2 -F qcow2 .agent/tmp/te-iter2-infra/sandbox.CnHWw8/agent/vms/pxe-test-server.qcow2
+[2026-11-06T07:28:17Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+DRY-RUN: virt-install --connect qemu:///system --name pxe-test-server --memory 3072 --vcpus 2 --osinfo linux2022 --import --disk path=.agent/tmp/te-iter2-infra/sandbox.CnHWw8/agent/vms/pxe-test-server.qcow2\,format=qcow2\,bus=virtio --disk path=.agent/tmp/te-iter2-infra/sandbox.CnHWw8/agent/media/ubuntu-24.04.5-live-server-amd64.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.CnHWw8/agent/media/debian-12.15.0-amd64-DVD-1.iso\,device=cdrom\,bus=sata\,readonly=on --disk path=.agent/tmp/te-iter2-infra/sandbox.CnHWw8/agent/media/Rocky-9-latest-x86_64-minimal.iso\,device=cdrom\,bus=sata\,readonly=on --network network=pxe-test\,mac=52:54:00:99:01:02\,model=virtio --network network=pxe-test-nat\,mac=52:54:00:99:01:03\,model=virtio --graphics none --noautoconsole --serial tcp\,host=127.0.0.1:45900\,mode=connect\,protocol.type=raw
+[2026-11-06T07:28:17Z] SSH siap dalam 0s
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/tftp/prepare.sh: line 13: sha256sum: command not found
+2026-11-06T07:28:17Z evidence           start 
+2026-11-06T07:28:17Z evidence           done 
+2026-11-06T07:28:17Z server-logs        NOT_RUN node belum dibuat (tahap server-up)
+[2026-11-06T07:28:17Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T07:28:17Z] cleanup run m6core selesai (lihat .agent/tmp/te-iter2-infra/sandbox.CnHWw8/runs/core/cleanup.txt)
+2026-11-06T07:28:17Z cleanup            done 
+2026-11-06T07:28:17Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di .agent/tmp/te-iter2-infra/sandbox.CnHWw8/runs/core bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T07:28:17Z redact             ok 
+2026-11-06T07:28:18Z result             FAIL exit=127 stage=server-up expected '1' got '127'
+  FAIL M6 BUG-M6-10 verify node1 gagal -> node2 tetap diverifikasi, FAIL
+  ok   M6 BUG-M6-10 tanpa $( ((…)) && …) di kvm-run.sh (statis)
+hasil: 61 lulus, 15 gagal
+  gagal: kvm-run.sh m4 dry-run end-to-end (semua nama pxe-test-)
+  gagal: M5 kvm-run dry-run: poweroff/start hanya node destroy (AC-5.36)
+  gagal: M6 kvm-run: entri cleanup di results.json pada gagal tiap tahap + sukses (AC-6.40)
+  gagal: M6 kvm-run --waves max_nodes 1/2/3, tanpa --waves ditolak (AC-6.41)
+  gagal: M6 kvm-run --scenario core/distro/bulk + spec :failpath/:os= (AC-6.41)
+  gagal: M6 kvm-run: password admin dihapus + discan di bukti (AC-6.42)
+  gagal: M6 BUG-M6-2 gagal sebelum node -> CR-4-12 NOT_RUN, bukan FAIL
+  gagal: M6 verifikasi parsial setelah Playwright gagal (node done saja)
+  gagal: M6 BUG-M6-8 modul disk Debian: salin dari initrd DVD (kver sama)
+  gagal: M6 BUG-M6-8 modul disk Debian: kver beda/modul hilang/argumen → gagal
+  gagal: M6 BUG-M6-8 server-up menyalin modul disk Debian ke media server
+  gagal: M6 BUG-M6-10 Playwright lulus, 2 node -> keduanya diverifikasi, PASS
+  gagal: M6 BUG-M6-10 Playwright lulus, --waves 3 node -> semua diverifikasi
+  gagal: M6 BUG-M6-10 Playwright gagal -> verifikasi parsial + catatan, FAIL
+  gagal: M6 BUG-M6-10 verify node1 gagal -> node2 tetap diverifikasi, FAIL
+exit=1

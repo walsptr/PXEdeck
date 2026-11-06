@@ -1,0 +1,8 @@
+# npm run typecheck @ fdc0abf 2026-11-06T07:25:58Z
+
+> dashboard@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+EXIT=0
