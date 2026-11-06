@@ -15,7 +15,8 @@
 #                                                                      -> REDACTED-B64-SECRET
 #     (B-5: late-command `printf %s '<b64>' | base64 -d` dicetak installer ke console serial;
 #     logika selaras .agent/runs/m4/b64-scan.py, diimplementasi dengan bash+base64+grep)
-# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, dan SEMUA
+# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, kredensial di
+# query string mirip URL (`?password=`/`&username=` bernilai, DEC-027 §4), dan SEMUA
 # isi file biner (CR-4-14: file non-teks tidak pernah diubah in-place; secret di dalamnya = exit 1).
 # Pola scan selaras dengan .agent/runs/m4/secret-scan.sh.
 set -euo pipefail
@@ -36,6 +37,8 @@ PKEY_RE='-----BEGIN [A-Z ]*PRIVATE KEY-----'
 B64_RUN_RE='[A-Za-z0-9+/]{40,}={0,2}'
 B64_INNER_RE='[A-Za-z0-9+/]{16,}={0,2}'
 B64_MARK='REDACTED-B64-SECRET'
+# DEC-027 §4: parameter kredensial di query string (scan saja, lihat di bawah).
+URL_CRED_RE='[?&](password|username)=[^&[:space:]"]*'
 B64_DEC_SECRET_RE="/boot/[0-9a-fA-F:%-]{12,40}/$B64U{43}"
 
 # _b64_secret <blob> <depth>: exit 0 bila blob ter-decode memuat secret (lihat header).
@@ -98,6 +101,13 @@ done < <(find "$dir" -type f -print0)
 
 hits="$(find "$dir" -type f -exec grep -EnaH -i -e "$TOKEN_PATH_RE" -e "$TOKEN_KV_RE" -e "$HASH_RE" -e "$SCRYPT_RE" -e "$PKEY_RE" {} + \
   | cut -d: -f1,2 | head -50 || true)"
+# DEC-027 §4: kredensial di string mirip URL (`?password=…`, `&username=…`) = temuan, hanya dipindai
+# (tidak disamarkan otomatis; kebocoran seperti ini harus terlihat). Nilai yang sudah disamarkan
+# (`<REDACTED…>`, `***`) atau kosong tidak dihitung. Mencakup server-nginx.txt dan
+# server-nginx-error.txt (semua file di <dir>).
+urlhits="$(find "$dir" -type f -exec grep -EnoaHi "$URL_CRED_RE" {} + 2>/dev/null \
+  | grep -Eiv "[?&](password|username)=(<REDACTED|\*\*\*|$)" | cut -d: -f1,2 | head -50 || true)"
+[[ -z "$urlhits" ]] || hits+="${hits:+$'\n'}$urlhits"
 while IFS= read -r -d '' f; do
   b64hits="$(_b64_scan "$f" | head -50)"
   [[ -z "$b64hits" ]] || hits+="${hits:+$'\n'}$b64hits"

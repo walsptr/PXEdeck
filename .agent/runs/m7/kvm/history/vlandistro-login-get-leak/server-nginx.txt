@@ -30,7 +30,7 @@
 10.99.0.1 [2026-11-06T14:58:53+00:00] "GET /_next/static/media/inter-latin-wght-normal.0gsaq8ukbf34m.woff2" 200 48256 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36"
 10.99.0.1 [2026-11-06T14:58:54+00:00] "GET /_next/static/media/jetbrains-mono-latin-wght-normal.2rmhnsrc80fag.woff2" 200 40404 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36"
 10.99.0.1 [2026-11-06T14:58:54+00:00] "GET /_next/static/chunks/2dxdye19043yf.js" 200 3620 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36"
-10.99.0.1 [2026-11-06T14:58:54+00:00] "GET /login?username=pxeadmin&password=<REDACTED-admin-password>" 200 10817 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36"
+10.99.0.1 [2026-11-06T14:58:54+00:00] "GET /login?username=<REDACTED>&password=<REDACTED-admin-password>" 200 10817 "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36"
 10.99.10.117 [2026-11-06T14:59:04+00:00] "GET /boot/52:54:00:99:00:33.ipxe?platform=efi" 200 150 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2"
 10.99.10.118 [2026-11-06T14:59:10+00:00] "GET /boot/52:54:00:99:00:34.ipxe?platform=efi" 200 150 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2"
 10.99.0.1 [2026-11-06T14:59:25+00:00] "POST /api/auth/login" 204 0 "curl/8.18.0"

@@ -1,0 +1,3 @@
+# mutasi DEC-027 §4 redact-evidence URL_CRED (M7-T11)
+M1 blok urlhits dinonaktifkan -> test_m7te_redact_url_credentials FAIL (killed)
+M2 URL_CRED_RE diganti pola tak cocok -> test ini FAIL (+ 23 test redact lain gagal karena grep tanpa cocok) (killed)

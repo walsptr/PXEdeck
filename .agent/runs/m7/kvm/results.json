@@ -1046,7 +1046,7 @@
       },
       "commit": "d9d5308",
       "evidenceDir": "history/vlandistro-login-get-leak",
-      "note": "BLOCKED: Playwright login mengklik submit sebelum hidrasi React -> form login (tanpa method) terkirim native GET /login?username=..&password=.. (password masuk URL & log akses nginx). Temuan keamanan produk; alur Debian/Rocky tidak berjalan. Password run (sekali pakai, sudah dihapus) disamarkan dari bukti."
+      "note": "BLOCKED: Playwright login mengklik submit sebelum hidrasi React -> form login (tanpa method) terkirim native GET /login?username=<REDACTED>&password=<REDACTED> (password masuk URL & log akses nginx). Temuan keamanan produk; alur Debian/Rocky tidak berjalan. Password run (sekali pakai, sudah dihapus) disamarkan dari bukti."
     }
   },
   "history": {

@@ -304,6 +304,41 @@ test_m7te_no_new_secrets_in_m7_diff() {
   assert_no_match "$(grep -v 'fixturesalt' <<<"$added" || true)" '\$6\$[A-Za-z0-9./]{8,16}\$[A-Za-z0-9./]{86}' "hash sha512crypt"
 }
 
+# DEC-027 §4 (M7-T11): kredensial di query string mirip URL di bukti = temuan (scan saja, exit 1),
+# termasuk server-nginx.txt dan server-nginx-error.txt; nilai tersamar/kosong dan /login?*** lolos.
+# Test ini merah bila pola URL_CRED_RE / blok urlhits dihapus dari redact-evidence.sh.
+test_m7te_redact_url_credentials() {
+  local d="$SB/evidence-url" pw="Xq9-run-secret-ZZ"
+  mkdir -p "$d"
+  echo "10.99.0.1 [2026-11-06T14:58:54+00:00] \"GET /login?username=pxeadmin&password=$pw\" 200 10817 \"Mozilla\"" > "$d/server-nginx.txt"
+  echo "2026/11/06 14:58:54 [error] 1#1: *5 open() failed, request: \"GET /x?password=$pw HTTP/1.1\"" > "$d/server-nginx-error.txt"
+  {
+    echo "10.99.0.1 [2026-11-06T15:00:00+00:00] \"GET /login?***\" 200 1 \"curl\""
+    echo "GET /login?username=<REDACTED>&password=<REDACTED-admin-password>"
+    echo "GET /login?password= 200"
+    echo "d-i passwd/user-password-crypted password \$6\$REDACTED"
+  } > "$d/ok.txt"
+  run_infra redact-evidence.sh "$d"
+  assert_eq "$RC" 1 "$OUT"
+  assert_contains "$OUT" "TEMUAN"
+  assert_match "$OUT" "server-nginx\.txt:1"
+  assert_match "$OUT" "server-nginx-error\.txt:1"
+  assert_not_contains "$OUT" "ok.txt" "nilai tersamar/kosong/*** ikut dilaporkan"
+  assert_not_contains "$OUT" "$pw" "isi kredensial bocor ke output"
+  # Hanya scan: file tidak diubah (kebocoran tetap terlihat untuk diperbaiki di sumbernya).
+  assert_contains "$(cat "$d/server-nginx.txt")" "password=$pw"
+  # username= sendiri juga temuan.
+  rm -f "$d/server-nginx.txt" "$d/server-nginx-error.txt"
+  echo "GET /login?next=%2Fhosts&username=pxeadmin" > "$d/server-nginx.txt"
+  run_infra redact-evidence.sh "$d"
+  assert_eq "$RC" 1 "$OUT"
+  assert_match "$OUT" "server-nginx\.txt:1"
+  # Bersih → exit 0.
+  rm -f "$d/server-nginx.txt"
+  run_infra redact-evidence.sh "$d"
+  assert_eq "$RC" 0 "$OUT"
+}
+
 t "M7te assert_name menolak nama terlindungi/tanpa prefix (AC-7.14)"            test_m7te_assert_name_protected
 t "M7te net-up/net-down vlan (palsu): lima network hilang, default/int utuh (AC-7.14)" test_m7te_net_down_vlan_fake_state
 t "M7te nginx VLAN: ACL hanya / + SSE, /boot & /media terbuka; rpcbind 10.99.10.2 (AC-7.16)" test_m7te_nginx_vlan_acl
@@ -317,3 +352,4 @@ t "M7te cleanup.sh --switch dry-run: rencana destroy/undefine + disk (AC-7.19)" 
 t "M7te skenario flat core/distro/bulk tanpa artefak VLAN (AC-7.19)"            test_m7te_flat_scenario_no_vlan_artifacts
 t "M7te README §Topologi VLAN + .env.example (AC-7.31)"                         test_m7te_readme_vlan_section
 t "M7te diff M7 tanpa hash/private key nyata (AC-7.31)"                         test_m7te_no_new_secrets_in_m7_diff
+t "M7te redact-evidence: password=/username= di URL (nginx access+error) → exit 1 (DEC-027 §4)" test_m7te_redact_url_credentials

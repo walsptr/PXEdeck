@@ -11,6 +11,8 @@ import { randomBytes } from "node:crypto"
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
+import { URL_CRED } from "./m7-shared"
+
 export type KvmOs = "ubuntu" | "debian" | "rocky"
 export type KvmRole = "install" | "destroy" | "failpath"
 /**
@@ -336,6 +338,8 @@ export function scanEvidence(secrets: string[]): string[] {
         if (TOKEN_IN_BOOT_PATH.test(text)) findings.push(`${p}: token pada path /boot/`)
         TOKEN_IN_BOOT_PATH.lastIndex = 0
         if (PRIVATE_KEY.test(text)) findings.push(`${p}: private key`)
+        // DEC-027 §4: kredensial di query string mirip URL (nilai tersamar/kosong tidak dihitung).
+        if (URL_CRED.test(text)) findings.push(`${p}: password=/username= di URL`)
         for (const s of secrets) if (s && text.includes(s)) findings.push(`${p}: password run`)
         for (const blob of new Set(text.match(B64_RUN) ?? [])) {
           const hit = base64Secret(blob, secrets)

@@ -15,13 +15,13 @@
 Error: expect(page).toHaveURL(expected) failed
 
 Expected pattern: /\/hosts$/
-Received string:  "http://10.99.0.2/login?username=pxeadmin&password=<REDACTED-admin-password>"
+Received string:  "http://10.99.0.2/login?username=<REDACTED>&password=<REDACTED-admin-password>"
 Timeout: 30000ms
 
 Call log:
   - Expect "toHaveURL" with timeout 30000ms
     63 × locator resolved to <html lang="id" class="h-full antialiased">…</html>
-       - unexpected value "http://10.99.0.2/login?username=pxeadmin&password=<REDACTED-admin-password>"
+       - unexpected value "http://10.99.0.2/login?username=<REDACTED>&password=<REDACTED-admin-password>"
 
 ```
 

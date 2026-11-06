@@ -114,3 +114,6 @@ ping -M do -s 1473 -c 1 -W 2 -I mgmt20 "$NODE_IP"; echo "# exit-1473=$?"
 
 /** Penanda kernel installer di serial (Ubuntu casper/NFS, Rocky inst.ks, Debian preseed). */
 export const INSTALLER_MARK = /netboot=nfs|casper\/vmlinuz|inst\.ks=|inst\.stage2=|preseed\/url=|auto=true priority=critical/g
+
+/** DEC-027 §4: `?password=…` / `&username=…` bernilai (bukan `<REDACTED…>`, `***`, atau kosong) = temuan scan bukti. */
+export const URL_CRED = /[?&](password|username)=(?!<REDACTED|\*\*\*)[^&\s"]+/i
