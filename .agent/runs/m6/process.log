@@ -1,0 +1,28 @@
+# test:process (build standalone + start-guard) @ f2f848d + working tree 2026-11-06T00:30:08Z
+
+> dashboard@0.1.0 test:process
+> vitest run -c vitest.process.config.mts --reporter=verbose
+
+
+ RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard
+
+ ✓ |process| test/process/start-guard.test.ts > AC-6.2 production tanpa admin valid → start ditolak (proses) > tanpa PXE_ADMIN_USERNAME 468ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.2 production tanpa admin valid → start ditolak (proses) > tanpa PXE_ADMIN_PASSWORD_HASH 424ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.2 production tanpa admin valid → start ditolak (proses) > hash format salah 484ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.2 production tanpa admin valid → start ditolak (proses) > logN=21 (di luar batas) 410ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.2 production tanpa admin valid → start ditolak (proses) > username admin tidak valid 423ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.3 SR-5-4 / DEC-016 §2: production + PXE_INSECURE_NO_LEASE_CHECK=1 (proses) > tanpa konfirmasi → ditolak, pesan menyebut kedua variabel 427ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.3 SR-5-4 / DEC-016 §2: production + PXE_INSECURE_NO_LEASE_CHECK=1 (proses) > konfirmasi yes → ditolak 413ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.3 SR-5-4 / DEC-016 §2: production + PXE_INSECURE_NO_LEASE_CHECK=1 (proses) > konfirmasi huruf kecil → ditolak 417ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.3 SR-5-4 / DEC-016 §2: production + PXE_INSECURE_NO_LEASE_CHECK=1 (proses) > konfirmasi berspasi → ditolak 398ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.3 SR-5-4 / DEC-016 §2: production + PXE_INSECURE_NO_LEASE_CHECK=1 (proses) > konfirmasi frasa beda → ditolak 379ms
+ ✓ |process| test/process/start-guard.test.ts > AC-6.3 SR-5-4 / DEC-016 §2: production + PXE_INSECURE_NO_LEASE_CHECK=1 (proses) > frasa tepat → start (GET /login 200) + peringatan 3877ms
+ ✓ |process| test/process/start-guard.test.ts > SR-5-10 / AC-6.3 PXE_TRUST_PROXY=1 tanpa PXE_DNSMASQ_LEASES (proses) > exit ≠ 0 + baris penolakan menyebut variabel 511ms
+ ✓ |process| test/process/start-guard.test.ts > kontrol positif: env baik > production + admin valid → GET /login 200, tanpa penolakan, tanpa hash di output 3801ms
+
+ Test Files  1 passed (1)
+      Tests  13 passed (13)
+   Start at  07:30:08
+   Duration  20.61s (tests 99%, import 1%)
+
+exit=0

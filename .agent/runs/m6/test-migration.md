@@ -160,6 +160,52 @@ Test baru: `src/lib/m6-api-client.test.ts`, `src/lib/m6-jobs-head.test.ts`, `src
 Test baru: `installers/m6-smoke-fixes.test.ts` (12), `infra/test/m6-nfs.sh` (3, di-source `run.sh`).
 Mutasi: `.agent/runs/m6/mutation-dev-T6b.txt` (14 mutan, semua merah).
 
+## T10–T13 — test-engineer (unit/integration/proses, migrasi E2E ke storageState, infra)
+
+Hitungan asersi file test LAMA (ada di `1a7be29`) yang berubah, `1a7be29` → working tree, dihasilkan oleh
+`.agent/runs/m6/count-assertions.py` (metrik TS: `expect(`/`expectTypeOf(`/`expect.poll|soft(`; shell:
+`assert_*` + `_fail`) → `.agent/runs/m6/assertion-counts.txt`. Tidak ada file yang turun; grep
+`skip|only|fixme|todo` = 0.
+
+### E2E (M6-T12, DEC-018 §3 / plan §2.10)
+| File | Perubahan | Alasan |
+|---|---|---|
+| `dashboard/playwright.config.ts` | (a) admin E2E: password acak per run (env proses `E2E_ADMIN_PASSWORD`, diwariskan ke worker; tidak pernah ke file/log) + hash scrypt runtime ke env SETIAP webServer; (b) readiness webServer `/hosts`/`/design` → `/login` (halaman lain mengalihkan tanpa sesi); (c) satu project `setup-<server>` per server (login lewat UI `/login`, simpan `storageState` di `.e2e-data/run-*/state/`), project spec lama `dependencies` + `use.storageState`; (d) server baru `m6-auth` (3114), `m6-session` (3115, `PXE_SESSION_IDLE_MIN=1`), `m6-ui` (3116, subnet KVM + `PXE_SERVER_IP`, 60 job sintetis). `forbidOnly`, `retries: 0`, `workers: 1`, `assertEverySpecCollected` tidak berubah. | Semua halaman/API butuh sesi (DEC-017 §4); tanpa env bypass auth. |
+| `dashboard/e2e/support/e2e-env.ts` | `e2eDb({ extra })`: callback opsional menulis data tambahan ke file DB sebelum server start (sekali per run). | Data stres server `m6-ui` (pola seed DB DEC-005/007, bukan seam produk). |
+| `dashboard/e2e/helpers.ts` | tipe `SHOTS(m)` menerima `6`. | Screenshot M6 ke `.agent/runs/m6/screenshots/`. |
+| `dashboard/e2e/m4-settings.spec.ts` › AC-4.6 | `toEqual` respons `/api/settings` ditambah `insecureConfirmed: false` + blok `auth` (admin E2E `e2eadmin`, default 120/12/5/15/600); asersi baru: respons tanpa `scrypt`/`PXE_ADMIN_PASSWORD_HASH`. 25 → 26. | Kontrak AC-6.1 (sama dengan migrasi unit `m4-api-routes`). Ekspektasi lama tidak dilonggarkan (`toEqual` tetap persis). |
+| `dashboard/e2e/m1-design-system.spec.ts` › AC-1.2 (`/hosts`,`/design`), AC-1.3 `/design`, AC-1.4, "oranye hanya pada tombol primary" | tambah `await expect(page.locator("header h1")).toBeVisible()` setelah `goto` sebelum mengukur (dua tempat juga `toHaveText("Design tokens")`; AC-1.4 juga ditambah). 36 → 42. | Shell dashboard kini di dalam Suspense `SessionGate` dan di-reveal ±300 ms SETELAH event `load` (OBS-M6-L1). Tanpa sinkronisasi, test mengukur halaman kosong: AC-1.4 merah (tinggi tombol 0) dan "oranye" merah secara intermiten, sedangkan AC-1.3 `/design` (tanpa drop shadow) LULUS HAMPA. Sinkronisasi menambah asersi; tidak ada asersi yang diubah. |
+
+`e2e/m6-auth.spec.ts` › "cookie berbentuk valid tapi palsu" juga memeriksa respons HTTP mentah tanpa shell dashboard (mutasi ME2: tanpa `SessionGate` → merah).
+
+Spec baru (bukan migrasi): `e2e/auth.setup.ts`, `e2e/m6-auth.spec.ts`, `e2e/m6-session.spec.ts`,
+`e2e/m6-ui.spec.ts`, helper `e2e/support/{e2e-auth,axe,m6-seed}.ts`. devDependency baru
+`@axe-core/playwright` (registry npm).
+
+**Filter axe (DEC-019 §3).** Fungsi bernama `classifyContrastFinding` (`e2e/support/axe.ts`) hanya
+menyaring node temuan `color-contrast`: (1) pasangan token terdaftar DEC-017 §9 + DEC-019 §2 berdasarkan warna
+TERHITUNG (bukan selector) di mana pun; (2) `verified-pass` hanya di dalam Sheet bila kontras terhitung
+≥ 4,5:1 (≥ 3:1 teks besar). Warna yang tidak bisa dihitung pasti (opacity leluhur < 1, latar gambar,
+format tak dikenal) → tetap pelanggaran. Tidak ada aturan axe yang dimatikan. Test sendiri: "filter
+`classifyContrastFinding`: kontrol positif & negatif (halaman sintetis)" (13 kasus + axe ujung-ke-ujung).
+Jumlah node yang difilter per kategori dicatat di `.agent/runs/m6/axe-results.json` (`filteredCount`).
+Audit "/hosts dengan Sheet terbuka" memakai konteks axe `include('[data-slot="sheet-content"]')`: konten
+di belakang overlay modal inert (Radix `aria-hidden` + `pointer-events:none`) dan tertutup overlay; halaman
+`/hosts` yang sama diaudit utuh tanpa modal di test "/hosts 1440 & 375". Semua aturan tetap aktif di Sheet.
+
+### Unit/integration/proses (M6-T10/T11) — semua file baru
+`src/app/boot/m6-te-boot.test.ts` (AC-6.7 /boot tanpa cookie, AC-6.12 lewat route, AC-6.22),
+`src/lib/server/m6-te-static.test.ts` (AC-6.53), `src/lib/server/m6-te-limits.test.ts` (nilai DEC dikunci
+literal; temuan mutasi MU6), `src/lib/server/auth/m6-te-session.test.ts` (idle 1/2/120 + polling; BUG-M6-L1),
+`test/process/start-guard.test.ts` + `test/process/global-setup.ts` + `vitest.process.config.mts` + script
+`npm run test:process` (SR-5-10/SR-5-4/O3 level proses atas build standalone). Config proses terpisah dari
+`vitest.config.mts` (DEC-004 tidak diubah).
+
+### Infra (M6-T13)
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `infra/test/run.sh` › `test_deploy_dry_run_no_secrets` | `grep -Eiq 'password\|secret\|\$6\$\|PRIVATE KEY' dashboard.env` (merah: baris placeholder `PXE_ADMIN_PASSWORD_HASH=@PXE_ADMIN_PASSWORD_HASH@` memuat kata PASSWORD) | (a) baris placeholder PERSIS harus ada tepat 1×; (b) tepat satu baris `PXE_ADMIN_PASSWORD_HASH=`; (c) semua baris SELAIN baris placeholder persis itu tetap ditolak bila memuat `password`, `secret`, `scrypt$` (baru), `$6$`, `PRIVATE KEY`. 252 → 254 asersi. | Placeholder hash disisipkan saat deploy lewat stdin (AC-6.42/6.53). Mutasi (`mutation-test.txt` MI1–MI4): placeholder diganti hash `scrypt$…`, placeholder + sufiks, placeholder ganda, komentar `$6$` → keempatnya merah. |
+
 ## T6c — perbaikan smoke ulang (backend-dev; BUG-M6-6, BUG-M6-7)
 
 | File › test | Sebelum | Sesudah | Alasan |
