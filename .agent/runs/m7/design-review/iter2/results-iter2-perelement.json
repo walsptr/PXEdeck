@@ -1,0 +1,56 @@
+{
+ "bulk@375": {
+  "MAC SAAT INI IP BARU b0:83:fe:5c:19:e2 1": {
+   "covered": null,
+   "violations": [],
+   "filtered": 6
+  },
+  "IP management statis di VLAN 20 pada NIC": {
+   "covered": null,
+   "violations": [],
+   "filtered": 1
+  },
+  "Maksimal 4. Tekan Enter untuk menambah.": {
+   "covered": null,
+   "violations": [],
+   "filtered": 1
+  },
+  "Terdaftar: 20 · 10.99.20.0/24, 30 · 10.9": {
+   "covered": null,
+   "violations": [],
+   "filtered": 3
+  },
+  "NIC dipilih dari MAC PXE masing-masing h": {
+   "covered": null,
+   "violations": [],
+   "filtered": 2
+  }
+ },
+ "bulk@1440": {
+  "MAC SAAT INI IP BARU b0:83:fe:5c:19:e2 1": {
+   "covered": null,
+   "violations": [],
+   "filtered": 6
+  },
+  "IP management statis di VLAN 20 pada NIC": {
+   "covered": null,
+   "violations": [],
+   "filtered": 1
+  },
+  "Maksimal 4. Tekan Enter untuk menambah.": {
+   "covered": null,
+   "violations": [],
+   "filtered": 1
+  },
+  "Terdaftar: 20 · 10.99.20.0/24, 30 · 10.9": {
+   "covered": null,
+   "violations": [],
+   "filtered": 3
+  },
+  "NIC dipilih dari MAC PXE masing-masing h": {
+   "covered": null,
+   "violations": [],
+   "filtered": 2
+  }
+ }
+}
