@@ -660,6 +660,8 @@ source "$(dirname "$0")/m6.sh"
 source "$(dirname "$0")/m6-nfs.sh"
 # M6 (BUG-M6-8): modul disk Debian netboot.
 source "$(dirname "$0")/m6-debian-modules.sh"
+# M6 (BUG-M6-10): verifikasi semua node saat Playwright lulus (set -e).
+source "$(dirname "$0")/m6-bug10.sh"
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"

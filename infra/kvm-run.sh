@@ -33,7 +33,8 @@
 # --keep-server : cleanup tanpa --server (VM pxe-test-server dibiarkan menyala untuk debug).
 # --skip-build  : deploy memakai build standalone yang sudah ada (SKIP_BUILD=1).
 # INFRA_DRY_RUN=1 didukung (rencana dicetak; PXE_KVM_DRY_FAIL_AT=<tahap> mensimulasikan kegagalan
-# tahap itu — hanya di dry-run, untuk test harness).
+# tahap itu — hanya di dry-run, untuk test harness; PXE_KVM_DRY_VERIFY_EXEC=1 menjalankan jalur
+# verifikasi SSH non-dry terhadap ssh palsu di PATH test, BUG-M6-10).
 #
 # Admin dashboard per run (DEC-017 §3): password acak di .agent/keys/<run>-admin.pass (0600),
 # hash via `npm run admin:hash` (stdin) di deploy-dashboard.sh. Suite hanya menerima PATH file
@@ -250,7 +251,7 @@ finish() {
   if ((keep_server || !server_started)); then "$INFRA_DIR/cleanup.sh" "$run_id"; else "$INFRA_DIR/cleanup.sh" "$run_id" --server; fi
   local crc=$?
   ((crc == 0)) || { cst=FAIL; cnote="cleanup.sh exit=$crc; "; }
-  step cleanup "$([[ $crc == 0 ]] && echo done || echo FAIL)" "$( ((keep_server || !server_started)) && echo '(server tidak dimatikan)')"
+  step cleanup "$([[ $crc == 0 ]] && echo done || echo FAIL)" "$(if ((keep_server || !server_started)); then echo '(server tidak dimatikan)'; fi)"
   # Bukti libvirt sesudah + diff; resource terlindungi harus identik, domain run ini harus hilang.
   libvirt_snapshot "$RUNS_DIR/libvirt-after.txt"
   b="$(libvirt_norm "$RUNS_DIR/libvirt-before.txt")"; a="$(libvirt_norm "$RUNS_DIR/libvirt-after.txt")"
@@ -329,7 +330,8 @@ fi
 mem_avail_mb=$(( $(awk '/^MemAvailable:/{print $2}' "$MEMINFO") / 1024 ))
 avail_mb="$mem_avail_mb"
 dom_running "$SERVER_NAME" || avail_mb=$((avail_mb - ${SERVER_RAM_MB:-3072}))
-max_nodes=$(( (avail_mb - 4096) / 2048 )); ((max_nodes < 1)) && max_nodes=1; ((max_nodes > 3)) && max_nodes=3
+max_nodes=$(( (avail_mb - 4096) / 2048 ))
+if ((max_nodes < 1)); then max_nodes=1; elif ((max_nodes > 3)); then max_nodes=3; fi
 if ((waves_mode)); then
   # Gelombang berukuran max_nodes, urutan sesuai --nodes.
   for ((i = 0; i < ${#NODE_NAMES[@]}; i += max_nodes)); do
@@ -517,18 +519,28 @@ verify_eligible() { # verify_eligible <index>: 0 bila node boleh diverifikasi
 NODE_SSH_OPTS=(-i "$RUN_KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null
   -o LogLevel=ERROR -o ConnectTimeout=10 -o BatchMode=yes -o IdentitiesOnly=yes)
 verify_rc=0
+# BUG-M6-10: substitusi perintah berisi daftar `((…)) && echo …` / `[[ … ]] && …` tanpa cabang
+# `||` di assignment, atau daftar `&&` sebagai perintah terakhir fungsi, berstatus 1 bila kondisinya
+# salah -> skrip berhenti (set -e). Pakai `if` atau tambahkan `|| …`.
+verify_partial_suffix() { # -> " (verifikasi parsial, Playwright exit=N)" atau kosong; selalu 0
+  if ((e2e_rc != 0)); then printf ' (verifikasi parsial, Playwright exit=%s)' "$e2e_rc"; fi
+  return 0
+}
 verify_one() { # verify_one <index>
-  local i="$1" name ip pub remote_env vout rc pw_out pw_ok methods
+  local i="$1" name ip pub remote_env vout rc pw_out pw_ok methods partial
+  partial="$(verify_partial_suffix)"
   name="${NODE_NAMES[$i]}"; ip="${NODE_IPS[$i]}"
   [[ "$ip" =~ ^10\.99\.0\.[0-9]+$ ]] || die "IP node $ip di luar 10.99.0.*"
   pub="$(cat "$RUN_KEY.pub" 2>/dev/null || echo DRY-RUN-KEY)"
   remote_env="EXPECT_HOSTNAME=$(printf '%q' "${NODE_HOSTS[$i]}") EXPECT_IP=$ip EXPECT_PREFIX=24"
   remote_env+=" EXPECT_MAC=${NODE_MACS[$i]} EXPECT_GW=10.99.0.1 EXPECT_DNS=10.99.0.2"
   remote_env+=" EXPECT_USER=$(printf '%q' "$NODE_USER") EXPECT_PUBKEY=$(printf '%q' "$pub")"
-  if is_dry; then
+  # PXE_KVM_DRY_VERIFY_EXEC=1 (dry-run saja, untuk test harness infra/test): jalur verifikasi
+  # sungguhan dijalankan terhadap ssh PALSU di PATH test (BUG-M6-10: jalur ini dulu tidak teruji).
+  if is_dry && [[ "${PXE_KVM_DRY_VERIFY_EXEC:-0}" != 1 ]]; then
     local vs="$VERIFY_SCRIPT"; [[ -f "$vs" ]] || vs=/dev/null
     run ssh "${NODE_SSH_OPTS[@]}" "$NODE_USER@$ip" "$remote_env bash -s" < "$vs"
-    VERIFY_STATUS[$i]=DRY-RUN; VERIFY_NOTE[$i]="dry-run: verifikasi hanya dicetak"
+    VERIFY_STATUS[$i]=DRY-RUN; VERIFY_NOTE[$i]="dry-run: verifikasi hanya dicetak$partial"
     return 0
   fi
   vout="$RUNS_DIR/$name-verify.txt"
@@ -550,8 +562,9 @@ verify_one() { # verify_one <index>
   fi
   step verify "$([[ $rc == 0 ]] && echo ok || echo FAIL)" "$name ($name-verify.txt)"
   VERIFY_STATUS[$i]="$([[ $rc == 0 ]] && echo PASS || echo FAIL)"
-  VERIFY_NOTE[$i]="verify-node.sh exit=$rc + cek login password$( ((e2e_rc != 0)) && echo " (verifikasi parsial, Playwright exit=$e2e_rc)")"
+  VERIFY_NOTE[$i]="verify-node.sh exit=$rc + cek login password$partial"
   ((rc == 0)) || verify_rc=1
+  return 0
 }
 wait_node_ssh() { # wait_node_ssh <index> <timeout-s>
   local i="$1" t="$2" s=0

@@ -1,0 +1,37 @@
+# Mutasi BUG-M6-10 (backend-dev), 2026-11-06T03:14:13Z, worktree milestone/6-hardening
+# Mutan: baris VERIFY_NOTE di verify_one() dikembalikan ke bentuk asli (b36a7db), sisa fix tetap.
+# Perintah: INFRA_TEST_SANDBOX_PARENT=.agent/tmp/bug10-dev bash infra/test/run.sh (lalu kvm-run.sh dipulihkan, cmp identik)
+## diff fixed -> mutan
+--- infra/kvm-run.sh (fixed)	2026-11-06 10:12:22.545803538 +0700
++++ infra/kvm-run.sh	2026-11-06 10:12:22.555192609 +0700
+@@ -562,7 +562,7 @@
+   fi
+   step verify "$([[ $rc == 0 ]] && echo ok || echo FAIL)" "$name ($name-verify.txt)"
+   VERIFY_STATUS[$i]="$([[ $rc == 0 ]] && echo PASS || echo FAIL)"
+-  VERIFY_NOTE[$i]="verify-node.sh exit=$rc + cek login password$partial"
++  VERIFY_NOTE[$i]="verify-node.sh exit=$rc + cek login password$( ((e2e_rc != 0)) && echo " (verifikasi parsial, Playwright exit=$e2e_rc)")"
+   ((rc == 0)) || verify_rc=1
+   return 0
+ }
+
+## hasil suite dengan mutan (exit=1)
+  FAIL M6 BUG-M6-10 Playwright lulus, 2 node -> keduanya diverifikasi, PASS
+  FAIL M6 BUG-M6-10 Playwright lulus, --waves 3 node -> semua diverifikasi
+  FAIL M6 BUG-M6-10 verify node1 gagal -> node2 tetap diverifikasi, FAIL
+  FAIL M6 BUG-M6-10 tanpa $( ((…)) && …) di kvm-run.sh (statis)
+hasil: 72 lulus, 4 gagal
+  gagal: M6 BUG-M6-10 Playwright lulus, 2 node -> keduanya diverifikasi, PASS
+  gagal: M6 BUG-M6-10 Playwright lulus, --waves 3 node -> semua diverifikasi
+  gagal: M6 BUG-M6-10 verify node1 gagal -> node2 tetap diverifikasi, FAIL
+  gagal: M6 BUG-M6-10 tanpa $( ((…)) && …) di kvm-run.sh (statis)
+## ASSERT (dipotong 300 karakter)
+    ASSERT: DRY-RUN: env PXE_KVM_BASE_URL=http://10.99.0.2 PXE_KVM_RUN=m6core PXE_KVM_RUNS_DIR=/home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/tmp/bug10-dev/sandbox.mZBbN1/runs/core PXE_KVM_SCENARIO=core PXE_KVM_NODES=pxe-test-m6core-node21=52:54:00:99:00:21=uefi=10.99.0.31=ubuntu=failpath=m6-node
+    ASSERT: DRY-RUN: /home/syawal/Project/PXE-BOOT/.agent/wt-m6/infra/node.sh start pxe-test-m6bulk-node27 52:54:00:99:00:27
+    ASSERT:  expected '[('node21', 'FAIL'), ('node22', 'PASS')]' got '[('node21', 'FAIL'), ('node22', 'NOT_RUN')]'
+    ASSERT: substitusi && tanpa || harus kosong, berisi: 565:$( ((e2e_rc != 0)) && echo " (verifikasi parsial, Playwright exit=$e2e_rc
+
+## Catatan
+- 'Playwright gagal -> verifikasi parsial' tetap lulus di mutan: dengan e2e_rc != 0 substitusi berstatus 0 (bug hanya muncul saat Playwright LULUS) — sesuai analisis bug.
+- Node kedua NOT_RUN di mutan (node22, wave node26/27 tidak di-start/diverifikasi) = gejala run resmi core/bulk.
+
+## hasil suite setelah mutan dipulihkan: hasil: 76 lulus, 0 gagal (lihat infra-bug10.log)
