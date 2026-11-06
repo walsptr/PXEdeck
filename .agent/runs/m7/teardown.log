@@ -1,0 +1,33 @@
+### teardown start 2026-11-06T18:53:34Z
+$ PXE_RUN=m7 PXE_RUNS_DIR=.agent/runs/m7/teardown infra/cleanup.sh m7 --server --switch --base
+[2026-11-06T18:53:35Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T18:53:35Z] pxe-test-switch dimatikan dan di-undefine (overlay + seed dihapus)
+[2026-11-06T18:53:35Z] cleanup run m7 selesai (lihat .agent/runs/m7/teardown/cleanup.txt)
+exit=0
+$ infra/net-down.sh --topology vlan
+Network pxe-test-port2 destroyed
+
+Network pxe-test-port2 has been undefined
+
+Network pxe-test-port1 destroyed
+
+Network pxe-test-port1 has been undefined
+
+Network pxe-test-trunk destroyed
+
+Network pxe-test-trunk has been undefined
+
+Network pxe-test-nat destroyed
+
+Network pxe-test-nat has been undefined
+
+Network pxe-test destroyed
+
+Network pxe-test has been undefined
+
+[2026-11-06T18:53:36Z] network pxe-test-port2 pxe-test-port1 pxe-test-trunk pxe-test-nat pxe-test dihapus
+exit=0
+$ rm -rf .agent/vms/pxe-test-debian-disk-modules  -> DENIED by permission system (not executed; not retried by other means)
+$ rm -f .agent/keys/infra_ed25519 .agent/keys/infra_ed25519.pub
+exit=0
+### teardown end 2026-11-06T18:54:03Z
