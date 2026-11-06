@@ -1,0 +1,62 @@
+# Done (API) pada 2026-11-06T10:56:05.918Z; reboot verifikasi setelahnya
+# dnsmasq DHCP/TFTP untuk 52:54:00:99:00:41 (baris DHCPDISCOVER/OFFER/REQUEST/ACK + tftp)
+Nov  6 10:50:33 dnsmasq-dhcp[1721]: 3587476347 DHCPREQUEST(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:50:33 dnsmasq-dhcp[1721]: 3587476347 DHCPACK(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:50:33 dnsmasq-dhcp[1721]: 3587476347 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  6 10:50:33 dnsmasq-tftp[1721]: sent /srv/pxe/tftp/snponly.efi to 10.99.10.133
+Nov  6 10:50:33 dnsmasq-tftp[1721]: sent /srv/pxe/tftp/snponly.efi to 10.99.10.133
+Nov  6 10:50:33 dnsmasq-dhcp[1721]: 502437435 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:50:35 dnsmasq-dhcp[1721]: 2796018742 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:50:35 dnsmasq-dhcp[1721]: 2796018742 DHCPOFFER(pxe10) 10.99.10.131 52:54:00:99:00:41 
+Nov  6 10:50:36 dnsmasq-dhcp[1721]: 2796018742 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:50:36 dnsmasq-dhcp[1721]: 2796018742 DHCPOFFER(pxe10) 10.99.10.131 52:54:00:99:00:41 
+Nov  6 10:50:38 dnsmasq-dhcp[1721]: 2796018742 DHCPREQUEST(pxe10) 10.99.10.131 52:54:00:99:00:41 
+Nov  6 10:50:38 dnsmasq-dhcp[1721]: 2796018742 DHCPACK(pxe10) 10.99.10.131 52:54:00:99:00:41 
+Nov  6 10:50:41 dnsmasq-dhcp[1721]: 502437435 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:50:57 dnsmasq-dhcp[1721]: 502437435 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:51:49 dnsmasq-dhcp[1721]: 2353736130 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:51:49 dnsmasq-dhcp[1721]: 2353736130 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:51:49 dnsmasq-dhcp[1721]: 2353736130 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:51:53 dnsmasq-dhcp[1721]: 2353736130 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:51:53 dnsmasq-dhcp[1721]: 2353736130 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:51:53 dnsmasq-dhcp[1721]: 2353736130 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:52:01 dnsmasq-dhcp[1721]: 2353736130 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:52:01 dnsmasq-dhcp[1721]: 2353736130 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:52:01 dnsmasq-dhcp[1721]: 2353736130 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:52:17 dnsmasq-dhcp[1721]: 2353736130 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:52:17 dnsmasq-dhcp[1721]: 2353736130 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:52:17 dnsmasq-dhcp[1721]: 2353736130 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:53:00 dnsmasq-dhcp[1721]: 1639505744 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  6 10:53:04 dnsmasq-dhcp[1721]: 1639505744 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  6 10:53:04 dnsmasq-tftp[1721]: sent /srv/pxe/tftp/snponly.efi to 10.99.10.132
+Nov  6 10:53:04 dnsmasq-tftp[1721]: sent /srv/pxe/tftp/snponly.efi to 10.99.10.132
+Nov  6 10:54:20 dnsmasq-dhcp[1721]: 2409716964 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:54:24 dnsmasq-dhcp[1721]: 2409716964 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:54:32 dnsmasq-dhcp[1721]: 2409716964 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:54:48 dnsmasq-dhcp[1721]: 2409716964 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:56:13 dnsmasq-dhcp[1721]: 3775153646 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:56:13 dnsmasq-dhcp[1721]: 3775153646 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:56:13 dnsmasq-dhcp[1721]: 3775153646 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  6 10:56:17 dnsmasq-dhcp[1721]: 3775153646 DHCPREQUEST(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:56:17 dnsmasq-dhcp[1721]: 3775153646 DHCPACK(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:56:17 dnsmasq-dhcp[1721]: 3775153646 sent size: 12 option: 67 bootfile-name  snponly.efi
+Nov  6 10:56:17 dnsmasq-tftp[1721]: sent /srv/pxe/tftp/snponly.efi to 10.99.10.133
+Nov  6 10:56:17 dnsmasq-tftp[1721]: sent /srv/pxe/tftp/snponly.efi to 10.99.10.133
+Nov  6 10:56:19 dnsmasq-dhcp[1721]: 2796018742 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:56:19 dnsmasq-dhcp[1721]: 2796018742 DHCPOFFER(pxe10) 10.99.10.131 52:54:00:99:00:41 
+Nov  6 10:56:20 dnsmasq-dhcp[1721]: 2796018742 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:56:20 dnsmasq-dhcp[1721]: 2796018742 DHCPOFFER(pxe10) 10.99.10.131 52:54:00:99:00:41 
+Nov  6 10:56:22 dnsmasq-dhcp[1721]: 2796018742 DHCPREQUEST(pxe10) 10.99.10.131 52:54:00:99:00:41 
+Nov  6 10:56:22 dnsmasq-dhcp[1721]: 2796018742 DHCPACK(pxe10) 10.99.10.131 52:54:00:99:00:41 
+Nov  6 10:57:33 dnsmasq-dhcp[1721]: 2478932023 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:57:33 dnsmasq-dhcp[1721]: 2478932023 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:57:33 dnsmasq-dhcp[1721]: 2478932023 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:57:37 dnsmasq-dhcp[1721]: 2478932023 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:57:37 dnsmasq-dhcp[1721]: 2478932023 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:57:37 dnsmasq-dhcp[1721]: 2478932023 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:57:45 dnsmasq-dhcp[1721]: 2478932023 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:57:45 dnsmasq-dhcp[1721]: 2478932023 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:57:45 dnsmasq-dhcp[1721]: 2478932023 sent size: 14 option: 67 bootfile-name  undionly.kpxe
+Nov  6 10:58:01 dnsmasq-dhcp[1721]: 2478932023 DHCPDISCOVER(pxe10) 52:54:00:99:00:41 
+Nov  6 10:58:01 dnsmasq-dhcp[1721]: 2478932023 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:41 
+Nov  6 10:58:01 dnsmasq-dhcp[1721]: 2478932023 sent size: 14 option: 67 bootfile-name  undionly.kpxe

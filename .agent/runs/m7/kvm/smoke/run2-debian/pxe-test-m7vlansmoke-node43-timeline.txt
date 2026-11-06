@@ -1,0 +1,7 @@
+2026-11-06T11:04:58.896Z discovered firmware=uefi currentIp=10.99.10.133 (lease VLAN 10)
+2026-11-06T11:04:58.938Z konfigurasi tersimpan os=debian-12 ip=10.99.20.53/24 vlan=20 gw=10.99.20.1 dns=10.99.10.2 hostname=m7-node43
+2026-11-06T11:04:58.968Z install dibuat job=job-b1bb1e22-745b-4c76-8a50-ac5b4ddd10c0 status=booting
+2026-11-06T11:04:59.046Z node.sh reset
+2026-11-06T11:04:59.054Z booting (+0 dtk, installerBoots=0)
+2026-11-06T11:35:02.099Z job akhir=booting/- dalam 1803 dtk; urutan=booting; stages=booting@install,booting@boot-script
+2026-11-06T11:35:02.525Z nginx: 0 request dari IP statis 10.99.20.53 (VLAN 20)

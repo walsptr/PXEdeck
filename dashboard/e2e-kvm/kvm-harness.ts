@@ -6,7 +6,7 @@
 //  - Perintah VM hanya lewat infra/node.sh (`reset <name>`), nama wajib ^pxe-test-<m>-nodeNN$.
 //  - Password acak per run hanya di memori; tidak pernah ditulis ke log/bukti (scanEvidence
 //    memverifikasinya).
-import { execFileSync, spawnSync } from "node:child_process"
+import { execFileSync, spawn, spawnSync } from "node:child_process"
 import { randomBytes } from "node:crypto"
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import path from "node:path"
@@ -144,7 +144,8 @@ function shq(v: string): string {
   return `'${v.replace(/'/g, `'\\''`)}'`
 }
 
-function relayExec(assign: Record<string, string>, timeoutMs: number): { code: number; out: string } {
+/** Argumen ssh + stdin relay (validasi key infra, path relay.sh, nama env) — dipakai sync & async. */
+function relayInvocation(assign: Record<string, string>): { args: string[]; input: Buffer } {
   if (TOPOLOGY !== "vlan") throw new Error("relay() hanya untuk PXE_KVM_TOPOLOGY=vlan")
   const key = path.resolve(env("PXE_KVM_INFRA_KEY"))
   if (!/\/\.agent\/keys\/[^/]+$/.test(key)) throw new Error(`key infra ${key} bukan di .agent/keys`)
@@ -155,8 +156,13 @@ function relayExec(assign: Record<string, string>, timeoutMs: number): { code: n
     if (!/^[A-Z][A-Z0-9_]*$/.test(k)) throw new Error(`env relay tidak valid: ${k}`)
     parts.push(`${k}=${shq(v)}`)
   }
-  const r = spawnSync("ssh", ["-i", key, ...SSH_OPTS, `root@${RELAY_SERVER}`, `${parts.join(" ")} bash -s`], {
-    input: readFileSync(script),
+  return { args: ["-i", key, ...SSH_OPTS, `root@${RELAY_SERVER}`, `${parts.join(" ")} bash -s`], input: readFileSync(script) }
+}
+
+function relayExec(assign: Record<string, string>, timeoutMs: number): { code: number; out: string } {
+  const inv = relayInvocation(assign)
+  const r = spawnSync("ssh", inv.args, {
+    input: inv.input,
     encoding: "utf8",
     timeout: timeoutMs,
     maxBuffer: 16 * 1024 * 1024,
@@ -175,6 +181,29 @@ export function relay(mode: RelayMode, node: KvmNode, extra: Record<string, stri
   if (!/^10\.99\.20\.\d{1,3}$/.test(node.ip)) throw new Error(`relay hanya untuk node 10.99.20.* (${node.ip})`)
   if ("MODE" in extra || "NODE_IP" in extra || "NODE_USER" in extra) throw new Error("extra tidak boleh menimpa MODE/NODE_IP/NODE_USER")
   return relayExec({ MODE: mode, NODE_IP: node.ip, NODE_USER: KVM.user, ...extra }, timeoutMs)
+}
+
+/**
+ * M7: varian async `relay()` (tidak memblokir event loop) — untuk suite yang mengikuti beberapa node
+ * paralel (smoke M7-T10: `wait-ssh` bisa menunggu menit-an). Validasi identik `relay()`.
+ */
+export function relayAsync(mode: RelayMode, node: KvmNode, extra: Record<string, string> = {}, timeoutMs = 15 * 60_000): Promise<{ code: number; out: string }> {
+  if (!RELAY_MODES.includes(mode)) throw new Error(`mode relay ${mode}`)
+  if (!/^10\.99\.20\.\d{1,3}$/.test(node.ip)) throw new Error(`relay hanya untuk node 10.99.20.* (${node.ip})`)
+  if ("MODE" in extra || "NODE_IP" in extra || "NODE_USER" in extra) throw new Error("extra tidak boleh menimpa MODE/NODE_IP/NODE_USER")
+  const inv = relayInvocation({ MODE: mode, NODE_IP: node.ip, NODE_USER: KVM.user, ...extra })
+  return new Promise((resolve) => {
+    const c = spawn("ssh", inv.args, { stdio: ["pipe", "pipe", "pipe"] })
+    let out = ""
+    const t = setTimeout(() => c.kill("SIGTERM"), timeoutMs)
+    c.stdout.on("data", (d: Buffer) => (out += d.toString("utf8")))
+    c.stderr.on("data", (d: Buffer) => (out += d.toString("utf8")))
+    c.on("close", (code) => {
+      clearTimeout(t)
+      resolve({ code: code ?? -1, out })
+    })
+    c.stdin.end(inv.input)
+  })
 }
 
 /** M7: capture DHCP (tanpa HTTP) di NIC server `pxe0` atau `trunk0`; `capture-stop` -> ringkasan teks. */

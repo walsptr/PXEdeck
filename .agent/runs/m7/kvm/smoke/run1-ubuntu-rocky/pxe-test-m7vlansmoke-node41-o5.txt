@@ -1,0 +1,126 @@
+## status=installing
+## 2026-11-06T10:45:19Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+# nginx request dari 10.99.20.51: 0
+
+## status=installing
+## 2026-11-06T10:46:20Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+# nginx request dari 10.99.20.51: 0
+
+## status=installing
+## 2026-11-06T10:47:20Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+# nginx request dari 10.99.20.51: 0
+
+## status=installing
+## 2026-11-06T10:48:21Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+# nginx request dari 10.99.20.51: 0
+
+## status=installing
+## 2026-11-06T10:49:21Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049  10.99.20.51:938
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+10.99.20.51 lladdr 52:54:00:99:00:41 REACHABLE 
+# nginx request dari 10.99.20.51: 0
+
+## status=installing
+## 2026-11-06T10:50:22Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049  10.99.20.51:938
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+10.99.20.51 lladdr 52:54:00:99:00:41 REACHABLE 
+# nginx request dari 10.99.20.51: 0
+
+## status=configuring
+## 2026-11-06T10:50:32Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049  10.99.20.51:938
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+10.99.20.51 lladdr 52:54:00:99:00:41 REACHABLE 
+# nginx request dari 10.99.20.51: 3
+
+## status=configuring
+## 2026-11-06T10:51:33Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049  10.99.20.51:938
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+10.99.20.51 lladdr 52:54:00:99:00:41 STALE 
+# nginx request dari 10.99.20.51: 3
+
+## status=configuring
+## 2026-11-06T10:52:33Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049  10.99.20.51:938
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+10.99.20.51 lladdr 52:54:00:99:00:41 STALE 
+# nginx request dari 10.99.20.51: 3
+
+## status=configuring
+## 2026-11-06T10:53:34Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049  10.99.20.51:938
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+10.99.20.52 lladdr 52:54:00:99:00:42 REACHABLE 
+10.99.20.51 lladdr 52:54:00:99:00:41 STALE 
+# nginx request dari 10.99.20.51: 3
+
+## status=configuring
+## 2026-11-06T10:54:35Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049  10.99.20.51:938
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+10.99.20.52 INCOMPLETE 
+10.99.20.51 lladdr 52:54:00:99:00:41 DELAY 
+# nginx request dari 10.99.20.51: 3
+
+## status=configuring
+## 2026-11-06T10:55:35Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049  10.99.20.51:938
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+10.99.20.52 FAILED 
+10.99.20.51 lladdr 52:54:00:99:00:41 DELAY 
+# nginx request dari 10.99.20.51: 3
+
+## status=done
+## 2026-11-06T10:56:05Z
+# ss -tn sport = :2049 (established)
+0      0      10.99.10.2:2049 10.99.10.132:877
+0      0      10.99.10.2:2049  10.99.20.51:938
+0      131204 10.99.10.2:2049 10.99.10.133:938
+# ip neigh dev mgmt20
+10.99.20.52 INCOMPLETE 
+10.99.20.51 lladdr 52:54:00:99:00:41 REACHABLE 
+# nginx request dari 10.99.20.51: 5
+

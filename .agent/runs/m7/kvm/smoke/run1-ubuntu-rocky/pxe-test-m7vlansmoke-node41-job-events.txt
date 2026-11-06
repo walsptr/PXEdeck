@@ -1,0 +1,12 @@
+1 2026-11-06T10:44:38.536Z info stage/install Job install dibuat (OS ubuntu-24.04); menunggu PXE boot
+2 2026-11-06T10:44:49.616Z info system/boot-script Script installer dilayani (ke-1/3, platform efi, IP 10.99.10.131)
+3 2026-11-06T10:45:12.076Z info system/config-fetch File meta-data diambil dari IP 10.99.10.131
+4 2026-11-06T10:45:12.095Z info system/config-fetch File user-data diambil dari IP 10.99.10.131
+5 2026-11-06T10:45:12.095Z info stage/config-fetch Installing: konfigurasi user-data diambil installer
+6 2026-11-06T10:45:12.111Z info system/config-fetch File vendor-data diambil dari IP 10.99.10.131
+7 2026-11-06T10:45:28.559Z info installer/installer installer: autoinstall mulai
+8 2026-11-06T10:50:24.178Z info installer/installer installer: late-commands mulai
+9 2026-11-06T10:50:24.232Z info stage/callback Configuring (callback dari IP 10.99.20.51)
+10 2026-11-06T10:50:24.362Z info installer/installer installer: konfigurasi target selesai
+11 2026-11-06T10:56:02.956Z info installer/installer first-boot: OS terpasang boot dari disk: m7-node41 mgmt.20=10.99.20.51/24 
+12 2026-11-06T10:56:02.995Z info stage/callback Done (callback dari IP 10.99.20.51)

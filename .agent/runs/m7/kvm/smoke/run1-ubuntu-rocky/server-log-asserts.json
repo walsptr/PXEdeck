@@ -1,0 +1,38 @@
+[
+  {
+    "ac": "CR-4-12-dnsmasq",
+    "node": "pxe-test-m7vlansmoke-node41",
+    "status": "PASS",
+    "note": "TFTP snponly.efi terkirim ke 10.99.10.131 (lease 52:54:00:99:00:41)",
+    "evidence": [
+      "server-dnsmasq.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-nginx",
+    "node": "pxe-test-m7vlansmoke-node41",
+    "status": "PASS",
+    "note": "user-data 200 x1 (min 1)",
+    "evidence": [
+      "server-nginx.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-dnsmasq",
+    "node": "pxe-test-m7vlansmoke-node42",
+    "status": "PASS",
+    "note": "TFTP snponly.efi terkirim ke 10.99.10.132 (lease 52:54:00:99:00:42)",
+    "evidence": [
+      "server-dnsmasq.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-nginx",
+    "node": "pxe-test-m7vlansmoke-node42",
+    "status": "PASS",
+    "note": "ks.cfg 200 x1 (min 1)",
+    "evidence": [
+      "server-nginx.txt"
+    ]
+  }
+]
