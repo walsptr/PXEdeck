@@ -1,0 +1,48 @@
+# Mutasi spot-check test-engineer M7-T7 (vitest) + M7-T9 (shell infra) — 2026-11-06T12:02:56Z
+# Dijalankan di SALINAN repo .agent/tmp/mut-te7 (git ls-files + test baru, node_modules symlink) agar
+# worktree yang dipakai run KVM paralel tidak pernah berisi kode mutan. Setiap mutasi: terapkan 1 perubahan
+# kode produk -> jalankan file test baru yang menargetkan -> git checkout file. KILLED = test merah.
+# Vitest: npx vitest run <file test>; shell: infra/test/mini.sh (harness run.sh, hanya m7-infra.sh + m7-te.sh, ONLY=<fungsi>).
+# Format: id | verdict | file | sebelum -> sesudah | ringkasan
+
+## Putaran 1 (T7 vitest + T9 shell)
+T7-M1 | SURVIVED | dashboard/src/lib/server/provisioning.ts | if (!ipAllowed(host, input.ip, [staticIp, host.mgmtIp])) return deny(" -> if (!ipAllowed(host, input.ip, [host.mgmtIp])) return deny("ip")     i | Tests  10 passed (10)
+T7-M2 | KILLED | dashboard/src/lib/server/provisioning.ts | if (!ipAllowed(host, input.ip, [staticIp, host.mgmtIp])) return deny(" -> if (input.ip === null) return deny("ip")     if (!(CALLBACK_STAGES | Tests  4 failed | 6 passed (10)
+T7-M3 | KILLED | dashboard/src/lib/server/provisioning.ts | currentIp: input.ip, -> currentIp: host.currentIp, | Tests  2 failed | 8 passed (10)
+T7-M4 | KILLED | dashboard/src/lib/server/provisioning.ts | if (!ipAllowed(host, input.ip)) return deny("ip") -> if (!ipAllowed(host, input.ip, [host.mgmtIp])) return deny("ip") | Tests  1 failed | 9 passed (10)
+T7-M5 | KILLED | dashboard/src/lib/server/provisioning.ts | if (!ipAllowed(host, input.ip, [staticIp, host.mgmtIp])) return deny(" -> if (!input.ip) return deny("ip")     if (splitLogLines | Tests  3 failed | 7 passed (10)
+T7-M6 | KILLED | dashboard/src/lib/server/provisioning.ts |   if (!host || host.mac !== mac) return deny("mac-mismatch") ->   if (!host) return deny("mac-mismatch") | Tests  1 failed | 9 passed (10)
+T7-M7 | KILLED | dashboard/src/lib/server/installers/context.ts |     return new URL(mediaUrl).hostname === serverIp ->     return new URL(mediaUrl).hostname.startsWith("10.99.") | Tests  2 failed | 15 passed (17)
+T7-M8 | KILLED | dashboard/src/lib/server/settings.ts | vlanNetworks = vlanNetworksFromEnv(env.PXE_VLAN_NETWORKS, network.cidr -> vlanNetworks = vlanNetworksFromEnv(undefined, network.cidr) | Tests  12 failed | 5 passed (17)
+T7-M9 | KILLED | dashboard/src/lib/server/installers/ubuntu.ts |       ? { name: n.iface.name } ->       ? { macaddress: c.mac } | Tests  1 failed | 9 passed (10)
+T7-M10 | KILLED | dashboard/src/lib/server/installers/debian.ts | di("pkgsel/include", "string", "openssh-server curl sudo"), -> di("pkgsel/include", "string", c.network.mode === "static" && c.networ | Tests  2 failed | 8 passed (10)
+T7-M11 | KILLED | dashboard/src/lib/server/installers/ubuntu.ts |     vlans: { [`mgmt.${n.vlan}`]: { id: n.vlan, link: "mgmt", ...l3 } } ->     vlans: { "mgmt.20": { id: 20, link: "mgmt", ...l3 } }, | Tests  1 failed | 9 passed (10)
+T7-M1b | KILLED | dashboard/src/lib/server/provisioning.ts | if (!ipAllowed(host, input.ip, [staticIp, host.mgmtIp])) return deny(" -> if (!ipAllowed(host, input.ip, [])) return deny("ip")     if (!(CALLBA | Tests  3 failed | 7 passed (10)
+
+## T9 shell (putaran 2, setelah runner mutasi diperbaiki dan test cleanup-setiap-tahap diperkuat)
+T9-S1 | KILLED | infra/kvm-run.sh | umask 077 && cat > /root/pxe-relay/node_ed25519 && chmod 600 /root/pxe -> cat > /root/pxe-relay/node_ed25519 | hasil: 0 lulus, 1 gagal
+T9-S2 | KILLED | infra/server/vlan/verify-listen-vlan.sh | for s in dnsmasq nginx nfs-server; do   [[ "$(systemctl is-active "$s" -> for s in nginx nfs-server; do   [[ "$(systemctl is-active "$s")" == ac | hasil: 0 lulus, 1 gagal
+T9-S3 | KILLED | infra/server/vlan/verify-listen-vlan.sh | dns_ok() { [[ "$1" == 10.99.10.2:* || "$1" == *%pxe10:* ]]; } -> dns_ok() { [[ "$1" == 10.99.*:* || "$1" == *%pxe10:* ]]; } | hasil: 0 lulus, 1 gagal
+T9-S4 | KILLED | infra/server/vlan/nginx-pxe-vlan.conf |     location /boot/ {  ->     location /boot/ {         allow 10.99.0.1;         deny all;  | hasil: 0 lulus, 1 gagal
+T9-S5 | KILLED | infra/server/vlan/apply-profile.sh | OPTIONS="-w -h 10.99.10.2" -> OPTIONS="-w" | hasil: 0 lulus, 1 gagal
+T9-S6 | KILLED | dashboard/e2e-kvm/verify-node.sh | if [[ -z "${EXPECT_VLAN:-}" ]]; then -> if [[ -z "${EXPECT_VLAN:-}" && -n "${EXPECT_VLAN+x}" ]]; then | hasil: 0 lulus, 1 gagal
+T9-S7 | KILLED | dashboard/e2e-kvm/verify-node.sh | [[ "$EXPECT_VLAN" =~ ^[0-9]{1,4}$ ]] || { echo "FAIL env EXPECT_VLAN t -> : | hasil: 0 lulus, 1 gagal
+T9-S8 | KILLED | infra/lib.sh | [[ "$n" == "$p" ]] && die "nama -> [[ "$n" == "$p-x" ]] && die "nama | hasil: 0 lulus, 1 gagal
+T9-S9 | KILLED | infra/README.md | **Syarat jaringan production (O5, R13).** -> **Catatan production.** | hasil: 0 lulus, 1 gagal
+T9-S10 | KILLED | infra/kvm-run.sh |   ((keep_server || !switch_started)) || cl_args+=(--switch) ->   : | hasil: 0 lulus, 1 gagal
+T9-S11 | KILLED | infra/switch-down.sh | for f in "$SWITCH_DISK" "$SWITCH_SEED"; do -> for f in "$SWITCH_DISK"; do | hasil: 0 lulus, 1 gagal
+T9-S12 | KILLED | infra/kvm-run.sh | topology=flat; [[ "$scenario" == vlan* ]] && topology=vlan -> topology=flat; [[ "$scenario" == vlan* || "$scenario" == core ]] && to | hasil: 0 lulus, 1 gagal
+
+## Catatan
+- Putaran pertama shell (tidak dicantumkan) memakai runner mutasi dengan `[[ ]] && real_t || true` yang menonaktifkan
+  set -e di subshell test, sehingga asersi gagal tidak menggagalkan test (artefak runner, bukan test). Runner
+  diperbaiki (`if …; then real_t; fi`) lalu seluruh mutasi T9 diulang (di atas). run.sh sendiri memanggil t langsung.
+- T7-M1 SURVIVED = mutan ekuivalen: config-service selalu menyetel host.mgmt_ip = IP statis config, sehingga
+  menghapus staticIp dari daftar IP sah callback status tidak mengubah perilaku selama mgmtIp tetap ada.
+  T7-M1b (hapus staticIp DAN mgmtIp) KILLED membuktikan test AC-7.5 bergantung pada binding IP statis VLAN.
+- T9-S10 awalnya SURVIVED (test cleanup-setiap-tahap tidak memeriksa switch dimatikan); test diperkuat
+  (asersi 'pxe-test-switch dimatikan dan di-undefine' untuk tahap setelah switch-up, tidak ada untuk sebelum) -> KILLED.
+- T9-S12 versi awal (node_net_args selalu mencetak --net) ekuivalen untuk flat (--net pxe-test = default node.sh);
+  diganti mutasi deteksi topologi (scenario core -> vlan) -> KILLED.
+
+Total final: 23/24 KILLED (1 SURVIVED = T7-M1 ekuivalen)

@@ -1,0 +1,649 @@
+# M7-T8 full E2E run 2 — 2026-11-06T20:28:56+07:00 — HEAD ca21e9d + test T8 (working tree)
+# npx playwright test --retries=0 --workers=1
+(node:463908) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 build
+[WebServer] > next build
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5 (Turbopack)
+[WebServer] ✓ Running next.config.ts took 25ms
+[WebServer] - Cache Components enabled
+[WebServer] - Partial Prefetching enabled
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 167ms
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 2.4s ...
+[WebServer]   Collecting page data using 11 workers ...
+[WebServer] (node:463986) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:463987) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:463993) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:464001) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:464007) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:464020) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:464027) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:464047) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:463985) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:464029) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:464035) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer]   Generating static pages using 11 workers (0/23) ...
+[WebServer]   Generating static pages using 11 workers (5/23) 
+[WebServer]   Generating static pages using 11 workers (11/23) 
+[WebServer]   Generating static pages using 11 workers (17/23) 
+[WebServer] ✓ Generating static pages using 11 workers (23/23) in 579ms
+[WebServer]   Finalizing page optimization ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ○ /_not-found
+[WebServer] ├ ƒ /api/auth/login
+[WebServer] ├ ƒ /api/auth/logout
+[WebServer] ├ ƒ /api/auth/session
+[WebServer] ├ ƒ /api/credentials/import
+[WebServer] ├ ƒ /api/hosts
+[WebServer] ├ ƒ /api/hosts/[id]
+[WebServer] ├ ƒ /api/hosts/[id]/config
+[WebServer] ├ ƒ /api/hosts/[id]/install
+[WebServer] ├ ƒ /api/hosts/[id]/reboot
+[WebServer] ├ ƒ /api/hosts/bulk
+[WebServer] ├ ƒ /api/hosts/bulk/install
+[WebServer] ├ ƒ /api/jobs
+[WebServer] ├ ƒ /api/jobs/[id]
+[WebServer] ├ ƒ /api/jobs/[id]/logs
+[WebServer] ├ ƒ /api/network
+[WebServer] ├ ƒ /api/os-images
+[WebServer] ├ ƒ /api/os-images/[id]
+[WebServer] ├ ƒ /api/server-status
+[WebServer] ├ ƒ /api/settings
+[WebServer] ├ ƒ /api/ssh-keys
+[WebServer] ├ ƒ /api/ssh-keys/[id]
+[WebServer] ├ ƒ /boot/[name]
+[WebServer] ├ ƒ /boot/[name]/[token]/[file]
+[WebServer] ├ ƒ /boot/[name]/[token]/log
+[WebServer] ├ ƒ /boot/[name]/[token]/status
+[WebServer] ├ ◐ /design
+[WebServer] ├ ◐ /hosts
+[WebServer] ├ ◐ /jobs
+[WebServer] ├ ◐ /login
+[WebServer] ├ ◐ /os-images
+[WebServer] ├ ◐ /settings
+[WebServer] └ ◐ /ssh-keys
+[WebServer] 
+[WebServer] 
+[WebServer] ƒ Proxy (Middleware)
+[WebServer] 
+[WebServer] ○  (Static)             prerendered as static content
+[WebServer] ◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+[WebServer] ƒ  (Dynamic)            server-rendered on demand
+[WebServer] 
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3100
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3100
+[WebServer] - Network:       http://192.168.0.207:3100
+[WebServer] ✓ Ready in 144ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464261) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3101
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3101
+[WebServer] - Network:       http://192.168.0.207:3101
+[WebServer] ✓ Ready in 133ms
+[WebServer] ✓ Running next.config.ts took 26ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464297) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3102
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3102
+[WebServer] - Network:       http://192.168.0.207:3102
+[WebServer] ✓ Ready in 158ms
+[WebServer] ✓ Running next.config.ts took 29ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464333) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3103
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3103
+[WebServer] - Network:       http://192.168.0.207:3103
+[WebServer] ✓ Ready in 157ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464371) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3104
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3104
+[WebServer] - Network:       http://192.168.0.207:3104
+[WebServer] ✓ Ready in 142ms
+[WebServer] ✓ Running next.config.ts took 29ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464417) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3105
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3105
+[WebServer] - Network:       http://192.168.0.207:3105
+[WebServer] ✓ Ready in 156ms
+[WebServer] ✓ Running next.config.ts took 31ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464453) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3106
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3106
+[WebServer] - Network:       http://192.168.0.207:3106
+[WebServer] ✓ Ready in 137ms
+[WebServer] ✓ Running next.config.ts took 27ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464494) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3107
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3107
+[WebServer] - Network:       http://192.168.0.207:3107
+[WebServer] ✓ Ready in 145ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464532) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3108
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3108
+[WebServer] - Network:       http://192.168.0.207:3108
+[WebServer] ✓ Ready in 149ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] (node:464567) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3109
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3109
+[WebServer] - Network:       http://192.168.0.207:3109
+[WebServer] ✓ Ready in 138ms
+[WebServer] ✓ Running next.config.ts took 26ms
+[WebServer] (node:464604) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3110
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3110
+[WebServer] - Network:       http://192.168.0.207:3110
+[WebServer] ✓ Ready in 149ms
+[WebServer] ✓ Running next.config.ts took 29ms
+[WebServer] (node:464647) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3111
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3111
+[WebServer] - Network:       http://192.168.0.207:3111
+[WebServer] ✓ Ready in 137ms
+[WebServer] ✓ Running next.config.ts took 27ms
+[WebServer] (node:464713) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3112
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3112
+[WebServer] - Network:       http://192.168.0.207:3112
+[WebServer] ✓ Ready in 147ms
+[WebServer] ✓ Running next.config.ts took 29ms
+[WebServer] (node:464758) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3113
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3113
+[WebServer] - Network:       http://192.168.0.207:3113
+[WebServer] ✓ Ready in 155ms
+[WebServer] ✓ Running next.config.ts took 31ms
+[WebServer] (node:464823) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3114
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3114
+[WebServer] - Network:       http://192.168.0.207:3114
+[WebServer] ✓ Ready in 151ms
+[WebServer] ✓ Running next.config.ts took 29ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464859) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3115
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3115
+[WebServer] - Network:       http://192.168.0.207:3115
+[WebServer] ✓ Ready in 138ms
+[WebServer] ✓ Running next.config.ts took 26ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:464895) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3116
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3116
+[WebServer] - Network:       http://192.168.0.207:3116
+[WebServer] ✓ Ready in 153ms
+[WebServer] ✓ Running next.config.ts took 31ms
+[WebServer] (node:464933) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3117
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3117
+[WebServer] - Network:       http://192.168.0.207:3117
+[WebServer] ✓ Ready in 146ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] (node:464970) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3118
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3118
+[WebServer] - Network:       http://192.168.0.207:3118
+[WebServer] ✓ Ready in 133ms
+[WebServer] ✓ Running next.config.ts took 26ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:465006) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 199 tests using 1 worker
+
+(node:465032) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓    1 [setup-chromium] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:465130) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓    2 [setup-m2-polling] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:465224) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓    3 [setup-m2-hosts-table] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:465320) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓    4 [setup-m3-sheet] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:465418) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓    5 [setup-m3-bulk] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (986ms)
+(node:465517) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓    6 [setup-iter2-ui] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:465619) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓    7 [setup-iter2-network-env] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:465714) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓    8 [setup-iter3-ui] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:465840) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓    9 [setup-m4-discovery] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.1s)
+(node:465942) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   10 [setup-m4-settings] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.0s)
+(node:466034) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   11 [setup-m5-jobs] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (908ms)
+(node:466126) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   12 [setup-m5-timeout] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (942ms)
+(node:466219) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   13 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (929ms)
+(node:466313) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   14 [setup-m5-ui] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.1s)
+(node:466408) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   15 [setup-m6-ui] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:466505) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   16 [setup-m6-ui-iter2] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:466601) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   17 [setup-m7-vlan] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:466697) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   18 [m6-auth] › e2e/m6-auth.spec.ts:35:9 › AC-6.8 halaman tanpa sesi → /login?next= › / → redirect ke login tanpa merender data (545ms)
+  ✓   19 [m6-auth] › e2e/m6-auth.spec.ts:35:9 › AC-6.8 halaman tanpa sesi → /login?next= › /hosts → redirect ke login tanpa merender data (285ms)
+  ✓   20 [m6-auth] › e2e/m6-auth.spec.ts:35:9 › AC-6.8 halaman tanpa sesi → /login?next= › /jobs?host=525400101011 → redirect ke login tanpa merender data (507ms)
+  ✓   21 [m6-auth] › e2e/m6-auth.spec.ts:35:9 › AC-6.8 halaman tanpa sesi → /login?next= › /os-images → redirect ke login tanpa merender data (256ms)
+  ✓   22 [m6-auth] › e2e/m6-auth.spec.ts:35:9 › AC-6.8 halaman tanpa sesi → /login?next= › /ssh-keys → redirect ke login tanpa merender data (259ms)
+  ✓   23 [m6-auth] › e2e/m6-auth.spec.ts:35:9 › AC-6.8 halaman tanpa sesi → /login?next= › /settings → redirect ke login tanpa merender data (224ms)
+  ✓   24 [m6-auth] › e2e/m6-auth.spec.ts:35:9 › AC-6.8 halaman tanpa sesi → /login?next= › /design → redirect ke login tanpa merender data (244ms)
+  ✓   25 [m6-auth] › e2e/m6-auth.spec.ts:56:7 › AC-6.8 halaman tanpa sesi → /login?next= › cookie berbentuk valid tapi palsu → layout server (lapis kedua) tetap mengalihkan tanpa data (322ms)
+  ✓   26 [m6-auth] › e2e/m6-auth.spec.ts:70:7 › AC-6.8 halaman tanpa sesi → /login?next= › /login, aset _next/static, font, favicon tetap 200 tanpa sesi (250ms)
+  ✓   27 [m6-auth] › e2e/m6-auth.spec.ts:86:9 › AC-6.8 halaman tanpa sesi → /login?next= › next berbahaya "//evil.test" → setelah login mendarat di /hosts (474ms)
+  ✓   28 [m6-auth] › e2e/m6-auth.spec.ts:86:9 › AC-6.8 halaman tanpa sesi → /login?next= › next berbahaya "/\\evil.test" → setelah login mendarat di /hosts (410ms)
+  ✓   29 [m6-auth] › e2e/m6-auth.spec.ts:86:9 › AC-6.8 halaman tanpa sesi → /login?next= › next berbahaya "https://evil.test" → setelah login mendarat di /hosts (407ms)
+  ✓   30 [m6-auth] › e2e/m6-auth.spec.ts:86:9 › AC-6.8 halaman tanpa sesi → /login?next= › next berbahaya "javascript:alert(1)" → setelah login mendarat di /hosts (562ms)
+  ✓   31 [m6-auth] › e2e/m6-auth.spec.ts:86:9 › AC-6.8 halaman tanpa sesi → /login?next= › next berbahaya "/login" → setelah login mendarat di /hosts (412ms)
+  ✓   32 [m6-auth] › e2e/m6-auth.spec.ts:86:9 › AC-6.8 halaman tanpa sesi → /login?next= › next berbahaya "/login?next=/settings" → setelah login mendarat di /hosts (432ms)
+  ✓   33 [m6-auth] › e2e/m6-auth.spec.ts:93:7 › AC-6.8 halaman tanpa sesi → /login?next= › next sah → mendarat di path itu (termasuk query) (552ms)
+  ✓   34 [m6-auth] › e2e/m6-auth.spec.ts:104:9 › AC-6.30 desain halaman login › login @375: card, judul, input, tombol oranye satu-satunya, tanpa sidebar/top bar, tanpa overflow (514ms)
+  ✓   35 [m6-auth] › e2e/m6-auth.spec.ts:104:9 › AC-6.30 desain halaman login › login @1440: card, judul, input, tombol oranye satu-satunya, tanpa sidebar/top bar, tanpa overflow (538ms)
+  ✓   36 [m6-auth] › e2e/m6-auth.spec.ts:179:7 › AC-6.31 alur login › password salah → Alert fokus; Enter mengirim; dari /jobs?host= kembali ke URL itu; username mono di sidebar (628ms)
+  ✓   37 [m6-auth] › e2e/m6-auth.spec.ts:197:7 › AC-6.31 alur login › login benar tanpa next → /hosts; Keluar → /login; Back tidak menampilkan data (1.5s)
+  ✓   38 [m6-auth] › e2e/m6-auth.spec.ts:248:7 › AC-6.33 lockout UI (paling akhir: menghabiskan kuota gagal per IP) › 5 password salah → ke-6 (password benar) menampilkan lockout N menit; tombol tetap aktif; username tak dikenal identik (1.4s)
+(node:467129) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   39 [m6-session] › e2e/m6-session.spec.ts:65:5 › DEC-019 §1: polling memperpanjang idle (tab /hosts tetap masuk > 60 dtk); sesi tanpa aktivitas habis setelah idle 1 mnt (1.3m)
+  ✓   40 [m6-session] › e2e/m6-session.spec.ts:90:5 › AC-6.32 (a) sesi di-logout dari konteks lain saat di /hosts → redirect sekali, tanpa polling; login ulang → /hosts (21.4s)
+  ✓   41 [m6-session] › e2e/m6-session.spec.ts:108:5 › AC-6.32 (b) baris sesi dihapus di DB saat di /hosts → redirect sekali, tanpa polling; login ulang → /hosts (21.4s)
+(node:467932) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   42 [chromium] › e2e/m1-design-system.spec.ts:18:9 › AC-1.2 warna dasar & font › body bg/teks, font Inter + JetBrains Mono di /hosts (793ms)
+  ✓   43 [chromium] › e2e/m1-design-system.spec.ts:18:9 › AC-1.2 warna dasar & font › body bg/teks, font Inter + JetBrains Mono di /design (560ms)
+  ✓   44 [chromium] › e2e/m1-design-system.spec.ts:52:7 › AC-1.3 tanpa drop shadow › /hosts, dropdown aksi baris, dan Sheet konfigurasi (1.9s)
+  ✓   45 [chromium] › e2e/m1-design-system.spec.ts:72:7 › AC-1.3 tanpa drop shadow › /design (629ms)
+  ✓   46 [chromium] › e2e/m1-design-system.spec.ts:85:7 › AC-1.4 bentuk & ukuran di /design › Button 40px/8px, Input 44px/8px border hairline, Card 12px putih, pill 9999px, placeholder muted-soft (481ms)
+  ✓   47 [chromium] › e2e/m1-design-system.spec.ts:132:7 › AC-1.4 bentuk & ukuran di /design › G1-3: pemetaan varian tombol ke SPEC terdokumentasi (311ms)
+  ✓   48 [chromium] › e2e/m1-design-system.spec.ts:143:7 › AC-1.5 tipografi › judul top bar, label kolom tabel, sel MAC mono (654ms)
+  ✓   49 [chromium] › e2e/m1-design-system.spec.ts:171:5 › oranye hanya pada tombol primary (/hosts, /design) (895ms)
+  ✓   50 [chromium] › e2e/m1-layout.spec.ts:20:7 › AC-1.8 layout › sidebar 5 link, item aktif, border hairline, top bar 64px, padding main 32px (637ms)
+  ✓   51 [chromium] › e2e/m1-layout.spec.ts:46:7 › AC-1.8 layout › item aktif & judul mengikuti halaman (360ms)
+  ✓   52 [chromium] › e2e/m1-layout.spec.ts:59:9 › AC-1.8 layout › viewport < 768 › padding main 24px, top bar tetap 64px (402ms)
+  ✓   53 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /hosts: tepat satu <main>/role=main, konten berada di dalamnya (403ms)
+  ✓   54 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /design: tepat satu <main>/role=main, konten berada di dalamnya (506ms)
+  ✓   55 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /settings: tepat satu <main>/role=main, konten berada di dalamnya (524ms)
+  ✓   56 [chromium] › e2e/m1-layout.spec.ts:70:9 › CR-1-2 satu landmark main › /ssh-keys: tepat satu <main>/role=main, konten berada di dalamnya (300ms)
+  ✓   57 [chromium] › e2e/m1-layout.spec.ts:82:7 › AC-1.9 navigasi › GET / redirect ke /hosts (429ms)
+  ✓   58 [chromium] › e2e/m1-layout.spec.ts:91:7 › AC-1.9 navigasi › klik tiap item sidebar membuka halaman benar dengan <title> dan isi (935ms)
+  ✓   59 [chromium] › e2e/m1-layout.spec.ts:110:9 › AC-1.9 navigasi › /os-images: konten nyata (bukan placeholder) (331ms)
+  ✓   60 [chromium] › e2e/m1-layout.spec.ts:110:9 › AC-1.9 navigasi › /ssh-keys: konten nyata (bukan placeholder) (507ms)
+  ✓   61 [chromium] › e2e/m1-layout.spec.ts:110:9 › AC-1.9 navigasi › /jobs: konten nyata (bukan placeholder) (525ms)
+  ✓   62 [chromium] › e2e/m1-layout.spec.ts:120:7 › AC-1.9 navigasi › /settings: halaman Settings read-only (bukan placeholder) dengan nilai dari API (315ms)
+  ✓   63 [chromium] › e2e/m1-layout.spec.ts:132:7 › AC-1.10 pencarian global › Ctrl+K buka dialog, cari halaman + Enter bernavigasi, Escape menutup (1.2s)
+  ✓   64 [chromium] › e2e/m1-layout.spec.ts:150:7 › AC-1.10 pencarian global › memilih host → /hosts?q=<mac> dan tabel terfilter ke host itu (577ms)
+  ✓   65 [chromium] › e2e/m1-layout.spec.ts:169:7 › AC-1.11 status server PXE › top bar menampilkan DHCP, TFTP, HTTP dengan teks aksesibel sesuai status server (530ms)
+  ✓   66 [chromium] › e2e/m7-novlan.spec.ts:15:5 › API tanpa env: kunci vlanNetworks tidak ada di /api/settings & /api/network (DEC-025 §3) (15ms)
+  ✓   67 [chromium] › e2e/m7-novlan.spec.ts:23:5 › /settings tanpa VLAN: card VLAN management dengan empty state; axe 0 pelanggaran; 375/768/1280/1440 tanpa overflow (3.7s)
+  ✓   68 [chromium] › e2e/m7-novlan.spec.ts:47:5 › Sheet tanpa VLAN terdaftar: tanpa daftar 'Terdaftar', VLAN 20 → petunjuk tidak terdaftar (teks utama) + subnet PXE (DEC-006) (1.3s)
+  ✓   69 [chromium] › e2e/smoke.spec.ts:4:5 › halaman /hosts terbuka (352ms)
+(node:468610) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   70 [m2-polling] › e2e/m2-polling.spec.ts:13:5 › AC-2.9/AC-4.12 host baru dari /boot/{mac}.ipxe muncul ≤ 6 dtk tanpa reload; polling ~5 dtk (20.8s)
+(node:468808) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   71 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:40:7 › AC-2.8 kolom & isi tabel › header kolom, satu baris per host API, '—', font mono, pill data-status (2.0s)
+  ✓   72 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:78:7 › AC-2.10 pencarian & filter › pencarian MAC/hostname/IP mempersempit baris (1.3s)
+  ✓   73 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:95:7 › AC-2.10 pencarian & filter › filter status (hitungan + hanya status itu), filter OS, Reset, tanpa hasil (2.3s)
+  ✓   74 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:151:7 › AC-2.10 pencarian & filter › /hosts?q=<mac> mengisi pencarian awal (579ms)
+  ✓   75 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:160:7 › AC-2.11 seleksi & bulk bar › 2 baris → toolbar, tombol, hanya Install OS primary; batal mengosongkan (756ms)
+  ✓   76 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:182:7 › AC-2.11 seleksi & bulk bar › Shift+klik memilih rentang (641ms)
+  ✓   77 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:193:7 › AC-2.11 seleksi & bulk bar › checkbox header: semua / indeterminate; tersembunyi oleh filter (880ms)
+  ✓   78 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:221:7 › AC-2.12 menu aksi baris › berisi tepat lima aksi; Reboot ke PXE nonaktif dengan alasan (DEC-012) (572ms)
+  ✓   79 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:231:7 › AC-2.12 menu aksi baris › Hapus: Batal tidak mengubah apa pun; konfirmasi menghapus baris + toast (1.7s)
+  ✓   80 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:258:7 › AC-2.12 menu aksi baris › Reboot ke PXE nonaktif: klik tidak membuka dialog/request; API 501, status tetap (1.5s)
+  ✓   81 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:277:7 › AC-2.12 menu aksi baris › Lihat log → /jobs?host=<id> (644ms)
+  ✓   82 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:284:7 › AC-2.12 menu aksi baris › Install OS / Edit konfigurasi membuka Sheet (1.6s)
+  ✓   83 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:301:7 › AC-2.13 empty & error state › {hosts: []} → 'Belum ada host' + penjelasan PXE boot (456ms)
+  ✓   84 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:310:7 › AC-2.13 empty & error state › GET /api/hosts 500 → Alert 'Gagal memuat data host' (1.7s)
+  ✓   85 [m2-hosts-table] › e2e/m2-hosts-table.spec.ts:321:7 › AC-2.14 copy MAC › tombol copy terlihat saat fokus keyboard dan menulis MAC ke clipboard (1.4s)
+(node:469215) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   86 [m3-sheet] › e2e/m3-sheet.spec.ts:18:5 › AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toast + tabel ter-update (3.3s)
+  ✓   87 [m3-sheet] › e2e/m3-sheet.spec.ts:144:5 › AC-3.13 validasi UI per tab menonaktifkan simpan; 422 server tampil di tab yang benar (3.0s)
+(node:469349) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   88 [m3-bulk] › e2e/m3-bulk.spec.ts:55:5 › AC-3.14 preview bulk (IP, hostname, CSV) tanpa request simpan; password acak sekali tampil + CSV (6.2s)
+  ✓   89 [m3-bulk] › e2e/m3-bulk.spec.ts:197:5 › AC-3.15 Simpan & Install: dialog konfirmasi, Batal tanpa request, install → Booting (4.3s)
+  ✓   90 [m3-bulk] › e2e/m3-bulk.spec.ts:238:5 › AC-3.15 bulk: dialog menyebut jumlah host; Batal tidak mengirim request (3.4s)
+(node:469618) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   91 [iter2-ui] › e2e/iter2-ui.spec.ts:45:7 › CR-3-6 dialog password sekali tampil › tidak bisa ditutup (Escape/overlay/tanpa tombol X) sebelum unduh atau konfirmasi; Selesai aktif setelah centang (2.5s)
+  ✓   92 [iter2-ui] › e2e/iter2-ui.spec.ts:83:7 › CR-3-6 dialog password sekali tampil › Selesai aktif setelah unduh CSV; batch berikutnya terkunci lagi (state di-reset); CSV aman formula (3.8s)
+  ✓   93 [iter2-ui] › e2e/iter2-ui.spec.ts:115:7 › CR-3-13 Sheet error state + Coba lagi › GET config host gagal → alert, form tidak dirender; Coba lagi memuat ulang form (2.6s)
+  ✓   94 [iter2-ui] › e2e/iter2-ui.spec.ts:148:7 › CR-3-13 Sheet error state + Coba lagi › GET /api/settings gagal → alert 'Gagal memuat parameter jaringan'; Coba lagi → form dengan default subnet (2.0s)
+  ✓   95 [iter2-ui] › e2e/iter2-ui.spec.ts:185:7 › CR-3-2 form & tampilan memakai parameter jaringan dari server (GET /api/settings) › server lab: /api/network = env PXE_MGMT_* lab; sidebar & empty state memakai nilainya (419ms)
+  ✓   96 [iter2-ui] › e2e/iter2-ui.spec.ts:203:7 › CR-3-2 form & tampilan memakai parameter jaringan dari server (GET /api/settings) › respons /api/settings lain → default range, gateway, DNS, preview IP, validasi, deskripsi, sidebar ikut (2.4s)
+  ✓   97 [iter2-ui] › e2e/iter2-ui.spec.ts:249:7 › CR-2-4 / CR-2-3 tabel host › pencarian MAC Cisco 5254.0010.1011 → hanya node01; query IP tidak cocok dengan digit MAC (1.2s)
+  ✓   98 [iter2-ui] › e2e/iter2-ui.spec.ts:263:7 › CR-2-4 / CR-2-3 tabel host › sort Hostname naik & turun: host tanpa hostname ('—') selalu di akhir (608ms)
+  ✓   99 [iter2-ui] › e2e/iter2-ui.spec.ts:286:7 › DR-2-1/2-2, DR-3-2, DR-3-3 ukuran & radius › toolbar & bulk bar 36px; Sheet radius 12px di sisi konten; tombol kecil Sheet ≥ 32px (1.2s)
+(node:469907) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  100 [iter2-network-env] › e2e/iter2-network-env.spec.ts:10:5 › GET /api/network mencerminkan env server (subnet KVM) (48ms)
+  ✓  101 [iter2-network-env] › e2e/iter2-network-env.spec.ts:24:5 › bulk Set IP: default & preview dari subnet env, simpan diterima server (200) dengan IP 10.99.0.x (1.6s)
+  ✓  102 [iter2-network-env] › e2e/iter2-network-env.spec.ts:60:5 › single host: IP lab ditolak UI ('Di luar subnet 10.99.0.0/24') dan API (422); IP KVM diterima keduanya (2.0s)
+(node:470041) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  103 [iter3-ui] › e2e/iter3-ui.spec.ts:117:7 › DR-1-2 toast Sonner tanpa drop shadow (alur nyata M2 & M3) › M2 hapus host → toast datar (diam/hover/focus-visible), border 1px, radius 12px (2.8s)
+  ✓  104 [iter3-ui] › e2e/iter3-ui.spec.ts:136:7 › DR-1-2 toast Sonner tanpa drop shadow (alur nyata M2 & M3) › M2 hapus host gagal → toast.error datar (diam/hover/focus-visible) (2.1s)
+  ✓  105 [iter3-ui] › e2e/iter3-ui.spec.ts:154:7 › DR-1-2 toast Sonner tanpa drop shadow (alur nyata M2 & M3) › M3 simpan konfigurasi → toast datar (diam/hover/focus-visible); seluruh halaman tanpa drop shadow (2.4s)
+  ✓  106 [iter3-ui] › e2e/iter3-ui.spec.ts:217:7 › DR-3-4 ukuran kontrol kecil Sheet › 'Tambah' DNS tinggi 36px; area klik 'Hapus DNS …' dan 'Batalkan perubahan …' ≥ 36px dan berfungsi (4.0s)
+  ✓  107 [iter3-ui] › e2e/iter3-ui.spec.ts:254:7 › CR-3-14 IP host = gateway payload ditolak di UI › single host: pesan 'Bentrok dengan gateway <gw>', simpan & install nonaktif, tanpa request (1.5s)
+  ✓  108 [iter3-ui] › e2e/iter3-ui.spec.ts:283:7 › I-3-13 bukti dialog password acak › screenshot dialog password terlihat penuh (opacity 1), kolom password di-mask (1.8s)
+(node:470298) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  109 [m4-discovery] › e2e/m4-discovery.spec.ts:44:5 › AC-4.9/4.11/4.12 discovery: IP asing ditolak; MAC di lease muncul ≤ 10 dtk tanpa refresh (6.2s)
+[WebServer] [boot] tolak file mac=52:54:00:99:00:32 alasan=ip
+[WebServer] [boot] tolak status mac=52:54:00:99:00:32 alasan=token-unknown
+  ✓  110 [m4-discovery] › e2e/m4-discovery.spec.ts:78:5 › AC-4.27 Install dari Sheet → pill Booting → Installing → Configuring → Done tanpa refresh (18.0s)
+(node:470528) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  111 [m4-settings] › e2e/m4-settings.spec.ts:9:5 › AC-4.6 GET /api/settings + halaman Settings read-only (737ms)
+  ✓  112 [m4-settings] › e2e/m4-settings.spec.ts:60:5 › AC-4.6 tab Network memakai subnet server 10.99.0.0/24; 10.10.10.5 ditandai di luar subnet (1.5s)
+  ✓  113 [m4-settings] › e2e/m4-settings.spec.ts:85:5 › AC-4.7 top bar mengikuti GET /api/server-status (online / offline / tidak diketahui) (15.4s)
+(node:470825) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  114 [m5-jobs] › e2e/m5-jobs.spec.ts:40:5 › AC-5.22/5.32 Jobs: empty state sebelum ada job, judul 26 px, tanpa placeholder (733ms)
+  ✓  115 [m5-jobs] › e2e/m5-jobs.spec.ts:55:5 › AC-5.1 Settings menampilkan pengaturan job read-only (mono) (645ms)
+  ✓  116 [m5-jobs] › e2e/m5-jobs.spec.ts:76:5 › AC-5.22/5.23 daftar + status live tanpa reload, filter, timeline warna persis, audit (27.6s)
+  ✓  117 [m5-jobs] › e2e/m5-jobs.spec.ts:183:5 › AC-5.24 log streaming SSE: live ≤ 3 dtk, mono, autoscroll, redaksi, putus → sambung ulang tanpa ganda, Selesai (7.8s)
+  ✓  118 [m5-jobs] › e2e/m5-jobs.spec.ts:266:5 › AC-5.25 Hosts: Lihat log → riwayat host + job terbaru terpilih; Failed + alasan; Install ulang → 2 job (4.0s)
+(node:471204) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  119 [m5-timeout] › e2e/m5-timeout.spec.ts:15:5 › AC-5.26 timeout Booting (1 mnt) → Failed ≤ 90 dtk di Hosts & Jobs tanpa reload; Install ulang → Booting (1.0m)
+(node:471654) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  120 [m5-library] › e2e/m5-library.spec.ts:45:5 › AC-5.27/5.32 OS Images: tabel seed, mono, tidak tersedia body (DEC-022 §1), judul 26 px (764ms)
+  ✓  121 [m5-library] › e2e/m5-library.spec.ts:71:5 › AC-5.27 Daftarkan image: error per field, 409 id ganda, valid → baris baru; hapus 409 / hapus berhasil (2.3s)
+  ✓  122 [m5-library] › e2e/m5-library.spec.ts:137:5 › DR-5-1 OS Images 375×812: kartu per image ≤ 200 px, path dipenggal di '/', tanpa scroll horizontal (496ms)
+  ✓  123 [m5-library] › e2e/m5-library.spec.ts:182:5 › DR-5-1 OS Images 1440×900: path Sumber tidak terpotong per karakter, tabel tanpa scroll horizontal (513ms)
+  ✓  124 [m5-library] › e2e/m5-library.spec.ts:380:5 › DR-5-8 OS Images 375/414: ID 48 karakter + path panjang — ID, Dipakai, Hapus tidak tumpang-tindih, tidak meluber, tanpa scroll horizontal (1.5s)
+  ✓  125 [m5-library] › e2e/m5-library.spec.ts:430:5 › DR-5-9 OS Images 1280/1440: ID/nama/path panjang — tabel muat tanpa scroll horizontal, Dipakai + Hapus di dalam kontainer (1.9s)
+  ✓  126 [m5-library] › e2e/m5-library.spec.ts:476:5 › DR-5-12 OS Images 1280/1440: ID 48 tanpa '-', nama ber-underscore/tanpa spasi, segmen path 110 — tabel tanpa overflow, Dipakai + Hapus di dalam kontainer (2.9s)
+  ✓  127 [m5-library] › e2e/m5-library.spec.ts:529:5 › DR-5-13 OS Images 375/414: nama tanpa spasi + segmen path tanpa titik pecah — tidak ada elemen kartu meluber, scrollWidth kontainer = clientWidth (1.8s)
+  ✓  128 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1.6s)
+  ✓  129 [m5-library] › e2e/m5-library.spec.ts:611:5 › AC-5.28/5.32 SSH Keys: paste + unggah .pub (fingerprint = ssh-keygen), invalid, 409, rename, hapus, Sheet library (5.7s)
+  ✓  130 [m5-library] › e2e/m5-library.spec.ts:706:5 › DR-5-2 SSH Keys 1280/1440: kolom Dipakai + tombol Hapus terlihat tanpa scroll horizontal (nama panjang dipotong + title) (1.5s)
+(node:472014) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  131 [m5-ui] › e2e/m5-ui-fixes.spec.ts:43:5 › AC-5.29 DR-4-1/4-2 judul Sheet & AlertDialog: host mono, Sheet 600 / 16–18 px (4.1s)
+  ✓  132 [m5-ui] › e2e/m5-ui-fixes.spec.ts:71:5 › AC-5.30 DR-4-3 install single ditolak: Alert di Sheet, tanpa toast yang menutupi footer (3.2s)
+  ✓  133 [m5-ui] › e2e/m5-ui-fixes.spec.ts:102:5 › AC-5.30 DR-4-4 bulk 1 sukses + 2 gagal: Sheet tetap terbuka, Alert per host (mono) + ringkasan, host sukses Booting (3.0s)
+  ✓  134 [m5-ui] › e2e/m5-ui-fixes.spec.ts:143:5 › AC-5.31 DR-4-5 'tidak tersedia' body #5a5852 bukan merah (DEC-022 §1); DR-4-6 alasan Reboot ke PXE kontras ≥ 4,5:1 (1.6s)
+(node:472195) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  135 [m6-ui] › e2e/m6-ui.spec.ts:51:5 › seed data stres lewat API (image ID 48 / nama 40–64 / path 110; key nama 64 + komentar panjang) (115ms)
+  ✓  136 [m6-ui] › e2e/m6-ui.spec.ts:73:5 › AC-6.1 Settings: blok Akses read-only, username admin mono, tanpa hash (762ms)
+  ✓  137 [m6-ui] › e2e/m6-ui.spec.ts:92:7 › AC-6.34 DR-5-10 SSH Keys › 375: kartu tanpa scroll horizontal, fingerprint utuh mono, aksi rename/hapus terlihat & dapat diklik (1.6s)
+  ✓  138 [m6-ui] › e2e/m6-ui.spec.ts:152:7 › AC-6.34 DR-5-10 SSH Keys › 1440: tetap tabel (1.1s)
+  ✓  139 [m6-ui] › e2e/m6-ui.spec.ts:193:7 › AC-6.35 DR-5-11 + DR-5-14 alasan tidak tersedia › tabel OS Images 1280 (data stres): path & id mono; `vmlinuz` dan `ubuntu-22.04` satu baris; path pecah hanya setelah / (1.3s)
+  ✓  140 [m6-ui] › e2e/m6-ui.spec.ts:233:7 › AC-6.35 DR-5-11 + DR-5-14 alasan tidak tersedia › kartu OS di Sheet: path alasan mono, tanpa overflow (859ms)
+  ✓  141 [m6-ui] › e2e/m6-ui.spec.ts:255:9 › AC-6.36 I-5-9 tanpa overflow horizontal 768–1440; status DHCP/TFTP/HTTP terlihat › /hosts (7.0s)
+  ✓  142 [m6-ui] › e2e/m6-ui.spec.ts:255:9 › AC-6.36 I-5-9 tanpa overflow horizontal 768–1440; status DHCP/TFTP/HTTP terlihat › /jobs (7.0s)
+  ✓  143 [m6-ui] › e2e/m6-ui.spec.ts:255:9 › AC-6.36 I-5-9 tanpa overflow horizontal 768–1440; status DHCP/TFTP/HTTP terlihat › /os-images (6.7s)
+  ✓  144 [m6-ui] › e2e/m6-ui.spec.ts:255:9 › AC-6.36 I-5-9 tanpa overflow horizontal 768–1440; status DHCP/TFTP/HTTP terlihat › /ssh-keys (6.5s)
+  ✓  145 [m6-ui] › e2e/m6-ui.spec.ts:255:9 › AC-6.36 I-5-9 tanpa overflow horizontal 768–1440; status DHCP/TFTP/HTTP terlihat › /settings (6.4s)
+  ✓  146 [m6-ui] › e2e/m6-ui.spec.ts:281:7 › AC-6.36 I-5-9 tanpa overflow horizontal 768–1440; status DHCP/TFTP/HTTP terlihat › /login (4.4s)
+  ✓  147 [m6-ui] › e2e/m6-ui.spec.ts:297:9 › AC-6.37 OS Images 768–1279 kartu, ≥ 1280 tabel; DR-5-1 › 768: mode kartu (1.2s)
+  ✓  148 [m6-ui] › e2e/m6-ui.spec.ts:297:9 › AC-6.37 OS Images 768–1279 kartu, ≥ 1280 tabel; DR-5-1 › 1024: mode kartu (882ms)
+  ✓  149 [m6-ui] › e2e/m6-ui.spec.ts:297:9 › AC-6.37 OS Images 768–1279 kartu, ≥ 1280 tabel; DR-5-1 › 1279: mode kartu (850ms)
+  ✓  150 [m6-ui] › e2e/m6-ui.spec.ts:297:9 › AC-6.37 OS Images 768–1279 kartu, ≥ 1280 tabel; DR-5-1 › 1280: mode tabel (877ms)
+  ✓  151 [m6-ui] › e2e/m6-ui.spec.ts:320:7 › AC-6.37 OS Images 768–1279 kartu, ≥ 1280 tabel; DR-5-1 › DR-5-1: 375 kartu image bawaan ≤ 200 px (setelah document.fonts.ready; batas tidak berubah) (355ms)
+  ✓  152 [m6-ui] › e2e/m6-ui.spec.ts:350:7 › AC-6.19 CR-5-4 daftar Jobs > 50 selama polling › > 50 job, ≥ 3 siklus polling, job baru di antara fetch: tanpa Alert error, tanpa duplikat/hilang (16.6s)
+  ✓  153 [m6-ui] › e2e/m6-ui.spec.ts:379:7 › AC-6.20 CR-5-5 log job tidak ada / terhapus › job tidak ada → 'Job tidak ditemukan'; tanpa request ke job itu 15 dtk berikutnya (16.1s)
+  ✓  154 [m6-ui] › e2e/m6-ui.spec.ts:394:7 › AC-6.20 CR-5-5 log job tidak ada / terhapus › job terhapus saat log terbuka → status final 'Job tidak ditemukan'; tanpa polling log 15 dtk berikutnya (17.3s)
+  ✓  155 [m6-ui] › e2e/m6-ui.spec.ts:420:7 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › filter `classifyContrastFinding`: kontrol positif & negatif (halaman sintetis) (517ms)
+  ✓  156 [m6-ui] › e2e/m6-ui.spec.ts:485:7 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /login (tanpa sesi) 1440 & 375 (2.8s)
+  ✓  157 [m6-ui] › e2e/m6-ui.spec.ts:505:9 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /hosts 1440 & 375 (3.5s)
+  ✓  158 [m6-ui] › e2e/m6-ui.spec.ts:505:9 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /os-images 1440 & 375 (3.5s)
+  ✓  159 [m6-ui] › e2e/m6-ui.spec.ts:505:9 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /ssh-keys 1440 & 375 (2.6s)
+  ✓  160 [m6-ui] › e2e/m6-ui.spec.ts:505:9 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /settings 1440 & 375 (2.5s)
+  ✓  161 [m6-ui] › e2e/m6-ui.spec.ts:516:7 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /hosts dengan Sheet terbuka (1440 & 375) (4.6s)
+  ✓  162 [m6-ui] › e2e/m6-ui.spec.ts:534:7 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /jobs detail job failed (1440 & 375) (4.9s)
+  ✓  163 [m6-ui] › e2e/m6-ui.spec.ts:545:7 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › navigasi keyboard login: Tab → username → password → toggle → Masuk, fokus terlihat (289ms)
+(node:473669) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  164 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:51:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Jobs: job-row-failure = body di 375 dan 1440 (1.6s)
+  ✓  165 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:62:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Hosts: host-failure-reason = body; Sheet: sheet-last-job-failure seluruh alasan tidak muted (2.7s)
+  ✓  166 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:88:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Job tidak ditemukan — …' (SSE end deleted) tidak muted (443ms)
+  ✓  167 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (5.6s)
+  ✓  168 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:132:5 › R2 / DR-6-2 timeline: label tahap belum tercapai = body (442ms)
+  ✓  169 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:150:9 › R3 / DR-6-3 'Media … tidak tersedia' = body + ikon info, tidak merah (DEC-022 §1) › /os-images @1440 (889ms)
+  ✓  170 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:150:9 › R3 / DR-6-3 'Media … tidak tersedia' = body + ikon info, tidak merah (DEC-022 §1) › /os-images @768 (846ms)
+  ✓  171 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:150:9 › R3 / DR-6-3 'Media … tidak tersedia' = body + ikon info, tidak merah (DEC-022 §1) › /os-images @375 (986ms)
+  ✓  172 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:179:7 › R3 / DR-6-3 'Media … tidak tersedia' = body + ikon info, tidak merah (DEC-022 §1) › Sheet tab OS: catatan kartu image tidak tersedia = body + ikon, tidak merah (818ms)
+  ✓  173 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @375: glyph berbeda per state, nama DHCP/TFTP/HTTP terlihat, tanpa overflow (983ms)
+  ✓  174 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @414: glyph berbeda per state, nama DHCP/TFTP/HTTP terlihat, tanpa overflow (839ms)
+  ✓  175 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @768: glyph berbeda per state, nama DHCP/TFTP/HTTP terlihat, tanpa overflow (932ms)
+  ✓  176 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @800: glyph berbeda per state, nama DHCP/TFTP/HTTP terlihat, tanpa overflow (1.1s)
+  ✓  177 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @1024: glyph berbeda per state, nama DHCP/TFTP/HTTP terlihat, tanpa overflow (929ms)
+  ✓  178 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @1279: glyph berbeda per state, nama DHCP/TFTP/HTTP terlihat, tanpa overflow (925ms)
+  ✓  179 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @1280: glyph berbeda per state, nama DHCP/TFTP/HTTP terlihat, tanpa overflow (885ms)
+  ✓  180 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @1440: glyph berbeda per state, nama DHCP/TFTP/HTTP terlihat, tanpa overflow (1.0s)
+  ✓  181 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:258:5 › DR-6-4 fokus input: border ring + ring ≥ 40% (login, keyboard) (783ms)
+  ✓  182 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:279:5 › DR-6-6 hostname 63 karakter dipotong 24ch + title; kolom Status tidak terdorong ke scroll tabel di 1440 (917ms)
+  ✓  183 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:317:5 › DR-6-7 'Di luar subnet …': CIDR mono, teks pesan tetap (1.1s)
+  ✓  184 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:332:5 › DR-6-8 /jobs?job=<tidak ada>: deskripsi tidak mengulang judul (437ms)
+  ✓  185 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:341:5 › CR-6-9 / CR-6-1 batas total authorized_keys 32 KiB tampil di tab SSH Sheet; config host tidak berubah (3.0s)
+  ✓  186 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:404:9 › axe (filter tidak berubah) pada halaman yang diubah › /hosts 1440 & 375 (3.5s)
+  ✓  187 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:404:9 › axe (filter tidak berubah) pada halaman yang diubah › /jobs 1440 & 375 (4.5s)
+  ✓  188 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:404:9 › axe (filter tidak berubah) pada halaman yang diubah › /jobs detail 1440 & 375 (4.9s)
+  ✓  189 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:404:9 › axe (filter tidak berubah) pada halaman yang diubah › /jobs 404 1440 & 375 (4.5s)
+  ✓  190 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:404:9 › axe (filter tidak berubah) pada halaman yang diubah › /os-images 1440 & 375 (3.0s)
+(node:474663) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  191 [m7-vlan] › e2e/m7-vlan.spec.ts:130:7 › AC-7.12 Settings blok VLAN management + API › GET /api/settings & /api/network memuat vlanNetworks terdaftar (identik) (24ms)
+  ✓  192 [m7-vlan] › e2e/m7-vlan.spec.ts:137:7 › AC-7.12 Settings blok VLAN management + API › /settings: card VLAN · Subnet · Gateway (mono) tepat setelah Jaringan provisioning, hairline tanpa shadow, tanpa oranye; 4 lebar tanpa overflow (1.8s)
+  ✓  193 [m7-vlan] › e2e/m7-vlan.spec.ts:198:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › petunjuk mono, isi otomatis prefix/gateway, validasi subnet VLAN, gateway manual dipertahankan, VLAN dikosongkan → subnet PXE, simpan vlan 20 → 200 (4.4s)
+  ✓  194 [m7-vlan] › e2e/m7-vlan.spec.ts:341:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › 422 server (luar subnet / gateway / bentrok) tampil di tab Network, DB tidak berubah (3.2s)
+  ✓  195 [m7-vlan] › e2e/m7-vlan.spec.ts:391:7 › DEC-006 VLAN tidak terdaftar (M7 §2.5c) › VLAN 99: petunjuk teks utama (bukan muted), aturan subnet PXE (range DHCP, luar subnet), simpan vlan 99 → 200; VLAN 5000 invalid (1.7s)
+  ✓  196 [m7-vlan] › e2e/m7-vlan.spec.ts:449:7 › AC-7.11 bulk 3 host VLAN 20 › range mulai 10.99.20.41: pratinjau .41/.43/.44 (.42 storage-02 dilewati), simpan → tersimpan identik dengan pratinjau (1.9s)
+  ✓  197 [m7-vlan] › e2e/m7-vlan.spec.ts:523:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › /settings dengan VLAN: axe 0 pelanggaran (375/768/1280/1440) (5.9s)
+  ✓  198 [m7-vlan] › e2e/m7-vlan.spec.ts:559:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet satu host VLAN (valid / invalid / tidak terdaftar): axe, tanpa overflow di 4 lebar (17.4s)
+  ✘  199 [m7-vlan] › e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar (11.6s)
+
+
+  1) [m7-vlan] › e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar 
+
+    Error: {
+     "m7 sheet bulk vlan20@375": [
+      {
+       "id": "scrollable-region-focusable",
+       "impact": "serious",
+       "targets": [
+        ".max-h-72 > .overflow-x-auto.w-full[data-slot=\"table-container\"]"
+       ]
+      }
+     ]
+    }
+
+    expect(received).toEqual(expected) // deep equality
+
+    - Expected  -  1
+    + Received  + 11
+
+    - Object {}
+    + Object {
+    +   "m7 sheet bulk vlan20@375": Array [
+    +     Object {
+    +       "id": "scrollable-region-focusable",
+    +       "impact": "serious",
+    +       "targets": Array [
+    +         ".max-h-72 > .overflow-x-auto.w-full[data-slot=\"table-container\"]",
+    +       ],
+    +     },
+    +   ],
+    + }
+
+      518 |     const f = found
+      519 |     found = {}
+    > 520 |     expect(f, JSON.stringify(f, null, 1)).toEqual({})
+          |                                           ^
+      521 |   }
+      522 |
+      523 |   test("/settings dengan VLAN: axe 0 pelanggaran (375/768/1280/1440)", async ({ page }) => {
+        at expectNoViolations (/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e/m7-vlan.spec.ts:520:43)
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e/m7-vlan.spec.ts:600:5
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/m7-vlan-M7-axe-lebar-layar-5e53a-e-tanpa-overflow-di-4-lebar-m7-vlan/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/m7-vlan-M7-axe-lebar-layar-5e53a-e-tanpa-overflow-di-4-lebar-m7-vlan/error-context.md
+
+    Error Context: test-results/m7-vlan-M7-axe-lebar-layar-5e53a-e-tanpa-overflow-di-4-lebar-m7-vlan/error-context.md
+
+    attachment #4: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m7-vlan-M7-axe-lebar-layar-5e53a-e-tanpa-overflow-di-4-lebar-m7-vlan/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m7-vlan-M7-axe-lebar-layar-5e53a-e-tanpa-overflow-di-4-lebar-m7-vlan/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [m7-vlan] › e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar 
+  198 passed (11.9m)
+exit=1

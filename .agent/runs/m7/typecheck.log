@@ -1,0 +1,7 @@
+
+> dashboard@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+tc=0

@@ -1,0 +1,39 @@
+# Rujukan kode upstream (sumber resmi deb.debian.org, bookworm) yang menjelaskan prompt netcfg/get_nameservers
+# busybox_1.35.0-4+deb12u1 debian/tree/busybox-udeb/etc/udhcpc/default.script (skrip udhcpc d-i, '#!/bin/sh -e'):
+1:#!/bin/sh -e
+72:		for r in "$router"; do
+73:			ip -4 route add default via "$r" $onlink
+76:		do_resolv_conf
+79:		printf "$domain" > /tmp/domain_name
+# netcfg_1.187+deb12u1 dhcp.c (state machine netcfg_activate_dhcp):
+	case DEFAULT_GATEWAY:
+            if (no_default_route()) {
+                debconf_input(client, "critical", "netcfg/no_default_route");
+                debconf_go(client);
+                debconf_get(client, "netcfg/no_default_route");
+
+                if (!strcmp(client->value, "false")) {
+                    state = ASK_OPTIONS;
+                    break;
+                }
+            }
+            state = NAMESERVERS;
+            break;
+
+        case NAMESERVERS:
+            /* Make sure we have NS going if the DHCP server didn't serve it up */
+            if (nameserver_count(interface) == 0) {
+                char *nameservers = NULL;
+
+                if (netcfg_get_nameservers (client, &nameservers, NULL) == GO_BACK) {
+                    state = ASK_OPTIONS;
+                    break;
+                }
+
+                netcfg_nameservers_to_array (nameservers, interface);
+                free(nameservers);
+# netcfg dhcp.c:757 (nameserver hanya dibaca dari /etc/resolv.conf):
+    /* Get a copy of the DNS servers that the DHCP server got */
+    read_resolv_conf_nameservers(RESOLV_FILE, interface);
+# netcfg-common.c:1442:
+    debconf_input(client, "critical", "netcfg/get_nameservers");

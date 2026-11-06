@@ -1,0 +1,24 @@
+{
+ "cmd": [
+  "npx",
+  "playwright",
+  "test",
+  "e2e/m7-vlan.spec.ts",
+  "e2e/m7-novlan.spec.ts",
+  "--retries=0",
+  "--workers=1"
+ ],
+ "desc": "onChange VLAN tanpa vlanPatch (tanpa isi otomatis)",
+ "mutations": [
+  {
+   "id": "TM1",
+   "file": "src/components/host-config/tab-network.tsx",
+   "old": "vlanPatch(value, e.target.value.replace(/\\D/g, \"\"), ctx),",
+   "new": "{ vlan: e.target.value.replace(/\\D/g, \"\") },",
+   "expect_red": [
+    "AC-7\\.10.*petunjuk mono",
+    "AC-7\\.11"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,22 @@
+# M7-T6 mutation log (frontend-dev, 2026-11-06T17:08:31+07:00)
+# Basis: commit cdceb9f + perubahan UI M7-T6 (form-state, tab-network, settings-view, use-settings)
+# Cara: tiap mutasi = replace string di satu file produk, lalu
+#   npx vitest run src/components/host-config/form-state-vlan.test.ts src/components/host-config/m7-vlan-ui.test.tsx src/hooks/m7-settings-hooks.test.ts
+#   lalu file dipulihkan dari salinan. KILLED = test merah. Hasil: 17/17 KILLED.
+M1 staticNetworkOf selalu management [src/components/host-config/form-state.ts]: KILLED (Tests  12 failed | 15 passed (27))
+M2 vlanPatch gateway selalu ditimpa [src/components/host-config/form-state.ts]: KILLED (Tests  2 failed | 25 passed (27))
+M3 vlanPatch tanpa isi otomatis range [src/components/host-config/form-state.ts]: KILLED (Tests  5 failed | 22 passed (27))
+M4 defaultIpRange tanpa cabang VLAN [src/components/host-config/form-state.ts]: KILLED (Tests  6 failed | 21 passed (27))
+M5 sectionErrors validasi ke management [src/components/host-config/form-state.ts]: KILLED (Tests  1 failed | 26 passed (27))
+M6 ipPlan single ke management [src/components/host-config/form-state.ts]: KILLED (Tests  3 failed | 24 passed (27))
+M7 initialForm range tanpa VLAN config [src/components/host-config/form-state.ts]: KILLED (Tests  1 failed | 26 passed (27))
+M8 tab prefixInvalid pakai management [src/components/host-config/tab-network.tsx]: KILLED (Tests  1 failed | 26 passed (27))
+M9 tab deskripsi IP tanpa cabang VLAN [src/components/host-config/tab-network.tsx]: KILLED (Tests  1 failed | 26 passed (27))
+M10 tab onChange VLAN tanpa vlanPatch [src/components/host-config/tab-network.tsx]: KILLED (Tests  3 failed | 24 passed (27))
+M11 petunjuk VLAN tidak terdaftar muted [src/components/host-config/tab-network.tsx]: KILLED (Tests  1 failed | 26 passed (27))
+M12 petunjuk daftar VLAN tanpa mono [src/components/host-config/tab-network.tsx]: KILLED (Tests  1 failed | 26 passed (27))
+M13 selectNetwork tanpa vlanNetworks [src/hooks/use-settings.ts]: KILLED (Tests  1 failed | 26 passed (27))
+M14 vlanNetworksOf tanpa fallback [src/hooks/use-settings.ts]: KILLED (Tests  3 failed | 24 passed (27))
+M15 Settings blok VLAN tidak disisipkan [src/components/settings/settings-view.tsx]: KILLED (Tests  1 failed | 26 passed (27))
+M16 Settings sel tanpa mono [src/components/settings/settings-view.tsx]: KILLED (Tests  1 failed | 26 passed (27))
+M17 Settings empty state hilang [src/components/settings/settings-view.tsx]: KILLED (Tests  1 failed | 26 passed (27))

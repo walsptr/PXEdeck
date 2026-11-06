@@ -3,18 +3,21 @@ import path from "node:path"
 import { expect, type Locator, type Page } from "@playwright/test"
 
 /**
- * Screenshot bukti run milestone aktif (`PXE_E2E_MILESTONE`, default 6 = milestone aktif) →
+ * Screenshot bukti run milestone aktif (`PXE_E2E_MILESTONE`, default 7 = milestone aktif) →
  * `.agent/runs/m<aktif>/screenshots/`. Screenshot regresi milik milestone lain diberi awalan `m<n>-`
  * di direktori yang sama, sehingga bukti milestone yang sudah di-approve tidak tertimpa.
  *
  * BUG-M6-L4: screenshot milik milestone aktif (`EVIDENCE_MILESTONE`, spec `m6-*`) selalu ditulis ke
  * `.agent/runs/m6/screenshots/` tanpa awalan, apa pun nilai env — jadi tidak pernah mencemari
  * direktori bukti M1–M5 yang sudah di-approve.
+ *
+ * M7-T8: milestone aktif = 7. Screenshot spec `m7-*` → `.agent/runs/m7/screenshots/`; regresi M1–M6
+ * → `.agent/runs/m7/screenshots/m<n>-*.png` (bukti M6 yang sudah di-approve tidak tertimpa).
  */
-export const EVIDENCE_MILESTONE = 6
+export const EVIDENCE_MILESTONE = 7
 const RUN_MILESTONE = Number(process.env.PXE_E2E_MILESTONE ?? EVIDENCE_MILESTONE)
 const RUNS_DIR = path.resolve(__dirname, "../../.agent/runs")
-export const SHOTS = (m: 1 | 2 | 3 | 4 | 5 | 6, name: string) =>
+export const SHOTS = (m: 1 | 2 | 3 | 4 | 5 | 6 | 7, name: string) =>
   m === EVIDENCE_MILESTONE
     ? path.join(RUNS_DIR, `m${EVIDENCE_MILESTONE}`, "screenshots", `${name}.png`)
     : path.join(RUNS_DIR, `m${RUN_MILESTONE}`, "screenshots", `${m === RUN_MILESTONE ? "" : `m${m}-`}${name}.png`)

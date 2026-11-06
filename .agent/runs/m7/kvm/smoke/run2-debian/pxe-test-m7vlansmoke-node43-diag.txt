@@ -1,0 +1,20 @@
+# 2026-11-06T11:14:10Z diagnosa node43 (Debian) di VM server
+# dnsmasq conf (dhcp-option)
+15:dhcp-option=3
+16:dhcp-option=option:dns-server,10.99.10.2
+# lease
+1793966723 52:54:00:99:00:43 10.99.10.133 * 01:52:54:00:99:00:43
+# DHCPOFFER/ACK ke node43
+Nov  6 11:05:03 dnsmasq-dhcp[1721]: 3793199261 DHCPACK(pxe10) 10.99.10.133 52:54:00:99:00:43 
+Nov  6 11:05:05 dnsmasq-dhcp[1721]: 171278654 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:43 
+Nov  6 11:05:06 dnsmasq-dhcp[1721]: 171278654 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:43 
+Nov  6 11:05:08 dnsmasq-dhcp[1721]: 171278654 DHCPACK(pxe10) 10.99.10.133 52:54:00:99:00:43 
+Nov  6 11:05:23 dnsmasq-dhcp[1721]: 4047520854 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:43 
+Nov  6 11:05:23 dnsmasq-dhcp[1721]: 4047520854 DHCPACK(pxe10) 10.99.10.133 52:54:00:99:00:43 
+# opsi yang dikirim pada ACK terakhir (opsi 3 router harus tidak ada)
+# nginx: request node43 per path (token disamarkan)
+10.99.10.133 /boot/52:54:00:99:00:43.ipxe?platform=efi" 150 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2" 
+10.99.10.133 /boot/52:54:00:99:00:43.ipxe?platform=efi" 367 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2" 
+10.99.10.133 /media/debian-netboot/linux" 8222656 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2" 
+10.99.10.133 /media/debian-netboot/initrd.gz" 40810276 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2" 
+# preseed.cfg diambil (semua host): 0

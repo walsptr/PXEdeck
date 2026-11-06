@@ -1,0 +1,85 @@
+=== TM1.json 2026-11-06T20:04:38+07:00 — onChange VLAN tanpa vlanPatch (tanpa isi otomatis)
+[TM1] src/components/host-config/tab-network.tsx: 'vlanPatch(value, e.target.value.replace(/\\D/g, ""), ctx),' -> '{ vlan: e.target.value.replace(/\\D/g, "") },' (1x)
+perintah: npx playwright test e2e/m7-vlan.spec.ts e2e/m7-novlan.spec.ts --retries=0 --workers=1 → exit 1
+ringkasan: 4 failed; 10 passed (1.5m)
+[TM1] test merah yang diharapkan: 2 → MERAH
+     × e2e/m7-vlan.spec.ts:198:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › petunjuk mono, isi otomatis prefix/gateway, validasi subnet VLAN, gateway manual diperta
+     × e2e/m7-vlan.spec.ts:449:7 › AC-7.11 bulk 3 host VLAN 20 › range mulai 10.99.20.41: pratinjau .41/.43/.44 (.42 storage-02 dilewati), simpan → tersimpan identik dengan prat
+merah lain (bukan dari mutasi; mis. bug terbuka): 2
+     · e2e/m7-vlan.spec.ts:341:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › 422 server (luar subnet / gateway / bentrok) tampil di tab Network, DB tidak berubah
+     · e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar
+pulih src/components/host-config/tab-network.tsx: sha256 identik=ya
+=== TM2.json 2026-11-06T20:06:11+07:00 — staticNetworkOf selalu subnet PXE (validasi VLAN hilang)
+[TM2] src/components/host-config/form-state.ts: 'return resolveStaticNetwork(parseVlan(f.vlan), mgmtOf(ctx), vlanNetworksOf(ctx))' -> 'return resolveStaticNetwork(null, mgmtOf(ctx), vlanNetworksOf(ctx))' (1x)
+perintah: npx playwright test e2e/m7-vlan.spec.ts e2e/m7-novlan.spec.ts --retries=0 --workers=1 → exit 1
+ringkasan: 5 failed; 9 passed (1.4m)
+[TM2] test merah yang diharapkan: 2 → MERAH
+     × e2e/m7-vlan.spec.ts:198:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › petunjuk mono, isi otomatis prefix/gateway, validasi subnet VLAN, gateway manual diperta
+     × e2e/m7-vlan.spec.ts:449:7 › AC-7.11 bulk 3 host VLAN 20 › range mulai 10.99.20.41: pratinjau .41/.43/.44 (.42 storage-02 dilewati), simpan → tersimpan identik dengan prat
+merah lain (bukan dari mutasi; mis. bug terbuka): 3
+     · e2e/m7-vlan.spec.ts:341:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › 422 server (luar subnet / gateway / bentrok) tampil di tab Network, DB tidak berubah
+     · e2e/m7-vlan.spec.ts:559:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet satu host VLAN (valid / invalid / tidak terdaftar): axe, tanpa overflow di 4 lebar
+     · e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar
+pulih src/components/host-config/form-state.ts: sha256 identik=ya
+=== TM3.json 2026-11-06T20:07:34+07:00 — Settings card VLAN tidak disisipkan
+[TM3] src/components/settings/settings-view.tsx: '{i === 0 && <VlanNetworksCard settings={settings.data} />}' -> '{i === 0 && null}' (1x)
+perintah: npx playwright test e2e/m7-vlan.spec.ts e2e/m7-novlan.spec.ts --retries=0 --workers=1 → exit 1
+ringkasan: 4 failed; 10 passed (1.5m)
+[TM3] test merah yang diharapkan: 3 → MERAH
+     × e2e/m7-novlan.spec.ts:23:5 › /settings tanpa VLAN: card VLAN management dengan empty state; axe 0 pelanggaran; 375/768/1280/1440 tanpa overflow
+     × e2e/m7-vlan.spec.ts:137:7 › AC-7.12 Settings blok VLAN management + API › /settings: card VLAN · Subnet · Gateway (mono) tepat setelah Jaringan provisioning, hairline tan
+     × e2e/m7-vlan.spec.ts:523:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › /settings dengan VLAN: axe 0 pelanggaran (375/768/1280/1440)
+merah lain (bukan dari mutasi; mis. bug terbuka): 1
+     · e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar
+pulih src/components/settings/settings-view.tsx: sha256 identik=ya
+=== TM4.json 2026-11-06T20:09:08+07:00 — petunjuk VLAN tidak terdaftar muted
+[TM4] src/components/host-config/tab-network.tsx: 'className="text-foreground"' -> 'className="text-muted-foreground"' (1x)
+perintah: npx playwright test e2e/m7-vlan.spec.ts e2e/m7-novlan.spec.ts --retries=0 --workers=1 → exit 1
+ringkasan: 3 failed; 11 passed (1.4m)
+[TM4] test merah yang diharapkan: 2 → MERAH
+     × e2e/m7-novlan.spec.ts:47:5 › Sheet tanpa VLAN terdaftar: tanpa daftar 'Terdaftar', VLAN 20 → petunjuk tidak terdaftar (teks utama) + subnet PXE (DEC-006)
+     × e2e/m7-vlan.spec.ts:391:7 › DEC-006 VLAN tidak terdaftar (M7 §2.5c) › VLAN 99: petunjuk teks utama (bukan muted), aturan subnet PXE (range DHCP, luar subnet), simpan vlan
+merah lain (bukan dari mutasi; mis. bug terbuka): 1
+     · e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar
+pulih src/components/host-config/tab-network.tsx: sha256 identik=ya
+=== TM5.json 2026-11-06T20:10:35+07:00 — sel Subnet Settings tanpa mono
+[TM5] src/components/settings/settings-view.tsx: '<TableCell className="type-data">{v.cidr}</TableCell>' -> '<TableCell>{v.cidr}</TableCell>' (1x)
+perintah: npx playwright test e2e/m7-vlan.spec.ts e2e/m7-novlan.spec.ts --retries=0 --workers=1 → exit 1
+ringkasan: 2 failed; 12 passed (1.4m)
+[TM5] test merah yang diharapkan: 1 → MERAH
+     × e2e/m7-vlan.spec.ts:137:7 › AC-7.12 Settings blok VLAN management + API › /settings: card VLAN · Subnet · Gateway (mono) tepat setelah Jaringan provisioning, hairline tan
+merah lain (bukan dari mutasi; mis. bug terbuka): 1
+     · e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar
+pulih src/components/settings/settings-view.tsx: sha256 identik=ya
+=== TM6.json 2026-11-06T20:12:01+07:00 — gateway manual selalu ditimpa saat VLAN diganti
+[TM6] src/components/host-config/form-state.ts: 'if (f.gateway.trim() === prev.gateway) patch.gateway = next.gateway' -> 'patch.gateway = next.gateway' (1x)
+perintah: npx playwright test e2e/m7-vlan.spec.ts e2e/m7-novlan.spec.ts --retries=0 --workers=1 → exit 1
+ringkasan: 2 failed; 12 passed (1.5m)
+[TM6] test merah yang diharapkan: 1 → MERAH
+     × e2e/m7-vlan.spec.ts:198:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › petunjuk mono, isi otomatis prefix/gateway, validasi subnet VLAN, gateway manual diperta
+merah lain (bukan dari mutasi; mis. bug terbuka): 1
+     · e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar
+pulih src/components/host-config/form-state.ts: sha256 identik=ya
+=== TM7.json 2026-11-06T20:13:33+07:00 — petunjuk VLAN terdaftar tanpa mono
+[TM7] src/components/host-config/tab-network.tsx: 'className="type-data text-xs whitespace-nowrap"' -> 'className="text-xs whitespace-nowrap"' (1x)
+perintah: npx playwright test e2e/m7-vlan.spec.ts e2e/m7-novlan.spec.ts --retries=0 --workers=1 → exit 1
+ringkasan: 2 failed; 12 passed (1.4m)
+[TM7] test merah yang diharapkan: 1 → MERAH
+     × e2e/m7-vlan.spec.ts:198:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › petunjuk mono, isi otomatis prefix/gateway, validasi subnet VLAN, gateway manual diperta
+merah lain (bukan dari mutasi; mis. bug terbuka): 1
+     · e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar
+pulih src/components/host-config/tab-network.tsx: sha256 identik=ya
+=== TM8.json 2026-11-06T20:14:59+07:00 — useActiveNetwork tanpa vlanNetworks (selectNetwork)
+[TM8] src/hooks/use-settings.ts: 'return { ...toActiveNetwork(s), vlanNetworks: vlanNetworksOf(s) }' -> 'return { ...toActiveNetwork(s), vlanNetworks: [] }' (1x)
+perintah: npx playwright test e2e/m7-vlan.spec.ts e2e/m7-novlan.spec.ts --retries=0 --workers=1 → exit 1
+ringkasan: 6 failed; 8 passed (1.5m)
+[TM8] test merah yang diharapkan: 2 → MERAH
+     × e2e/m7-vlan.spec.ts:198:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › petunjuk mono, isi otomatis prefix/gateway, validasi subnet VLAN, gateway manual diperta
+     × e2e/m7-vlan.spec.ts:449:7 › AC-7.11 bulk 3 host VLAN 20 › range mulai 10.99.20.41: pratinjau .41/.43/.44 (.42 storage-02 dilewati), simpan → tersimpan identik dengan prat
+merah lain (bukan dari mutasi; mis. bug terbuka): 4
+     · e2e/m7-vlan.spec.ts:341:7 › AC-7.10 Sheet satu host, tab Network VLAN terdaftar › 422 server (luar subnet / gateway / bentrok) tampil di tab Network, DB tidak berubah
+     · e2e/m7-vlan.spec.ts:391:7 › DEC-006 VLAN tidak terdaftar (M7 §2.5c) › VLAN 99: petunjuk teks utama (bukan muted), aturan subnet PXE (range DHCP, luar subnet), simpan vlan
+     · e2e/m7-vlan.spec.ts:559:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet satu host VLAN (valid / invalid / tidak terdaftar): axe, tanpa overflow di 4 lebar
+     · e2e/m7-vlan.spec.ts:584:7 › M7 axe + lebar layar (Sheet VLAN, Settings) › Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar
+pulih src/hooks/use-settings.ts: sha256 identik=ya
+=== git status produk setelah semua mutasi:

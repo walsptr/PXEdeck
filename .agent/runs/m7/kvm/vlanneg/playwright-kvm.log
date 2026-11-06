@@ -1,0 +1,6 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 e2e-kvm/m7-vlanneg.spec.ts:45:7 › vlanneg: keadaan akhir — host negatif tidak ada di dashboard (UI + API), dnsmasq/nginx tanpa jawaban, dnsmasq hanya pxe10, sw-p2 access20 (1.0s)
+
+  1 passed (1.8s)

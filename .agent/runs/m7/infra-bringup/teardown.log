@@ -1,0 +1,12 @@
+Domain 'pxe-test-server' is being shutdown
+
+Domain 'pxe-test-server' has been undefined
+
+[2026-11-06T10:33:38Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+Domain 'pxe-test-switch' is being shutdown
+
+Domain 'pxe-test-switch' has been undefined
+
+[2026-11-06T10:33:40Z] pxe-test-switch dimatikan dan di-undefine (overlay + seed dihapus)
+[2026-11-06T10:33:40Z] cleanup run m7 selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/infra-bringup/cleanup.txt)
+exit=0

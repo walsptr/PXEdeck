@@ -1,0 +1,122 @@
+[
+  {
+    "label": "settings@375",
+    "sw": 375,
+    "vw": 375,
+    "ok": true
+  },
+  {
+    "label": "settings-td-font@375",
+    "font": "\"JetBrains Mono Variable\", ui-monospace, SFMono-Regular, monospace"
+  },
+  {
+    "label": "sheet-single-invalid@375",
+    "sw": 375,
+    "vw": 375,
+    "ok": true
+  },
+  {
+    "label": "sheet-bulk@375",
+    "sw": 375,
+    "vw": 375,
+    "ok": true
+  },
+  {
+    "label": "bulk-preview@375",
+    "preview": [
+      "b0:83:fe:5c:19:e210.10.10.14310.99.20.41",
+      "b0:83:fe:5c:19:e310.10.10.14410.99.20.42",
+      "a0:36:9f:0b:72:5d10.10.10.15710.99.20.43"
+    ]
+  },
+  {
+    "label": "settings@768",
+    "sw": 768,
+    "vw": 768,
+    "ok": true
+  },
+  {
+    "label": "settings-td-font@768",
+    "font": "\"JetBrains Mono Variable\", ui-monospace, SFMono-Regular, monospace"
+  },
+  {
+    "label": "sheet-single-invalid@768",
+    "sw": 768,
+    "vw": 768,
+    "ok": true
+  },
+  {
+    "label": "sheet-bulk@768",
+    "sw": 768,
+    "vw": 768,
+    "ok": true
+  },
+  {
+    "label": "bulk-preview@768",
+    "preview": [
+      "b0:83:fe:5c:19:e210.10.10.14310.99.20.41",
+      "b0:83:fe:5c:19:e310.10.10.14410.99.20.42",
+      "a0:36:9f:0b:72:5d10.10.10.15710.99.20.43"
+    ]
+  },
+  {
+    "label": "settings@1280",
+    "sw": 1280,
+    "vw": 1280,
+    "ok": true
+  },
+  {
+    "label": "settings-td-font@1280",
+    "font": "\"JetBrains Mono Variable\", ui-monospace, SFMono-Regular, monospace"
+  },
+  {
+    "label": "sheet-single-invalid@1280",
+    "sw": 1280,
+    "vw": 1280,
+    "ok": true
+  },
+  {
+    "label": "sheet-bulk@1280",
+    "sw": 1280,
+    "vw": 1280,
+    "ok": true
+  },
+  {
+    "label": "bulk-preview@1280",
+    "preview": [
+      "b0:83:fe:5c:19:e210.10.10.14310.99.20.41",
+      "b0:83:fe:5c:19:e310.10.10.14410.99.20.42",
+      "a0:36:9f:0b:72:5d10.10.10.15710.99.20.43"
+    ]
+  },
+  {
+    "label": "settings@1440",
+    "sw": 1440,
+    "vw": 1440,
+    "ok": true
+  },
+  {
+    "label": "settings-td-font@1440",
+    "font": "\"JetBrains Mono Variable\", ui-monospace, SFMono-Regular, monospace"
+  },
+  {
+    "label": "sheet-single-invalid@1440",
+    "sw": 1440,
+    "vw": 1440,
+    "ok": true
+  },
+  {
+    "label": "sheet-bulk@1440",
+    "sw": 1440,
+    "vw": 1440,
+    "ok": true
+  },
+  {
+    "label": "bulk-preview@1440",
+    "preview": [
+      "b0:83:fe:5c:19:e210.10.10.14310.99.20.41",
+      "b0:83:fe:5c:19:e310.10.10.14410.99.20.42",
+      "a0:36:9f:0b:72:5d10.10.10.15710.99.20.43"
+    ]
+  }
+]

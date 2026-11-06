@@ -44,6 +44,7 @@ function realScript(method: CmdlineMethod, mac = MAC, token = TOKEN): string {
     mediaUrl: `${BASE}/media`,
     mediaRoot: "/srv/pxe/media",
     serverIp: "10.99.0.2",
+    pxeDns: "10.99.0.2",
     configUrl: `${BASE}/boot/${mac}/${token}/`,
     source: IMAGES[method],
     extraArgs: "console=ttyS0,115200n8 console=tty0",

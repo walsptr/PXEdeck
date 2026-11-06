@@ -1,0 +1,28 @@
+# kvm-run m7 scenario=vlanneg run=m7vlanneg 20261106T135252Z nodes=[36:uefi:neg=admin 37:bios:neg=access20 38:uefi:neg=tagged10] waves=0 keep_server=0 dry=0
+2026-11-06T13:52:52Z preflight          ok max_nodes=2 avail_mb=9899 mem_available_mb=13739 waves=—
+2026-11-06T13:52:53Z net-up             ok 
+2026-11-06T13:53:07Z server-up          ok profil VLAN + server-listen-vlan.txt PASS
+2026-11-06T13:53:07Z admin-pass         ok m7vlanneg-admin.pass (0600, isi tidak dicetak)
+2026-11-06T13:53:29Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-06T13:54:17Z switch-up          ok switch-check.txt
+2026-11-06T13:54:18Z server-check       ok 
+2026-11-06T13:54:19Z relay-setup        ok /root/pxe-relay (key 0600, isi tidak dicetak)
+2026-11-06T13:54:21Z node-create        ok pxe-test-m7vlanneg-node36 uefi 52:54:00:99:00:36 net=pxe-test neg=admin (tunggu 240s)
+2026-11-06T13:58:24Z neg                PASS pxe-test-m7vlanneg-node36 AC-7.26: pcap pxe0: request dari MAC=7 reply=0 tag20=0 frame-dari-MAC=7; dnsmasq=0 nginx-ipxe=0 api-hosts=0; sw-p2 RX 25->31; domifstat tx=22
+2026-11-06T13:58:24Z neg-port           ok pxe-test-m7vlanneg-node37 sw-p2=access20
+2026-11-06T13:58:26Z node-create        ok pxe-test-m7vlanneg-node37 bios 52:54:00:99:00:37 net=pxe-test-port2 neg=access20 (tunggu 240s)
+2026-11-06T14:02:29Z neg                PASS pxe-test-m7vlanneg-node37 AC-7.27: pcap trunk0: request dari MAC=4 reply=0 tag20=4 frame-dari-MAC=4; dnsmasq=0 nginx-ipxe=0 api-hosts=0; sw-p2 RX 31->42; domifstat tx=12
+2026-11-06T14:02:29Z neg-port           ok pxe-test-m7vlanneg-node38 sw-p2=tagged10
+2026-11-06T14:02:31Z node-create        ok pxe-test-m7vlanneg-node38 uefi 52:54:00:99:00:38 net=pxe-test-port2 neg=tagged10 (tunggu 240s)
+2026-11-06T14:06:34Z neg-port           ok sw-p2 dikembalikan ke access20 (switch-check-after-n3.txt)
+2026-11-06T14:06:34Z neg                PASS pxe-test-m7vlanneg-node38 AC-7.28: pcap trunk0: request dari MAC=0 reply=0 tag20=0 frame-dari-MAC=0; dnsmasq=0 nginx-ipxe=0 api-hosts=0; sw-p2 RX 42->64; domifstat tx=22
+2026-11-06T14:06:37Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-06T14:06:37Z verify             partial Playwright exit=1: hanya node berstatus done (0 host terbaca)
+2026-11-06T14:06:37Z evidence           start 
+2026-11-06T14:06:38Z evidence           done 
+2026-11-06T14:06:38Z relay-teardown     ok relay-clean: absent
+2026-11-06T14:06:43Z cleanup            done 
+2026-11-06T14:06:43Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-06T14:06:44Z redact             ok 
+2026-11-06T14:06:44Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T14:06:44Z result             FAIL exit=1 stage=verify

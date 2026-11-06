@@ -1,0 +1,25 @@
+# kvm-run m7 scenario=vlancore run=m7vlancore 20261106T143517Z nodes=[31:uefi 32:bios] waves=0 keep_server=0 dry=0
+2026-11-06T14:35:17Z preflight          ok max_nodes=2 avail_mb=8487 mem_available_mb=12327 waves=—
+2026-11-06T14:35:17Z net-up             ok 
+2026-11-06T14:35:32Z server-up          ok profil VLAN + server-listen-vlan.txt PASS
+2026-11-06T14:35:32Z admin-pass         ok m7vlancore-admin.pass (0600, isi tidak dicetak)
+2026-11-06T14:35:50Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-06T14:36:38Z switch-up          ok switch-check.txt
+2026-11-06T14:36:39Z server-check       ok 
+2026-11-06T14:36:40Z relay-setup        ok /root/pxe-relay (key 0600, isi tidak dicetak)
+2026-11-06T14:36:42Z node-create        ok pxe-test-m7vlancore-node31 uefi 52:54:00:99:00:31 net=pxe-test-port1
+2026-11-06T14:36:43Z node-create        ok pxe-test-m7vlancore-node32 bios 52:54:00:99:00:32 net=pxe-test-port1
+2026-11-06T14:56:38Z playwright         ok exit=0 (playwright-kvm.log)
+2026-11-06T14:56:43Z probe              PASS pxe-test-m7vlancore-node31 (pxe-test-m7vlancore-node31-probe.txt)
+2026-11-06T14:56:43Z verify             ok pxe-test-m7vlancore-node31 (pxe-test-m7vlancore-node31-verify.txt, relay)
+2026-11-06T14:56:48Z probe              PASS pxe-test-m7vlancore-node32 (pxe-test-m7vlancore-node32-probe.txt)
+2026-11-06T14:56:48Z verify             ok pxe-test-m7vlancore-node32 (pxe-test-m7vlancore-node32-verify.txt, relay)
+2026-11-06T14:56:48Z evidence           start 
+2026-11-06T14:56:50Z evidence           done 
+2026-11-06T14:56:50Z relay-teardown     ok relay-clean: absent
+2026-11-06T14:56:50Z server-logs        ok 
+2026-11-06T14:56:55Z cleanup            done 
+2026-11-06T14:56:55Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-06T14:57:02Z redact             ok 
+2026-11-06T14:57:02Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T14:57:02Z result             PASS exit=0

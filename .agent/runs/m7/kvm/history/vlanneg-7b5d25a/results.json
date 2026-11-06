@@ -1,0 +1,12 @@
+{
+  "run": "m7vlanneg",
+  "session": "1793973995644-7ef9b2fe",
+  "generatedAt": "2026-11-06T14:06:37.248Z",
+  "results": [
+    {"ac": "AC-7.30-scan", "status": "PASS", "note": "0 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "verify", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "topology": "vlan", "switchStopped": true, "relayClean": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "scenario": "vlanneg",
+  "nodes": [{"name": "pxe-test-m7vlanneg-node36", "fw": "uefi", "mac": "52:54:00:99:00:36"}, {"name": "pxe-test-m7vlanneg-node37", "fw": "bios", "mac": "52:54:00:99:00:37"}, {"name": "pxe-test-m7vlanneg-node38", "fw": "uefi", "mac": "52:54:00:99:00:38"}],
+  "harness": {"milestone": "m7", "scenario": "vlanneg", "runId": "m7vlanneg", "nodes": "36:uefi:neg=admin 37:bios:neg=access20 38:uefi:neg=tagged10", "maxNodes": 2, "memAvailableMb": 13739, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "verify", "exit": 1, "dryRun": false, "startedAt": "2026-11-06T13:52:52Z", "durationSec": 832}
+}

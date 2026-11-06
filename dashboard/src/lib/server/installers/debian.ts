@@ -126,9 +126,16 @@ export function debianAptHookCmd(): string {
 export const DEBIAN_UNTRUST_CMD =
   "for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list; do if [ -f \"$f\" ]; then sed -i 's#^deb[[:space:]]*\\[trusted=yes by-hash=no\\][[:space:]]*#\\# (media instalasi PXE tanpa tanda tangan, DEC-021) deb #' \"$f\"; fi; done; rm -f /etc/apt/apt.conf.d/00AllowUnauthenticated"
 
-/** Konfigurasi ifupdown untuk interface `$IF` (dicari dari MAC saat runtime). */
-function interfacesText(c: InstallContext): string {
-  const n = c.network
+/**
+ * Konfigurasi ifupdown `/etc/network/interfaces.d/mgmt` untuk interface `$IF` (dicari dari MAC saat
+ * runtime, diganti `sed` di late script). Statis + `vlan` (DEC-023/024, O6-A): parent `inet manual`
+ * (link up, tanpa IPv4 — native/VLAN PXE tidak memakan lease) + `$IF.<vlan>` static. ifupdown
+ * menurunkan raw device dan VLAN ID dari nama `<iface>.<id>`. Dukungan VLAN ifupdown di target
+ * (bawaan vs paket `vlan`) dibuktikan smoke KVM M7-T10 sebelum diubah (O10); fungsi ini tidak
+ * menambah paket. Diekspor untuk test.
+ */
+export function debianInterfacesText(ctx: InstallContext): string {
+  const n = validateContext(ctx).network
   if (n.mode === "dhcp") return "auto $IF\niface $IF inet dhcp\n"
   const name = n.vlan === null ? "$IF" : `$IF.${n.vlan}`
   return [
@@ -181,7 +188,7 @@ export function debianLateScript(ctx: InstallContext): string {
     // Interface management dari MAC; file interfaces utama hanya lo + include.
     b64write("/etc/network/interfaces", "644", "auto lo\niface lo inet loopback\n\nsource /etc/network/interfaces.d/*\n"),
     "mkdir -p /etc/network/interfaces.d",
-    `printf %s '${b64(interfacesText(c))}' | base64 -d | sed "s/\\$IF/$IF/g" > /etc/network/interfaces.d/mgmt`,
+    `printf %s '${b64(debianInterfacesText(c))}' | base64 -d | sed "s/\\$IF/$IF/g" > /etc/network/interfaces.d/mgmt`,
     // SR-6-6: sumber `trusted=yes` dibersihkan SEBELUM unit firstboot (callback done) dipasang; bila
     // pembersihan gagal (`set -e`), firstboot tidak terpasang → job tidak pernah Done.
     DEBIAN_UNTRUST_CMD,
@@ -236,6 +243,9 @@ export function debianPreseed(ctx: InstallContext): string {
     // Tanpa firmware non-free di media (offline): jangan tanya "load missing firmware".
     di("hw-detect/load_firmware", "boolean", false),
     di("netcfg/choose_interface", "select", "auto"),
+    // DEC-025 §1: selaras dengan cmdline kernel (boot-script.ts) bila netcfg dijalankan ulang setelah
+    // preseed dimuat (VLAN PXE tanpa router). Hanya dibaca netcfg bila DHCP tidak memberi gateway.
+    di("netcfg/no_default_route", "boolean", true),
     di("netcfg/get_hostname", "string", c.hostname),
     di("netcfg/get_domain", "string", ""),
     di("netcfg/hostname", "string", c.hostname),

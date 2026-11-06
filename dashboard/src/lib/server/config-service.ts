@@ -16,6 +16,10 @@
 //    IP & gateway wajib host di subnet management (jadi selalu satu subnet),
 //    gateway di luar range DHCP dinamis, IP host ≠ gateway payload, DNS IPv4
 //    bukan alamat khusus, tidak terikat subnet (DEC-011).
+//  - M7 (DEC-024 §4): `vlan` yang terdaftar di `PXE_VLAN_NETWORKS` → aturan
+//    yang sama terhadap CIDR VLAN itu (prefix = prefix VLAN, IP & gateway host
+//    di CIDR VLAN, IP ≠ gateway VLAN/payload), tanpa aturan range DHCP. `vlan`
+//    null/tidak terdaftar → DEC-006 tanpa perubahan. Bentrok IP tetap global.
 //  - `updated`/`updatedAt` hanya untuk host yang benar-benar berubah (mode
 //    credentials CSV: hanya host yang ada di CSV).
 //  - Key SSH baru (G3-3): fingerprint yang sudah ada di library → 422
@@ -62,7 +66,7 @@ import {
   insertKey,
   listKeys,
 } from "@/lib/server/db/repos/ssh-keys"
-import { getMgmtNetwork } from "@/lib/server/net-config"
+import { getStaticNetwork } from "@/lib/server/net-config"
 
 export function toPublicConfig(c: HostConfig): PublicHostConfig {
   const { passwordHash, ...rest } = c
@@ -365,7 +369,8 @@ function applyInTx(
         },
       })
     } else {
-      const net = getMgmtNetwork()
+      // DEC-024 §4: VLAN terdaftar → jaringan VLAN; selain itu subnet management (DEC-006).
+      const net = getStaticNetwork(n.vlan)
       for (const message of validateStaticNetwork(n, net)) {
         errors.push({ section: "network", message })
       }

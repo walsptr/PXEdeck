@@ -119,10 +119,13 @@ test.describe("R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §
       }),
     )
     await page.goto(`/jobs?job=${M6_FAILED_JOB}`)
+    // Nilai dibaca SEKALI di dalam poll dan dipakai ulang: `page.evaluate` kedua setelah poll bisa jatuh
+    // tepat saat redirect ke /login ("Execution context was destroyed", flaky gate final M7 iter1).
+    let stored: string | null = null
     await expect
-      .poll(() => page.evaluate(() => sessionStorage.getItem("iter2-session-msg")).catch(() => null), { timeout: 15_000 })
+      .poll(async () => (stored = await page.evaluate(() => sessionStorage.getItem("iter2-session-msg")).catch(() => null)), { timeout: 15_000 })
       .not.toBeNull()
-    const got = JSON.parse((await page.evaluate(() => sessionStorage.getItem("iter2-session-msg")))!) as { text: string; color: string }
+    const got = JSON.parse(stored!) as { text: string; color: string }
     expect(got.text).toBe("Sesi berakhir. Masuk lagi untuk melihat log.")
     expect(got.color).not.toBe(MUTED)
     expect(got.color).toBe(BODY)
@@ -392,7 +395,7 @@ test("CR-6-9 / CR-6-1 batas total authorized_keys 32 KiB tampil di tab SSH Sheet
 })
 
 test.describe("axe (filter tidak berubah) pada halaman yang diubah", () => {
-  test.afterAll(() => writeAxeEvidence(path.resolve(__dirname, "../../.agent/runs/m6/axe-results-iter2-ui.json")))
+  test.afterAll(() => writeAxeEvidence(path.resolve(__dirname, "../../.agent/runs/m7/m6-axe-results-iter2-ui.json")))
 
   for (const [label, url] of [
     ["/hosts", "/hosts"],

@@ -662,6 +662,14 @@ source "$(dirname "$0")/m6-nfs.sh"
 source "$(dirname "$0")/m6-debian-modules.sh"
 # M6 (BUG-M6-10): verifikasi semua node saat Playwright lulus (set -e).
 source "$(dirname "$0")/m6-bug10.sh"
+# M7 (M7-T3/T4/T5): topologi VLAN — network, switch, profil server, relay, kvm-run skenario vlan*.
+source "$(dirname "$0")/m7-infra.sh"
+# M7 (M7-T9, test-engineer): pelengkap infra M7 (AC-7.14–7.19, AC-7.31).
+source "$(dirname "$0")/m7-te.sh"
+# M7 (DEC-027 §2): access log nginx tanpa query string non-/boot.
+source "$(dirname "$0")/m7-dec027.sh"
+# M7 iterasi 2 (DEC-028 §1, GK-7-1): race SIGPIPE overlay admin.env di dry-run.
+source "$(dirname "$0")/m7-gk71.sh"
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"

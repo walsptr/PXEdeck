@@ -1,0 +1,16 @@
+2026-11-06T13:52:52Z
+commit d9d5308 (suite; run vlanneg pertama di 7b5d25a gagal harness)
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+ Name             State    Autostart   Persistent
+---------------------------------------------------
+ default          active   yes         yes
+ int              active   yes         yes
+ pxe-test         active   no          yes
+ pxe-test-nat     active   no          yes
+ pxe-test-port1   active   no          yes
+ pxe-test-port2   active   no          yes
+ pxe-test-trunk   active   no          yes
+

@@ -1,0 +1,16 @@
+{
+  "run": "m6distro",
+  "session": "1793979913598-e7917b23",
+  "generatedAt": "2026-11-06T15:58:56.994Z",
+  "results": [
+    {"ac": "AC-6.48", "node": "pxe-test-m6distro-node23", "status": "PASS", "durationS": 583, "note": "booting→installing→configuring→done 583s; verify 0/0", "evidence": ["pxe-test-m6distro-node23-verify-ssh.txt", "pxe-test-m6distro-node23-timeline.txt", "installer-logs/"]},
+    {"ac": "AC-6.52-scan", "status": "PASS", "note": "0 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6distro-node23", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.101 (lease 52:54:00:99:00:23)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6distro-node23", "status": "PASS", "note": "preseed.cfg 200 x1 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m6distro-node23", "status": "PASS", "note": "verify-node.sh exit=0 + cek login password", "evidence": ["pxe-test-m6distro-node23-verify.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "scenario": "distro",
+  "nodes": [{"name": "pxe-test-m6distro-node23", "os": "debian", "ip": "10.99.0.33", "hostname": "m6-node23"}],
+  "harness": {"milestone": "m6", "scenario": "distro", "runId": "m6distro", "nodes": "23:uefi:os=debian", "maxNodes": 3, "memAvailableMb": 19655, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "", "exit": 0, "dryRun": false, "startedAt": "2026-11-06T15:44:37Z", "durationSec": 869}
+}

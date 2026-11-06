@@ -1,0 +1,8 @@
+# typecheck @ 5220865 2026-11-06T18:06:33Z
+
+> dashboard@0.1.0 typecheck
+> next typegen && tsc --noEmit
+
+Generating route types...
+✓ Types generated successfully
+EXIT=0

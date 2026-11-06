@@ -1,0 +1,171 @@
+
+> dashboard@0.1.0 test
+> vitest run --coverage
+
+
+ RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard
+      Coverage enabled with v8
+
+(node:3933193) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933207) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933235) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933248) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933282) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933274) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933263) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933299) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933312) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933361) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933419) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933431) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933470) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933492) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933738) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933672) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933834) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3933452) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934419) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934575) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934582) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934074) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934671) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934655) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934658) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934751) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934811) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934821) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934834) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934833) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934853) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934864) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934875) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3934886) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935078) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935089) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935052) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935062) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935094) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935125) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935136) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935152) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935163) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935245) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:3935389) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+ Test Files  83 passed (83)
+      Tests  2087 passed (2087)
+   Start at  18:59:39
+   Duration  19.74s (tests 55%, import 22%, environment 14%, setup 4%, worker 3%, transform 1%)
+
+ % Coverage report from v8
+-------------------|---------|----------|---------|---------|-------------------
+File               | % Stmts | % Branch | % Funcs | % Lines | Uncovered Line #s 
+-------------------|---------|----------|---------|---------|-------------------
+All files          |   98.25 |    96.28 |   98.84 |   98.97 |                   
+ ...i/auth/session |   88.88 |       75 |     100 |     100 |                   
+  route.ts         |   88.88 |       75 |     100 |     100 | 17                
+ ...jobs/[id]/logs |   96.15 |    95.83 |     100 |     100 |                   
+  route.ts         |   96.15 |    95.83 |     100 |     100 | 35                
+ app/api/network   |    87.5 |      100 |     100 |   85.71 |                   
+  route.ts         |    87.5 |      100 |     100 |   85.71 | 21                
+ .../server-status |   85.71 |      100 |     100 |   83.33 |                   
+  route.ts         |   85.71 |      100 |     100 |   83.33 | 18                
+ app/api/settings  |   85.71 |      100 |     100 |   83.33 |                   
+  route.ts         |   85.71 |      100 |     100 |   83.33 | 20                
+ ...ts/host-config |     100 |    99.51 |     100 |     100 |                   
+  form-state.ts    |     100 |    99.51 |     100 |     100 | 280               
+ hooks             |   97.32 |    90.41 |   96.96 |   98.87 |                   
+  use-job-log.ts   |   96.59 |    83.54 |     100 |     100 | ...96,205,215-219 
+  use-jobs.ts      |   94.54 |    93.18 |   94.11 |   95.83 | 33-34             
+  use-mobile.ts    |   88.88 |      100 |      80 |    87.5 | 16                
+  use-now.ts       |    97.5 |    89.47 |    90.9 |   97.14 | 76                
+  use-os-images.ts |     100 |     97.5 |     100 |     100 | 111               
+  use-session.ts   |   91.66 |    85.71 |      75 |     100 | 32                
+  use-ssh-keys.ts  |     100 |     90.9 |     100 |     100 | 76                
+ lib               |   99.36 |    98.32 |     100 |     100 |                   
+  credentials.ts   |     100 |    98.03 |     100 |     100 | 41                
+  net.ts           |   98.36 |    96.85 |     100 |     100 | 111,113-115,319   
+  ssh-key.ts       |     100 |    93.75 |     100 |     100 | 57                
+ lib/server        |   97.45 |    95.14 |   98.47 |   98.35 |                   
+  boot-http.ts     |   98.14 |    92.85 |     100 |     100 | 75,101            
+  ...ig-service.ts |   97.86 |    93.86 |     100 |   97.92 | 199,202-204,225   
+  discovery.ts     |     100 |    94.44 |     100 |     100 | 157,192-201       
+  http.ts          |   99.02 |    98.52 |     100 |     100 | 100               
+  ...ll-service.ts |   97.82 |      100 |     100 |   97.67 | 95                
+  job-lifecycle.ts |   91.17 |    86.66 |    90.9 |   93.33 | 84,130            
+  jobs-service.ts  |     100 |    96.29 |     100 |     100 | 27                
+  leases.ts        |     100 |    97.43 |     100 |     100 | 115               
+  ...ry-service.ts |   95.08 |     91.3 |     100 |   94.73 | 92-94             
+  provisioning.ts  |   92.76 |    91.26 |      90 |   96.72 | 107-115,265       
+  redact.ts        |   99.39 |    96.29 |     100 |     100 | ...52,559,605,607 
+  settings.ts      |     100 |    99.24 |     100 |     100 | 145               
+  sse.ts           |   91.54 |    89.79 |     100 |    94.4 | ...95-197,245-246 
+  startup.ts       |    90.9 |    83.33 |   66.66 |   88.88 | 28                
+ lib/server/auth   |     100 |    97.93 |     100 |     100 |                   
+  login-service.ts |     100 |    94.73 |     100 |     100 | 36                
+  rate-limit.ts    |     100 |       95 |     100 |     100 | 78,90             
+ lib/server/db     |   97.93 |    96.07 |     100 |   97.64 |                   
+  index.ts         |   96.36 |    96.29 |     100 |   95.74 | 44-45             
+  seed.ts          |     100 |       95 |     100 |     100 | 128               
+ ...erver/db/repos |   98.91 |    93.28 |   98.68 |   98.84 |                   
+  configs.ts       |     100 |    92.68 |     100 |     100 | 39-40,42          
+  job-events.ts    |   94.73 |       90 |      90 |   94.59 | 105-108           
+  jobs.ts          |     100 |    95.45 |     100 |     100 | 80-81             
+  os-images.ts     |     100 |       90 |     100 |     100 | 74-75             
+ ...ver/installers |   99.09 |    98.42 |     100 |     100 |                   
+  context.ts       |   98.95 |    99.01 |     100 |     100 | 104               
+  shell.ts         |   97.91 |    97.05 |     100 |     100 | 116               
+  windows.ts       |   97.95 |     90.9 |     100 |     100 | 32-33             
+-------------------|---------|----------|---------|---------|-------------------
+
+=============================== Coverage summary ===============================
+Statements   : 98.25% ( 3839/3907 )
+Branches     : 96.28% ( 2615/2716 )
+Functions    : 98.84% ( 767/776 )
+Lines        : 98.97% ( 3296/3330 )
+================================================================================

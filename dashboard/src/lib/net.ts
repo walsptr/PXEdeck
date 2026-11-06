@@ -15,6 +15,45 @@ export type MgmtNetwork = {
   dynamicRange: readonly [string, string]
 }
 
+/**
+ * Jaringan VLAN management terdaftar (M7, DEC-024 §4, env `PXE_VLAN_NETWORKS`). IP statis dengan
+ * `vlan` = `vlan` di sini divalidasi terhadap `cidr` ini, bukan subnet PXE (perluasan DEC-006).
+ */
+export type VlanNetwork = {
+  /** VLAN ID 1–4094 (unik di daftar). */
+  vlan: number
+  /** CIDR ternormalisasi ke alamat network, mis. "10.99.20.0/24". */
+  cidr: string
+  prefix: number
+  /** Gateway VLAN (host di `cidr`). */
+  gateway: string
+}
+
+/** Target validasi IP statis: subnet management (DEC-006) atau VLAN terdaftar (DEC-024). */
+export type StaticNetwork = MgmtNetwork | VlanNetwork
+
+export function isVlanNetwork(n: StaticNetwork): n is VlanNetwork {
+  return typeof (n as VlanNetwork).vlan === "number"
+}
+
+/** Label subnet untuk pesan: "10.99.20.0/24 (VLAN 20)" atau CIDR management apa adanya. */
+function subnetLabel(n: StaticNetwork): string {
+  return isVlanNetwork(n) ? `${n.cidr} (VLAN ${n.vlan})` : n.cidr
+}
+
+/**
+ * Jaringan yang berlaku untuk IP statis ber-`vlan` (DEC-024 §4): VLAN terdaftar → jaringan VLAN
+ * itu; `vlan` null/undefined atau tidak terdaftar → subnet management (aturan DEC-006 apa adanya).
+ */
+export function resolveStaticNetwork(
+  vlan: number | null | undefined,
+  mgmt: MgmtNetwork,
+  vlanNetworks: readonly VlanNetwork[] = [],
+): StaticNetwork {
+  if (vlan === null || vlan === undefined) return mgmt
+  return vlanNetworks.find((v) => v.vlan === vlan) ?? mgmt
+}
+
 /** Default lab (scripts/pxe-nodes). Dipakai form di browser. */
 export const MGMT_NETWORK: MgmtNetwork = {
   cidr: "10.10.10.0/24",
@@ -96,7 +135,9 @@ function inRange(ip: string, [lo, hi]: readonly [string, string]): boolean {
   return n >= ipToInt(lo) && n <= ipToInt(hi)
 }
 
-function resolveNet(net: string | MgmtNetwork | undefined): MgmtNetwork {
+function resolveNet(
+  net: string | StaticNetwork | undefined,
+): StaticNetwork {
   if (net === undefined) return MGMT_NETWORK
   return typeof net === "string" ? { ...MGMT_NETWORK, cidr: net } : net
 }
@@ -110,8 +151,9 @@ function resolveNet(net: string | MgmtNetwork | undefined): MgmtNetwork {
  */
 export function validateStaticNetwork(
   v: { prefix: number; gateway: string; dns: readonly string[] },
-  net: MgmtNetwork = MGMT_NETWORK,
+  net: StaticNetwork = MGMT_NETWORK,
 ): string[] {
+  if (isVlanNetwork(net)) return validateVlanStaticNetwork(v, net)
   const errors: string[] = []
   const { prefix } = parseCidr(net.cidr)
   if (v.prefix !== prefix) {
@@ -134,6 +176,32 @@ export function validateStaticNetwork(
   return errors
 }
 
+/**
+ * `validateStaticNetwork` untuk VLAN terdaftar (DEC-024 §4): prefix = prefix CIDR VLAN, gateway
+ * payload host di CIDR VLAN (tanpa aturan range DHCP — VLAN management tanpa DHCP dashboard), DNS
+ * sama dengan DEC-011.
+ */
+function validateVlanStaticNetwork(
+  v: { prefix: number; gateway: string; dns: readonly string[] },
+  net: VlanNetwork,
+): string[] {
+  const errors: string[] = []
+  if (v.prefix !== net.prefix) {
+    errors.push(
+      `Prefix /${v.prefix} tidak sesuai subnet VLAN ${net.vlan} ${net.cidr} (harus /${net.prefix})`,
+    )
+  }
+  const gw = v.gateway.trim()
+  if (!isIpv4(gw)) errors.push("Gateway tidak valid")
+  else if (!isHostInSubnet(gw, net.cidr))
+    errors.push(`Gateway ${gw} di luar subnet VLAN ${net.vlan} ${net.cidr}`)
+  for (const d of v.dns) {
+    const err = dnsAddressError(d)
+    if (err) errors.push(err)
+  }
+  return errors
+}
+
 export type IpUsage = {
   /** IP → label pemakai (hostname/MAC) untuk host di luar batch. */
   used: Map<string, string>
@@ -147,22 +215,26 @@ export type IpUsage = {
 export function validateStaticIp(
   ip: string,
   usage?: IpUsage,
-  /** CIDR (memakai gateway/range default) atau parameter subnet lengkap. */
-  subnet?: string | MgmtNetwork,
+  /**
+   * CIDR (memakai gateway/range default), parameter subnet lengkap, atau jaringan VLAN terdaftar
+   * (DEC-024: tanpa aturan range DHCP/PXE server; IP ≠ gateway VLAN).
+   */
+  subnet?: string | StaticNetwork,
 ): string | null {
   const net = resolveNet(subnet)
   const cidr = net.cidr
   const v = ip.trim()
   if (!v) return "IP wajib diisi"
   if (!isIpv4(v)) return "Format IPv4 tidak valid"
-  if (!inSubnet(v, cidr)) return `Di luar subnet ${cidr}`
+  if (!inSubnet(v, cidr)) return `Di luar subnet ${subnetLabel(net)}`
   const { network, broadcast } = subnetBounds(cidr)
   const n = ipToInt(v)
   if (n === network || n === broadcast) return "Alamat network/broadcast"
-  if (v === net.gateway || v === net.pxeServer) {
+  if (isVlanNetwork(net)) {
+    if (v === net.gateway) return `Dipakai gateway VLAN ${net.vlan}`
+  } else if (v === net.gateway || v === net.pxeServer) {
     return "Dipakai gateway/PXE server"
-  }
-  if (inRange(v, net.dynamicRange)) {
+  } else if (inRange(v, net.dynamicRange)) {
     const [lo, hi] = net.dynamicRange
     return `Di dalam range DHCP dinamis ${lo}–${hi}`
   }
@@ -193,7 +265,7 @@ export function planIps(
   spec: IpPlanSpec,
   usage: IpUsage,
   skipUsed: boolean,
-  net: MgmtNetwork = MGMT_NETWORK,
+  net: StaticNetwork = MGMT_NETWORK,
 ): IpPlanRow[] {
   if (!isIpv4(spec.start)) {
     return hostIds.map((hostId) => ({
@@ -220,7 +292,7 @@ export function planIps(
     return hostIds.map((hostId) => ({
       hostId,
       ip: null,
-      error: `IP awal di luar subnet ${net.cidr}`,
+      error: `IP awal di luar subnet ${subnetLabel(net)}`,
     }))
   }
   const step =
@@ -263,7 +335,7 @@ export function planIps(
 export function validateIpAssignments(
   assignments: { hostId: string; ip: string }[],
   usage: IpUsage,
-  net: MgmtNetwork = MGMT_NETWORK,
+  net: StaticNetwork = MGMT_NETWORK,
 ): Map<string, string> {
   const errors = new Map<string, string>()
   const seen = new Map<string, string>()
@@ -355,6 +427,66 @@ export function mgmtNetworkFromEnv(
   return { cidr, gateway, dns, pxeServer, dynamicRange }
 }
 
+/** Batas jumlah entri `PXE_VLAN_NETWORKS` (DEC-024 §4). */
+export const MAX_VLAN_NETWORKS = 16
+
+/** true bila dua CIDR (ternormalisasi atau tidak) berbagi minimal satu alamat. */
+export function cidrsOverlap(a: string, b: string): boolean {
+  const x = subnetBounds(a)
+  const y = subnetBounds(b)
+  return x.network <= y.broadcast && y.network <= x.broadcast
+}
+
+/**
+ * Parse `PXE_VLAN_NETWORKS` = `"<vlan>:<cidr>:<gateway>[;…]"` (fungsi murni, M7 DEC-024 §4).
+ * Kosong/undefined → `[]`. Aturan: maks `MAX_VLAN_NETWORKS` entri; VLAN 1–4094 unik; CIDR IPv4
+ * prefix 8–30 (dinormalisasi ke alamat network); gateway host di CIDR (bukan network/broadcast);
+ * CIDR tidak tumpang tindih dengan `mgmtCidr` (`PXE_MGMT_CIDR`) maupun entri lain. Pelanggaran →
+ * Error yang pesannya diawali `PXE_VLAN_NETWORKS` (dibungkus settings → "Konfigurasi server tidak
+ * valid: …"). Hasil diurutkan menurut urutan env.
+ */
+export function vlanNetworksFromEnv(
+  raw: string | undefined,
+  mgmtCidr: string,
+): VlanNetwork[] {
+  const v = raw?.trim() ?? ""
+  if (!v) return []
+  const fail = (msg: string): never => {
+    throw new Error(`PXE_VLAN_NETWORKS ${msg}`)
+  }
+  const entries = v.split(";").map((e) => e.trim())
+  if (entries.length > MAX_VLAN_NETWORKS)
+    fail(`maksimal ${MAX_VLAN_NETWORKS} entri (ada ${entries.length})`)
+  const out: VlanNetwork[] = []
+  entries.forEach((e, i) => {
+    const at = `entri #${i + 1}`
+    if (!e) fail(`${at} kosong (format "<vlan>:<cidr>:<gateway>", antarentri dipisah ";")`)
+    const parts = e.split(":").map((x) => x.trim())
+    if (parts.length !== 3)
+      fail(`${at} "${e}" harus berbentuk <vlan>:<cidr>:<gateway> (antarentri dipisah ";")`)
+    const [rawVlan, rawCidr, gateway] = parts
+    if (!/^\d{1,4}$/.test(rawVlan) || Number(rawVlan) < 1 || Number(rawVlan) > 4094)
+      fail(`${at}: VLAN "${rawVlan}" harus bilangan bulat 1–4094`)
+    const vlan = Number(rawVlan)
+    if (out.some((o) => o.vlan === vlan)) fail(`${at}: VLAN ${vlan} ganda`)
+    if (!isCidr(rawCidr)) fail(`${at}: "${rawCidr}" bukan CIDR IPv4`)
+    const { network, prefix } = parseCidr(rawCidr)
+    if (prefix < 8 || prefix > 30)
+      fail(`${at}: prefix /${prefix} harus 8–30`)
+    const cidr = `${intToIp(network)}/${prefix}`
+    if (!isIpv4(gateway)) fail(`${at}: gateway "${gateway}" bukan IPv4`)
+    if (!isHostInSubnet(gateway, cidr))
+      fail(`${at}: gateway ${gateway} bukan alamat host di ${cidr}`)
+    if (cidrsOverlap(cidr, mgmtCidr))
+      fail(`${at}: ${cidr} (VLAN ${vlan}) tumpang tindih dengan PXE_MGMT_CIDR ${mgmtCidr}`)
+    const clash = out.find((o) => cidrsOverlap(o.cidr, cidr))
+    if (clash)
+      fail(`${at}: ${cidr} (VLAN ${vlan}) tumpang tindih dengan ${clash.cidr} (VLAN ${clash.vlan})`)
+    out.push({ vlan, cidr, prefix, gateway })
+  })
+  return out
+}
+
 /**
  * Bentuk respons `GET /api/network` (kontrak klien, CR-3-2): parameter subnet
  * management aktif dari server.
@@ -366,9 +498,17 @@ export type NetworkResponse = {
   dns: string[]
   dynamicRange: [string, string]
   pxeServer: string
+  /**
+   * M7 (DEC-024 §4): VLAN management terdaftar (`PXE_VLAN_NETWORKS`). Hanya ada bila env berisi
+   * minimal satu entri; tidak ada = tidak ada VLAN terdaftar (klien: `r.vlanNetworks ?? []`).
+   */
+  vlanNetworks?: VlanNetwork[]
 }
 
-export function toNetworkResponse(net: MgmtNetwork): NetworkResponse {
+export function toNetworkResponse(
+  net: MgmtNetwork,
+  vlanNetworks: readonly VlanNetwork[] = [],
+): NetworkResponse {
   return {
     cidr: net.cidr,
     prefix: parseCidr(net.cidr).prefix,
@@ -376,6 +516,9 @@ export function toNetworkResponse(net: MgmtNetwork): NetworkResponse {
     dns: [...net.dns],
     dynamicRange: [net.dynamicRange[0], net.dynamicRange[1]],
     pxeServer: net.pxeServer,
+    ...(vlanNetworks.length
+      ? { vlanNetworks: vlanNetworks.map((v) => ({ ...v })) }
+      : {}),
   }
 }
 

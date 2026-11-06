@@ -1,0 +1,16 @@
+BASE=m6-approved  metrik TS: expect( + expectTypeOf( + expect.poll/soft( ; shell: assert_* + _fail
+file                                                                    sebelum  sesudah
+dashboard/e2e/helpers.ts                                                      1        1
+dashboard/e2e/m6-ui-iter2.spec.ts                                            76       76
+dashboard/e2e/support/axe.ts                                                  0        0
+dashboard/src/app/boot/boot-routes.test.ts                                  182      182
+dashboard/src/lib/server/boot-script.test.ts                                 64       64
+dashboard/src/lib/server/installers/m5-te-hooks.test.ts                      67       67
+dashboard/src/lib/server/installers/m6-generator.test.ts                     56       56
+dashboard/src/lib/server/installers/m6-smoke-fixes.test.ts                  110      110
+dashboard/src/lib/server/m5-settings.test.ts                                 29       29
+dashboard/src/lib/server/m5-te-unit.test.ts                                  60       60
+infra/test/run.sh                                                           254      254
+
+file lama berubah: 11; turun/dihapus: 0 []
+grep skip/only/fixme/todo (test & e2e & infra/test): 0

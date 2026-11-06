@@ -53,6 +53,99 @@ export function rockyDiskPreLines(ctx: InstallContext): string[] {
 /** Log anaconda yang di-tail saat gagal. */
 export const ROCKY_ERROR_LOGS = ["/tmp/anaconda.log", "/tmp/program.log"]
 
+/** Lokasi konfigurasi jaringan di target (dapat diganti test ke direktori fixture). */
+export type RockyNetPaths = {
+  /** Keyfile NetworkManager. */
+  nmDir: string
+  /** ifcfg lama (initscripts); dibersihkan juga bila ada. */
+  ifcfgDir: string
+  /** sysfs NIC untuk mencari nama interface dari MAC. */
+  sysNet: string
+  /** Sumber UUID profil baru. */
+  uuidFile: string
+}
+
+export const ROCKY_NET_PATHS: RockyNetPaths = {
+  nmDir: "/etc/NetworkManager/system-connections",
+  ifcfgDir: "/etc/sysconfig/network-scripts",
+  sysNet: "/sys/class/net",
+  uuidFile: "/proc/sys/kernel/random/uuid",
+}
+
+/** Nama keyfile profil parent yang dibuat %post bila tidak ada profil parent yang dipertahankan. */
+export const ROCKY_NATIVE_PROFILE = "pxe-native"
+
+/**
+ * M7 (DEC-024 §6, O6-A): baris %post (sh, chroot target) yang membuat interface native (parent
+ * VLAN, = VLAN PXE di topologi trunk) TANPA IPv4/IPv6 di OS terpasang. Hanya untuk `vlan ≠ null`
+ * (tanpa VLAN → `[]`, %post identik M6).
+ *
+ * Anaconda menyalin profil boot (`ip=dhcp`) ke target sebagai profil ethernet DHCP autoconnect untuk
+ * parent; tanpa langkah ini host memakan lease di VLAN PXE setelah reboot (dual-homed). Langkah:
+ * 1. Parent = `--device` kickstart: nama interface (iface by name) atau MAC host (nama dicari dari
+ *    sysfs untuk mencocokkan profil yang diikat `interface-name`).
+ * 2. Setiap profil non-VLAN yang terikat parent (keyfile `mac-address`/`interface-name`, ifcfg
+ *    `HWADDR`/`DEVICE`) dihapus — kecuali satu keyfile yang UUID-nya dirujuk `parent=` profil VLAN:
+ *    profil itu ditulis ulang di tempat (`[ipv4]`/`[ipv6]` → `method=disabled`, autoconnect true)
+ *    agar rujukan VLAN tetap sah.
+ * 3. Tanpa profil yang dipertahankan → keyfile baru `pxe-native` (ethernet, autoconnect, IPv4/IPv6
+ *    disabled) diikat ke parent.
+ * Profil VLAN (`type=vlan`, dari `network --vlanid`) tidak disentuh. Diekspor untuk test (fixture
+ * direktori NetworkManager palsu lewat `paths`).
+ */
+export function rockyNativeNoIpv4Lines(
+  ctx: InstallContext,
+  paths: RockyNetPaths = ROCKY_NET_PATHS,
+): string[] {
+  const c = validateContext(ctx)
+  const n = c.network
+  if (n.mode !== "static" || n.vlan === null) return []
+  const byName = n.iface.by === "name" ? n.iface.name : ""
+  const bind = byName
+    ? String.raw`printf 'interface-name=%s\n' "$IFN"`
+    : String.raw`printf '\n[ethernet]\nmac-address=%s\n' "$MAC"`
+  return [
+    `# M7 (DEC-024 §6): native/parent VLAN ${n.vlan} tanpa IPv4 di OS terpasang`,
+    `NMD=${shQuote(paths.nmDir)}`,
+    `IFCD=${shQuote(paths.ifcfgDir)}`,
+    `MAC=${shQuote(c.mac)}`,
+    `IFN=${shQuote(byName)}`,
+    byName
+      ? "BYMAC="
+      : `BYMAC=1; for d in ${shQuote(paths.sysNet)}/*; do [ "$(cat "$d/address" 2>/dev/null)" = "$MAC" ] && IFN=$(basename "$d"); done`,
+    String.raw`mkdir -p "$NMD"`,
+    String.raw`VP=$(sed -n 's/^parent=//p' "$NMD"/*.nmconnection 2>/dev/null)`,
+    "KEEP=",
+    String.raw`for f in "$NMD"/*.nmconnection; do`,
+    String.raw`  [ -f "$f" ] || continue`,
+    String.raw`  grep -qx 'type=vlan' "$f" && continue`,
+    String.raw`  if { [ -n "$BYMAC" ] && grep -qixF "mac-address=$MAC" "$f"; } || { [ -n "$IFN" ] && grep -qxF "interface-name=$IFN" "$f"; }; then`,
+    String.raw`    U=$(sed -n 's/^uuid=//p' "$f" | head -n 1)`,
+    String.raw`    if [ -z "$KEEP" ] && [ -n "$U" ] && printf '%s\n' "$VP" | grep -qxF "$U"; then KEEP=$f; else rm -f "$f"; fi`,
+    "  fi",
+    "done",
+    String.raw`for f in "$IFCD"/ifcfg-*; do`,
+    String.raw`  [ -f "$f" ] || continue`,
+    String.raw`  grep -qiE '^VLAN="?yes"?$' "$f" && continue`,
+    String.raw`  if { [ -n "$BYMAC" ] && grep -qiE "^HWADDR=\"?$MAC\"?$" "$f"; } || { [ -n "$IFN" ] && grep -qE "^DEVICE=\"?$IFN\"?$" "$f"; }; then rm -f "$f"; fi`,
+    "done",
+    String.raw`if [ -n "$KEEP" ]; then`,
+    String.raw`  awk '/^\[/ { sec = $0; print; if (sec == "[connection]") print "autoconnect=true"; if (sec == "[ipv4]") { print "method=disabled"; s4 = 1 } if (sec == "[ipv6]") { print "method=disabled"; s6 = 1 } next } (sec == "[ipv4]" || sec == "[ipv6]") && NF { next } sec == "[connection]" && /^autoconnect=/ { next } { print } END { if (!s4) printf "\n[ipv4]\nmethod=disabled\n"; if (!s6) printf "\n[ipv6]\nmethod=disabled\n" }' "$KEEP" > "$KEEP.pxe" && mv "$KEEP.pxe" "$KEEP"`,
+    "else",
+    `  KEEP="$NMD/${ROCKY_NATIVE_PROFILE}.nmconnection"`,
+    `  U=$(cat ${shQuote(paths.uuidFile)} 2>/dev/null)`,
+    "  {",
+    String.raw`    printf '[connection]\nid=` + ROCKY_NATIVE_PROFILE + String.raw`\n'`,
+    String.raw`    [ -n "$U" ] && printf 'uuid=%s\n' "$U"`,
+    String.raw`    printf 'type=ethernet\nautoconnect=true\n'`,
+    `    ${bind}`,
+    String.raw`    printf '\n[ipv4]\nmethod=disabled\n\n[ipv6]\nmethod=disabled\n'`,
+    String.raw`  } > "$KEEP"`,
+    "fi",
+    String.raw`chmod 600 "$KEEP"`,
+  ]
+}
+
 /** Script %post (chroot target). Diekspor untuk test. */
 export function rockyPostScript(ctx: InstallContext): string {
   const c = validateContext(ctx)
@@ -70,6 +163,8 @@ export function rockyPostScript(ctx: InstallContext): string {
     )
   }
   lines.push(
+    // M7 (DEC-024 §6): hanya bila vlan ≠ null; sebelum firstboot + restorecon (label SELinux keyfile).
+    ...rockyNativeNoIpv4Lines(c),
     ...firstbootInstallCmds("", "kickstart", c.mac),
     "restorecon -R /etc /usr/local/sbin /home 2>/dev/null || true",
     logCmd("kickstart", c.mac, ROCKY_LOG.postDone),

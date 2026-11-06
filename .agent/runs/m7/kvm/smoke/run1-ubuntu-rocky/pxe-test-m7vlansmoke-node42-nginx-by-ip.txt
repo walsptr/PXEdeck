@@ -1,0 +1,9 @@
+# nginx: request per IP sumber (MAC 52:54:00:99:00:42 / IP statis 10.99.20.52)
+    359 10.99.10.132
+    130 10.99.0.1
+      9 10.99.10.131
+      3 10.99.20.51
+      2 10.99.20.52
+# nginx: request dari IP statis 10.99.20.52 (VLAN mgmt), path tanpa token
+/boot/52:54:00:99:00:42/***/log" 10.99.20.52 13 "curl/7.76.1" 
+/boot/52:54:00:99:00:42/***/status" 10.99.20.52 13 "curl/7.76.1" 

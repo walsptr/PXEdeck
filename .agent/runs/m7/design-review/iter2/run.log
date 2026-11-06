@@ -1,0 +1,20 @@
+(node:766163) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:766222) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 8 tests using 1 worker
+
+(node:766247) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  1 [vlan] › ../.agent/runs/m7/design-review/iter2/dr-iter2.spec.ts:29:5 › login: muat normal + hidrasi tertunda + tanpa JS (9.6s)
+  ✓  2 [vlan] › ../.agent/runs/m7/design-review/iter2/dr-iter2.spec.ts:88:7 › halaman /hosts (4.5s)
+  ✓  3 [vlan] › ../.agent/runs/m7/design-review/iter2/dr-iter2.spec.ts:88:7 › halaman /settings (3.7s)
+  ✓  4 [vlan] › ../.agent/runs/m7/design-review/iter2/dr-iter2.spec.ts:88:7 › halaman /jobs (3.7s)
+  ✓  5 [vlan] › ../.agent/runs/m7/design-review/iter2/dr-iter2.spec.ts:88:7 › halaman /os-images (3.5s)
+  ✓  6 [vlan] › ../.agent/runs/m7/design-review/iter2/dr-iter2.spec.ts:88:7 › halaman /ssh-keys (3.4s)
+  ✓  7 [vlan] › ../.agent/runs/m7/design-review/iter2/dr-iter2.spec.ts:108:5 › Bulk VLAN 20: region preview IP baru (CR-7-4) (8.0s)
+  ✓  8 [vlan] › ../.agent/runs/m7/design-review/iter2/dr-iter2.spec.ts:140:5 › Dialog password acak: region vs tabel (CR-7-4) (8.5s)
+
+  8 passed (47.4s)

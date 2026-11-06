@@ -1,0 +1,86 @@
+== e2e-run2-axe-results-m7-vlan.json generatedAt=2026-11-06T13:40:48.772Z audits=50
+filteredCount {'total': 1965, 'byCategory': {'exception:muted/white': 1292, 'exception:muted/canvas': 300, 'exception:white/stage-done': 349, 'exception:on-primary/primary': 24}}
+  m7 /settings tanpa VLAN@375                  viol=[] kept=0 {}
+  m7 /settings tanpa VLAN@768                  viol=[] kept=0 {}
+  m7 /settings tanpa VLAN@1280                 viol=[] kept=0 {}
+  m7 /settings tanpa VLAN@1440                 viol=[] kept=0 {}
+  self-test sintetis                           viol=['color-contrast'] kept=5 {'kept': 5}
+  /login@1440                                  viol=[] kept=0 {}
+  /login@375                                   viol=[] kept=0 {}
+  /login error@375                             viol=[] kept=0 {}
+  /hosts@1440                                  viol=[] kept=0 {}
+  /hosts@375                                   viol=[] kept=0 {}
+  /os-images@1440                              viol=[] kept=0 {}
+  /os-images@375                               viol=[] kept=0 {}
+  /ssh-keys@1440                               viol=[] kept=0 {}
+  /ssh-keys@375                                viol=[] kept=0 {}
+  /settings@1440                               viol=[] kept=0 {}
+  /settings@375                                viol=[] kept=0 {}
+  /hosts sheet@1440 [konteks: [data-slot="shee viol=[] kept=0 {}
+  /hosts sheet@375 [konteks: [data-slot="sheet viol=[] kept=0 {}
+  /jobs detail@1440                            viol=[] kept=0 {}
+  /jobs detail@375                             viol=[] kept=0 {}
+  iter2 /hosts@1440                            viol=[] kept=0 {}
+  iter2 /hosts@375                             viol=[] kept=0 {}
+  iter2 /jobs@1440                             viol=[] kept=0 {}
+  iter2 /jobs@375                              viol=[] kept=0 {}
+  iter2 /jobs detail@1440                      viol=[] kept=0 {}
+  iter2 /jobs detail@375                       viol=[] kept=0 {}
+  iter2 /jobs 404@1440                         viol=[] kept=0 {}
+  iter2 /jobs 404@375                          viol=[] kept=0 {}
+  iter2 /os-images@1440                        viol=[] kept=0 {}
+  iter2 /os-images@375                         viol=[] kept=0 {}
+  m7 /settings vlan@375                        viol=[] kept=0 {}
+  m7 /settings vlan@768                        viol=[] kept=0 {}
+  m7 /settings vlan@1280                       viol=[] kept=0 {}
+  m7 /settings vlan@1440                       viol=[] kept=0 {}
+  m7 sheet single vlan20-valid@375 [konteks: [ viol=[] kept=0 {}
+  m7 sheet single vlan20-invalid@375 [konteks: viol=[] kept=0 {}
+  m7 sheet single vlan99@375 [konteks: [data-s viol=[] kept=0 {}
+  m7 sheet single vlan20-valid@768 [konteks: [ viol=[] kept=0 {}
+  m7 sheet single vlan20-invalid@768 [konteks: viol=[] kept=0 {}
+  m7 sheet single vlan99@768 [konteks: [data-s viol=[] kept=0 {}
+  m7 sheet single vlan20-valid@1280 [konteks:  viol=[] kept=0 {}
+  m7 sheet single vlan20-invalid@1280 [konteks viol=[] kept=0 {}
+  m7 sheet single vlan99@1280 [konteks: [data- viol=[] kept=0 {}
+  m7 sheet single vlan20-valid@1440 [konteks:  viol=[] kept=0 {}
+  m7 sheet single vlan20-invalid@1440 [konteks viol=[] kept=0 {}
+  m7 sheet single vlan99@1440 [konteks: [data- viol=[] kept=0 {}
+  m7 sheet bulk vlan20@375 [konteks: [data-slo viol=['scrollable-region-focusable'] kept=0 {}
+  m7 sheet bulk vlan20@768 [konteks: [data-slo viol=[] kept=0 {}
+  m7 sheet bulk vlan20@1280 [konteks: [data-sl viol=[] kept=0 {}
+  m7 sheet bulk vlan20@1440 [konteks: [data-sl viol=[] kept=0 {}
+TOTAL kept (non-selftest) = 0
+== e2e-run2-m6-axe-results-iter2-ui.json generatedAt=2026-11-06T13:39:59.920Z audits=30
+filteredCount {'total': 1658, 'byCategory': {'exception:muted/white': 1047, 'exception:muted/canvas': 250, 'exception:white/stage-done': 349, 'exception:on-primary/primary': 12}}
+  m7 /settings tanpa VLAN@375                  viol=[] kept=0 {}
+  m7 /settings tanpa VLAN@768                  viol=[] kept=0 {}
+  m7 /settings tanpa VLAN@1280                 viol=[] kept=0 {}
+  m7 /settings tanpa VLAN@1440                 viol=[] kept=0 {}
+  self-test sintetis                           viol=['color-contrast'] kept=5 {'kept': 5}
+  /login@1440                                  viol=[] kept=0 {}
+  /login@375                                   viol=[] kept=0 {}
+  /login error@375                             viol=[] kept=0 {}
+  /hosts@1440                                  viol=[] kept=0 {}
+  /hosts@375                                   viol=[] kept=0 {}
+  /os-images@1440                              viol=[] kept=0 {}
+  /os-images@375                               viol=[] kept=0 {}
+  /ssh-keys@1440                               viol=[] kept=0 {}
+  /ssh-keys@375                                viol=[] kept=0 {}
+  /settings@1440                               viol=[] kept=0 {}
+  /settings@375                                viol=[] kept=0 {}
+  /hosts sheet@1440 [konteks: [data-slot="shee viol=[] kept=0 {}
+  /hosts sheet@375 [konteks: [data-slot="sheet viol=[] kept=0 {}
+  /jobs detail@1440                            viol=[] kept=0 {}
+  /jobs detail@375                             viol=[] kept=0 {}
+  iter2 /hosts@1440                            viol=[] kept=0 {}
+  iter2 /hosts@375                             viol=[] kept=0 {}
+  iter2 /jobs@1440                             viol=[] kept=0 {}
+  iter2 /jobs@375                              viol=[] kept=0 {}
+  iter2 /jobs detail@1440                      viol=[] kept=0 {}
+  iter2 /jobs detail@375                       viol=[] kept=0 {}
+  iter2 /jobs 404@1440                         viol=[] kept=0 {}
+  iter2 /jobs 404@375                          viol=[] kept=0 {}
+  iter2 /os-images@1440                        viol=[] kept=0 {}
+  iter2 /os-images@375                         viol=[] kept=0 {}
+TOTAL kept (non-selftest) = 0

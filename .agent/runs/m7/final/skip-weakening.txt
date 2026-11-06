@@ -1,0 +1,125 @@
+# skip/weakening M7 final iter1 — 2026-11-06T17:19:32Z @ 9f64843 (kode produk 339f234 + perbaikan flake test 9f64843)
+## (1) Hitungan asersi file test lama vs m6-approved (count-assertions.py)
+BASE=m6-approved  metrik TS: expect( + expectTypeOf( + expect.poll/soft( ; shell: assert_* + _fail
+file                                                                    sebelum  sesudah
+dashboard/e2e/helpers.ts                                                      1        1
+dashboard/e2e/m6-ui-iter2.spec.ts                                            76       76
+dashboard/e2e/support/axe.ts                                                  0        0
+dashboard/src/app/boot/boot-routes.test.ts                                  182      182
+dashboard/src/lib/server/boot-script.test.ts                                 64       64
+dashboard/src/lib/server/installers/m5-te-hooks.test.ts                      67       67
+dashboard/src/lib/server/installers/m6-generator.test.ts                     56       56
+dashboard/src/lib/server/installers/m6-smoke-fixes.test.ts                  110      110
+dashboard/src/lib/server/m5-settings.test.ts                                 29       29
+dashboard/src/lib/server/m5-te-unit.test.ts                                  60       60
+infra/test/run.sh                                                           254      254
+
+file lama berubah: 11; turun/dihapus: 0 []
+grep skip/only/fixme/todo (test & e2e & infra/test): 0
+EXIT=0
+
+## (2) Penanda skip/only/todo/fixme di semua file test
+$ grep -rnE "\b(it|test|describe|suite)\.(skip|only|todo|fixme|skipIf|runIf)\b|\b(xit|xdescribe|xtest|fit|fdescribe)\(|test\.fail\(" dashboard/src dashboard/e2e dashboard/e2e-kvm
+(0 hit)
+$ grep -nE "^\s*#\s*t \"|\bskip\b" infra/test/*.sh (baris test shell dikomentari / skip)
+(0 hit)
+E2E: e2e-run1.log/e2e-run2.log = 203 passed, 0 failed/flaky/skipped/did-not-run (forbidOnly: true, retries 0)
+
+## (3) Config test tidak berubah sejak m6-approved
+- dashboard/vitest.config.mts: 
+- dashboard/vitest.process.config.mts: 
+- dashboard/vitest.setup.dom.ts: 
+- dashboard/playwright.config.ts: 1 file changed, 28 insertions(+), 1 deletion(-)
+- dashboard/e2e-kvm/playwright.config.ts: 
+$ git diff m6-approved HEAD -- dashboard/vitest.config.mts dashboard/vitest.process.config.mts
+(akhir diff vitest config: kosong = tidak berubah)
+$ git diff m6-approved HEAD -- dashboard/playwright.config.ts | grep -nE "^[+-].*(retries|forbidOnly|timeout|workers|testIgnore|grep)"
+(0 baris retries/forbidOnly/timeout/workers/testIgnore/grep berubah; perubahan = server m7-vlan + SHARED_MATCH m7-novlan, test-migration.md §M7-T8)
+
+## (4) File test yang dihapus sejak m6-approved
+(0 file test dihapus)
+
+## (5) Filter axe (dashboard/e2e/support/axe.ts) vs m6-approved — hanya komentar + path default writeAxeEvidence
+diff --git a/dashboard/e2e/support/axe.ts b/dashboard/e2e/support/axe.ts
+index 966272e..8f4932a 100644
+--- a/dashboard/e2e/support/axe.ts
++++ b/dashboard/e2e/support/axe.ts
+@@ -10,7 +10,7 @@
+ //      (≥ 3:1 untuk teks besar);
+ //   selain itu `kept` (tetap pelanggaran), termasuk bila warna tidak bisa dihitung pasti (opacity
+ //   leluhur < 1, warna non-sRGB, latar tidak opak).
+-// Jumlah node yang difilter per kategori dicatat sebagai bukti (`.agent/runs/m6/axe-results.json`).
++// Jumlah node yang difilter per kategori dicatat sebagai bukti (`.agent/runs/m<aktif>/axe-results.json`, M7: m7).
+ import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
+ import path from "node:path"
+ 
+@@ -158,7 +158,7 @@ export type AxeAudit = {
+ 
+ /**
+  * Bukti per audit ditambahkan ke JSONL di direktori run E2E (worker Playwright di-restart setiap test
+- * gagal, jadi state modul tidak cukup); `writeAxeEvidence` meringkasnya ke `.agent/runs/m6/axe-results.json`.
++ * gagal, jadi state modul tidak cukup); `writeAxeEvidence` meringkasnya ke `.agent/runs/m7/axe-results.json`.
+  */
+ const evidenceFile = () => path.join(process.env.PXE_E2E_ROOT ?? path.resolve(__dirname, "../../.e2e-data"), "axe-audits.jsonl")
+ 
+@@ -194,8 +194,11 @@ export async function auditA11y(page: Page, label: string, opts: { include?: str
+   return audit
+ }
+ 
+-/** Tulis bukti audit (dipanggil afterAll spec). */
+-export function writeAxeEvidence(file = path.resolve(__dirname, "../../../.agent/runs/m6/axe-results.json")) {
++/**
++ * Tulis bukti audit (dipanggil afterAll spec). M7-T8: default ke `.agent/runs/m7/` (milestone aktif) agar
++ * run regresi tidak menimpa bukti M6 yang sudah di-approve; filter di atas tidak berubah.
++ */
++export function writeAxeEvidence(file = path.resolve(__dirname, "../../../.agent/runs/m7/axe-results.json")) {
+   if (!existsSync(evidenceFile())) return
+   const evidence = readFileSync(evidenceFile(), "utf8")
+     .split("\n")
+
+## (7) Perubahan test di gate final ini (9f64843): dashboard/e2e/m6-ui-iter2.spec.ts
+@@ -119,10 +119,13 @@ test.describe("R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §
+       }),
+     )
+     await page.goto(`/jobs?job=${M6_FAILED_JOB}`)
++    // Nilai dibaca SEKALI di dalam poll dan dipakai ulang: `page.evaluate` kedua setelah poll bisa jatuh
++    // tepat saat redirect ke /login ("Execution context was destroyed", flaky gate final M7 iter1).
++    let stored: string | null = null
+     await expect
+-      .poll(() => page.evaluate(() => sessionStorage.getItem("iter2-session-msg")).catch(() => null), { timeout: 15_000 })
++      .poll(async () => (stored = await page.evaluate(() => sessionStorage.getItem("iter2-session-msg")).catch(() => null)), { timeout: 15_000 })
+       .not.toBeNull()
+-    const got = JSON.parse((await page.evaluate(() => sessionStorage.getItem("iter2-session-msg")))!) as { text: string; color: string }
++    const got = JSON.parse(stored!) as { text: string; color: string }
+     expect(got.text).toBe("Sesi berakhir. Masuk lagi untuk melihat log.")
+     expect(got.color).not.toBe(MUTED)
+     expect(got.color).toBe(BODY)
+
+## (6) File test BARU M7 (c7a68eebf5c11465ca3d81e80b060eb1479b3f7b..HEAD): asersi saat pertama ditambahkan vs HEAD
+file                                                                         awal     HEAD commit-ubah
+dashboard/e2e-kvm/m7-shared.ts                                                  0        0 68ee54c 6a26cc6 d9d5308 
+dashboard/e2e-kvm/m7-vlan.spec.ts                                              25       25 -
+dashboard/e2e-kvm/m7-vlanneg.spec.ts                                            3        3 -
+dashboard/e2e-kvm/m7-vlansmoke.spec.ts                                         11       11 -
+dashboard/e2e/m7-login-no-url-creds.spec.ts                                    37       37 -
+dashboard/e2e/m7-novlan.spec.ts                                                21       21 -
+dashboard/e2e/m7-vlan.spec.ts                                                 144      144 -
+dashboard/src/app/api/m7-vlan-api.test.ts                                      50       50 -
+dashboard/src/app/boot/m7-debian-nameservers-route.test.ts                      7        7 -
+dashboard/src/app/boot/m7-te-vlan-callback.test.ts                             54       54 -
+dashboard/src/app/login/submit/route.test.ts                                    6        6 -
+dashboard/src/components/auth/m7-login-no-url-creds.test.tsx                   14       14 -
+dashboard/src/components/host-config/form-state-vlan.test.ts                   41       41 -
+dashboard/src/components/host-config/m7-vlan-ui.test.tsx                       50       50 -
+dashboard/src/components/host-config/plan-table-a11y.test.tsx                  11       11 -
+dashboard/src/hooks/m7-settings-hooks.test.ts                                   6        6 -
+dashboard/src/lib/m7-net-vlan.test.ts                                          64       64 -
+dashboard/src/lib/server/installers/m7-te-generators.test.ts                   21       21 -
+dashboard/src/lib/server/installers/m7-vlan-generators.test.ts                 45       46 cdceb9f 
+dashboard/src/lib/server/m7-debian-nameservers.test.ts                         12       12 -
+dashboard/src/lib/server/m7-debian-no-route.test.ts                             8        8 4c4b1e6 
+dashboard/src/lib/server/m7-kvm-urlcred.test.ts                                 2        2 68ee54c 
+dashboard/src/lib/server/m7-te-vlan-env.test.ts                                28       28 -
+infra/test/m7-dec027.sh                                                        28       28 -
+infra/test/m7-infra.sh                                                        200      206 4c4b1e6 
+infra/test/m7-te.sh                                                           100      110 68ee54c 6a26cc6 

@@ -1,0 +1,248 @@
+# kvm-path-diff-iter2 — git diff 339f234 62a3945 -- infra  (2026-11-06T17:49:22Z)
+# DEC-028 §1/§4, gate-iter1 §Bukti ulang 5. Diharapkan: hanya cabang is_dry deploy-dashboard.sh,
+# komentar apply-profile.sh, README, dan test infra.
+
+## stat
+ infra/README.md                    | 26 ++++++++++++-
+ infra/deploy-dashboard.sh          | 17 ++++++---
+ infra/server/vlan/apply-profile.sh | 10 ++++-
+ infra/test/m7-gk71.sh              | 77 ++++++++++++++++++++++++++++++++++++++
+ infra/test/run.sh                  |  2 +
+ 5 files changed, 124 insertions(+), 8 deletions(-)
+
+## berkas non-test/non-dok yang berubah
+infra/deploy-dashboard.sh
+infra/server/vlan/apply-profile.sh
+
+## apply-profile.sh: baris non-komentar yang berubah (harus kosong)
+(kosong)
+
+## deploy-dashboard.sh dengan -w (non-dry: hanya dibungkus else/fi, isi pipeline identik)
+diff --git a/infra/deploy-dashboard.sh b/infra/deploy-dashboard.sh
+index 7e39617..b0d96c0 100755
+--- a/infra/deploy-dashboard.sh
++++ b/infra/deploy-dashboard.sh
+@@ -118,11 +118,18 @@ ssh_server "mkdir -m 700 '$remote_stage'"
+ scp_server "$stage/release.tar.xz" "$stage/dashboard.env" "$stage/pxe-dashboard.service" \
+   "$stage/nginx-pxe.conf" "$remote_stage/"
+ # Overlay env admin: HANYA lewat stdin ssh (umask 077 di VM); argv cuma memuat path tujuan.
++# GK-7-1 (DEC-028 §1): di dry-run `run` hanya mencetak dan TIDAK membaca stdin, jadi pipe ke sana
++# berlomba dengan penulis (SIGPIPE -> exit 141 di bawah pipefail). Dry-run cukup mencetak perintah
++# yang sama dengan stdin /dev/null; jalur non-dry (else) tidak berubah.
++if is_dry; then
++  ssh_server "umask 077 && cat > '$remote_stage/admin.env'" </dev/null
++else
+   {
+     printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+     printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+     [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+   } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++fi
+ unset admin_hash_val
+ if is_dry; then
+   ssh_root "RELEASE_TS=$ts STAGE=$remote_stage bash -s" < "$INFRA_DIR/server/install-dashboard.sh"
+
+## pipeline non-dry 339f234 vs HEAD setelah buang indentasi awal (python, blok '{' .. '} | ssh_server' pertama)
+IDENTIK (5 baris; satu-satunya beda = indentasi 2 spasi di dalam else)
+  {
+  printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+  printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+  [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+  } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
+
+## lib.sh / ssh_server / nginx / profil / relay / generator tidak berubah
+tidak ada perubahan
+
+## diff penuh
+diff --git a/infra/README.md b/infra/README.md
+index 8b89c09..45788c0 100644
+--- a/infra/README.md
++++ b/infra/README.md
+@@ -116,10 +116,34 @@ lewat HTTP (callback `done` dari OS terpasang, semua distro) dan, untuk **Ubuntu
+ di Configuring sampai timeout. Di lab, server sendiri adalah gateway VLAN 20 (`ip_forward=0`), nginx
+ listen `10.99.10.2:80` dan ekspor NFS read-only mencakup `10.99.20.0/24`.
+ 
++**Perimeter layanan server di VLAN (SR-7-2, kondisi lab apa adanya).** Yang benar-benar terikat ke satu
++alamat hanya dnsmasq (`pxe10`), nginx (`10.99.0.2:80`, `10.99.10.2:80`), dan nfsd (`10.99.10.2:2049`).
++Yang listen **wildcard**: rpcbind tcp+udp `0.0.0.0:111` (socket activation systemd, sehingga
++`OPTIONS="-w -h 10.99.10.2"` tidak berpengaruh; bukti `kvm/vlandistro/server-listen-vlan.txt`),
++`rpc.mountd` dan `rpc.statd` (port dinamis), serta `sshd` `0.0.0.0:22` (root key-only). Linux memakai model weak host, jadi node di VLAN 10 dan VLAN 20
++bisa menjangkau layanan wildcard itu lewat `10.99.10.2`, `10.99.20.1`, maupun `10.99.0.2`. Data NFS
++tetap dibatasi ekspor **read-only** dengan ACL subnet (`10.99.10.0/24`, `10.99.20.0/24`). nftables di
++server lab hanya men-drop koneksi baru dari `nat0`; tidak ada filter untuk `pxe10`/`mgmt20`.
++`verify-listen-vlan.sh` hanya gagal bila ada socket yang terikat **eksplisit** ke `10.99.20.1`/`%mgmt20`,
++sehingga socket wildcard tidak terdeteksi olehnya.
++
++Untuk production disarankan filter input nftables (default drop) untuk `iifname { "pxe10", "mgmt20" }`.
++Filter ini belum diterapkan di lab karena profil server termasuk jalur KVM:
++- selalu: `ct state established,related accept`; tolak paket VLAN yang menuju alamat admin
++  (`ip daddr 10.99.0.2 drop`);
++- `pxe10` (VLAN 10): udp 67 (DHCP), udp 69 (TFTP; data TFTP lewat helper conntrack `tftp` atau
++  related), udp/tcp 53 (DNS), tcp 80 (iPXE, kernel/initrd, `/media`, konfigurasi, callback), tcp 2049
++  (NFS), tcp/udp 111 (rpcbind), dan port `rpc.mountd` yang dipatok tetap (mis. `[mountd] port=20048` di
++  `nfs.conf`);
++- `mgmt20` (VLAN 20): tcp 80 ke `10.99.10.2` (callback status), tcp 2049 + tcp/udp 111 + port mountd
++  tetap (root NFS Ubuntu setelah pindah ke IP statis), udp/tcp 53 bila node memakai DNS server ini;
++- drop sisanya, termasuk tcp 22 (sshd) dan `rpc.statd` (locking NLM; ekspornya ro, tetapi pastikan dulu
++  klien casper/anaconda tidak membutuhkannya sebelum diblok; bila butuh, patok port statd dan izinkan).
++
+ | Script | Fungsi (M7) |
+ |---|---|
+ | `net-up.sh --topology vlan` / `net-down.sh --topology vlan` | Lima network (`pxe-test`, `pxe-test-nat`, `pxe-test-trunk`, `pxe-test-port1`, `pxe-test-port2`); down hanya saat teardown M7-T12. |
+-| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd/rpcbind `10.99.10.2`, ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
++| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd `10.99.10.2:2049` (rpcbind/mountd/statd/sshd tetap wildcard, lihat Perimeter di atas), ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
+ | `deploy-dashboard.sh --topology vlan` | `server/dashboard-vlan.env` (`PXE_MGMT_CIDR=10.99.10.0/24`, `PXE_SERVER_IP`/`PXE_BASE_URL`/`PXE_MEDIA_URL` = `10.99.10.2`, `PXE_DHCP_INTERFACE=pxe10`, `PXE_ALLOWED_HOSTS=10.99.0.2,10.99.10.2`, `PXE_VLAN_NETWORKS=20:10.99.20.0/24:10.99.20.1`) + `server/vlan/nginx-pxe-vlan.conf`; verifikasi dari host lewat `10.99.0.2`: `cidr 10.99.10.0/24` dan `vlanNetworks` memuat VLAN 20. |
+ | `switch-base.sh` | Sekali: `qemu-img convert` cloud image Ubuntu 24.04 (`.agent/media`) → `.agent/vms/pxe-test-switch-base.qcow2` + `.ready` (tanpa boot/paket). |
+ | `switch-up.sh` / `switch-down.sh [--purge]` | VM `pxe-test-switch` (overlay + seed cloud-init, 768 MB, 1 vCPU, root key-only, tanpa NAT): `sw-mgmt` `10.99.0.3` (pxe-test), `sw-up` (trunk), `sw-p1` (port1), `sw-p2` (port2), MAC `52:54:00:99:02:01..04`. `switch/pxe-switch.sh` (unit oneshot `pxe-switch.service`): `br0 vlan_filtering 1 vlan_default_pvid 0 stp_state 0`, tanpa IP; `sw-up` 10T+20T, `sw-p1` 10 PVID untagged + 20T, `sw-p2` profil `access20` (default) / `tagged10` (`pxe-switch.sh apply-port sw-p2 <profil>`). `switch-up.sh` menjalankan `pxe-switch.sh verify` → `switch-check.txt`. Dibuat **setelah** `verify-listen-vlan.sh` PASS. |
+diff --git a/infra/deploy-dashboard.sh b/infra/deploy-dashboard.sh
+index 7e39617..b0d96c0 100755
+--- a/infra/deploy-dashboard.sh
++++ b/infra/deploy-dashboard.sh
+@@ -118,11 +118,18 @@ ssh_server "mkdir -m 700 '$remote_stage'"
+ scp_server "$stage/release.tar.xz" "$stage/dashboard.env" "$stage/pxe-dashboard.service" \
+   "$stage/nginx-pxe.conf" "$remote_stage/"
+ # Overlay env admin: HANYA lewat stdin ssh (umask 077 di VM); argv cuma memuat path tujuan.
+-{
+-  printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+-  printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+-  [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+-} | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++# GK-7-1 (DEC-028 §1): di dry-run `run` hanya mencetak dan TIDAK membaca stdin, jadi pipe ke sana
++# berlomba dengan penulis (SIGPIPE -> exit 141 di bawah pipefail). Dry-run cukup mencetak perintah
++# yang sama dengan stdin /dev/null; jalur non-dry (else) tidak berubah.
++if is_dry; then
++  ssh_server "umask 077 && cat > '$remote_stage/admin.env'" </dev/null
++else
++  {
++    printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
++    printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
++    [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
++  } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++fi
+ unset admin_hash_val
+ if is_dry; then
+   ssh_root "RELEASE_TS=$ts STAGE=$remote_stage bash -s" < "$INFRA_DIR/server/install-dashboard.sh"
+diff --git a/infra/server/vlan/apply-profile.sh b/infra/server/vlan/apply-profile.sh
+index 30c3536..0bc307c 100755
+--- a/infra/server/vlan/apply-profile.sh
++++ b/infra/server/vlan/apply-profile.sh
+@@ -6,7 +6,8 @@
+ #   netplan-vlan.yaml dnsmasq-vlan.conf nginx-pxe-vlan.conf exports-vlan nfs-vlan.conf sysctl-vlan.conf
+ # Urutan: dnsmasq DIHENTIKAN dulu -> trunk0 (rename NIC ber-MAC 52:54:00:99:01:04) + pxe10/mgmt20 ->
+ # ip_forward=0 -> dnsmasq hanya pxe10 -> nginx 10.99.0.2:80 + 10.99.10.2:80 (nginx -t) -> NFS ro
+-# 10.99.10.0/24 + 10.99.20.0/24, nfsd/rpcbind 10.99.10.2 -> log dnsmasq dipotong -> dnsmasq start.
++# 10.99.10.0/24 + 10.99.20.0/24, nfsd 10.99.10.2 (+ OPTIONS rpcbind) -> log dnsmasq dipotong ->
++# dnsmasq start. Perimeter (SR-7-2): lihat langkah 6 dan infra/README.md §Topologi VLAN.
+ # Verifikasi listen TIDAK di sini: infra/server/vlan/verify-listen-vlan.sh (gagal -> dnsmasq stop).
+ # Idempoten. Gagal di langkah mana pun -> exit ≠ 0 dengan dnsmasq tetap mati.
+ set -euo pipefail
+@@ -63,7 +64,12 @@ nginx -t
+ systemctl restart nginx
+ echo "OK   nginx dimuat ulang (10.99.0.2:80 + 10.99.10.2:80)"
+ 
+-# 6) NFS read-only VLAN 10 + 20, nfsd/rpcbind hanya 10.99.10.2.
++# 6) NFS read-only VLAN 10 + 20 (ekspor ro + ACL subnet). Hanya nfsd yang terikat 10.99.10.2:2049.
++#    `-h 10.99.10.2` tidak efektif di lab: rpcbind memakai socket activation systemd (tcp+udp
++#    0.0.0.0:111, bukti kvm/vlandistro/server-listen-vlan.txt), dan rpc.mountd, rpc.statd serta sshd
++#    listen wildcard. Karena model weak host, semuanya terjangkau dari VLAN 10/20 (10.99.10.2,
++#    10.99.20.1, 10.99.0.2) di lab ini.
++#    Production: filter input nftables di pxe10/mgmt20 (SR-7-2, belum diterapkan, lihat README).
+ install -m 0644 "$STAGE/nfs-vlan.conf" /etc/nfs.conf.d/pxe.conf
+ install -m 0644 "$STAGE/exports-vlan" /etc/exports.d/pxe.exports
+ echo 'OPTIONS="-w -h 10.99.10.2"' > /etc/default/rpcbind
+diff --git a/infra/test/m7-gk71.sh b/infra/test/m7-gk71.sh
+new file mode 100644
+index 0000000..b1b970d
+--- /dev/null
++++ b/infra/test/m7-gk71.sh
+@@ -0,0 +1,77 @@
++# shellcheck shell=bash
++# infra/test/m7-gk71.sh — GK-7-1 (DEC-028 §1): race SIGPIPE overlay admin.env di deploy-dashboard.sh.
++# Di-source oleh run.sh SETELAH m6.sh (memakai M6_HASH, M6_PASS, _m6_fake_dash).
++#
++# Penulis lambat disuntikkan lewat fungsi bash `printf` yang diekspor (bash di run_infra mewarisinya
++# dan fungsi menang atas builtin): pemanggilan printf baris PXE_ADMIN_USERNAME tidur dulu lalu
++# meneruskan ke builtin dan menandai file. Tanpa perbaikan (dry-run mem-pipe ke `run` yang tidak
++# membaca stdin) penulis selalu kalah cepat -> SIGPIPE -> exit 141 (reproduksi deterministik
++# flaky-ac717). Dengan perbaikan, dry-run tidak menjalankan blok penulis sama sekali.
++
++_gk71_slow_printf_on() {
++  export GK71_MARK="$SB/slow-printf.mark"
++  printf() {
++    if [[ "${1:-}" == PXE_ADMIN_USERNAME=* ]]; then
++      sleep 0.4
++      echo hit >> "$GK71_MARK"
++    fi
++    builtin printf "$@"
++  }
++  export -f printf
++}
++_gk71_slow_printf_off() { unset -f printf; }
++
++# (a) Regresi: dry-run + penulis lambat (flat dan VLAN) -> exit 0, perintah overlay tetap dicetak.
++test_gk71_dry_run_slow_writer_exit0() {
++  export INFRA_DRY_RUN=1 PXE_RUN=m7gk71
++  local topo
++  for topo in flat vlan; do
++    _gk71_slow_printf_on
++    run_infra deploy-dashboard.sh --topology "$topo"
++    _gk71_slow_printf_off
++    assert_eq "$RC" 0 "dry-run $topo penulis lambat (141 = SIGPIPE GK-7-1): $OUT"
++    assert_match "$(unq "$OUT")" "DRY-RUN: ssh .* pxe@10\.99\.0\.2 umask 077 && cat > '/tmp/pxe-test-deploy\.[0-9TZ]+/admin\.env'"
++    assert_match "$(unq "$OUT")" "DRY-RUN: ssh .* root@10\.99\.0\.2 RELEASE_TS=.* bash -s"
++    assert_empty "$(mutating_calls)" "dry-run $topo memutasi"
++    # Hash/password tidak pernah dicetak di dry-run.
++    assert_not_contains "$OUT" 'scrypt$'
++    assert_not_contains "$OUT" "PXE_ADMIN_PASSWORD_HASH="
++  done
++  # Dry-run tidak menjalankan blok penulis (tidak ada pipe ke konsumen yang tak membaca stdin).
++  assert_no_file "$GK71_MARK"
++}
++
++# (b) Non-dry (ssh palsu yang MEMBACA stdin) dengan penulis lambat: env admin tetap dikirim lewat
++# stdin ssh, utuh, ke perintah `umask 077 && cat > …/admin.env`; tidak ada di argv.
++test_gk71_non_dry_sends_admin_env_via_stdin() {
++  export PXE_DASHBOARD_DIR; PXE_DASHBOARD_DIR="$(_m6_fake_dash)"
++  export SKIP_BUILD=1 PXE_RUN=m7gk71 FAKE_ADMIN_HASH="$M6_HASH" FAKE_CURL_HTTP=1
++  export FAKE_SSH_STDIN_LOG="$SB/ssh-stdin.log" PXE_DEPLOY_BOOTING_TIMEOUT_MIN=120
++  export FAKE_CURL_SETTINGS_BODY='{"cidr":"10.99.0.0/24","auth":{"adminUsername":"pxeadmin","adminConfigured":true}}'
++  echo running > "$FAKE_STATE/dom/pxe-test-server"
++  : > "$PXE_AGENT_DIR/keys/infra_ed25519"
++  (umask 077; printf '%s' "$M6_PASS" > "$PXE_AGENT_DIR/keys/m7gk71-admin.pass")
++  _gk71_slow_printf_on
++  run_infra deploy-dashboard.sh
++  _gk71_slow_printf_off
++  assert_eq "$RC" 0 "$OUT"
++  # Blok penulis dijalankan (jalur pipe non-dry tetap ada) tepat sekali.
++  assert_eq "$(cat "$GK71_MARK" 2>/dev/null)" "hit" "penulis env admin non-dry tidak dijalankan"
++  # Satu pemanggilan ssh ke admin.env, sebagai user pxe, dengan umask 077 di VM.
++  local cmd_re="^ssh .* pxe@10\.99\.0\.2 umask 077 && cat > '/tmp/pxe-test-deploy\.[0-9TZ]+/admin\.env'$"
++  assert_eq "$(grep -cE "$cmd_re" "$FAKE_LOG")" 1 "$(cat "$FAKE_LOG")"
++  # Isi stdin pemanggilan itu persis tiga baris env admin.
++  local blk
++  blk="$(awk '/^### ssh umask 077 && cat > .*\/admin\.env.$/{f=1;next} /^### /{f=0} f' "$FAKE_SSH_STDIN_LOG")"
++  assert_eq "$blk" "PXE_ADMIN_USERNAME=pxeadmin
++PXE_ADMIN_PASSWORD_HASH='$M6_HASH'
++PXE_JOB_BOOTING_TIMEOUT_MIN=120" "stdin admin.env"
++  # Hash/password tidak di argv maupun keluaran.
++  assert_not_contains "$(cat "$FAKE_LOG")" "$M6_HASH"
++  assert_not_contains "$(cat "$FAKE_LOG")" "$M6_PASS"
++  assert_not_contains "$OUT" "$M6_HASH"
++  assert_not_contains "$OUT" "$M6_PASS"
++}
++
++t "GK-7-1 deploy dry-run penulis lambat flat+vlan → exit 0, tanpa pipe (DEC-028 §1)" test_gk71_dry_run_slow_writer_exit0
++t "GK-7-1 deploy non-dry: env admin lewat stdin ssh (umask 077), penulis lambat" test_gk71_non_dry_sends_admin_env_via_stdin
+diff --git a/infra/test/run.sh b/infra/test/run.sh
+index f695c4e..1dfb2d4 100755
+--- a/infra/test/run.sh
++++ b/infra/test/run.sh
+@@ -668,6 +668,8 @@ source "$(dirname "$0")/m7-infra.sh"
+ source "$(dirname "$0")/m7-te.sh"
+ # M7 (DEC-027 §2): access log nginx tanpa query string non-/boot.
+ source "$(dirname "$0")/m7-dec027.sh"
++# M7 iterasi 2 (DEC-028 §1, GK-7-1): race SIGPIPE overlay admin.env di dry-run.
++source "$(dirname "$0")/m7-gk71.sh"
+ rm -rf "$SAFE_BIN"
+ rmdir "$SANDBOX_PARENT" 2>/dev/null || true
+ echo "hasil: $PASS lulus, $FAIL gagal"

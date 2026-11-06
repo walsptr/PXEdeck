@@ -1,0 +1,24 @@
+{
+ "375": {
+  "where": "tabpanel",
+  "li": [
+   {
+    "text": "Di luar subnet 10.99.20.0/24 (VLAN 20)",
+    "font": "\"Inter Variable\"",
+    "color": "rgb(207, 45, 86)",
+    "mono": 0
+   }
+  ]
+ },
+ "1440": {
+  "where": "tabpanel",
+  "li": [
+   {
+    "text": "Di luar subnet 10.99.20.0/24 (VLAN 20)",
+    "font": "\"Inter Variable\"",
+    "color": "rgb(207, 45, 86)",
+    "mono": 0
+   }
+  ]
+ }
+}

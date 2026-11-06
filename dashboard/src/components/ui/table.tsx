@@ -3,11 +3,34 @@
 import * as React from "react"
 import { cn } from "cn"
 
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+type TableProps = React.ComponentProps<"table"> & {
+  /**
+   * Opt-in: jadikan container scroll sebuah region yang bisa difokus keyboard
+   * (axe `scrollable-region-focusable`). Pakai untuk tabel tanpa elemen fokusable
+   * yang bisa overflow (mis. preview di dalam kotak `max-h-*`).
+   */
+  scrollRegionLabel?: string
+  containerClassName?: string
+}
+
+function Table({
+  className,
+  scrollRegionLabel,
+  containerClassName,
+  ...props
+}: TableProps) {
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      className={cn(
+        "relative w-full overflow-x-auto",
+        scrollRegionLabel &&
+          "outline-none focus-visible:border-ring focus-visible:ring-[3px] focus-visible:ring-ring/50",
+        containerClassName
+      )}
+      {...(scrollRegionLabel
+        ? { role: "region", tabIndex: 0, "aria-label": scrollRegionLabel }
+        : {})}
     >
       <table
         data-slot="table"

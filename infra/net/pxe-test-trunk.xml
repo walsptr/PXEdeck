@@ -1,0 +1,10 @@
+<!-- M7 (DEC-023 §3, DEC-024 O1-A): Trunk server (trunk0) <-> switch (sw-up): VLAN 10 dan 20 ber-tag.
+     Terisolasi total: tanpa elemen ip (host tidak punya alamat L3 di segmen ini), tanpa elemen forward,
+     tanpa elemen dhcp, DNS libvirt mati, tanpa interface fisik. DHCP/TFTP hanya dnsmasq di VM
+     pxe-test-server (pxe10, VLAN 10). Linux bridge host (vlan_filtering=0) meneruskan frame ber-tag
+     apa adanya; VLAN dipisahkan oleh VM pxe-test-switch. -->
+<network>
+  <name>pxe-test-trunk</name>
+  <bridge name='virbr-pxetrk' stp='off' delay='0'/>
+  <dns enable='no'/>
+</network>

@@ -1,0 +1,13 @@
+2026-11-06T10:44:38.470Z discovered firmware=uefi currentIp=10.99.10.131 (lease VLAN 10)
+2026-11-06T10:44:38.514Z konfigurasi tersimpan os=ubuntu-24.04 ip=10.99.20.51/24 vlan=20 gw=10.99.20.1 dns=10.99.10.2 hostname=m7-node41
+2026-11-06T10:44:38.567Z install dibuat job=job-108d31c6-0a4d-409e-b5a2-598966149c23 status=booting
+2026-11-06T10:44:38.650Z node.sh reset
+2026-11-06T10:44:38.739Z booting (+0 dtk, installerBoots=0)
+2026-11-06T10:45:18.820Z installing (+40 dtk, installerBoots=1)
+2026-11-06T10:50:32.711Z configuring (+354 dtk, installerBoots=1)
+2026-11-06T10:56:05.568Z done (+687 dtk, installerBoots=1)
+2026-11-06T10:56:05.745Z job akhir=done/- dalam 687 dtk; urutan=booting>installing>configuring>done; stages=booting@install,booting@boot-script,installing@config-fetch,configuring@callback,done@callback
+2026-11-06T10:56:05.918Z nginx: 5 request dari IP statis 10.99.20.51 (VLAN 20)
+2026-11-06T10:56:07.130Z ssh (relay) key yang di-inject: OK
+2026-11-06T10:56:11.703Z reboot (relay): relay-reboot: dikirim ke 10.99.20.51
+2026-11-06T11:01:44.273Z reboot: kembali=true verify2=0 status=done currentIp=10.99.10.131 job 1->1 penanda-installer-serial 4->4 iPXE-boot-lokal=true

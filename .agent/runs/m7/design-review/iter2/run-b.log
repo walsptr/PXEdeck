@@ -1,0 +1,4 @@
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  1 [vlan] › ../.agent/runs/m7/design-review/iter2/dr-iter2b.spec.ts:19:5 › unoccluded (19.1s)
+
+  1 passed (21.3s)

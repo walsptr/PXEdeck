@@ -1,12 +1,17 @@
 // Helper suite KVM (M4-T13). Batas keras CLAUDE.md:
 //  - ssh hanya ke 10.99.0.* dengan key di .agent/keys (path dari PXE_KVM_SSH_KEY, dicek).
+//  - M7 (topologi VLAN, DEC-023 §4 / DEC-024 O7-A): node di 10.99.20.* TIDAK PERNAH disasar langsung
+//    dari host (tanpa route -> paket keluar lewat LAN fisik). Akses node hanya lewat `relay()` =
+//    `ssh root@10.99.0.2 'MODE=… bash -s' < infra/vlan/relay.sh` dengan key infra di .agent/keys.
 //  - Perintah VM hanya lewat infra/node.sh (`reset <name>`), nama wajib ^pxe-test-<m>-nodeNN$.
 //  - Password acak per run hanya di memori; tidak pernah ditulis ke log/bukti (scanEvidence
 //    memverifikasinya).
-import { execFileSync, spawnSync } from "node:child_process"
+import { execFileSync, spawn, spawnSync } from "node:child_process"
 import { randomBytes } from "node:crypto"
 import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
 import path from "node:path"
+
+import { URL_CRED } from "./m7-shared"
 
 export type KvmOs = "ubuntu" | "debian" | "rocky"
 export type KvmRole = "install" | "destroy" | "failpath"
@@ -21,6 +26,11 @@ function env(name: string): string {
   if (!v) throw new Error(`env ${name} kosong (jalankan lewat infra/kvm-run.sh)`)
   return v
 }
+
+/** Topologi run (`PXE_KVM_TOPOLOGY`, M7): `vlan` hanya bila diset kvm-run.sh skenario vlan*. */
+export const TOPOLOGY: "flat" | "vlan" = process.env.PXE_KVM_TOPOLOGY === "vlan" ? "vlan" : "flat"
+/** IP node yang sah per topologi: flat 10.99.0.*, vlan 10.99.20.* (VLAN management, lewat relay). */
+const NODE_IP_RE = TOPOLOGY === "vlan" ? /^10\.99\.20\.\d{1,3}$/ : /^10\.99\.0\.\d{1,3}$/
 
 export const KVM = {
   run: env("PXE_KVM_RUN"),
@@ -45,7 +55,7 @@ export function kvmNodes(): KvmNode[] {
       if (!m) throw new Error(`nama node tidak valid: ${name}`)
       if (mac !== `52:54:00:99:00:${m[1]}`) throw new Error(`MAC ${mac} tidak cocok dengan ${name}`)
       if (fw !== "uefi" && fw !== "bios") throw new Error(`firmware ${fw}`)
-      if (!/^10\.99\.0\.\d{1,3}$/.test(ip)) throw new Error(`IP ${ip} di luar 10.99.0.*`)
+      if (!NODE_IP_RE.test(ip)) throw new Error(`IP ${ip} di luar ${TOPOLOGY === "vlan" ? "10.99.20.*" : "10.99.0.*"}`)
       if (os !== "ubuntu" && os !== "debian" && os !== "rocky") throw new Error(`os ${os}`)
       if (role !== "install" && role !== "destroy" && role !== "failpath") throw new Error(`peran ${role}`)
       const hn = hostname ?? `${KVM.run}-node${m[1]}`
@@ -122,6 +132,87 @@ export function passwordLoginRejected(ip: string): { ok: boolean; out: string } 
   const methods = (/Permission denied \(([a-z,-]*)\)/.exec(out)?.[1] ?? "").split(",")
   const ok = r.status !== 0 && methods.includes("publickey") && !methods.includes("password") && !methods.includes("keyboard-interactive")
   return { ok, out }
+}
+
+// ---- relay VLAN (M7) ----
+/** Mode relay yang menyentuh node (`infra/vlan/relay.sh`); mode lain ditolak sebelum ssh. */
+export type RelayMode = "verify" | "pwcheck" | "wait-ssh" | "reboot" | "probe"
+const RELAY_MODES: readonly RelayMode[] = ["verify", "pwcheck", "wait-ssh", "reboot", "probe"]
+/** Mode relay tanpa node (capture DHCP di VM server, AC-7.21/7.26–7.28). */
+export type RelayCaptureMode = "capture-start" | "capture-stop"
+const RELAY_SERVER = "10.99.0.2"
+
+function shq(v: string): string {
+  return `'${v.replace(/'/g, `'\\''`)}'`
+}
+
+/** Argumen ssh + stdin relay (validasi key infra, path relay.sh, nama env) — dipakai sync & async. */
+function relayInvocation(assign: Record<string, string>): { args: string[]; input: Buffer } {
+  if (TOPOLOGY !== "vlan") throw new Error("relay() hanya untuk PXE_KVM_TOPOLOGY=vlan")
+  const key = path.resolve(env("PXE_KVM_INFRA_KEY"))
+  if (!/\/\.agent\/keys\/[^/]+$/.test(key)) throw new Error(`key infra ${key} bukan di .agent/keys`)
+  const script = path.resolve(env("PXE_KVM_RELAY_CMD"))
+  if (!/\/infra\/vlan\/relay\.sh$/.test(script)) throw new Error(`relay cmd ${script}`)
+  const parts: string[] = []
+  for (const [k, v] of Object.entries(assign)) {
+    if (!/^[A-Z][A-Z0-9_]*$/.test(k)) throw new Error(`env relay tidak valid: ${k}`)
+    parts.push(`${k}=${shq(v)}`)
+  }
+  return { args: ["-i", key, ...SSH_OPTS, `root@${RELAY_SERVER}`, `${parts.join(" ")} bash -s`], input: readFileSync(script) }
+}
+
+function relayExec(assign: Record<string, string>, timeoutMs: number): { code: number; out: string } {
+  const inv = relayInvocation(assign)
+  const r = spawnSync("ssh", inv.args, {
+    input: inv.input,
+    encoding: "utf8",
+    timeout: timeoutMs,
+    maxBuffer: 16 * 1024 * 1024,
+  })
+  return { code: r.status ?? -1, out: `${r.stdout ?? ""}${r.stderr ?? ""}` }
+}
+
+/**
+ * M7: jalankan `infra/vlan/relay.sh` mode `mode` untuk `node` DI VM server (host hanya ssh ke
+ * root@10.99.0.2). `extra` = env tambahan (mis. `EXPECT_*` untuk `verify`, `WAIT_SEC` untuk
+ * `wait-ssh`); nama env wajib huruf besar, nilai di-quote shell. Key node tidak pernah lewat sini
+ * (sudah dipasang kvm-run.sh saat relay setup).
+ */
+export function relay(mode: RelayMode, node: KvmNode, extra: Record<string, string> = {}, timeoutMs = 15 * 60_000): { code: number; out: string } {
+  if (!RELAY_MODES.includes(mode)) throw new Error(`mode relay ${mode}`)
+  if (!/^10\.99\.20\.\d{1,3}$/.test(node.ip)) throw new Error(`relay hanya untuk node 10.99.20.* (${node.ip})`)
+  if ("MODE" in extra || "NODE_IP" in extra || "NODE_USER" in extra) throw new Error("extra tidak boleh menimpa MODE/NODE_IP/NODE_USER")
+  return relayExec({ MODE: mode, NODE_IP: node.ip, NODE_USER: KVM.user, ...extra }, timeoutMs)
+}
+
+/**
+ * M7: varian async `relay()` (tidak memblokir event loop) — untuk suite yang mengikuti beberapa node
+ * paralel (smoke M7-T10: `wait-ssh` bisa menunggu menit-an). Validasi identik `relay()`.
+ */
+export function relayAsync(mode: RelayMode, node: KvmNode, extra: Record<string, string> = {}, timeoutMs = 15 * 60_000): Promise<{ code: number; out: string }> {
+  if (!RELAY_MODES.includes(mode)) throw new Error(`mode relay ${mode}`)
+  if (!/^10\.99\.20\.\d{1,3}$/.test(node.ip)) throw new Error(`relay hanya untuk node 10.99.20.* (${node.ip})`)
+  if ("MODE" in extra || "NODE_IP" in extra || "NODE_USER" in extra) throw new Error("extra tidak boleh menimpa MODE/NODE_IP/NODE_USER")
+  const inv = relayInvocation({ MODE: mode, NODE_IP: node.ip, NODE_USER: KVM.user, ...extra })
+  return new Promise((resolve) => {
+    const c = spawn("ssh", inv.args, { stdio: ["pipe", "pipe", "pipe"] })
+    let out = ""
+    const t = setTimeout(() => c.kill("SIGTERM"), timeoutMs)
+    c.stdout.on("data", (d: Buffer) => (out += d.toString("utf8")))
+    c.stderr.on("data", (d: Buffer) => (out += d.toString("utf8")))
+    c.on("close", (code) => {
+      clearTimeout(t)
+      resolve({ code: code ?? -1, out })
+    })
+    c.stdin.end(inv.input)
+  })
+}
+
+/** M7: capture DHCP (tanpa HTTP) di NIC server `pxe0` atau `trunk0`; `capture-stop` -> ringkasan teks. */
+export function relayCapture(mode: RelayCaptureMode, iface: "pxe0" | "trunk0"): { code: number; out: string } {
+  if (mode !== "capture-start" && mode !== "capture-stop") throw new Error(`mode capture ${mode}`)
+  if (iface !== "pxe0" && iface !== "trunk0") throw new Error(`interface capture ${iface}`)
+  return relayExec({ MODE: mode, CAP_IF: iface }, 60_000)
 }
 
 /** `infra/node.sh reset <name>` (virsh reset satu node milik run; bukan server). */
@@ -247,6 +338,8 @@ export function scanEvidence(secrets: string[]): string[] {
         if (TOKEN_IN_BOOT_PATH.test(text)) findings.push(`${p}: token pada path /boot/`)
         TOKEN_IN_BOOT_PATH.lastIndex = 0
         if (PRIVATE_KEY.test(text)) findings.push(`${p}: private key`)
+        // DEC-027 §4: kredensial di query string mirip URL (nilai tersamar/kosong tidak dihitung).
+        if (URL_CRED.test(text)) findings.push(`${p}: password=/username= di URL`)
         for (const s of secrets) if (s && text.includes(s)) findings.push(`${p}: password run`)
         for (const blob of new Set(text.match(B64_RUN) ?? [])) {
           const hit = base64Secret(blob, secrets)

@@ -1,0 +1,24 @@
+# ip -d link mgmt20 / trunk0
+6: mgmt20@trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 0 maxmtu 65535 
+    vlan protocol 802.1Q id 20 <REORDER_HDR> addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 
+4: trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 1  allmulti 0 minmtu 68 maxmtu 65535 addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus virtio parentdev virtio2 
+# ping -M do -s 1472 -c 3 10.99.20.52 (dari mgmt20)
+PING 10.99.20.52 (10.99.20.52) from 10.99.20.1 mgmt20: 1472(1500) bytes of data.
+1480 bytes from 10.99.20.52: icmp_seq=1 ttl=64 time=0.323 ms
+1480 bytes from 10.99.20.52: icmp_seq=2 ttl=64 time=0.443 ms
+1480 bytes from 10.99.20.52: icmp_seq=3 ttl=64 time=0.490 ms
+
+--- 10.99.20.52 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2027ms
+rtt min/avg/max/mdev = 0.323/0.418/0.490/0.070 ms
+# exit-1472=0
+# ping -M do -s 1473 -c 1 10.99.20.52 (harus ditolak: > MTU 1500, DF)
+PING 10.99.20.52 (10.99.20.52) from 10.99.20.1 mgmt20: 1473(1501) bytes of data.
+
+--- 10.99.20.52 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+# exit-1473=1
+ping: local error: message too long, mtu=1500

@@ -1,0 +1,68 @@
+# DEC-027 §1 frontend — mutation log (frontend-dev, 2026-11-06T22:12:29+07:00)
+# Each mutation applied to dashboard/src/components/auth/login-form.tsx, then vitest (src/components/auth src/app/login) + playwright --project=m7-login-no-url-creds; file restored after each.
+# Baseline (unmutated): vitest 9/9 pass; e2e 4/4 pass.
+# Note M4: test 4 also red because without the fix the button transitions 0.5->1 opacity after hydration (transition-all), i.e. the DR-6-11 faded flash.
+=== MUTATION M1-no-method-post: replace [      method="post"
+] -> []
+     × form method=post dengan action fallback yang membawa next 169ms
+       × HTML server: tombol nonaktif tanpa efek pudar; setelah hydration aktif + data-hydrated 28ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |dom| src/components/auth/m7-login-no-url-creds.test.tsx > LoginForm DEC-027 §1 > form method=post dengan action fallback yang membawa next
+ FAIL  |dom| src/components/auth/m7-login-no-url-creds.test.tsx > LoginForm DEC-027 §1 > SSR + hydration > HTML server: tombol nonaktif tanpa efek pudar; setelah hydration aktif + data-hydrated
+      Tests  2 failed | 7 passed (9)
+  ✘  1 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:27:7 › DEC-027 §1 login tanpa kredensial di URL › JavaScript nonaktif: HTML server sudah aman (method=post, action fallback, tombol nonaktif) (5.2s)
+  ✘  2 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:47:7 › DEC-027 §1 login tanpa kredensial di URL › sebelum hydration: tombol nonaktif, klik/Enter tidak mengirim apa pun; dipaksa aktif → POST ke fallback, 303 ke /login tanpa kredensial (30.1s)
+  ✓  3 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:95:7 › DEC-027 §1 login tanpa kredensial di URL › POST urlencoded langsung ke fallback: body dibuang, 303 ke /login dengan next disanitasi (70ms)
+  ✓  4 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:119:7 › DEC-027 §1 login tanpa kredensial di URL › setelah hydration: tombol aktif, login normal lewat fetch JSON, tanpa kredensial di URL (871ms)
+    Error: expect(locator).toHaveAttribute(expected) failed
+    test-results/m7-login-no-url-creds-DEC--bc295-n-fallback-tombol-nonaktif--m7-login-no-url-creds/test-failed-1.png
+    test-results/m7-login-no-url-creds-DEC--cd13a-3-ke-login-tanpa-kredensial-m7-login-no-url-creds/test-failed-1.png
+  2 failed
+  2 passed (1.1m)
+=== MUTATION M2-no-hydration-disable: replace [disabled={busy || !hydrated}] -> [disabled={busy}]
+       × HTML server: tombol nonaktif tanpa efek pudar; setelah hydration aktif + data-hydrated 31ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |dom| src/components/auth/m7-login-no-url-creds.test.tsx > LoginForm DEC-027 §1 > SSR + hydration > HTML server: tombol nonaktif tanpa efek pudar; setelah hydration aktif + data-hydrated
+      Tests  1 failed | 8 passed (9)
+  ✘  1 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:27:7 › DEC-027 §1 login tanpa kredensial di URL › JavaScript nonaktif: HTML server sudah aman (method=post, action fallback, tombol nonaktif) (5.2s)
+  ✘  2 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:47:7 › DEC-027 §1 login tanpa kredensial di URL › sebelum hydration: tombol nonaktif, klik/Enter tidak mengirim apa pun; dipaksa aktif → POST ke fallback, 303 ke /login tanpa kredensial (5.2s)
+  ✓  3 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:95:7 › DEC-027 §1 login tanpa kredensial di URL › POST urlencoded langsung ke fallback: body dibuang, 303 ke /login dengan next disanitasi (88ms)
+  ✓  4 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:119:7 › DEC-027 §1 login tanpa kredensial di URL › setelah hydration: tombol aktif, login normal lewat fetch JSON, tanpa kredensial di URL (869ms)
+    Error: expect(locator).toBeDisabled() failed
+    test-results/m7-login-no-url-creds-DEC--bc295-n-fallback-tombol-nonaktif--m7-login-no-url-creds/test-failed-1.png
+    Error: expect(locator).toBeDisabled() failed
+    test-results/m7-login-no-url-creds-DEC--cd13a-3-ke-login-tanpa-kredensial-m7-login-no-url-creds/test-failed-1.png
+  2 failed
+  2 passed (38.2s)
+=== MUTATION M3-no-fallback-action: replace [      action={loginNativeAction(params.get("next"))}
+] -> []
+     × form method=post dengan action fallback yang membawa next 153ms
+       × HTML server: tombol nonaktif tanpa efek pudar; setelah hydration aktif + data-hydrated 24ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |dom| src/components/auth/m7-login-no-url-creds.test.tsx > LoginForm DEC-027 §1 > form method=post dengan action fallback yang membawa next
+ FAIL  |dom| src/components/auth/m7-login-no-url-creds.test.tsx > LoginForm DEC-027 §1 > SSR + hydration > HTML server: tombol nonaktif tanpa efek pudar; setelah hydration aktif + data-hydrated
+      Tests  2 failed | 7 passed (9)
+  ✘  1 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:27:7 › DEC-027 §1 login tanpa kredensial di URL › JavaScript nonaktif: HTML server sudah aman (method=post, action fallback, tombol nonaktif) (5.2s)
+  ✘  2 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:47:7 › DEC-027 §1 login tanpa kredensial di URL › sebelum hydration: tombol nonaktif, klik/Enter tidak mengirim apa pun; dipaksa aktif → POST ke fallback, 303 ke /login tanpa kredensial (30.1s)
+  ✓  3 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:95:7 › DEC-027 §1 login tanpa kredensial di URL › POST urlencoded langsung ke fallback: body dibuang, 303 ke /login dengan next disanitasi (78ms)
+  ✓  4 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:119:7 › DEC-027 §1 login tanpa kredensial di URL › setelah hydration: tombol aktif, login normal lewat fetch JSON, tanpa kredensial di URL (854ms)
+    Error: expect(locator).toHaveAttribute(expected) failed
+    test-results/m7-login-no-url-creds-DEC--bc295-n-fallback-tombol-nonaktif--m7-login-no-url-creds/test-failed-1.png
+    test-results/m7-login-no-url-creds-DEC--cd13a-3-ke-login-tanpa-kredensial-m7-login-no-url-creds/test-failed-1.png
+  2 failed
+  2 passed (1.1m)
+=== MUTATION M4-faded-before-hydration: replace [!hydrated && "disabled:opacity-100"] -> [false]
+       × HTML server: tombol nonaktif tanpa efek pudar; setelah hydration aktif + data-hydrated 36ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |dom| src/components/auth/m7-login-no-url-creds.test.tsx > LoginForm DEC-027 §1 > SSR + hydration > HTML server: tombol nonaktif tanpa efek pudar; setelah hydration aktif + data-hydrated
+      Tests  1 failed | 8 passed (9)
+  ✓  1 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:27:7 › DEC-027 §1 login tanpa kredensial di URL › JavaScript nonaktif: HTML server sudah aman (method=post, action fallback, tombol nonaktif) (243ms)
+  ✘  2 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:47:7 › DEC-027 §1 login tanpa kredensial di URL › sebelum hydration: tombol nonaktif, klik/Enter tidak mengirim apa pun; dipaksa aktif → POST ke fallback, 303 ke /login tanpa kredensial (199ms)
+  ✓  3 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:95:7 › DEC-027 §1 login tanpa kredensial di URL › POST urlencoded langsung ke fallback: body dibuang, 303 ke /login dengan next disanitasi (84ms)
+  ✘  4 [m7-login-no-url-creds] › e2e/m7-login-no-url-creds.spec.ts:119:7 › DEC-027 §1 login tanpa kredensial di URL › setelah hydration: tombol aktif, login normal lewat fetch JSON, tanpa kredensial di URL (363ms)
+    test-results/m7-login-no-url-creds-DEC--cd13a-3-ke-login-tanpa-kredensial-m7-login-no-url-creds/test-failed-1.png
+    test-results/m7-login-no-url-creds-DEC--21bc4-SON-tanpa-kredensial-di-URL-m7-login-no-url-creds/test-failed-1.png
+  2 failed
+  2 passed (27.1s)
+
+# Final (unmutated) runs: vitest full 88 files / 2111 tests pass; playwright --project=m6-auth --project=m6-session --project=m7-login-no-url-creds --project=chromium (+setup): 57 passed, 0 failed.

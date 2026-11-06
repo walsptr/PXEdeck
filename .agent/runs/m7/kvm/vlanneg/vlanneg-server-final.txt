@@ -1,0 +1,9 @@
+# dnsmasq: baris yang memuat MAC negatif
+(tidak ada OFFER/ACK/tftp)
+# dnsmasq OFFER/ACK count=0
+# nginx count=0
+# ip_forward=0
+# ss -lunp dnsmasq
+UNCONN 0      0         10.99.10.2:53         0.0.0.0:*    users:(("dnsmasq",pid=1719,fd=6))                         
+UNCONN 0      0      0.0.0.0%pxe10:67         0.0.0.0:*    users:(("dnsmasq",pid=1719,fd=4))                         
+UNCONN 0      0         10.99.10.2:69         0.0.0.0:*    users:(("dnsmasq",pid=1719,fd=8))                         

@@ -1,0 +1,1027 @@
+# reuse-diff-final — basis d9d5308 / 6a26cc6 / 339f234 → final 5220865 (2026-11-06T18:05:06Z)
+# Path: dashboard/src infra (+ dashboard/e2e-kvm terpisah, karena URL_CRED DEC-028 §2 ada di m7-shared.ts).
+
+################ d9d5308..5220865 ################
+## stat (dashboard/src infra)
+ dashboard/src/app/login/submit/route.test.ts       |  33 ++++++
+ dashboard/src/app/login/submit/route.ts            |  21 ++++
+ dashboard/src/components/auth/login-form.tsx       |  52 +++++++++-
+ .../components/auth/m7-login-no-url-creds.test.tsx |  78 ++++++++++++++
+ .../components/host-config/passwords-dialog.tsx    |   2 +-
+ .../host-config/plan-table-a11y.test.tsx           |  24 ++++-
+ .../src/components/host-config/plan-table.tsx      |   2 +-
+ dashboard/src/lib/server/m7-kvm-urlcred.test.ts    |  87 ++++++++++++++++
+ infra/README.md                                    |  26 ++++-
+ infra/deploy-dashboard.sh                          |  17 ++-
+ infra/redact-evidence.sh                           |  35 ++++++-
+ infra/server/nginx-pxe.conf                        |   8 +-
+ infra/server/vlan/apply-profile.sh                 |  10 +-
+ infra/server/vlan/nginx-pxe-vlan.conf              |   8 +-
+ infra/test/m7-dec027.sh                            | 114 +++++++++++++++++++++
+ infra/test/m7-gk71.sh                              |  77 ++++++++++++++
+ infra/test/m7-te.sh                                | 103 ++++++++++++++++++-
+ infra/test/nginx-logmap.py                         |  76 ++++++++++++++
+ infra/test/run.sh                                  |   4 +
+ 19 files changed, 758 insertions(+), 19 deletions(-)
+## stat dashboard/e2e-kvm
+ dashboard/e2e-kvm/kvm-harness.ts |  4 ++++
+ dashboard/e2e-kvm/m7-shared.ts   | 13 +++++++++++++
+ 2 files changed, 17 insertions(+)
+## isi lengkap file non-test (dashboard/src infra dashboard/e2e-kvm; tanpa *.test.ts(x), infra/test/**)
+diff --git a/dashboard/e2e-kvm/kvm-harness.ts b/dashboard/e2e-kvm/kvm-harness.ts
+index 9787ba4..e22b7b8 100644
+--- a/dashboard/e2e-kvm/kvm-harness.ts
++++ b/dashboard/e2e-kvm/kvm-harness.ts
+@@ -11,6 +11,8 @@ import { randomBytes } from "node:crypto"
+ import { existsSync, readdirSync, readFileSync, statSync, writeFileSync } from "node:fs"
+ import path from "node:path"
+ 
++import { URL_CRED } from "./m7-shared"
++
+ export type KvmOs = "ubuntu" | "debian" | "rocky"
+ export type KvmRole = "install" | "destroy" | "failpath"
+ /**
+@@ -336,6 +338,8 @@ export function scanEvidence(secrets: string[]): string[] {
+         if (TOKEN_IN_BOOT_PATH.test(text)) findings.push(`${p}: token pada path /boot/`)
+         TOKEN_IN_BOOT_PATH.lastIndex = 0
+         if (PRIVATE_KEY.test(text)) findings.push(`${p}: private key`)
++        // DEC-027 §4: kredensial di query string mirip URL (nilai tersamar/kosong tidak dihitung).
++        if (URL_CRED.test(text)) findings.push(`${p}: password=/username= di URL`)
+         for (const s of secrets) if (s && text.includes(s)) findings.push(`${p}: password run`)
+         for (const blob of new Set(text.match(B64_RUN) ?? [])) {
+           const hit = base64Secret(blob, secrets)
+diff --git a/dashboard/e2e-kvm/m7-shared.ts b/dashboard/e2e-kvm/m7-shared.ts
+index ad59d3e..ca0ad86 100644
+--- a/dashboard/e2e-kvm/m7-shared.ts
++++ b/dashboard/e2e-kvm/m7-shared.ts
+@@ -114,3 +114,16 @@ ping -M do -s 1473 -c 1 -W 2 -I mgmt20 "$NODE_IP"; echo "# exit-1473=$?"
+ 
+ /** Penanda kernel installer di serial (Ubuntu casper/NFS, Rocky inst.ks, Debian preseed). */
+ export const INSTALLER_MARK = /netboot=nfs|casper\/vmlinuz|inst\.ks=|inst\.stage2=|preseed\/url=|auto=true priority=critical/g
++
++// DEC-027 §4 + DEC-028 §2 (CR-7-2/SR-7-5): parameter password/username bernilai di string mirip URL =
++// temuan scan bukti. Pemisah/`=` boleh mentah, percent-encoded (%3F %26 %3D) atau JSON-escaped
++// (backslash-u0026/u003f/u003d; `\x5C` = backslash literal agar tidak ditafsirkan sebagai escape).
++// Dikecualikan HANYA token placeholder UTUH (diikuti `&`, spasi, `"`, backslash-quote JSON, %26,
++// backslash-u0026, atau akhir teks): kosong, `***`, `…`, `<REDACTED…>` (juga bentuk ter-encode-nya).
++// Nilai yang sekadar diawali placeholder (`***x`, `<REDACTED>x`, backtick…) tetap temuan.
++// Selaras dengan `_url_cred_hits` di infra/redact-evidence.sh (test: m7-kvm-urlcred.test.ts, m7-te.sh).
++const URL_SEP = String.raw`(?:[?&]|%3F|%26|\x5Cu0026|\x5Cu003f)`
++const URL_EQ = String.raw`(?:=|%3D|\x5Cu003d)`
++const URL_END = String.raw`(?:[&\s"]|%26|\x5Cu0026|\x5C"|$)`
++const URL_PLACEHOLDER = String.raw`(?:(?:<|%3C|\x5Cu003c)REDACTED[^&\s"<>%\x5C]*(?:>|%3E|\x5Cu003e)|(?:\*|%2A){3}|…|%E2%80%A6)`
++export const URL_CRED = new RegExp(`${URL_SEP}(password|username)${URL_EQ}(?!${URL_PLACEHOLDER}?${URL_END})`, "i")
+diff --git a/dashboard/src/app/login/submit/route.ts b/dashboard/src/app/login/submit/route.ts
+new file mode 100644
+index 0000000..3eb0020
+--- /dev/null
++++ b/dashboard/src/app/login/submit/route.ts
+@@ -0,0 +1,21 @@
++// DEC-027 §1 — target `action` native form login (`method="post"`). Hanya terpakai bila form
++// tersubmit tanpa JavaScript klien (sebelum hydration / JS mati); login sesungguhnya lewat
++// `fetch` JSON ke `POST /api/auth/login`.
++//
++// Body (urlencoded, berisi kredensial) SENGAJA tidak dibaca, tidak divalidasi, dan tidak dicatat:
++// handler hanya mengembalikan 303 ke halaman login (GET, tanpa kredensial) dengan `next` yang
++// disanitasi. Tidak ada sesi yang dibuat dan tidak ada nilai input yang dipantulkan.
++// Tanpa ekspor GET: metode lain → 405 dari Next (GET ke sini tidak pernah dihasilkan form).
++import { LOGIN_PATH, loginHref } from "@/lib/auth-next"
++
++export function POST(req: Request): Response {
++  const next = new URL(req.url).searchParams.get("next")
++  return new Response(null, {
++    status: 303,
++    headers: {
++      // Location relatif (RFC 9110): aman di belakang reverse proxy tanpa bergantung Host.
++      Location: next === null ? LOGIN_PATH : loginHref(next),
++      "Cache-Control": "no-store",
++    },
++  })
++}
+diff --git a/dashboard/src/components/auth/login-form.tsx b/dashboard/src/components/auth/login-form.tsx
+index 864fe69..158d063 100644
+--- a/dashboard/src/components/auth/login-form.tsx
++++ b/dashboard/src/components/auth/login-form.tsx
+@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation"
+ import { HugeiconsIcon } from "@hugeicons/react"
+ import { Alert02Icon, ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons"
+ 
++import { cn } from "cn"
++
+ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+ import { Button } from "@/components/ui/button"
+ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+@@ -29,6 +31,31 @@ export function lockoutText(retryAfterSec: number): string {
+   return `Terlalu banyak percobaan. Coba lagi dalam ${n} menit.`
+ }
+ 
++const noopSubscribe = () => () => {}
++
++/**
++ * `false` saat render server dan selama hydration, `true` setelah React mengambil alih di klien
++ * (DEC-027 §1). Tanpa effect/state → tombol aktif pada commit hydration pertama.
++ */
++export function useHydrated(): boolean {
++  return React.useSyncExternalStore(
++    noopSubscribe,
++    () => true,
++    () => false,
++  )
++}
++
++/** Path route fallback submit native (DEC-027 §1, `src/app/login/submit/route.ts`). */
++export const LOGIN_NATIVE_ACTION = "/login/submit"
++
++/**
++ * `action` form login untuk submit native (tanpa JS): POST ke route fallback yang membuang body dan
++ * mengalihkan kembali ke `/login`. `next` ikut di query (bukan kredensial) agar tujuan tetap terjaga.
++ */
++export function loginNativeAction(next: string | null): string {
++  return next === null ? LOGIN_NATIVE_ACTION : `${LOGIN_NATIVE_ACTION}?next=${encodeURIComponent(next)}`
++}
++
+ /**
+  * Pesan error login dari respons server. 401 → teks seragam (tanpa membedakan username ada/tidak);
+  * 429 → lockout dengan N menit; lainnya → pesan server bila ada.
+@@ -54,6 +81,7 @@ export function LoginForm() {
+   const [busy, setBusy] = React.useState(false)
+   const [show, setShow] = React.useState(false)
+   const alertRef = React.useRef<HTMLDivElement>(null)
++  const hydrated = useHydrated()
+ 
+   // Fokus ke Alert setiap kali error (juga bila teksnya sama dengan sebelumnya — `n` berubah).
+   React.useEffect(() => {
+@@ -91,7 +119,20 @@ export function LoginForm() {
+   }
+ 
+   return (
+-    <form onSubmit={onSubmit} aria-labelledby="login-title" className="flex flex-col gap-6">
++    // DEC-027 §1: kredensial tidak boleh pernah masuk URL. `method="post"` → submit native (sebelum
++    // hydration / tanpa JS) mengirim body urlencoded ke `/login/submit` (route yang membuang body lalu
++    // 303 ke `/login`), bukan `GET /login?username=…&password=…`. POST langsung ke halaman `/login`
++    // tidak dipakai: dengan Cache Components Next membalas sisa render dinamis tanpa shell (halaman
++    // kosong). Ditambah tombol Masuk nonaktif sampai hydration sehingga submit native (klik / Enter =
++    // implicit submission) tidak terjadi sama sekali.
++    <form
++      method="post"
++      action={loginNativeAction(params.get("next"))}
++      onSubmit={onSubmit}
++      aria-labelledby="login-title"
++      className="flex flex-col gap-6"
++      data-hydrated={hydrated || undefined}
++    >
+       {error && (
+         <Alert
+           ref={alertRef}
+@@ -149,7 +190,14 @@ export function LoginForm() {
+           </InputGroup>
+         </Field>
+       </FieldGroup>
+-      <Button type="submit" className="w-full" disabled={busy} data-testid="login-submit">
++      {/* Sebelum hydration tombol nonaktif tetapi tanpa efek pudar (`disabled:opacity-100`) agar
++          tidak berkedip pudar pada muat normal (lih. DR-6-11); aktif tepat saat hydration. */}
++      <Button
++        type="submit"
++        className={cn("w-full", !hydrated && "disabled:opacity-100")}
++        disabled={busy || !hydrated}
++        data-testid="login-submit"
++      >
+         {busy && <Spinner data-icon="inline-start" aria-label="Memproses" />}
+         Masuk
+       </Button>
+diff --git a/dashboard/src/components/host-config/passwords-dialog.tsx b/dashboard/src/components/host-config/passwords-dialog.tsx
+index d6d0950..ab6260b 100644
+--- a/dashboard/src/components/host-config/passwords-dialog.tsx
++++ b/dashboard/src/components/host-config/passwords-dialog.tsx
+@@ -111,7 +111,7 @@ export function PasswordsDialog({
+         </Alert>
+         <Table
+           aria-label="Password yang dibuat"
+-          scrollRegionLabel="Password yang dibuat"
++          scrollRegionLabel="Area gulir password yang dibuat"
+           containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+         >
+           <TableHeader>
+diff --git a/dashboard/src/components/host-config/plan-table.tsx b/dashboard/src/components/host-config/plan-table.tsx
+index b76338d..86f7ca2 100644
+--- a/dashboard/src/components/host-config/plan-table.tsx
++++ b/dashboard/src/components/host-config/plan-table.tsx
+@@ -34,7 +34,7 @@ export function PlanTable({
+       </div>
+       <Table
+         aria-label={`Preview ${valueLabel}`}
+-        scrollRegionLabel={`Preview ${valueLabel}`}
++        scrollRegionLabel={`Area gulir preview ${valueLabel}`}
+         containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+       >
+         <TableHeader>
+diff --git a/infra/README.md b/infra/README.md
+index 8b89c09..45788c0 100644
+--- a/infra/README.md
++++ b/infra/README.md
+@@ -116,10 +116,34 @@ lewat HTTP (callback `done` dari OS terpasang, semua distro) dan, untuk **Ubuntu
+ di Configuring sampai timeout. Di lab, server sendiri adalah gateway VLAN 20 (`ip_forward=0`), nginx
+ listen `10.99.10.2:80` dan ekspor NFS read-only mencakup `10.99.20.0/24`.
+ 
++**Perimeter layanan server di VLAN (SR-7-2, kondisi lab apa adanya).** Yang benar-benar terikat ke satu
++alamat hanya dnsmasq (`pxe10`), nginx (`10.99.0.2:80`, `10.99.10.2:80`), dan nfsd (`10.99.10.2:2049`).
++Yang listen **wildcard**: rpcbind tcp+udp `0.0.0.0:111` (socket activation systemd, sehingga
++`OPTIONS="-w -h 10.99.10.2"` tidak berpengaruh; bukti `kvm/vlandistro/server-listen-vlan.txt`),
++`rpc.mountd` dan `rpc.statd` (port dinamis), serta `sshd` `0.0.0.0:22` (root key-only). Linux memakai model weak host, jadi node di VLAN 10 dan VLAN 20
++bisa menjangkau layanan wildcard itu lewat `10.99.10.2`, `10.99.20.1`, maupun `10.99.0.2`. Data NFS
++tetap dibatasi ekspor **read-only** dengan ACL subnet (`10.99.10.0/24`, `10.99.20.0/24`). nftables di
++server lab hanya men-drop koneksi baru dari `nat0`; tidak ada filter untuk `pxe10`/`mgmt20`.
++`verify-listen-vlan.sh` hanya gagal bila ada socket yang terikat **eksplisit** ke `10.99.20.1`/`%mgmt20`,
++sehingga socket wildcard tidak terdeteksi olehnya.
++
++Untuk production disarankan filter input nftables (default drop) untuk `iifname { "pxe10", "mgmt20" }`.
++Filter ini belum diterapkan di lab karena profil server termasuk jalur KVM:
++- selalu: `ct state established,related accept`; tolak paket VLAN yang menuju alamat admin
++  (`ip daddr 10.99.0.2 drop`);
++- `pxe10` (VLAN 10): udp 67 (DHCP), udp 69 (TFTP; data TFTP lewat helper conntrack `tftp` atau
++  related), udp/tcp 53 (DNS), tcp 80 (iPXE, kernel/initrd, `/media`, konfigurasi, callback), tcp 2049
++  (NFS), tcp/udp 111 (rpcbind), dan port `rpc.mountd` yang dipatok tetap (mis. `[mountd] port=20048` di
++  `nfs.conf`);
++- `mgmt20` (VLAN 20): tcp 80 ke `10.99.10.2` (callback status), tcp 2049 + tcp/udp 111 + port mountd
++  tetap (root NFS Ubuntu setelah pindah ke IP statis), udp/tcp 53 bila node memakai DNS server ini;
++- drop sisanya, termasuk tcp 22 (sshd) dan `rpc.statd` (locking NLM; ekspornya ro, tetapi pastikan dulu
++  klien casper/anaconda tidak membutuhkannya sebelum diblok; bila butuh, patok port statd dan izinkan).
++
+ | Script | Fungsi (M7) |
+ |---|---|
+ | `net-up.sh --topology vlan` / `net-down.sh --topology vlan` | Lima network (`pxe-test`, `pxe-test-nat`, `pxe-test-trunk`, `pxe-test-port1`, `pxe-test-port2`); down hanya saat teardown M7-T12. |
+-| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd/rpcbind `10.99.10.2`, ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
++| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd `10.99.10.2:2049` (rpcbind/mountd/statd/sshd tetap wildcard, lihat Perimeter di atas), ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
+ | `deploy-dashboard.sh --topology vlan` | `server/dashboard-vlan.env` (`PXE_MGMT_CIDR=10.99.10.0/24`, `PXE_SERVER_IP`/`PXE_BASE_URL`/`PXE_MEDIA_URL` = `10.99.10.2`, `PXE_DHCP_INTERFACE=pxe10`, `PXE_ALLOWED_HOSTS=10.99.0.2,10.99.10.2`, `PXE_VLAN_NETWORKS=20:10.99.20.0/24:10.99.20.1`) + `server/vlan/nginx-pxe-vlan.conf`; verifikasi dari host lewat `10.99.0.2`: `cidr 10.99.10.0/24` dan `vlanNetworks` memuat VLAN 20. |
+ | `switch-base.sh` | Sekali: `qemu-img convert` cloud image Ubuntu 24.04 (`.agent/media`) → `.agent/vms/pxe-test-switch-base.qcow2` + `.ready` (tanpa boot/paket). |
+ | `switch-up.sh` / `switch-down.sh [--purge]` | VM `pxe-test-switch` (overlay + seed cloud-init, 768 MB, 1 vCPU, root key-only, tanpa NAT): `sw-mgmt` `10.99.0.3` (pxe-test), `sw-up` (trunk), `sw-p1` (port1), `sw-p2` (port2), MAC `52:54:00:99:02:01..04`. `switch/pxe-switch.sh` (unit oneshot `pxe-switch.service`): `br0 vlan_filtering 1 vlan_default_pvid 0 stp_state 0`, tanpa IP; `sw-up` 10T+20T, `sw-p1` 10 PVID untagged + 20T, `sw-p2` profil `access20` (default) / `tagged10` (`pxe-switch.sh apply-port sw-p2 <profil>`). `switch-up.sh` menjalankan `pxe-switch.sh verify` → `switch-check.txt`. Dibuat **setelah** `verify-listen-vlan.sh` PASS. |
+diff --git a/infra/deploy-dashboard.sh b/infra/deploy-dashboard.sh
+index 7e39617..b0d96c0 100755
+--- a/infra/deploy-dashboard.sh
++++ b/infra/deploy-dashboard.sh
+@@ -118,11 +118,18 @@ ssh_server "mkdir -m 700 '$remote_stage'"
+ scp_server "$stage/release.tar.xz" "$stage/dashboard.env" "$stage/pxe-dashboard.service" \
+   "$stage/nginx-pxe.conf" "$remote_stage/"
+ # Overlay env admin: HANYA lewat stdin ssh (umask 077 di VM); argv cuma memuat path tujuan.
+-{
+-  printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+-  printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+-  [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+-} | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++# GK-7-1 (DEC-028 §1): di dry-run `run` hanya mencetak dan TIDAK membaca stdin, jadi pipe ke sana
++# berlomba dengan penulis (SIGPIPE -> exit 141 di bawah pipefail). Dry-run cukup mencetak perintah
++# yang sama dengan stdin /dev/null; jalur non-dry (else) tidak berubah.
++if is_dry; then
++  ssh_server "umask 077 && cat > '$remote_stage/admin.env'" </dev/null
++else
++  {
++    printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
++    printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
++    [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
++  } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++fi
+ unset admin_hash_val
+ if is_dry; then
+   ssh_root "RELEASE_TS=$ts STAGE=$remote_stage bash -s" < "$INFRA_DIR/server/install-dashboard.sh"
+diff --git a/infra/redact-evidence.sh b/infra/redact-evidence.sh
+index cb7ab4d..12c7f3c 100755
+--- a/infra/redact-evidence.sh
++++ b/infra/redact-evidence.sh
+@@ -15,7 +15,9 @@
+ #                                                                      -> REDACTED-B64-SECRET
+ #     (B-5: late-command `printf %s '<b64>' | base64 -d` dicetak installer ke console serial;
+ #     logika selaras .agent/runs/m4/b64-scan.py, diimplementasi dengan bash+base64+grep)
+-# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, dan SEMUA
++# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, kredensial di
++# query string mirip URL (parameter password/username bernilai, juga ter-encode; DEC-027 §4 +
++# DEC-028 §2), dan SEMUA
+ # isi file biner (CR-4-14: file non-teks tidak pernah diubah in-place; secret di dalamnya = exit 1).
+ # Pola scan selaras dengan .agent/runs/m4/secret-scan.sh.
+ set -euo pipefail
+@@ -36,6 +38,30 @@ PKEY_RE='-----BEGIN [A-Z ]*PRIVATE KEY-----'
+ B64_RUN_RE='[A-Za-z0-9+/]{40,}={0,2}'
+ B64_INNER_RE='[A-Za-z0-9+/]{16,}={0,2}'
+ B64_MARK='REDACTED-B64-SECRET'
++# DEC-027 §4 + DEC-028 §2 (CR-7-2/SR-7-5): parameter kredensial di query string (scan saja, lihat
++# di bawah). Prefilter baris kandidat: pemisah `?`/`&` mentah, percent-encoded (%3F/%26) atau
++# JSON-escaped (\u0026/\u003f); `=` mentah, %3D atau \u003d. Tanpa beda huruf besar/kecil.
++URL_CRED_RE='(\?|&|%3F|%26|\\u0026|\\u003f)(password|username)(=|%3D|\\u003d)'
++# _url_cred_hits: baca `file:baris:isi` (grep -nH) dari stdin, cetak `file:baris` bila ada nilai
++# kredensial. Isi di-decode dulu (JSON \u0026 \u003f \u003d \u003c \u003e \" lalu %3F %26 %3D %3C %3E %2A
++# %E2%80%A6), lalu tiap nilai (s/d `&`, spasi, `"`) dicek. Yang dikecualikan HANYA token placeholder
++# UTUH: kosong, `***`, `…`, atau `<REDACTED…>` (tanpa `&`/spasi/`"`/`<`/`>` di dalamnya). Nilai yang
++# sekadar diawali placeholder (`***x`, `<REDACTED>x`, backtick, dst.) tetap temuan.
++_url_cred_hits() {
++  awk '{
++    i = index($0, ":"); f = substr($0, 1, i - 1); r = substr($0, i + 1)
++    j = index(r, ":"); ln = substr(r, 1, j - 1); s = tolower(substr(r, j + 1))
++    gsub(/\\u0026/, "\\&", s); gsub(/\\u003f/, "?", s); gsub(/\\u003d/, "=", s); gsub(/\\u003c/, "<", s); gsub(/\\u003e/, ">", s)
++    gsub(/\\"/, "\"", s)
++    gsub(/%3f/, "?", s); gsub(/%26/, "\\&", s); gsub(/%3d/, "=", s); gsub(/%3c/, "<", s); gsub(/%3e/, ">", s)
++    gsub(/%2a/, "*", s); gsub(/%e2%80%a6/, "\342\200\246", s)
++    while (match(s, /[?&](password|username)=[^&[:space:]"]*/)) {
++      v = substr(s, RSTART, RLENGTH); sub(/^[?&](password|username)=/, "", v)
++      if (!(v == "" || v == "***" || v == "\342\200\246" || v ~ /^<redacted[^&[:space:]"<>]*>$/)) { print f ":" ln; next }
++      s = substr(s, RSTART + RLENGTH)
++    }
++  }'
++}
+ B64_DEC_SECRET_RE="/boot/[0-9a-fA-F:%-]{12,40}/$B64U{43}"
+ 
+ # _b64_secret <blob> <depth>: exit 0 bila blob ter-decode memuat secret (lihat header).
+@@ -98,6 +124,13 @@ done < <(find "$dir" -type f -print0)
+ 
+ hits="$(find "$dir" -type f -exec grep -EnaH -i -e "$TOKEN_PATH_RE" -e "$TOKEN_KV_RE" -e "$HASH_RE" -e "$SCRYPT_RE" -e "$PKEY_RE" {} + \
+   | cut -d: -f1,2 | head -50 || true)"
++# DEC-027 §4: kredensial di string mirip URL (parameter password/username bernilai, juga bentuk
++# ter-encode) = temuan, hanya dipindai (tidak disamarkan otomatis; kebocoran seperti ini harus
++# terlihat). Hanya token placeholder utuh yang dikecualikan (lihat _url_cred_hits). Mencakup
++# server-nginx.txt dan server-nginx-error.txt (semua file di <dir>).
++urlhits="$(find "$dir" -type f -exec grep -EnaHi "$URL_CRED_RE" {} + 2>/dev/null \
++  | _url_cred_hits | head -50 || true)"
++[[ -z "$urlhits" ]] || hits+="${hits:+$'\n'}$urlhits"
+ while IFS= read -r -d '' f; do
+   b64hits="$(_b64_scan "$f" | head -50)"
+   [[ -z "$b64hits" ]] || hits+="${hits:+$'\n'}$b64hits"
+diff --git a/infra/server/nginx-pxe.conf b/infra/server/nginx-pxe.conf
+index 6768a28..045bcde 100644
+--- a/infra/server/nginx-pxe.conf
++++ b/infra/server/nginx-pxe.conf
+@@ -5,8 +5,14 @@
+ # (`allow <admin>; deny all`); /boot/** dan /media/** tetap terbuka untuk klien PXE.
+ # Baris `allow` bertanda `# PXE_ADMIN_ALLOW` diganti deploy-dashboard.sh dari env PXE_ADMIN_ALLOW
+ # (IPv4 atau CIDR IPv4, default 10.99.0.1 = host lab).
++# DEC-027 §2: query string TIDAK dicatat kecuali untuk `/boot/<mac>.ipxe` (platform/wait = bukti
++# firmware). Path lain (termasuk /login, /api/**, /boot ber-token) dicatat tanpa query: `?` + isi
++# query diganti penanda `?***`. Regex dievaluasi berurutan; baris pertama yang cocok menang.
+ map $request_uri $pxe_log_uri {
+-    "~^(?<p>/boot/[^/]+/)[^/]+(?<r>/.*)$" "$p***$r";
++    "~^/boot/[0-9A-Za-z_:-][0-9A-Za-z._:-]*\.ipxe(\?[^?]*)?$" $request_uri;
++    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)\?" "$p***$r?***";
++    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)$" "$p***$r";
++    "~^(?<pxe_path>[^?]*)\?" "$pxe_path?***";
+     default $request_uri;
+ }
+ # M6 (DEC-017 §5, O5): limit_req sebagai LAPIS KEDUA (sumber kebenaran rate limit = aplikasi).
+diff --git a/infra/server/vlan/apply-profile.sh b/infra/server/vlan/apply-profile.sh
+index 30c3536..0bc307c 100755
+--- a/infra/server/vlan/apply-profile.sh
++++ b/infra/server/vlan/apply-profile.sh
+@@ -6,7 +6,8 @@
+ #   netplan-vlan.yaml dnsmasq-vlan.conf nginx-pxe-vlan.conf exports-vlan nfs-vlan.conf sysctl-vlan.conf
+ # Urutan: dnsmasq DIHENTIKAN dulu -> trunk0 (rename NIC ber-MAC 52:54:00:99:01:04) + pxe10/mgmt20 ->
+ # ip_forward=0 -> dnsmasq hanya pxe10 -> nginx 10.99.0.2:80 + 10.99.10.2:80 (nginx -t) -> NFS ro
+-# 10.99.10.0/24 + 10.99.20.0/24, nfsd/rpcbind 10.99.10.2 -> log dnsmasq dipotong -> dnsmasq start.
++# 10.99.10.0/24 + 10.99.20.0/24, nfsd 10.99.10.2 (+ OPTIONS rpcbind) -> log dnsmasq dipotong ->
++# dnsmasq start. Perimeter (SR-7-2): lihat langkah 6 dan infra/README.md §Topologi VLAN.
+ # Verifikasi listen TIDAK di sini: infra/server/vlan/verify-listen-vlan.sh (gagal -> dnsmasq stop).
+ # Idempoten. Gagal di langkah mana pun -> exit ≠ 0 dengan dnsmasq tetap mati.
+ set -euo pipefail
+@@ -63,7 +64,12 @@ nginx -t
+ systemctl restart nginx
+ echo "OK   nginx dimuat ulang (10.99.0.2:80 + 10.99.10.2:80)"
+ 
+-# 6) NFS read-only VLAN 10 + 20, nfsd/rpcbind hanya 10.99.10.2.
++# 6) NFS read-only VLAN 10 + 20 (ekspor ro + ACL subnet). Hanya nfsd yang terikat 10.99.10.2:2049.
++#    `-h 10.99.10.2` tidak efektif di lab: rpcbind memakai socket activation systemd (tcp+udp
++#    0.0.0.0:111, bukti kvm/vlandistro/server-listen-vlan.txt), dan rpc.mountd, rpc.statd serta sshd
++#    listen wildcard. Karena model weak host, semuanya terjangkau dari VLAN 10/20 (10.99.10.2,
++#    10.99.20.1, 10.99.0.2) di lab ini.
++#    Production: filter input nftables di pxe10/mgmt20 (SR-7-2, belum diterapkan, lihat README).
+ install -m 0644 "$STAGE/nfs-vlan.conf" /etc/nfs.conf.d/pxe.conf
+ install -m 0644 "$STAGE/exports-vlan" /etc/exports.d/pxe.exports
+ echo 'OPTIONS="-w -h 10.99.10.2"' > /etc/default/rpcbind
+diff --git a/infra/server/vlan/nginx-pxe-vlan.conf b/infra/server/vlan/nginx-pxe-vlan.conf
+index ce638a4..58dca3d 100644
+--- a/infra/server/vlan/nginx-pxe-vlan.conf
++++ b/infra/server/vlan/nginx-pxe-vlan.conf
+@@ -8,8 +8,14 @@
+ # (`allow <admin>; deny all`); /boot/** dan /media/** tetap terbuka untuk klien PXE.
+ # Baris `allow` bertanda `# PXE_ADMIN_ALLOW` diganti deploy-dashboard.sh dari env PXE_ADMIN_ALLOW
+ # (IPv4 atau CIDR IPv4, default 10.99.0.1 = host lab).
++# DEC-027 §2: query string TIDAK dicatat kecuali untuk `/boot/<mac>.ipxe` (platform/wait = bukti
++# firmware). Path lain (termasuk /login, /api/**, /boot ber-token) dicatat tanpa query: `?` + isi
++# query diganti penanda `?***`. Regex dievaluasi berurutan; baris pertama yang cocok menang.
+ map $request_uri $pxe_log_uri {
+-    "~^(?<p>/boot/[^/]+/)[^/]+(?<r>/.*)$" "$p***$r";
++    "~^/boot/[0-9A-Za-z_:-][0-9A-Za-z._:-]*\.ipxe(\?[^?]*)?$" $request_uri;
++    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)\?" "$p***$r?***";
++    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)$" "$p***$r";
++    "~^(?<pxe_path>[^?]*)\?" "$pxe_path?***";
+     default $request_uri;
+ }
+ # M6 (DEC-017 §5, O5): limit_req sebagai LAPIS KEDUA (sumber kebenaran rate limit = aplikasi).
+
+################ 6a26cc6..5220865 ################
+## stat (dashboard/src infra)
+ dashboard/src/components/auth/login-form.tsx       |  8 +--
+ .../components/host-config/passwords-dialog.tsx    |  2 +-
+ .../host-config/plan-table-a11y.test.tsx           | 24 ++++++-
+ .../src/components/host-config/plan-table.tsx      |  2 +-
+ dashboard/src/lib/server/m7-kvm-urlcred.test.ts    | 65 +++++++++++++++++-
+ infra/README.md                                    | 26 +++++++-
+ infra/deploy-dashboard.sh                          | 17 +++--
+ infra/redact-evidence.sh                           | 41 +++++++++---
+ infra/server/vlan/apply-profile.sh                 | 10 ++-
+ infra/test/m7-gk71.sh                              | 77 ++++++++++++++++++++++
+ infra/test/m7-te.sh                                | 67 ++++++++++++++++++-
+ infra/test/run.sh                                  |  2 +
+ 12 files changed, 312 insertions(+), 29 deletions(-)
+## stat dashboard/e2e-kvm
+ dashboard/e2e-kvm/m7-shared.ts | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+## isi lengkap file non-test (dashboard/src infra dashboard/e2e-kvm; tanpa *.test.ts(x), infra/test/**)
+diff --git a/dashboard/e2e-kvm/m7-shared.ts b/dashboard/e2e-kvm/m7-shared.ts
+index 8c61f1f..ca0ad86 100644
+--- a/dashboard/e2e-kvm/m7-shared.ts
++++ b/dashboard/e2e-kvm/m7-shared.ts
+@@ -115,5 +115,15 @@ ping -M do -s 1473 -c 1 -W 2 -I mgmt20 "$NODE_IP"; echo "# exit-1473=$?"
+ /** Penanda kernel installer di serial (Ubuntu casper/NFS, Rocky inst.ks, Debian preseed). */
+ export const INSTALLER_MARK = /netboot=nfs|casper\/vmlinuz|inst\.ks=|inst\.stage2=|preseed\/url=|auto=true priority=critical/g
+ 
+-/** DEC-027 §4: `?password=…` / `&username=…` bernilai (bukan `<REDACTED…>`, `***`, atau kosong) = temuan scan bukti. */
+-export const URL_CRED = /[?&](password|username)=(?!<REDACTED|\*\*\*)[^&\s"]+/i
++// DEC-027 §4 + DEC-028 §2 (CR-7-2/SR-7-5): parameter password/username bernilai di string mirip URL =
++// temuan scan bukti. Pemisah/`=` boleh mentah, percent-encoded (%3F %26 %3D) atau JSON-escaped
++// (backslash-u0026/u003f/u003d; `\x5C` = backslash literal agar tidak ditafsirkan sebagai escape).
++// Dikecualikan HANYA token placeholder UTUH (diikuti `&`, spasi, `"`, backslash-quote JSON, %26,
++// backslash-u0026, atau akhir teks): kosong, `***`, `…`, `<REDACTED…>` (juga bentuk ter-encode-nya).
++// Nilai yang sekadar diawali placeholder (`***x`, `<REDACTED>x`, backtick…) tetap temuan.
++// Selaras dengan `_url_cred_hits` di infra/redact-evidence.sh (test: m7-kvm-urlcred.test.ts, m7-te.sh).
++const URL_SEP = String.raw`(?:[?&]|%3F|%26|\x5Cu0026|\x5Cu003f)`
++const URL_EQ = String.raw`(?:=|%3D|\x5Cu003d)`
++const URL_END = String.raw`(?:[&\s"]|%26|\x5Cu0026|\x5C"|$)`
++const URL_PLACEHOLDER = String.raw`(?:(?:<|%3C|\x5Cu003c)REDACTED[^&\s"<>%\x5C]*(?:>|%3E|\x5Cu003e)|(?:\*|%2A){3}|…|%E2%80%A6)`
++export const URL_CRED = new RegExp(`${URL_SEP}(password|username)${URL_EQ}(?!${URL_PLACEHOLDER}?${URL_END})`, "i")
+diff --git a/dashboard/src/components/auth/login-form.tsx b/dashboard/src/components/auth/login-form.tsx
+index 30ceaaf..158d063 100644
+--- a/dashboard/src/components/auth/login-form.tsx
++++ b/dashboard/src/components/auth/login-form.tsx
+@@ -31,10 +31,6 @@ export function lockoutText(retryAfterSec: number): string {
+   return `Terlalu banyak percobaan. Coba lagi dalam ${n} menit.`
+ }
+ 
+-/**
+- * Pesan error login dari respons server. 401 → teks seragam (tanpa membedakan username ada/tidak);
+- * 429 → lockout dengan N menit; lainnya → pesan server bila ada.
+- */
+ const noopSubscribe = () => () => {}
+ 
+ /**
+@@ -60,6 +56,10 @@ export function loginNativeAction(next: string | null): string {
+   return next === null ? LOGIN_NATIVE_ACTION : `${LOGIN_NATIVE_ACTION}?next=${encodeURIComponent(next)}`
+ }
+ 
++/**
++ * Pesan error login dari respons server. 401 → teks seragam (tanpa membedakan username ada/tidak);
++ * 429 → lockout dengan N menit; lainnya → pesan server bila ada.
++ */
+ export async function loginErrorText(res: Response): Promise<string> {
+   if (res.status === 401) return LOGIN_FAILED_TEXT
+   if (res.status === 429) return lockoutText(parseRetryAfter(res.headers.get("retry-after")))
+diff --git a/dashboard/src/components/host-config/passwords-dialog.tsx b/dashboard/src/components/host-config/passwords-dialog.tsx
+index d6d0950..ab6260b 100644
+--- a/dashboard/src/components/host-config/passwords-dialog.tsx
++++ b/dashboard/src/components/host-config/passwords-dialog.tsx
+@@ -111,7 +111,7 @@ export function PasswordsDialog({
+         </Alert>
+         <Table
+           aria-label="Password yang dibuat"
+-          scrollRegionLabel="Password yang dibuat"
++          scrollRegionLabel="Area gulir password yang dibuat"
+           containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+         >
+           <TableHeader>
+diff --git a/dashboard/src/components/host-config/plan-table.tsx b/dashboard/src/components/host-config/plan-table.tsx
+index b76338d..86f7ca2 100644
+--- a/dashboard/src/components/host-config/plan-table.tsx
++++ b/dashboard/src/components/host-config/plan-table.tsx
+@@ -34,7 +34,7 @@ export function PlanTable({
+       </div>
+       <Table
+         aria-label={`Preview ${valueLabel}`}
+-        scrollRegionLabel={`Preview ${valueLabel}`}
++        scrollRegionLabel={`Area gulir preview ${valueLabel}`}
+         containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+       >
+         <TableHeader>
+diff --git a/infra/README.md b/infra/README.md
+index 8b89c09..45788c0 100644
+--- a/infra/README.md
++++ b/infra/README.md
+@@ -116,10 +116,34 @@ lewat HTTP (callback `done` dari OS terpasang, semua distro) dan, untuk **Ubuntu
+ di Configuring sampai timeout. Di lab, server sendiri adalah gateway VLAN 20 (`ip_forward=0`), nginx
+ listen `10.99.10.2:80` dan ekspor NFS read-only mencakup `10.99.20.0/24`.
+ 
++**Perimeter layanan server di VLAN (SR-7-2, kondisi lab apa adanya).** Yang benar-benar terikat ke satu
++alamat hanya dnsmasq (`pxe10`), nginx (`10.99.0.2:80`, `10.99.10.2:80`), dan nfsd (`10.99.10.2:2049`).
++Yang listen **wildcard**: rpcbind tcp+udp `0.0.0.0:111` (socket activation systemd, sehingga
++`OPTIONS="-w -h 10.99.10.2"` tidak berpengaruh; bukti `kvm/vlandistro/server-listen-vlan.txt`),
++`rpc.mountd` dan `rpc.statd` (port dinamis), serta `sshd` `0.0.0.0:22` (root key-only). Linux memakai model weak host, jadi node di VLAN 10 dan VLAN 20
++bisa menjangkau layanan wildcard itu lewat `10.99.10.2`, `10.99.20.1`, maupun `10.99.0.2`. Data NFS
++tetap dibatasi ekspor **read-only** dengan ACL subnet (`10.99.10.0/24`, `10.99.20.0/24`). nftables di
++server lab hanya men-drop koneksi baru dari `nat0`; tidak ada filter untuk `pxe10`/`mgmt20`.
++`verify-listen-vlan.sh` hanya gagal bila ada socket yang terikat **eksplisit** ke `10.99.20.1`/`%mgmt20`,
++sehingga socket wildcard tidak terdeteksi olehnya.
++
++Untuk production disarankan filter input nftables (default drop) untuk `iifname { "pxe10", "mgmt20" }`.
++Filter ini belum diterapkan di lab karena profil server termasuk jalur KVM:
++- selalu: `ct state established,related accept`; tolak paket VLAN yang menuju alamat admin
++  (`ip daddr 10.99.0.2 drop`);
++- `pxe10` (VLAN 10): udp 67 (DHCP), udp 69 (TFTP; data TFTP lewat helper conntrack `tftp` atau
++  related), udp/tcp 53 (DNS), tcp 80 (iPXE, kernel/initrd, `/media`, konfigurasi, callback), tcp 2049
++  (NFS), tcp/udp 111 (rpcbind), dan port `rpc.mountd` yang dipatok tetap (mis. `[mountd] port=20048` di
++  `nfs.conf`);
++- `mgmt20` (VLAN 20): tcp 80 ke `10.99.10.2` (callback status), tcp 2049 + tcp/udp 111 + port mountd
++  tetap (root NFS Ubuntu setelah pindah ke IP statis), udp/tcp 53 bila node memakai DNS server ini;
++- drop sisanya, termasuk tcp 22 (sshd) dan `rpc.statd` (locking NLM; ekspornya ro, tetapi pastikan dulu
++  klien casper/anaconda tidak membutuhkannya sebelum diblok; bila butuh, patok port statd dan izinkan).
++
+ | Script | Fungsi (M7) |
+ |---|---|
+ | `net-up.sh --topology vlan` / `net-down.sh --topology vlan` | Lima network (`pxe-test`, `pxe-test-nat`, `pxe-test-trunk`, `pxe-test-port1`, `pxe-test-port2`); down hanya saat teardown M7-T12. |
+-| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd/rpcbind `10.99.10.2`, ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
++| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd `10.99.10.2:2049` (rpcbind/mountd/statd/sshd tetap wildcard, lihat Perimeter di atas), ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
+ | `deploy-dashboard.sh --topology vlan` | `server/dashboard-vlan.env` (`PXE_MGMT_CIDR=10.99.10.0/24`, `PXE_SERVER_IP`/`PXE_BASE_URL`/`PXE_MEDIA_URL` = `10.99.10.2`, `PXE_DHCP_INTERFACE=pxe10`, `PXE_ALLOWED_HOSTS=10.99.0.2,10.99.10.2`, `PXE_VLAN_NETWORKS=20:10.99.20.0/24:10.99.20.1`) + `server/vlan/nginx-pxe-vlan.conf`; verifikasi dari host lewat `10.99.0.2`: `cidr 10.99.10.0/24` dan `vlanNetworks` memuat VLAN 20. |
+ | `switch-base.sh` | Sekali: `qemu-img convert` cloud image Ubuntu 24.04 (`.agent/media`) → `.agent/vms/pxe-test-switch-base.qcow2` + `.ready` (tanpa boot/paket). |
+ | `switch-up.sh` / `switch-down.sh [--purge]` | VM `pxe-test-switch` (overlay + seed cloud-init, 768 MB, 1 vCPU, root key-only, tanpa NAT): `sw-mgmt` `10.99.0.3` (pxe-test), `sw-up` (trunk), `sw-p1` (port1), `sw-p2` (port2), MAC `52:54:00:99:02:01..04`. `switch/pxe-switch.sh` (unit oneshot `pxe-switch.service`): `br0 vlan_filtering 1 vlan_default_pvid 0 stp_state 0`, tanpa IP; `sw-up` 10T+20T, `sw-p1` 10 PVID untagged + 20T, `sw-p2` profil `access20` (default) / `tagged10` (`pxe-switch.sh apply-port sw-p2 <profil>`). `switch-up.sh` menjalankan `pxe-switch.sh verify` → `switch-check.txt`. Dibuat **setelah** `verify-listen-vlan.sh` PASS. |
+diff --git a/infra/deploy-dashboard.sh b/infra/deploy-dashboard.sh
+index 7e39617..b0d96c0 100755
+--- a/infra/deploy-dashboard.sh
++++ b/infra/deploy-dashboard.sh
+@@ -118,11 +118,18 @@ ssh_server "mkdir -m 700 '$remote_stage'"
+ scp_server "$stage/release.tar.xz" "$stage/dashboard.env" "$stage/pxe-dashboard.service" \
+   "$stage/nginx-pxe.conf" "$remote_stage/"
+ # Overlay env admin: HANYA lewat stdin ssh (umask 077 di VM); argv cuma memuat path tujuan.
+-{
+-  printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+-  printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+-  [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+-} | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++# GK-7-1 (DEC-028 §1): di dry-run `run` hanya mencetak dan TIDAK membaca stdin, jadi pipe ke sana
++# berlomba dengan penulis (SIGPIPE -> exit 141 di bawah pipefail). Dry-run cukup mencetak perintah
++# yang sama dengan stdin /dev/null; jalur non-dry (else) tidak berubah.
++if is_dry; then
++  ssh_server "umask 077 && cat > '$remote_stage/admin.env'" </dev/null
++else
++  {
++    printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
++    printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
++    [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
++  } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++fi
+ unset admin_hash_val
+ if is_dry; then
+   ssh_root "RELEASE_TS=$ts STAGE=$remote_stage bash -s" < "$INFRA_DIR/server/install-dashboard.sh"
+diff --git a/infra/redact-evidence.sh b/infra/redact-evidence.sh
+index 801074a..12c7f3c 100755
+--- a/infra/redact-evidence.sh
++++ b/infra/redact-evidence.sh
+@@ -16,7 +16,8 @@
+ #     (B-5: late-command `printf %s '<b64>' | base64 -d` dicetak installer ke console serial;
+ #     logika selaras .agent/runs/m4/b64-scan.py, diimplementasi dengan bash+base64+grep)
+ # Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, kredensial di
+-# query string mirip URL (`?password=`/`&username=` bernilai, DEC-027 §4), dan SEMUA
++# query string mirip URL (parameter password/username bernilai, juga ter-encode; DEC-027 §4 +
++# DEC-028 §2), dan SEMUA
+ # isi file biner (CR-4-14: file non-teks tidak pernah diubah in-place; secret di dalamnya = exit 1).
+ # Pola scan selaras dengan .agent/runs/m4/secret-scan.sh.
+ set -euo pipefail
+@@ -37,8 +38,30 @@ PKEY_RE='-----BEGIN [A-Z ]*PRIVATE KEY-----'
+ B64_RUN_RE='[A-Za-z0-9+/]{40,}={0,2}'
+ B64_INNER_RE='[A-Za-z0-9+/]{16,}={0,2}'
+ B64_MARK='REDACTED-B64-SECRET'
+-# DEC-027 §4: parameter kredensial di query string (scan saja, lihat di bawah).
+-URL_CRED_RE='[?&](password|username)=[^&[:space:]"]*'
++# DEC-027 §4 + DEC-028 §2 (CR-7-2/SR-7-5): parameter kredensial di query string (scan saja, lihat
++# di bawah). Prefilter baris kandidat: pemisah `?`/`&` mentah, percent-encoded (%3F/%26) atau
++# JSON-escaped (\u0026/\u003f); `=` mentah, %3D atau \u003d. Tanpa beda huruf besar/kecil.
++URL_CRED_RE='(\?|&|%3F|%26|\\u0026|\\u003f)(password|username)(=|%3D|\\u003d)'
++# _url_cred_hits: baca `file:baris:isi` (grep -nH) dari stdin, cetak `file:baris` bila ada nilai
++# kredensial. Isi di-decode dulu (JSON \u0026 \u003f \u003d \u003c \u003e \" lalu %3F %26 %3D %3C %3E %2A
++# %E2%80%A6), lalu tiap nilai (s/d `&`, spasi, `"`) dicek. Yang dikecualikan HANYA token placeholder
++# UTUH: kosong, `***`, `…`, atau `<REDACTED…>` (tanpa `&`/spasi/`"`/`<`/`>` di dalamnya). Nilai yang
++# sekadar diawali placeholder (`***x`, `<REDACTED>x`, backtick, dst.) tetap temuan.
++_url_cred_hits() {
++  awk '{
++    i = index($0, ":"); f = substr($0, 1, i - 1); r = substr($0, i + 1)
++    j = index(r, ":"); ln = substr(r, 1, j - 1); s = tolower(substr(r, j + 1))
++    gsub(/\\u0026/, "\\&", s); gsub(/\\u003f/, "?", s); gsub(/\\u003d/, "=", s); gsub(/\\u003c/, "<", s); gsub(/\\u003e/, ">", s)
++    gsub(/\\"/, "\"", s)
++    gsub(/%3f/, "?", s); gsub(/%26/, "\\&", s); gsub(/%3d/, "=", s); gsub(/%3c/, "<", s); gsub(/%3e/, ">", s)
++    gsub(/%2a/, "*", s); gsub(/%e2%80%a6/, "\342\200\246", s)
++    while (match(s, /[?&](password|username)=[^&[:space:]"]*/)) {
++      v = substr(s, RSTART, RLENGTH); sub(/^[?&](password|username)=/, "", v)
++      if (!(v == "" || v == "***" || v == "\342\200\246" || v ~ /^<redacted[^&[:space:]"<>]*>$/)) { print f ":" ln; next }
++      s = substr(s, RSTART + RLENGTH)
++    }
++  }'
++}
+ B64_DEC_SECRET_RE="/boot/[0-9a-fA-F:%-]{12,40}/$B64U{43}"
+ 
+ # _b64_secret <blob> <depth>: exit 0 bila blob ter-decode memuat secret (lihat header).
+@@ -101,12 +124,12 @@ done < <(find "$dir" -type f -print0)
+ 
+ hits="$(find "$dir" -type f -exec grep -EnaH -i -e "$TOKEN_PATH_RE" -e "$TOKEN_KV_RE" -e "$HASH_RE" -e "$SCRYPT_RE" -e "$PKEY_RE" {} + \
+   | cut -d: -f1,2 | head -50 || true)"
+-# DEC-027 §4: kredensial di string mirip URL (`?password=…`, `&username=…`) = temuan, hanya dipindai
+-# (tidak disamarkan otomatis; kebocoran seperti ini harus terlihat). Nilai yang sudah disamarkan
+-# (`<REDACTED…>`, `***`) atau kosong tidak dihitung. Mencakup server-nginx.txt dan
+-# server-nginx-error.txt (semua file di <dir>).
+-urlhits="$(find "$dir" -type f -exec grep -EnoaHi "$URL_CRED_RE" {} + 2>/dev/null \
+-  | grep -Eiv "[?&](password|username)=(<REDACTED|\*\*\*|$)" | cut -d: -f1,2 | head -50 || true)"
++# DEC-027 §4: kredensial di string mirip URL (parameter password/username bernilai, juga bentuk
++# ter-encode) = temuan, hanya dipindai (tidak disamarkan otomatis; kebocoran seperti ini harus
++# terlihat). Hanya token placeholder utuh yang dikecualikan (lihat _url_cred_hits). Mencakup
++# server-nginx.txt dan server-nginx-error.txt (semua file di <dir>).
++urlhits="$(find "$dir" -type f -exec grep -EnaHi "$URL_CRED_RE" {} + 2>/dev/null \
++  | _url_cred_hits | head -50 || true)"
+ [[ -z "$urlhits" ]] || hits+="${hits:+$'\n'}$urlhits"
+ while IFS= read -r -d '' f; do
+   b64hits="$(_b64_scan "$f" | head -50)"
+diff --git a/infra/server/vlan/apply-profile.sh b/infra/server/vlan/apply-profile.sh
+index 30c3536..0bc307c 100755
+--- a/infra/server/vlan/apply-profile.sh
++++ b/infra/server/vlan/apply-profile.sh
+@@ -6,7 +6,8 @@
+ #   netplan-vlan.yaml dnsmasq-vlan.conf nginx-pxe-vlan.conf exports-vlan nfs-vlan.conf sysctl-vlan.conf
+ # Urutan: dnsmasq DIHENTIKAN dulu -> trunk0 (rename NIC ber-MAC 52:54:00:99:01:04) + pxe10/mgmt20 ->
+ # ip_forward=0 -> dnsmasq hanya pxe10 -> nginx 10.99.0.2:80 + 10.99.10.2:80 (nginx -t) -> NFS ro
+-# 10.99.10.0/24 + 10.99.20.0/24, nfsd/rpcbind 10.99.10.2 -> log dnsmasq dipotong -> dnsmasq start.
++# 10.99.10.0/24 + 10.99.20.0/24, nfsd 10.99.10.2 (+ OPTIONS rpcbind) -> log dnsmasq dipotong ->
++# dnsmasq start. Perimeter (SR-7-2): lihat langkah 6 dan infra/README.md §Topologi VLAN.
+ # Verifikasi listen TIDAK di sini: infra/server/vlan/verify-listen-vlan.sh (gagal -> dnsmasq stop).
+ # Idempoten. Gagal di langkah mana pun -> exit ≠ 0 dengan dnsmasq tetap mati.
+ set -euo pipefail
+@@ -63,7 +64,12 @@ nginx -t
+ systemctl restart nginx
+ echo "OK   nginx dimuat ulang (10.99.0.2:80 + 10.99.10.2:80)"
+ 
+-# 6) NFS read-only VLAN 10 + 20, nfsd/rpcbind hanya 10.99.10.2.
++# 6) NFS read-only VLAN 10 + 20 (ekspor ro + ACL subnet). Hanya nfsd yang terikat 10.99.10.2:2049.
++#    `-h 10.99.10.2` tidak efektif di lab: rpcbind memakai socket activation systemd (tcp+udp
++#    0.0.0.0:111, bukti kvm/vlandistro/server-listen-vlan.txt), dan rpc.mountd, rpc.statd serta sshd
++#    listen wildcard. Karena model weak host, semuanya terjangkau dari VLAN 10/20 (10.99.10.2,
++#    10.99.20.1, 10.99.0.2) di lab ini.
++#    Production: filter input nftables di pxe10/mgmt20 (SR-7-2, belum diterapkan, lihat README).
+ install -m 0644 "$STAGE/nfs-vlan.conf" /etc/nfs.conf.d/pxe.conf
+ install -m 0644 "$STAGE/exports-vlan" /etc/exports.d/pxe.exports
+ echo 'OPTIONS="-w -h 10.99.10.2"' > /etc/default/rpcbind
+
+################ 339f234..5220865 ################
+## stat (dashboard/src infra)
+ dashboard/src/components/auth/login-form.tsx       |  8 +--
+ .../components/host-config/passwords-dialog.tsx    |  2 +-
+ .../host-config/plan-table-a11y.test.tsx           | 24 ++++++-
+ .../src/components/host-config/plan-table.tsx      |  2 +-
+ dashboard/src/lib/server/m7-kvm-urlcred.test.ts    | 67 +++++++++++++++++--
+ infra/README.md                                    | 26 +++++++-
+ infra/deploy-dashboard.sh                          | 17 +++--
+ infra/redact-evidence.sh                           | 41 +++++++++---
+ infra/server/vlan/apply-profile.sh                 | 10 ++-
+ infra/test/m7-gk71.sh                              | 77 ++++++++++++++++++++++
+ infra/test/m7-te.sh                                | 68 +++++++++++++++++--
+ infra/test/run.sh                                  |  2 +
+ 12 files changed, 312 insertions(+), 32 deletions(-)
+## stat dashboard/e2e-kvm
+ dashboard/e2e-kvm/m7-shared.ts | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+## isi lengkap file non-test (dashboard/src infra dashboard/e2e-kvm; tanpa *.test.ts(x), infra/test/**)
+diff --git a/dashboard/e2e-kvm/m7-shared.ts b/dashboard/e2e-kvm/m7-shared.ts
+index 72a900d..ca0ad86 100644
+--- a/dashboard/e2e-kvm/m7-shared.ts
++++ b/dashboard/e2e-kvm/m7-shared.ts
+@@ -115,5 +115,15 @@ ping -M do -s 1473 -c 1 -W 2 -I mgmt20 "$NODE_IP"; echo "# exit-1473=$?"
+ /** Penanda kernel installer di serial (Ubuntu casper/NFS, Rocky inst.ks, Debian preseed). */
+ export const INSTALLER_MARK = /netboot=nfs|casper\/vmlinuz|inst\.ks=|inst\.stage2=|preseed\/url=|auto=true priority=critical/g
+ 
+-/** DEC-027 §4: `?password=…` / `&username=…` bernilai (bukan `<REDACTED…>`, `***`, atau kosong) = temuan scan bukti. */
+-export const URL_CRED = /[?&](password|username)=(?!<REDACTED|\*\*\*|…|`)[^&\s"]+/i
++// DEC-027 §4 + DEC-028 §2 (CR-7-2/SR-7-5): parameter password/username bernilai di string mirip URL =
++// temuan scan bukti. Pemisah/`=` boleh mentah, percent-encoded (%3F %26 %3D) atau JSON-escaped
++// (backslash-u0026/u003f/u003d; `\x5C` = backslash literal agar tidak ditafsirkan sebagai escape).
++// Dikecualikan HANYA token placeholder UTUH (diikuti `&`, spasi, `"`, backslash-quote JSON, %26,
++// backslash-u0026, atau akhir teks): kosong, `***`, `…`, `<REDACTED…>` (juga bentuk ter-encode-nya).
++// Nilai yang sekadar diawali placeholder (`***x`, `<REDACTED>x`, backtick…) tetap temuan.
++// Selaras dengan `_url_cred_hits` di infra/redact-evidence.sh (test: m7-kvm-urlcred.test.ts, m7-te.sh).
++const URL_SEP = String.raw`(?:[?&]|%3F|%26|\x5Cu0026|\x5Cu003f)`
++const URL_EQ = String.raw`(?:=|%3D|\x5Cu003d)`
++const URL_END = String.raw`(?:[&\s"]|%26|\x5Cu0026|\x5C"|$)`
++const URL_PLACEHOLDER = String.raw`(?:(?:<|%3C|\x5Cu003c)REDACTED[^&\s"<>%\x5C]*(?:>|%3E|\x5Cu003e)|(?:\*|%2A){3}|…|%E2%80%A6)`
++export const URL_CRED = new RegExp(`${URL_SEP}(password|username)${URL_EQ}(?!${URL_PLACEHOLDER}?${URL_END})`, "i")
+diff --git a/dashboard/src/components/auth/login-form.tsx b/dashboard/src/components/auth/login-form.tsx
+index 30ceaaf..158d063 100644
+--- a/dashboard/src/components/auth/login-form.tsx
++++ b/dashboard/src/components/auth/login-form.tsx
+@@ -31,10 +31,6 @@ export function lockoutText(retryAfterSec: number): string {
+   return `Terlalu banyak percobaan. Coba lagi dalam ${n} menit.`
+ }
+ 
+-/**
+- * Pesan error login dari respons server. 401 → teks seragam (tanpa membedakan username ada/tidak);
+- * 429 → lockout dengan N menit; lainnya → pesan server bila ada.
+- */
+ const noopSubscribe = () => () => {}
+ 
+ /**
+@@ -60,6 +56,10 @@ export function loginNativeAction(next: string | null): string {
+   return next === null ? LOGIN_NATIVE_ACTION : `${LOGIN_NATIVE_ACTION}?next=${encodeURIComponent(next)}`
+ }
+ 
++/**
++ * Pesan error login dari respons server. 401 → teks seragam (tanpa membedakan username ada/tidak);
++ * 429 → lockout dengan N menit; lainnya → pesan server bila ada.
++ */
+ export async function loginErrorText(res: Response): Promise<string> {
+   if (res.status === 401) return LOGIN_FAILED_TEXT
+   if (res.status === 429) return lockoutText(parseRetryAfter(res.headers.get("retry-after")))
+diff --git a/dashboard/src/components/host-config/passwords-dialog.tsx b/dashboard/src/components/host-config/passwords-dialog.tsx
+index d6d0950..ab6260b 100644
+--- a/dashboard/src/components/host-config/passwords-dialog.tsx
++++ b/dashboard/src/components/host-config/passwords-dialog.tsx
+@@ -111,7 +111,7 @@ export function PasswordsDialog({
+         </Alert>
+         <Table
+           aria-label="Password yang dibuat"
+-          scrollRegionLabel="Password yang dibuat"
++          scrollRegionLabel="Area gulir password yang dibuat"
+           containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+         >
+           <TableHeader>
+diff --git a/dashboard/src/components/host-config/plan-table.tsx b/dashboard/src/components/host-config/plan-table.tsx
+index b76338d..86f7ca2 100644
+--- a/dashboard/src/components/host-config/plan-table.tsx
++++ b/dashboard/src/components/host-config/plan-table.tsx
+@@ -34,7 +34,7 @@ export function PlanTable({
+       </div>
+       <Table
+         aria-label={`Preview ${valueLabel}`}
+-        scrollRegionLabel={`Preview ${valueLabel}`}
++        scrollRegionLabel={`Area gulir preview ${valueLabel}`}
+         containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+       >
+         <TableHeader>
+diff --git a/infra/README.md b/infra/README.md
+index 8b89c09..45788c0 100644
+--- a/infra/README.md
++++ b/infra/README.md
+@@ -116,10 +116,34 @@ lewat HTTP (callback `done` dari OS terpasang, semua distro) dan, untuk **Ubuntu
+ di Configuring sampai timeout. Di lab, server sendiri adalah gateway VLAN 20 (`ip_forward=0`), nginx
+ listen `10.99.10.2:80` dan ekspor NFS read-only mencakup `10.99.20.0/24`.
+ 
++**Perimeter layanan server di VLAN (SR-7-2, kondisi lab apa adanya).** Yang benar-benar terikat ke satu
++alamat hanya dnsmasq (`pxe10`), nginx (`10.99.0.2:80`, `10.99.10.2:80`), dan nfsd (`10.99.10.2:2049`).
++Yang listen **wildcard**: rpcbind tcp+udp `0.0.0.0:111` (socket activation systemd, sehingga
++`OPTIONS="-w -h 10.99.10.2"` tidak berpengaruh; bukti `kvm/vlandistro/server-listen-vlan.txt`),
++`rpc.mountd` dan `rpc.statd` (port dinamis), serta `sshd` `0.0.0.0:22` (root key-only). Linux memakai model weak host, jadi node di VLAN 10 dan VLAN 20
++bisa menjangkau layanan wildcard itu lewat `10.99.10.2`, `10.99.20.1`, maupun `10.99.0.2`. Data NFS
++tetap dibatasi ekspor **read-only** dengan ACL subnet (`10.99.10.0/24`, `10.99.20.0/24`). nftables di
++server lab hanya men-drop koneksi baru dari `nat0`; tidak ada filter untuk `pxe10`/`mgmt20`.
++`verify-listen-vlan.sh` hanya gagal bila ada socket yang terikat **eksplisit** ke `10.99.20.1`/`%mgmt20`,
++sehingga socket wildcard tidak terdeteksi olehnya.
++
++Untuk production disarankan filter input nftables (default drop) untuk `iifname { "pxe10", "mgmt20" }`.
++Filter ini belum diterapkan di lab karena profil server termasuk jalur KVM:
++- selalu: `ct state established,related accept`; tolak paket VLAN yang menuju alamat admin
++  (`ip daddr 10.99.0.2 drop`);
++- `pxe10` (VLAN 10): udp 67 (DHCP), udp 69 (TFTP; data TFTP lewat helper conntrack `tftp` atau
++  related), udp/tcp 53 (DNS), tcp 80 (iPXE, kernel/initrd, `/media`, konfigurasi, callback), tcp 2049
++  (NFS), tcp/udp 111 (rpcbind), dan port `rpc.mountd` yang dipatok tetap (mis. `[mountd] port=20048` di
++  `nfs.conf`);
++- `mgmt20` (VLAN 20): tcp 80 ke `10.99.10.2` (callback status), tcp 2049 + tcp/udp 111 + port mountd
++  tetap (root NFS Ubuntu setelah pindah ke IP statis), udp/tcp 53 bila node memakai DNS server ini;
++- drop sisanya, termasuk tcp 22 (sshd) dan `rpc.statd` (locking NLM; ekspornya ro, tetapi pastikan dulu
++  klien casper/anaconda tidak membutuhkannya sebelum diblok; bila butuh, patok port statd dan izinkan).
++
+ | Script | Fungsi (M7) |
+ |---|---|
+ | `net-up.sh --topology vlan` / `net-down.sh --topology vlan` | Lima network (`pxe-test`, `pxe-test-nat`, `pxe-test-trunk`, `pxe-test-port1`, `pxe-test-port2`); down hanya saat teardown M7-T12. |
+-| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd/rpcbind `10.99.10.2`, ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
++| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd `10.99.10.2:2049` (rpcbind/mountd/statd/sshd tetap wildcard, lihat Perimeter di atas), ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
+ | `deploy-dashboard.sh --topology vlan` | `server/dashboard-vlan.env` (`PXE_MGMT_CIDR=10.99.10.0/24`, `PXE_SERVER_IP`/`PXE_BASE_URL`/`PXE_MEDIA_URL` = `10.99.10.2`, `PXE_DHCP_INTERFACE=pxe10`, `PXE_ALLOWED_HOSTS=10.99.0.2,10.99.10.2`, `PXE_VLAN_NETWORKS=20:10.99.20.0/24:10.99.20.1`) + `server/vlan/nginx-pxe-vlan.conf`; verifikasi dari host lewat `10.99.0.2`: `cidr 10.99.10.0/24` dan `vlanNetworks` memuat VLAN 20. |
+ | `switch-base.sh` | Sekali: `qemu-img convert` cloud image Ubuntu 24.04 (`.agent/media`) → `.agent/vms/pxe-test-switch-base.qcow2` + `.ready` (tanpa boot/paket). |
+ | `switch-up.sh` / `switch-down.sh [--purge]` | VM `pxe-test-switch` (overlay + seed cloud-init, 768 MB, 1 vCPU, root key-only, tanpa NAT): `sw-mgmt` `10.99.0.3` (pxe-test), `sw-up` (trunk), `sw-p1` (port1), `sw-p2` (port2), MAC `52:54:00:99:02:01..04`. `switch/pxe-switch.sh` (unit oneshot `pxe-switch.service`): `br0 vlan_filtering 1 vlan_default_pvid 0 stp_state 0`, tanpa IP; `sw-up` 10T+20T, `sw-p1` 10 PVID untagged + 20T, `sw-p2` profil `access20` (default) / `tagged10` (`pxe-switch.sh apply-port sw-p2 <profil>`). `switch-up.sh` menjalankan `pxe-switch.sh verify` → `switch-check.txt`. Dibuat **setelah** `verify-listen-vlan.sh` PASS. |
+diff --git a/infra/deploy-dashboard.sh b/infra/deploy-dashboard.sh
+index 7e39617..b0d96c0 100755
+--- a/infra/deploy-dashboard.sh
++++ b/infra/deploy-dashboard.sh
+@@ -118,11 +118,18 @@ ssh_server "mkdir -m 700 '$remote_stage'"
+ scp_server "$stage/release.tar.xz" "$stage/dashboard.env" "$stage/pxe-dashboard.service" \
+   "$stage/nginx-pxe.conf" "$remote_stage/"
+ # Overlay env admin: HANYA lewat stdin ssh (umask 077 di VM); argv cuma memuat path tujuan.
+-{
+-  printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+-  printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+-  [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+-} | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++# GK-7-1 (DEC-028 §1): di dry-run `run` hanya mencetak dan TIDAK membaca stdin, jadi pipe ke sana
++# berlomba dengan penulis (SIGPIPE -> exit 141 di bawah pipefail). Dry-run cukup mencetak perintah
++# yang sama dengan stdin /dev/null; jalur non-dry (else) tidak berubah.
++if is_dry; then
++  ssh_server "umask 077 && cat > '$remote_stage/admin.env'" </dev/null
++else
++  {
++    printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
++    printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
++    [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
++  } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++fi
+ unset admin_hash_val
+ if is_dry; then
+   ssh_root "RELEASE_TS=$ts STAGE=$remote_stage bash -s" < "$INFRA_DIR/server/install-dashboard.sh"
+diff --git a/infra/redact-evidence.sh b/infra/redact-evidence.sh
+index b31e2ad..12c7f3c 100755
+--- a/infra/redact-evidence.sh
++++ b/infra/redact-evidence.sh
+@@ -16,7 +16,8 @@
+ #     (B-5: late-command `printf %s '<b64>' | base64 -d` dicetak installer ke console serial;
+ #     logika selaras .agent/runs/m4/b64-scan.py, diimplementasi dengan bash+base64+grep)
+ # Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, kredensial di
+-# query string mirip URL (`?password=`/`&username=` bernilai, DEC-027 §4), dan SEMUA
++# query string mirip URL (parameter password/username bernilai, juga ter-encode; DEC-027 §4 +
++# DEC-028 §2), dan SEMUA
+ # isi file biner (CR-4-14: file non-teks tidak pernah diubah in-place; secret di dalamnya = exit 1).
+ # Pola scan selaras dengan .agent/runs/m4/secret-scan.sh.
+ set -euo pipefail
+@@ -37,8 +38,30 @@ PKEY_RE='-----BEGIN [A-Z ]*PRIVATE KEY-----'
+ B64_RUN_RE='[A-Za-z0-9+/]{40,}={0,2}'
+ B64_INNER_RE='[A-Za-z0-9+/]{16,}={0,2}'
+ B64_MARK='REDACTED-B64-SECRET'
+-# DEC-027 §4: parameter kredensial di query string (scan saja, lihat di bawah).
+-URL_CRED_RE='[?&](password|username)=[^&[:space:]"]*'
++# DEC-027 §4 + DEC-028 §2 (CR-7-2/SR-7-5): parameter kredensial di query string (scan saja, lihat
++# di bawah). Prefilter baris kandidat: pemisah `?`/`&` mentah, percent-encoded (%3F/%26) atau
++# JSON-escaped (\u0026/\u003f); `=` mentah, %3D atau \u003d. Tanpa beda huruf besar/kecil.
++URL_CRED_RE='(\?|&|%3F|%26|\\u0026|\\u003f)(password|username)(=|%3D|\\u003d)'
++# _url_cred_hits: baca `file:baris:isi` (grep -nH) dari stdin, cetak `file:baris` bila ada nilai
++# kredensial. Isi di-decode dulu (JSON \u0026 \u003f \u003d \u003c \u003e \" lalu %3F %26 %3D %3C %3E %2A
++# %E2%80%A6), lalu tiap nilai (s/d `&`, spasi, `"`) dicek. Yang dikecualikan HANYA token placeholder
++# UTUH: kosong, `***`, `…`, atau `<REDACTED…>` (tanpa `&`/spasi/`"`/`<`/`>` di dalamnya). Nilai yang
++# sekadar diawali placeholder (`***x`, `<REDACTED>x`, backtick, dst.) tetap temuan.
++_url_cred_hits() {
++  awk '{
++    i = index($0, ":"); f = substr($0, 1, i - 1); r = substr($0, i + 1)
++    j = index(r, ":"); ln = substr(r, 1, j - 1); s = tolower(substr(r, j + 1))
++    gsub(/\\u0026/, "\\&", s); gsub(/\\u003f/, "?", s); gsub(/\\u003d/, "=", s); gsub(/\\u003c/, "<", s); gsub(/\\u003e/, ">", s)
++    gsub(/\\"/, "\"", s)
++    gsub(/%3f/, "?", s); gsub(/%26/, "\\&", s); gsub(/%3d/, "=", s); gsub(/%3c/, "<", s); gsub(/%3e/, ">", s)
++    gsub(/%2a/, "*", s); gsub(/%e2%80%a6/, "\342\200\246", s)
++    while (match(s, /[?&](password|username)=[^&[:space:]"]*/)) {
++      v = substr(s, RSTART, RLENGTH); sub(/^[?&](password|username)=/, "", v)
++      if (!(v == "" || v == "***" || v == "\342\200\246" || v ~ /^<redacted[^&[:space:]"<>]*>$/)) { print f ":" ln; next }
++      s = substr(s, RSTART + RLENGTH)
++    }
++  }'
++}
+ B64_DEC_SECRET_RE="/boot/[0-9a-fA-F:%-]{12,40}/$B64U{43}"
+ 
+ # _b64_secret <blob> <depth>: exit 0 bila blob ter-decode memuat secret (lihat header).
+@@ -101,12 +124,12 @@ done < <(find "$dir" -type f -print0)
+ 
+ hits="$(find "$dir" -type f -exec grep -EnaH -i -e "$TOKEN_PATH_RE" -e "$TOKEN_KV_RE" -e "$HASH_RE" -e "$SCRYPT_RE" -e "$PKEY_RE" {} + \
+   | cut -d: -f1,2 | head -50 || true)"
+-# DEC-027 §4: kredensial di string mirip URL (`?password=…`, `&username=…`) = temuan, hanya dipindai
+-# (tidak disamarkan otomatis; kebocoran seperti ini harus terlihat). Nilai yang sudah disamarkan
+-# (`<REDACTED…>`, `***`), placeholder dokumentasi (`…`, backtick penutup kode) atau kosong tidak dihitung. Mencakup server-nginx.txt dan
+-# server-nginx-error.txt (semua file di <dir>).
+-urlhits="$(find "$dir" -type f -exec grep -EnoaHi "$URL_CRED_RE" {} + 2>/dev/null \
+-  | grep -Eiv "[?&](password|username)=(<REDACTED|\*\*\*|…|\`|$)" | cut -d: -f1,2 | head -50 || true)"
++# DEC-027 §4: kredensial di string mirip URL (parameter password/username bernilai, juga bentuk
++# ter-encode) = temuan, hanya dipindai (tidak disamarkan otomatis; kebocoran seperti ini harus
++# terlihat). Hanya token placeholder utuh yang dikecualikan (lihat _url_cred_hits). Mencakup
++# server-nginx.txt dan server-nginx-error.txt (semua file di <dir>).
++urlhits="$(find "$dir" -type f -exec grep -EnaHi "$URL_CRED_RE" {} + 2>/dev/null \
++  | _url_cred_hits | head -50 || true)"
+ [[ -z "$urlhits" ]] || hits+="${hits:+$'\n'}$urlhits"
+ while IFS= read -r -d '' f; do
+   b64hits="$(_b64_scan "$f" | head -50)"
+diff --git a/infra/server/vlan/apply-profile.sh b/infra/server/vlan/apply-profile.sh
+index 30c3536..0bc307c 100755
+--- a/infra/server/vlan/apply-profile.sh
++++ b/infra/server/vlan/apply-profile.sh
+@@ -6,7 +6,8 @@
+ #   netplan-vlan.yaml dnsmasq-vlan.conf nginx-pxe-vlan.conf exports-vlan nfs-vlan.conf sysctl-vlan.conf
+ # Urutan: dnsmasq DIHENTIKAN dulu -> trunk0 (rename NIC ber-MAC 52:54:00:99:01:04) + pxe10/mgmt20 ->
+ # ip_forward=0 -> dnsmasq hanya pxe10 -> nginx 10.99.0.2:80 + 10.99.10.2:80 (nginx -t) -> NFS ro
+-# 10.99.10.0/24 + 10.99.20.0/24, nfsd/rpcbind 10.99.10.2 -> log dnsmasq dipotong -> dnsmasq start.
++# 10.99.10.0/24 + 10.99.20.0/24, nfsd 10.99.10.2 (+ OPTIONS rpcbind) -> log dnsmasq dipotong ->
++# dnsmasq start. Perimeter (SR-7-2): lihat langkah 6 dan infra/README.md §Topologi VLAN.
+ # Verifikasi listen TIDAK di sini: infra/server/vlan/verify-listen-vlan.sh (gagal -> dnsmasq stop).
+ # Idempoten. Gagal di langkah mana pun -> exit ≠ 0 dengan dnsmasq tetap mati.
+ set -euo pipefail
+@@ -63,7 +64,12 @@ nginx -t
+ systemctl restart nginx
+ echo "OK   nginx dimuat ulang (10.99.0.2:80 + 10.99.10.2:80)"
+ 
+-# 6) NFS read-only VLAN 10 + 20, nfsd/rpcbind hanya 10.99.10.2.
++# 6) NFS read-only VLAN 10 + 20 (ekspor ro + ACL subnet). Hanya nfsd yang terikat 10.99.10.2:2049.
++#    `-h 10.99.10.2` tidak efektif di lab: rpcbind memakai socket activation systemd (tcp+udp
++#    0.0.0.0:111, bukti kvm/vlandistro/server-listen-vlan.txt), dan rpc.mountd, rpc.statd serta sshd
++#    listen wildcard. Karena model weak host, semuanya terjangkau dari VLAN 10/20 (10.99.10.2,
++#    10.99.20.1, 10.99.0.2) di lab ini.
++#    Production: filter input nftables di pxe10/mgmt20 (SR-7-2, belum diterapkan, lihat README).
+ install -m 0644 "$STAGE/nfs-vlan.conf" /etc/nfs.conf.d/pxe.conf
+ install -m 0644 "$STAGE/exports-vlan" /etc/exports.d/pxe.exports
+ echo 'OPTIONS="-w -h 10.99.10.2"' > /etc/default/rpcbind
+
+################ cek syarat 'tanpa run KVM ulang' (339f234..5220865) ################
+## file non-test berubah
+dashboard/e2e-kvm/m7-shared.ts
+dashboard/src/components/auth/login-form.tsx
+dashboard/src/components/host-config/passwords-dialog.tsx
+dashboard/src/components/host-config/plan-table.tsx
+infra/README.md
+infra/deploy-dashboard.sh
+infra/redact-evidence.sh
+infra/server/vlan/apply-profile.sh
+## file jalur KVM terlarang yang berubah (lib.sh, kvm-run.sh, nginx*, server/**, switch/**, vlan/** relay, installers/**, validasi, boot/iPXE) — harus kosong
+## apply-profile.sh: baris non-komentar berubah (harus kosong)
+(kosong)
+## lib.sh run()/ssh_server: diff (harus kosong)
+(akhir)
+## deploy-dashboard.sh: pipeline non-dry lama vs baru, spasi awal dibuang (harus identik)
+IDENTIK (5 baris)
+    {
+    printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+    printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+    [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+    } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
+## deploy-dashboard.sh dengan -w (perubahan lain di luar cabang is_dry harus nihil)
+diff --git a/infra/deploy-dashboard.sh b/infra/deploy-dashboard.sh
+index 7e39617..b0d96c0 100755
+--- a/infra/deploy-dashboard.sh
++++ b/infra/deploy-dashboard.sh
+@@ -118,11 +118,18 @@ ssh_server "mkdir -m 700 '$remote_stage'"
+ scp_server "$stage/release.tar.xz" "$stage/dashboard.env" "$stage/pxe-dashboard.service" \
+   "$stage/nginx-pxe.conf" "$remote_stage/"
+ # Overlay env admin: HANYA lewat stdin ssh (umask 077 di VM); argv cuma memuat path tujuan.
++# GK-7-1 (DEC-028 §1): di dry-run `run` hanya mencetak dan TIDAK membaca stdin, jadi pipe ke sana
++# berlomba dengan penulis (SIGPIPE -> exit 141 di bawah pipefail). Dry-run cukup mencetak perintah
++# yang sama dengan stdin /dev/null; jalur non-dry (else) tidak berubah.
++if is_dry; then
++  ssh_server "umask 077 && cat > '$remote_stage/admin.env'" </dev/null
++else
+   {
+     printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+     printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+     [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+   } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
++fi
+ unset admin_hash_val
+ if is_dry; then
+   ssh_root "RELEASE_TS=$ts STAGE=$remote_stage bash -s" < "$INFRA_DIR/server/install-dashboard.sh"
+## login-form.tsx: diff setelah komentar dibuang (CR-7-3 hanya posisi JSDoc, harus kosong)
+(kosong: kode identik, hanya JSDoc pindah)
+## plan-table.tsx / passwords-dialog.tsx (CR-7-4): pemakaian di spec e2e-kvm/m7-* + m7-shared/kvm-harness (harus kosong)
+(kosong)
+## selector login di spec e2e-kvm/m7-* (label Username/Password + tombol; tidak berubah oleh CR-7-3)
+dashboard/e2e-kvm/m7-vlan.spec.ts:154:  await row.getByRole("button", { name: /^Aksi untuk/ }).click()
+dashboard/e2e-kvm/m7-vlan.spec.ts:162:    await sheet.getByRole("button", { name: "Buat password acak" }).click()
+dashboard/e2e-kvm/m7-vlan.spec.ts:179:  await expect(sheet.getByRole("button", { name: `Hapus DNS ${KVM.dns}` })).toBeVisible()
+dashboard/e2e-kvm/m7-vlan.spec.ts:191:    await sheet.getByRole("button", { name: "Tempel / unggah key baru" }).click()
+dashboard/e2e-kvm/m7-vlan.spec.ts:197:  await sheet.getByRole("button", { name: "Simpan & Install" }).click()
+dashboard/e2e-kvm/m7-vlan.spec.ts:201:  await confirm.getByRole("button", { name: "Hapus disk & install" }).click()
+dashboard/e2e-kvm/m7-vlan.spec.ts:242:    await page.getByLabel("Username").fill(user)
+dashboard/e2e-kvm/m7-vlan.spec.ts:243:    await page.getByLabel("Password", { exact: true }).fill(pw)
+dashboard/e2e-kvm/m7-vlan.spec.ts:501:      await row.getByRole("button", { name: /^Aksi untuk/ }).click()
+dashboard/e2e-kvm/m7-vlan.spec.ts:510:      const saveDisabled = await sheet.getByRole("button", { name: "Simpan konfigurasi" }).isDisabled()
+dashboard/e2e-kvm/m7-vlanneg.spec.ts:52:    await page.getByLabel("Username").fill(user)
+dashboard/e2e-kvm/m7-vlanneg.spec.ts:53:    await page.getByLabel("Password", { exact: true }).fill(pw)
+## label/teks yang dipakai selector itu di login-form.tsx 339f234 vs final (harus sama)
+-- 339f234
+152:          <FieldLabel htmlFor="login-username">Username</FieldLabel>
+167:          <FieldLabel htmlFor="login-password">Password</FieldLabel>
+196:        type="submit"
+-- 5220865
+152:          <FieldLabel htmlFor="login-username">Username</FieldLabel>
+167:          <FieldLabel htmlFor="login-password">Password</FieldLabel>
+196:        type="submit"
+## dashboard/e2e-kvm: perubahan (hanya URL_CRED m7-shared.ts, DEC-028 §2)
+ dashboard/e2e-kvm/m7-shared.ts | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
+
+################ VERDICT test-engineer (gate-iter1 §Bukti ulang 5, DEC-028 §4) ################
+<final> = 5220865, commit kode terakhir iter2. Commit bukti sesudahnya hanya menyentuh .agent/runs/.
+Syarat "tanpa run KVM ulang": TERPENUHI.
+1. Pipeline deploy non-dry (overlay admin.env lewat stdin ssh_server, umask 077) IDENTIK dengan 339f234
+   setelah spasi awal dibuang. Satu-satunya perubahan di deploy-dashboard.sh adalah pembungkus
+   `if is_dry; then ... </dev/null; else ... fi`. Test shell `infra/test/m7-gk71.sh` memastikan jalur
+   non-dry tetap mengirim env lewat stdin (10/10 run, final-iter2/infra-test-run*.log).
+2. Tidak ada perubahan pada lib.sh (run()/ssh_server), kvm-run.sh, nginx*, infra/server/** (selain
+   komentar apply-profile.sh: 0 baris non-komentar), infra/switch, infra/vlan (relay), installers
+   (generator), validasi/schema, boot/iPXE. Daftar "file jalur KVM terlarang" di atas kosong.
+3. Komponen UI yang berubah:
+   - login-form.tsx (CR-7-3): kode identik setelah komentar dibuang, hanya JSDoc yang pindah. Selector
+     spec m7-vlan/m7-vlanneg (getByLabel "Username"/"Password", URL /login?next=) memakai FieldLabel
+     yang sama di 339f234 dan final.
+   - plan-table.tsx dan passwords-dialog.tsx (CR-7-4): hanya atribut `scrollRegionLabel` (aria-label
+     region). Keduanya tidak dirujuk spec e2e-kvm/m7-*, m7-shared.ts, atau kvm-harness.ts (grep kosong).
+     PlanTable hanya dirender di cabang bulk tab Network/Hostname, dan spec m7 KVM mengonfigurasi
+     node satu per satu lewat menu baris. Label tabel "Password yang dibuat" (dipakai e2e-kvm/m6-bulk)
+     tidak berubah.
+4. Perubahan lain di jalur bukti adalah scanner DEC-028 §2 (redact-evidence.sh `_url_cred_hits`,
+   m7-shared.ts URL_CRED). Scanner ini hanya memindai (exit 1 bila ada temuan) dan tidak memengaruhi
+   boot/install/deploy. Pola baru yang lebih ketat dijalankan ulang atas bukti KVM T11 yang ada
+   (vlancore, vlandistro, vlanneg, flat-debian, smoke, history): redact-evidence.sh exit 0 dengan 0 file
+   berubah pada salinan, dan URL_CRED 0 temuan (final-iter2/kvm-evidence-rescan.txt). Artinya entri
+   `AC-7.30-scan`/`redact` PASS di kvm/results.json tetap berlaku di bawah pola baru.

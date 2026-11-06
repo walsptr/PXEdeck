@@ -10,7 +10,7 @@
 //      (≥ 3:1 untuk teks besar);
 //   selain itu `kept` (tetap pelanggaran), termasuk bila warna tidak bisa dihitung pasti (opacity
 //   leluhur < 1, warna non-sRGB, latar tidak opak).
-// Jumlah node yang difilter per kategori dicatat sebagai bukti (`.agent/runs/m6/axe-results.json`).
+// Jumlah node yang difilter per kategori dicatat sebagai bukti (`.agent/runs/m<aktif>/axe-results.json`, M7: m7).
 import { appendFileSync, existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
@@ -158,7 +158,7 @@ export type AxeAudit = {
 
 /**
  * Bukti per audit ditambahkan ke JSONL di direktori run E2E (worker Playwright di-restart setiap test
- * gagal, jadi state modul tidak cukup); `writeAxeEvidence` meringkasnya ke `.agent/runs/m6/axe-results.json`.
+ * gagal, jadi state modul tidak cukup); `writeAxeEvidence` meringkasnya ke `.agent/runs/m7/axe-results.json`.
  */
 const evidenceFile = () => path.join(process.env.PXE_E2E_ROOT ?? path.resolve(__dirname, "../../.e2e-data"), "axe-audits.jsonl")
 
@@ -194,8 +194,11 @@ export async function auditA11y(page: Page, label: string, opts: { include?: str
   return audit
 }
 
-/** Tulis bukti audit (dipanggil afterAll spec). */
-export function writeAxeEvidence(file = path.resolve(__dirname, "../../../.agent/runs/m6/axe-results.json")) {
+/**
+ * Tulis bukti audit (dipanggil afterAll spec). M7-T8: default ke `.agent/runs/m7/` (milestone aktif) agar
+ * run regresi tidak menimpa bukti M6 yang sudah di-approve; filter di atas tidak berubah.
+ */
+export function writeAxeEvidence(file = path.resolve(__dirname, "../../../.agent/runs/m7/axe-results.json")) {
   if (!existsSync(evidenceFile())) return
   const evidence = readFileSync(evidenceFile(), "utf8")
     .split("\n")

@@ -1,0 +1,9 @@
+# kvm-run m7 scenario=vlancore run=m7vlancore 20261106T142500Z nodes=[31:uefi 32:bios] waves=0 keep_server=0 dry=0
+2026-11-06T14:25:00Z evidence           start 
+2026-11-06T14:25:00Z evidence           done 
+2026-11-06T14:25:00Z relay-teardown     ok relay-clean: absent
+2026-11-06T14:25:00Z server-logs        NOT_RUN node belum dibuat (tahap preflight)
+2026-11-06T14:25:00Z cleanup            done (server tidak dimatikan)
+2026-11-06T14:25:00Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-06T14:25:00Z redact             ok 
+2026-11-06T14:25:01Z result             FAIL exit=1 stage=preflight

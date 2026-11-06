@@ -1,0 +1,37 @@
+# network-config cloud-init VM pxe-test-switch (M7, docs/design/M7-plan.md §2.2).
+# sw-mgmt: segmen admin pxe-test (10.99.0.3/24, TANPA gateway — switch tanpa NAT/internet).
+# sw-up/sw-p1/sw-p2: port bridge br0 (dibuat pxe-switch.service), tanpa alamat apa pun.
+network:
+  version: 2
+  ethernets:
+    sw-mgmt:
+      match:
+        macaddress: "52:54:00:99:02:01"
+      set-name: sw-mgmt
+      addresses: [10.99.0.3/24]
+      dhcp4: false
+      dhcp6: false
+    sw-up:
+      match:
+        macaddress: "52:54:00:99:02:02"
+      set-name: sw-up
+      dhcp4: false
+      dhcp6: false
+      link-local: []
+      optional: true
+    sw-p1:
+      match:
+        macaddress: "52:54:00:99:02:03"
+      set-name: sw-p1
+      dhcp4: false
+      dhcp6: false
+      link-local: []
+      optional: true
+    sw-p2:
+      match:
+        macaddress: "52:54:00:99:02:04"
+      set-name: sw-p2
+      dhcp4: false
+      dhcp6: false
+      link-local: []
+      optional: true

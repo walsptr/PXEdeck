@@ -1,0 +1,484 @@
+(node:3711011) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 build
+[WebServer] > next build
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5 (Turbopack)
+[WebServer] ✓ Running next.config.ts took 23ms
+[WebServer] - Cache Components enabled
+[WebServer] - Partial Prefetching enabled
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 620ms
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 2.8s ...
+[WebServer]   Collecting page data using 11 workers ...
+[WebServer] (node:3711152) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711173) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711159) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711145) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711161) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711207) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711187) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711194) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711144) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711180) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3711196) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer]   Generating static pages using 11 workers (0/24) ...
+[WebServer]   Generating static pages using 11 workers (6/24) 
+[WebServer]   Generating static pages using 11 workers (12/24) 
+[WebServer]   Generating static pages using 11 workers (18/24) 
+[WebServer] ✓ Generating static pages using 11 workers (24/24) in 526ms
+[WebServer]   Finalizing page optimization ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ○ /_not-found
+[WebServer] ├ ƒ /api/auth/login
+[WebServer] ├ ƒ /api/auth/logout
+[WebServer] ├ ƒ /api/auth/session
+[WebServer] ├ ƒ /api/credentials/import
+[WebServer] ├ ƒ /api/hosts
+[WebServer] ├ ƒ /api/hosts/[id]
+[WebServer] ├ ƒ /api/hosts/[id]/config
+[WebServer] ├ ƒ /api/hosts/[id]/install
+[WebServer] ├ ƒ /api/hosts/[id]/reboot
+[WebServer] ├ ƒ /api/hosts/bulk
+[WebServer] ├ ƒ /api/hosts/bulk/install
+[WebServer] ├ ƒ /api/jobs
+[WebServer] ├ ƒ /api/jobs/[id]
+[WebServer] ├ ƒ /api/jobs/[id]/logs
+[WebServer] ├ ƒ /api/network
+[WebServer] ├ ƒ /api/os-images
+[WebServer] ├ ƒ /api/os-images/[id]
+[WebServer] ├ ƒ /api/server-status
+[WebServer] ├ ƒ /api/settings
+[WebServer] ├ ƒ /api/ssh-keys
+[WebServer] ├ ƒ /api/ssh-keys/[id]
+[WebServer] ├ ƒ /boot/[name]
+[WebServer] ├ ƒ /boot/[name]/[token]/[file]
+[WebServer] ├ ƒ /boot/[name]/[token]/log
+[WebServer] ├ ƒ /boot/[name]/[token]/status
+[WebServer] ├ ◐ /design
+[WebServer] ├ ◐ /hosts
+[WebServer] ├ ◐ /jobs
+[WebServer] ├ ◐ /login
+[WebServer] ├ ƒ /login/submit
+[WebServer] ├ ◐ /os-images
+[WebServer] ├ ◐ /settings
+[WebServer] └ ◐ /ssh-keys
+[WebServer] 
+[WebServer] 
+[WebServer] ƒ Proxy (Middleware)
+[WebServer] 
+[WebServer] ○  (Static)             prerendered as static content
+[WebServer] ◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+[WebServer] ƒ  (Dynamic)            server-rendered on demand
+[WebServer] 
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3100
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3100
+[WebServer] - Network:       http://192.168.0.207:3100
+[WebServer] ✓ Ready in 135ms
+[WebServer] ✓ Running next.config.ts took 27ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711375) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3101
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3101
+[WebServer] - Network:       http://192.168.0.207:3101
+[WebServer] ✓ Ready in 156ms
+[WebServer] ✓ Running next.config.ts took 31ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711409) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3102
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3102
+[WebServer] - Network:       http://192.168.0.207:3102
+[WebServer] ✓ Ready in 142ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711445) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3103
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3103
+[WebServer] - Network:       http://192.168.0.207:3103
+[WebServer] ✓ Ready in 150ms
+[WebServer] ✓ Running next.config.ts took 29ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711481) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3104
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3104
+[WebServer] - Network:       http://192.168.0.207:3104
+[WebServer] ✓ Ready in 132ms
+[WebServer] ✓ Running next.config.ts took 26ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711517) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3105
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3105
+[WebServer] - Network:       http://192.168.0.207:3105
+[WebServer] ✓ Ready in 153ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711553) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3106
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3106
+[WebServer] - Network:       http://192.168.0.207:3106
+[WebServer] ✓ Ready in 138ms
+[WebServer] ✓ Running next.config.ts took 32ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711589) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3107
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3107
+[WebServer] - Network:       http://192.168.0.207:3107
+[WebServer] ✓ Ready in 143ms
+[WebServer] ✓ Running next.config.ts took 26ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711631) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3108
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3108
+[WebServer] - Network:       http://192.168.0.207:3108
+[WebServer] ✓ Ready in 139ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] (node:3711667) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3109
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3109
+[WebServer] - Network:       http://192.168.0.207:3109
+[WebServer] ✓ Ready in 165ms
+[WebServer] ✓ Running next.config.ts took 32ms
+[WebServer] (node:3711703) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3110
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3110
+[WebServer] - Network:       http://192.168.0.207:3110
+[WebServer] ✓ Ready in 147ms
+[WebServer] ✓ Running next.config.ts took 29ms
+[WebServer] (node:3711740) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3111
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3111
+[WebServer] - Network:       http://192.168.0.207:3111
+[WebServer] ✓ Ready in 163ms
+[WebServer] ✓ Running next.config.ts took 31ms
+[WebServer] (node:3711776) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3112
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3112
+[WebServer] - Network:       http://192.168.0.207:3112
+[WebServer] ✓ Ready in 152ms
+[WebServer] ✓ Running next.config.ts took 31ms
+[WebServer] (node:3711812) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3113
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3113
+[WebServer] - Network:       http://192.168.0.207:3113
+[WebServer] ✓ Ready in 148ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] (node:3711846) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3114
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3114
+[WebServer] - Network:       http://192.168.0.207:3114
+[WebServer] ✓ Ready in 149ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711882) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3115
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3115
+[WebServer] - Network:       http://192.168.0.207:3115
+[WebServer] ✓ Ready in 153ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3711927) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3116
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3116
+[WebServer] - Network:       http://192.168.0.207:3116
+[WebServer] ✓ Ready in 161ms
+[WebServer] ✓ Running next.config.ts took 33ms
+[WebServer] (node:3711963) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3117
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3117
+[WebServer] - Network:       http://192.168.0.207:3117
+[WebServer] ✓ Ready in 148ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] (node:3711999) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3118
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3118
+[WebServer] - Network:       http://192.168.0.207:3118
+[WebServer] ✓ Ready in 151ms
+[WebServer] ✓ Running next.config.ts took 31ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3712035) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3119
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3119
+[WebServer] - Network:       http://192.168.0.207:3119
+[WebServer] ✓ Ready in 168ms
+[WebServer] ✓ Running next.config.ts took 32ms
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+[WebServer] (node:3712071) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 41 tests using 1 worker
+
+(node:3712097) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   1 [setup-m6-ui-iter2] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+(node:3712193) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   2 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.2s)
+(node:3712286) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   3 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (758ms)
+(node:3712378) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   4 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (824ms)
+(node:3712470) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   5 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (724ms)
+(node:3712562) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   6 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (2.3s)
+(node:3712695) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   7 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.2s)
+(node:3712789) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   8 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.3s)
+(node:3712894) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓   9 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (742ms)
+(node:3712987) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  10 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (748ms)
+(node:3713083) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  11 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.3s)
+(node:3713177) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  12 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (4.4s)
+(node:3713289) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  13 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (6.3s)
+(node:3713400) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  14 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (706ms)
+(node:3713490) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  15 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.3s)
+(node:3713584) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  16 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.2s)
+(node:3713682) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  17 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (3.4s)
+(node:3713816) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  18 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.4s)
+(node:3713922) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  19 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (4.3s)
+(node:3714030) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✘  20 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (14.4s)
+(node:3714159) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  21 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (734ms)
+(node:3714254) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  22 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (5.6s)
+(node:3714360) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  23 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (843ms)
+(node:3714455) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  24 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.3s)
+(node:3714594) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  25 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (775ms)
+(node:3714688) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  26 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (725ms)
+(node:3714779) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  27 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.2s)
+(node:3714875) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  28 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (2.4s)
+(node:3714977) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  29 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.2s)
+(node:3715079) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  30 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.4s)
+(node:3715174) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  31 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (796ms)
+(node:3715268) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  32 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (1.4s)
+(node:3715369) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  33 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (2.4s)
+(node:3715469) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  34 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (5.8s)
+(node:3715594) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  35 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (2.2s)
+(node:3715702) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  36 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (796ms)
+(node:3715796) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  37 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (851ms)
+(node:3715927) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  38 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (846ms)
+(node:3716023) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  39 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (2.4s)
+(node:3716123) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  40 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (2.4s)
+(node:3716234) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  41 [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login (2.2s)
+
+
+  1) [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login 
+
+    Error: expect(received).not.toBeNull()
+
+    Received: null
+
+    Call Log:
+    - Timeout 15000ms exceeded while waiting on the predicate
+
+      125 |     await expect
+      126 |       .poll(async () => (stored = await page.evaluate(() => sessionStorage.getItem("iter2-session-msg")).catch(() => null)), { timeout: 15_000 })
+    > 127 |       .not.toBeNull()
+          |            ^
+      128 |     const got = JSON.parse(stored!) as { text: string; color: string }
+      129 |     expect(got.text).toBe("Sesi berakhir. Masuk lagi untuk melihat log.")
+      130 |     expect(got.color).not.toBe(MUTED)
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e/m6-ui-iter2.spec.ts:127:12
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/m6-ui-iter2-R1-DR-6-1-alas-bd75b-ukur-sebelum-redirect-login-m6-ui-iter2-repeat18/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/m6-ui-iter2-R1-DR-6-1-alas-bd75b-ukur-sebelum-redirect-login-m6-ui-iter2-repeat18/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m6-ui-iter2-R1-DR-6-1-alas-bd75b-ukur-sebelum-redirect-login-m6-ui-iter2-repeat18/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m6-ui-iter2-R1-DR-6-1-alas-bd75b-ukur-sebelum-redirect-login-m6-ui-iter2-repeat18/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [m6-ui-iter2] › e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur sebelum redirect login 
+  40 passed (2.4m)
+exit=1

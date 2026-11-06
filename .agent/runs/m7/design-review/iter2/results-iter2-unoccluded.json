@@ -1,0 +1,278 @@
+{
+ "bulk@375": {
+  "perDescription": [
+   {
+    "text": "IP management statis di VLAN 20 pada NIC yang dipilih. Saat ",
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       ".gap-2 > .type-column-label.text-muted-foreground",
+       "table[aria-label=\"Preview IP baru\"] > thead > tr > th:nth-child(1)",
+       "table[aria-label=\"Preview IP baru\"] > thead > tr > th:nth-child(2)",
+       "table[aria-label=\"Preview IP baru\"] > thead > tr > th:nth-child(3)",
+       "tr[data-host-id=\"b083fe5c19e2\"] > .text-muted-foreground.type-data",
+       "tr[data-host-id=\"a0369f0b725d\"] > .text-muted-foreground.type-data"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 1.17 < 4.5",
+        "fg": "#807d72",
+        "bg": "#f54e00",
+        "ratio": 1.17,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 1.17 < 4.5",
+        "fg": "#807d72",
+        "bg": "#f54e00",
+        "ratio": 1.17,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.27 < 4.5",
+        "fg": "#807d72",
+        "bg": "#e6e5e0",
+        "ratio": 3.27,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 3
+   },
+   {
+    "text": "Maksimal 4. Tekan Enter untuk menambah.",
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       ".gap-7 > .leading-normal.group-has-data-horizontal\\/field\\:text-balance.\\[\\[data-variant\\=legend\\]\\+\\&\\]\\:-mt-1\\.5",
+       ".gap-7 > .leading-normal.group-has-data-horizontal\\/field\\:text-balance.\\[\\[data-variant\\=legend\\]\\+\\&\\]\\:-mt-1\\.5 > .text-xs.type-data"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.94 < 4.5",
+        "fg": "#807d72",
+        "bg": "#fafaf7",
+        "ratio": 3.94,
+        "inSheet": true
+       },
+       {
+        "category": "kept",
+        "why": "kontras terhitung 1.17 < 4.5",
+        "fg": "#807d72",
+        "bg": "#f54e00",
+        "ratio": 1.17,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 11
+   },
+   {
+    "text": "Terdaftar: 20 · 10.99.20.0/24, 30 · 10.99.30.0/26",
+    "violations": [],
+    "filtered": 13
+   },
+   {
+    "text": "NIC dipilih dari MAC PXE masing-masing host (match: macaddre",
+    "violations": [],
+    "filtered": 13
+   }
+  ],
+  "regionCentered": {
+   "violations": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "targets": [
+      ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto.group\\/field:nth-child(4) > .leading-normal.group-has-data-horizontal\\/field\\:text-balance.\\[\\[data-variant\\=legend\\]\\+\\&\\]\\:-mt-1\\.5"
+     ],
+     "detail": [
+      {
+       "category": "kept",
+       "why": "kontras terhitung 3.27 < 4.5",
+       "fg": "#807d72",
+       "bg": "#e6e5e0",
+       "ratio": 3.27,
+       "inSheet": true
+      }
+     ]
+    }
+   ],
+   "filtered": 8
+  }
+ },
+ "pw@375": {
+  "dialogOnly": {
+   "violations": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "targets": [
+      "table[aria-label=\"Password yang dibuat\"] > thead > tr > th:nth-child(3)"
+     ],
+     "detail": [
+      {
+       "category": "kept",
+       "why": "di luar Sheet dan bukan pasangan pengecualian",
+       "fg": "#807d72",
+       "bg": "#333333",
+       "ratio": 3.06,
+       "inSheet": false
+      }
+     ]
+    }
+   ],
+   "filtered": 5
+  },
+  "dialogOnlyScrolledRight": {
+   "violations": [],
+   "filtered": 5
+  },
+  "overflowX": 131
+ },
+ "bulk@1440": {
+  "perDescription": [
+   {
+    "text": "IP management statis di VLAN 20 pada NIC yang dipilih. Saat ",
+    "violations": [],
+    "filtered": 10
+   },
+   {
+    "text": "Maksimal 4. Tekan Enter untuk menambah.",
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "tr[data-host-id=\"b083fe5c19e2\"] > .text-muted-foreground.type-data"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.27 < 4.5",
+        "fg": "#807d72",
+        "bg": "#e6e5e0",
+        "ratio": 3.27,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 14
+   },
+   {
+    "text": "Terdaftar: 20 · 10.99.20.0/24, 30 · 10.99.30.0/26",
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "tr[data-host-id=\"b083fe5c19e2\"] > .text-muted-foreground.type-data"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.27 < 4.5",
+        "fg": "#807d72",
+        "bg": "#e6e5e0",
+        "ratio": 3.27,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 14
+   },
+   {
+    "text": "NIC dipilih dari MAC PXE masing-masing host (match: macaddre",
+    "violations": [
+     {
+      "id": "color-contrast",
+      "impact": "serious",
+      "targets": [
+       "tr[data-host-id=\"b083fe5c19e2\"] > .text-muted-foreground.type-data"
+      ],
+      "detail": [
+       {
+        "category": "kept",
+        "why": "kontras terhitung 3.27 < 4.5",
+        "fg": "#807d72",
+        "bg": "#e6e5e0",
+        "ratio": 3.27,
+        "inSheet": true
+       }
+      ]
+     }
+    ],
+    "filtered": 14
+   }
+  ],
+  "regionCentered": {
+   "violations": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "targets": [
+      ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto.group\\/field:nth-child(4) > .leading-normal.group-has-data-horizontal\\/field\\:text-balance.\\[\\[data-variant\\=legend\\]\\+\\&\\]\\:-mt-1\\.5"
+     ],
+     "detail": [
+      {
+       "category": "kept",
+       "why": "kontras terhitung 3.94 < 4.5",
+       "fg": "#807d72",
+       "bg": "#fafaf7",
+       "ratio": 3.94,
+       "inSheet": true
+      }
+     ]
+    }
+   ],
+   "filtered": 10
+  }
+ },
+ "pw@1440": {
+  "dialogOnly": {
+   "violations": [],
+   "filtered": 4
+  },
+  "dialogOnlyScrolledRight": {
+   "violations": [],
+   "filtered": 4
+  },
+  "overflowX": 0
+ }
+}

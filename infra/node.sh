@@ -9,10 +9,26 @@
 # Nama wajib ^pxe-test-, tidak boleh pxe-test-node01 / nama milik user.
 # M5 (AC-5.33): poweroff = `virsh destroy` saja (definisi, NVRAM, dan disk tetap; uji "matikan
 # paksa di tengah install"); start = `virsh start` dengan listener serial disambung (append).
+# M7 (docs/design/M7-plan.md §2.6): `create ... --net <network>` (atau env PXE_NODE_NET) memilih
+# network NIC node dari allowlist pxe-test | pxe-test-port1 | pxe-test-port2 (default pxe-test);
+# selain itu identik.
 set -euo pipefail
 source "$(dirname "$0")/lib.sh"
 
-usage() { echo "pakai: $0 create|destroy <name> <mac> [uefi|bios] | reset|poweroff <name> | start <name> [mac]" >&2; exit 2; }
+usage() { echo "pakai: $0 create <name> <mac> [uefi|bios] [--net pxe-test|pxe-test-port1|pxe-test-port2] | destroy <name> [mac] | reset|poweroff <name> | start <name> [mac]" >&2; exit 2; }
+node_net="${PXE_NODE_NET:-$NET_PXE}"
+pos=()
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --net) [[ $# -ge 2 ]] || usage; node_net="$2"; shift 2 ;;
+    --net=*) node_net="${1#--net=}"; shift ;;
+    *) pos+=("$1"); shift ;;
+  esac
+done
+set -- "${pos[@]+"${pos[@]}"}"
+net_ok=0
+for n in "${NODE_NETS[@]}"; do [[ "$node_net" == "$n" ]] && net_ok=1; done
+((net_ok)) || die "network node '$node_net' tidak diizinkan (hanya ${NODE_NETS[*]})"
 [[ $# -ge 2 ]] || usage
 action="$1"; name="$2"; mac="${3:-}"; fw="${4:-uefi}"
 assert_name "$name"
@@ -34,7 +50,8 @@ case "$action" in
       serial_capture_start "$(serial_port_for_mac "$mac")" "$console" append >/dev/null
       log "start $name (sudah ada)"; virsh_m start "$name"; exit 0
     fi
-    net_active "$NET_PXE" || is_dry || die "network $NET_PXE belum aktif (net-up.sh)"
+    assert_name "$node_net"
+    net_active "$node_net" || is_dry || die "network $node_net belum aktif (net-up.sh)"
     run rm -f "$disk"
     run qemu-img create -q -f qcow2 "$disk" 20G
     serial_arg="$(serial_capture_start "$(serial_port_for_mac "$mac")" "$console")"
@@ -42,11 +59,11 @@ case "$action" in
     if [[ "$fw" == uefi ]]; then
       boot="network,hd,loader=$OVMF_CODE,loader.readonly=yes,loader.type=pflash,loader_secure=no,nvram.template=$OVMF_VARS"
     fi
-    log "create $name ($fw, $mac, ${NODE_RAM_MB} MB)"
+    log "create $name ($fw, $mac, ${NODE_RAM_MB} MB, network $node_net)"
     run virt-install --connect "$VIRSH_URI" --name "$name" --memory "$NODE_RAM_MB" --vcpus 2 \
       --osinfo linux2022 \
       --disk "path=$disk,format=qcow2,bus=virtio" \
-      --network "network=$NET_PXE,mac=$mac,model=virtio" \
+      --network "network=$node_net,mac=$mac,model=virtio" \
       --pxe --boot "$boot" --install no_install=yes \
       --graphics none --noautoconsole --serial "$serial_arg"
     if ! is_dry; then

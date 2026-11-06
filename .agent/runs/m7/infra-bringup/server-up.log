@@ -1,0 +1,32 @@
+[2026-11-06T10:31:13Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-06T10:31:03Z in 65s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-06T10:31:13Z] network pxe-test sudah terdefinisi
+[2026-11-06T10:31:13Z] network pxe-test sudah aktif
+[2026-11-06T10:31:13Z] network pxe-test-nat sudah terdefinisi
+[2026-11-06T10:31:13Z] network pxe-test-nat sudah aktif
+[2026-11-06T10:31:13Z] network pxe-test-trunk sudah terdefinisi
+[2026-11-06T10:31:13Z] network pxe-test-trunk sudah aktif
+[2026-11-06T10:31:13Z] network pxe-test-port1 sudah terdefinisi
+[2026-11-06T10:31:13Z] network pxe-test-port1 sudah aktif
+[2026-11-06T10:31:13Z] network pxe-test-port2 sudah terdefinisi
+[2026-11-06T10:31:13Z] network pxe-test-port2 sudah aktif
+[2026-11-06T10:31:14Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-06T10:31:23Z] SSH siap dalam 10s
+6.1.0-50-amd64
+# apply-profile vlan 2026-11-06T10:31:25Z on pxe-test-server
+OK   dnsmasq dihentikan
+OK   enp3s0 -> trunk0
+OK   pxe10 10.99.10.2/24, mgmt20 10.99.20.1/24 di trunk0
+OK   net.ipv4.ip_forward=0
+dnsmasq: syntax check OK.
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+OK   nginx dimuat ulang (10.99.0.2:80 + 10.99.10.2:80)
+OK   NFS: /srv/pxe/media/ubuntu-24.04 10.99.10.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash) /srv/pxe/media/ubuntu-24.04 10.99.20.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash) /srv/pxe/media/rocky-9 10.99.10.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash) /srv/pxe/media/rocky-9 10.99.20.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash) 
+OK   dnsmasq dijalankan (interface=pxe10)
+RESULT: APPLIED
+[2026-11-06T10:31:28Z] verifikasi listen VLAN PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/infra-bringup/server-listen-vlan.txt
+exit=0

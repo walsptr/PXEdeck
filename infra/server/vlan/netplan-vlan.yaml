@@ -1,0 +1,30 @@
+# /etc/netplan/60-pxe-vlan.yaml — profil VLAN VM pxe-test-server (M7, docs/design/M7-plan.md §2.3).
+# Tambahan di atas netplan base (pxe0 10.99.0.2 admin, nat0 NAT apt) — base tidak diubah.
+# trunk0 (NIC ke-3, network pxe-test-trunk) tanpa alamat; sub-interface ber-tag:
+#   pxe10  VLAN 10 (PXE)        10.99.10.2/24  dnsmasq (DHCP/TFTP/DNS), nginx, nfsd
+#   mgmt20 VLAN 20 (management) 10.99.20.1/24  gateway node (penerimaan lokal; ip_forward=0)
+network:
+  version: 2
+  ethernets:
+    trunk0:
+      match:
+        macaddress: "52:54:00:99:01:04"
+      set-name: trunk0
+      dhcp4: false
+      dhcp6: false
+      link-local: []
+  vlans:
+    pxe10:
+      id: 10
+      link: trunk0
+      addresses: [10.99.10.2/24]
+      dhcp4: false
+      dhcp6: false
+      link-local: []
+    mgmt20:
+      id: 20
+      link: trunk0
+      addresses: [10.99.20.1/24]
+      dhcp4: false
+      dhcp6: false
+      link-local: []

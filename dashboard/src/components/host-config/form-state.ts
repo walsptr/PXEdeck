@@ -17,15 +17,19 @@ import {
 import {
   intToIp,
   ipToInt,
+  isVlanNetwork,
   MGMT_NETWORK,
   parseCidr,
   planIps,
+  resolveStaticNetwork,
   subnetBounds,
   validateIpAssignments,
   validateStaticNetwork,
   type IpPlanRow,
   type IpUsage,
   type MgmtNetwork,
+  type StaticNetwork,
+  type VlanNetwork,
 } from "@/lib/net"
 import { parseSshKey } from "@/lib/ssh-key"
 import type { Host } from "@/lib/types"
@@ -113,26 +117,54 @@ export type FormState = {
 }
 
 /**
- * Default range alokasi bulk dari subnet aktif: mulai `.11` (setelah gateway/PXE server, sama
- * dengan pxe-nodes) sampai tepat sebelum range DHCP dinamis (atau sebelum broadcast).
+ * Parameter jaringan untuk form: subnet management aktif (DEC-006) + VLAN management terdaftar
+ * (M7, DEC-024 §4; `vlanNetworks` dari `GET /api/settings`, kosong/tidak ada = tidak ada VLAN).
  */
-export function defaultIpRange(mgmt: MgmtNetwork): { start: string; end: string } {
-  const { network, broadcast } = subnetBounds(mgmt.cidr)
+export type FormNetwork = MgmtNetwork & {
+  vlanNetworks?: readonly VlanNetwork[]
+}
+
+/**
+ * Default range alokasi bulk dari subnet aktif: mulai `.11` (setelah gateway/PXE server, sama
+ * dengan pxe-nodes) sampai tepat sebelum range DHCP dinamis (atau sebelum broadcast). VLAN
+ * terdaftar (DEC-024) tidak punya range DHCP dashboard → `.11` sampai sebelum broadcast.
+ */
+export function defaultIpRange(net: StaticNetwork): { start: string; end: string } {
+  const { network, broadcast } = subnetBounds(net.cidr)
   const start = Math.min(network + 11, broadcast - 1)
-  const lo = ipToInt(mgmt.dynamicRange[0])
+  if (isVlanNetwork(net)) return { start: intToIp(start), end: intToIp(broadcast - 1) }
+  const lo = ipToInt(net.dynamicRange[0])
   const end = lo - 1 > start && lo <= broadcast ? lo - 1 : broadcast - 1
   return { start: intToIp(start), end: intToIp(end) }
+}
+
+/** Prefix yang diharuskan jaringan statis (VLAN: prefix CIDR VLAN; management: prefix CIDR). */
+export function requiredPrefix(net: StaticNetwork): number {
+  return isVlanNetwork(net) ? net.prefix : parseCidr(net.cidr).prefix
+}
+
+/** Nilai field VLAN form → VLAN ID (null bila kosong/bukan angka). */
+export function parseVlan(v: string): number | null {
+  const t = v.trim()
+  if (!/^\d+$/.test(t)) return null
+  return Number(t)
 }
 
 export function initialForm(
   hosts: Host[],
   config?: PublicHostConfig,
-  /** Subnet management aktif dari server (`GET /api/settings`, CR-3-2). */
-  mgmt: MgmtNetwork = MGMT_NETWORK,
+  /** Subnet management aktif dari server (`GET /api/settings`, CR-3-2) + VLAN terdaftar (M7). */
+  mgmt: FormNetwork = MGMT_NETWORK,
 ): FormState {
   const single = hosts.length === 1 ? hosts[0] : null
   const net = config?.network
-  const range = defaultIpRange(mgmt)
+  const range = defaultIpRange(
+    resolveStaticNetwork(
+      net?.mode === "static" ? net.vlan : null,
+      mgmt,
+      mgmt.vlanNetworks,
+    ),
+  )
   return {
     os: {
       osImageId:
@@ -193,13 +225,49 @@ export type Context = {
   /** Semua host (untuk deteksi bentrok IP/hostname di luar batch). */
   allHosts: Host[]
   config?: PublicHostConfig
-  /** Subnet management aktif dari server (`GET /api/settings`); default lab hanya untuk test. */
-  net?: MgmtNetwork
+  /**
+   * Subnet management aktif dari server (`GET /api/settings`) + VLAN terdaftar (M7); default lab
+   * hanya untuk test.
+   */
+  net?: FormNetwork
 }
 
-/** Subnet yang dipakai validasi klien. */
+/** Subnet management (DEC-006) yang dipakai validasi klien. */
 export function mgmtOf(ctx: Context): MgmtNetwork {
   return ctx.net ?? MGMT_NETWORK
+}
+
+/** VLAN management terdaftar (`PXE_VLAN_NETWORKS`); kosong bila server tidak mengirimnya. */
+export function vlanNetworksOf(ctx: Context): readonly VlanNetwork[] {
+  return ctx.net?.vlanNetworks ?? []
+}
+
+/**
+ * Jaringan yang berlaku untuk IP statis form (DEC-024 §4, sama dengan server): VLAN terdaftar →
+ * jaringan VLAN itu; VLAN kosong/tidak terdaftar → subnet management (DEC-006).
+ */
+export function staticNetworkOf(f: Pick<NetForm, "vlan">, ctx: Context): StaticNetwork {
+  return resolveStaticNetwork(parseVlan(f.vlan), mgmtOf(ctx), vlanNetworksOf(ctx))
+}
+
+/**
+ * Patch form saat field VLAN berubah (M7 §2.5c): prefix, gateway, dan range bulk yang masih sama
+ * dengan nilai default jaringan sebelumnya (= belum diubah pengguna) diganti default jaringan
+ * baru; nilai yang sudah diubah pengguna dipertahankan. VLAN tidak terdaftar/kosong → jaringan
+ * management, sehingga mengosongkan VLAN mengembalikan default subnet PXE.
+ */
+export function vlanPatch(f: NetForm, vlan: string, ctx: Context): Partial<NetForm> {
+  const prev = staticNetworkOf(f, ctx)
+  const next = staticNetworkOf({ vlan }, ctx)
+  const patch: Partial<NetForm> = { vlan }
+  if (prev === next) return patch
+  if (f.prefix === requiredPrefix(prev)) patch.prefix = requiredPrefix(next)
+  if (f.gateway.trim() === prev.gateway) patch.gateway = next.gateway
+  const prevRange = defaultIpRange(prev)
+  const nextRange = defaultIpRange(next)
+  if (f.start.trim() === prevRange.start) patch.start = nextRange.start
+  if (f.end.trim() === prevRange.end) patch.end = nextRange.end
+  return patch
 }
 
 export function ipUsageFor(ctx: Context): IpUsage {
@@ -233,7 +301,7 @@ export function ipPlan(f: NetForm, ctx: Context): IpPlanRow[] {
   if (ctx.hosts.length === 1) {
     const h = ctx.hosts[0]
     const err =
-      validateIpAssignments([{ hostId: h.id, ip: f.ip }], usage, mgmtOf(ctx)).get(
+      validateIpAssignments([{ hostId: h.id, ip: f.ip }], usage, staticNetworkOf(f, ctx)).get(
         h.id,
       ) ??
       null
@@ -247,7 +315,7 @@ export function ipPlan(f: NetForm, ctx: Context): IpPlanRow[] {
       : { kind: "increment", start: f.start.trim(), step: f.step },
     usage,
     f.skipUsed,
-    mgmtOf(ctx),
+    staticNetworkOf(f, ctx),
   )
 }
 
@@ -326,8 +394,10 @@ export function sectionErrors(
           ? bad[0].error
           : `${bad.length} host belum dapat IP valid`,
       )
-    // Aturan sama dengan server (DEC-006): prefix = subnet management, gateway di subnet.
-    for (const m of validateStaticNetwork(n, mgmtOf(ctx))) push("network", m)
+    // Aturan sama dengan server (DEC-006/DEC-024): prefix = subnet management atau subnet VLAN
+    // terdaftar, gateway di subnet itu.
+    for (const m of validateStaticNetwork(n, staticNetworkOf(n, ctx)))
+      push("network", m)
     if (n.dns.length === 0) push("network", "Minimal satu DNS")
     if (n.vlan && !(Number(n.vlan) >= 1 && Number(n.vlan) <= 4094))
       push("network", "VLAN ID 1–4094")

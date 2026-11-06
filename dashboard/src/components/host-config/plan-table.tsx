@@ -32,45 +32,47 @@ export function PlanTable({
           {bad ? `${bad} bermasalah` : `${rows.length} host siap`}
         </Badge>
       </div>
-      <div className="max-h-72 overflow-auto rounded-xl border border-border bg-card">
-        <Table aria-label={`Preview ${valueLabel}`}>
-          <TableHeader>
-            <TableRow>
-              <TableHead>MAC</TableHead>
-              <TableHead>Saat ini</TableHead>
-              <TableHead>{valueLabel}</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rows.map((r) => {
-              const h = byId.get(r.hostId)!
-              const cur = currentOf(h)
-              return (
-                <TableRow
-                  key={r.hostId}
-                  data-host-id={r.hostId}
-                  data-state={r.error ? "error" : "ok"}
-                >
-                  <TableCell className="type-data">{h.mac}</TableCell>
-                  <TableCell className="type-data text-muted-foreground">
-                    {cur ?? "—"}
-                  </TableCell>
-                  <TableCell className="whitespace-normal">
-                    <div className="flex flex-col gap-0.5">
-                      <span className="type-data">{r.value || "—"}</span>
-                      {r.error && (
-                        <span className="type-caption text-destructive">
-                          <IpText text={r.error} />
-                        </span>
-                      )}
-                    </div>
-                  </TableCell>
-                </TableRow>
-              )
-            })}
-          </TableBody>
-        </Table>
-      </div>
+      <Table
+        aria-label={`Preview ${valueLabel}`}
+        scrollRegionLabel={`Area gulir preview ${valueLabel}`}
+        containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+      >
+        <TableHeader>
+          <TableRow>
+            <TableHead>MAC</TableHead>
+            <TableHead>Saat ini</TableHead>
+            <TableHead>{valueLabel}</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((r) => {
+            const h = byId.get(r.hostId)!
+            const cur = currentOf(h)
+            return (
+              <TableRow
+                key={r.hostId}
+                data-host-id={r.hostId}
+                data-state={r.error ? "error" : "ok"}
+              >
+                <TableCell className="type-data">{h.mac}</TableCell>
+                <TableCell className="type-data text-muted-foreground">
+                  {cur ?? "—"}
+                </TableCell>
+                <TableCell className="whitespace-normal">
+                  <div className="flex flex-col gap-0.5">
+                    <span className="type-data">{r.value || "—"}</span>
+                    {r.error && (
+                      <span className="type-caption text-destructive">
+                        <IpText text={r.error} />
+                      </span>
+                    )}
+                  </div>
+                </TableCell>
+              </TableRow>
+            )
+          })}
+        </TableBody>
+      </Table>
     </div>
   )
 }

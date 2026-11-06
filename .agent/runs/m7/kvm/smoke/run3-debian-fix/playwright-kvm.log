@@ -1,0 +1,37 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 e2e-kvm/m7-vlansmoke.spec.ts:357:7 › T10 settings server VLAN: cidr PXE 10.99.10.0/24 + vlanNetworks VLAN 20 (15ms)
+  ✘  2 e2e-kvm/m7-vlansmoke.spec.ts:367:7 › T10 smoke VLAN: node port1 (VLAN 10 native) → IP statis VLAN 20 → Done + relay verify + MTU + reboot dari disk (30.4m)
+
+
+  1) e2e-kvm/m7-vlansmoke.spec.ts:367:7 › T10 smoke VLAN: node port1 (VLAN 10 native) → IP statis VLAN 20 → Done + relay verify + MTU + reboot dari disk 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 3
+
+    - Array []
+    + Array [
+    +   "pxe-test-m7vlansmoke-node43: job booting/timeout 30 mnt (urutan booting)",
+    + ]
+
+      381 |       }
+      382 |     }
+    > 383 |     expect(outcomes.filter((o) => !o.ok).map((o) => `${o.node}: ${o.note}`)).toEqual([])
+          |                                                                              ^
+      384 |   })
+      385 | }
+      386 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm/m7-vlansmoke.spec.ts:383:78
+
+    Error Context: ../.agent/runs/m7/kvm/smoke/playwright-kvm-artifacts/m7-vlansmoke-T10-smoke-VLA-5bb44-verify-MTU-reboot-dari-disk/error-context.md
+
+    Error Context: ../.agent/runs/m7/kvm/smoke/playwright-kvm-artifacts/m7-vlansmoke-T10-smoke-VLA-5bb44-verify-MTU-reboot-dari-disk/error-context.md
+
+  Slow test file: e2e-kvm/m7-vlansmoke.spec.ts (30.4m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 failed
+    e2e-kvm/m7-vlansmoke.spec.ts:367:7 › T10 smoke VLAN: node port1 (VLAN 10 native) → IP statis VLAN 20 → Done + relay verify + MTU + reboot dari disk 
+  1 passed (30.4m)

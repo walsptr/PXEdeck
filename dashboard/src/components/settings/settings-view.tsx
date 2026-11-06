@@ -14,7 +14,19 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
-import { useSettings, type SettingsResponse } from "@/hooks/use-settings"
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table"
+import {
+  useSettings,
+  vlanNetworksOf,
+  type SettingsResponse,
+} from "@/hooks/use-settings"
 
 type Row = {
   label: string
@@ -159,6 +171,53 @@ function accessSection(s: SettingsResponse) {
   }
 }
 
+/**
+ * M7 (DEC-024 §4, AC-7.12): blok read-only "VLAN management" — VLAN terdaftar dari env
+ * `PXE_VLAN_NETWORKS` (VLAN · Subnet · Gateway, mono). IP statis host dengan VLAN ini divalidasi
+ * terhadap subnet VLAN, bukan subnet PXE.
+ */
+export function VlanNetworksCard({ settings }: { settings: SettingsResponse }) {
+  const vlans = vlanNetworksOf(settings)
+  return (
+    <Card data-slot="settings-section" data-testid="settings-vlan">
+      <CardHeader>
+        <CardTitle className="type-section-title">VLAN management</CardTitle>
+        <CardDescription className="type-caption">
+          IP statis host dengan VLAN terdaftar divalidasi terhadap subnet VLAN itu (tanpa DHCP
+          dashboard); VLAN lain mengikuti subnet provisioning.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        {vlans.length === 0 ? (
+          <p className="type-body text-muted-foreground" data-testid="settings-vlan-empty">
+            Tidak ada VLAN management terdaftar (
+            <span className="type-data">PXE_VLAN_NETWORKS</span>)
+          </p>
+        ) : (
+          <Table aria-label="VLAN management terdaftar">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="pl-0">VLAN</TableHead>
+                <TableHead>Subnet</TableHead>
+                <TableHead>Gateway</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {vlans.map((v) => (
+                <TableRow key={v.vlan} data-vlan={v.vlan}>
+                  <TableCell className="type-data pl-0">{v.vlan}</TableCell>
+                  <TableCell className="type-data">{v.cidr}</TableCell>
+                  <TableCell className="type-data">{v.gateway}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        )}
+      </CardContent>
+    </Card>
+  )
+}
+
 const noopSubscribe = () => () => {}
 
 /** Halaman Settings read-only (AC-4.6): nilai dari `GET /api/settings`. */
@@ -225,8 +284,9 @@ export function SettingsView() {
             </AlertDescription>
           </Alert>
         )}
-        {sections(settings.data).map((sec) => (
-          <Card key={sec.title} data-slot="settings-section">
+        {sections(settings.data).map((sec, i) => (
+          <React.Fragment key={sec.title}>
+          <Card data-slot="settings-section">
             <CardHeader>
               <CardTitle className="type-section-title">{sec.title}</CardTitle>
               <CardDescription className="type-caption">
@@ -264,6 +324,9 @@ export function SettingsView() {
               </dl>
             </CardContent>
           </Card>
+          {/* VLAN management tepat setelah "Jaringan provisioning". */}
+          {i === 0 && <VlanNetworksCard settings={settings.data} />}
+          </React.Fragment>
         ))}
         </>
       )}

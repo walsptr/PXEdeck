@@ -100,6 +100,7 @@ describe("CR-4-10 URL IPv6 ditolak; URL yang lolos aman untuk iPXE", () => {
           mediaUrl: s.mediaUrl,
           mediaRoot: s.mediaRoot,
           serverIp: s.network.pxeServer,
+          pxeDns: s.network.dns[0],
           configUrl: `${s.baseUrl}/boot/52:54:00:99:00:11/${"A".repeat(43)}/`,
           source: { kernel: "k", initrd: "i", repo: "r" },
           extraArgs: "",

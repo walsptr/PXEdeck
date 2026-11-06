@@ -1,0 +1,75 @@
+# Mutation DEC-026 §1 + §3 (backend-dev, T2c) — 2026-11-06T19:35:28+07:00
+# Setiap mutasi diterapkan ke kode produk, test dijalankan, lalu file dipulihkan (cmp = identik).
+
+# §1 dashboard (vitest: m7-debian-nameservers*.test.ts, boot-script.test.ts, boot-routes.test.ts)
+## M1 hapus netcfg/get_nameservers dari cmdline Debian (boot-script.ts)
+ dashboard/src/lib/server/boot-script.ts | 21 +++++++++++++++++++++
+ FAIL  |node| src/app/boot/boot-routes.test.ts > AC-4.16 installer Debian & Rocky; image tidak tersedia / Windows > Debian (preseed) dan Rocky (kickstart) sesuai §2.3 (snapshot)
+ FAIL  |node| src/app/boot/m7-debian-nameservers-route.test.ts > DEC-026 §1: cmdline Debian dari route memakai PXE_MGMT_DNS[0] > netcfg/get_nameservers=10.99.10.53 (bukan PXE_SERVER_IP, bukan entri kedua)
+ FAIL  |node| src/lib/server/boot-script.test.ts > installerScript (AC-4.15, AC-4.16) > Debian: netboot + preseed/url
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > dikirim tepat sekali dengan nilai pxeDns, SEBELUM `---`
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > netcfg/no_default_route=true (DEC-025) tetap ada; jawaban netcfg lain tidak ditambah
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > selalu dikirim, tanpa bergantung extraArgs
+ Test Files  4 failed (4)
+      Tests  6 failed | 53 passed (59)
+## M2 discovery.ts memakai PXE_SERVER_IP, bukan PXE_MGMT_DNS[0]
+ dashboard/src/lib/server/discovery.ts | 1 +
+ FAIL  |node| src/app/boot/m7-debian-nameservers-route.test.ts > DEC-026 §1: cmdline Debian dari route memakai PXE_MGMT_DNS[0] > netcfg/get_nameservers=10.99.10.53 (bukan PXE_SERVER_IP, bukan entri kedua)
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 58 passed (59)
+## M3 discovery.ts memakai entri DNS terakhir
+ dashboard/src/lib/server/discovery.ts | 1 +
+ FAIL  |node| src/app/boot/m7-debian-nameservers-route.test.ts > DEC-026 §1: cmdline Debian dari route memakai PXE_MGMT_DNS[0] > netcfg/get_nameservers=10.99.10.53 (bukan PXE_SERVER_IP, bukan entri kedua)
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 58 passed (59)
+## M4 hapus validasi isIpv4 pxeDns
+ dashboard/src/lib/server/boot-script.ts | 21 +++++++++++++++++++++
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > pxeDns tidak valid (kosong) → ditolak, bukan disisipkan
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > pxeDns tidak valid (hostname) → ditolak, bukan disisipkan
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > pxeDns tidak valid (oktet > 255) → ditolak, bukan disisipkan
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > pxeDns tidak valid (daftar dipisah koma) → ditolak, bukan disisipkan
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > pxeDns tidak valid (IPv6) → ditolak, bukan disisipkan
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > pxeDns tidak valid (injeksi argumen) → ditolak, bukan disisipkan
+ Test Files  1 failed | 3 passed (4)
+      Tests  6 failed | 53 passed (59)
+## M5 hapus ipxeSafe pxeDns (isIpv4 men-trim spasi)
+ dashboard/src/lib/server/boot-script.ts | 22 ++++++++++++++++++++++
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > pxeDns tidak valid (spasi di depan) → ditolak, bukan disisipkan
+ Test Files  1 failed | 3 passed (4)
+      Tests  1 failed | 58 passed (59)
+## M6 parameter dipindah SETELAH ---
+ dashboard/src/lib/server/boot-script.ts | 23 ++++++++++++++++++++++-
+ FAIL  |node| src/app/boot/boot-routes.test.ts > AC-4.16 installer Debian & Rocky; image tidak tersedia / Windows > Debian (preseed) dan Rocky (kickstart) sesuai §2.3 (snapshot)
+ FAIL  |node| src/app/boot/m7-debian-nameservers-route.test.ts > DEC-026 §1: cmdline Debian dari route memakai PXE_MGMT_DNS[0] > netcfg/get_nameservers=10.99.10.53 (bukan PXE_SERVER_IP, bukan entri kedua)
+ FAIL  |node| src/lib/server/boot-script.test.ts > installerScript (AC-4.15, AC-4.16) > Debian: netboot + preseed/url
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > dikirim tepat sekali dengan nilai pxeDns, SEBELUM `---`
+ Test Files  4 failed (4)
+      Tests  4 failed | 55 passed (59)
+## M7 nilai dari serverIp di boot-script.ts
+ dashboard/src/lib/server/boot-script.ts | 22 ++++++++++++++++++++++
+ FAIL  |node| src/app/boot/m7-debian-nameservers-route.test.ts > DEC-026 §1: cmdline Debian dari route memakai PXE_MGMT_DNS[0] > netcfg/get_nameservers=10.99.10.53 (bukan PXE_SERVER_IP, bukan entri kedua)
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > dikirim tepat sekali dengan nilai pxeDns, SEBELUM `---`
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > netcfg/no_default_route=true (DEC-025) tetap ada; jawaban netcfg lain tidak ditambah
+ FAIL  |node| src/lib/server/m7-debian-nameservers.test.ts > DEC-026 §1: Debian netcfg/get_nameservers di cmdline > selalu dikirim, tanpa bergantung extraArgs
+ Test Files  2 failed | 2 passed (4)
+      Tests  4 failed | 55 passed (59)
+
+# §3 infra (bash infra/test/run.sh)
+## S1 hapus cek akhir dhcp_seen (selalu OK)
+ infra/server/vlan/verify-listen-vlan.sh | 9 +++++++--
+  FAIL M7 verify-listen-vlan.sh wajib DHCP dnsmasq udp %pxe10:67 (DEC-026 §3)
+hasil: 107 lulus, 1 gagal
+## S2 longgarkan: socket tcp juga dihitung
+ infra/server/vlan/verify-listen-vlan.sh | 10 ++++++++--
+  FAIL M7 verify-listen-vlan.sh wajib DHCP dnsmasq udp %pxe10:67 (DEC-026 §3)
+hasil: 107 lulus, 1 gagal
+## S3 longgarkan: udp port 67 di alamat apa pun
+ infra/server/vlan/verify-listen-vlan.sh | 10 ++++++++--
+  FAIL M7 verify-listen-vlan.sh wajib DHCP dnsmasq udp %pxe10:67 (DEC-026 §3)
+hasil: 107 lulus, 1 gagal
+## S4 longgarkan: prefix port (%pxe10:67*)
+ infra/server/vlan/verify-listen-vlan.sh | 10 ++++++++--
+  FAIL M7 verify-listen-vlan.sh wajib DHCP dnsmasq udp %pxe10:67 (DEC-026 §3)
+hasil: 107 lulus, 1 gagal
+
+Semua mutasi terdeteksi (merah). Sumber dipulihkan: boot-script.ts, discovery.ts, verify-listen-vlan.sh identik dengan versi final.

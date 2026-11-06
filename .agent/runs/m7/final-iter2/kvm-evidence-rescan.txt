@@ -1,0 +1,21 @@
+# redact-evidence.sh (commit 5220865, pola URL ketat DEC-028 §2) atas SALINAN bukti KVM per skenario (asli tidak diubah) 2026-11-06T18:09:15Z
+redact-evidence: 61 file di vlancore bersih (token/hash disamarkan; 13 biner/kosong hanya dipindai)
+  vlancore: exit=0; file berubah oleh redaksi pada salinan: 0
+redact-evidence: 56 file di vlandistro bersih (token/hash disamarkan; 12 biner/kosong hanya dipindai)
+  vlandistro: exit=0; file berubah oleh redaksi pada salinan: 0
+redact-evidence: 61 file di vlanneg bersih (token/hash disamarkan; 7 biner/kosong hanya dipindai)
+  vlanneg: exit=0; file berubah oleh redaksi pada salinan: 0
+redact-evidence: 35 file di flat-debian bersih (token/hash disamarkan; 5 biner/kosong hanya dipindai)
+  flat-debian: exit=0; file berubah oleh redaksi pada salinan: 0
+redact-evidence: 184 file di smoke bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+  smoke: exit=0; file berubah oleh redaksi pada salinan: 0
+redact-evidence: 102 file di history bersih (token/hash disamarkan; 7 biner/kosong hanya dipindai)
+  history: exit=0; file berubah oleh redaksi pada salinan: 0
+
+# URL_CRED (dashboard/e2e-kvm/m7-shared.ts @5220865, dipakai scanEvidence) atas file bukti KVM asli (baca saja, latin1 seperti scanEvidence)
+  vlancore: 61 file, temuan URL_CRED: 0
+  vlandistro: 56 file, temuan URL_CRED: 0
+  vlanneg: 61 file, temuan URL_CRED: 0
+  flat-debian: 35 file, temuan URL_CRED: 0
+  smoke: 184 file, temuan URL_CRED: 0
+  history: 102 file, temuan URL_CRED: 0

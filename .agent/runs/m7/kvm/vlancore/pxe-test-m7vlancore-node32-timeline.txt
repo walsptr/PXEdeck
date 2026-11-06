@@ -1,0 +1,10 @@
+2026-11-06T14:37:01.500Z host muncul (tanpa reload) currentIp=10.99.10.116
+2026-11-06T14:37:05.747Z install dibuat (UI) os=ubuntu-24.04 ip=10.99.20.42/24 vlan=20 gw=10.99.20.1 generator=false
+2026-11-06T14:37:05.822Z node.sh reset
+2026-11-06T14:37:05.901Z booting (UI, +0 dtk)
+2026-11-06T14:37:46.150Z installing (UI, +40 dtk)
+2026-11-06T14:42:48.397Z configuring (UI, +343 dtk)
+2026-11-06T14:45:12.938Z done (UI, +487 dtk)
+2026-11-06T14:54:05.020Z ssh (relay) key yang di-inject: true
+2026-11-06T14:56:35.098Z reboot: kembali=true verify2=0 status=done currentIp=10.99.10.116 job 1->1 penanda-installer-serial 4->4 iPXE-script 3->4 serial-boot-lokal=true
+2026-11-06T14:56:35.506Z AC-7.22 selesai dalam 152 dtk; masalah: tidak ada

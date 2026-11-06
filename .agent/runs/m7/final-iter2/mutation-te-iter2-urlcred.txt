@@ -1,0 +1,39 @@
+# mutasi scanner URL kredensial (DEC-028 §2, CR-7-2/SR-7-5) 2026-11-06T17:57:09Z @ 555c282 + working tree
+## baseline (tanpa mutasi)
+  run.sh exit=0
+  hasil: 116 lulus, 0 gagal
+  vitest exit=0
+        Tests  42 passed (42)
+## M1 shell: redact-evidence.sh dikembalikan ke HEAD (pola lama: prefix-exclusion, tanpa encode)
+  run.sh exit=1
+  hasil: 115 lulus, 1 gagal
+    FAIL M7te redact-evidence: hanya placeholder utuh dikecualikan + bentuk %3F/%26/%3D & JSON-escaped (DEC-028 §2)
+## M2 shell: decode tetap, pengecualian kembali ke awalan (v ~ /^(<redacted|\*\*\*|…|`)/ atau kosong)
+  run.sh exit=1
+  hasil: 115 lulus, 1 gagal
+    FAIL M7te redact-evidence: hanya placeholder utuh dikecualikan + bentuk %3F/%26/%3D & JSON-escaped (DEC-028 §2)
+## M3 shell: baris decode percent/JSON dihapus (pengecualian utuh tetap)
+  run.sh exit=1
+  hasil: 115 lulus, 1 gagal
+    FAIL M7te redact-evidence: hanya placeholder utuh dikecualikan + bentuk %3F/%26/%3D & JSON-escaped (DEC-028 §2)
+## M4 TS: m7-shared.ts URL_CRED dikembalikan ke HEAD
+  vitest exit=1
+  ⎯⎯⎯⎯⎯⎯ Failed Tests 21 ⎯⎯⎯⎯⎯⎯⎯
+        Tests  21 failed | 21 passed (42)
+## M5 TS: lookahead tanpa URL_END (pengecualian awalan, bukan token utuh)
+  129:export const URL_CRED = new RegExp(`${URL_SEP}(password|username)${URL_EQ}(?!${URL_PLACEHOLDER}|[&\s"]|$)`, "i")
+  vitest exit=1
+  ⎯⎯⎯⎯⎯⎯ Failed Tests 14 ⎯⎯⎯⎯⎯⎯⎯
+        Tests  14 failed | 28 passed (42)
+## M6 TS: hanya pemisah/= mentah (tanpa %3F/%26/%3D/JSON-escaped)
+  125:const URL_SEP = String.raw`[?&]`
+  126:const URL_EQ = "="
+  vitest exit=1
+  ⎯⎯⎯⎯⎯⎯ Failed Tests 11 ⎯⎯⎯⎯⎯⎯⎯
+        Tests  11 failed | 31 passed (42)
+## pemulihan
+   dashboard/e2e-kvm/m7-shared.ts | 14 ++++++++++++--
+   infra/redact-evidence.sh       | 41 ++++++++++++++++++++++++++++++++---------
+   2 files changed, 44 insertions(+), 11 deletions(-)
+  cmp file terpulihkan vs salinan pra-mutasi: identik (redact-evidence.sh, m7-shared.ts)
+  (working tree saat mutasi = isi commit 5220865 untuk redact-evidence.sh, m7-shared.ts, m7-kvm-urlcred.test.ts, m7-te.sh)

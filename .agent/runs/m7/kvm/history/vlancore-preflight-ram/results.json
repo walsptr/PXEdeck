@@ -1,0 +1,13 @@
+{
+  "run": "m7vlancore",
+  "generatedAt": "2026-11-06T14:25:00Z",
+  "results": [
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m7vlancore-node31", "status": "NOT_RUN", "note": "node tidak dibuat: run berhenti di tahap preflight", "evidence": ["kvm-run.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m7vlancore-node31", "status": "NOT_RUN", "note": "node tidak dibuat: run berhenti di tahap preflight", "evidence": ["kvm-run.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m7vlancore-node32", "status": "NOT_RUN", "note": "node tidak dibuat: run berhenti di tahap preflight", "evidence": ["kvm-run.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m7vlancore-node31", "status": "NOT_RUN", "note": "tidak diverifikasi: run berhenti di tahap preflight", "evidence": ["pxe-test-m7vlancore-node31-verify.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m7vlancore-node32", "status": "NOT_RUN", "note": "tidak diverifikasi: run berhenti di tahap preflight", "evidence": ["pxe-test-m7vlancore-node32-verify.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "preflight", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": false, "topology": "vlan", "switchStopped": true, "relayClean": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "harness": {"milestone": "m7", "scenario": "vlancore", "runId": "m7vlancore", "nodes": "31:uefi 32:bios", "maxNodes": 1, "memAvailableMb": 11655, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "preflight", "exit": 1, "dryRun": false, "startedAt": "2026-11-06T14:25:00Z", "durationSec": 1}
+}

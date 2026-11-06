@@ -1,0 +1,24 @@
+{
+ "cmd": [
+  "npx",
+  "playwright",
+  "test",
+  "e2e/m7-vlan.spec.ts",
+  "e2e/m7-novlan.spec.ts",
+  "--retries=0",
+  "--workers=1"
+ ],
+ "desc": "useActiveNetwork tanpa vlanNetworks (selectNetwork)",
+ "mutations": [
+  {
+   "id": "TM8",
+   "file": "src/hooks/use-settings.ts",
+   "old": "return { ...toActiveNetwork(s), vlanNetworks: vlanNetworksOf(s) }",
+   "new": "return { ...toActiveNetwork(s), vlanNetworks: [] }",
+   "expect_red": [
+    "AC-7\\.10.*petunjuk mono",
+    "AC-7\\.11"
+   ]
+  }
+ ]
+}

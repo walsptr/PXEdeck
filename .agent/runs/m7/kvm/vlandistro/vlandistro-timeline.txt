@@ -1,0 +1,1 @@
+2026-11-06T15:36:31.854Z capture trunk0: stop exit=0; start ulang exit=0

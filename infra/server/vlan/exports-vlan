@@ -1,0 +1,6 @@
+# /etc/exports.d/pxe.exports (profil VLAN, M7) — read-only, hanya VLAN 10 (PXE) dan VLAN 20
+# (management: Ubuntu pindah ke IP statis VLAN 20 di tengah instalasi, root live tetap NFS; F5/O5-A).
+# nfsd hanya listen 10.99.10.2 (nfs-vlan.conf).
+/srv/pxe/media/ubuntu-24.04 10.99.10.0/24(ro,no_subtree_check,no_root_squash,fsid=1001) 10.99.20.0/24(ro,no_subtree_check,no_root_squash,fsid=1001)
+# Stage2 Rocky 9 (`inst.stage2=nfs:…`, DEC-020).
+/srv/pxe/media/rocky-9 10.99.10.0/24(ro,no_subtree_check,root_squash,fsid=1003) 10.99.20.0/24(ro,no_subtree_check,root_squash,fsid=1003)

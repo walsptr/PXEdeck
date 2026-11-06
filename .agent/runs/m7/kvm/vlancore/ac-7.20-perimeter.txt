@@ -1,0 +1,8 @@
+GET /login (tanpa sesi): 200
+GET /api/settings tanpa sesi: 401
+HEAD /media/ubuntu-24.04/casper/vmlinuz: 200
+GET /api/settings (sesi): cidr=10.99.10.0/24 vlanNetworks=[{"vlan":20,"cidr":"10.99.20.0/24","prefix":24,"gateway":"10.99.20.1"}]
+host ip route get 10.99.10.2 (baca saja, preflight): (baca saja; host tidak pernah menyasar 10.99.10.*/10.99.20.*) 10.99.10.2 via 192.168.0.1 dev wlo1 src 192.168.0.207 uid 1000      cache
+socket dnsmasq: UNCONN 0 0 10.99.10.2:53 0.0.0.0:* users:(("dnsmasq",pid=1722,fd=6))  | UNCONN 0 0 0.0.0.0%pxe10:67 0.0.0.0:* users:(("dnsmasq",pid=1722,fd=4))  | UNCONN 0 0 10.99.10.2:69 0.0.0.0:* users:(("dnsmasq",pid=1722,fd=8))  | LISTEN 0 32 10.99.10.2:53 0.0.0.0:* users:(("dnsmasq",pid=1722,fd=7)) 
+switch-check.txt RESULT PASS: true; server-listen-vlan.txt RESULT PASS: true
+masalah: tidak ada

@@ -1,0 +1,13 @@
+2026-11-06T10:44:38.475Z discovered firmware=uefi currentIp=10.99.10.132 (lease VLAN 10)
+2026-11-06T10:44:38.535Z konfigurasi tersimpan os=rocky-9 ip=10.99.20.52/24 vlan=20 gw=10.99.20.1 dns=10.99.10.2 hostname=m7-node42
+2026-11-06T10:44:38.654Z install dibuat job=job-5b949537-0a5b-4dda-a3cc-c8098092113e status=booting
+2026-11-06T10:44:38.736Z node.sh reset
+2026-11-06T10:44:38.744Z booting (+0 dtk, installerBoots=0)
+2026-11-06T10:45:08.807Z installing (+30 dtk, installerBoots=1)
+2026-11-06T10:49:01.448Z configuring (+263 dtk, installerBoots=1)
+2026-11-06T10:52:54.042Z done (+495 dtk, installerBoots=1)
+2026-11-06T10:52:54.063Z job akhir=done/- dalam 495 dtk; urutan=booting>installing>configuring>done; stages=booting@install,booting@boot-script,installing@config-fetch,configuring@callback,done@callback
+2026-11-06T10:52:54.242Z nginx: 2 request dari IP statis 10.99.20.52 (VLAN 20)
+2026-11-06T10:52:54.767Z ssh (relay) key yang di-inject: OK
+2026-11-06T10:52:59.162Z reboot (relay): relay-reboot: dikirim ke 10.99.20.52
+2026-11-06T10:56:37.627Z reboot: kembali=true verify2=0 status=done currentIp=10.99.10.132 job 1->1 penanda-installer-serial 4->4 iPXE-boot-lokal=true

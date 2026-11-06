@@ -1,0 +1,76 @@
+# pxe-test-m7vlansmoke-node42 (rocky, uefi) VLAN 20 10.99.20.52/24: booting → installing → configuring → done dalam 495 dtk
+# verify-node.sh lewat relay (sebelum reboot)
+# verify-node 2026-11-06T10:52:54Z on m7-node42
+# uname: 5.14.0-687.10.1.el9_8.0.1.x86_64
+OK   hostname = m7-node42 (aktual: m7-node42)
+OK   parent NIC dengan MAC 52:54:00:99:00:42 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (enp1s0.20)
+# ip -4 addr (enp1s0.20): 10.99.20.52/24
+OK   ip -4 addr enp1s0.20 memuat 10.99.20.52/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain enp1s0.20 (—)
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/rocky/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub2/grub.cfg (cocok: 0)
+OK   bebas token: /boot/loader/entries/16c36a3f525b42eead5089b6a88c23ff-0-rescue.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/16c36a3f525b42eead5089b6a88c23ff-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /etc/kernel/cmdline (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+OK   bebas token: /root/anaconda-ks.cfg (cocok: 0)
+# token-scan files=8 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/vda4), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+# exit=0
+# pwcheck (relay)
+# ssh PreferredAuthentications=password (exit 255): Warning: Permanently added '10.99.20.52' (ED25519) to the list of known hosts.
+m7admin@10.99.20.52: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+# password ditolak=true
+# verify-node.sh lewat relay (sesudah reboot)
+# verify-node 2026-11-06T10:56:36Z on m7-node42
+# uname: 5.14.0-687.10.1.el9_8.0.1.x86_64
+OK   hostname = m7-node42 (aktual: m7-node42)
+OK   parent NIC dengan MAC 52:54:00:99:00:42 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (enp1s0.20)
+# ip -4 addr (enp1s0.20): 10.99.20.52/24
+OK   ip -4 addr enp1s0.20 memuat 10.99.20.52/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain enp1s0.20 (—)
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/rocky/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub2/grub.cfg (cocok: 0)
+OK   bebas token: /boot/loader/entries/16c36a3f525b42eead5089b6a88c23ff-0-rescue.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/16c36a3f525b42eead5089b6a88c23ff-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /etc/kernel/cmdline (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+OK   bebas token: /root/anaconda-ks.cfg (cocok: 0)
+# token-scan files=8 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/vda4), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+# exit=0
+# reboot: kembali=true verify2=0 status=done currentIp=10.99.10.132 job 1->1 penanda-installer-serial 4->4 iPXE-boot-lokal=true
+# verdicts: {"MTU":"PASS: ping DF 1472 B (frame 1518 B ber-tag) 3/3; 1473 ditolak","O6":"PASS: parent native tanpa IPv4 sebelum reboot=true sesudah=true","parentNoIPv4":"true"}
+# masalah: tidak ada

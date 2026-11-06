@@ -1,0 +1,23 @@
+{
+ "cmd": [
+  "npx",
+  "playwright",
+  "test",
+  "e2e/m7-vlan.spec.ts",
+  "e2e/m7-novlan.spec.ts",
+  "--retries=0",
+  "--workers=1"
+ ],
+ "desc": "gateway manual selalu ditimpa saat VLAN diganti",
+ "mutations": [
+  {
+   "id": "TM6",
+   "file": "src/components/host-config/form-state.ts",
+   "old": "if (f.gateway.trim() === prev.gateway) patch.gateway = next.gateway",
+   "new": "patch.gateway = next.gateway",
+   "expect_red": [
+    "AC-7\\.10.*petunjuk mono"
+   ]
+  }
+ ]
+}

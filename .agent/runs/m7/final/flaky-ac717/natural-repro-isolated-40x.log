@@ -1,0 +1,46 @@
+  ok   test_m7_host_never_targets_vlan_subnets #1
+  ok   test_m7_host_never_targets_vlan_subnets #2
+  ok   test_m7_host_never_targets_vlan_subnets #3
+  ok   test_m7_host_never_targets_vlan_subnets #4
+  ok   test_m7_host_never_targets_vlan_subnets #5
+  ok   test_m7_host_never_targets_vlan_subnets #6
+  ok   test_m7_host_never_targets_vlan_subnets #7
+  ok   test_m7_host_never_targets_vlan_subnets #8
+  ok   test_m7_host_never_targets_vlan_subnets #9
+    ASSERT: vlanneg: 2026-11-06T16:16:31Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+redact-evidence: 6 file di /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.X1vtBn/runs/vlanneg bersih (token/hash disamarkan; 0 biner/kosong hanya dipindai)
+2026-11-06T16:16:31Z redact             ok 
+2026-11-06T16:16:31Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T16:16:31Z result             FAIL exit=141 stage=deploy expected '0' got '141'
+  FAIL test_m7_host_never_targets_vlan_subnets #10
+  ok   test_m7_host_never_targets_vlan_subnets #11
+  ok   test_m7_host_never_targets_vlan_subnets #12
+  ok   test_m7_host_never_targets_vlan_subnets #13
+  ok   test_m7_host_never_targets_vlan_subnets #14
+  ok   test_m7_host_never_targets_vlan_subnets #15
+  ok   test_m7_host_never_targets_vlan_subnets #16
+  ok   test_m7_host_never_targets_vlan_subnets #17
+  ok   test_m7_host_never_targets_vlan_subnets #18
+  ok   test_m7_host_never_targets_vlan_subnets #19
+  ok   test_m7_host_never_targets_vlan_subnets #20
+  ok   test_m7_host_never_targets_vlan_subnets #21
+  ok   test_m7_host_never_targets_vlan_subnets #22
+  ok   test_m7_host_never_targets_vlan_subnets #23
+  ok   test_m7_host_never_targets_vlan_subnets #24
+  ok   test_m7_host_never_targets_vlan_subnets #25
+  ok   test_m7_host_never_targets_vlan_subnets #26
+  ok   test_m7_host_never_targets_vlan_subnets #27
+  ok   test_m7_host_never_targets_vlan_subnets #28
+  ok   test_m7_host_never_targets_vlan_subnets #29
+  ok   test_m7_host_never_targets_vlan_subnets #30
+  ok   test_m7_host_never_targets_vlan_subnets #31
+  ok   test_m7_host_never_targets_vlan_subnets #32
+  ok   test_m7_host_never_targets_vlan_subnets #33
+  ok   test_m7_host_never_targets_vlan_subnets #34
+  ok   test_m7_host_never_targets_vlan_subnets #35
+  ok   test_m7_host_never_targets_vlan_subnets #36
+  ok   test_m7_host_never_targets_vlan_subnets #37
+  ok   test_m7_host_never_targets_vlan_subnets #38
+  ok   test_m7_host_never_targets_vlan_subnets #39
+  ok   test_m7_host_never_targets_vlan_subnets #40
+hasil: 39 lulus, 1 gagal

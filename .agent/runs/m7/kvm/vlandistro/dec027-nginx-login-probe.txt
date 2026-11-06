@@ -1,0 +1,17 @@
+# DEC-027 §2 bukti di VM server VLAN (run vlandistro, commit 6a26cc6): host GET /login dengan query kredensial uji (nilai 'x') -> HTTP 200
+# 2026-11-06T15:26:04Z nginx -t
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+# map $pxe_log_uri aktif:
+14:map $request_uri $pxe_log_uri {
+15-    "~^/boot/[0-9A-Za-z_:-][0-9A-Za-z._:-]*\.ipxe(\?[^?]*)?$" $request_uri;
+16-    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)\?" "$p***$r?***";
+17-    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)$" "$p***$r";
+18-    "~^(?<pxe_path>[^?]*)\?" "$pxe_path?***";
+19-    default $request_uri;
+20-}
+# baris log akses terakhir /login (probe host)
+10.99.0.1 [2026-11-06T15:25:14+00:00] "GET /login" 200 38235 "curl/8.18.0"
+10.99.0.1 [2026-11-06T15:26:03+00:00] "GET /login" 200 38230 "curl/8.18.0"
+10.99.0.1 [2026-11-06T15:26:04+00:00] "GET /login?***" 200 38269 "curl/8.18.0"
+# jumlah baris log akses yang memuat kata password: 0

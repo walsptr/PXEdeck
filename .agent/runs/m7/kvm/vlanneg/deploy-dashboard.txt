@@ -1,0 +1,20 @@
+# deploy-dashboard 20261106T140750Z (commit d9d5308)
+OK   /etc/pxe-dashboard.env 640 root:pxe (admin 2 kunci, nilai tidak dicetak)
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+# release /opt/pxe-dashboard/releases/20261106T140750Z (v22.23.4)
+# systemctl is-active
+pxe-dashboard  active
+nginx          active
+dnsmasq        active
+# listen :3000 / :80
+LISTEN 0      511        10.99.0.2:80    0.0.0.0:* users:(("nginx",pid=2191,fd=6),("nginx",pid=2190,fd=6),("nginx",pid=1665,fd=6))
+LISTEN 0      511       10.99.10.2:80    0.0.0.0:* users:(("nginx",pid=2191,fd=7),("nginx",pid=2190,fd=7),("nginx",pid=1665,fd=7))
+LISTEN 0      511        127.0.0.1:3000  0.0.0.0:* users:(("next-server (v1",pid=2185,fd=21))                                     
+OK   next listen 127.0.0.1:3000
+# install-dashboard exit=0
+# host: GET http://10.99.0.2/login -> 200
+# host: GET http://10.99.0.2/api/settings tanpa sesi -> 401
+# host: POST /api/auth/login (admin pxeadmin) -> 204
+# host: GET http://10.99.0.2/api/settings dengan sesi
+{"cidr":"10.99.10.0/24","prefix":24,"gateway":"10.99.10.1","dns":["10.99.10.2"],"dynamicRange":["10.99.10.100","10.99.10.200"],"pxeServer":"10.99.10.2","vlanNetworks":[{"vlan":20,"cidr":"10.99.20.0/24","prefix":24,"gateway":"10.99.20.1"}],"interface":"pxe10","baseUrl":"http://10.99.10.2","mediaUrl":"http://10.99.10.2/media","tftpRoot":"/srv/pxe/tftp","tokenTtlMin":360,"unknownHostAction":"local","jobTimeouts":{"bootingMin":60,"installingMin":15,"configuringMin":60},"maxInstallerBoots":3,"insecureNoLeaseCheck":false,"insecureConfirmed":false,"auth":{"adminUsername":"pxeadmin","adminConfigured":true,"sessionIdleMin":240,"sessionMaxHours":12,"loginMaxFailures":5,"loginWindowMin":15,"apiRatePerMin":600}}

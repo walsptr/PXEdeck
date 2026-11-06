@@ -1,0 +1,38 @@
+[
+  {
+    "ac": "CR-4-12-dnsmasq",
+    "node": "pxe-test-m7vlandistro-node33",
+    "status": "PASS",
+    "note": "TFTP snponly.efi terkirim ke 10.99.10.117 (lease 52:54:00:99:00:33)",
+    "evidence": [
+      "server-dnsmasq.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-nginx",
+    "node": "pxe-test-m7vlandistro-node33",
+    "status": "PASS",
+    "note": "preseed.cfg 200 x1 (min 1)",
+    "evidence": [
+      "server-nginx.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-dnsmasq",
+    "node": "pxe-test-m7vlandistro-node34",
+    "status": "PASS",
+    "note": "TFTP snponly.efi terkirim ke 10.99.10.118 (lease 52:54:00:99:00:34)",
+    "evidence": [
+      "server-dnsmasq.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-nginx",
+    "node": "pxe-test-m7vlandistro-node34",
+    "status": "PASS",
+    "note": "ks.cfg 200 x1 (min 1)",
+    "evidence": [
+      "server-nginx.txt"
+    ]
+  }
+]

@@ -1,0 +1,23 @@
+{
+ "cmd": [
+  "npx",
+  "playwright",
+  "test",
+  "e2e/m7-vlan.spec.ts",
+  "e2e/m7-novlan.spec.ts",
+  "--retries=0",
+  "--workers=1"
+ ],
+ "desc": "petunjuk VLAN terdaftar tanpa mono",
+ "mutations": [
+  {
+   "id": "TM7",
+   "file": "src/components/host-config/tab-network.tsx",
+   "old": "className=\"type-data text-xs whitespace-nowrap\"",
+   "new": "className=\"text-xs whitespace-nowrap\"",
+   "expect_red": [
+    "AC-7\\.10.*petunjuk mono"
+   ]
+  }
+ ]
+}

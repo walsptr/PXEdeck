@@ -1,0 +1,23 @@
+{
+ "cmd": [
+  "npx",
+  "playwright",
+  "test",
+  "e2e/m7-vlan.spec.ts",
+  "e2e/m7-novlan.spec.ts",
+  "--retries=0",
+  "--workers=1"
+ ],
+ "desc": "sel Subnet Settings tanpa mono",
+ "mutations": [
+  {
+   "id": "TM5",
+   "file": "src/components/settings/settings-view.tsx",
+   "old": "<TableCell className=\"type-data\">{v.cidr}</TableCell>",
+   "new": "<TableCell>{v.cidr}</TableCell>",
+   "expect_red": [
+    "AC-7\\.12.*/settings: card"
+   ]
+  }
+ ]
+}

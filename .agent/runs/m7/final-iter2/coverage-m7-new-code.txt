@@ -1,0 +1,38 @@
+# Coverage kode baru/berubah M7 (git diff --diff-filter=AM 78e7dc7700deab342b5115f59d5468756ab4a2e7..HEAD -- dashboard/src, non-test) @ 5220865
+# Sumber: dashboard/coverage/coverage-summary.json + coverage-final.json (vitest v8, include DEC-004)
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/app/login/submit/route.ts
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/auth/login-form.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/config-sheet.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/passwords-dialog.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/plan-table.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/tab-credentials.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/tab-network.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/settings/settings-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ui/table.tsx
+  85.71% lines  100.00% branches  baris-berubah 2/2  cabang-berubah 0/0  dashboard/src/app/api/network/route.ts
+ 100.00% lines   99.51% branches  baris-berubah 24/24  cabang-berubah 23/23  dashboard/src/components/host-config/form-state.ts
+ 100.00% lines  100.00% branches  baris-berubah 2/2  cabang-berubah 2/2  dashboard/src/hooks/use-settings.ts
+ 100.00% lines   96.86% branches  baris-berubah 60/60  cabang-berubah 70/70  dashboard/src/lib/net.ts
+ 100.00% lines  100.00% branches  baris-berubah 2/2  cabang-berubah 2/2  dashboard/src/lib/server/boot-script.ts
+  97.93% lines   93.87% branches  baris-berubah 1/1  cabang-berubah 0/0  dashboard/src/lib/server/config-service.ts
+ 100.00% lines   94.44% branches  baris-berubah 0/0  cabang-berubah 0/0  dashboard/src/lib/server/discovery.ts
+ 100.00% lines  100.00% branches  baris-berubah 1/1  cabang-berubah 0/0  dashboard/src/lib/server/installers/debian.ts
+ 100.00% lines  100.00% branches  baris-berubah 8/8  cabang-berubah 11/11  dashboard/src/lib/server/installers/rocky.ts
+ 100.00% lines  100.00% branches  baris-berubah 0/0  cabang-berubah 0/0  dashboard/src/lib/server/installers/ubuntu.ts
+ 100.00% lines  100.00% branches  baris-berubah 3/3  cabang-berubah 0/0  dashboard/src/lib/server/net-config.ts
+ 100.00% lines   99.25% branches  baris-berubah 3/3  cabang-berubah 0/0  dashboard/src/lib/server/settings.ts
+
+TOTAL kode baru M7 per file (include DEC-004): lines 912/918 = 99.35%  branches 819/840 = 97.50%
+TOTAL baris berubah ber-statement: 106/106 = 100.00%
+TOTAL cabang di baris berubah: 108/108 = 100.00%
+Repo (All files): lines 98.97%  branches 96.28%  functions 98.84%  statements 98.26%
+File kode baru < 80% lines: tidak ada
+Komponen .tsx di luar include DEC-004 dibuktikan per AC lewat E2E (m7-*.spec.ts) dan test komponen jsdom (m7-vlan-ui.test.tsx).
+
+# Catatan test-engineer iter2:
+# - BASE = merge-base main HEAD = 78e7dc7 (main + DEC-028, dok saja). `git diff c7a68ee 78e7dc7 -- dashboard infra` kosong,
+#   jadi himpunan kode baru M7 sama dengan iter1 (basis c7a68ee).
+# - Perubahan iter2 di dashboard/src (login-form.tsx, plan-table.tsx, passwords-dialog.tsx) adalah komponen .tsx di
+#   luar include DEC-004; perilakunya diuji plan-table-a11y.test.tsx (+1 test PasswordsDialog) dan E2E penuh 2x.
+# - URL_CRED (dashboard/e2e-kvm/m7-shared.ts) di luar include coverage (harness e2e-kvm); dieksekusi 42 kasus di
+#   src/lib/server/m7-kvm-urlcred.test.ts (lulus di unit.log) + mutasi final-iter2/mutation-te-iter2-urlcred.txt.

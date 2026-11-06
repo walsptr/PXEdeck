@@ -1,0 +1,11 @@
+1 2026-11-06T10:44:38.548Z info stage/install Job install dibuat (OS rocky-9); menunggu PXE boot
+2 2026-11-06T10:44:49.913Z info system/boot-script Script installer dilayani (ke-1/3, platform efi, IP 10.99.10.132)
+3 2026-11-06T10:45:00.684Z info system/config-fetch File ks.cfg diambil dari IP 10.99.10.132
+4 2026-11-06T10:45:00.684Z info stage/config-fetch Installing: konfigurasi ks.cfg diambil installer
+5 2026-11-06T10:45:21.552Z info installer/installer installer: kickstart mulai
+6 2026-11-06T10:45:21.636Z info installer/installer installer: disk target dipilih
+7 2026-11-06T10:49:00.848Z info installer/installer installer: post mulai
+8 2026-11-06T10:49:00.871Z info stage/callback Configuring (callback dari IP 10.99.10.132)
+9 2026-11-06T10:49:01.000Z info installer/installer installer: konfigurasi target selesai
+10 2026-11-06T10:52:45.330Z info installer/installer first-boot: OS terpasang boot dari disk: m7-node42 enp1s0.20=10.99.20.52/24 
+11 2026-11-06T10:52:45.351Z info stage/callback Done (callback dari IP 10.99.20.52)

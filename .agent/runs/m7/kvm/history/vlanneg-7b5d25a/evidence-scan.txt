@@ -1,0 +1,1 @@
+bersih: tanpa password admin, token /boot/, private key (teks & base64)

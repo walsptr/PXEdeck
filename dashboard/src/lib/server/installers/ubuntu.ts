@@ -40,6 +40,17 @@ fi
 export const FORCE_REBOOT_GUARD =
   "systemd-run --unit=pxe-force-reboot -p DefaultDependencies=no /bin/sh -c 'until [ \"$(systemctl is-system-running)\" = stopping ]; do sleep 2; done; sleep 45; echo s > /proc/sysrq-trigger; sleep 3; echo b > /proc/sysrq-trigger'"
 
+/**
+ * Netplan target. Statis + `vlan` (topologi trunk, PXE native — DEC-023/024): parent `mgmt` (match
+ * MAC/nama) TANPA alamat (`dhcp4/dhcp6: false`) dan alamat/route/DNS di `vlans."mgmt.<id>"`
+ * (`link: mgmt`), sehingga native (VLAN PXE) tidak mendapat IPv4 di OS terpasang (O6-A).
+ *
+ * Catatan (M7 F5, O5-A): subiquity MENERAPKAN konfigurasi network ini ke lingkungan installer di
+ * tengah instalasi — sejak itu installer (late-commands, callback `configuring`/log) berbicara dari IP
+ * statis di VLAN management, sementara root live tetap NFS dari VLAN PXE. Server dashboard/nginx/NFS
+ * wajib terjangkau dari VLAN management (production: route/gateway VLAN; uji: `mgmt20` di
+ * `pxe-test-server`). Generator ini sengaja tidak berubah untuk VLAN (DEC-024 §5).
+ */
 function netplan(c: InstallContext) {
   const n = c.network
   const match =

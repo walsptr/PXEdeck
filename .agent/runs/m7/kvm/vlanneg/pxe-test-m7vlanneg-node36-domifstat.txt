@@ -1,0 +1,10 @@
+# virsh domifstat pxe-test-m7vlanneg-node36 vnet173 (baca saja)
+vnet173 rx_bytes 12014
+vnet173 rx_packets 156
+vnet173 rx_errs 0
+vnet173 rx_drop 0
+vnet173 tx_bytes 4940
+vnet173 tx_packets 22
+vnet173 tx_errs 0
+vnet173 tx_drop 0
+

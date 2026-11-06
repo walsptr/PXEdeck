@@ -1,0 +1,4 @@
+# tsc --noEmit
+exit=0
+# eslint e2e-kvm/m7-vlansmoke.spec.ts e2e-kvm/kvm-harness.ts
+exit=0

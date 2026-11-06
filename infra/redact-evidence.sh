@@ -15,7 +15,9 @@
 #                                                                      -> REDACTED-B64-SECRET
 #     (B-5: late-command `printf %s '<b64>' | base64 -d` dicetak installer ke console serial;
 #     logika selaras .agent/runs/m4/b64-scan.py, diimplementasi dengan bash+base64+grep)
-# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, dan SEMUA
+# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, kredensial di
+# query string mirip URL (parameter password/username bernilai, juga ter-encode; DEC-027 §4 +
+# DEC-028 §2), dan SEMUA
 # isi file biner (CR-4-14: file non-teks tidak pernah diubah in-place; secret di dalamnya = exit 1).
 # Pola scan selaras dengan .agent/runs/m4/secret-scan.sh.
 set -euo pipefail
@@ -36,6 +38,30 @@ PKEY_RE='-----BEGIN [A-Z ]*PRIVATE KEY-----'
 B64_RUN_RE='[A-Za-z0-9+/]{40,}={0,2}'
 B64_INNER_RE='[A-Za-z0-9+/]{16,}={0,2}'
 B64_MARK='REDACTED-B64-SECRET'
+# DEC-027 §4 + DEC-028 §2 (CR-7-2/SR-7-5): parameter kredensial di query string (scan saja, lihat
+# di bawah). Prefilter baris kandidat: pemisah `?`/`&` mentah, percent-encoded (%3F/%26) atau
+# JSON-escaped (\u0026/\u003f); `=` mentah, %3D atau \u003d. Tanpa beda huruf besar/kecil.
+URL_CRED_RE='(\?|&|%3F|%26|\\u0026|\\u003f)(password|username)(=|%3D|\\u003d)'
+# _url_cred_hits: baca `file:baris:isi` (grep -nH) dari stdin, cetak `file:baris` bila ada nilai
+# kredensial. Isi di-decode dulu (JSON \u0026 \u003f \u003d \u003c \u003e \" lalu %3F %26 %3D %3C %3E %2A
+# %E2%80%A6), lalu tiap nilai (s/d `&`, spasi, `"`) dicek. Yang dikecualikan HANYA token placeholder
+# UTUH: kosong, `***`, `…`, atau `<REDACTED…>` (tanpa `&`/spasi/`"`/`<`/`>` di dalamnya). Nilai yang
+# sekadar diawali placeholder (`***x`, `<REDACTED>x`, backtick, dst.) tetap temuan.
+_url_cred_hits() {
+  awk '{
+    i = index($0, ":"); f = substr($0, 1, i - 1); r = substr($0, i + 1)
+    j = index(r, ":"); ln = substr(r, 1, j - 1); s = tolower(substr(r, j + 1))
+    gsub(/\\u0026/, "\\&", s); gsub(/\\u003f/, "?", s); gsub(/\\u003d/, "=", s); gsub(/\\u003c/, "<", s); gsub(/\\u003e/, ">", s)
+    gsub(/\\"/, "\"", s)
+    gsub(/%3f/, "?", s); gsub(/%26/, "\\&", s); gsub(/%3d/, "=", s); gsub(/%3c/, "<", s); gsub(/%3e/, ">", s)
+    gsub(/%2a/, "*", s); gsub(/%e2%80%a6/, "\342\200\246", s)
+    while (match(s, /[?&](password|username)=[^&[:space:]"]*/)) {
+      v = substr(s, RSTART, RLENGTH); sub(/^[?&](password|username)=/, "", v)
+      if (!(v == "" || v == "***" || v == "\342\200\246" || v ~ /^<redacted[^&[:space:]"<>]*>$/)) { print f ":" ln; next }
+      s = substr(s, RSTART + RLENGTH)
+    }
+  }'
+}
 B64_DEC_SECRET_RE="/boot/[0-9a-fA-F:%-]{12,40}/$B64U{43}"
 
 # _b64_secret <blob> <depth>: exit 0 bila blob ter-decode memuat secret (lihat header).
@@ -98,6 +124,13 @@ done < <(find "$dir" -type f -print0)
 
 hits="$(find "$dir" -type f -exec grep -EnaH -i -e "$TOKEN_PATH_RE" -e "$TOKEN_KV_RE" -e "$HASH_RE" -e "$SCRYPT_RE" -e "$PKEY_RE" {} + \
   | cut -d: -f1,2 | head -50 || true)"
+# DEC-027 §4: kredensial di string mirip URL (parameter password/username bernilai, juga bentuk
+# ter-encode) = temuan, hanya dipindai (tidak disamarkan otomatis; kebocoran seperti ini harus
+# terlihat). Hanya token placeholder utuh yang dikecualikan (lihat _url_cred_hits). Mencakup
+# server-nginx.txt dan server-nginx-error.txt (semua file di <dir>).
+urlhits="$(find "$dir" -type f -exec grep -EnaHi "$URL_CRED_RE" {} + 2>/dev/null \
+  | _url_cred_hits | head -50 || true)"
+[[ -z "$urlhits" ]] || hits+="${hits:+$'\n'}$urlhits"
 while IFS= read -r -d '' f; do
   b64hits="$(_b64_scan "$f" | head -50)"
   [[ -z "$b64hits" ]] || hits+="${hits:+$'\n'}$b64hits"

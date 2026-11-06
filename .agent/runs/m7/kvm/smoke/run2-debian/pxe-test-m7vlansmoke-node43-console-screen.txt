@@ -1,0 +1,40 @@
+[    1.599262] hub 2-0:1.0: USB hub found
+[    1.599724] hub 2-0:1.0: 15 ports detected
+Starting system log daemon: syslogd, klogd.
+  )0             
+  )0             
+  )0             
+/var/run/utmp: No such file or directory
+  )0                                                                                      
+       [                               (  -* )                               ][   Nov 06   11:05  ]
+                                                                                            Detecting network hardware   
+        0%          
+                                                                               Detecting hardware, please wait...        2       5    Loading module 'usb-storage' for 'USB storage'...                                    95%                                100                                                                                   
+                                                                                            Detecting link on enp1s0; please wait...   
+        0%          
+        <Cancel>                                                                 
+                                                                               <Cancel>                                                                               
+                                                                                            Waiting for link-local address...   
+        0%          
+        <Cancel>                                                                 
+                                                                                     8    <Cancel>           16           25           33           41        5 0   8%      100                                                                                                             
+                                                                                            Attempting IPv6 autoconfiguration...   
+        0%          
+        <Cancel>                                                                 
+                                                                                     8    <Cancel>           16           25           33           41        5 0   8%      66         75         83         91         100                                                                                     
+                                                                                            Configuring the network with DHCP   
+        0%          
+        <Cancel>                                                                 
+                                                                                This may take some time.   <Cancel>      1      3                                                                             
+        Configuring the network with DHCP   
+                                        100%                                           
+    This may take some time.                                                     
+                                                                               Network autoconfiguration has succeeded                                                                                
+                                                                                            [!!] Configure the network                                                                                   The network autoconfiguration was successful. However, no default              route was set: the system does not know how to communicate with hosts          on the Internet. This will make it impossible to continue with the         
+    installation unless you have the first image from a set of                 
+    installation media, a 'Netinst' image, or packages available on the        
+    local network.                                                             
+    If you are unsure, you should not continue without a default route:        
+    contact your local network administrator about this problem.               
+    Continue without a default route?                                          
+        <Go Back>                                       <Yes>      <No>            

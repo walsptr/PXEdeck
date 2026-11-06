@@ -1,0 +1,110 @@
+# 2026-11-06T11:53:18Z diagnosa node43 run3 (Debian, setelah DEC-025)
+# dnsmasq dhcp-option aktif
+15:dhcp-option=3
+16:dhcp-option=option:dns-server,10.99.10.2
+## xid 171278654
+171278654 DHCPACK(pxe10) 10.99.10.133 52:54:00:99:00:43 
+171278654 DHCPDISCOVER(pxe10) 52:54:00:99:00:43 
+171278654 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:43 
+171278654 DHCPREQUEST(pxe10) 10.99.10.133 52:54:00:99:00:43 
+171278654 available DHCP range: 10.99.10.100 -- 10.99.10.200
+171278654 requested options: 128, 129, 130, 131, 132, 133, 134, 135, 175, 
+171278654 requested options: 12:hostname, 15:domain-name, 17:root-path, 
+171278654 requested options: 1:netmask, 3:router, 6:dns-server, 7:log-server, 
+171278654 requested options: 203
+171278654 requested options: 26:mtu, 43:vendor-encap, 60:vendor-class, 
+171278654 requested options: 66:tftp-server, 67:bootfile-name, 119:domain-search, 
+171278654 sent size:  1 option: 53 message-type  2
+171278654 sent size:  1 option: 53 message-type  5
+171278654 sent size:  4 option:  1 netmask  255.255.255.0
+171278654 sent size:  4 option:  6 dns-server  10.99.10.2
+171278654 sent size:  4 option: 28 broadcast  10.99.10.255
+171278654 sent size:  4 option: 51 lease-time  1h
+171278654 sent size:  4 option: 54 server-identifier  10.99.10.2
+171278654 sent size:  4 option: 58 T1  30m
+171278654 sent size:  4 option: 59 T2  52m30s
+171278654 sent size:  8 option: 15 domain-name  pxe.test
+171278654 sent size: 56 option: 67 bootfile-name  http://10.99.10.2/boot/${mac}.ipxe?platform=${platform}
+171278654 user class: iPXE
+171278654 vendor class: PXEClient:Arch:00007:UNDI:003010
+## xid 2728781908
+2728781908 DHCPACK(pxe10) 10.99.10.133 52:54:00:99:00:43 
+2728781908 DHCPDISCOVER(pxe10) 52:54:00:99:00:43 
+2728781908 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:43 
+2728781908 DHCPREQUEST(pxe10) 10.99.10.133 52:54:00:99:00:43 
+2728781908 available DHCP range: 10.99.10.100 -- 10.99.10.200
+2728781908 requested options: 15:domain-name, 28:broadcast, 42:ntp-server
+2728781908 requested options: 1:netmask, 3:router, 6:dns-server, 12:hostname, 
+2728781908 sent size:  1 option: 53 message-type  2
+2728781908 sent size:  1 option: 53 message-type  5
+2728781908 sent size:  4 option:  1 netmask  255.255.255.0
+2728781908 sent size:  4 option:  6 dns-server  10.99.10.2
+2728781908 sent size:  4 option: 28 broadcast  10.99.10.255
+2728781908 sent size:  4 option: 51 lease-time  1h
+2728781908 sent size:  4 option: 54 server-identifier  10.99.10.2
+2728781908 sent size:  4 option: 58 T1  30m
+2728781908 sent size:  4 option: 59 T2  52m30s
+2728781908 sent size:  8 option: 15 domain-name  pxe.test
+2728781908 vendor class: d-i
+## xid 339243706
+339243706 DHCPACK(pxe10) 10.99.10.133 52:54:00:99:00:43 
+339243706 DHCPDISCOVER(pxe10) 52:54:00:99:00:43 
+339243706 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:43 
+339243706 DHCPREQUEST(pxe10) 10.99.10.133 52:54:00:99:00:43 
+339243706 available DHCP range: 10.99.10.100 -- 10.99.10.200
+339243706 requested options: 132, 133, 134, 135
+339243706 requested options: 15:domain-name, 17:root-path, 18:extension-path, 
+339243706 requested options: 1:netmask, 2:time-offset, 3:router, 4, 5, 
+339243706 requested options: 22:max-datagram-reassembly, 23:default-ttl, 
+339243706 requested options: 28:broadcast, 40:nis-domain, 41:nis-server, 
+339243706 requested options: 42:ntp-server, 43:vendor-encap, 50:requested-address, 
+339243706 requested options: 51:lease-time, 54:server-identifier, 58:T1, 
+339243706 requested options: 59:T2, 60:vendor-class, 66:tftp-server, 67:bootfile-name, 
+339243706 requested options: 6:dns-server, 12:hostname, 13:boot-file-size, 
+339243706 requested options: 97:client-machine-id, 128, 129, 130, 131, 
+339243706 sent size:  1 option: 53 message-type  2
+339243706 sent size:  1 option: 53 message-type  5
+339243706 sent size:  4 option:  1 netmask  255.255.255.0
+339243706 sent size:  4 option:  6 dns-server  10.99.10.2
+339243706 sent size:  4 option: 28 broadcast  10.99.10.255
+339243706 sent size:  4 option: 51 lease-time  1h
+339243706 sent size:  4 option: 54 server-identifier  10.99.10.2
+339243706 sent size:  4 option: 58 T1  30m
+339243706 sent size:  4 option: 59 T2  52m30s
+339243706 sent size:  8 option: 15 domain-name  pxe.test
+339243706 sent size: 12 option: 67 bootfile-name  snponly.efi
+339243706 vendor class: PXEClient:Arch:00007:UNDI:003001
+## xid 4196318265
+4196318265 DHCPACK(pxe10) 10.99.10.133 52:54:00:99:00:43 
+4196318265 DHCPDISCOVER(pxe10) 52:54:00:99:00:43 
+4196318265 DHCPOFFER(pxe10) 10.99.10.133 52:54:00:99:00:43 
+4196318265 DHCPREQUEST(pxe10) 10.99.10.133 52:54:00:99:00:43 
+4196318265 available DHCP range: 10.99.10.100 -- 10.99.10.200
+4196318265 requested options: 132, 133, 134, 135
+4196318265 requested options: 15:domain-name, 17:root-path, 18:extension-path, 
+4196318265 requested options: 1:netmask, 2:time-offset, 3:router, 4, 5, 
+4196318265 requested options: 22:max-datagram-reassembly, 23:default-ttl, 
+4196318265 requested options: 28:broadcast, 40:nis-domain, 41:nis-server, 
+4196318265 requested options: 42:ntp-server, 43:vendor-encap, 50:requested-address, 
+4196318265 requested options: 51:lease-time, 54:server-identifier, 58:T1, 
+4196318265 requested options: 59:T2, 60:vendor-class, 66:tftp-server, 67:bootfile-name, 
+4196318265 requested options: 6:dns-server, 12:hostname, 13:boot-file-size, 
+4196318265 requested options: 97:client-machine-id, 128, 129, 130, 131, 
+4196318265 sent size:  1 option: 53 message-type  2
+4196318265 sent size:  1 option: 53 message-type  5
+4196318265 sent size:  4 option:  1 netmask  255.255.255.0
+4196318265 sent size:  4 option:  6 dns-server  10.99.10.2
+4196318265 sent size:  4 option: 28 broadcast  10.99.10.255
+4196318265 sent size:  4 option: 51 lease-time  1h
+4196318265 sent size:  4 option: 54 server-identifier  10.99.10.2
+4196318265 sent size:  4 option: 58 T1  30m
+4196318265 sent size:  4 option: 59 T2  52m30s
+4196318265 sent size:  8 option: 15 domain-name  pxe.test
+4196318265 sent size: 12 option: 67 bootfile-name  snponly.efi
+4196318265 vendor class: PXEClient:Arch:00007:UNDI:003001
+# nginx node43 (token disamarkan)
+10.99.10.133 /boot/52:54:00:99:00:43.ipxe?platform=efi" 150 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2" 
+10.99.10.133 /boot/52:54:00:99:00:43.ipxe?platform=efi" 396 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2" 
+10.99.10.133 /media/debian-netboot/linux" 8222656 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2" 
+10.99.10.133 /media/debian-netboot/initrd.gz" 40810276 "iPXE/1.21.1+git-20220113.fbbdc3926-0ubuntu2" 
+# boot script iPXE terakhir untuk node43: baris kernel (token disamarkan)

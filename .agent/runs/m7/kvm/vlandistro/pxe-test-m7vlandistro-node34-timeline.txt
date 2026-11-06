@@ -1,0 +1,10 @@
+2026-11-06T15:26:21.919Z host muncul (tanpa reload) currentIp=10.99.10.118
+2026-11-06T15:26:26.222Z install dibuat (UI) os=rocky-9 ip=10.99.20.44/24 vlan=20 gw=10.99.20.1 generator=false
+2026-11-06T15:26:26.308Z node.sh reset
+2026-11-06T15:26:26.489Z booting (UI, +0 dtk)
+2026-11-06T15:26:46.682Z installing (UI, +20 dtk)
+2026-11-06T15:30:57.852Z configuring (UI, +272 dtk)
+2026-11-06T15:34:42.840Z done (UI, +497 dtk)
+2026-11-06T15:40:18.893Z ssh (relay) key yang di-inject: true
+2026-11-06T15:44:03.840Z reboot: kembali=true verify2=0 status=done currentIp=10.99.10.118 job 1->1 penanda-installer-serial 4->4 iPXE-script 2->3 serial-boot-lokal=true
+2026-11-06T15:44:04.004Z AC-7.25 selesai dalam 226 dtk; masalah: tidak ada

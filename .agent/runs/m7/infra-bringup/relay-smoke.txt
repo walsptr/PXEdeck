@@ -1,0 +1,42 @@
+## relay MODE=setup
+relay-setup: /root/pxe-relay 700 root
+# exit=0
+## relay MODE=capture-start CAP_IF=trunk0
+relay-capture: started trunk0
+# exit=0
+## relay MODE=capture-start CAP_IF=pxe0
+relay-capture: started pxe0
+# exit=0
+## relay MODE=evil
+relay: MODE 'evil' tidak dikenal
+# exit=2
+## relay MODE=verify NODE_IP=10.99.0.5 NODE_USER=x
+relay: NODE_IP '10.99.0.5' harus 10.99.20.x (VLAN management)
+# exit=2
+## (beberapa detik kemudian) ls /root/pxe-cap
+total 32
+drwx------ 2 root root 4096 Nov  6 10:33 .
+drwx------ 6 root root 4096 Nov  6 10:33 ..
+-rw-r--r-- 1 root root   86 Nov  6 10:33 pxe0.log
+-rw-r--r-- 1 root root   24 Nov  6 10:33 pxe0.pcap
+-rw-r--r-- 1 root root    5 Nov  6 10:33 pxe0.pid
+-rw-r--r-- 1 root root   88 Nov  6 10:33 trunk0.log
+-rw-r--r-- 1 root root   24 Nov  6 10:33 trunk0.pcap
+-rw-r--r-- 1 root root    5 Nov  6 10:33 trunk0.pid
+1970 tcpdump -i trunk0 -nn -e -U -Z root -w /root/pxe-cap/trunk0.pcap (udp port 67 or udp port 68) or (vlan and (udp port 67 or udp port 68))
+2031 tcpdump -i pxe0 -nn -e -U -Z root -w /root/pxe-cap/pxe0.pcap (udp port 67 or udp port 68) or (vlan and (udp port 67 or udp port 68))
+## relay MODE=capture-stop CAP_IF=trunk0
+# capture trunk0 filter: (udp port 67 or udp port 68) or (vlan and (udp port 67 or udp port 68))
+reading from file /root/pxe-cap/trunk0.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+# exit=0
+## relay MODE=capture-stop CAP_IF=pxe0
+# capture pxe0 filter: (udp port 67 or udp port 68) or (vlan and (udp port 67 or udp port 68))
+reading from file /root/pxe-cap/pxe0.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+# exit=0
+## relay MODE=teardown
+relay-clean: absent
+# exit=0
+## setelah teardown
+ls: cannot access '/root/pxe-relay': No such file or directory
+ls: cannot access '/root/pxe-cap': No such file or directory
+tcpdump: tidak berjalan
