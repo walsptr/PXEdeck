@@ -135,6 +135,15 @@ describe("aturan start (AC-6.2, AC-6.3)", () => {
 
   it("production + admin valid → start tanpa peringatan admin", () => {
     vi.stubEnv("NODE_ENV", "production")
+    // M6 iter2 (SR-6-3, DEC-022 §3): production tanpa PXE_TRUST_PROXY=1 kini memperingatkan rate limit
+    // login per IP yang global. Env deploy rujukan (nginx + PXE_TRUST_PROXY=1 + lease) → tanpa
+    // peringatan sama sekali; tanpa proxy → tepat satu peringatan, dan itu BUKAN peringatan admin.
+    const noProxy = vi.fn()
+    onServerStart({ warn: noProxy, error: vi.fn() }, false)
+    expect(noProxy).toHaveBeenCalledTimes(1)
+    expect(String(noProxy.mock.calls[0][0])).toMatch(/^\[pxe\] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1/)
+    expect(String(noProxy.mock.calls[0][0])).not.toMatch(/admin belum dikonfigurasi/)
+    Object.assign(process.env, { PXE_TRUST_PROXY: "1", PXE_DNSMASQ_LEASES: "/var/lib/misc/dnsmasq.leases" })
     const warn = vi.fn()
     onServerStart({ warn, error: vi.fn() }, false)
     expect(warn).not.toHaveBeenCalled()

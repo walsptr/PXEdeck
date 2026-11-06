@@ -17,22 +17,32 @@ import {
   getImage,
   imageAvailability,
 } from "@/lib/server/db/repos/os-images"
+import { debianExternalMediaError, isLocalMedia } from "@/lib/server/installers/context"
 import { logJobEvent, sweepJobs } from "@/lib/server/job-lifecycle"
-import { getSettings } from "@/lib/server/settings"
+import { getSettings, type Settings } from "@/lib/server/settings"
 import { newToken } from "@/lib/server/tokens"
 
 function label(h: Host) {
   return h.hostname ?? h.mac
 }
 
+/** Sumber media yang dipakai generator (PXE_MEDIA_URL + PXE_SERVER_IP). */
+export type MediaSource = { mediaUrl: string; serverIp: string }
+
+function mediaSource(s: Settings): MediaSource {
+  return { mediaUrl: s.mediaUrl, serverIp: s.network.pxeServer }
+}
+
 /**
  * Alasan host belum bisa di-install, atau null. Credentials harus tersimpan
  * eksplisit di config host (tidak ada default/seed — SR-2-1/CR-3-12).
+ * DEC-022 §2: image Debian (preseed) hanya dari media server PXE lokal (fail-closed, DEC-021).
  */
 export function installBlocker(
   h: Host,
   mediaRoot: string = getSettings().mediaRoot,
   exists?: (p: string) => boolean,
+  media: MediaSource = mediaSource(getSettings()),
 ): string | null {
   const cfg = peekConfig(h.id)
   const missing = [
@@ -46,6 +56,8 @@ export function installBlocker(
   if (!img) return `${label(h)}: OS image ${cfg!.os!.osImageId} tidak dikenal`
   const { available, reason } = imageAvailability(img, mediaRoot, exists)
   if (!available) return `${label(h)}: ${reason}`
+  if (img.method === "preseed" && !isLocalMedia(media.mediaUrl, media.serverIp))
+    return `${label(h)}: ${debianExternalMediaError(media.mediaUrl, media.serverIp)}`
   if (cfg!.os!.partition === "custom")
     return `${label(h)}: skema partisi custom belum didukung`
   if (cfg!.sshUser && cfg!.sshUser !== cfg!.username)
@@ -72,7 +84,7 @@ export function installHosts(
         result.failed.push({ hostId: id, message: "Host tidak ditemukan" })
         continue
       }
-      const err = installBlocker(h, s.mediaRoot)
+      const err = installBlocker(h, s.mediaRoot, undefined, mediaSource(s))
       if (err) {
         result.failed.push({ hostId: id, message: err })
         continue

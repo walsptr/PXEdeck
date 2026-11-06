@@ -378,6 +378,22 @@ export function authWarnings(s: Settings): string[] {
       ]
 }
 
+/**
+ * SR-6-3 / CR-6-6 (DEC-022 §3): production tanpa `PXE_TRUST_PROXY=1` → IP klien tidak diketahui
+ * (`X-Real-IP` diabaikan), sehingga batas login per IP (`PXE_LOGIN_MAX_FAILURES`, 20/IP) berlaku
+ * GLOBAL untuk semua klien: satu pihak bisa mengunci login admin selama `PXE_LOGIN_WINDOW_MIN`.
+ * Peringatan saja (start tidak ditolak); deploy rujukan memakai nginx + `PXE_TRUST_PROXY=1`.
+ */
+export function trustProxyWarnings(s: Settings, nodeEnv: string | undefined = process.env.NODE_ENV): string[] {
+  if (nodeEnv !== "production" || s.trustProxy) return []
+  return [
+    "peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login " +
+      "per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama " +
+      `${s.auth.loginWindowMin} menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan ` +
+      "PXE_TRUST_PROXY=1",
+  ]
+}
+
 /** Nama env yang memengaruhi `getSettings()` (kunci cache). */
 export const SETTINGS_ENV_KEYS = [
   "PXE_MGMT_CIDR",

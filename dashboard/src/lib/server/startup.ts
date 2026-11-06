@@ -3,9 +3,10 @@
 //    PXE_DNSMASQ_LEASES, DEC-013) → `register()` melempar → server tidak start.
 //  - Peringatan konfigurasi (flag dev insecure; M6: admin belum dikonfigurasi di non-production)
 //    dicatat satu baris per item. Production tanpa admin valid / flag insecure tanpa konfirmasi
-//    (SR-5-4) → settings melempar → start ditolak (DEC-017 §3, §7).
+//    (SR-5-4) → settings melempar → start ditolak (DEC-017 §3, §7). M6 iter2 (SR-6-3): production
+//    tanpa PXE_TRUST_PROXY=1 → peringatan rate limit login per IP menjadi global.
 //  - Timer watchdog job (DEC-014 §2) dimulai sekali per proses.
-import { authWarnings, getSettings, settingsWarnings, type Settings } from "@/lib/server/settings"
+import { authWarnings, getSettings, settingsWarnings, trustProxyWarnings, type Settings } from "@/lib/server/settings"
 import { startWatchdog } from "@/lib/server/watchdog"
 
 export type StartupLogger = Pick<Console, "warn" | "error">
@@ -13,7 +14,7 @@ export type StartupLogger = Pick<Console, "warn" | "error">
 /** Jalankan pemeriksaan start. Mengembalikan settings aktif. */
 export function onServerStart(logger: StartupLogger = console, watchdog = true): Settings {
   const s = getSettings()
-  for (const w of [...settingsWarnings(s), ...authWarnings(s)]) logger.warn(`[pxe] ${w}`)
+  for (const w of [...settingsWarnings(s), ...authWarnings(s), ...trustProxyWarnings(s)]) logger.warn(`[pxe] ${w}`)
   if (watchdog) startWatchdog(logger)
   return s
 }

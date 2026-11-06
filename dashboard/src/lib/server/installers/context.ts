@@ -50,12 +50,6 @@ export type InstallContext = {
    * menurunkannya dari argumen kernel installer (`callbackUrlCmd`, B-5).
    */
   callbackUrl: string
-  /**
-   * DEC-021: metadata repo media bertanda tangan (mirror resmi)? Default false = media lokal server PXE
-   * (DVD; `Release` tanpa InRelease/Release.gpg) → Debian memakai sumber apt `[trusted=yes by-hash=no]`
-   * hanya selama instalasi. true → sumber biasa, tanpa `trusted=yes`.
-   */
-  mediaSigned?: boolean
 }
 
 const HASH_RE = /^\$6\$(rounds=\d{4,9}\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{86}$/
@@ -70,6 +64,35 @@ const KEY_B64_RE = /^[A-Za-z0-9+/]+={0,3}$/
 
 function bad(msg: string): never {
   throw new InstallerInputError(msg)
+}
+
+/**
+ * DEC-021 / DEC-022 §2 (fail-closed): media dilayani server PXE lokal ⇔ host `mediaUrl` (tanpa port)
+ * sama persis dengan `serverIp` (PXE_SERVER_IP). Hanya media lokal (DVD Debian, `Release` tanpa
+ * tanda tangan) yang boleh dipasang dengan sumber apt `[trusted=yes]`; nama DNS server PXE, IP lain,
+ * atau URL tidak valid → bukan lokal.
+ */
+export function isLocalMedia(mediaUrl: string, serverIp: string): boolean {
+  if (!isIpv4(serverIp)) return false
+  try {
+    return new URL(mediaUrl).hostname === serverIp
+  } catch {
+    return false
+  }
+}
+
+/** Pesan penolakan Debian dengan media eksternal (DEC-022 §2); dipakai generator dan validasi install. */
+export function debianExternalMediaError(mediaUrl: string, serverIp: string): string {
+  let host = "?"
+  try {
+    host = new URL(mediaUrl).host
+  } catch {
+    // biarkan "?"
+  }
+  return (
+    `Debian: media ${host} bukan server PXE lokal (${serverIp}); repo media Debian tanpa tanda tangan ` +
+    "hanya diizinkan dari server PXE lokal (DEC-021). Set PXE_MEDIA_URL ke http://<PXE_SERVER_IP>/…"
+  )
 }
 
 /** Normalisasi + sanitasi satu public key; Error bila tidak valid. */

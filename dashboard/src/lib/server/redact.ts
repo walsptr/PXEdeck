@@ -34,7 +34,9 @@
 // langsung karakter token lain (rangkaian ≥ 44, mis. `<token>X` — sengaja bukan token, M5 AC-5.14);
 // isi key yang hanya satu baris per request tanpa BEGIN/END (rangkaian < 2); baris isi key dengan
 // prefiks log di luar daftar `LOG_PREFIX_RE`; homoglyph (digit fullwidth, huruf Kiril) di dalam
-// token; encoding selain persen/JSON/backslash (mis. base32, hex, HTML entity).
+// token; encoding selain persen/JSON/backslash (mis. base32, hex, HTML entity); base64 ter-wrap dengan
+// lebar selain 60/64/76 atau baris tidak seragam (SR-6-4: lebar umum digabung sebelum didekode); baris
+// terakhir base64 ter-wrap TANPA padding yang membuat total panjang bukan kelipatan 4 (tidak ikut ditandai).
 
 const B64U = "[A-Za-z0-9_-]"
 /** `/boot/<mac>/<token 43>` (MAC `aa:bb:..`, `aa-bb-..`, `%3A`, atau 12 hex). */
@@ -102,11 +104,15 @@ function b64HasSecret(blob: string, depth: number): boolean {
     if (s.length < 16) continue
     s = s.slice(0, s.length - (s.length % 4))
     const buf = Buffer.from(s, "base64")
-    for (const dec of [buf.toString("utf8"), buf.toString("utf16le")]) {
+    // UTF-16LE hanya bisa menghasilkan karakter ASCII (semua pola di sini ASCII) bila ada byte 0x00;
+    // tanpa byte nol dekode UTF-16LE dilewati — hasil identik, separuh kerja (SR-5-11/SR-6-4).
+    for (const dec of buf.includes(0) ? [buf.toString("utf8"), buf.toString("utf16le")] : [buf.toString("utf8")]) {
       const clean = dec.replaceAll("\0", "")
       if (SECRET_IN_DECODED_RE.test(clean)) return true
       if (depth > 0) {
-        for (const m of clean.matchAll(B64_INNER_RE)) {
+        // SR-6-4: base64 lapis dalam yang ter-wrap digabung (baris baru dibuang) sebelum dicari —
+        // satu rangkaian panjang alih-alih ratusan potongan per baris (tetap linear).
+        for (const m of clean.replace(/[\r\n]+/g, "").matchAll(B64_INNER_RE)) {
           if (b64HasSecret(m[0], depth - 1)) return true
         }
       }
@@ -251,6 +257,66 @@ function keyBodyRunRanges(text: string): Range[] {
   return out
 }
 
+/** Lebar baris base64 ter-wrap yang umum: PEM/MIME 64, `openssl -A`-less 60, GNU `base64` 76 (SR-6-4). */
+const B64_WRAP_WIDTHS = new Set([60, 64, 76])
+
+/**
+ * SR-6-4 (M6 iter2): base64 ter-wrap (mis. keluaran GNU `base64` 76 kolom). Rangkaian ≥ 2 baris
+ * berurutan yang (setelah prefiks log dilepas) berupa base64 murni: semua baris selain terakhir
+ * selebar sama W ∈ {60, 64, 76}, baris terakhir ≤ W (lebih pendek atau berpadding `=` menutup
+ * rangkaian, dan hanya bila total panjang rangkaian kelipatan 4). Isi baris digabung lalu didekode (`b64HasSecret`); bila memuat secret, inti setiap baris
+ * ditandai (baris tetap terpisah, prefiks log tetap tampil). Setiap baris diperiksa sekali dan setiap
+ * rangkaian didekode sekali → linear (SR-5-11).
+ */
+function wrappedB64Ranges(text: string): Range[] {
+  const out: Range[] = []
+  let cores: Range[] = []
+  let parts: string[] = []
+  let width = 0
+  let total = 0
+  let closed = false
+  const flush = () => {
+    if (cores.length >= 2 && b64HasSecret(parts.join(""), 2)) out.push(...cores)
+    cores = []
+    parts = []
+    width = 0
+    total = 0
+    closed = false
+  }
+  let pos = 0
+  while (pos <= text.length) {
+    let nl = text.indexOf("\n", pos)
+    if (nl < 0) nl = text.length
+    const line = text.slice(pos, nl)
+    const core = keyLineCore(line)
+    if (core.length > 0 && PKEY_BODY_LINE_RE.test(core)) {
+      const end = pos + line.trimEnd().length
+      const r: Range = [end - core.length, end]
+      const padded = core.endsWith("=")
+      // Baris penutup (lebih pendek/berpadding) hanya bila total panjang kelipatan 4 (keluaran base64
+      // berpadding selalu demikian) — kata biasa di bawah blok (`selesai`) tidak ikut ditandai.
+      const last = core.length < width || padded
+      if (cores.length > 0 && !closed && core.length <= width && (!last || (total + core.length) % 4 === 0)) {
+        cores.push(r)
+        parts.push(core)
+        total += core.length
+        closed = last
+      } else {
+        flush()
+        if (B64_WRAP_WIDTHS.has(core.length) && !padded) {
+          cores.push(r)
+          parts.push(core)
+          width = core.length
+          total = core.length
+        }
+      }
+    } else flush()
+    pos = nl + 1
+  }
+  flush()
+  return out
+}
+
 /** Sentinel (Private Use Area) untuk `secretMarks`: satu karakter per karakter yang disamarkan. */
 export const MARK_PLAIN = ""
 export const MARK_KEY = ""
@@ -282,6 +348,7 @@ export function secretMarks(text: string): string {
   let out = text.replace(PKEY_BLOCK_RE, (m) => MARK_KEY.repeat(m.length))
   out = fillRanges(out, orphanKeyTailRanges(out), MARK_KEY)
   out = fillRanges(out, keyBodyRunRanges(out), MARK_KEY)
+  out = fillRanges(out, wrappedB64Ranges(out), MARK_B64)
   out = out
     .replace(TOKEN_PATH_RE, keep)
     .replace(TOKEN_PATH_PARTIAL_RE, keep)

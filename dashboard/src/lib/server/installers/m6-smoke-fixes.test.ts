@@ -470,17 +470,20 @@ describe("BUG-M6-9 / DEC-021 sumber apt media lokal tanpa tanda tangan", () => {
     expect(early).toContain("chmod a-x /usr/lib/apt-setup/generators/50mirror")
     const late = debianLateScript(ctx())
     expect(late).toContain("trusted=yes by-hash=no")
-    expect(late.split("\n").at(-3)).toContain("rm -f /etc/apt/apt.conf.d/00AllowUnauthenticated")
+    // SR-6-6 (DEC-022 §2): pembersihan berjalan SEBELUM unit firstboot (callback done) dipasang.
+    const lines = late.split("\n")
+    const untrust = lines.findIndex((l) => l.includes("rm -f /etc/apt/apt.conf.d/00AllowUnauthenticated"))
+    const firstboot = lines.findIndex((l) => l.includes("mkdir -p /etc/pxe-callback"))
+    expect(untrust).toBeGreaterThan(0)
+    expect(firstboot).toBeGreaterThan(untrust)
   })
-  it("mirror bertanda tangan (mediaSigned): TIDAK ada trusted=yes, by-hash override, hook, maupun untrust", () => {
-    const p = debianPreseed(ctx({ mediaSigned: true }))
-    expect(p).not.toContain("trusted=yes")
-    expect(p).not.toContain("by-hash")
-    expect(p).not.toContain("post-base-installer")
-    expect(p).not.toContain("50mirror")
-    expect(diValue(p, "apt-setup/local0/repository")).toBeNull()
-    const late = debianLateScript(ctx({ mediaSigned: true }))
-    expect(late).not.toContain("trusted=yes")
+  it("DEC-022 §2 media eksternal (host ≠ PXE_SERVER_IP): generator menolak, tanpa trusted=yes/allow_unauthenticated", () => {
+    // Pengganti uji `mediaSigned` (kode mati dihapus): media bukan server PXE lokal tidak pernah
+    // menghasilkan preseed; tidak ada jalur yang mengeluarkan trusted=yes ke host lain.
+    for (const mediaUrl of ["http://deb.debian.org/media", "http://10.99.0.3/media", "http://pxe.lab.example/media"]) {
+      expect(() => debianPreseed(ctx({ mediaUrl })), mediaUrl).toThrow(/bukan server PXE lokal/)
+      expect(() => debianLateScript(ctx({ mediaUrl })), mediaUrl).toThrow(/bukan server PXE lokal/)
+    }
   })
   it("pertanyaan apt-setup/tasksel/pkgsel/grub yang bisa muncul dipreseed (tanpa NAT)", () => {
     const p = debianPreseed(ctx())

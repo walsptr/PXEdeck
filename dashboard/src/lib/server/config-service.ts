@@ -32,15 +32,17 @@ import {
   validatePassword,
   validateUsername,
 } from "@/lib/credentials"
-import type {
-  ApiFieldError,
-  ConfigPayload,
-  CsvRowResult,
-  HostConfig,
-  PublicHostConfig,
-  SaveResult,
-  SshKey,
-  SshSection,
+import {
+  AUTHORIZED_KEYS_MAX_BYTES,
+  authorizedKeysBytes,
+  type ApiFieldError,
+  type ConfigPayload,
+  type CsvRowResult,
+  type HostConfig,
+  type PublicHostConfig,
+  type SaveResult,
+  type SshKey,
+  type SshSection,
 } from "@/lib/host-config"
 import { validateHostname } from "@/lib/hostname"
 import {
@@ -509,6 +511,19 @@ function applyInTx(
       errors.push({
         section: "ssh",
         message: "Pilih atau tambahkan minimal satu key",
+      })
+    }
+    // CR-6-1: total authorized_keys host (key library terpilih + key baru) dibatasi agar
+    // late_command installer tidak melampaui MAX_ARG_STRLEN.
+    const keyBytes = authorizedKeysBytes([
+      ...keyIds.map((id) => getKey(id)?.publicKey ?? ""),
+      ...newLibrary.map((k) => k.publicKey),
+      ...extra,
+    ])
+    if (keyBytes > AUTHORIZED_KEYS_MAX_BYTES) {
+      errors.push({
+        section: "ssh",
+        message: `Total SSH key ${keyBytes} byte melebihi batas ${AUTHORIZED_KEYS_MAX_BYTES} byte (32 KiB) per host — kurangi jumlah key atau pakai key yang lebih kecil (mis. ed25519)`,
       })
     }
     steps.push({

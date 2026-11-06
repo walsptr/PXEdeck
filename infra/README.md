@@ -91,6 +91,25 @@ kontrol yang berlaku (DEC-015, DEC-017, SR-4-7, SR-4-8, SR-5-15):
   Done/Failed sehingga tidak bisa dipakai ulang; tidak diasersi. Yang **diasersi** (`verify-node.sh`):
   `/proc/cmdline`, `/etc/default/grub`, `grub.cfg`, entri BLS, `/etc/kernel/cmdline`,
   `/root/anaconda-ks.cfg` bebas token, `/etc/pxe-callback` hilang.
+- **Sisa risiko DEC-021 (apt Debian tanpa verifikasi tanda tangan selama instalasi).** Repo DVD
+  Debian di server PXE tidak bertanda tangan (`Release` tanpa `InRelease`/`Release.gpg`), sehingga
+  selama instalasi apt di target memakai sumber `[trusted=yes by-hash=no]` dan
+  `debian-installer/allow_unauthenticated true`: paket **tidak** diverifikasi tanda tangannya.
+  Dibatasi fail-closed (DEC-022 §2): hanya untuk **media lokal** (host `PXE_MEDIA_URL` =
+  `PXE_SERVER_IP`); media Debian lain ditolak dashboard (422) dan generator tidak mengeluarkan
+  `trusted=yes`. `trusted=yes` dan `00AllowUnauthenticated` dihapus di `late_command` (sebelum unit
+  firstboot dipasang) dan diverifikasi lewat SSH di run KVM `distro` (`e2e-kvm/m6-distro.spec.ts`:
+  `trusted_files=0`, tidak ada `trusted=yes` di `/etc/apt/` target). Integritas ISO dijamin checksum resmi sebelum
+  dipakai (`.agent/runs/m6/kvm/media-checksums.txt`); jaringan `pxe-test` terisolasi.
+- **Sesi: polling memperpanjang idle (DEC-019 §1).** Setiap request API tab yang terbuka (polling
+  5 dtk, SSE) menggeser batas idle (`PXE_SESSION_IDLE_MIN`), jadi idle praktis tidak habis selama
+  tab dashboard terbuka. Batas atas tetap **absolut** `PXE_SESSION_MAX_HOURS` (default 12 jam) sejak
+  login, apa pun aktivitasnya; setelah itu login ulang.
+- **Rate limit login tanpa `PXE_TRUST_PROXY` (SR-6-3).** Tanpa `PXE_TRUST_PROXY=1` IP klien tidak
+  diketahui (`X-Real-IP` diabaikan), sehingga batas login per IP menjadi **global** untuk semua klien:
+  satu pihak dapat mengunci login admin selama `PXE_LOGIN_WINDOW_MIN`. Brute force tetap dibatasi.
+  Server production tanpa `PXE_TRUST_PROXY=1` mencetak `[pxe] peringatan: …` saat start; deploy
+  rujukan memakai nginx (menimpa `X-Real-IP` dengan `$remote_addr`) + `PXE_TRUST_PROXY=1`.
 - **Over-redaksi bukti** diterima (lihat docstring `dashboard/src/lib/server/redact.ts`): lebih baik
   bukti tersamar berlebih daripada secret lolos.
 

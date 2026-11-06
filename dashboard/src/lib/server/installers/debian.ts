@@ -1,7 +1,14 @@
 // Generator Debian preseed (d-i). Setiap baris `d-i <key> <type> <value>`
 // satu baris (CR/LF ditolak). Semua kerja pasca-install ada di satu script
 // yang dikirim ke target sebagai base64 dan dijalankan lewat in-target.
-import { prefixToNetmask, validateContext, type InstallContext } from "./context"
+import {
+  debianExternalMediaError,
+  InstallerInputError,
+  isLocalMedia,
+  prefixToNetmask,
+  validateContext,
+  type InstallContext,
+} from "./context"
 import { di } from "./lines"
 import {
   authorizedKeysCmds,
@@ -69,6 +76,24 @@ export function debianDiskCmd(ctx: InstallContext): string {
   ].join("; ")
 }
 
+/**
+ * CR-6-1: batas aman panjang satu baris `preseed/late_command` (byte). d-i menjalankannya sebagai satu
+ * argumen `sh -c`, dan `in-target sh -c '…'` sekali lagi; Linux membatasi satu argumen pada
+ * `MAX_ARG_STRLEN` = 131072. Di atas batas ini generator menolak (InstallerInputError) alih-alih
+ * menghasilkan preseed yang gagal E2BIG di tengah instalasi. Validasi config membatasi total
+ * `authorized_keys` (`AUTHORIZED_KEYS_MAX_BYTES`) sehingga batas ini tidak tercapai untuk input valid.
+ */
+export const DEBIAN_LATE_COMMAND_MAX_BYTES = 100_000
+
+/**
+ * DEC-021 / DEC-022 §2 (fail-closed): generator Debian hanya untuk media server PXE lokal. Media
+ * eksternal tidak terbukti bertanda tangan → ditolak, sehingga `[trusted=yes]`,
+ * `allow_unauthenticated true`, dan hook `50mirror` tidak pernah dikeluarkan untuk host media lain.
+ */
+function requireLocalMedia(c: InstallContext): void {
+  if (!isLocalMedia(c.mediaUrl, c.serverIp)) throw new InstallerInputError(debianExternalMediaError(c.mediaUrl, c.serverIp))
+}
+
 /** Opsi sumber apt media lokal tidak bertanda tangan (DEC-021). */
 export const DEBIAN_UNSIGNED_OPTS = "[trusted=yes by-hash=no]"
 /** Hook base-installer (berjalan setelah base system, sebelum apt-setup) — DEC-021. */
@@ -120,6 +145,7 @@ function interfacesText(c: InstallContext): string {
 /** Script pasca-install (dijalankan di chroot target). Diekspor untuk test. */
 export function debianLateScript(ctx: InstallContext): string {
   const c = validateContext(ctx)
+  requireLocalMedia(c)
   const n = c.network
   const ifaceLookup =
     n.mode === "static" && n.iface.by === "name"
@@ -156,8 +182,10 @@ export function debianLateScript(ctx: InstallContext): string {
     b64write("/etc/network/interfaces", "644", "auto lo\niface lo inet loopback\n\nsource /etc/network/interfaces.d/*\n"),
     "mkdir -p /etc/network/interfaces.d",
     `printf %s '${b64(interfacesText(c))}' | base64 -d | sed "s/\\$IF/$IF/g" > /etc/network/interfaces.d/mgmt`,
+    // SR-6-6: sumber `trusted=yes` dibersihkan SEBELUM unit firstboot (callback done) dipasang; bila
+    // pembersihan gagal (`set -e`), firstboot tidak terpasang → job tidak pernah Done.
+    DEBIAN_UNTRUST_CMD,
     ...firstbootInstallCmds("", "preseed", c.mac),
-    ...(c.mediaSigned ? [] : [DEBIAN_UNTRUST_CMD]),
     logCmd("preseed", c.mac, DEBIAN_LOG.lateDone),
   )
   return `${lines.join("\n")}\n`
@@ -180,6 +208,14 @@ export function localeLines(locale: string): string[] {
 
 export function debianPreseed(ctx: InstallContext): string {
   const c = validateContext(ctx)
+  requireLocalMedia(c)
+  const lateCommand = `in-target sh -c 'echo ${b64(debianLateScript(c))} | base64 -d > /tmp/pxe-late.sh && sh /tmp/pxe-late.sh; rm -f /tmp/pxe-late.sh'`
+  const lateBytes = Buffer.byteLength(lateCommand)
+  if (lateBytes > DEBIAN_LATE_COMMAND_MAX_BYTES)
+    throw new InstallerInputError(
+      `Debian: preseed/late_command ${lateBytes} byte melebihi batas aman ${DEBIAN_LATE_COMMAND_MAX_BYTES} byte ` +
+        "(kurangi jumlah/ukuran SSH key)",
+    )
   const media = new URL(`${c.mediaUrl}/${c.imageRepo}`)
   const recipe = c.storage.partition === "lvm" ? "lvm" : "regular"
   const out = [
@@ -188,7 +224,7 @@ export function debianPreseed(ctx: InstallContext): string {
     di(
       "preseed/early_command",
       "string",
-      `${logCmd("preseed", c.mac, DEBIAN_LOG.start)}; ${debianModulesCmd(c)}${c.mediaSigned ? "" : `; ${debianAptHookCmd()}`}`,
+      `${logCmd("preseed", c.mac, DEBIAN_LOG.start)}; ${debianModulesCmd(c)}; ${debianAptHookCmd()}`,
     ),
     // BUG-M6-3: dengan `auto=true`, localechooser berjalan SETELAH preseed dimuat. Bila language/
     // locale dipreseed terpisah, country WAJIB ikut (example-preseed Debian), kalau tidak d-i bertanya
@@ -209,6 +245,7 @@ export function debianPreseed(ctx: InstallContext): string {
     di("mirror/http/directory", "string", media.pathname),
     di("mirror/http/proxy", "string", ""),
     di("mirror/suite", "string", "bookworm"),
+    // DEC-021: hanya media lokal (requireLocalMedia di atas); dibersihkan di late script.
     di("debian-installer/allow_unauthenticated", "boolean", true),
     // Tanpa NAT: tidak ada security/updates/backports, non-free, contrib, deb-src.
     di("apt-setup/services-select", "multiselect", ""),
@@ -218,7 +255,7 @@ export function debianPreseed(ctx: InstallContext): string {
     di("apt-setup/enable-source-repositories", "boolean", false),
     di("apt-setup/cdrom/set-first", "boolean", false),
     // DEC-021: media lokal tanpa tanda tangan → satu sumber dari 60local (lihat debianAptHookCmd).
-    ...(c.mediaSigned ? [] : [di("apt-setup/local0/repository", "string", `${DEBIAN_UNSIGNED_OPTS} ${media.href.replace(/\/$/, "")} bookworm main`)]),
+    di("apt-setup/local0/repository", "string", `${DEBIAN_UNSIGNED_OPTS} ${media.href.replace(/\/$/, "")} bookworm main`),
     di("passwd/root-login", "boolean", false),
     di("passwd/user-fullname", "string", c.username),
     di("passwd/username", "string", c.username),
@@ -257,11 +294,7 @@ export function debianPreseed(ctx: InstallContext): string {
     di("grub-installer/force-efi-extra-removable", "boolean", true),
     // Nilai awal; `partman/early_command` menimpanya dengan disk terpilih (otomatis maupun eksplisit).
     di("grub-installer/bootdev", "string", c.storage.disk || "default"),
-    di(
-      "preseed/late_command",
-      "string",
-      `in-target sh -c 'echo ${b64(debianLateScript(c))} | base64 -d > /tmp/pxe-late.sh && sh /tmp/pxe-late.sh; rm -f /tmp/pxe-late.sh'`,
-    ),
+    di("preseed/late_command", "string", lateCommand),
     di("finish-install/reboot_in_progress", "note"),
   ]
   return `${out.join("\n")}\n`
