@@ -87,3 +87,14 @@ Test yang membuktikan bug dibiarkan MERAH (tidak di-skip/dilonggarkan). Kode pro
   `session-expired-{db,logout}.png`. Verifikasi `.agent/runs/m6/bug-l4.log`: tsc/eslint bersih,
   `npx playwright test e2e/m6-session.spec.ts` tanpa env 3/3 lulus, PNG baru hanya di `m6/screenshots/`,
   `git status -- .agent/runs/m4` kosong.
+
+## Verifikasi final (rerun gate lokal @ 105727e, test-engineer, 2026-11-06)
+
+- BUG-M6-L1 — perbaikan 6cca9e5 (interval tulis = min(60 dtk, idle/2)): `m6-te-session.test.ts` idle=1 dan
+  `m6-session.spec.ts` "DEC-019 §1 …" lulus (unit 1878/1878; E2E run 1 & 2). **Tertutup.**
+- BUG-M6-L2 — perbaikan 0dafffd: `m5-library.spec.ts` DR-5-8 (≤ 520, batas tidak diubah) + 6 test sesudahnya
+  lulus di kedua run. **Tertutup.**
+- BUG-M6-L3 — perbaikan 0dafffd: `m6-ui.spec.ts` AC-6.38 (7 audit) lulus di kedua run, 0 temuan `kept`;
+  filter tidak diperluas (`final/axe-summary-run{1,2}.txt`). **Tertutup.**
+- BUG-M6-L4 — FIXED 4d23f55; E2E final tidak menulis ke `.agent/runs/m4/`.
+- Spec E2E dan `m6-te-session.test.ts` tidak berubah sejak 3c4ceda (bukti merah) selain `e2e/helpers.ts` (L4).

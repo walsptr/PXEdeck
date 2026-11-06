@@ -1,0 +1,77 @@
+# Mutasi spot-check final M6 @ 105727e 2026-11-06T04:55:30Z — test-engineer
+# Skrip: .agent/runs/m6/mutate.py (ganti string persis, jalankan test, pulihkan, cek sha256). Kode produk dipulihkan identik.
+# sha256 sebelum:
+1915d5fd249d464d047859b86d89d321c6b9ed9e8030fdcfd2f9e72613177762  src/lib/server/http.ts
+58a84a32407250d4f292c61804009138b9b233264a03080a416e11fe5190ff79  src/lib/auth-next.ts
+9cc8eefc47402ca32f7fcc9ef94b057c6a6a203d624d144077d6ef07f1c31c8e  src/lib/server/auth/rate-limit.ts
+fd1b852f172d227355dc95e977677bf0370d9ce6076deb7ee484354affb1d453  src/lib/server/redact.ts
+
+[MF1 requireSession: cek hanya keberadaan cookie (sesi tidak valid lolos)] src/lib/server/http.ts
+   mutasi: 'if (!session) return { response: jsonNoStore({ error: LOGIN_REQUIRED }, { status: 401 }) }' -> 'if (!session && !req.headers.get("cookie")) return { response: jsonNoStore({ error: LOGIN_REQUIRED }, { status'
+   perintah: npx vitest run src/app/api/m6-auth-matrix.test.ts src/app/api/auth/auth-routes.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/app/api/m6-auth-matrix.test.ts (28 tests | 4 failed) 171ms
+     × cookie palsu (bentuk benar): setiap route × method 6ms
+     × cookie rusak: setiap route × method 2ms
+     × cookie kedaluwarsa: setiap route × method 2ms
+     × cookie setelah logout: setiap route × method 2ms
+     ❯ |node| src/app/api/auth/auth-routes.test.ts (15 tests | 3 failed) 2479ms
+     × dua login berurutan → dua id berbeda; id dari cookie request lama dihapus 72ms
+     × logout → 204, cookie Max-Age=0, baris sesi dihapus, cookie lama → 401; logout tanpa sesi → 401 39ms
+     × idle + 1 dtk → 401; aktif sebelum idle memperpanjang; absolut → 401 walau aktif; ganti hash → 401 42ms
+     Test Files  2 failed (2)
+     Tests  7 failed | 36 passed (43)
+     FAIL  |node| src/app/api/m6-auth-matrix.test.ts > integration: tanpa sesi valid → 401 Perlu login tanpa efek > cookie palsu (bentuk benar): setiap route × method
+   pulih sha256 identik=ya
+[MF1b proxy: cookie berbentuk apa pun dianggap sesi (regex dilewati)] src/lib/auth-next.ts
+   mutasi: 'if (cookie !== undefined && SESSION_COOKIE_RE.test(cookie)) return null' -> 'if (cookie !== undefined) return null'
+   perintah: npx vitest run src/lib/auth-next.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/auth-next.test.ts (39 tests | 1 failed) 19ms
+     × proxyRedirect: tanpa cookie / cookie berbentuk salah → /login?next=<path+query>; cookie berbentuk benar → lanjut 5ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 38 passed (39)
+     FAIL  |node| src/lib/auth-next.test.ts > Proxy (src/proxy.ts) > proxyRedirect: tanpa cookie / cookie berbentuk salah → /login?next=<path+query>; cookie berbentuk benar → lanjut
+   pulih sha256 identik=ya
+[MF2 rate limit login (ip,username): off-by-one max -> max+1] src/lib/server/auth/rate-limit.ts
+   mutasi: '  const a = peek(uk, now, max, windowMs)' -> '  const a = peek(uk, now, max + 1, windowMs)'
+   perintah: npx vitest run src/app/api/auth/auth-routes.test.ts src/lib/server/auth/rate-limit.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/auth/rate-limit.test.ts (8 tests | 2 failed) 92ms
+     × 5 gagal per (IP, username) → ke-6 ditolak; username lain dari IP sama masih boleh sampai 20 per IP 11ms
+     × PXE_LOGIN_MAX_FAILURES / PXE_LOGIN_WINDOW_MIN dari env 2ms
+     ❯ |node| src/app/api/auth/auth-routes.test.ts (15 tests | 4 failed) 2396ms
+     × 5 gagal untuk (IP, admin) → ke-6 (password BENAR) 429 + Retry-After; body sama untuk username tak dikenal; jendela lewat → 204 196ms
+     × login sukses mereset hitungan (IP, username) 349ms
+     × X-Real-IP hanya dipakai bila PXE_TRUST_PROXY=1 (tanpa itu semua klien = satu kunci 'unknown') 192ms
+     × race: 10 login salah paralel → tepat 5 diverifikasi (401) dan 5 ditolak (429) 78ms
+     Test Files  2 failed (2)
+     Tests  6 failed | 17 passed (23)
+     FAIL  |node| src/app/api/auth/auth-routes.test.ts > rate limit login (AC-6.10) > 5 gagal untuk (IP, admin) → ke-6 (password BENAR) 429 + Retry-After; body sama untuk username tak dikenal; jendela lewa
+     FAIL  |node| src/app/api/auth/auth-routes.test.ts > rate limit login (AC-6.10) > login sukses mereset hitungan (IP, username)
+   pulih sha256 identik=ya
+[MF3 redact: blok BEGIN PRIVATE KEY tanpa footer tidak lagi diredaksi (hapus alternatif |$)] src/lib/server/redact.ts
+   mutasi: 'PRIVATE KEY-----|$)/g' -> 'PRIVATE KEY-----)/g'
+   perintah: npx vitest run src/lib/server/m6-redact.test.ts src/lib/server/m5-iter3-redact.test.ts src/lib/server/m5-iter2-redact-timeout.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/m5-iter2-redact-timeout.test.ts (37 tests | 3 failed) 333ms
+     × redactSecrets atas body utuh: tanpa footer (terpotong) 11ms
+     × POST log (handleLogPost): blok tanpa footer → tak satu pun baris key tersimpan 24ms
+     × POST log: blok terpecah dua request → ekor request kedua (base64 + END) tersamarkan 24ms
+     ❯ |node| src/lib/server/m5-iter3-redact.test.ts (144 tests | 5 failed) 1068ms
+     × (a) header key dipecah `\r`, tanpa footer → tak satu pun baris isi key tersimpan 26ms
+     × handleLogPost: diagnostik di atas ekor key (request kedua) tersimpan 17ms
+     × (1) cleanAndRedact/cleanEventMessage: token= + ESC-----BEGIN tanpa footer → tak satu pun baris key 3ms
+     × (1) handleLogPost: token= + ESC-----BEGIN tanpa footer → tak satu pun baris key tersimpan 17ms
+     × handleLogPost: ekor RSA `AQID` + baris kosong pada request kedua tidak meloloskan baris key 17ms
+     ❯ |node| src/lib/server/m6-redact.test.ts (306 tests | 18 failed) 2855ms
+     × (d) ESC-----BEGIN OPENSSH ESC[0mPRIVATE KEY----- tanpa footer sendiri → tak satu pun baris isi key 8ms
+   pulih sha256 identik=ya
+
+# sha256 sesudah:
+1915d5fd249d464d047859b86d89d321c6b9ed9e8030fdcfd2f9e72613177762  src/lib/server/http.ts
+58a84a32407250d4f292c61804009138b9b233264a03080a416e11fe5190ff79  src/lib/auth-next.ts
+9cc8eefc47402ca32f7fcc9ef94b057c6a6a203d624d144077d6ef07f1c31c8e  src/lib/server/auth/rate-limit.ts
+fd1b852f172d227355dc95e977677bf0370d9ce6076deb7ee484354affb1d453  src/lib/server/redact.ts
+# git diff produk (harus kosong):
+(akhir)

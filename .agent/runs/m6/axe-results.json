@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-06T00:41:20.482Z",
+  "generatedAt": "2026-11-06T04:53:20.604Z",
   "tags": [
     "wcag2a",
     "wcag2aa",
@@ -36,9 +36,9 @@
     }
   ],
   "filteredCount": {
-    "total": 609,
+    "total": 607,
     "byCategory": {
-      "exception:muted/white": 446,
+      "exception:muted/white": 444,
       "exception:muted/canvas": 68,
       "exception:white/stage-done": 85,
       "exception:on-primary/primary": 10
@@ -191,25 +191,7 @@
     },
     {
       "label": "/login error@375",
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "targets": [
-            ".text-balance"
-          ],
-          "detail": [
-            {
-              "category": "kept",
-              "why": "di luar Sheet dan bukan pasangan pengecualian",
-              "fg": "#d44267",
-              "bg": "#ffffff",
-              "ratio": 4.4,
-              "inSheet": false
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "filtered": [
         {
           "category": "exception:muted/white",
@@ -233,25 +215,7 @@
     },
     {
       "label": "/hosts@1440",
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "targets": [
-            ".lg\\:not-sr-only"
-          ],
-          "detail": [
-            {
-              "category": "kept",
-              "why": "di luar Sheet dan bukan pasangan pengecualian",
-              "fg": "#a09c92",
-              "bg": "#ffffff",
-              "ratio": 2.74,
-              "inSheet": false
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "filtered": [
         {
           "category": "exception:muted/canvas",
@@ -270,6 +234,15 @@
           "ratio": 3.84,
           "inSheet": false,
           "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+        },
+        {
+          "category": "exception:muted/white",
+          "why": "pasangan token terdaftar",
+          "fg": "#807d72",
+          "bg": "#ffffff",
+          "ratio": 4.12,
+          "inSheet": false,
+          "target": ".lg\\:not-sr-only"
         },
         {
           "category": "exception:muted/canvas",
@@ -578,25 +551,7 @@
     },
     {
       "label": "/os-images@1440",
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "targets": [
-            ".lg\\:not-sr-only"
-          ],
-          "detail": [
-            {
-              "category": "kept",
-              "why": "di luar Sheet dan bukan pasangan pengecualian",
-              "fg": "#a09c92",
-              "bg": "#ffffff",
-              "ratio": 2.74,
-              "inSheet": false
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "filtered": [
         {
           "category": "exception:muted/canvas",
@@ -615,6 +570,15 @@
           "ratio": 3.84,
           "inSheet": false,
           "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+        },
+        {
+          "category": "exception:muted/white",
+          "why": "pasangan token terdaftar",
+          "fg": "#807d72",
+          "bg": "#ffffff",
+          "ratio": 4.12,
+          "inSheet": false,
+          "target": ".lg\\:not-sr-only"
         },
         {
           "category": "exception:on-primary/primary",
@@ -812,7 +776,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -821,7 +785,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -830,7 +794,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
         },
         {
           "category": "exception:muted/white",
@@ -839,7 +803,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -893,7 +857,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -902,7 +866,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -911,7 +875,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
         },
         {
           "category": "exception:muted/white",
@@ -920,7 +884,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -929,7 +893,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
         },
         {
           "category": "exception:muted/white",
@@ -983,7 +947,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -992,7 +956,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1001,7 +965,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
         },
         {
           "category": "exception:muted/white",
@@ -1010,7 +974,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -1109,7 +1073,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1118,7 +1082,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1127,7 +1091,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
+          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
         },
         {
           "category": "exception:muted/white",
@@ -1136,7 +1100,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -1190,7 +1154,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1199,7 +1163,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1208,7 +1172,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -1271,7 +1235,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         }
       ]
     },
@@ -1412,7 +1376,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1421,7 +1385,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1430,7 +1394,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
         },
         {
           "category": "exception:muted/white",
@@ -1439,7 +1403,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -1448,7 +1412,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
         },
         {
           "category": "exception:muted/white",
@@ -1502,7 +1466,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1511,7 +1475,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1520,7 +1484,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
         },
         {
           "category": "exception:muted/white",
@@ -1529,7 +1493,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -1538,7 +1502,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
+          "target": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
         },
         {
           "category": "exception:muted/white",
@@ -1592,7 +1556,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1601,7 +1565,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1610,7 +1574,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
         },
         {
           "category": "exception:muted/white",
@@ -1619,7 +1583,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -1628,7 +1592,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
+          "target": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
         },
         {
           "category": "exception:muted/white",
@@ -1727,7 +1691,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1736,7 +1700,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1745,7 +1709,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
+          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
         },
         {
           "category": "exception:muted/white",
@@ -1754,7 +1718,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
         },
         {
           "category": "exception:muted/white",
@@ -1763,7 +1727,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
+          "target": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
         },
         {
           "category": "exception:muted/white",
@@ -1817,7 +1781,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1826,7 +1790,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]"
+          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1835,7 +1799,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)"
         },
         {
           "category": "exception:muted/white",
@@ -1844,7 +1808,16 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
+          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)"
+        },
+        {
+          "category": "exception:muted/white",
+          "why": "pasangan token terdaftar",
+          "fg": "#807d72",
+          "bg": "#ffffff",
+          "ratio": 4.12,
+          "inSheet": false,
+          "target": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)"
         },
         {
           "category": "exception:muted/white",
@@ -1907,7 +1880,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]"
+          "target": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]"
         },
         {
           "category": "exception:muted/white",
@@ -1922,25 +1895,7 @@
     },
     {
       "label": "/ssh-keys@1440",
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "targets": [
-            ".lg\\:not-sr-only"
-          ],
-          "detail": [
-            {
-              "category": "kept",
-              "why": "di luar Sheet dan bukan pasangan pengecualian",
-              "fg": "#a09c92",
-              "bg": "#ffffff",
-              "ratio": 2.74,
-              "inSheet": false
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "filtered": [
         {
           "category": "exception:muted/canvas",
@@ -1959,6 +1914,15 @@
           "ratio": 3.84,
           "inSheet": false,
           "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+        },
+        {
+          "category": "exception:muted/white",
+          "why": "pasangan token terdaftar",
+          "fg": "#807d72",
+          "bg": "#ffffff",
+          "ratio": 4.12,
+          "inSheet": false,
+          "target": ".lg\\:not-sr-only"
         },
         {
           "category": "exception:on-primary/primary",
@@ -2036,7 +2000,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-6ae8b06f\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
+          "target": "tr[data-key-id=\"key-9c1ac08a\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
         },
         {
           "category": "exception:muted/white",
@@ -2045,7 +2009,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-6ae8b06f\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-9c1ac08a\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2054,7 +2018,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-6ae8b06f\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-9c1ac08a\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2063,7 +2027,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-9baaef2c\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
+          "target": "tr[data-key-id=\"key-04abd93a\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
         },
         {
           "category": "exception:muted/white",
@@ -2072,7 +2036,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-9baaef2c\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-04abd93a\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2081,7 +2045,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-9baaef2c\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-04abd93a\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2090,7 +2054,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-1ec892f6\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
+          "target": "tr[data-key-id=\"key-128274ea\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]"
         },
         {
           "category": "exception:muted/white",
@@ -2099,7 +2063,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-1ec892f6\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-128274ea\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground"
         },
         {
           "category": "exception:muted/white",
@@ -2108,31 +2072,13 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "tr[data-key-id=\"key-1ec892f6\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
+          "target": "tr[data-key-id=\"key-128274ea\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground"
         }
       ]
     },
     {
       "label": "/settings@1440",
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "targets": [
-            ".lg\\:not-sr-only"
-          ],
-          "detail": [
-            {
-              "category": "kept",
-              "why": "di luar Sheet dan bukan pasangan pengecualian",
-              "fg": "#a09c92",
-              "bg": "#ffffff",
-              "ratio": 2.74,
-              "inSheet": false
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "filtered": [
         {
           "category": "exception:muted/canvas",
@@ -2151,6 +2097,15 @@
           "ratio": 3.84,
           "inSheet": false,
           "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+        },
+        {
+          "category": "exception:muted/white",
+          "why": "pasangan token terdaftar",
+          "fg": "#807d72",
+          "bg": "#ffffff",
+          "ratio": 4.12,
+          "inSheet": false,
+          "target": ".lg\\:not-sr-only"
         },
         {
           "category": "exception:muted/white",
@@ -2738,61 +2693,7 @@
     },
     {
       "label": "/hosts sheet@1440 [konteks: [data-slot=\"sheet-content\"]]",
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "targets": [
-            "#radix-_r_2e_-trigger-credentials",
-            "#radix-_r_2e_-trigger-network",
-            "#radix-_r_2e_-trigger-hostname",
-            "#radix-_r_2e_-trigger-ssh",
-            ".min-h-7 > .type-caption.text-muted-foreground"
-          ],
-          "detail": [
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.84 < 4.5",
-              "fg": "#73726c",
-              "bg": "#e6e5e0",
-              "ratio": 3.84,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.84 < 4.5",
-              "fg": "#73726c",
-              "bg": "#e6e5e0",
-              "ratio": 3.84,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.84 < 4.5",
-              "fg": "#73726c",
-              "bg": "#e6e5e0",
-              "ratio": 3.84,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.84 < 4.5",
-              "fg": "#73726c",
-              "bg": "#e6e5e0",
-              "ratio": 3.84,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.94 < 4.5",
-              "fg": "#807d72",
-              "bg": "#fafaf7",
-              "ratio": 3.94,
-              "inSheet": true
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "filtered": [
         {
           "category": "exception:muted/white",
@@ -2802,60 +2703,6 @@
           "ratio": 4.12,
           "inSheet": true,
           "target": "#radix-_R_1lfivabrbH2_ > .type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": true,
-          "target": "label[for=\"os-debian-12\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": true,
-          "target": "label[for=\"os-debian-12\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": true,
-          "target": "label[for=\"os-rocky-9\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": true,
-          "target": "label[for=\"os-rocky-9\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": true,
-          "target": "label[for=\"os-ubuntu-24.04\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": true,
-          "target": "label[for=\"os-ubuntu-24.04\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data"
         },
         {
           "category": "exception:on-primary/primary",
@@ -2870,97 +2717,7 @@
     },
     {
       "label": "/hosts sheet@375 [konteks: [data-slot=\"sheet-content\"]]",
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "targets": [
-            "#radix-_r_2t_-trigger-credentials",
-            "#radix-_r_2t_-trigger-network",
-            "#radix-_r_2t_-trigger-hostname",
-            "#radix-_r_2t_-trigger-ssh",
-            "label[for=\"os-rocky-9\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]",
-            "label[for=\"os-rocky-9\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data",
-            "label[for=\"os-ubuntu-24.04\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]",
-            "label[for=\"os-ubuntu-24.04\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data",
-            ".min-h-7 > .type-caption.text-muted-foreground"
-          ],
-          "detail": [
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.84 < 4.5",
-              "fg": "#73726c",
-              "bg": "#e6e5e0",
-              "ratio": 3.84,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.84 < 4.5",
-              "fg": "#73726c",
-              "bg": "#e6e5e0",
-              "ratio": 3.84,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.84 < 4.5",
-              "fg": "#73726c",
-              "bg": "#e6e5e0",
-              "ratio": 3.84,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.84 < 4.5",
-              "fg": "#73726c",
-              "bg": "#e6e5e0",
-              "ratio": 3.84,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.77 < 4.5",
-              "fg": "#807d72",
-              "bg": "#f5f5f3",
-              "ratio": 3.77,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.77 < 4.5",
-              "fg": "#807d72",
-              "bg": "#f5f5f3",
-              "ratio": 3.77,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.94 < 4.5",
-              "fg": "#807d72",
-              "bg": "#fafaf7",
-              "ratio": 3.94,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.94 < 4.5",
-              "fg": "#807d72",
-              "bg": "#fafaf7",
-              "ratio": 3.94,
-              "inSheet": true
-            },
-            {
-              "category": "kept",
-              "why": "kontras terhitung 3.94 < 4.5",
-              "fg": "#807d72",
-              "bg": "#fafaf7",
-              "ratio": 3.94,
-              "inSheet": true
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "filtered": [
         {
           "category": "exception:muted/white",
@@ -2970,24 +2727,6 @@
           "ratio": 4.12,
           "inSheet": true,
           "target": "#radix-_R_1lfivabrbH2_ > .type-data"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": true,
-          "target": "label[for=\"os-debian-12\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]"
-        },
-        {
-          "category": "exception:muted/white",
-          "why": "pasangan token terdaftar",
-          "fg": "#807d72",
-          "bg": "#ffffff",
-          "ratio": 4.12,
-          "inSheet": true,
-          "target": "label[for=\"os-debian-12\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data"
         },
         {
           "category": "exception:on-primary/primary",
@@ -3002,25 +2741,7 @@
     },
     {
       "label": "/jobs detail@1440",
-      "violations": [
-        {
-          "id": "color-contrast",
-          "impact": "serious",
-          "targets": [
-            ".lg\\:not-sr-only"
-          ],
-          "detail": [
-            {
-              "category": "kept",
-              "why": "di luar Sheet dan bukan pasangan pengecualian",
-              "fg": "#a09c92",
-              "bg": "#ffffff",
-              "ratio": 2.74,
-              "inSheet": false
-            }
-          ]
-        }
-      ],
+      "violations": [],
       "filtered": [
         {
           "category": "exception:muted/canvas",
@@ -3039,6 +2760,15 @@
           "ratio": 3.84,
           "inSheet": false,
           "target": ".group-data-\\[collapsible\\=icon\\]\\:hidden"
+        },
+        {
+          "category": "exception:muted/white",
+          "why": "pasangan token terdaftar",
+          "fg": "#807d72",
+          "bg": "#ffffff",
+          "ratio": 4.12,
+          "inSheet": false,
+          "target": ".lg\\:not-sr-only"
         },
         {
           "category": "exception:muted/canvas",
@@ -4343,7 +4073,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "time[datetime=\"2026-11-03T00:37:00.000Z\"]"
+          "target": "time[datetime=\"2026-11-03T04:50:00.000Z\"]"
         },
         {
           "category": "exception:muted/white",
@@ -4478,7 +4208,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "time[datetime=\"2026-11-03T00:37:30.000Z\"]"
+          "target": "time[datetime=\"2026-11-03T04:50:30.000Z\"]"
         },
         {
           "category": "exception:muted/white",
@@ -5807,7 +5537,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "time[datetime=\"2026-11-03T00:37:00.000Z\"]"
+          "target": "time[datetime=\"2026-11-03T04:50:00.000Z\"]"
         },
         {
           "category": "exception:muted/white",
@@ -5906,7 +5636,7 @@
           "bg": "#ffffff",
           "ratio": 4.12,
           "inSheet": false,
-          "target": "time[datetime=\"2026-11-03T00:37:30.000Z\"]"
+          "target": "time[datetime=\"2026-11-03T04:50:30.000Z\"]"
         },
         {
           "category": "exception:muted/white",

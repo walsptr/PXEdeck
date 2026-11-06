@@ -261,3 +261,19 @@ Dicatat test-engineer; tidak diperbaiki test-engineer (kode produk/infra milik d
   node22, `result FAIL exit=1 stage=verify`), `results.json` (entri `verify-node` node22 NOT_RUN).
 - Saran: `local suffix=""; ((e2e_rc != 0)) && suffix=" (…)" || true` atau `if`; tambah kasus test infra
   "Playwright lulus, 2 node → keduanya diverifikasi" (dry-run dengan PXE_KVM_DRY_PLAYWRIGHT_RC=0).
+
+## Verifikasi final (rerun gate lokal @ 105727e, test-engineer, 2026-11-06)
+
+BUG-M6-1..9 tidak punya baris "Status" formal di atas; diverifikasi di commit final (kode produk = 019502a):
+
+| Bug | Commit perbaikan (git log --grep) | Bukti di commit final |
+|---|---|---|
+| BUG-M6-1 | b36a7db | infra `M6 BUG-M6-1 server-check Rocky memakai repo Minimal/` lulus (`final/infra-test.log`); `kvm/distro` server-check PASS |
+| BUG-M6-2 | b36a7db | infra `M6 BUG-M6-2 gagal sebelum node -> CR-4-12 NOT_RUN` lulus |
+| BUG-M6-3/-4/-5 | a67bcf6 | `m6-smoke-fixes.test.ts` (BUG-M6-3, BUG-M6-4/DEC-020, BUG-M6-5) lulus; `kvm/distro` AC-6.48/6.49 PASS |
+| BUG-M6-6/-7 | f2f848d | `m6-smoke-fixes.test.ts` (BUG-M6-6, BUG-M6-7) lulus; AC-6.48/6.49 PASS |
+| BUG-M6-8 | feb866e | `m6-smoke-fixes.test.ts` + infra `m6-debian-modules.sh` lulus; AC-6.48 PASS |
+| BUG-M6-9 | fc2f31a | `m6-smoke-fixes.test.ts` (BUG-M6-9/DEC-021) lulus; AC-6.48 PASS |
+| BUG-M6-10 | 9aeac33 | FIXED (di atas); infra `m6-bug10.sh` lulus; `kvm/core` dan `kvm/bulk` memverifikasi semua node |
+
+Tidak ada bug terbuka baru dari rerun final (lihat `final/SUMMARY.md`).

@@ -1,0 +1,19 @@
+filteredCount {'total': 607, 'byCategory': {'exception:muted/white': 444, 'exception:muted/canvas': 68, 'exception:white/stage-done': 85, 'exception:on-primary/primary': 10}}
+self-test sintetis                            viol=['color-contrast'] filtered=4 inSheet=0 kept=5 {'exception:muted/white': 1, 'exception:muted/canvas': 1, 'exception:white/stage-done': 1, 'exception:on-primary/primary': 1}
+/login@1440                                   viol=[] filtered=2 inSheet=0 kept=0 {'exception:muted/white': 1, 'exception:on-primary/primary': 1}
+/login@375                                    viol=[] filtered=2 inSheet=0 kept=0 {'exception:muted/white': 1, 'exception:on-primary/primary': 1}
+/login error@375                              viol=[] filtered=2 inSheet=0 kept=0 {'exception:muted/white': 1, 'exception:on-primary/primary': 1}
+/hosts@1440                                   viol=[] filtered=32 inSheet=0 kept=0 {'exception:muted/canvas': 4, 'exception:muted/white': 28}
+/hosts@375                                    viol=[] filtered=4 inSheet=0 kept=0 {'exception:muted/canvas': 2, 'exception:muted/white': 2}
+/os-images@1440                               viol=[] filtered=76 inSheet=0 kept=0 {'exception:muted/canvas': 2, 'exception:muted/white': 73, 'exception:on-primary/primary': 1}
+/os-images@375                                viol=[] filtered=72 inSheet=0 kept=0 {'exception:on-primary/primary': 1, 'exception:muted/white': 71}
+/ssh-keys@1440                                viol=[] filtered=9 inSheet=0 kept=0 {'exception:muted/canvas': 2, 'exception:muted/white': 6, 'exception:on-primary/primary': 1}
+/ssh-keys@375                                 viol=[] filtered=10 inSheet=0 kept=0 {'exception:on-primary/primary': 1, 'exception:muted/white': 9}
+/settings@1440                                viol=[] filtered=35 inSheet=0 kept=0 {'exception:muted/canvas': 2, 'exception:muted/white': 33}
+/settings@375                                 viol=[] filtered=32 inSheet=0 kept=0 {'exception:muted/white': 32}
+/hosts sheet@1440 [konteks: [data-slot="sheet viol=[] filtered=2 inSheet=2 kept=0 {'exception:muted/white': 1, 'exception:on-primary/primary': 1}
+/hosts sheet@375 [konteks: [data-slot="sheet- viol=[] filtered=2 inSheet=2 kept=0 {'exception:muted/white': 1, 'exception:on-primary/primary': 1}
+/jobs detail@1440                             viol=[] filtered=165 inSheet=0 kept=0 {'exception:muted/canvas': 3, 'exception:muted/white': 120, 'exception:white/stage-done': 42}
+/jobs detail@375                              viol=[] filtered=158 inSheet=0 kept=0 {'exception:muted/canvas': 52, 'exception:muted/white': 64, 'exception:white/stage-done': 42}
+TOTAL non-selftest by category {'exception:muted/white': 443, 'exception:on-primary/primary': 9, 'exception:muted/canvas': 67, 'exception:white/stage-done': 84}
+TOTAL filtered in Sheet {'exception:muted/white': 2, 'exception:on-primary/primary': 2} 4
