@@ -118,11 +118,18 @@ ssh_server "mkdir -m 700 '$remote_stage'"
 scp_server "$stage/release.tar.xz" "$stage/dashboard.env" "$stage/pxe-dashboard.service" \
   "$stage/nginx-pxe.conf" "$remote_stage/"
 # Overlay env admin: HANYA lewat stdin ssh (umask 077 di VM); argv cuma memuat path tujuan.
-{
-  printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
-  printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
-  [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
-} | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
+# GK-7-1 (DEC-028 §1): di dry-run `run` hanya mencetak dan TIDAK membaca stdin, jadi pipe ke sana
+# berlomba dengan penulis (SIGPIPE -> exit 141 di bawah pipefail). Dry-run cukup mencetak perintah
+# yang sama dengan stdin /dev/null; jalur non-dry (else) tidak berubah.
+if is_dry; then
+  ssh_server "umask 077 && cat > '$remote_stage/admin.env'" </dev/null
+else
+  {
+    printf 'PXE_ADMIN_USERNAME=%s\n' "$ADMIN_USERNAME"
+    printf "PXE_ADMIN_PASSWORD_HASH='%s'\n" "$admin_hash_val"
+    [[ -z "$booting_min" ]] || printf 'PXE_JOB_BOOTING_TIMEOUT_MIN=%s\n' "$booting_min"
+  } | ssh_server "umask 077 && cat > '$remote_stage/admin.env'"
+fi
 unset admin_hash_val
 if is_dry; then
   ssh_root "RELEASE_TS=$ts STAGE=$remote_stage bash -s" < "$INFRA_DIR/server/install-dashboard.sh"

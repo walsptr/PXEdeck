@@ -116,10 +116,34 @@ lewat HTTP (callback `done` dari OS terpasang, semua distro) dan, untuk **Ubuntu
 di Configuring sampai timeout. Di lab, server sendiri adalah gateway VLAN 20 (`ip_forward=0`), nginx
 listen `10.99.10.2:80` dan ekspor NFS read-only mencakup `10.99.20.0/24`.
 
+**Perimeter layanan server di VLAN (SR-7-2, kondisi lab apa adanya).** Yang benar-benar terikat ke satu
+alamat hanya dnsmasq (`pxe10`), nginx (`10.99.0.2:80`, `10.99.10.2:80`), dan nfsd (`10.99.10.2:2049`).
+Yang listen **wildcard**: rpcbind tcp+udp `0.0.0.0:111` (socket activation systemd, sehingga
+`OPTIONS="-w -h 10.99.10.2"` tidak berpengaruh; bukti `kvm/vlandistro/server-listen-vlan.txt`),
+`rpc.mountd` dan `rpc.statd` (port dinamis), serta `sshd` `0.0.0.0:22` (root key-only). Linux memakai model weak host, jadi node di VLAN 10 dan VLAN 20
+bisa menjangkau layanan wildcard itu lewat `10.99.10.2`, `10.99.20.1`, maupun `10.99.0.2`. Data NFS
+tetap dibatasi ekspor **read-only** dengan ACL subnet (`10.99.10.0/24`, `10.99.20.0/24`). nftables di
+server lab hanya men-drop koneksi baru dari `nat0`; tidak ada filter untuk `pxe10`/`mgmt20`.
+`verify-listen-vlan.sh` hanya gagal bila ada socket yang terikat **eksplisit** ke `10.99.20.1`/`%mgmt20`,
+sehingga socket wildcard tidak terdeteksi olehnya.
+
+Untuk production disarankan filter input nftables (default drop) untuk `iifname { "pxe10", "mgmt20" }`.
+Filter ini belum diterapkan di lab karena profil server termasuk jalur KVM:
+- selalu: `ct state established,related accept`; tolak paket VLAN yang menuju alamat admin
+  (`ip daddr 10.99.0.2 drop`);
+- `pxe10` (VLAN 10): udp 67 (DHCP), udp 69 (TFTP; data TFTP lewat helper conntrack `tftp` atau
+  related), udp/tcp 53 (DNS), tcp 80 (iPXE, kernel/initrd, `/media`, konfigurasi, callback), tcp 2049
+  (NFS), tcp/udp 111 (rpcbind), dan port `rpc.mountd` yang dipatok tetap (mis. `[mountd] port=20048` di
+  `nfs.conf`);
+- `mgmt20` (VLAN 20): tcp 80 ke `10.99.10.2` (callback status), tcp 2049 + tcp/udp 111 + port mountd
+  tetap (root NFS Ubuntu setelah pindah ke IP statis), udp/tcp 53 bila node memakai DNS server ini;
+- drop sisanya, termasuk tcp 22 (sshd) dan `rpc.statd` (locking NLM; ekspornya ro, tetapi pastikan dulu
+  klien casper/anaconda tidak membutuhkannya sebelum diblok; bila butuh, patok port statd dan izinkan).
+
 | Script | Fungsi (M7) |
 |---|---|
 | `net-up.sh --topology vlan` / `net-down.sh --topology vlan` | Lima network (`pxe-test`, `pxe-test-nat`, `pxe-test-trunk`, `pxe-test-port1`, `pxe-test-port2`); down hanya saat teardown M7-T12. |
-| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd/rpcbind `10.99.10.2`, ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
+| `server-up.sh --topology vlan` | NIC ketiga `trunk0` (MAC `52:54:00:99:01:04`, `pxe-test-trunk`); dnsmasq dihentikan segera setelah SSH siap; `server/vlan/apply-profile.sh` (root VM): netplan `pxe10`/`mgmt20`, `ip_forward=0`, `dnsmasq-vlan.conf` (`interface=pxe10`, `bind-interfaces`, `except-interface=lo,nat0,pxe0,mgmt20`, `no-dhcp-interface=pxe0,mgmt20`, `dhcp-option=3`), nginx `10.99.0.2:80` + `10.99.10.2:80`, nfsd `10.99.10.2:2049` (rpcbind/mountd/statd/sshd tetap wildcard, lihat Perimeter di atas), ekspor ro `10.99.10.0/24` + `10.99.20.0/24`; lalu `server/vlan/verify-listen-vlan.sh` → `server-listen-vlan.txt` (gagal ⇒ dnsmasq dihentikan, exit 1). |
 | `deploy-dashboard.sh --topology vlan` | `server/dashboard-vlan.env` (`PXE_MGMT_CIDR=10.99.10.0/24`, `PXE_SERVER_IP`/`PXE_BASE_URL`/`PXE_MEDIA_URL` = `10.99.10.2`, `PXE_DHCP_INTERFACE=pxe10`, `PXE_ALLOWED_HOSTS=10.99.0.2,10.99.10.2`, `PXE_VLAN_NETWORKS=20:10.99.20.0/24:10.99.20.1`) + `server/vlan/nginx-pxe-vlan.conf`; verifikasi dari host lewat `10.99.0.2`: `cidr 10.99.10.0/24` dan `vlanNetworks` memuat VLAN 20. |
 | `switch-base.sh` | Sekali: `qemu-img convert` cloud image Ubuntu 24.04 (`.agent/media`) → `.agent/vms/pxe-test-switch-base.qcow2` + `.ready` (tanpa boot/paket). |
 | `switch-up.sh` / `switch-down.sh [--purge]` | VM `pxe-test-switch` (overlay + seed cloud-init, 768 MB, 1 vCPU, root key-only, tanpa NAT): `sw-mgmt` `10.99.0.3` (pxe-test), `sw-up` (trunk), `sw-p1` (port1), `sw-p2` (port2), MAC `52:54:00:99:02:01..04`. `switch/pxe-switch.sh` (unit oneshot `pxe-switch.service`): `br0 vlan_filtering 1 vlan_default_pvid 0 stp_state 0`, tanpa IP; `sw-up` 10T+20T, `sw-p1` 10 PVID untagged + 20T, `sw-p2` profil `access20` (default) / `tagged10` (`pxe-switch.sh apply-port sw-p2 <profil>`). `switch-up.sh` menjalankan `pxe-switch.sh verify` → `switch-check.txt`. Dibuat **setelah** `verify-listen-vlan.sh` PASS. |

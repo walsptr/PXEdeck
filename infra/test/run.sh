@@ -668,6 +668,8 @@ source "$(dirname "$0")/m7-infra.sh"
 source "$(dirname "$0")/m7-te.sh"
 # M7 (DEC-027 §2): access log nginx tanpa query string non-/boot.
 source "$(dirname "$0")/m7-dec027.sh"
+# M7 iterasi 2 (DEC-028 §1, GK-7-1): race SIGPIPE overlay admin.env di dry-run.
+source "$(dirname "$0")/m7-gk71.sh"
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"

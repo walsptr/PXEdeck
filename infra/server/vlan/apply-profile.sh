@@ -6,7 +6,8 @@
 #   netplan-vlan.yaml dnsmasq-vlan.conf nginx-pxe-vlan.conf exports-vlan nfs-vlan.conf sysctl-vlan.conf
 # Urutan: dnsmasq DIHENTIKAN dulu -> trunk0 (rename NIC ber-MAC 52:54:00:99:01:04) + pxe10/mgmt20 ->
 # ip_forward=0 -> dnsmasq hanya pxe10 -> nginx 10.99.0.2:80 + 10.99.10.2:80 (nginx -t) -> NFS ro
-# 10.99.10.0/24 + 10.99.20.0/24, nfsd/rpcbind 10.99.10.2 -> log dnsmasq dipotong -> dnsmasq start.
+# 10.99.10.0/24 + 10.99.20.0/24, nfsd 10.99.10.2 (+ OPTIONS rpcbind) -> log dnsmasq dipotong ->
+# dnsmasq start. Perimeter (SR-7-2): lihat langkah 6 dan infra/README.md §Topologi VLAN.
 # Verifikasi listen TIDAK di sini: infra/server/vlan/verify-listen-vlan.sh (gagal -> dnsmasq stop).
 # Idempoten. Gagal di langkah mana pun -> exit ≠ 0 dengan dnsmasq tetap mati.
 set -euo pipefail
@@ -63,7 +64,12 @@ nginx -t
 systemctl restart nginx
 echo "OK   nginx dimuat ulang (10.99.0.2:80 + 10.99.10.2:80)"
 
-# 6) NFS read-only VLAN 10 + 20, nfsd/rpcbind hanya 10.99.10.2.
+# 6) NFS read-only VLAN 10 + 20 (ekspor ro + ACL subnet). Hanya nfsd yang terikat 10.99.10.2:2049.
+#    `-h 10.99.10.2` tidak efektif di lab: rpcbind memakai socket activation systemd (tcp+udp
+#    0.0.0.0:111, bukti kvm/vlandistro/server-listen-vlan.txt), dan rpc.mountd, rpc.statd serta sshd
+#    listen wildcard. Karena model weak host, semuanya terjangkau dari VLAN 10/20 (10.99.10.2,
+#    10.99.20.1, 10.99.0.2) di lab ini.
+#    Production: filter input nftables di pxe10/mgmt20 (SR-7-2, belum diterapkan, lihat README).
 install -m 0644 "$STAGE/nfs-vlan.conf" /etc/nfs.conf.d/pxe.conf
 install -m 0644 "$STAGE/exports-vlan" /etc/exports.d/pxe.exports
 echo 'OPTIONS="-w -h 10.99.10.2"' > /etc/default/rpcbind
