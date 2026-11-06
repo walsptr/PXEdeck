@@ -21,3 +21,17 @@ Disimpan oleh Orchestrator dari laporan akhir test-engineer (subagent tidak dapa
 
 ## Kegagalan run 2
 `e2e/m5-library.spec.ts:566` (DR-5-5/DR-5-6, footer sticky 1440×900): baris 582 `flush() ≤ 1` mendapat 1.27 px; 2 test berikutnya (serial) tidak jalan. Lulus di run 1, kedua run iterasi 1, dan 8/8 run terisolasi (`e2e-diag-m5-library-dr55.log`). Dugaan: diukur saat animasi buka dialog masih berjalan (belum dikonfirmasi). Ditindaklanjuti Orchestrator: lihat bukti E2E ulang.
+
+## Tindak lanjut flake (commit `0fa1f0c`, bukti `fbff9ff`)
+- Akar masalah terkonfirmasi (`flaky-dr55-diagnosis.txt`): animasi buka Dialog `zoom-in-95` 100 ms; `flush()` mengambil dua `boundingBox()` terpisah di frame dengan skala berbeda (selisih skala 0.003 ≈ 1.3 px). Layout final rata 0 px. Repro deterministik via CDP `Animation.setPlaybackRate` (lama gagal 15/15 dengan jeda frame; baru 0/60).
+- Perbaikan test saja: helper `waitForLocatorAnimations(loc)` sebelum pengukuran di `m5-library` DR-5-5/DR-5-6, `m3-sheet` AC-3.12, `iter2-ui` toolbar/Sheet. Ambang ≤ 1 px dan semua asersi tetap (jumlah `expect(` sama). Dicatat di `test-migration.md`.
+- Kode produk tidak berubah (`git diff 18913b5 HEAD -- dashboard/src infra` kosong).
+
+| # | Cek | Hasil | Angka | File |
+|---|---|---|---|---|
+| 1 | Typecheck, lint @ 0fa1f0c | PASS | EXIT=0 | `typecheck-flakefix.log`, `lint-flakefix.log` |
+| 4d | E2E penuh run 3 | PASS | 186 passed, 0 failed/skipped/flaky/did-not-run | `e2e-run3.log` |
+| 4e | E2E penuh run 4 | PASS | 186 passed, 0 failed/skipped/flaky/did-not-run | `e2e-run4.log` |
+| 4f | axe run 3/4 | PASS | kept 0 (16 + 26 audit) | `axe-summary-run{3,4}.txt` |
+
+Dua run E2E penuh resmi iterasi 2 = run 3 dan run 4 di `0fa1f0c`. Run 1/2 dipertahankan sebagai riwayat.
