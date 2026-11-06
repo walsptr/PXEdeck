@@ -7,7 +7,7 @@
 import { describe, expect, it } from "vitest"
 
 import { execFileSync, spawnSync } from "node:child_process"
-import { chmodSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { chmodSync, existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
 import { installerScript } from "@/lib/server/boot-script"
@@ -16,7 +16,7 @@ import { TEST_TMP_ROOT } from "@/test/db"
 import { SSH_ED25519 } from "@/test/fixtures"
 
 import type { InstallContext } from "./context"
-import { DEBIAN_LOG, debianLateScript, debianPreseed } from "./debian"
+import { DEBIAN_APT_HOOK, DEBIAN_LOG, DEBIAN_MODULES_PATH, debianLateScript, debianPreseed } from "./debian"
 import { FIRSTBOOT_SCRIPT_TEXT } from "./firstboot"
 import { ROCKY_ERROR_LOGS, ROCKY_LOG, rockyKickstart, rockyPostScript } from "./rocky"
 import { callbackCmd, logCmd, type CmdlineMethod } from "./shell"
@@ -84,25 +84,55 @@ function ctx(over: Partial<InstallContext> = {}): InstallContext {
 }
 
 type Call = { prog: string; argv: string[]; stdin: string }
+/** Versi kernel yang dikembalikan stub `uname -r` (deterministik, bukan kernel host). */
+const STUB_KVER = "6.1.0-50-amd64"
 
 /**
  * Jalankan `cmd` dengan `sh -c` (cmdline palsu, stub curl/wget). `files` dipetakan: path asli di
  * perintah → isi file sementara. Mengembalikan request yang tercatat + exit code.
+ *
+ * CR-6-4 (M6 iter2): `modprobe`/`insmod`/`udevadm`/`uname` SELALU distub di `bin` (tidak pernah
+ * menjalankan perintah kernel/udev host). `seq` = urutan semua pemanggilan stub (curl/wget/modprobe/
+ * insmod/udevadm/uname). `sandbox: true` mengalihkan `/sys/module/`, `/tmp/`, `/usr/lib/` ke root palsu
+ * `<d>` (seam yang sama dengan `m6-smoke-fixes.test.ts`); stub `insmod` menandai modul dimuat dengan
+ * `mkdir <d>/sys/module/<m>` hanya bila berkas `.ko` hasil `wget -O` ada.
  */
-function runSh(cmd: string, kernelCmdline: string, files: Record<string, string> = {}, env: Record<string, string> = {}): { calls: Call[]; code: number; stderr: string } {
+function runSh(
+  cmd: string,
+  kernelCmdline: string,
+  files: Record<string, string> = {},
+  env: Record<string, string> = {},
+  opts: { sandbox?: boolean } = {},
+): { calls: Call[]; code: number; stderr: string; seq: string[]; aptHookMode: number | null } {
   mkdirSync(TEST_TMP_ROOT, { recursive: true })
   const d = mkdtempSync(path.join(TEST_TMP_ROOT, "hooks-"))
   try {
     const bin = path.join(d, "bin")
     const rec = path.join(d, "rec")
+    const seqFile = path.join(d, "seq.txt")
     mkdirSync(bin)
     mkdirSync(rec)
+    for (const sub of ["sys/module", "tmp", "usr/lib"]) mkdirSync(path.join(d, sub), { recursive: true })
     for (const prog of ["curl", "wget"]) {
       const f = path.join(bin, prog)
       writeFileSync(
         f,
-        `#!/bin/sh\nn=$(ls "$REC" | wc -l)\nn=$((n / 3))\nprintf '%s' "${prog}" > "$REC/$n.prog"\n: > "$REC/$n.argv"\nfor a in "$@"; do printf '%s\\n' "$a" >> "$REC/$n.argv"; done\ncat > "$REC/$n.stdin"\nexit 0\n`,
+        `#!/bin/sh\nprintf '%s\\n' "${prog}" >> "$SEQ"\nn=$(ls "$REC" | wc -l)\nn=$((n / 3))\nprintf '%s' "${prog}" > "$REC/$n.prog"\n: > "$REC/$n.argv"\nfor a in "$@"; do printf '%s\\n' "$a" >> "$REC/$n.argv"; done\ncat > "$REC/$n.stdin"\n` +
+          // wget -O <berkas di dalam sandbox> → tulis berkas (meniru unduhan .ko); di luar sandbox tidak menulis apa pun.
+          (prog === "wget" ? `out=""; prev=""; for a in "$@"; do [ "$prev" = -O ] && out=$a; prev=$a; done\ncase "$out" in "$SANDBOX"/*) printf 'ko' > "$out";; esac\n` : "") +
+          `exit 0\n`,
       )
+      chmodSync(f, 0o755)
+    }
+    const stubs: Record<string, string> = {
+      modprobe: `printf 'modprobe %s\\n' "$*" >> "$SEQ"; exit 0`,
+      insmod: `m=$(basename "$1" .ko); printf 'insmod %s\\n' "$m" >> "$SEQ"; [ -f "$1" ] || exit 1; mkdir -p "$SANDBOX/sys/module/$m"; exit 0`,
+      udevadm: `printf 'udevadm %s\\n' "$*" >> "$SEQ"; exit 0`,
+      uname: `printf 'uname %s\\n' "$*" >> "$SEQ"; echo ${STUB_KVER}`,
+    }
+    for (const [prog, body] of Object.entries(stubs)) {
+      const f = path.join(bin, prog)
+      writeFileSync(f, `#!/bin/sh\n${body}\n`)
       chmodSync(f, 0o755)
     }
     const cmdlineFile = path.join(d, "cmdline")
@@ -113,10 +143,16 @@ function runSh(cmd: string, kernelCmdline: string, files: Record<string, string>
       writeFileSync(f, content)
       script = script.replaceAll(orig, f)
     }
+    if (opts.sandbox) {
+      script = script
+        .replaceAll("/sys/module/", `${d}/sys/module/`)
+        .replaceAll("/tmp/", `${d}/tmp/`)
+        .replaceAll("/usr/lib/", `${d}/usr/lib/`)
+    }
     const r = spawnSync("sh", ["-c", script], {
       encoding: "utf8",
       input: "",
-      env: { PATH: `${bin}:/usr/bin:/bin`, REC: rec, ...env } as unknown as NodeJS.ProcessEnv,
+      env: { PATH: `${bin}:/usr/bin:/bin`, REC: rec, SEQ: seqFile, SANDBOX: d, ...env } as unknown as NodeJS.ProcessEnv,
       timeout: 20_000,
     })
     const n = readdirSync(rec).filter((f) => f.endsWith(".prog")).length
@@ -125,7 +161,10 @@ function runSh(cmd: string, kernelCmdline: string, files: Record<string, string>
       argv: readFileSync(path.join(rec, `${i}.argv`), "utf8").replace(/\n$/, "").split("\n"),
       stdin: existsSync(path.join(rec, `${i}.stdin`)) ? readFileSync(path.join(rec, `${i}.stdin`), "utf8") : "",
     }))
-    return { calls, code: r.status ?? -1, stderr: r.stderr }
+    const seq = existsSync(seqFile) ? readFileSync(seqFile, "utf8").replace(/\n$/, "").split("\n") : []
+    const hook = path.join(d, DEBIAN_APT_HOOK)
+    const aptHookMode = opts.sandbox && existsSync(hook) ? statSync(hook).mode & 0o777 : null
+    return { calls, code: r.status ?? -1, stderr: r.stderr, seq, aptHookMode }
   } finally {
     rmSync(d, { recursive: true, force: true })
   }
@@ -212,15 +251,35 @@ describe("AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl)", ()
     const ps = debianPreseed(ctx({ imageRepo: "debian-12" }))
     const early = /^d-i preseed\/early_command string (.*)$/m.exec(ps)![1]
     const k = kcmd("preseed")
-    const r0 = runSh(early, k)
-    // M6 (BUG-M6-8): setelah log mulai, early_command mengunduh driver disk virtio dari media
-    // (tanpa token) untuk insmod — panggilan berikutnya hanya ke path media itu.
-    expect([url(r0.calls[0]), r0.calls[0].stdin]).toEqual([LOG_URL, `${DEBIAN_LOG.start}\n`])
-    // (Di host test, /sys/module asli dipakai: modul yang sudah ada dilewati, lalu log "modul dimuat".)
-    for (const c of r0.calls.slice(1)) {
-      if (url(c) === LOG_URL) expect(c.stdin).toBe(`${DEBIAN_LOG.modules}\n`)
-      else expect([c.prog, url(c)]).toEqual(["wget", expect.stringMatching(/^http:\/\/[^/]+\/media\/debian-netboot\/modules\/[^/]+\/virtio_(blk|scsi)\.ko$/)])
-    }
+    // CR-6-4: sandbox deterministik — /sys/module kosong (modul belum dimuat), perintah kernel/udev distub.
+    const r0 = runSh(early, k, {}, {}, { sandbox: true })
+    expect(r0.code).toBe(0)
+    // M6 (BUG-M6-8): log mulai → unduh driver disk virtio dari media (tanpa token) → log "modul dimuat".
+    const ko = (m: string) => `${BASE}/media/${DEBIAN_MODULES_PATH}/${STUB_KVER}/${m}.ko`
+    expect(r0.calls.map((c) => [c.prog, url(c), c.stdin])).toEqual([
+      ["curl", LOG_URL, `${DEBIAN_LOG.start}\n`],
+      ["wget", ko("virtio_blk"), ""],
+      ["wget", ko("virtio_scsi"), ""],
+      ["curl", LOG_URL, `${DEBIAN_LOG.modules}\n`],
+    ])
+    // Urutan penuh: dependensi modprobe sebelum unduhan; tiap .ko diunduh lalu di-insmod; settle; log.
+    expect(r0.seq).toEqual([
+      "curl",
+      "modprobe virtio",
+      "modprobe virtio_ring",
+      "modprobe virtio_pci",
+      "modprobe scsi_mod",
+      "uname -r",
+      "wget",
+      "insmod virtio_blk",
+      "uname -r",
+      "wget",
+      "insmod virtio_scsi",
+      "udevadm settle --timeout=15",
+      "curl",
+    ])
+    // DEC-021: hook apt media lokal ditulis (di root palsu) dan dapat dieksekusi.
+    expect(r0.aptHookMode).toBe(0o755)
     const lateLines = debianLateScript(ctx({ imageRepo: "debian-12" })).trimEnd().split("\n")
     const iLog = lateLines.indexOf(logCmd("preseed", MAC, DEBIAN_LOG.late))
     const iCfg = lateLines.findIndex((l) => l.includes("stage=configuring"))

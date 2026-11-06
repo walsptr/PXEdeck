@@ -1,0 +1,30 @@
+# Mutasi test-engineer M6 iter2 (R6/CR-6-4) — 2026-11-06T12:18:07
+target: dashboard/src/lib/server/installers/debian.ts sha256 awal ddc360e5a384643a26082a41ceb9725cc42f908f7f5b842d4995449d3585fab6
+test: npx vitest run src/lib/server/installers/m5-te-hooks.test.ts -t 'Debian early_command'
+
+## M1 drop virtio_scsi dari DEBIAN_DISK_MODULES (satu wget+insmod hilang)
+exit=1 -> MERAH
+  Tests  1 failed | 27 skipped (28)
+  FAIL  |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Debian early_command + late (log sebelum configuring, penanda di akhir)
+  AssertionError: expected [ [ 'curl', …(2) ], …(2) ] to deeply equal [ [ 'curl', …(2) ], …(3) ]
+
+## M2 swap urutan modul (virtio_scsi sebelum virtio_blk)
+exit=1 -> MERAH
+  Tests  1 failed | 27 skipped (28)
+  FAIL  |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Debian early_command + late (log sebelum configuring, penanda di akhir)
+  AssertionError: expected [ [ 'curl', …(2) ], …(3) ] to deeply equal [ [ 'curl', …(2) ], …(3) ]
+
+## M3 udevadm settle dipindah sebelum loop unduh/insmod
+exit=1 -> MERAH
+  Tests  1 failed | 27 skipped (28)
+  FAIL  |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Debian early_command + late (log sebelum configuring, penanda di akhir)
+  AssertionError: expected [ 'curl', 'modprobe virtio', …(11) ] to deeply equal [ 'curl', 'modprobe virtio', …(11) ]
+
+## M4 insmod dihapus dari loop (modul tak pernah dimuat -> log 'modul dimuat' tidak terkirim, insmod hilang dari urutan)
+exit=1 -> MERAH
+  Tests  1 failed | 27 skipped (28)
+  FAIL  |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Debian early_command + late (log sebelum configuring, penanda di akhir)
+  AssertionError: expected [ [ 'curl', …(2) ], …(2) ] to deeply equal [ [ 'curl', …(2) ], …(3) ]
+
+sha256 akhir debian.ts ddc360e5a384643a26082a41ceb9725cc42f908f7f5b842d4995449d3585fab6 -> IDENTIK
+rerun tanpa mutasi: exit=0 Tests  28 passed (28)

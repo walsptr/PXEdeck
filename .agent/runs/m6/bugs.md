@@ -276,4 +276,4 @@ BUG-M6-1..9 tidak punya baris "Status" formal di atas; diverifikasi di commit fi
 | BUG-M6-9 | fc2f31a | `m6-smoke-fixes.test.ts` (BUG-M6-9/DEC-021) lulus; AC-6.48 PASS |
 | BUG-M6-10 | 9aeac33 | FIXED (di atas); infra `m6-bug10.sh` lulus; `kvm/core` dan `kvm/bulk` memverifikasi semua node |
 
-Tidak ada bug terbuka baru dari rerun final (lihat `final/SUMMARY.md`).
+Tidak ada bug terbuka baru dari rerun final (bukti mentah di `final/`: `typecheck.log`, `lint.log`, `unit.log`, `coverage-summary.txt`, `coverage-m6-new-code.txt`, `process.log`, `infra-test.log`, `e2e-run1.log`, `e2e-run2.log`, `axe-summary-run{1,2}.txt`, `secret-scan.txt`, `mutation-final.txt`).

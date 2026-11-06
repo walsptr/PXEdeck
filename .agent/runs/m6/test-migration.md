@@ -277,3 +277,16 @@ Hanya helper E2E yang berubah; tidak ada file spec yang diubah, jumlah asersi ti
 
 Verifikasi: `.agent/runs/m6/bug-l4.log` (tsc + eslint bersih; `m6-session` 3/3 lulus tanpa env;
 PNG baru hanya di `.agent/runs/m6/screenshots/`; `git status -- .agent/runs/m4` kosong).
+
+## R6 / CR-6-4 — asersi early_command Debian kembali `toEqual` persis (test-engineer, iter2)
+
+Hitungan asersi `m5-te-hooks.test.ts`: 66 → 67 (`grep -o 'expect(\|expectTypeOf(' | wc -l`). Tidak ada
+test yang dihapus/di-skip; jumlah test di file tetap 28.
+
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `installers/m5-te-hooks.test.ts` › helper `runSh` | stub hanya `curl`/`wget`; `modprobe`/`insmod`/`udevadm`/`uname` asli dari `/usr/bin` host; `/sys/module`, `/tmp`, `/usr/lib` asli | `modprobe`/`insmod`/`udevadm`/`uname` selalu distub (tidak ada perintah kernel/udev host); `uname -r` → `6.1.0-50-amd64`; urutan semua stub dicatat (`seq`); opsi `sandbox` mengalihkan `/sys/module/`, `/tmp/`, `/usr/lib/` ke root palsu (seam sama dengan `m6-smoke-fixes.test.ts`); `wget -O <berkas sandbox>` menulis berkas, `insmod` gagal bila berkas tidak ada dan menandai `<d>/sys/module/<m>` | CR-6-4: hasil bergantung `/sys/module` host, `udevadm settle` hingga 15 s, risiko `modprobe`/`insmod` host bila dijalankan root; early_command juga menulis hook ke `/usr/lib/post-base-installer.d` host |
+| `installers/m5-te-hooks.test.ts` › "Debian early_command + late …" | panggilan pertama `toEqual` + loop atas sisa panggilan (lulus dengan 0 panggilan) — 3 `expect` | `code` 0; `toEqual` persis `[curl log mulai, wget virtio_blk.ko, wget virtio_scsi.ko, curl log modul]` (prog, URL, stdin); `toEqual` persis urutan penuh 13 stub (`curl`, `modprobe virtio/virtio_ring/virtio_pci/scsi_mod`, `uname -r`, `wget`, `insmod virtio_blk`, `uname -r`, `wget`, `insmod virtio_scsi`, `udevadm settle --timeout=15`, `curl`); hook apt DEC-021 dibuat di sandbox dengan mode 0755 — 4 `expect` | ekspektasi diturunkan dari `debianModulesCmd`/`debianAptHookCmd` di `installers/debian.ts` (sha256 `ddc360e5…fab6`), bukan dari test lama |
+
+Mutasi generator (in-place, dipulihkan, sha256 identik): `.agent/runs/m6/mutation-te-iter2.txt` — 4/4 merah
+(hapus `virtio_scsi`, tukar urutan modul, `udevadm settle` dipindah sebelum unduhan, `insmod` dihapus).
