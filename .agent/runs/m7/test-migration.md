@@ -95,3 +95,50 @@ Tidak ada asersi yang diubah, dihapus, atau dilonggarkan. Hitungan asersi per fi
   ditambahkan agar isi otomatis prefix bisa diamati, karena prefix VLAN 20 sama dengan prefix subnet PXE /24.
 - `SHARED_MATCH` ditambah `/m7-novlan\.spec\.ts/`. Spec ini read-only di server bersama :3100 tanpa
   `PXE_VLAN_NETWORKS`. Pemeriksaan `assertEverySpecCollected` tetap berlaku.
+
+## Gate final M7 iter1: flake AC-7.17 "M7 host tidak pernah menyasar 10.99.10.*/10.99.20.*" (test-engineer)
+
+Tidak ada test yang diubah, dihapus, atau dilonggarkan. Akar masalahnya ada di kode infra, bukan di
+test. Rinciannya ada di `.agent/runs/m7/final/flaky-ac717.txt`, beserta reproduksi alami dan
+reproduksi deterministik di `final/flaky-ac717/`.
+
+- Penyebab: `infra/deploy-dashboard.sh:121-125` mem-pipe `{ printf …; }` ke `ssh_server`. Dalam
+  dry-run, `ssh_server` (`run`) hanya mencetak baris dan tidak membaca stdin. Karena itu printf bisa
+  terkena SIGPIPE. Dengan `pipefail`, script keluar 141, dan kvm-run.sh mencatat
+  `FAIL exit=141 stage=deploy`. Test AC-7.17 menjalankan kvm-run dry-run 4×, sehingga paling sering
+  terkena. Semua test lain yang memanggil deploy dry-run juga rentan.
+- Status: dilaporkan ke Orchestrator untuk diperbaiki backend-dev. Instruksinya: bila penyebab ada di
+  produk/infra, test-engineer tidak memperbaiki. Test AC-7.17 tetap seperti apa adanya.
+
+## Gate final M7 iter1: flake E2E `m6-ui-iter2.spec.ts` "Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted" (test-engineer)
+
+Gejala: full E2E pra-perbaikan (`final/e2e-prefix-run0.log`) menghasilkan 202 lulus dan 1 gagal
+dengan `page.evaluate: Execution context was destroyed, most likely because of a navigation` di
+baris 125.
+
+Akar masalah ada di kode test. Test ini membaca `sessionStorage` dua kali. Bacaan pertama ada di dalam
+`expect.poll(...)` (ber-`.catch`). Bacaan kedua adalah `page.evaluate` terpisah sesudah poll.
+Alur produk "sesi berakhir" memang mengalihkan halaman ke `/login` sesaat setelah pesan tampil. Bila
+bacaan kedua jatuh tepat saat navigasi itu, konteks eksekusi hancur.
+
+Reproduksi dengan `--repeat-each=40` (`final/flaky-e2e-session/`):
+- Sebelum perbaikan: 10/40 gagal "Execution context was destroyed".
+- Sesudah perbaikan: 0/40 gagal dengan error itu.
+- Di kedua run ada 2/40 dan 1/40 timeout poll karena rate limit API (`Terlalu banyak request`, 429).
+  Ini artefak dari 40 pengulangan beruntun di satu server. Dalam suite normal test ini hanya jalan
+  sekali.
+
+Perbaikan (`dashboard/e2e/m6-ui-iter2.spec.ts`): nilai disimpan sekali dari dalam poll
+(`stored = await page.evaluate(...)`), lalu dipakai ulang untuk `JSON.parse`. `page.evaluate` kedua
+dihapus.
+- Sebelum: `const got = JSON.parse((await page.evaluate(() => sessionStorage.getItem("iter2-session-msg")))!)`
+- Sesudah: `let stored: string | null = null; await expect.poll(async () => (stored = await page.evaluate(…).catch(() => null)), { timeout: 15_000 }).not.toBeNull(); const got = JSON.parse(stored!)`
+
+Asersi tidak berubah:
+- poll `.not.toBeNull()` dengan timeout 15 dtk.
+- `got.text` = "Sesi berakhir. Masuk lagi untuk melihat log."
+- `got.color` ≠ MUTED.
+- `got.color` = BODY.
+
+Nilai yang diperiksa tetap sama, yaitu entri `sessionStorage` yang direkam MutationObserver. Hitungan
+asersi file tetap 76 → 76 (`final/skip-weakening.txt`).
