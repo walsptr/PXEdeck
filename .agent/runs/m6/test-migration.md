@@ -265,3 +265,15 @@ mengomentari baris itu (tanpa `trusted=yes`) dan menghapus `00AllowUnauthenticat
 | golden `debian-preseed.cfg`, `debian-preseed-auto-disk.cfg`, `debian-late.sh` (via late b64) | `tasksel/first standard, ssh-server` | `ssh-server`; + apt-setup non-free/contrib/deb-src false, local0, pkgsel/update-policy, grub with_other_os/force-efi-extra-removable; early_command + hook; late + untrust | Diperbarui (`-u`), ditinjau. |
 
 Test baru (+5) di `installers/m6-smoke-fixes.test.ts`. Mutasi: `.agent/runs/m6/mutation-dev-T6e.txt` (12/12 merah).
+
+## BUG-M6-L4 — direktori bukti screenshot E2E (test-engineer)
+
+Hanya helper E2E yang berubah; tidak ada file spec yang diubah, jumlah asersi tidak berubah
+(`m6-session.spec.ts` 0 baris diff).
+
+| File | Perubahan | Alasan |
+|---|---|---|
+| `dashboard/e2e/helpers.ts` | `SHOTS(m, name)`: screenshot milestone aktif (`EVIDENCE_MILESTONE = 6`, dipakai semua spec `m6-*`) selalu ditulis ke `.agent/runs/m6/screenshots/<name>.png` apa pun nilai `PXE_E2E_MILESTONE`; default `PXE_E2E_MILESTONE` 4 → 6 sehingga screenshot regresi `m1`–`m5` (awalan `m<n>-`) tanpa env juga masuk ke `m6`, bukan ke direktori M4 yang sudah di-approve | tanpa env, `SHOTS(6, …)` menulis `.agent/runs/m4/screenshots/m6-*.png` (BUG-M6-L4) |
+
+Verifikasi: `.agent/runs/m6/bug-l4.log` (tsc + eslint bersih; `m6-session` 3/3 lulus tanpa env;
+PNG baru hanya di `.agent/runs/m6/screenshots/`; `git status -- .agent/runs/m4` kosong).

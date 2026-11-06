@@ -1,0 +1,313 @@
+# BUG-M6-L4 verifikasi — 2026-11-06T10:08:19+07:00 — HEAD 261e26e (+ perubahan e2e/helpers.ts belum di-commit)
+# env PXE_E2E_MILESTONE=<unset>
+## typecheck (tsc --noEmit)
+exit=0
+## lint (eslint e2e/helpers.ts)
+exit=0
+## npx playwright test e2e/m6-session.spec.ts (PXE_E2E_MILESTONE unset)
+(node:2296110) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 build
+[WebServer] > next build
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5 (Turbopack)
+[WebServer] ✓ Running next.config.ts took 80ms
+[WebServer] - Cache Components enabled
+[WebServer] - Partial Prefetching enabled
+[WebServer] 
+[WebServer]   Creating an optimized production build ...
+[WebServer] ✓ Compiled successfully in 953ms
+[WebServer]   Running TypeScript ...
+[WebServer]   Finished TypeScript in 4.3s ...
+[WebServer]   Collecting page data using 11 workers ...
+[WebServer] (node:2296281) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296294) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296308) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296287) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296301) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296316) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296343) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296322) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296329) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296336) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:2296280) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer]   Generating static pages using 11 workers (0/23) ...
+[WebServer]   Generating static pages using 11 workers (5/23) 
+[WebServer]   Generating static pages using 11 workers (11/23) 
+[WebServer]   Generating static pages using 11 workers (17/23) 
+[WebServer] ✓ Generating static pages using 11 workers (23/23) in 691ms
+[WebServer]   Finalizing page optimization ...
+[WebServer] 
+[WebServer] Route (app)
+[WebServer] ┌ ○ /_not-found
+[WebServer] ├ ƒ /api/auth/login
+[WebServer] ├ ƒ /api/auth/logout
+[WebServer] ├ ƒ /api/auth/session
+[WebServer] ├ ƒ /api/credentials/import
+[WebServer] ├ ƒ /api/hosts
+[WebServer] ├ ƒ /api/hosts/[id]
+[WebServer] ├ ƒ /api/hosts/[id]/config
+[WebServer] ├ ƒ /api/hosts/[id]/install
+[WebServer] ├ ƒ /api/hosts/[id]/reboot
+[WebServer] ├ ƒ /api/hosts/bulk
+[WebServer] ├ ƒ /api/hosts/bulk/install
+[WebServer] ├ ƒ /api/jobs
+[WebServer] ├ ƒ /api/jobs/[id]
+[WebServer] ├ ƒ /api/jobs/[id]/logs
+[WebServer] ├ ƒ /api/network
+[WebServer] ├ ƒ /api/os-images
+[WebServer] ├ ƒ /api/os-images/[id]
+[WebServer] ├ ƒ /api/server-status
+[WebServer] ├ ƒ /api/settings
+[WebServer] ├ ƒ /api/ssh-keys
+[WebServer] ├ ƒ /api/ssh-keys/[id]
+[WebServer] ├ ƒ /boot/[name]
+[WebServer] ├ ƒ /boot/[name]/[token]/[file]
+[WebServer] ├ ƒ /boot/[name]/[token]/log
+[WebServer] ├ ƒ /boot/[name]/[token]/status
+[WebServer] ├ ◐ /design
+[WebServer] ├ ◐ /hosts
+[WebServer] ├ ◐ /jobs
+[WebServer] ├ ◐ /login
+[WebServer] ├ ◐ /os-images
+[WebServer] ├ ◐ /settings
+[WebServer] └ ◐ /ssh-keys
+[WebServer] 
+[WebServer] 
+[WebServer] ƒ Proxy (Middleware)
+[WebServer] 
+[WebServer] ○  (Static)             prerendered as static content
+[WebServer] ◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+[WebServer] ƒ  (Dynamic)            server-rendered on demand
+[WebServer] 
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3100
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3100
+[WebServer] - Network:       http://192.168.0.207:3100
+[WebServer] ✓ Ready in 141ms
+[WebServer] ✓ Running next.config.ts took 29ms
+[WebServer] (node:2296555) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3101
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3101
+[WebServer] - Network:       http://192.168.0.207:3101
+[WebServer] ✓ Ready in 149ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] (node:2296593) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3102
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3102
+[WebServer] - Network:       http://192.168.0.207:3102
+[WebServer] ✓ Ready in 143ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] (node:2296629) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3103
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3103
+[WebServer] - Network:       http://192.168.0.207:3103
+[WebServer] ✓ Ready in 160ms
+[WebServer] ✓ Running next.config.ts took 33ms
+[WebServer] (node:2296665) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3104
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3104
+[WebServer] - Network:       http://192.168.0.207:3104
+[WebServer] ✓ Ready in 151ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] (node:2296701) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3105
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3105
+[WebServer] - Network:       http://192.168.0.207:3105
+[WebServer] ✓ Ready in 164ms
+[WebServer] ✓ Running next.config.ts took 37ms
+[WebServer] (node:2296737) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3106
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3106
+[WebServer] - Network:       http://192.168.0.207:3106
+[WebServer] ✓ Ready in 144ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] (node:2296773) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3107
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3107
+[WebServer] - Network:       http://192.168.0.207:3107
+[WebServer] ✓ Ready in 135ms
+[WebServer] ✓ Running next.config.ts took 26ms
+[WebServer] (node:2296808) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3108
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3108
+[WebServer] - Network:       http://192.168.0.207:3108
+[WebServer] ✓ Ready in 165ms
+[WebServer] ✓ Running next.config.ts took 33ms
+[WebServer] (node:2296844) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3109
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3109
+[WebServer] - Network:       http://192.168.0.207:3109
+[WebServer] ✓ Ready in 149ms
+[WebServer] ✓ Running next.config.ts took 30ms
+[WebServer] (node:2296880) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3110
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3110
+[WebServer] - Network:       http://192.168.0.207:3110
+[WebServer] ✓ Ready in 157ms
+[WebServer] ✓ Running next.config.ts took 32ms
+[WebServer] (node:2296916) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3111
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3111
+[WebServer] - Network:       http://192.168.0.207:3111
+[WebServer] ✓ Ready in 138ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] (node:2296953) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3112
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3112
+[WebServer] - Network:       http://192.168.0.207:3112
+[WebServer] ✓ Ready in 143ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] (node:2296989) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3113
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3113
+[WebServer] - Network:       http://192.168.0.207:3113
+[WebServer] ✓ Ready in 145ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] (node:2297064) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3114
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3114
+[WebServer] - Network:       http://192.168.0.207:3114
+[WebServer] ✓ Ready in 137ms
+[WebServer] ✓ Running next.config.ts took 27ms
+[WebServer] (node:2297126) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3115
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3115
+[WebServer] - Network:       http://192.168.0.207:3115
+[WebServer] ✓ Ready in 139ms
+[WebServer] ✓ Running next.config.ts took 28ms
+[WebServer] (node:2297162) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3116
+[WebServer] 
+[WebServer] ▲ Next.js 16.4.5
+[WebServer] - Local:         http://localhost:3116
+[WebServer] - Network:       http://192.168.0.207:3116
+[WebServer] ✓ Ready in 142ms
+[WebServer] ✓ Running next.config.ts took 29ms
+[WebServer] (node:2297199) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+Running 3 tests using 1 worker
+
+(node:2297224) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  ✓  1 [m6-session] › e2e/m6-session.spec.ts:65:5 › DEC-019 §1: polling memperpanjang idle (tab /hosts tetap masuk > 60 dtk); sesi tanpa aktivitas habis setelah idle 1 mnt (1.3m)
+  ✓  2 [m6-session] › e2e/m6-session.spec.ts:90:5 › AC-6.32 (a) sesi di-logout dari konteks lain saat di /hosts → redirect sekali, tanpa polling; login ulang → /hosts (21.4s)
+  ✓  3 [m6-session] › e2e/m6-session.spec.ts:108:5 › AC-6.32 (b) baris sesi dihapus di DB saat di /hosts → redirect sekali, tanpa polling; login ulang → /hosts (21.0s)
+
+  3 passed (2.4m)
+exit=0
+## PNG yang ditulis run ini (lebih baru dari awal run) di .agent/runs/m*:
+.agent/runs/m6/screenshots/session-expired-logout.png
+.agent/runs/m6/screenshots/session-expired-db.png
+## ls -la .agent/runs/m6/screenshots/*session-expired*
+-rw-r--r-- 1 syawal syawal 22243 Nov  6 07:46 .agent/runs/m6/screenshots/m6-session-expired-db.png
+-rw-r--r-- 1 syawal syawal 22243 Nov  6 07:45 .agent/runs/m6/screenshots/m6-session-expired-logout.png
+-rw-r--r-- 1 syawal syawal 22243 Nov  6 10:10 .agent/runs/m6/screenshots/session-expired-db.png
+-rw-r--r-- 1 syawal syawal 22243 Nov  6 10:10 .agent/runs/m6/screenshots/session-expired-logout.png
+## ls .agent/runs/m4/screenshots | grep m6- (harus kosong)
+(count=0)
+## git status --short -- .agent/runs/m4 (harus kosong)
+(end)
+## git status --short (keseluruhan)
+ M .agent/runs/m6/screenshots/session-expired-db.png
+ M dashboard/e2e/helpers.ts
+ M infra/kvm-run.sh
+ M infra/test/fake-bin/ssh
+?? .agent/runs/m6/bug-l4.log
+?? .agent/runs/m6/screenshots/m6-session-expired-db.png
+?? .agent/runs/m6/screenshots/m6-session-expired-logout.png
+?? infra/test/m6-bug10.sh
