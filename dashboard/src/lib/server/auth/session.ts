@@ -4,7 +4,8 @@
 //  - Valid bila: format benar, baris ada, username = admin aktif, `cred_fp` = sidik kredensial aktif
 //    (ganti hash/username → semua sesi lama batal), `now < expires_at` (absolut
 //    `PXE_SESSION_MAX_HOURS`), dan `now − last_seen_at ≤ PXE_SESSION_IDLE_MIN` (geser).
-//  - Perpanjangan idle: `last_seen_at` ditulis paling sering 1× per `TOUCH_INTERVAL_MS`.
+//  - Perpanjangan idle: `last_seen_at` ditulis paling sering 1× per min(60 dtk, idle/2)
+//    (`touchIntervalMs`).
 //  - Sesi tidak valid yang ditemukan saat validasi dihapus; sisanya oleh `pruneSessions` (watchdog).
 // Semua fungsi menerima `now` (jam injeksi untuk test).
 import crypto from "node:crypto"
@@ -22,8 +23,17 @@ import { getSettings, type AdminCredential, type Settings } from "@/lib/server/s
 export const SESSION_COOKIE = "pxe_session"
 /** Bentuk id sesi mentah di cookie (32 B base64url tanpa padding). */
 export const SESSION_ID_RE = /^[A-Za-z0-9_-]{43}$/
-/** Interval minimum tulis `last_seen_at` (ms). */
+/** Interval maksimum antar tulis `last_seen_at` (ms); lihat `touchIntervalMs`. */
 export const TOUCH_INTERVAL_MS = 60_000
+
+/**
+ * Interval minimum antar tulis `last_seen_at` untuk idle `idleMin` (BUG-M6-L1): min(60 dtk,
+ * idle/2) — tulis SQLite tetap ≤ 1× per 60 dtk untuk idle ≥ 2 mnt, dan untuk idle 1 mnt request
+ * berkala (polling 5 dtk) tetap memperpanjang sesi sebelum idle habis (AC-6.6, DEC-019 §1).
+ */
+export function touchIntervalMs(idleMin: number): number {
+  return Math.min(TOUCH_INTERVAL_MS, Math.floor((idleMin * 60_000) / 2))
+}
 
 export type Session = {
   /** sha256(id sesi) — kunci internal (rate limit, batas SSE); bukan nilai cookie. */
@@ -96,7 +106,7 @@ export function sessionByHash(
     deleteSession(idHash)
     return null
   }
-  if (touch && t - lastSeen >= TOUCH_INTERVAL_MS) touchSession(idHash, now.toISOString())
+  if (touch && t - lastSeen >= touchIntervalMs(s.auth.sessionIdleMin)) touchSession(idHash, now.toISOString())
   return { idHash, username: row.username, createdAt: row.createdAt, expiresAt: row.expiresAt }
 }
 

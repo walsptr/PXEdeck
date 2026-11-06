@@ -22,6 +22,7 @@ import {
   sessionCookieHeader,
   sessionFromId,
   TOUCH_INTERVAL_MS,
+  touchIntervalMs,
 } from "./session"
 
 withDb("empty")
@@ -94,6 +95,21 @@ describe("createSession / sessionFromId", () => {
       t += 100 * MIN
       expect(sessionFromId(id, at(t)), `t=${t}`).not.toBeNull()
     }
+  })
+
+  it("BUG-M6-L1: idle 1 mnt + request tiap 5 dtk → sesi tetap hidup 5 mnt; tulis ≤ 1 per 30 dtk", () => {
+    process.env.PXE_SESSION_IDLE_MIN = "1"
+    expect(touchIntervalMs(1)).toBe(30_000)
+    expect(touchIntervalMs(2)).toBe(60_000)
+    expect(touchIntervalMs(120)).toBe(TOUCH_INTERVAL_MS)
+    const { id } = createSession(admin(), null, T0)
+    const writes = vi.spyOn(getDb(), "prepare")
+    for (let t = 5000; t <= 5 * MIN; t += 5000) expect(sessionFromId(id, at(t)), `t=${t}`).not.toBeNull()
+    const updates = writes.mock.calls.filter(([sql]) => /UPDATE sessions SET last_seen_at/.test(String(sql)))
+    expect(updates).toHaveLength(10)
+    writes.mockRestore()
+    // Berhenti polling → habis setelah idle 1 mnt.
+    expect(sessionFromId(id, at(5 * MIN + 60_001))).toBeNull()
   })
 
   it("touch=false tidak memperpanjang", () => {
