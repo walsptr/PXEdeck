@@ -79,3 +79,11 @@ Test yang membuktikan bug dibiarkan MERAH (tidak di-skip/dilonggarkan). Kode pro
 - Reproduksi: `npx playwright test --project m6-session` tanpa `PXE_E2E_MILESTONE=6`.
 - Saran: default `PXE_E2E_MILESTONE` ke milestone aktif (6) atau wajibkan env di `playwright.config.ts`;
   hapus dua file m4 yang tidak sengaja dibuat (jangan di-commit).
+- **Status: FIXED** di commit `4d23f55` (test-engineer). `dashboard/e2e/helpers.ts`: `SHOTS(6, …)` selalu
+  menulis ke `.agent/runs/m6/screenshots/<name>.png` apa pun env (`EVIDENCE_MILESTONE = 6`); default
+  `PXE_E2E_MILESTONE` 4 → 6 sehingga screenshot regresi M1–M5 tanpa env juga tidak masuk ke `m4`. Tidak ada
+  spec/asersi yang berubah. Dua PNG m4 yang tidak sengaja dibuat dipindah (`mv`, tidak di-commit) ke
+  `.agent/runs/m6/screenshots/m6-session-expired-{db,logout}.png` — isinya identik (sha1 sama) dengan
+  `session-expired-{db,logout}.png`. Verifikasi `.agent/runs/m6/bug-l4.log`: tsc/eslint bersih,
+  `npx playwright test e2e/m6-session.spec.ts` tanpa env 3/3 lulus, PNG baru hanya di `m6/screenshots/`,
+  `git status -- .agent/runs/m4` kosong.
