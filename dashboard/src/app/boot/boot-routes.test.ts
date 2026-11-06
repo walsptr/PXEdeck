@@ -335,7 +335,7 @@ describe("AC-4.16 installer Debian & Rocky; image tidak tersedia / Windows", () 
     expect(deb.script).toContain(`url=http://10.99.0.2/boot/${MAC}/${deb.token}/preseed.cfg`)
     expect(redact(deb.script)).toMatchInlineSnapshot(`
       "#!ipxe
-      kernel http://10.99.0.2/media/debian-netboot/linux initrd=initrd auto=true priority=critical url=http://10.99.0.2/boot/<mac>/<token>/preseed.cfg interface=auto netcfg/dhcp_timeout=60 netcfg/no_default_route=true console=ttyS0,115200n8 console=tty0 ---
+      kernel http://10.99.0.2/media/debian-netboot/linux initrd=initrd auto=true priority=critical url=http://10.99.0.2/boot/<mac>/<token>/preseed.cfg interface=auto netcfg/dhcp_timeout=60 netcfg/no_default_route=true netcfg/get_nameservers=10.99.0.2 console=ttyS0,115200n8 console=tty0 ---
       initrd --name initrd http://10.99.0.2/media/debian-netboot/initrd.gz
       boot
       "

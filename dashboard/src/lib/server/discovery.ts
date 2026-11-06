@@ -165,6 +165,7 @@ export function decideBoot(req: BootRequest): BootDecision {
           mediaUrl: s.mediaUrl,
           mediaRoot: s.mediaRoot,
           serverIp: s.network.pxeServer,
+          pxeDns: s.network.dns[0],
           configUrl: `${s.baseUrl}/boot/${req.mac}/${token}/`,
           source: img.source,
           extraArgs: s.kernelExtraArgs,

@@ -293,6 +293,31 @@ test_m7_verify_listen_vlan() {
   assert_eq "$RC" 1; assert_contains "$OUT" "FAIL pxe10 bukan VLAN id 10 di trunk0"
 }
 
+test_m7_verify_listen_vlan_requires_dhcp_pxe10() {
+  # DEC-026 §3: verifikasi menuntut socket DHCP dnsmasq udp `%pxe10:67`; tanpa itu FAIL + stop dnsmasq,
+  # walau service aktif dan socket dnsmasq lain (53/69) benar.
+  _m7_listen_fakes
+  local S="$INFRA_DIR_UNDER_TEST/server/vlan/verify-listen-vlan.sh" repl
+  _m7_ss_good > "$SB/ss"
+  set +e; OUT="$(bash "$S" 2>&1)"; RC=$?; set -e
+  assert_eq "$RC" 0 "$(grep FAIL <<<"$OUT")"
+  assert_contains "$OUT" "OK   dnsmasq DHCP listen udp %pxe10:67"
+  # Pengganti baris 0.0.0.0%pxe10:67 ("-" = dihapus): semuanya harus FAIL.
+  for repl in '-' \
+              'udp UNCONN 0 0 10.99.10.2:67 0.0.0.0:* users:(("dnsmasq",pid=1,fd=4))' \
+              'tcp LISTEN 0 0 0.0.0.0%pxe10:67 0.0.0.0:* users:(("dnsmasq",pid=1,fd=4))' \
+              'udp UNCONN 0 0 0.0.0.0%pxe10:67 0.0.0.0:* users:(("other",pid=9,fd=4))' \
+              'udp UNCONN 0 0 0.0.0.0%pxe10:6767 0.0.0.0:* users:(("dnsmasq",pid=1,fd=4))'; do
+    { _m7_ss_good | grep -vF '0.0.0.0%pxe10:67 '; [[ "$repl" == - ]] || echo "$repl"; } > "$SB/ss"
+    : > "$FAKE_LOG"
+    set +e; OUT="$(bash "$S" 2>&1)"; RC=$?; set -e
+    assert_eq "$RC" 1 "harus FAIL tanpa DHCP %pxe10:67 ($repl)"
+    assert_contains "$OUT" "FAIL dnsmasq tidak listen DHCP udp %pxe10:67"
+    assert_contains "$OUT" "RESULT: FAIL"
+    assert_match "$(cat "$FAKE_LOG")" "^systemctl stop dnsmasq$" "dnsmasq dihentikan ($repl)"
+  done
+}
+
 test_m7_server_up_vlan_dry() {
   _m7_vlan_sandbox
   export INFRA_DRY_RUN=1
@@ -620,6 +645,7 @@ t "M7 pxe-switch.sh apply/apply-port: perintah tabel §2.2 (AC-7.15)"           
 t "M7 pxe-switch.sh verify PASS/FAIL (AC-7.15)"                                test_m7_pxe_switch_verify
 t "M7 profil server VLAN statis: dnsmasq/nginx/NFS/sysctl (AC-7.16)"            test_m7_server_profile_static
 t "M7 verify-listen-vlan.sh: PASS / FAIL + stop dnsmasq (AC-7.16)"            test_m7_verify_listen_vlan
+t "M7 verify-listen-vlan.sh wajib DHCP dnsmasq udp %pxe10:67 (DEC-026 §3)"     test_m7_verify_listen_vlan_requires_dhcp_pxe10
 t "M7 server-up --topology vlan dry-run (NIC trunk, urutan profil) (AC-7.16)"   test_m7_server_up_vlan_dry
 t "M7 deploy-dashboard --topology vlan: env + asersi vlanNetworks (AC-7.16)"   test_m7_deploy_vlan
 t "M7 cleanup.sh --switch, run id switch* ditolak, node.sh --net (AC-7.19)"    test_m7_cleanup_switch_and_node_net

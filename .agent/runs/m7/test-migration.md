@@ -30,3 +30,40 @@ golden tetap berupa string lengkap yang persis, dan hanya ditambah satu token at
 
 Test baru: `dashboard/src/lib/server/m7-debian-no-route.test.ts` (4 test). Log mutasi ada di
 `.agent/runs/m7/mutation-dev-T2b.txt`.
+
+## DEC-026 §1: Debian `netcfg/get_nameservers=<DNS PXE>` (backend-dev, T2c)
+
+Alasan: di DHCP tanpa router, script udhcpc d-i (`sh -e`) berhenti di `ip route add default via ""`
+sebelum menulis `/etc/resolv.conf`, lalu netcfg menanyakan `netcfg/get_nameservers` (critical) sebelum
+`preseed.cfg` diambil. Buktinya ada di `.agent/runs/m7/kvm/smoke/run3-debian-fix/`. Nilainya diambil dari
+entri pertama `PXE_MGMT_DNS`. Di kedua topologi lab nilainya sama dengan `PXE_SERVER_IP` dan sama dengan
+opsi dns-server dnsmasq. Asersi lama tidak dilemahkan: golden tetap berupa string lengkap yang persis,
+hanya ditambah satu token.
+
+### 1. Golden cmdline Debian: `dashboard/src/lib/server/boot-script.test.ts` ("Debian: netboot + preseed/url")
+- Sebelum: `... interface=auto netcfg/dhcp_timeout=60 netcfg/no_default_route=true console=ttyS0,115200n8 console=tty0 ---`
+- Sesudah: `... interface=auto netcfg/dhcp_timeout=60 netcfg/no_default_route=true netcfg/get_nameservers=10.99.0.2 console=ttyS0,115200n8 console=tty0 ---`
+
+### 2. Inline snapshot: `dashboard/src/app/boot/boot-routes.test.ts` ("Debian (preseed) dan Rocky (kickstart) sesuai §2.3 (snapshot)")
+- Perubahannya sama: token `netcfg/get_nameservers=10.99.0.2` ditambahkan setelah `netcfg/no_default_route=true`
+  (env test `PXE_MGMT_DNS=10.99.0.2`).
+
+### 3. Fixture input `InstallerScriptInput`: ditambah field wajib `pxeDns`
+Hanya ada penambahan properti, tanpa perubahan asersi:
+- `boot-script.test.ts`, `m7-debian-no-route.test.ts`, `installers/m5-te-hooks.test.ts`,
+  `installers/m6-generator.test.ts`, `installers/m6-smoke-fixes.test.ts`: `pxeDns: "10.99.0.2"`.
+- `m5-settings.test.ts`, `m5-te-unit.test.ts` (properti URL dari settings): `pxeDns: s.network.dns[0]`,
+  sama seperti pemanggil produk di `discovery.ts`.
+
+### Tidak diubah
+- Golden preseed (`debian-preseed*.cfg`). Tidak ada baris `netcfg/get_nameservers` di preseed.
+  Alasannya: nilai dari cmdline kernel sudah tersimpan di db debconf d-i selama sesi installer. Bila netcfg
+  dijalankan ulang, jawabannya tetap tersedia. Menambahkannya ke preseed juga membutuhkan DNS jaringan PXE
+  di `InstallContext`, padahal context itu adalah konfigurasi target per host.
+
+Test baru:
+- `dashboard/src/lib/server/m7-debian-nameservers.test.ts` (12 test)
+- `dashboard/src/app/boot/m7-debian-nameservers-route.test.ts` (1 test integration; `PXE_MGMT_DNS` ≠ `PXE_SERVER_IP`)
+- `infra/test/m7-infra.sh`: "M7 verify-listen-vlan.sh wajib DHCP dnsmasq udp %pxe10:67 (DEC-026 §3)"
+
+Log mutasi ada di `.agent/runs/m7/mutation-dev-T2c.txt`.

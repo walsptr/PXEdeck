@@ -4,6 +4,8 @@
 # Memastikan:
 #   - dnsmasq HANYA di pxe10 (10.99.10.2 / %pxe10; port 67/69/53) — tidak di pxe0, mgmt20, nat0,
 #     10.99.0.2, 10.99.20.1, atau wildcard tanpa device (0.0.0.0:67);
+#   - DEC-026 §3: dnsmasq WAJIB benar-benar listen DHCP di udp `*%pxe10:67` (socket bind-interfaces,
+#     mis. 0.0.0.0%pxe10:67). "Service aktif" saja tidak cukup;
 #   - nginx tepat 10.99.0.2:80 dan 10.99.10.2:80;
 #   - nfsd hanya 10.99.10.2:2049;
 #   - tidak ada socket selain sshd di 10.99.20.1 / NIC NAT 192.168.199.*;
@@ -41,7 +43,7 @@ bad=0
 ok() { echo "OK   $*"; }
 fail() { echo "FAIL $*"; bad=1; }
 dns_ok() { [[ "$1" == 10.99.10.2:* || "$1" == *%pxe10:* ]]; }
-nginx_seen=""; nfs_seen=0
+nginx_seen=""; nfs_seen=0; dhcp_seen=0
 # Kolom ss -lntupH: Netid State Recv-Q Send-Q Local Peer [Process]
 while read -r netid state rq sq local peer proc; do
   [[ -z "${local:-}" ]] && continue
@@ -49,7 +51,8 @@ while read -r netid state rq sq local peer proc; do
   case "$proc" in
     *'"dnsmasq"'*)
       if dns_ok "$local"; then ok "dnsmasq $netid $local"
-      else fail "dnsmasq $netid $local (harus 10.99.10.2 / %pxe10)"; fi ;;
+      else fail "dnsmasq $netid $local (harus 10.99.10.2 / %pxe10)"; fi
+      [[ "$netid" == udp && "$local" == *%pxe10:67 ]] && dhcp_seen=1 ;;
     *'"nginx"'*)
       if [[ "$local" == 10.99.0.2:80 || "$local" == 10.99.10.2:80 ]]; then
         ok "nginx $netid $local"; nginx_seen+=" $local"
@@ -70,6 +73,9 @@ for l in 10.99.0.2:80 10.99.10.2:80; do
   [[ " $nginx_seen " == *" $l "* ]] || fail "nginx tidak listen $l"
 done
 ((nfs_seen)) || fail "nfsd tidak listen 10.99.10.2:2049"
+# DEC-026 §3: tanpa socket DHCP di pxe10, node VLAN PXE tidak pernah mendapat lease.
+if ((dhcp_seen)); then ok "dnsmasq DHCP listen udp %pxe10:67"
+else fail "dnsmasq tidak listen DHCP udp %pxe10:67 (ss -lunp)"; fi
 
 fwd="$(cat "$PROC/sys/net/ipv4/ip_forward" 2>/dev/null || echo '?')"
 if [[ "$fwd" == 0 ]]; then ok "net.ipv4.ip_forward=0"; else fail "net.ipv4.ip_forward=$fwd (harus 0)"; fi

@@ -57,6 +57,7 @@ describe("AC-6.28 SR-4-6 preseed ` ---`", () => {
     mediaUrl: "http://10.99.0.2/media",
     mediaRoot: "/srv/pxe/media",
     serverIp: "10.99.0.2",
+    pxeDns: "10.99.0.2",
     configUrl: `http://10.99.0.2/boot/${MAC}/${TOKEN}/`,
     extraArgs: "console=ttyS0,115200n8 console=tty0",
   }

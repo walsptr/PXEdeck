@@ -25,6 +25,7 @@ const BASE: Omit<InstallerScriptInput, "method" | "source"> = {
   mediaUrl: "http://10.99.0.2/media",
   mediaRoot: "/srv/pxe/media",
   serverIp: "10.99.0.2",
+  pxeDns: "10.99.0.2",
   configUrl: "http://10.99.0.2/boot/52:54:00:99:00:11/TOKEN_abcdefghijklmnopqrstuvwxyz0123456789ABCD/",
   extraArgs: "console=ttyS0,115200n8 console=tty0",
 }
@@ -121,7 +122,7 @@ describe("installerScript (AC-4.15, AC-4.16)", () => {
     expect(s).toBe(
       [
         "#!ipxe",
-        `kernel http://10.99.0.2/media/debian-netboot/linux initrd=initrd auto=true priority=critical url=${BASE.configUrl}preseed.cfg interface=auto netcfg/dhcp_timeout=60 netcfg/no_default_route=true console=ttyS0,115200n8 console=tty0 ---`,
+        `kernel http://10.99.0.2/media/debian-netboot/linux initrd=initrd auto=true priority=critical url=${BASE.configUrl}preseed.cfg interface=auto netcfg/dhcp_timeout=60 netcfg/no_default_route=true netcfg/get_nameservers=10.99.0.2 console=ttyS0,115200n8 console=tty0 ---`,
         "initrd --name initrd http://10.99.0.2/media/debian-netboot/initrd.gz",
         "boot",
         "",
