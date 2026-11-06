@@ -1,0 +1,2 @@
+PASS  CR-4-12-dnsmasq  pxe-test-m6distro-node23     TFTP snponly.efi terkirim ke 10.99.0.101 (lease 52:54:00:99:00:23)
+PASS  CR-4-12-nginx    pxe-test-m6distro-node23     preseed.cfg 200 x1 (min 1)

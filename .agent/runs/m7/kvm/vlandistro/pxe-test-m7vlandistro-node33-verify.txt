@@ -1,0 +1,60 @@
+# verify-node lewat relay infra/vlan/relay.sh di pxe-test-server (node 10.99.20.43, VLAN 20)
+# verify-node 2026-11-06T15:44:03Z on m7-node33
+# uname: 6.1.0-50-amd64
+OK   hostname = m7-node33 (aktual: m7-node33)
+OK   parent NIC dengan MAC 52:54:00:99:00:33 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (enp1s0.20)
+# ip -4 addr (enp1s0.20): 10.99.20.43/24
+OK   ip -4 addr enp1s0.20 memuat 10.99.20.43/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain enp1s0.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   enp1s0.20@enp1s0: vlan protocol 802.1Q id 20
+# info /etc/network/interfaces:
+#   # This file describes the network interfaces available on your system
+#   # and how to activate them. For more information, see interfaces(5).
+#   
+#   source /etc/network/interfaces.d/*
+#   
+#   # The loopback network interface
+#   auto lo
+#   iface lo inet loopback
+# info /etc/network/interfaces.d/mgmt:
+#   auto enp1s0
+#   iface enp1s0 inet manual
+#   auto enp1s0.20
+#   iface enp1s0.20 inet static
+#       address 10.99.20.43/24
+#       netmask 255.255.255.0
+#       gateway 10.99.20.1
+#       dns-nameservers 10.99.10.2
+# info dpkg vlan: dpkg-query: no packages found matching vlan
+# info dpkg ifupdown: install ok installed 0.8.41
+# info nmcli con:
+#   lo:lo:loopback:no
+#   Wired connection 1::802-3-ethernet:yes
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/debian/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=4 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/pxe--vg-root), bukan NFS/live
+# uptime: up 3 minutes
+# verify-node fails=0
+# verify-node exit=0
+# ssh PreferredAuthentications=password (exit 255): Warning: Permanently added '10.99.20.43' (ED25519) to the list of known hosts.
+m7admin@10.99.20.43: Permission denied (publickey).
+OK   login password ditolak (server hanya menawarkan: publickey)

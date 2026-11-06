@@ -1,0 +1,139 @@
+# AC-7.25 pxe-test-m7vlandistro-node34 (rocky, uefi) VLAN 20 10.99.20.44/24: booting → installing → configuring → done dalam 497 dtk (UI tanpa reload)
+# lease VLAN 10 (currentIp sebelum reboot): 10.99.20.44
+# pcap trunk0 (capture-trunk0-install.txt): DISCOVER node vlan10=16 OFFER server vlan10=16 ACK server vlan10=8 frame non-vlan10=0
+# nginx (token disamarkan): file konfigurasi
+  10.99.10.118 2026-11-06T15:26:45+00:00 GET /boot/52:54:00:99:00:34/***/ks.cfg 200
+# nginx: callback status
+  10.99.10.118 2026-11-06T15:30:56+00:00 POST /boot/52:54:00:99:00:34/***/status 200
+  10.99.20.44 2026-11-06T15:34:39+00:00 POST /boot/52:54:00:99:00:34/***/status 200
+# event installer berurutan: true 
+  installer: kickstart mulai
+  installer: disk target dipilih
+  installer: post mulai
+  installer: konfigurasi target selesai
+  first-boot: OS terpasang boot dari disk: m7-node34 enp1s0.20=10.99.20.44/24 
+# dnsmasq: transaksi DHCP sebelum verifikasi
+  Nov  6 15:32:24 1258420468 DHCPDISCOVER,DHCPOFFER vendor=HTTPClient:Arch:00016:UNDI:003001 user=-
+  Nov  6 15:26:27 2302120231 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00007:UNDI:003001 user=-
+  Nov  6 15:26:11 25135576 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00007:UNDI:003001 user=-
+  Nov  6 15:31:04 258023372 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00007:UNDI:003001 user=-
+  Nov  6 15:26:22 2618306309 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00007:UNDI:003010 user=iPXE
+  Nov  6 15:26:56 3430708933 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=anaconda-Linux user=-
+  Nov  6 15:26:44 3670482172 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=anaconda-Linux user=-
+# verify-node.sh lewat relay (sebelum reboot)
+# verify-node 2026-11-06T15:40:17Z on m7-node34
+# uname: 5.14.0-687.10.1.el9_8.0.1.x86_64
+OK   hostname = m7-node34 (aktual: m7-node34)
+OK   parent NIC dengan MAC 52:54:00:99:00:34 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (enp1s0.20)
+# ip -4 addr (enp1s0.20): 10.99.20.44/24
+OK   ip -4 addr enp1s0.20 memuat 10.99.20.44/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain enp1s0.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   enp1s0.20@enp1s0: vlan protocol 802.1Q id 20
+# info nmcli con:
+#   enp1s0.20:enp1s0.20:vlan:yes
+#   pxe-native:enp1s0:802-3-ethernet:yes
+#   lo:lo:loopback:yes
+#   enp1s0::802-3-ethernet:yes
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/rocky/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub2/grub.cfg (cocok: 0)
+OK   bebas token: /boot/loader/entries/c2d35270904b43be849bd501b2e1aab4-0-rescue.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/c2d35270904b43be849bd501b2e1aab4-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /etc/kernel/cmdline (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+OK   bebas token: /root/anaconda-ks.cfg (cocok: 0)
+# token-scan files=8 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/rlm_m7--node34-root), bukan NFS/live
+# uptime: up 5 minutes
+# verify-node fails=0
+# exit=0
+# pwcheck (relay)
+# ssh PreferredAuthentications=password (exit 255): Warning: Permanently added '10.99.20.44' (ED25519) to the list of known hosts.
+m7admin@10.99.20.44: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+# password ditolak=true
+# MTU
+# ip -d link mgmt20
+6: mgmt20@trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 0 maxmtu 65535 
+    vlan protocol 802.1Q id 20 <REORDER_HDR> addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 
+# ping -M do -s 1472 -c 3 10.99.20.44 (dari mgmt20)
+PING 10.99.20.44 (10.99.20.44) from 10.99.20.1 mgmt20: 1472(1500) bytes of data.
+1480 bytes from 10.99.20.44: icmp_seq=1 ttl=64 time=0.308 ms
+1480 bytes from 10.99.20.44: icmp_seq=2 ttl=64 time=1.41 ms
+1480 bytes from 10.99.20.44: icmp_seq=3 ttl=64 time=0.516 ms
+
+--- 10.99.20.44 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2015ms
+rtt min/avg/max/mdev = 0.308/0.743/1.406/0.476 ms
+# exit-1472=0
+# ping -M do -s 1473 -c 1 10.99.20.44 (harus ditolak: > MTU 1500, DF)
+PING 10.99.20.44 (10.99.20.44) from 10.99.20.1 mgmt20: 1473(1501) bytes of data.
+
+--- 10.99.20.44 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+# exit-1473=1
+ping: local error: message too long, mtu=1500
+# mtu ok=true
+# reboot: kembali=true verify2=0 status=done currentIp=10.99.10.118 job 1->1 penanda-installer-serial 4->4 iPXE-script 2->3 serial-boot-lokal=true
+# verify-node.sh lewat relay (sesudah reboot)
+# verify-node 2026-11-06T15:44:01Z on m7-node34
+# uname: 5.14.0-687.10.1.el9_8.0.1.x86_64
+OK   hostname = m7-node34 (aktual: m7-node34)
+OK   parent NIC dengan MAC 52:54:00:99:00:34 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (enp1s0.20)
+# ip -4 addr (enp1s0.20): 10.99.20.44/24
+OK   ip -4 addr enp1s0.20 memuat 10.99.20.44/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain enp1s0.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   enp1s0.20@enp1s0: vlan protocol 802.1Q id 20
+# info nmcli con:
+#   enp1s0.20:enp1s0.20:vlan:yes
+#   pxe-native:enp1s0:802-3-ethernet:yes
+#   lo:lo:loopback:yes
+#   enp1s0::802-3-ethernet:yes
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/rocky/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub2/grub.cfg (cocok: 0)
+OK   bebas token: /boot/loader/entries/c2d35270904b43be849bd501b2e1aab4-0-rescue.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/c2d35270904b43be849bd501b2e1aab4-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /etc/kernel/cmdline (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+OK   bebas token: /root/anaconda-ks.cfg (cocok: 0)
+# token-scan files=8 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/rlm_m7--node34-root), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+# exit=0
+# DHCP dari OS terpasang setelah Done: tidak ada
+# masalah: tidak ada

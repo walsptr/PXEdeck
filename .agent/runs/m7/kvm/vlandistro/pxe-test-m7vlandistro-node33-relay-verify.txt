@@ -1,0 +1,168 @@
+# AC-7.24 pxe-test-m7vlandistro-node33 (debian, uefi) VLAN 20 10.99.20.43/24: booting → installing → configuring → done dalam 601 dtk (UI tanpa reload)
+# lease VLAN 10 (currentIp sebelum reboot): 10.99.20.43
+# pcap trunk0 (capture-trunk0-install.txt): DISCOVER node vlan10=14 OFFER server vlan10=14 ACK server vlan10=7 frame non-vlan10=0
+# nginx (token disamarkan): file konfigurasi
+  10.99.10.117 2026-11-06T15:26:51+00:00 GET /boot/52:54:00:99:00:33/***/preseed.cfg 200
+# nginx: callback status
+  10.99.10.117 2026-11-06T15:32:41+00:00 POST /boot/52:54:00:99:00:33/***/status 200
+  10.99.20.43 2026-11-06T15:36:23+00:00 POST /boot/52:54:00:99:00:33/***/status 200
+# event installer berurutan: true 
+  installer: preseed mulai
+  installer: modul disk virtio dimuat
+  installer: modul disk virtio dimuat
+  installer: disk target dipilih
+  installer: late_command mulai
+  installer: konfigurasi target selesai
+  first-boot: OS terpasang boot dari disk: m7-node33 enp1s0.20=10.99.20.43/24 
+# dnsmasq: transaksi DHCP sebelum verifikasi
+  Nov  6 15:32:46 1112557299 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00007:UNDI:003001 user=-
+  Nov  6 15:26:08 1162354649 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00007:UNDI:003001 user=-
+  Nov  6 15:26:24 2165478614 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00007:UNDI:003001 user=-
+  Nov  6 15:34:06 375403045 DHCPDISCOVER,DHCPOFFER vendor=HTTPClient:Arch:00016:UNDI:003001 user=-
+  Nov  6 15:26:16 3939064833 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00007:UNDI:003010 user=iPXE
+  Nov  6 15:26:47 4103431432 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=d-i user=-
+# verify-node.sh lewat relay (sebelum reboot)
+# verify-node 2026-11-06T15:36:31Z on m7-node33
+# uname: 6.1.0-50-amd64
+OK   hostname = m7-node33 (aktual: m7-node33)
+OK   parent NIC dengan MAC 52:54:00:99:00:33 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (enp1s0.20)
+# ip -4 addr (enp1s0.20): 10.99.20.43/24
+OK   ip -4 addr enp1s0.20 memuat 10.99.20.43/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain enp1s0.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   enp1s0.20@enp1s0: vlan protocol 802.1Q id 20
+# info /etc/network/interfaces:
+#   # This file describes the network interfaces available on your system
+#   # and how to activate them. For more information, see interfaces(5).
+#   
+#   source /etc/network/interfaces.d/*
+#   
+#   # The loopback network interface
+#   auto lo
+#   iface lo inet loopback
+# info /etc/network/interfaces.d/mgmt:
+#   auto enp1s0
+#   iface enp1s0 inet manual
+#   auto enp1s0.20
+#   iface enp1s0.20 inet static
+#       address 10.99.20.43/24
+#       netmask 255.255.255.0
+#       gateway 10.99.20.1
+#       dns-nameservers 10.99.10.2
+# info dpkg vlan: dpkg-query: no packages found matching vlan
+# info dpkg ifupdown: install ok installed 0.8.41
+# info nmcli con:
+#   lo:lo:loopback:no
+#   Wired connection 1::802-3-ethernet:yes
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/debian/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=4 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/pxe--vg-root), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+# exit=0
+# pwcheck (relay)
+# ssh PreferredAuthentications=password (exit 255): Warning: Permanently added '10.99.20.43' (ED25519) to the list of known hosts.
+m7admin@10.99.20.43: Permission denied (publickey).
+# password ditolak=true
+# MTU
+# ip -d link mgmt20
+6: mgmt20@trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 0 maxmtu 65535 
+    vlan protocol 802.1Q id 20 <REORDER_HDR> addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 
+# ping -M do -s 1472 -c 3 10.99.20.43 (dari mgmt20)
+PING 10.99.20.43 (10.99.20.43) from 10.99.20.1 mgmt20: 1472(1500) bytes of data.
+1480 bytes from 10.99.20.43: icmp_seq=1 ttl=64 time=0.267 ms
+1480 bytes from 10.99.20.43: icmp_seq=2 ttl=64 time=0.572 ms
+1480 bytes from 10.99.20.43: icmp_seq=3 ttl=64 time=1.07 ms
+
+--- 10.99.20.43 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2077ms
+rtt min/avg/max/mdev = 0.267/0.635/1.067/0.329 ms
+# exit-1472=0
+# ping -M do -s 1473 -c 1 10.99.20.43 (harus ditolak: > MTU 1500, DF)
+PING 10.99.20.43 (10.99.20.43) from 10.99.20.1 mgmt20: 1473(1501) bytes of data.
+
+--- 10.99.20.43 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+# exit-1473=1
+ping: local error: message too long, mtu=1500
+# mtu ok=true
+# reboot: kembali=true verify2=0 status=done currentIp=10.99.10.117 job 1->1 penanda-installer-serial 3->3 iPXE-script 3->4 serial-boot-lokal=true
+# verify-node.sh lewat relay (sesudah reboot)
+# verify-node 2026-11-06T15:40:15Z on m7-node33
+# uname: 6.1.0-50-amd64
+OK   hostname = m7-node33 (aktual: m7-node33)
+OK   parent NIC dengan MAC 52:54:00:99:00:33 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (enp1s0.20)
+# ip -4 addr (enp1s0.20): 10.99.20.43/24
+OK   ip -4 addr enp1s0.20 memuat 10.99.20.43/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain enp1s0.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   enp1s0.20@enp1s0: vlan protocol 802.1Q id 20
+# info /etc/network/interfaces:
+#   # This file describes the network interfaces available on your system
+#   # and how to activate them. For more information, see interfaces(5).
+#   
+#   source /etc/network/interfaces.d/*
+#   
+#   # The loopback network interface
+#   auto lo
+#   iface lo inet loopback
+# info /etc/network/interfaces.d/mgmt:
+#   auto enp1s0
+#   iface enp1s0 inet manual
+#   auto enp1s0.20
+#   iface enp1s0.20 inet static
+#       address 10.99.20.43/24
+#       netmask 255.255.255.0
+#       gateway 10.99.20.1
+#       dns-nameservers 10.99.10.2
+# info dpkg vlan: dpkg-query: no packages found matching vlan
+# info dpkg ifupdown: install ok installed 0.8.41
+# info nmcli con:
+#   lo:lo:loopback:no
+#   Wired connection 1::802-3-ethernet:yes
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/debian/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=4 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/pxe--vg-root), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+# exit=0
+# DHCP dari OS terpasang setelah Done: tidak ada
+# masalah: tidak ada

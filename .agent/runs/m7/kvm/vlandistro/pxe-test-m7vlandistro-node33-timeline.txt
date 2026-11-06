@@ -1,0 +1,10 @@
+2026-11-06T15:26:16.554Z host muncul (tanpa reload) currentIp=10.99.10.117
+2026-11-06T15:26:23.920Z install dibuat (UI) os=debian-12 ip=10.99.20.43/24 vlan=20 gw=10.99.20.1 generator=true
+2026-11-06T15:26:24.017Z node.sh reset
+2026-11-06T15:26:26.325Z booting (UI, +0 dtk)
+2026-11-06T15:26:56.761Z installing (UI, +30 dtk)
+2026-11-06T15:32:42.320Z configuring (UI, +376 dtk)
+2026-11-06T15:36:27.159Z done (UI, +601 dtk)
+2026-11-06T15:36:32.788Z ssh (relay) key yang di-inject: true
+2026-11-06T15:40:17.956Z reboot: kembali=true verify2=0 status=done currentIp=10.99.10.117 job 1->1 penanda-installer-serial 3->3 iPXE-script 3->4 serial-boot-lokal=true
+2026-11-06T15:40:18.126Z AC-7.24 selesai dalam 226 dtk; masalah: tidak ada

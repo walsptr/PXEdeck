@@ -1,0 +1,37 @@
+# preflight 2026-11-06T15:44:37Z
+virsh         /usr/bin/virsh
+virt-install  /usr/bin/virt-install
+qemu-img      /usr/bin/qemu-img
+ssh           /usr/bin/ssh
+scp           /usr/bin/scp
+ssh-keygen    /usr/bin/ssh-keygen
+curl          /usr/bin/curl
+socat         /usr/bin/socat
+npm           /usr/bin/npm
+npx           /usr/bin/npx
+tar           /usr/bin/tar
+xz            /usr/bin/xz
+python3       /usr/bin/python3
+/dev/kvm      ok
+OVMF          ok
+e2e-kvm       ok
+verify-node   ok
+# meminfo: /proc/meminfo
+MemTotal:       24289248 kB
+MemAvailable:   20130748 kB
+# virsh list --all
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+# virsh net-list --all
+ Name             State    Autostart   Persistent
+---------------------------------------------------
+ default          active   yes         yes
+ int              active   yes         yes
+ pxe-test         active   no          yes
+ pxe-test-nat     active   no          yes
+ pxe-test-port1   active   no          yes
+ pxe-test-port2   active   no          yes
+ pxe-test-trunk   active   no          yes
+

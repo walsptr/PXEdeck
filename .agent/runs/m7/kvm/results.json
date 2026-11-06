@@ -921,16 +921,42 @@
       "evidenceDir": "vlancore"
     },
     "vlandistro": {
-      "status": "FAIL",
-      "summarizedAt": "2026-11-06T14:59:34Z",
+      "status": "PASS",
+      "summarizedAt": "2026-11-06T15:44:21Z",
       "run": "m7vlandistro",
-      "session": "1793977133087-e16d18be",
-      "generatedAt": "2026-11-06T14:59:24.259Z",
+      "session": "1793978768964-ebbc0d2d",
+      "generatedAt": "2026-11-06T15:44:04.058Z",
       "results": [
         {
+          "ac": "AC-7.24",
+          "node": "pxe-test-m7vlandistro-node33",
+          "status": "PASS",
+          "durationS": 601,
+          "note": "booting\u2192installing\u2192configuring\u2192done 601s; verify 0/0; MTU ok; job 1",
+          "evidence": [
+            "pxe-test-m7vlandistro-node33-relay-verify.txt",
+            "pxe-test-m7vlandistro-node33-timeline.txt",
+            "capture-trunk0-install.txt",
+            "screenshots/pxe-test-m7vlandistro-node33-sheet-network.png"
+          ]
+        },
+        {
+          "ac": "AC-7.25",
+          "node": "pxe-test-m7vlandistro-node34",
+          "status": "PASS",
+          "durationS": 497,
+          "note": "booting\u2192installing\u2192configuring\u2192done 497s; verify 0/0; MTU ok; job 1",
+          "evidence": [
+            "pxe-test-m7vlandistro-node34-relay-verify.txt",
+            "pxe-test-m7vlandistro-node34-timeline.txt",
+            "capture-trunk0-install.txt",
+            "screenshots/pxe-test-m7vlandistro-node34-sheet-network.png"
+          ]
+        },
+        {
           "ac": "AC-7.30-scan",
-          "status": "FAIL",
-          "note": "1 temuan (scan harness)",
+          "status": "PASS",
+          "note": "0 temuan (scan harness)",
           "evidence": [
             "evidence-scan.txt"
           ]
@@ -947,8 +973,8 @@
         {
           "ac": "CR-4-12-nginx",
           "node": "pxe-test-m7vlandistro-node33",
-          "status": "FAIL",
-          "note": "preseed.cfg 200 x0 (min 1)",
+          "status": "PASS",
+          "note": "preseed.cfg 200 x1 (min 1)",
           "evidence": [
             "server-nginx.txt"
           ]
@@ -965,8 +991,8 @@
         {
           "ac": "CR-4-12-nginx",
           "node": "pxe-test-m7vlandistro-node34",
-          "status": "FAIL",
-          "note": "ks.cfg 200 x0 (min 1)",
+          "status": "PASS",
+          "note": "ks.cfg 200 x1 (min 1)",
           "evidence": [
             "server-nginx.txt"
           ]
@@ -974,8 +1000,8 @@
         {
           "ac": "verify-node",
           "node": "pxe-test-m7vlandistro-node33",
-          "status": "NOT_RUN",
-          "note": "tidak diverifikasi: Playwright exit=1, status host discovered (bukan done)",
+          "status": "PASS",
+          "note": "verify-node.sh (EXPECT_VLAN=20) lewat relay exit=0 + cek login password",
           "evidence": [
             "pxe-test-m7vlandistro-node33-verify.txt"
           ]
@@ -983,8 +1009,8 @@
         {
           "ac": "verify-node",
           "node": "pxe-test-m7vlandistro-node34",
-          "status": "NOT_RUN",
-          "note": "tidak diverifikasi: Playwright exit=1, status host discovered (bukan done)",
+          "status": "PASS",
+          "note": "verify-node.sh (EXPECT_VLAN=20) lewat relay exit=0 + cek login password",
           "evidence": [
             "pxe-test-m7vlandistro-node34-verify.txt"
           ]
@@ -993,7 +1019,7 @@
           "ac": "cleanup",
           "status": "PASS",
           "note": "semua resource run dihapus; resource terlindungi identik",
-          "failedStage": "verify",
+          "failedStage": "",
           "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)",
           "protectedIdentical": true,
           "runDomainsRemaining": 0,
@@ -1010,6 +1036,28 @@
           ]
         }
       ],
+      "statusTrail": {
+        "pxe-test-m7vlandistro-node33": {
+          "seen": [
+            "booting",
+            "installing",
+            "configuring",
+            "done"
+          ],
+          "last": "done",
+          "doneS": 601
+        },
+        "pxe-test-m7vlandistro-node34": {
+          "seen": [
+            "booting",
+            "installing",
+            "configuring",
+            "done"
+          ],
+          "last": "done",
+          "doneS": 497
+        }
+      },
       "scenario": "vlandistro",
       "vlan": 20,
       "nodes": [
@@ -1033,20 +1081,121 @@
         "scenario": "vlandistro",
         "runId": "m7vlandistro",
         "nodes": "33:uefi:os=debian 34:uefi:os=rocky",
-        "maxNodes": 2,
-        "memAvailableMb": 13623,
+        "maxNodes": 3,
+        "memAvailableMb": 19186,
         "wavesMode": false,
         "waves": [],
         "bootingTimeoutMin": null,
-        "failedStage": "verify",
-        "exit": 1,
+        "failedStage": "",
+        "exit": 0,
         "dryRun": false,
-        "startedAt": "2026-11-06T14:57:24Z",
-        "durationSec": 130
+        "startedAt": "2026-11-06T15:24:38Z",
+        "durationSec": 1183
       },
-      "commit": "d9d5308",
-      "evidenceDir": "history/vlandistro-login-get-leak",
-      "note": "BLOCKED: Playwright login mengklik submit sebelum hidrasi React -> form login (tanpa method) terkirim native GET /login?username=<REDACTED>&password=<REDACTED> (password masuk URL & log akses nginx). Temuan keamanan produk; alur Debian/Rocky tidak berjalan. Password run (sekali pakai, sudah dihapus) disamarkan dari bukti."
+      "commit": "6a26cc6",
+      "evidenceDir": "vlandistro"
+    },
+    "flat-debian": {
+      "status": "PASS",
+      "summarizedAt": "2026-11-06T15:59:06Z",
+      "run": "m6distro",
+      "session": "1793979913598-e7917b23",
+      "generatedAt": "2026-11-06T15:58:56.994Z",
+      "results": [
+        {
+          "ac": "AC-6.48",
+          "node": "pxe-test-m6distro-node23",
+          "status": "PASS",
+          "durationS": 583,
+          "note": "booting\u2192installing\u2192configuring\u2192done 583s; verify 0/0",
+          "evidence": [
+            "pxe-test-m6distro-node23-verify-ssh.txt",
+            "pxe-test-m6distro-node23-timeline.txt",
+            "installer-logs/"
+          ]
+        },
+        {
+          "ac": "AC-6.52-scan",
+          "status": "PASS",
+          "note": "0 temuan (scan harness)",
+          "evidence": [
+            "evidence-scan.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m6distro-node23",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.0.101 (lease 52:54:00:99:00:23)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m6distro-node23",
+          "status": "PASS",
+          "note": "preseed.cfg 200 x1 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m6distro-node23",
+          "status": "PASS",
+          "note": "verify-node.sh exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m6distro-node23-verify.txt"
+          ]
+        },
+        {
+          "ac": "cleanup",
+          "status": "PASS",
+          "note": "semua resource run dihapus; resource terlindungi identik",
+          "failedStage": "",
+          "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)",
+          "protectedIdentical": true,
+          "runDomainsRemaining": 0,
+          "serverStopped": true,
+          "evidence": [
+            "libvirt-before.txt",
+            "libvirt-after.txt",
+            "libvirt-diff.txt",
+            "cleanup.txt",
+            "kvm-run.txt"
+          ]
+        }
+      ],
+      "scenario": "distro",
+      "nodes": [
+        {
+          "name": "pxe-test-m6distro-node23",
+          "os": "debian",
+          "ip": "10.99.0.33",
+          "hostname": "m6-node23"
+        }
+      ],
+      "harness": {
+        "milestone": "m6",
+        "scenario": "distro",
+        "runId": "m6distro",
+        "nodes": "23:uefi:os=debian",
+        "maxNodes": 3,
+        "memAvailableMb": 19655,
+        "wavesMode": false,
+        "waves": [],
+        "bootingTimeoutMin": null,
+        "failedStage": "",
+        "exit": 0,
+        "dryRun": false,
+        "startedAt": "2026-11-06T15:44:37Z",
+        "durationSec": 869
+      },
+      "commit": "6a26cc6",
+      "evidenceDir": "flat-debian/distro",
+      "topology": "flat",
+      "note": "Regresi flat DEC-026 \u00a74: kvm-run.sh m6 --scenario distro --nodes 23:uefi:os=debian (spec m6-distro tak berubah)"
     }
   },
   "history": {
@@ -1059,7 +1208,27 @@
       "status": "FAIL",
       "note": "preflight: RAM bebas hanya cukup 1 node (sistem user); diulang setelah RAM cukup -> PASS",
       "evidenceDir": "history/vlancore-preflight-ram"
+    },
+    "vlandistro-login-get-leak": {
+      "status": "FAIL",
+      "commit": "d9d5308",
+      "supersededBy": "vlandistro@6a26cc6",
+      "note": "login form submit sebelum hidrasi -> GET dengan kredensial di URL (diperbaiki DEC-027: ea0a356, c209fb7); password run disamarkan",
+      "evidenceDir": "history/vlandistro-login-get-leak"
     }
   },
-  "suiteCommit": "d9d5308"
+  "suiteCommit": {
+    "vlanneg": "d9d5308",
+    "vlancore": "d9d5308",
+    "vlandistro": "6a26cc6",
+    "flat-debian": "6a26cc6",
+    "reuseDiff": "reuse-diff-d9d5308.txt", "final": "68ee54c"
+  },
+  "effectiveRuns": [
+    "vlansmoke",
+    "vlanneg",
+    "vlancore",
+    "vlandistro",
+    "flat-debian"
+  ]
 }

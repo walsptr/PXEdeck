@@ -1,0 +1,219 @@
+# DEC-027 §4: git diff d9d5308 68ee54c -- dashboard/src infra
+# vlanneg/vlancore dijalankan di d9d5308; vlandistro & flat-debian di 6a26cc6; 68ee54c hanya mengubah pola scan bukti (infra/redact-evidence.sh) + test.
+## --stat d9d5308..68ee54c
+ dashboard/src/app/login/submit/route.test.ts       |  33 ++++++
+ dashboard/src/app/login/submit/route.ts            |  21 ++++
+ dashboard/src/components/auth/login-form.tsx       |  52 +++++++++-
+ .../components/auth/m7-login-no-url-creds.test.tsx |  78 ++++++++++++++
+ dashboard/src/lib/server/m7-kvm-urlcred.test.ts    |  28 +++++
+ infra/redact-evidence.sh                           |  12 ++-
+ infra/server/nginx-pxe.conf                        |   8 +-
+ infra/server/vlan/nginx-pxe-vlan.conf              |   8 +-
+ infra/test/m7-dec027.sh                            | 114 +++++++++++++++++++++
+ infra/test/m7-te.sh                                |  37 +++++++
+ infra/test/nginx-logmap.py                         |  76 ++++++++++++++
+ infra/test/run.sh                                  |   2 +
+ 12 files changed, 464 insertions(+), 5 deletions(-)
+
+## --stat 6a26cc6..68ee54c (sesudah run vlandistro/flat-debian)
+ dashboard/src/lib/server/m7-kvm-urlcred.test.ts | 2 ++
+ infra/redact-evidence.sh                        | 4 ++--
+ infra/test/m7-te.sh                             | 1 +
+ 3 files changed, 5 insertions(+), 2 deletions(-)
+
+## diff lengkap file non-test d9d5308..68ee54c
+diff --git a/dashboard/src/app/login/submit/route.ts b/dashboard/src/app/login/submit/route.ts
+new file mode 100644
+index 0000000..3eb0020
+--- /dev/null
++++ b/dashboard/src/app/login/submit/route.ts
+@@ -0,0 +1,21 @@
++// DEC-027 §1 — target `action` native form login (`method="post"`). Hanya terpakai bila form
++// tersubmit tanpa JavaScript klien (sebelum hydration / JS mati); login sesungguhnya lewat
++// `fetch` JSON ke `POST /api/auth/login`.
++//
++// Body (urlencoded, berisi kredensial) SENGAJA tidak dibaca, tidak divalidasi, dan tidak dicatat:
++// handler hanya mengembalikan 303 ke halaman login (GET, tanpa kredensial) dengan `next` yang
++// disanitasi. Tidak ada sesi yang dibuat dan tidak ada nilai input yang dipantulkan.
++// Tanpa ekspor GET: metode lain → 405 dari Next (GET ke sini tidak pernah dihasilkan form).
++import { LOGIN_PATH, loginHref } from "@/lib/auth-next"
++
++export function POST(req: Request): Response {
++  const next = new URL(req.url).searchParams.get("next")
++  return new Response(null, {
++    status: 303,
++    headers: {
++      // Location relatif (RFC 9110): aman di belakang reverse proxy tanpa bergantung Host.
++      Location: next === null ? LOGIN_PATH : loginHref(next),
++      "Cache-Control": "no-store",
++    },
++  })
++}
+diff --git a/dashboard/src/components/auth/login-form.tsx b/dashboard/src/components/auth/login-form.tsx
+index 864fe69..30ceaaf 100644
+--- a/dashboard/src/components/auth/login-form.tsx
++++ b/dashboard/src/components/auth/login-form.tsx
+@@ -5,6 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation"
+ import { HugeiconsIcon } from "@hugeicons/react"
+ import { Alert02Icon, ViewIcon, ViewOffIcon } from "@hugeicons/core-free-icons"
+ 
++import { cn } from "cn"
++
+ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+ import { Button } from "@/components/ui/button"
+ import { Field, FieldGroup, FieldLabel } from "@/components/ui/field"
+@@ -33,6 +35,31 @@ export function lockoutText(retryAfterSec: number): string {
+  * Pesan error login dari respons server. 401 → teks seragam (tanpa membedakan username ada/tidak);
+  * 429 → lockout dengan N menit; lainnya → pesan server bila ada.
+  */
++const noopSubscribe = () => () => {}
++
++/**
++ * `false` saat render server dan selama hydration, `true` setelah React mengambil alih di klien
++ * (DEC-027 §1). Tanpa effect/state → tombol aktif pada commit hydration pertama.
++ */
++export function useHydrated(): boolean {
++  return React.useSyncExternalStore(
++    noopSubscribe,
++    () => true,
++    () => false,
++  )
++}
++
++/** Path route fallback submit native (DEC-027 §1, `src/app/login/submit/route.ts`). */
++export const LOGIN_NATIVE_ACTION = "/login/submit"
++
++/**
++ * `action` form login untuk submit native (tanpa JS): POST ke route fallback yang membuang body dan
++ * mengalihkan kembali ke `/login`. `next` ikut di query (bukan kredensial) agar tujuan tetap terjaga.
++ */
++export function loginNativeAction(next: string | null): string {
++  return next === null ? LOGIN_NATIVE_ACTION : `${LOGIN_NATIVE_ACTION}?next=${encodeURIComponent(next)}`
++}
++
+ export async function loginErrorText(res: Response): Promise<string> {
+   if (res.status === 401) return LOGIN_FAILED_TEXT
+   if (res.status === 429) return lockoutText(parseRetryAfter(res.headers.get("retry-after")))
+@@ -54,6 +81,7 @@ export function LoginForm() {
+   const [busy, setBusy] = React.useState(false)
+   const [show, setShow] = React.useState(false)
+   const alertRef = React.useRef<HTMLDivElement>(null)
++  const hydrated = useHydrated()
+ 
+   // Fokus ke Alert setiap kali error (juga bila teksnya sama dengan sebelumnya — `n` berubah).
+   React.useEffect(() => {
+@@ -91,7 +119,20 @@ export function LoginForm() {
+   }
+ 
+   return (
+-    <form onSubmit={onSubmit} aria-labelledby="login-title" className="flex flex-col gap-6">
++    // DEC-027 §1: kredensial tidak boleh pernah masuk URL. `method="post"` → submit native (sebelum
++    // hydration / tanpa JS) mengirim body urlencoded ke `/login/submit` (route yang membuang body lalu
++    // 303 ke `/login`), bukan `GET /login?username=…&password=…`. POST langsung ke halaman `/login`
++    // tidak dipakai: dengan Cache Components Next membalas sisa render dinamis tanpa shell (halaman
++    // kosong). Ditambah tombol Masuk nonaktif sampai hydration sehingga submit native (klik / Enter =
++    // implicit submission) tidak terjadi sama sekali.
++    <form
++      method="post"
++      action={loginNativeAction(params.get("next"))}
++      onSubmit={onSubmit}
++      aria-labelledby="login-title"
++      className="flex flex-col gap-6"
++      data-hydrated={hydrated || undefined}
++    >
+       {error && (
+         <Alert
+           ref={alertRef}
+@@ -149,7 +190,14 @@ export function LoginForm() {
+           </InputGroup>
+         </Field>
+       </FieldGroup>
+-      <Button type="submit" className="w-full" disabled={busy} data-testid="login-submit">
++      {/* Sebelum hydration tombol nonaktif tetapi tanpa efek pudar (`disabled:opacity-100`) agar
++          tidak berkedip pudar pada muat normal (lih. DR-6-11); aktif tepat saat hydration. */}
++      <Button
++        type="submit"
++        className={cn("w-full", !hydrated && "disabled:opacity-100")}
++        disabled={busy || !hydrated}
++        data-testid="login-submit"
++      >
+         {busy && <Spinner data-icon="inline-start" aria-label="Memproses" />}
+         Masuk
+       </Button>
+diff --git a/infra/redact-evidence.sh b/infra/redact-evidence.sh
+index cb7ab4d..b31e2ad 100755
+--- a/infra/redact-evidence.sh
++++ b/infra/redact-evidence.sh
+@@ -15,7 +15,8 @@
+ #                                                                      -> REDACTED-B64-SECRET
+ #     (B-5: late-command `printf %s '<b64>' | base64 -d` dicetak installer ke console serial;
+ #     logika selaras .agent/runs/m4/b64-scan.py, diimplementasi dengan bash+base64+grep)
+-# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, dan SEMUA
++# Yang hanya dipindai (tidak bisa disamarkan dengan aman -> gagal): header private key, kredensial di
++# query string mirip URL (`?password=`/`&username=` bernilai, DEC-027 §4), dan SEMUA
+ # isi file biner (CR-4-14: file non-teks tidak pernah diubah in-place; secret di dalamnya = exit 1).
+ # Pola scan selaras dengan .agent/runs/m4/secret-scan.sh.
+ set -euo pipefail
+@@ -36,6 +37,8 @@ PKEY_RE='-----BEGIN [A-Z ]*PRIVATE KEY-----'
+ B64_RUN_RE='[A-Za-z0-9+/]{40,}={0,2}'
+ B64_INNER_RE='[A-Za-z0-9+/]{16,}={0,2}'
+ B64_MARK='REDACTED-B64-SECRET'
++# DEC-027 §4: parameter kredensial di query string (scan saja, lihat di bawah).
++URL_CRED_RE='[?&](password|username)=[^&[:space:]"]*'
+ B64_DEC_SECRET_RE="/boot/[0-9a-fA-F:%-]{12,40}/$B64U{43}"
+ 
+ # _b64_secret <blob> <depth>: exit 0 bila blob ter-decode memuat secret (lihat header).
+@@ -98,6 +101,13 @@ done < <(find "$dir" -type f -print0)
+ 
+ hits="$(find "$dir" -type f -exec grep -EnaH -i -e "$TOKEN_PATH_RE" -e "$TOKEN_KV_RE" -e "$HASH_RE" -e "$SCRYPT_RE" -e "$PKEY_RE" {} + \
+   | cut -d: -f1,2 | head -50 || true)"
++# DEC-027 §4: kredensial di string mirip URL (`?password=…`, `&username=…`) = temuan, hanya dipindai
++# (tidak disamarkan otomatis; kebocoran seperti ini harus terlihat). Nilai yang sudah disamarkan
++# (`<REDACTED…>`, `***`), placeholder dokumentasi (`…`, backtick penutup kode) atau kosong tidak dihitung. Mencakup server-nginx.txt dan
++# server-nginx-error.txt (semua file di <dir>).
++urlhits="$(find "$dir" -type f -exec grep -EnoaHi "$URL_CRED_RE" {} + 2>/dev/null \
++  | grep -Eiv "[?&](password|username)=(<REDACTED|\*\*\*|…|\`|$)" | cut -d: -f1,2 | head -50 || true)"
++[[ -z "$urlhits" ]] || hits+="${hits:+$'\n'}$urlhits"
+ while IFS= read -r -d '' f; do
+   b64hits="$(_b64_scan "$f" | head -50)"
+   [[ -z "$b64hits" ]] || hits+="${hits:+$'\n'}$b64hits"
+diff --git a/infra/server/nginx-pxe.conf b/infra/server/nginx-pxe.conf
+index 6768a28..045bcde 100644
+--- a/infra/server/nginx-pxe.conf
++++ b/infra/server/nginx-pxe.conf
+@@ -5,8 +5,14 @@
+ # (`allow <admin>; deny all`); /boot/** dan /media/** tetap terbuka untuk klien PXE.
+ # Baris `allow` bertanda `# PXE_ADMIN_ALLOW` diganti deploy-dashboard.sh dari env PXE_ADMIN_ALLOW
+ # (IPv4 atau CIDR IPv4, default 10.99.0.1 = host lab).
++# DEC-027 §2: query string TIDAK dicatat kecuali untuk `/boot/<mac>.ipxe` (platform/wait = bukti
++# firmware). Path lain (termasuk /login, /api/**, /boot ber-token) dicatat tanpa query: `?` + isi
++# query diganti penanda `?***`. Regex dievaluasi berurutan; baris pertama yang cocok menang.
+ map $request_uri $pxe_log_uri {
+-    "~^(?<p>/boot/[^/]+/)[^/]+(?<r>/.*)$" "$p***$r";
++    "~^/boot/[0-9A-Za-z_:-][0-9A-Za-z._:-]*\.ipxe(\?[^?]*)?$" $request_uri;
++    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)\?" "$p***$r?***";
++    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)$" "$p***$r";
++    "~^(?<pxe_path>[^?]*)\?" "$pxe_path?***";
+     default $request_uri;
+ }
+ # M6 (DEC-017 §5, O5): limit_req sebagai LAPIS KEDUA (sumber kebenaran rate limit = aplikasi).
+diff --git a/infra/server/vlan/nginx-pxe-vlan.conf b/infra/server/vlan/nginx-pxe-vlan.conf
+index ce638a4..58dca3d 100644
+--- a/infra/server/vlan/nginx-pxe-vlan.conf
++++ b/infra/server/vlan/nginx-pxe-vlan.conf
+@@ -8,8 +8,14 @@
+ # (`allow <admin>; deny all`); /boot/** dan /media/** tetap terbuka untuk klien PXE.
+ # Baris `allow` bertanda `# PXE_ADMIN_ALLOW` diganti deploy-dashboard.sh dari env PXE_ADMIN_ALLOW
+ # (IPv4 atau CIDR IPv4, default 10.99.0.1 = host lab).
++# DEC-027 §2: query string TIDAK dicatat kecuali untuk `/boot/<mac>.ipxe` (platform/wait = bukti
++# firmware). Path lain (termasuk /login, /api/**, /boot ber-token) dicatat tanpa query: `?` + isi
++# query diganti penanda `?***`. Regex dievaluasi berurutan; baris pertama yang cocok menang.
+ map $request_uri $pxe_log_uri {
+-    "~^(?<p>/boot/[^/]+/)[^/]+(?<r>/.*)$" "$p***$r";
++    "~^/boot/[0-9A-Za-z_:-][0-9A-Za-z._:-]*\.ipxe(\?[^?]*)?$" $request_uri;
++    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)\?" "$p***$r?***";
++    "~^(?<p>/boot/[^/?]+/)[^/?]+(?<r>/[^?]*)$" "$p***$r";
++    "~^(?<pxe_path>[^?]*)\?" "$pxe_path?***";
+     default $request_uri;
+ }
+ # M6 (DEC-017 §5, O5): limit_req sebagai LAPIS KEDUA (sumber kebenaran rate limit = aplikasi).

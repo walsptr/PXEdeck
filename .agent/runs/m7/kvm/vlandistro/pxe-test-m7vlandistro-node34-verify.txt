@@ -1,0 +1,46 @@
+# verify-node lewat relay infra/vlan/relay.sh di pxe-test-server (node 10.99.20.44, VLAN 20)
+# verify-node 2026-11-06T15:44:05Z on m7-node34
+# uname: 5.14.0-687.10.1.el9_8.0.1.x86_64
+OK   hostname = m7-node34 (aktual: m7-node34)
+OK   parent NIC dengan MAC 52:54:00:99:00:34 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (enp1s0.20)
+# ip -4 addr (enp1s0.20): 10.99.20.44/24
+OK   ip -4 addr enp1s0.20 memuat 10.99.20.44/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain enp1s0.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   enp1s0.20@enp1s0: vlan protocol 802.1Q id 20
+# info nmcli con:
+#   enp1s0.20:enp1s0.20:vlan:yes
+#   pxe-native:enp1s0:802-3-ethernet:yes
+#   lo:lo:loopback:yes
+#   enp1s0::802-3-ethernet:yes
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/rocky/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub2/grub.cfg (cocok: 0)
+OK   bebas token: /boot/loader/entries/c2d35270904b43be849bd501b2e1aab4-0-rescue.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/c2d35270904b43be849bd501b2e1aab4-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /etc/kernel/cmdline (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+OK   bebas token: /root/anaconda-ks.cfg (cocok: 0)
+# token-scan files=8 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/rlm_m7--node34-root), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+# verify-node exit=0
+# ssh PreferredAuthentications=password (exit 255): Warning: Permanently added '10.99.20.44' (ED25519) to the list of known hosts.
+m7admin@10.99.20.44: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+OK   login password ditolak (server hanya menawarkan: publickey,gssapi-keyex,gssapi-with-mic)

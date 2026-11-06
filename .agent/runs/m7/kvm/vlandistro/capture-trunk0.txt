@@ -1,0 +1,684 @@
+# capture trunk0 filter: (udp port 67 or udp port 68) or (vlan and (udp port 67 or udp port 68))
+reading from file /root/pxe-cap/trunk0.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+15:36:38.861136 52:54:00:99:00:33 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 393: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 12741, offset 0, flags [none], proto UDP (17), length 375)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:33, length 347, xid 0x502884f, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 35: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      TFTP (66), BF (67), GUID (97), Unknown (128)
+	      Unknown (129), Unknown (130), Unknown (131), Unknown (132)
+	      Unknown (133), Unknown (134), Unknown (135)
+	    GUID (97), length 17: 0.120.138.45.179.145.51.67.79.141.33.92.46.188.68.186.0
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 7
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003001"
+15:36:38.861375 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 356: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 2687, offset 0, flags [none], proto UDP (17), length 338)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 310, xid 0x502884f, Flags [Broadcast]
+	  Your-IP 10.99.10.117
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 12: "snponly.efi^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:36:42.826525 52:54:00:99:00:33 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 405: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 12742, offset 0, flags [none], proto UDP (17), length 387)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:33, length 359, xid 0x502884f, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Request
+	    Server-ID (54), length 4: 10.99.10.2
+	    Requested-IP (50), length 4: 10.99.10.117
+	    MSZ (57), length 2: 65280
+	    Parameter-Request (55), length 35: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      TFTP (66), BF (67), GUID (97), Unknown (128)
+	      Unknown (129), Unknown (130), Unknown (131), Unknown (132)
+	      Unknown (133), Unknown (134), Unknown (135)
+	    GUID (97), length 17: 0.120.138.45.179.145.51.67.79.141.33.92.46.188.68.186.0
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 7
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003001"
+15:36:42.835432 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 356: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 2911, offset 0, flags [none], proto UDP (17), length 338)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 310, xid 0x502884f, Flags [Broadcast]
+	  Your-IP 10.99.10.117
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: ACK
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 12: "snponly.efi^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:36:44.898485 52:54:00:99:00:33 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 440: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 256, offset 0, flags [none], proto UDP (17), length 422)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:33, length 394, xid 0xeac95c01, secs 4, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 7
+	    NDI (94), length 3: 1.3.10
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003010"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 23: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      Vendor-Option (43), Vendor-Class (60), TFTP (66), BF (67)
+	      Unknown (119), Unknown (128), Unknown (129), Unknown (130)
+	      Unknown (131), Unknown (132), Unknown (133), Unknown (134)
+	      Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 42: 45317,282,62480,16875,769,0,5889,292,257,4865,276,257,4353,295,257,10497,277,257,9729,274,257
+	    Client-ID (61), length 7: ether 52:54:00:99:00:33
+	    GUID (97), length 17: 0.120.138.45.179.145.51.67.79.141.33.92.46.188.68.186.0
+15:36:44.898717 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 400: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 3858, offset 0, flags [none], proto UDP (17), length 382)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 354, xid 0xeac95c01, secs 4, Flags [Broadcast]
+	  Your-IP 10.99.10.117
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 56: "http://10.99.10.2/boot/${mac}.ipxe?platform=${platform}^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:36:45.886904 52:54:00:99:00:33 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 440: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 513, offset 0, flags [none], proto UDP (17), length 422)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:33, length 394, xid 0xeac95c01, secs 10, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 7
+	    NDI (94), length 3: 1.3.10
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003010"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 23: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      Vendor-Option (43), Vendor-Class (60), TFTP (66), BF (67)
+	      Unknown (119), Unknown (128), Unknown (129), Unknown (130)
+	      Unknown (131), Unknown (132), Unknown (133), Unknown (134)
+	      Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 42: 45317,282,62480,16875,769,0,5889,292,257,4865,276,257,4353,295,257,10497,277,257,9729,274,257
+	    Client-ID (61), length 7: ether 52:54:00:99:00:33
+	    GUID (97), length 17: 0.120.138.45.179.145.51.67.79.141.33.92.46.188.68.186.0
+15:36:45.887172 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 400: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 3999, offset 0, flags [none], proto UDP (17), length 382)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 354, xid 0xeac95c01, secs 10, Flags [Broadcast]
+	  Your-IP 10.99.10.117
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 56: "http://10.99.10.2/boot/${mac}.ipxe?platform=${platform}^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:36:47.887261 52:54:00:99:00:33 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 452: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 788, offset 0, flags [none], proto UDP (17), length 434)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:33, length 406, xid 0xeac95c01, secs 18, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Request
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 7
+	    NDI (94), length 3: 1.3.10
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003010"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 23: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      Vendor-Option (43), Vendor-Class (60), TFTP (66), BF (67)
+	      Unknown (119), Unknown (128), Unknown (129), Unknown (130)
+	      Unknown (131), Unknown (132), Unknown (133), Unknown (134)
+	      Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 42: 45317,282,62480,16875,769,0,5889,292,257,4865,276,257,4353,295,257,10497,277,257,9729,274,257
+	    Client-ID (61), length 7: ether 52:54:00:99:00:33
+	    GUID (97), length 17: 0.120.138.45.179.145.51.67.79.141.33.92.46.188.68.186.0
+	    Server-ID (54), length 4: 10.99.10.2
+	    Requested-IP (50), length 4: 10.99.10.117
+15:36:47.892978 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 400: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 4717, offset 0, flags [none], proto UDP (17), length 382)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 354, xid 0xeac95c01, secs 18, Flags [Broadcast]
+	  Your-IP 10.99.10.117
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: ACK
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 56: "http://10.99.10.2/boot/${mac}.ipxe?platform=${platform}^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:37:58.819405 52:54:00:99:00:33 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 386: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 9311, offset 0, flags [none], proto UDP (17), length 368)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:33, length 340, xid 0x1e3279d4, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 27: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      Unknown (246), BF (67), GUID (97)
+	    GUID (97), length 17: 0.120.138.45.179.145.51.67.79.141.33.92.46.188.68.186.0
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 16
+	    Vendor-Class (60), length 33: "HTTPClient:Arch:00016:UNDI:003001"
+15:37:58.819654 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 358: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 16432, offset 0, flags [none], proto UDP (17), length 340)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 312, xid 0x1e3279d4, Flags [Broadcast]
+	  Your-IP 10.99.10.117
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 14: "undionly.kpxe^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:38:02.816115 52:54:00:99:00:33 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 386: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 9312, offset 0, flags [none], proto UDP (17), length 368)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:33, length 340, xid 0x1e3279d4, secs 4, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 27: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      Unknown (246), BF (67), GUID (97)
+	    GUID (97), length 17: 0.120.138.45.179.145.51.67.79.141.33.92.46.188.68.186.0
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 16
+	    Vendor-Class (60), length 33: "HTTPClient:Arch:00016:UNDI:003001"
+15:38:02.816325 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 358: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 17225, offset 0, flags [none], proto UDP (17), length 340)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 312, xid 0x1e3279d4, secs 4, Flags [Broadcast]
+	  Your-IP 10.99.10.117
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 14: "undionly.kpxe^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:38:10.816674 52:54:00:99:00:33 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 386: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 9313, offset 0, flags [none], proto UDP (17), length 368)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:33, length 340, xid 0x1e3279d4, secs 12, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 27: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      Unknown (246), BF (67), GUID (97)
+	    GUID (97), length 17: 0.120.138.45.179.145.51.67.79.141.33.92.46.188.68.186.0
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 16
+	    Vendor-Class (60), length 33: "HTTPClient:Arch:00016:UNDI:003001"
+15:38:10.816943 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 358: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 19925, offset 0, flags [none], proto UDP (17), length 340)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 312, xid 0x1e3279d4, secs 12, Flags [Broadcast]
+	  Your-IP 10.99.10.117
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 14: "undionly.kpxe^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:38:26.818441 52:54:00:99:00:33 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 386: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 9314, offset 0, flags [none], proto UDP (17), length 368)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:33, length 340, xid 0x1e3279d4, secs 28, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 27: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      Unknown (246), BF (67), GUID (97)
+	    GUID (97), length 17: 0.120.138.45.179.145.51.67.79.141.33.92.46.188.68.186.0
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 16
+	    Vendor-Class (60), length 33: "HTTPClient:Arch:00016:UNDI:003001"
+15:38:26.818648 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 358: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 24872, offset 0, flags [none], proto UDP (17), length 340)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 312, xid 0x1e3279d4, secs 28, Flags [Broadcast]
+	  Your-IP 10.99.10.117
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:33
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 14: "undionly.kpxe^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:40:25.907285 52:54:00:99:00:34 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 393: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 6142, offset 0, flags [none], proto UDP (17), length 375)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:34, length 347, xid 0x2b396f4b, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 35: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      TFTP (66), BF (67), GUID (97), Unknown (128)
+	      Unknown (129), Unknown (130), Unknown (131), Unknown (132)
+	      Unknown (133), Unknown (134), Unknown (135)
+	    GUID (97), length 17: 0.26.10.180.135.25.185.210.66.163.11.166.236.236.194.9.242
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 7
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003001"
+15:40:25.907514 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 356: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 56203, offset 0, flags [none], proto UDP (17), length 338)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 310, xid 0x2b396f4b, Flags [Broadcast]
+	  Your-IP 10.99.10.118
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 12: "snponly.efi^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:40:29.876405 52:54:00:99:00:34 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 405: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 6143, offset 0, flags [none], proto UDP (17), length 387)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:34, length 359, xid 0x2b396f4b, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Request
+	    Server-ID (54), length 4: 10.99.10.2
+	    Requested-IP (50), length 4: 10.99.10.118
+	    MSZ (57), length 2: 65280
+	    Parameter-Request (55), length 35: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      TFTP (66), BF (67), GUID (97), Unknown (128)
+	      Unknown (129), Unknown (130), Unknown (131), Unknown (132)
+	      Unknown (133), Unknown (134), Unknown (135)
+	    GUID (97), length 17: 0.26.10.180.135.25.185.210.66.163.11.166.236.236.194.9.242
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 7
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003001"
+15:40:29.883086 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 356: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 59663, offset 0, flags [none], proto UDP (17), length 338)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 310, xid 0x2b396f4b, Flags [Broadcast]
+	  Your-IP 10.99.10.118
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: ACK
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 12: "snponly.efi^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:40:31.943639 52:54:00:99:00:34 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 440: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 256, offset 0, flags [none], proto UDP (17), length 422)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:34, length 394, xid 0x9c102f05, secs 4, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 7
+	    NDI (94), length 3: 1.3.10
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003010"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 23: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      Vendor-Option (43), Vendor-Class (60), TFTP (66), BF (67)
+	      Unknown (119), Unknown (128), Unknown (129), Unknown (130)
+	      Unknown (131), Unknown (132), Unknown (133), Unknown (134)
+	      Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 42: 45317,282,62480,16875,769,0,5889,292,257,4865,276,257,4353,295,257,10497,277,257,9729,274,257
+	    Client-ID (61), length 7: ether 52:54:00:99:00:34
+	    GUID (97), length 17: 0.26.10.180.135.25.185.210.66.163.11.166.236.236.194.9.242
+15:40:31.943869 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 400: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 60210, offset 0, flags [none], proto UDP (17), length 382)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 354, xid 0x9c102f05, secs 4, Flags [Broadcast]
+	  Your-IP 10.99.10.118
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 56: "http://10.99.10.2/boot/${mac}.ipxe?platform=${platform}^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:40:32.936625 52:54:00:99:00:34 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 440: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 513, offset 0, flags [none], proto UDP (17), length 422)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:34, length 394, xid 0x9c102f05, secs 10, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 7
+	    NDI (94), length 3: 1.3.10
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003010"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 23: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      Vendor-Option (43), Vendor-Class (60), TFTP (66), BF (67)
+	      Unknown (119), Unknown (128), Unknown (129), Unknown (130)
+	      Unknown (131), Unknown (132), Unknown (133), Unknown (134)
+	      Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 42: 45317,282,62480,16875,769,0,5889,292,257,4865,276,257,4353,295,257,10497,277,257,9729,274,257
+	    Client-ID (61), length 7: ether 52:54:00:99:00:34
+	    GUID (97), length 17: 0.26.10.180.135.25.185.210.66.163.11.166.236.236.194.9.242
+15:40:32.936886 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 400: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 60738, offset 0, flags [none], proto UDP (17), length 382)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 354, xid 0x9c102f05, secs 10, Flags [Broadcast]
+	  Your-IP 10.99.10.118
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 56: "http://10.99.10.2/boot/${mac}.ipxe?platform=${platform}^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:40:34.936840 52:54:00:99:00:34 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 452: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 770, offset 0, flags [none], proto UDP (17), length 434)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:34, length 406, xid 0x9c102f05, secs 18, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Request
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 7
+	    NDI (94), length 3: 1.3.10
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00007:UNDI:003010"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 23: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      Vendor-Option (43), Vendor-Class (60), TFTP (66), BF (67)
+	      Unknown (119), Unknown (128), Unknown (129), Unknown (130)
+	      Unknown (131), Unknown (132), Unknown (133), Unknown (134)
+	      Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 42: 45317,282,62480,16875,769,0,5889,292,257,4865,276,257,4353,295,257,10497,277,257,9729,274,257
+	    Client-ID (61), length 7: ether 52:54:00:99:00:34
+	    GUID (97), length 17: 0.26.10.180.135.25.185.210.66.163.11.166.236.236.194.9.242
+	    Server-ID (54), length 4: 10.99.10.2
+	    Requested-IP (50), length 4: 10.99.10.118
+15:40:34.948466 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 400: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 62455, offset 0, flags [none], proto UDP (17), length 382)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 354, xid 0x9c102f05, secs 18, Flags [Broadcast]
+	  Your-IP 10.99.10.118
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: ACK
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 56: "http://10.99.10.2/boot/${mac}.ipxe?platform=${platform}^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:41:45.855161 52:54:00:99:00:34 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 386: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 32777, offset 0, flags [none], proto UDP (17), length 368)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:34, length 340, xid 0x3c70b000, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 27: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      Unknown (246), BF (67), GUID (97)
+	    GUID (97), length 17: 0.26.10.180.135.25.185.210.66.163.11.166.236.236.194.9.242
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 16
+	    Vendor-Class (60), length 33: "HTTPClient:Arch:00016:UNDI:003001"
+15:41:45.855417 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 358: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 33582, offset 0, flags [none], proto UDP (17), length 340)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 312, xid 0x3c70b000, Flags [Broadcast]
+	  Your-IP 10.99.10.118
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 14: "undionly.kpxe^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:41:49.851859 52:54:00:99:00:34 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 386: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 32778, offset 0, flags [none], proto UDP (17), length 368)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:34, length 340, xid 0x3c70b000, secs 4, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 27: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      Unknown (246), BF (67), GUID (97)
+	    GUID (97), length 17: 0.26.10.180.135.25.185.210.66.163.11.166.236.236.194.9.242
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 16
+	    Vendor-Class (60), length 33: "HTTPClient:Arch:00016:UNDI:003001"
+15:41:49.852095 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 358: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 37512, offset 0, flags [none], proto UDP (17), length 340)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 312, xid 0x3c70b000, secs 4, Flags [Broadcast]
+	  Your-IP 10.99.10.118
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 14: "undionly.kpxe^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:41:57.852294 52:54:00:99:00:34 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 386: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 32779, offset 0, flags [none], proto UDP (17), length 368)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:34, length 340, xid 0x3c70b000, secs 12, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 27: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      Unknown (246), BF (67), GUID (97)
+	    GUID (97), length 17: 0.26.10.180.135.25.185.210.66.163.11.166.236.236.194.9.242
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 16
+	    Vendor-Class (60), length 33: "HTTPClient:Arch:00016:UNDI:003001"
+15:41:57.852530 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 358: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 42397, offset 0, flags [none], proto UDP (17), length 340)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 312, xid 0x3c70b000, secs 12, Flags [Broadcast]
+	  Your-IP 10.99.10.118
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 14: "undionly.kpxe^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2
+15:42:13.852832 52:54:00:99:00:34 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 386: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 32780, offset 0, flags [none], proto UDP (17), length 368)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:34, length 340, xid 0x3c70b000, secs 28, Flags [Broadcast]
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    Parameter-Request (55), length 27: 
+	      Subnet-Mask (1), Time-Zone (2), Default-Gateway (3), Time-Server (4)
+	      IEN-Name-Server (5), Domain-Name-Server (6), Hostname (12), BS (13)
+	      Domain-Name (15), RP (17), EP (18), RSZ (22)
+	      TTL (23), BR (28), YD (40), YS (41)
+	      NTP (42), Vendor-Option (43), Requested-IP (50), Lease-Time (51)
+	      Server-ID (54), RN (58), RB (59), Vendor-Class (60)
+	      Unknown (246), BF (67), GUID (97)
+	    GUID (97), length 17: 0.26.10.180.135.25.185.210.66.163.11.166.236.236.194.9.242
+	    NDI (94), length 3: 1.3.1
+	    ARCH (93), length 2: 16
+	    Vendor-Class (60), length 33: "HTTPClient:Arch:00016:UNDI:003001"
+15:42:13.853107 52:54:00:99:01:04 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 358: vlan 10, p 0, ethertype IPv4 (0x0800), (tos 0xc0, ttl 64, id 55238, offset 0, flags [none], proto UDP (17), length 340)
+    10.99.10.2.67 > 255.255.255.255.68: BOOTP/DHCP, Reply, length 312, xid 0x3c70b000, secs 28, Flags [Broadcast]
+	  Your-IP 10.99.10.118
+	  Server-IP 10.99.10.2
+	  Client-Ethernet-Address 52:54:00:99:00:34
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Offer
+	    Server-ID (54), length 4: 10.99.10.2
+	    Lease-Time (51), length 4: 3600
+	    BF (67), length 14: "undionly.kpxe^@"
+	    RN (58), length 4: 1800
+	    RB (59), length 4: 3150
+	    Subnet-Mask (1), length 4: 255.255.255.0
+	    BR (28), length 4: 10.99.10.255
+	    Domain-Name (15), length 8: "pxe.test"
+	    Domain-Name-Server (6), length 4: 10.99.10.2

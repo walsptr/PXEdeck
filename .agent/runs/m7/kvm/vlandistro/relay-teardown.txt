@@ -1,0 +1,2 @@
+# 2026-11-06T15:44:09Z relay teardown (sebelum server dimatikan)
+relay-clean: absent
