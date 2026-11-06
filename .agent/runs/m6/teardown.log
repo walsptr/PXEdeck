@@ -1,0 +1,23 @@
+### 2026-11-06T09:14:36Z PXE_RUN=m6 infra/cleanup.sh m6 --server --base
+[2026-11-06T09:14:36Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T09:14:36Z] cleanup run m6 selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/runs/m6/teardown/cleanup.txt)
+exit=0
+### 2026-11-06T09:14:42Z infra/net-down.sh
+Network pxe-test-nat destroyed
+
+Network pxe-test-nat has been undefined
+
+Network pxe-test destroyed
+
+Network pxe-test has been undefined
+
+[2026-11-06T09:14:42Z] network pxe-test* dihapus
+exit=0
+### 2026-11-06T09:14:42Z rm cache + keys
+removed '.agent/vms/pxe-test-debian-disk-modules/6.1.0-50-amd64/virtio_blk.ko'
+removed '.agent/vms/pxe-test-debian-disk-modules/6.1.0-50-amd64/virtio_scsi.ko'
+removed directory '.agent/vms/pxe-test-debian-disk-modules/6.1.0-50-amd64'
+removed directory '.agent/vms/pxe-test-debian-disk-modules'
+removed '.agent/keys/infra_ed25519'
+removed '.agent/keys/infra_ed25519.pub'
+exit=0

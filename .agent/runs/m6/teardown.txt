@@ -1,0 +1,173 @@
+# M6-T16 teardown — AC-6.54 evidence
+Repo: /home/syawal/Project/PXE-BOOT (branch main, HEAD 73d7775, tag m6-approved)
+Executed: 2026-11-06T09:15:04Z by test-engineer; no sudo; only project scripts infra/cleanup.sh + infra/net-down.sh, plus rm inside .agent/vms and .agent/keys.
+
+## Commands
+1. PXE_RUN=m6 PXE_RUNS_DIR=.agent/runs/m6/teardown infra/cleanup.sh m6 --server --base   (exit 0)
+2. infra/net-down.sh   (exit 0; pxe-test-nat + pxe-test destroyed & undefined)
+3. rm -rf .agent/vms/pxe-test-debian-disk-modules   (cache)
+4. rm -f .agent/keys/infra_ed25519 .agent/keys/infra_ed25519.pub   (one-time keys; no other files in .agent/keys)
+Raw output: .agent/runs/m6/teardown.log, .agent/runs/m6/teardown/cleanup.txt
+
+## AC-6.54 results
+- [PASS] virsh net-list --all does not contain pxe-test / pxe-test-nat
+- [PASS] networks default and int identical before/after (active, autostart, inactive XML sha256, live XML sha256)
+- [PASS] no pxe-test-* domains except protected pxe-test-node01 (pxe-test-node01 absent before and after; not touched)
+- [PASS] protected domain ubuntu24.04 identical before/after (state shut off, inactive XML sha256)
+- [PASS] .agent/vms/pxe-test-server* (base qcow2 + .ready) and all pxe-test-* disks gone (.agent/vms empty)
+- [PASS] .agent/keys/* gone (.agent/keys empty)
+- [PASS] .agent/media/ preserved (ISOs present)
+
+## Notes
+- Before teardown the pxe-test-server domain was already undefined (only base disk + .ready remained); cleanup.sh --server ran server-down.sh --purge as a no-op on the domain.
+- No pxe-test-<run>-* node VMs existed before teardown.
+- libvirt storage pool 'vms' (target .agent/vms, not pxe-test-prefixed, so not refreshed/modified by this task) still shows a stale cached volume list
+  (incl. pxe-test-m6distro-node23/24.qcow2, pxe-test-server*.qcow2). These files do not exist on disk (ls -la .agent/vms is empty).
+  The listing is cache only; a 'virsh pool-refresh vms' by the user would clear it. Not done here because the pool is not a pxe-test-* resource.
+
+## Protected-resource comparison
+--- before
+domain ubuntu24.04 state=shut off xml_sha256=2cf828b7222f8264be0727580ef2dac749cdd14033e06ef59aa088a6f71d2a70
+domain pxe-test-node01 ABSENT
+network default active=yes autostart=yes xml_sha256=9cd2678599eccc950e7a121c7be051005d0467791e8c51a1b1c704fa6bd718fe live_xml_sha256=a1ed3524c410bf7783e11b5d56237f6681d091f99982898e4f9f43dc8d13dbbe
+network int active=yes autostart=yes xml_sha256=0350b85585d61951dda4ccddf43c1ee7c5d4461b0fb97989f4329bcda67d9165 live_xml_sha256=0350b85585d61951dda4ccddf43c1ee7c5d4461b0fb97989f4329bcda67d9165
+--- after
+domain ubuntu24.04 state=shut off xml_sha256=2cf828b7222f8264be0727580ef2dac749cdd14033e06ef59aa088a6f71d2a70
+domain pxe-test-node01 ABSENT
+network default active=yes autostart=yes xml_sha256=9cd2678599eccc950e7a121c7be051005d0467791e8c51a1b1c704fa6bd718fe live_xml_sha256=a1ed3524c410bf7783e11b5d56237f6681d091f99982898e4f9f43dc8d13dbbe
+network int active=yes autostart=yes xml_sha256=0350b85585d61951dda4ccddf43c1ee7c5d4461b0fb97989f4329bcda67d9165 live_xml_sha256=0350b85585d61951dda4ccddf43c1ee7c5d4461b0fb97989f4329bcda67d9165
+
+================ SNAPSHOT BEFORE ================
+### snapshot before 2026-11-06T09:14:27Z
+--- virsh list --all
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+--- virsh net-list --all
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+--- virsh pool-list --all
+ Name                 State    Autostart
+------------------------------------------
+ default              active   yes
+ Downloads            active   yes
+ mayaloka             active   yes
+ media                active   yes
+ pre-setup-node-lab   active   yes
+ syawal               active   yes
+ vms                  active   yes
+
+--- pxe-test-* volumes in pools
+[vms]  pxe-test-debian-disk-modules     /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-debian-disk-modules
+[vms]  pxe-test-m6distro-node23.qcow2   /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-m6distro-node23.qcow2
+[vms]  pxe-test-m6distro-node24.qcow2   /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-m6distro-node24.qcow2
+[vms]  pxe-test-server-base.qcow2       /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2
+[vms]  pxe-test-server-base.ready       /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.ready
+[vms]  pxe-test-server.qcow2            /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server.qcow2
+(end)
+--- protected resources
+domain ubuntu24.04 state=shut off xml_sha256=2cf828b7222f8264be0727580ef2dac749cdd14033e06ef59aa088a6f71d2a70
+domain pxe-test-node01 ABSENT
+network default active=yes autostart=yes xml_sha256=9cd2678599eccc950e7a121c7be051005d0467791e8c51a1b1c704fa6bd718fe live_xml_sha256=a1ed3524c410bf7783e11b5d56237f6681d091f99982898e4f9f43dc8d13dbbe
+network int active=yes autostart=yes xml_sha256=0350b85585d61951dda4ccddf43c1ee7c5d4461b0fb97989f4329bcda67d9165 live_xml_sha256=0350b85585d61951dda4ccddf43c1ee7c5d4461b0fb97989f4329bcda67d9165
+--- ls -la .agent/vms
+total 2519112
+drwxr-xr-x 1 syawal syawal        160 Nov  6 14:22 .
+drwxr-xr-x 1 syawal syawal         82 Nov  6 14:24 ..
+drwxr-xr-x 1 syawal syawal         28 Nov  6 14:02 pxe-test-debian-disk-modules
+-rw-r--r-- 1 qemu   qemu   2579628032 Nov  5 14:00 pxe-test-server-base.qcow2
+-rw-r--r-- 1 syawal syawal         76 Nov  5 14:00 pxe-test-server-base.ready
+--- ls -la .agent/keys
+total 8
+drwxr-xr-x 1 syawal syawal  60 Nov  6 14:22 .
+drwxr-xr-x 1 syawal syawal  82 Nov  6 14:24 ..
+-rw------- 1 syawal syawal 411 Nov  5 13:51 infra_ed25519
+-rw-r--r-- 1 syawal syawal  96 Nov  5 13:51 infra_ed25519.pub
+--- ls -la .agent/media
+total 11209436
+drwxr-xr-x 1 syawal syawal        736 Nov  5 13:48 .
+drwxr-xr-x 1 syawal syawal         82 Nov  6 14:24 ..
+-rw-r--r-- 1 qemu   qemu   3989078016 Nov  5 13:25 debian-12.15.0-amd64-DVD-1.iso
+-rw-r--r-- 1 syawal syawal       2147 Nov  5 13:22 debian-dvd.SHA256SUMS
+drwxr-xr-x 1 syawal syawal         28 Nov  5 13:22 debian-netboot
+-rw-r--r-- 1 syawal syawal      78509 Nov  5 13:22 debian-netboot.SHA256SUMS
+drwxr-xr-x 1 syawal syawal         48 Nov  5 13:23 ipxe
+-rw-r--r-- 1 syawal syawal    1401914 Nov  5 13:22 ipxe_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb
+-rw-r--r-- 1 syawal syawal   31029996 Nov  5 13:48 node-v22.23.4-linux-x64.tar.xz
+-rw-r--r-- 1 syawal syawal       3981 Nov  5 13:48 node-v22.23.4.SHASUMS256.txt
+-rw-r--r-- 1 qemu   qemu   2755067904 Nov  5 13:24 Rocky-9-latest-x86_64-minimal.iso
+-rw-r--r-- 1 syawal syawal        928 Nov  5 13:22 rocky.CHECKSUM
+-rw-r--r-- 1 qemu   qemu   4080486400 Nov  5 13:24 ubuntu-24.04.5-live-server-amd64.iso
+-rw-r--r-- 1 syawal syawal  621284352 Nov  5 13:23 ubuntu-24.04-server-cloudimg-amd64.img
+-rw-r--r-- 1 syawal syawal       7843 Nov  5 13:22 ubuntu-cloud.SHA256SUMS
+-rw-r--r-- 1 syawal syawal        893 Nov  5 13:22 ubuntu-iso.SHA256SUMS
+
+================ SNAPSHOT AFTER ================
+### snapshot after 2026-11-06T09:14:47Z
+--- virsh list --all
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+--- virsh net-list --all
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+ int       active   yes         yes
+
+--- virsh pool-list --all
+ Name                 State    Autostart
+------------------------------------------
+ default              active   yes
+ Downloads            active   yes
+ mayaloka             active   yes
+ media                active   yes
+ pre-setup-node-lab   active   yes
+ syawal               active   yes
+ vms                  active   yes
+
+--- pxe-test-* volumes in pools
+[vms]  pxe-test-debian-disk-modules     /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-debian-disk-modules
+[vms]  pxe-test-m6distro-node23.qcow2   /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-m6distro-node23.qcow2
+[vms]  pxe-test-m6distro-node24.qcow2   /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-m6distro-node24.qcow2
+[vms]  pxe-test-server-base.qcow2       /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2
+[vms]  pxe-test-server-base.ready       /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.ready
+[vms]  pxe-test-server.qcow2            /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server.qcow2
+(end)
+--- protected resources
+domain ubuntu24.04 state=shut off xml_sha256=2cf828b7222f8264be0727580ef2dac749cdd14033e06ef59aa088a6f71d2a70
+domain pxe-test-node01 ABSENT
+network default active=yes autostart=yes xml_sha256=9cd2678599eccc950e7a121c7be051005d0467791e8c51a1b1c704fa6bd718fe live_xml_sha256=a1ed3524c410bf7783e11b5d56237f6681d091f99982898e4f9f43dc8d13dbbe
+network int active=yes autostart=yes xml_sha256=0350b85585d61951dda4ccddf43c1ee7c5d4461b0fb97989f4329bcda67d9165 live_xml_sha256=0350b85585d61951dda4ccddf43c1ee7c5d4461b0fb97989f4329bcda67d9165
+--- ls -la .agent/vms
+total 0
+drwxr-xr-x 1 syawal syawal  0 Nov  6 16:14 .
+drwxr-xr-x 1 syawal syawal 82 Nov  6 14:24 ..
+--- ls -la .agent/keys
+total 0
+drwxr-xr-x 1 syawal syawal  0 Nov  6 16:14 .
+drwxr-xr-x 1 syawal syawal 82 Nov  6 14:24 ..
+--- ls -la .agent/media
+total 11209436
+drwxr-xr-x 1 syawal syawal        736 Nov  5 13:48 .
+drwxr-xr-x 1 syawal syawal         82 Nov  6 14:24 ..
+-rw-r--r-- 1 qemu   qemu   3989078016 Nov  5 13:25 debian-12.15.0-amd64-DVD-1.iso
+-rw-r--r-- 1 syawal syawal       2147 Nov  5 13:22 debian-dvd.SHA256SUMS
+drwxr-xr-x 1 syawal syawal         28 Nov  5 13:22 debian-netboot
+-rw-r--r-- 1 syawal syawal      78509 Nov  5 13:22 debian-netboot.SHA256SUMS
+drwxr-xr-x 1 syawal syawal         48 Nov  5 13:23 ipxe
+-rw-r--r-- 1 syawal syawal    1401914 Nov  5 13:22 ipxe_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb
+-rw-r--r-- 1 syawal syawal   31029996 Nov  5 13:48 node-v22.23.4-linux-x64.tar.xz
+-rw-r--r-- 1 syawal syawal       3981 Nov  5 13:48 node-v22.23.4.SHASUMS256.txt
+-rw-r--r-- 1 qemu   qemu   2755067904 Nov  5 13:24 Rocky-9-latest-x86_64-minimal.iso
+-rw-r--r-- 1 syawal syawal        928 Nov  5 13:22 rocky.CHECKSUM
+-rw-r--r-- 1 qemu   qemu   4080486400 Nov  5 13:24 ubuntu-24.04.5-live-server-amd64.iso
+-rw-r--r-- 1 syawal syawal  621284352 Nov  5 13:23 ubuntu-24.04-server-cloudimg-amd64.img
+-rw-r--r-- 1 syawal syawal       7843 Nov  5 13:22 ubuntu-cloud.SHA256SUMS
+-rw-r--r-- 1 syawal syawal        893 Nov  5 13:22 ubuntu-iso.SHA256SUMS
