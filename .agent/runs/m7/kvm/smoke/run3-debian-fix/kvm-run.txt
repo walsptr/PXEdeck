@@ -1,0 +1,22 @@
+# kvm-run m7 scenario=vlansmoke run=m7vlansmoke 20261106T114256Z nodes=[43:uefi:os=debian] waves=0 keep_server=0 dry=0
+2026-11-06T11:42:56Z preflight          ok max_nodes=2 avail_mb=10179 mem_available_mb=14019 waves=—
+2026-11-06T11:42:56Z net-up             ok 
+2026-11-06T11:43:11Z server-up          ok profil VLAN + server-listen-vlan.txt PASS
+2026-11-06T11:43:11Z admin-pass         ok m7vlansmoke-admin.pass (0600, isi tidak dicetak)
+2026-11-06T11:43:35Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-06T11:44:22Z switch-up          ok switch-check.txt
+2026-11-06T11:44:23Z server-check       ok 
+2026-11-06T11:44:24Z relay-setup        ok /root/pxe-relay (key 0600, isi tidak dicetak)
+2026-11-06T11:44:26Z node-create        ok pxe-test-m7vlansmoke-node43 uefi 52:54:00:99:00:43 net=pxe-test-port1
+2026-11-06T12:14:50Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-06T12:14:51Z verify             partial Playwright exit=1: hanya node berstatus done (1 host terbaca)
+2026-11-06T12:14:51Z verify             NOT_RUN pxe-test-m7vlansmoke-node43 (status host booting)
+2026-11-06T12:14:51Z evidence           start 
+2026-11-06T12:14:52Z evidence           done 
+2026-11-06T12:14:52Z relay-teardown     ok relay-clean: absent
+2026-11-06T12:14:52Z server-logs        FAIL server-log-asserts.txt
+2026-11-06T12:14:57Z cleanup            done 
+2026-11-06T12:14:57Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-06T12:14:59Z redact             ok 
+2026-11-06T12:14:59Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T12:14:59Z result             FAIL exit=1 stage=verify

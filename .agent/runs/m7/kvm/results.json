@@ -4,7 +4,7 @@
   "runs": {
     "vlansmoke": {
       "status": "FAIL",
-      "note": "M7-T10 smoke dijalankan dua run berurutan (max_nodes=2 saat run 1): run1 Ubuntu+Rocky PASS; run2 Debian FAIL (d-i macet di prompt netcfg/no_default_route: DHCP VLAN 10 tanpa opsi router)",
+      "note": "M7-T10: run1 Ubuntu+Rocky PASS; run2 Debian FAIL (no_default_route, digantikan run3); run3 Debian setelah DEC-025 FAIL (netcfg/get_nameservers, DHCP tanpa router). O10 belum dinilai.",
       "parts": {
         "run1": {
           "status": "PASS",
@@ -341,7 +341,123 @@
             "durationSec": 1920
           },
           "evidenceDir": "smoke/run2-debian",
-          "nodesSpec": "43:uefi:os=debian"
+          "nodesSpec": "43:uefi:os=debian",
+          "supersededBy": "run3"
+        },
+        "run3": {
+          "status": "FAIL",
+          "summarizedAt": "2026-11-06T12:14:59Z",
+          "run": "m7vlansmoke",
+          "session": "1793965467655-16415eb5",
+          "generatedAt": "2026-11-06T12:14:49.759Z",
+          "results": [
+            {
+              "ac": "smoke-settings",
+              "status": "PASS",
+              "note": "cidr=10.99.10.0/24 vlanNetworks=[{\"vlan\":20,\"cidr\":\"10.99.20.0/24\",\"prefix\":24,\"gateway\":\"10.99.20.1\"}]",
+              "evidence": [
+                "smoke-settings.txt"
+              ]
+            },
+            {
+              "ac": "smoke-vlan-debian",
+              "node": "pxe-test-m7vlansmoke-node43",
+              "status": "FAIL",
+              "durationS": 1821,
+              "note": "job booting/timeout 30 mnt (urutan booting)",
+              "evidence": [
+                "pxe-test-m7vlansmoke-node43-timeline.txt",
+                "pxe-test-m7vlansmoke-node43-job-events.txt",
+                "pxe-test-m7vlansmoke-node43-nginx-by-ip.txt"
+              ]
+            },
+            {
+              "ac": "smoke-scan",
+              "status": "PASS",
+              "note": "0 temuan (scan harness)",
+              "evidence": [
+                "evidence-scan.txt"
+              ]
+            },
+            {
+              "ac": "CR-4-12-dnsmasq",
+              "node": "pxe-test-m7vlansmoke-node43",
+              "status": "PASS",
+              "note": "TFTP snponly.efi terkirim ke 10.99.10.133 (lease 52:54:00:99:00:43)",
+              "evidence": [
+                "server-dnsmasq.txt"
+              ]
+            },
+            {
+              "ac": "CR-4-12-nginx",
+              "node": "pxe-test-m7vlansmoke-node43",
+              "status": "FAIL",
+              "note": "preseed.cfg 200 x0 (min 1)",
+              "evidence": [
+                "server-nginx.txt"
+              ]
+            },
+            {
+              "ac": "verify-node",
+              "node": "pxe-test-m7vlansmoke-node43",
+              "status": "NOT_RUN",
+              "note": "tidak diverifikasi: Playwright exit=1, status host booting (bukan done)",
+              "evidence": [
+                "pxe-test-m7vlansmoke-node43-verify.txt"
+              ]
+            },
+            {
+              "ac": "cleanup",
+              "status": "PASS",
+              "note": "semua resource run dihapus; resource terlindungi identik",
+              "failedStage": "verify",
+              "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)",
+              "protectedIdentical": true,
+              "runDomainsRemaining": 0,
+              "serverStopped": true,
+              "topology": "vlan",
+              "switchStopped": true,
+              "relayClean": true,
+              "evidence": [
+                "libvirt-before.txt",
+                "libvirt-after.txt",
+                "libvirt-diff.txt",
+                "cleanup.txt",
+                "kvm-run.txt"
+              ]
+            }
+          ],
+          "smoke": "vlansmoke",
+          "vlan": 20,
+          "nodes": [
+            {
+              "name": "pxe-test-m7vlansmoke-node43",
+              "fw": "uefi",
+              "os": "debian",
+              "ip": "10.99.20.53",
+              "hostname": "m7-node43"
+            }
+          ],
+          "harness": {
+            "milestone": "m7",
+            "scenario": "vlansmoke",
+            "runId": "m7vlansmoke",
+            "nodes": "43:uefi:os=debian",
+            "maxNodes": 2,
+            "memAvailableMb": 14019,
+            "wavesMode": false,
+            "waves": [],
+            "bootingTimeoutMin": null,
+            "failedStage": "verify",
+            "exit": 1,
+            "dryRun": false,
+            "startedAt": "2026-11-06T11:42:56Z",
+            "durationSec": 1923
+          },
+          "evidenceDir": "smoke/run3-debian-fix",
+          "nodesSpec": "43:uefi:os=debian",
+          "branchHead": "17d383d (DEC-025: netcfg/no_default_route=true)",
+          "note": "DEC-025 bekerja (prompt default route terlewati), tetapi d-i berhenti di netcfg/get_nameservers: skrip udhcpc d-i (#!/bin/sh -e) gagal di `ip route add default via \"\"` sebelum menulis /etc/resolv.conf -> netcfg melihat 0 nameserver. O10 belum dapat dinilai."
         }
       }
     }

@@ -103,6 +103,21 @@ paddrs="$(ip -4 -o addr show dev "${parent:-lo}" 2>/dev/null | awk '{print $4}')
 [[ -n "$parent" && -z "$paddrs" ]]; check "parent $parent tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: ${paddrs:-—})" $?
 others="$(ip -4 -o addr show | awk '$2 != "lo" {print $2" "$4}' | grep -v "^${child:-x} " || true)"
 [[ -z "$others" ]]; check "tidak ada IPv4 di interface lain selain $child (${others:-—})" $?
+# Info (bukan asersi; M7-T10 O6/O10): konfigurasi jaringan target apa adanya. Hanya baris "# " /
+# isi file konfigurasi jaringan (tanpa secret); perintah yang tidak ada dilewati.
+echo "# info ip -d -o link (vlan):"
+ip -d -o link show 2>/dev/null | awk '{ n = $2; for (i = 1; i < NF; i++) if ($i == "vlan" && $(i + 1) == "protocol") { n = n " " $i " " $(i + 1) " " $(i + 2) " " $(i + 3) " " $(i + 4) }; print "#   " n }' || true
+for f in /etc/network/interfaces /etc/network/interfaces.d/*; do
+  [[ -f "$f" ]] || continue
+  echo "# info $f:"; sed 's/^/#   /' "$f" 2>/dev/null || true
+done
+if command -v dpkg-query >/dev/null 2>&1; then
+  echo "# info dpkg vlan: $(dpkg-query -W -f='${Status} ${Version}' vlan 2>&1 | head -n 1)"
+  echo "# info dpkg ifupdown: $(dpkg-query -W -f='${Status} ${Version}' ifupdown 2>&1 | head -n 1)"
+fi
+if command -v nmcli >/dev/null 2>&1; then
+  echo "# info nmcli con:"; nmcli -t -f NAME,DEVICE,TYPE,AUTOCONNECT con show 2>/dev/null | sed 's/^/#   /' || true
+fi
 fi
 
 # --- default route & DNS ---

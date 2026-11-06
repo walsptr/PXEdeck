@@ -1,0 +1,2 @@
+PASS  CR-4-12-dnsmasq  pxe-test-m7vlansmoke-node43  TFTP snponly.efi terkirim ke 10.99.10.133 (lease 52:54:00:99:00:43)
+FAIL  CR-4-12-nginx    pxe-test-m7vlansmoke-node43  preseed.cfg 200 x0 (min 1)
