@@ -85,3 +85,17 @@ Lab KVM sudah dibongkar (AC-6.54 PASS, `.agent/runs/m6/teardown.txt`). Network `
 
 ## Blocker
 Tidak ada.
+
+## Addendum 2026-11-07: Milestone 7, PXE lewat VLAN
+Atas permintaan user, M7 menambahkan dukungan dan pembuktian topologi production dengan VLAN PXE terpisah. Port node berupa trunk dengan VLAN PXE native dan VLAN management ber-tag. Status APPROVED (gate iterasi 2), dengan APR-007, tag `m7-approved` dan DEC-023 … DEC-028. Rincian ada di `REPORT-m7.md`.
+- **Hasil KVM:** Ubuntu 24.04 UEFI/BIOS, Debian 12 dan Rocky 9 Done lewat VLAN, beserta uji negatif isolasi dan regresi flat.
+- **Perbaikan produk:**
+  - Validasi IP per VLAN (`PXE_VLAN_NETWORKS`).
+  - Debian d-i tanpa router DHCP.
+  - NIC native Rocky tanpa IPv4.
+- **Perbaikan keamanan:** form login tidak lagi bisa mengirim kredensial di URL, dan log nginx tidak mencatat query string (DEC-027). Bug ini ada di `main` sejak M6.
+- **Carry-over baru (prioritas):**
+  - DR-7-2, aksesibilitas tab Credentials (axe critical, sejak M3).
+  - Filter nftables untuk VLAN di server PXE (SR-7-2/SR-7-9).
+  - Masking `error_log` nginx (SR-7-1).
+- **Lab:** sudah dibongkar lagi (AC-7.32).
