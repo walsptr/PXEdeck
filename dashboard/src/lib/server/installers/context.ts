@@ -50,6 +50,12 @@ export type InstallContext = {
    * menurunkannya dari argumen kernel installer (`callbackUrlCmd`, B-5).
    */
   callbackUrl: string
+  /**
+   * DEC-021: metadata repo media bertanda tangan (mirror resmi)? Default false = media lokal server PXE
+   * (DVD; `Release` tanpa InRelease/Release.gpg) → Debian memakai sumber apt `[trusted=yes by-hash=no]`
+   * hanya selama instalasi. true → sumber biasa, tanpa `trusted=yes`.
+   */
+  mediaSigned?: boolean
 }
 
 const HASH_RE = /^\$6\$(rounds=\d{4,9}\$)?[./0-9A-Za-z]{1,16}\$[./0-9A-Za-z]{86}$/

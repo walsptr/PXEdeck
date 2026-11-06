@@ -69,6 +69,38 @@ export function debianDiskCmd(ctx: InstallContext): string {
   ].join("; ")
 }
 
+/** Opsi sumber apt media lokal tidak bertanda tangan (DEC-021). */
+export const DEBIAN_UNSIGNED_OPTS = "[trusted=yes by-hash=no]"
+/** Hook base-installer (berjalan setelah base system, sebelum apt-setup) — DEC-021. */
+export const DEBIAN_APT_HOOK = "/usr/lib/post-base-installer.d/05pxe-local-media"
+const APT_MIRROR_GEN = "/usr/lib/apt-setup/generators/50mirror"
+
+/**
+ * BUG-M6-9 / DEC-021 (media lokal tidak bertanda tangan saja). apt 2.6 di target menolak repo DVD
+ * (`Release` tanpa tanda tangan, `Acquire-By-Hash: yes` tanpa `by-hash/`). Generator `50mirror`
+ * apt-setup selalu menulis `deb http://<mirror> …` lalu memverifikasinya dengan `apt-get update` →
+ * gagal → "[!!] Configure the package manager" (dan pertanyaan `apt-setup/mirror/error` di-reset ke
+ * Retry sehingga tidak bisa dipreseed). Maka: hook post-base-installer (dibuat di
+ * `preseed/early_command`, dijalankan base-installer SETELAH kernel dari mirror terpasang dan
+ * SEBELUM apt-setup) menonaktifkan `50mirror` (`chmod a-x` → apt-setup membuang keluarannya), dan
+ * sumber satu-satunya ditulis generator resmi `60local` dari `apt-setup/local0/repository` dengan
+ * `[trusted=yes by-hash=no]`. Diekspor untuk test.
+ */
+export function debianAptHookCmd(): string {
+  return [
+    "mkdir -p /usr/lib/post-base-installer.d",
+    `printf '%s\\n' '#!/bin/sh' '# PXE dashboard (DEC-021): mirror media lokal tanpa tanda tangan -> sumber dari apt-setup/local0' 'if [ -f ${APT_MIRROR_GEN} ]; then chmod a-x ${APT_MIRROR_GEN}; logger -t pxe "50mirror dinonaktifkan (DEC-021)"; fi' > ${DEBIAN_APT_HOOK}`,
+    `chmod 755 ${DEBIAN_APT_HOOK}`,
+  ].join("; ")
+}
+
+/**
+ * Baris late script (target, chroot): hapus `[trusted=yes by-hash=no]` dan nonaktifkan (komentari)
+ * sumber media lokal, sehingga sistem terpasang tidak menyimpan sumber tak terautentikasi (DEC-021 §2).
+ */
+export const DEBIAN_UNTRUST_CMD =
+  "for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list; do if [ -f \"$f\" ]; then sed -i 's#^deb[[:space:]]*\\[trusted=yes by-hash=no\\][[:space:]]*#\\# (media instalasi PXE tanpa tanda tangan, DEC-021) deb #' \"$f\"; fi; done; rm -f /etc/apt/apt.conf.d/00AllowUnauthenticated"
+
 /** Konfigurasi ifupdown untuk interface `$IF` (dicari dari MAC saat runtime). */
 function interfacesText(c: InstallContext): string {
   const n = c.network
@@ -125,6 +157,7 @@ export function debianLateScript(ctx: InstallContext): string {
     "mkdir -p /etc/network/interfaces.d",
     `printf %s '${b64(interfacesText(c))}' | base64 -d | sed "s/\\$IF/$IF/g" > /etc/network/interfaces.d/mgmt`,
     ...firstbootInstallCmds("", "preseed", c.mac),
+    ...(c.mediaSigned ? [] : [DEBIAN_UNTRUST_CMD]),
     logCmd("preseed", c.mac, DEBIAN_LOG.lateDone),
   )
   return `${lines.join("\n")}\n`
@@ -152,7 +185,11 @@ export function debianPreseed(ctx: InstallContext): string {
   const out = [
     "# Preseed dibuat PXE dashboard (jangan edit manual)",
     // BUG-M6-8: driver disk virtio dimuat sedini mungkin (sebelum disk-detect/partman).
-    di("preseed/early_command", "string", `${logCmd("preseed", c.mac, DEBIAN_LOG.start)}; ${debianModulesCmd(c)}`),
+    di(
+      "preseed/early_command",
+      "string",
+      `${logCmd("preseed", c.mac, DEBIAN_LOG.start)}; ${debianModulesCmd(c)}${c.mediaSigned ? "" : `; ${debianAptHookCmd()}`}`,
+    ),
     // BUG-M6-3: dengan `auto=true`, localechooser berjalan SETELAH preseed dimuat. Bila language/
     // locale dipreseed terpisah, country WAJIB ikut (example-preseed Debian), kalau tidak d-i bertanya
     // "Select your location" dan instalasi macet. Bahasa installer tetap English; locale target dari
@@ -173,9 +210,15 @@ export function debianPreseed(ctx: InstallContext): string {
     di("mirror/http/proxy", "string", ""),
     di("mirror/suite", "string", "bookworm"),
     di("debian-installer/allow_unauthenticated", "boolean", true),
+    // Tanpa NAT: tidak ada security/updates/backports, non-free, contrib, deb-src.
     di("apt-setup/services-select", "multiselect", ""),
     di("apt-setup/non-free-firmware", "boolean", false),
+    di("apt-setup/non-free", "boolean", false),
+    di("apt-setup/contrib", "boolean", false),
+    di("apt-setup/enable-source-repositories", "boolean", false),
     di("apt-setup/cdrom/set-first", "boolean", false),
+    // DEC-021: media lokal tanpa tanda tangan → satu sumber dari 60local (lihat debianAptHookCmd).
+    ...(c.mediaSigned ? [] : [di("apt-setup/local0/repository", "string", `${DEBIAN_UNSIGNED_OPTS} ${media.href.replace(/\/$/, "")} bookworm main`)]),
     di("passwd/root-login", "boolean", false),
     di("passwd/user-fullname", "string", c.username),
     di("passwd/username", "string", c.username),
@@ -202,11 +245,16 @@ export function debianPreseed(ctx: InstallContext): string {
     di("partman/choose_partition", "select", "finish"),
     di("partman/confirm", "boolean", true),
     di("partman/confirm_nooverwrite", "boolean", true),
-    di("tasksel/first", "multiselect", "standard, ssh-server"),
+    // Hanya ssh-server (paket standard tidak diperlukan; lebih sedikit paket dari DVD offline).
+    di("tasksel/first", "multiselect", "ssh-server"),
     di("pkgsel/include", "string", "openssh-server curl sudo"),
     di("pkgsel/upgrade", "select", "none"),
+    di("pkgsel/update-policy", "select", "none"),
     di("popularity-contest/popularity-contest", "boolean", false),
     di("grub-installer/only_debian", "boolean", true),
+    di("grub-installer/with_other_os", "boolean", false),
+    // UEFI: salinan juga di jalur removable \EFI\BOOT\BOOTX64.EFI (boot dari disk tanpa entri NVRAM).
+    di("grub-installer/force-efi-extra-removable", "boolean", true),
     // Nilai awal; `partman/early_command` menimpanya dengan disk terpilih (otomatis maupun eksplisit).
     di("grub-installer/bootdev", "string", c.storage.disk || "default"),
     di(

@@ -246,3 +246,22 @@ Test baru: `installers/m6-smoke-fixes.test.ts` (+6: repro BUG-M6-8 di sandbox sh
 `list-devices disk`, `ls -l /dev/vd*…`, `lsmod`, `/proc/partitions`, tanpa token) + `failed`; preseed
 satu baris tanpa backslash akhir + `sh -n`), `infra/test/m6-debian-modules.sh` (3: ISO/initrd palsu
 bsdtar). Mutasi: `.agent/runs/m6/mutation-dev-T6d.txt` (14/14 merah).
+
+## T6e — BUG-M6-9 / DEC-021 (backend-dev): sumber apt media lokal Debian
+
+Mekanisme (dibaca dari udeb DVD 12.15 `apt-setup-udeb`/`apt-mirror-setup` 0.182 dan `bootstrap-base`
+1.213): `50mirror` selalu menulis `deb http://<mirror> …` lalu `apt-setup-verify` (`apt-get update`) →
+gagal untuk `Release` tanpa tanda tangan; `apt-setup/mirror/error` di-`db_set Retry` sebelum ditanya
+sehingga tidak bisa dipreseed. Maka `preseed/early_command` membuat hook `/usr/lib/post-base-installer.d/
+05pxe-local-media` (dijalankan base-installer setelah base + sebelum kernel/apt-setup; kernel tetap dari
+sumber base-installer) yang `chmod a-x` `50mirror`; satu-satunya sumber ditulis `60local` dari
+`apt-setup/local0/repository = [trusted=yes by-hash=no] <media> bookworm main`. `late_command`
+mengomentari baris itu (tanpa `trusted=yes`) dan menghapus `00AllowUnauthenticated`. `mediaSigned: true`
+(mirror bertanda tangan) → tidak ada trusted/hook/untrust.
+
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `installers/m6-smoke-fixes.test.ts` › "preseed/early_command juga memuat driver" | seam `/sys/module/`, `/tmp/` | + seam `/usr/lib/` | early_command kini juga menulis hook di `/usr/lib/post-base-installer.d` (test milik T6d). |
+| golden `debian-preseed.cfg`, `debian-preseed-auto-disk.cfg`, `debian-late.sh` (via late b64) | `tasksel/first standard, ssh-server` | `ssh-server`; + apt-setup non-free/contrib/deb-src false, local0, pkgsel/update-policy, grub with_other_os/force-efi-extra-removable; early_command + hook; late + untrust | Diperbarui (`-u`), ditinjau. |
+
+Test baru (+5) di `installers/m6-smoke-fixes.test.ts`. Mutasi: `.agent/runs/m6/mutation-dev-T6e.txt` (12/12 merah).

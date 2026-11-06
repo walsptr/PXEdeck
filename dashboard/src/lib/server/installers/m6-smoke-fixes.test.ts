@@ -6,7 +6,7 @@
 //   BUG-M6-5  kickstart tanpa `repo --name=AppStream` (ISO minimal hanya `Minimal/`), mode
 //             non-interaktif (`cmdline` + `inst.cmdline`) agar kegagalan memicu %onerror.
 import { spawnSync } from "node:child_process"
-import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { existsSync, mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, statSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
 import { describe, expect, it } from "vitest"
@@ -359,7 +359,7 @@ describe("BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk", () =>
   it("preseed/early_command juga memuat driver (sebelum disk-detect), log mulai tetap pertama", () => {
     const p = debianPreseed(ctx())
     const early = p.split("\n").find((x) => x.startsWith("d-i preseed/early_command string "))!.slice("d-i preseed/early_command string ".length)
-    const r = runDisk((d) => early.replaceAll("/sys/module/", `${d}/sys/module/`).replaceAll("/tmp/", `${d}/tmp/`), { kcmd: KCMD_URL, disks: [], onVirtio: [{ name: "vda", removable: false }], serve: true })
+    const r = runDisk((d) => early.replaceAll("/sys/module/", `${d}/sys/module/`).replaceAll("/tmp/", `${d}/tmp/`).replaceAll("/usr/lib/", `${d}/usr/lib/`), { kcmd: KCMD_URL, disks: [], onVirtio: [{ name: "vda", removable: false }], serve: true })
     expect(r.code).toBe(0)
     expect(logs(r)[0]).toContain(DEBIAN_LOG.start)
     expect(r.calls).toEqual(expect.arrayContaining(["insmod virtio_blk"]))
@@ -453,5 +453,105 @@ describe("BUG-M6-7 Rocky %pre memilih/memvalidasi disk", () => {
     expect(k.endsWith("inst.cmdline console=tty0 quiet console=ttyS0,115200n8")).toBe(true)
     const deb = installerScript({ ...BASE, extraArgs: "console=ttyS0,115200n8 console=tty0", method: "preseed", source: { kernel: "d/linux", initrd: "d/initrd.gz", repo: "debian-12" } })
     expect(deb).toContain("console=ttyS0,115200n8 console=tty0 ---")
+  })
+})
+
+// ---------------------------------------------------------------------------
+// BUG-M6-9 / DEC-021: repo DVD Debian tidak bertanda tangan → sumber apt `[trusted=yes by-hash=no]`
+// hanya selama instalasi, lewat generator resmi apt-setup `60local`; `50mirror` dinonaktifkan hook
+// post-base-installer; dihapus di late_command.
+describe("BUG-M6-9 / DEC-021 sumber apt media lokal tanpa tanda tangan", () => {
+  const MEDIA_LINE = "[trusted=yes by-hash=no] http://10.99.0.2/media/debian-12 bookworm main"
+  it("media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late", () => {
+    const p = debianPreseed(ctx())
+    expect(diValue(p, "apt-setup/local0/repository")).toEqual({ type: "string", value: MEDIA_LINE })
+    const early = diValue(p, "preseed/early_command")!.value
+    expect(early).toContain("/usr/lib/post-base-installer.d/05pxe-local-media")
+    expect(early).toContain("chmod a-x /usr/lib/apt-setup/generators/50mirror")
+    const late = debianLateScript(ctx())
+    expect(late).toContain("trusted=yes by-hash=no")
+    expect(late.split("\n").at(-3)).toContain("rm -f /etc/apt/apt.conf.d/00AllowUnauthenticated")
+  })
+  it("mirror bertanda tangan (mediaSigned): TIDAK ada trusted=yes, by-hash override, hook, maupun untrust", () => {
+    const p = debianPreseed(ctx({ mediaSigned: true }))
+    expect(p).not.toContain("trusted=yes")
+    expect(p).not.toContain("by-hash")
+    expect(p).not.toContain("post-base-installer")
+    expect(p).not.toContain("50mirror")
+    expect(diValue(p, "apt-setup/local0/repository")).toBeNull()
+    const late = debianLateScript(ctx({ mediaSigned: true }))
+    expect(late).not.toContain("trusted=yes")
+  })
+  it("pertanyaan apt-setup/tasksel/pkgsel/grub yang bisa muncul dipreseed (tanpa NAT)", () => {
+    const p = debianPreseed(ctx())
+    const want: [string, string][] = [
+      ["apt-setup/services-select", ""],
+      ["apt-setup/non-free-firmware", "false"],
+      ["apt-setup/non-free", "false"],
+      ["apt-setup/contrib", "false"],
+      ["apt-setup/enable-source-repositories", "false"],
+      ["tasksel/first", "ssh-server"],
+      ["pkgsel/include", "openssh-server curl sudo"],
+      ["pkgsel/upgrade", "none"],
+      ["pkgsel/update-policy", "none"],
+      ["popularity-contest/popularity-contest", "false"],
+      ["grub-installer/only_debian", "true"],
+      ["grub-installer/with_other_os", "false"],
+      ["grub-installer/force-efi-extra-removable", "true"],
+      ["debian-installer/allow_unauthenticated", "true"],
+    ]
+    for (const [k, v] of want) expect(diValue(p, k)?.value ?? null, k).toBe(v)
+    expect(diValue(p, "finish-install/reboot_in_progress")).toEqual({ type: "note", value: "" })
+  })
+  it("hook post-base-installer dijalankan sh: 50mirror jadi tidak executable (apt-setup membuang keluarannya)", () => {
+    const early = diValue(debianPreseed(ctx()), "preseed/early_command")!.value
+    const hookCmd = early.slice(early.indexOf("mkdir -p /usr/lib/post-base-installer.d"))
+    mkdirSync(TEST_TMP_ROOT, { recursive: true })
+    const d = mkdtempSync(path.join(TEST_TMP_ROOT, "apt-hook-"))
+    try {
+      const gen = path.join(d, "usr/lib/apt-setup/generators")
+      mkdirSync(gen, { recursive: true })
+      writeFileSync(path.join(gen, "50mirror"), "#!/bin/sh\necho 'deb http://x bookworm main' > \"$1\"\n", { mode: 0o755 })
+      writeFileSync(path.join(gen, "60local"), "#!/bin/sh\nexit 0\n", { mode: 0o755 })
+      mkdirSync(path.join(d, "bin"))
+      writeFileSync(path.join(d, "bin/logger"), "#!/bin/sh\nexit 0\n", { mode: 0o755 })
+      const env = { PATH: `${d}/bin:/usr/bin:/bin` } as unknown as NodeJS.ProcessEnv
+      const r1 = spawnSync("sh", ["-c", hookCmd.replaceAll("/usr/lib/", `${d}/usr/lib/`)], { encoding: "utf8", env })
+      expect(r1.status, r1.stderr).toBe(0)
+      const hook = path.join(d, "usr/lib/post-base-installer.d/05pxe-local-media")
+      const txt = readFileSync(hook, "utf8")
+      expect(txt.startsWith("#!/bin/sh\n")).toBe(true)
+      // base-installer menjalankan hook (seperti `log-output -t base-installer "$script"`).
+      const r2 = spawnSync("sh", ["-c", `${hook.replaceAll(" ", "\\ ")}`], { encoding: "utf8", env: { ...env } })
+      expect(r2.status, r2.stderr).toBe(0)
+      expect((statSync(path.join(gen, "50mirror")).mode & 0o111)).toBe(0)
+      expect((statSync(path.join(gen, "60local")).mode & 0o111)).not.toBe(0)
+    } finally {
+      rmSync(d, { recursive: true, force: true })
+    }
+  })
+  it("late script (sh) menghapus trusted=yes dari sources target dan 00AllowUnauthenticated", () => {
+    const late = debianLateScript(ctx())
+    const line = late.split("\n").find((l) => l.includes("trusted=yes by-hash=no"))!
+    mkdirSync(TEST_TMP_ROOT, { recursive: true })
+    const d = mkdtempSync(path.join(TEST_TMP_ROOT, "apt-untrust-"))
+    try {
+      mkdirSync(path.join(d, "etc/apt/sources.list.d"), { recursive: true })
+      mkdirSync(path.join(d, "etc/apt/apt.conf.d"), { recursive: true })
+      // Persis seperti tulisan 60local: "deb " + "" (tanpa key) + " " + repository.
+      writeFileSync(path.join(d, "etc/apt/sources.list"), `\ndeb  ${MEDIA_LINE}\n`)
+      writeFileSync(path.join(d, "etc/apt/apt.conf.d/00AllowUnauthenticated"), 'APT::Get::AllowUnauthenticated "true";\n')
+      writeFileSync(path.join(d, "etc/apt/apt.conf.d/00trustcdrom"), "x\n")
+      const r = spawnSync("sh", ["-ec", line.replaceAll("/etc/apt/", `${d}/etc/apt/`)], { encoding: "utf8" })
+      expect(r.status, r.stderr).toBe(0)
+      const src = readFileSync(path.join(d, "etc/apt/sources.list"), "utf8")
+      expect(src).not.toContain("trusted=yes")
+      expect(src).not.toMatch(/^deb /m)
+      expect(src).toContain("# (media instalasi PXE tanpa tanda tangan, DEC-021) deb http://10.99.0.2/media/debian-12 bookworm main")
+      expect(existsSync(path.join(d, "etc/apt/apt.conf.d/00AllowUnauthenticated"))).toBe(false)
+      expect(existsSync(path.join(d, "etc/apt/apt.conf.d/00trustcdrom"))).toBe(true)
+    } finally {
+      rmSync(d, { recursive: true, force: true })
+    }
   })
 })
