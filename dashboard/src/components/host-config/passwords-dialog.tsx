@@ -109,35 +109,37 @@ export function PasswordsDialog({
             dilihat lagi — buat ulang jika hilang.
           </AlertDescription>
         </Alert>
-        <div className="max-h-72 overflow-auto rounded-xl border border-border bg-card">
-          <Table aria-label="Password yang dibuat">
-            <TableHeader>
-              <TableRow>
-                <TableHead>MAC</TableHead>
-                <TableHead>User</TableHead>
-                <TableHead>Password</TableHead>
+        <Table
+          aria-label="Password yang dibuat"
+          scrollRegionLabel="Password yang dibuat"
+          containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
+        >
+          <TableHeader>
+            <TableRow>
+              <TableHead>MAC</TableHead>
+              <TableHead>User</TableHead>
+              <TableHead>Password</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {passwords?.map((p) => (
+              <TableRow key={p.mac} data-mac={p.mac}>
+                <TableCell className="type-data">
+                  {p.mac}
+                  {p.hostname && (
+                    <span className="type-caption ml-1.5 text-muted-foreground">
+                      {p.hostname}
+                    </span>
+                  )}
+                </TableCell>
+                <TableCell className="type-data">{p.username}</TableCell>
+                <TableCell className="type-data select-all">
+                  {p.password}
+                </TableCell>
               </TableRow>
-            </TableHeader>
-            <TableBody>
-              {passwords?.map((p) => (
-                <TableRow key={p.mac} data-mac={p.mac}>
-                  <TableCell className="type-data">
-                    {p.mac}
-                    {p.hostname && (
-                      <span className="type-caption ml-1.5 text-muted-foreground">
-                        {p.hostname}
-                      </span>
-                    )}
-                  </TableCell>
-                  <TableCell className="type-data">{p.username}</TableCell>
-                  <TableCell className="type-data select-all">
-                    {p.password}
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </div>
+            ))}
+          </TableBody>
+        </Table>
         <DialogFooter>
           {!downloaded && (
             <Field orientation="horizontal" className="mr-auto w-auto">

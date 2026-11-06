@@ -1,0 +1,20 @@
+# F-T8-1 mutation log (frontend-dev) 2026-11-06T20:43:53+07:00
+## M1: revert plan-table.tsx ke versi HEAD (wrapper div max-h-72 overflow-auto tak fokusable)
+     × container scroll = region berlabel, tabIndex 0, membungkus tabel, dengan focus ring 197ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |dom| src/components/host-config/plan-table-a11y.test.tsx > PlanTable: region scroll bisa difokus (F-T8-1) > container scroll = region berlabel, tabIndex 0, membungkus tabel, dengan focus ring
+TestingLibraryElementError: Unable to find an accessible element with the role "region" and name "Preview IP baru"
+      Tests  1 failed | 1 passed (2)
+## M2: hapus tabIndex dari Table scrollRegionLabel (table.tsx)
+     × container scroll = region berlabel, tabIndex 0, membungkus tabel, dengan focus ring 122ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |dom| src/components/host-config/plan-table-a11y.test.tsx > PlanTable: region scroll bisa difokus (F-T8-1) > container scroll = region berlabel, tabIndex 0, membungkus tabel, dengan focus ring
+      Tests  1 failed | 1 passed (2)
+## M3: hapus focus ring
+     × container scroll = region berlabel, tabIndex 0, membungkus tabel, dengan focus ring 136ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |dom| src/components/host-config/plan-table-a11y.test.tsx > PlanTable: region scroll bisa difokus (F-T8-1) > container scroll = region berlabel, tabIndex 0, membungkus tabel, dengan focus ring
+AssertionError: expected 'relative w-full outline-none focus-vi…' to match /focus-visible:ring-\[3px\]/
+      Tests  1 failed | 1 passed (2)
+## Restored
+      Tests  2 passed (2)

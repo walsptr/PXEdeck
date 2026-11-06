@@ -413,49 +413,51 @@ function CsvPreview({ rows, hosts }: { rows: CsvRowResult[]; hosts: Host[] }) {
   const untouched = hosts.filter((h) => !covered.has(h.id)).length
   return (
     <div className="flex flex-col gap-2">
-      <div className="max-h-64 overflow-auto rounded-xl border border-border bg-card">
-        <Table aria-label="Preview CSV credentials">
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-12">Baris</TableHead>
-              <TableHead>MAC</TableHead>
-              <TableHead>Username</TableHead>
-              <TableHead>Hasil</TableHead>
+      <Table
+        aria-label="Preview CSV credentials"
+        scrollRegionLabel="Preview CSV credentials"
+        containerClassName="max-h-64 overflow-auto rounded-xl border border-border bg-card"
+      >
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-12">Baris</TableHead>
+            <TableHead>MAC</TableHead>
+            <TableHead>Username</TableHead>
+            <TableHead>Hasil</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {rows.map((r) => (
+            <TableRow
+              key={r.line}
+              data-line={r.line}
+              data-state={r.errors.length ? "error" : "ok"}
+            >
+              <TableCell className="type-data text-xs text-muted-foreground">
+                {r.line}
+              </TableCell>
+              <TableCell>
+                <span className="type-data">{r.mac || "—"}</span>
+                {r.hostId && byId.get(r.hostId)?.hostname && (
+                  <span className="type-caption ml-1.5 text-muted-foreground">
+                    {byId.get(r.hostId)!.hostname}
+                  </span>
+                )}
+              </TableCell>
+              <TableCell className="type-data">{r.username || "—"}</TableCell>
+              <TableCell className="whitespace-normal">
+                {r.errors.length === 0 ? (
+                  <Badge variant="secondary">OK</Badge>
+                ) : (
+                  <span className="type-caption text-destructive">
+                    {r.errors.join("; ")}
+                  </span>
+                )}
+              </TableCell>
             </TableRow>
-          </TableHeader>
-          <TableBody>
-            {rows.map((r) => (
-              <TableRow
-                key={r.line}
-                data-line={r.line}
-                data-state={r.errors.length ? "error" : "ok"}
-              >
-                <TableCell className="type-data text-xs text-muted-foreground">
-                  {r.line}
-                </TableCell>
-                <TableCell>
-                  <span className="type-data">{r.mac || "—"}</span>
-                  {r.hostId && byId.get(r.hostId)?.hostname && (
-                    <span className="type-caption ml-1.5 text-muted-foreground">
-                      {byId.get(r.hostId)!.hostname}
-                    </span>
-                  )}
-                </TableCell>
-                <TableCell className="type-data">{r.username || "—"}</TableCell>
-                <TableCell className="whitespace-normal">
-                  {r.errors.length === 0 ? (
-                    <Badge variant="secondary">OK</Badge>
-                  ) : (
-                    <span className="type-caption text-destructive">
-                      {r.errors.join("; ")}
-                    </span>
-                  )}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </div>
+          ))}
+        </TableBody>
+      </Table>
       {untouched > 0 && (
         <FieldDescription>
           {untouched} host terpilih tidak ada di CSV — credentials-nya tidak
