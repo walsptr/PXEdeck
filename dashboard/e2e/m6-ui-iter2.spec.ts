@@ -392,7 +392,7 @@ test("CR-6-9 / CR-6-1 batas total authorized_keys 32 KiB tampil di tab SSH Sheet
 })
 
 test.describe("axe (filter tidak berubah) pada halaman yang diubah", () => {
-  test.afterAll(() => writeAxeEvidence(path.resolve(__dirname, "../../.agent/runs/m6/axe-results-iter2-ui.json")))
+  test.afterAll(() => writeAxeEvidence(path.resolve(__dirname, "../../.agent/runs/m7/m6-axe-results-iter2-ui.json")))
 
   for (const [label, url] of [
     ["/hosts", "/hosts"],

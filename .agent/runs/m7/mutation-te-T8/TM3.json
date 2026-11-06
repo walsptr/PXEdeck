@@ -1,0 +1,25 @@
+{
+ "cmd": [
+  "npx",
+  "playwright",
+  "test",
+  "e2e/m7-vlan.spec.ts",
+  "e2e/m7-novlan.spec.ts",
+  "--retries=0",
+  "--workers=1"
+ ],
+ "desc": "Settings card VLAN tidak disisipkan",
+ "mutations": [
+  {
+   "id": "TM3",
+   "file": "src/components/settings/settings-view.tsx",
+   "old": "{i === 0 && <VlanNetworksCard settings={settings.data} />}",
+   "new": "{i === 0 && null}",
+   "expect_red": [
+    "AC-7\\.12.*/settings: card",
+    "/settings dengan VLAN",
+    "/settings tanpa VLAN"
+   ]
+  }
+ ]
+}

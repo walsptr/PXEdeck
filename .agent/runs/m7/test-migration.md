@@ -67,3 +67,31 @@ Test baru:
 - `infra/test/m7-infra.sh`: "M7 verify-listen-vlan.sh wajib DHCP dnsmasq udp %pxe10:67 (DEC-026 §3)"
 
 Log mutasi ada di `.agent/runs/m7/mutation-dev-T2c.txt`.
+
+## M7-T8: infrastruktur E2E untuk milestone aktif 7 (test-engineer)
+
+Tidak ada asersi yang diubah, dihapus, atau dilonggarkan. Hitungan asersi per file lama terhadap
+`m6-approved` ada di `.agent/runs/m7/assertion-counts.txt` (skrip `.agent/runs/m7/count-assertions.py`):
+0 file turun, grep `skip|only|fixme|todo` = 0. Perubahan hanya pada lokasi bukti dan config server.
+
+### 1. `dashboard/e2e/helpers.ts`: `EVIDENCE_MILESTONE` 6 → 7, tipe `SHOTS` ditambah `7`
+- Alasannya: screenshot spec M6 sebelumnya selalu ditulis ke `.agent/runs/m6/screenshots/` (BUG-M6-L4).
+  Run regresi M7 akan menimpa bukti M6 yang sudah di-approve.
+- Sesudah: spec `m7-*` (`SHOTS(7, …)`) ditulis ke `.agent/runs/m7/screenshots/<nama>.png`, sedangkan
+  regresi M1–M6 ditulis ke `.agent/runs/m7/screenshots/m<n>-<nama>.png`. Logika BUG-M6-L4 tetap sama.
+
+### 2. `dashboard/e2e/support/axe.ts`: default path `writeAxeEvidence` `runs/m6/axe-results.json` → `runs/m7/axe-results.json`
+- Hanya parameter default dan komentar yang berubah. `classifyContrastFinding`, `CONTRAST_EXCEPTIONS`,
+  `AXE_TAGS`, dan `auditA11y` tidak berubah.
+
+### 3. `dashboard/e2e/m6-ui-iter2.spec.ts:395`: path bukti afterAll
+- Sebelum: `writeAxeEvidence(path.resolve(__dirname, "../../.agent/runs/m6/axe-results-iter2-ui.json"))`
+- Sesudah: `writeAxeEvidence(path.resolve(__dirname, "../../.agent/runs/m7/m6-axe-results-iter2-ui.json"))`
+- Hanya lokasi file bukti yang berubah. Asersi tidak disentuh (76 → 76).
+
+### 4. `dashboard/playwright.config.ts`
+- Server baru `m7-vlan` (:3118, `testMatch` `m7-vlan.spec.ts`): `LAB_ENV`, DB demo sendiri, media palsu,
+  dan `PXE_VLAN_NETWORKS="20:10.99.20.0/24:10.99.20.1;30:10.99.30.0/26:10.99.30.1"`. VLAN 30 (/26)
+  ditambahkan agar isi otomatis prefix bisa diamati, karena prefix VLAN 20 sama dengan prefix subnet PXE /24.
+- `SHARED_MATCH` ditambah `/m7-novlan\.spec\.ts/`. Spec ini read-only di server bersama :3100 tanpa
+  `PXE_VLAN_NETWORKS`. Pemeriksaan `assertEverySpecCollected` tetap berlaku.

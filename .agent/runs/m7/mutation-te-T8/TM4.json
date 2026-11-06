@@ -1,0 +1,24 @@
+{
+ "cmd": [
+  "npx",
+  "playwright",
+  "test",
+  "e2e/m7-vlan.spec.ts",
+  "e2e/m7-novlan.spec.ts",
+  "--retries=0",
+  "--workers=1"
+ ],
+ "desc": "petunjuk VLAN tidak terdaftar muted",
+ "mutations": [
+  {
+   "id": "TM4",
+   "file": "src/components/host-config/tab-network.tsx",
+   "old": "className=\"text-foreground\"",
+   "new": "className=\"text-muted-foreground\"",
+   "expect_red": [
+    "VLAN 99: petunjuk",
+    "Sheet tanpa VLAN terdaftar"
+   ]
+  }
+ ]
+}

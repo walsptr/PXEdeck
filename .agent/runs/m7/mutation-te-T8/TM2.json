@@ -1,0 +1,24 @@
+{
+ "cmd": [
+  "npx",
+  "playwright",
+  "test",
+  "e2e/m7-vlan.spec.ts",
+  "e2e/m7-novlan.spec.ts",
+  "--retries=0",
+  "--workers=1"
+ ],
+ "desc": "staticNetworkOf selalu subnet PXE (validasi VLAN hilang)",
+ "mutations": [
+  {
+   "id": "TM2",
+   "file": "src/components/host-config/form-state.ts",
+   "old": "return resolveStaticNetwork(parseVlan(f.vlan), mgmtOf(ctx), vlanNetworksOf(ctx))",
+   "new": "return resolveStaticNetwork(null, mgmtOf(ctx), vlanNetworksOf(ctx))",
+   "expect_red": [
+    "AC-7\\.10.*petunjuk mono",
+    "AC-7\\.11"
+   ]
+  }
+ ]
+}

@@ -1,6 +1,7 @@
 # M7 — AC → test (trace)
 
-Diperbarui test-engineer M7-T7/T9, 2026-11-06. Status: **PASS** = test ada dan lulus pada run ini
+Diperbarui test-engineer M7-T7/T9, 2026-11-06; baris AC-7.10–7.13 diperbarui M7-T8 (E2E: `e2e-run1.log`,
+`e2e-run2.log` — masing-masing 199 test: 198 lulus, **1 gagal** (temuan F-T8-1), 0 flaky/skipped/did-not-run). Status: **PASS** = test ada dan lulus pada run ini
 (`unit.log`: 83 file / 2087 test lulus; `infra-test.log`: 107/107 lulus); **pending** = menunggu task
 lain (T8 E2E, T11 KVM, T12 teardown). Singkatan file:
 
@@ -14,6 +15,8 @@ lain (T8 E2E, T11 KVM, T12 teardown). Singkatan file:
 - **`te-cb`** = `dashboard/src/app/boot/m7-te-vlan-callback.test.ts` (baru, T7)
 - **`te-env`** = `dashboard/src/lib/server/m7-te-vlan-env.test.ts` (baru, T7)
 - **`te-gen`** = `dashboard/src/lib/server/installers/m7-te-generators.test.ts` (baru, T7)
+- **`e2e-vlan`** = `dashboard/e2e/m7-vlan.spec.ts` (baru, T8; server `m7-vlan` :3118 dengan `PXE_VLAN_NETWORKS`)
+- **`e2e-novlan`** = `dashboard/e2e/m7-novlan.spec.ts` (baru, T8; server bersama :3100 tanpa env)
 - `infra` = `infra/test/m7-infra.sh` (dev T3–T5), **`infra-te`** = `infra/test/m7-te.sh` (baru, T9);
   keduanya dijalankan `infra/test/run.sh`
 
@@ -28,10 +31,10 @@ lain (T8 E2E, T11 KVM, T12 teardown). Singkatan file:
 | AC-7.7 | unit, golden | gen-vlan : "AC-7.7 Ubuntu netplan VLAN" (ethernets.mgmt tanpa alamat + vlans.mgmt.20; golden `ubuntu-user-data-vlan.yaml` bebas token); **te-gen** : "AC-7.7 Ubuntu netplan VLAN (iface by name, id lain, tanpa VLAN)" — iface by name, VLAN 300, tanpa VLAN → bentuk M6 tanpa `vlans`; golden M6 `ubuntu-user-data*.yaml` tidak berubah (installers.test.ts) | PASS |
 | AC-7.8 | unit | gen-vlan : "AC-7.8 Debian ifupdown VLAN" (stanza, substitusi `$IF` sungguhan, late_command < batas, golden `debian-late-vlan.sh`); **te-gen** : "AC-7.8 Debian VLAN: tanpa paket tambahan (O10), perbedaan hanya di stanza" — `pkgsel/include` identik & tanpa `vlan`, preseed hanya beda di late_command, VLAN 300; deb-noroute : DEC-025 §1 (`netcfg/no_default_route`) | PASS |
 | AC-7.9 | unit | gen-vlan : "AC-7.9 Rocky kickstart VLAN" + "AC-7.9 Rocky %post native tanpa IPv4 (fixture NetworkManager, sh)"; **te-gen** : "AC-7.9 Rocky VLAN pelengkap" (tepat satu baris network + flag lengkap, iface by name, tanpa VLAN → tanpa --vlanid) | PASS |
-| AC-7.10 | e2e | sisi komponen: ui-vlan "TabNetwork VLAN-aware (AC-7.10 sisi komponen)", fs-vlan "validasi klien & pratinjau …"; E2E Playwright | **pending (T8)** |
-| AC-7.11 | e2e | sisi komponen: ui-vlan "TabNetwork bulk VLAN (AC-7.11 sisi komponen)", fs-vlan "bulk range .41–.44 …"; E2E | **pending (T8)** |
-| AC-7.12 | e2e | sisi komponen: ui-vlan "Settings blok VLAN management (AC-7.12 sisi komponen)"; E2E + axe + lebar layar | **pending (T8)** |
-| AC-7.13 | e2e regresi | suite M1–M6 + hitung asersi | **pending (T8)** |
+| AC-7.10 | e2e | **e2e-vlan** : "AC-7.10 … petunjuk mono, isi otomatis prefix/gateway, validasi subnet VLAN, gateway manual dipertahankan, VLAN dikosongkan → subnet PXE, simpan vlan 20 → 200" (petunjuk "20 · 10.99.20.0/24" mono; VLAN 20/30 → prefix 24/26 + gateway; 10.99.10.41 → "Di luar subnet 10.99.20.0/24 (VLAN 20)" + simpan nonaktif; = gateway VLAN; bentrok storage-02; 10.99.20.41 → "Di dalam 10.99.20.0/24 (VLAN 20)."; payload `vlan: 20` persis + 200 + DB/tabel); **e2e-vlan** : "422 server (luar subnet / gateway / bentrok) tampil di tab Network, DB tidak berubah" (body PATCH ditulis ulang via `page.route`); sisi komponen: ui-vlan, fs-vlan | PASS (run1+run2) |
+| AC-7.11 | e2e | **e2e-vlan** : "AC-7.11 … range mulai 10.99.20.41: pratinjau .41/.43/.44 (.42 storage-02 dilewati), simpan → tersimpan identik dengan pratinjau" (tanpa lewati → .42 error "Bentrok dengan storage-02"; range luar subnet → 3 baris error; payload bulk `vlan: 20` + assignments = pratinjau; GET host/config = pratinjau); sisi komponen: ui-vlan, fs-vlan | PASS (run1+run2) |
+| AC-7.12 | e2e | **e2e-vlan** : "GET /api/settings & /api/network memuat vlanNetworks …", "/settings: card VLAN · Subnet · Gateway (mono) …, hairline tanpa shadow, tanpa oranye; 4 lebar tanpa overflow", "/settings dengan VLAN: axe 0 pelanggaran (375/768/1280/1440)", "Sheet satu host VLAN (valid / invalid / tidak terdaftar): axe, tanpa overflow di 4 lebar", "Sheet bulk VLAN 20 (pratinjau): axe, tanpa overflow di 4 lebar"; **e2e-vlan** : "DEC-006 VLAN tidak terdaftar … VLAN 99" (petunjuk teks utama, bukan muted); **e2e-novlan** : "API tanpa env: kunci vlanNetworks tidak ada", "/settings tanpa VLAN: … empty state; axe 0 …", "Sheet tanpa VLAN terdaftar …" | **FAIL sebagian**: semua test lulus kecuali "Sheet bulk VLAN 20 (pratinjau): axe" — F-T8-1 axe `scrollable-region-focusable` (serious) @375 pada `.max-h-72 > [data-slot=table-container]` tabel Preview IP (PlanTable M3, tidak berubah sejak m6-approved; bulk preview belum pernah diaudit axe sebelumnya). Butuh perbaikan produk. |
+| AC-7.13 | e2e regresi | suite penuh 2× (`e2e-run1.log`, `e2e-run2.log`, `--retries=0 --workers=1`): semua spec M1–M6 lulus di kedua run; `assertion-counts.txt` (BASE `m6-approved`): 0 file lama turun, grep skip/only/fixme/todo = 0; perubahan test lama hanya path bukti (`test-migration.md` §M7-T8) | PASS (regresi M1–M6); suite penuh belum 0 gagal karena F-T8-1 (AC-7.12) |
 | AC-7.14 | static-shell | infra : "M7 XML network trunk/port1/port2 tanpa ip/forward/dhcp", "M7 net-up/net-down --topology vlan, idempoten, flat tetap", "M7 net-up menolak XML berisi ip/forward/dhcp/nama salah"; **infra-te** : "M7te assert_name menolak nama terlindungi/tanpa prefix", "M7te net-up/net-down vlan (palsu): lima network hilang, default/int utuh" | PASS |
 | AC-7.15 | unit-shell | infra : "M7 switch-up dry-run: overlay/seed, 4 NIC, RAM<=1024, tanpa NAT", "M7 pxe-switch.sh apply/apply-port: perintah tabel §2.2", "M7 pxe-switch.sh verify PASS/FAIL" | PASS |
 | AC-7.16 | static-shell + unit-shell | infra : "M7 profil server VLAN statis …", "M7 verify-listen-vlan.sh: PASS / FAIL + stop dnsmasq" (%pxe0, 0.0.0.0:67, 10.99.20.1:53, nfsd 10.99.0.2, nginx mgmt20), "M7 server-up --topology vlan dry-run", "M7 deploy-dashboard --topology vlan"; **infra-te** : "M7te nginx VLAN: ACL hanya / + SSE, /boot & /media terbuka; rpcbind 10.99.10.2", "M7te verify-listen-vlan: kasus FAIL tambahan + stop dnsmasq" (nfsd 0.0.0.0, tftp/dns 10.99.0.2, dnsmasq %nat0/%mgmt20, dnsmasq inactive) | PASS |
@@ -53,5 +56,5 @@ lain (T8 E2E, T11 KVM, T12 teardown). Singkatan file:
 | AC-7.32 | infra | teardown setelah APR | **pending (T12)** |
 
 Ringkasan (32 AC): 16 AC unit/integration/shell/static (AC-7.1–7.9, 7.14–7.19, 7.31) punya test lulus;
-4 E2E (7.10–7.13) menunggu T8 (sisi komponen sudah diuji); 11 KVM (7.20–7.30) menunggu T11; AC-7.32
+E2E (T8): AC-7.10, 7.11, 7.13 PASS; AC-7.12 punya test, gagal 1 (F-T8-1, bukan pelemahan—butuh perbaikan produk); 11 KVM (7.20–7.30) menunggu T11; AC-7.32
 menunggu T12.

@@ -34,6 +34,9 @@ const KVM_ENV = {
   PXE_DYNAMIC_RANGE: "10.99.0.100-10.99.0.200",
 }
 
+/** M7 (DEC-024 §4): VLAN management terdaftar untuk server `m7-vlan`. */
+const M7_VLAN_NETWORKS = "20:10.99.20.0/24:10.99.20.1;30:10.99.30.0/26:10.99.30.1"
+
 /**
  * M4 (DEC-007): setiap server memakai file DB SQLite sendiri yang di-seed sebelum start
  * (e2e/support/e2e-env.ts). `PXE_SEED=empty` di server: DB demo sudah berisi flag `meta.seeded`.
@@ -150,13 +153,28 @@ const FILE_SERVERS = [
     testMatch: /m6-ui-iter2\.spec\.ts/,
     env: { ...M4_ENV, ...dbEnv("m6-ui-iter2", "demo", seedM6Iter2), PXE_DNSMASQ_LEASES: e2eLeaseFile("m6-ui-iter2") },
   },
+  {
+    // M7-T8 (AC-7.10–7.12): server mock dengan `PXE_VLAN_NETWORKS` (DEC-024 §4). VLAN 20 = nilai AC;
+    // VLAN 30 (/26) tambahan agar isi otomatis prefix teramati (prefix VLAN 20 = prefix subnet PXE /24).
+    // Subnet PXE = lab 10.10.10.0/24 (DEC-006) untuk perilaku VLAN tidak terdaftar.
+    name: "m7-vlan",
+    port: 3118,
+    testMatch: /m7-vlan\.spec\.ts/,
+    env: {
+      ...LAB_ENV,
+      ...dbEnv("m7-vlan"),
+      PXE_MEDIA_ROOT: e2eMedia(),
+      PXE_VLAN_NETWORKS: M7_VLAN_NETWORKS,
+    },
+  },
 ] as const
 
 const chromium = { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }
 
 const TEST_DIR = path.join(__dirname, "e2e")
 /** Pola `testMatch` project "chromium" (spec read-only di server :3100). */
-const SHARED_MATCH = [/m1-.*\.spec\.ts/, /smoke\.spec\.ts/]
+// M7: `m7-novlan` (read-only, server tanpa `PXE_VLAN_NETWORKS` → empty state, AC-7.12).
+const SHARED_MATCH = [/m1-.*\.spec\.ts/, /smoke\.spec\.ts/, /m7-novlan\.spec\.ts/]
 const POLLING_MATCH = /m2-polling\.spec\.ts/
 /** M6: file setup login (bukan `.spec.ts`, dikumpulkan hanya oleh project `setup-*`). */
 const SETUP_MATCH = /auth\.setup\.ts/
