@@ -243,6 +243,9 @@ export function debianPreseed(ctx: InstallContext): string {
     // Tanpa firmware non-free di media (offline): jangan tanya "load missing firmware".
     di("hw-detect/load_firmware", "boolean", false),
     di("netcfg/choose_interface", "select", "auto"),
+    // DEC-025 §1: selaras dengan cmdline kernel (boot-script.ts) bila netcfg dijalankan ulang setelah
+    // preseed dimuat (VLAN PXE tanpa router). Hanya dibaca netcfg bila DHCP tidak memberi gateway.
+    di("netcfg/no_default_route", "boolean", true),
     di("netcfg/get_hostname", "string", c.hostname),
     di("netcfg/get_domain", "string", ""),
     di("netcfg/hostname", "string", c.hostname),

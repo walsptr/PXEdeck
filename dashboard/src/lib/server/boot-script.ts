@@ -127,6 +127,11 @@ export function installerScript(i: InstallerScriptInput): string {
       // SR-4-6 (M6): ` ---` di akhir. d-i menyalin parameter SETELAH `---` ke bootloader sistem
       // terpasang; semua parameter (termasuk `url=…/<token>/preseed.cfg`) berada sebelum `---`
       // sehingga URL ber-token tidak tertulis ke GRUB target.
+      // DEC-025 §1: `netcfg/no_default_route=true` selalu dikirim. DHCP VLAN PXE sengaja tanpa
+      // router (DEC-024 §3); tanpa jawaban ini netcfg menanyakan "Continue without a default route?"
+      // (prioritas critical, sebelum preseed.cfg diambil) dan instalasi macet. netcfg hanya
+      // membaca template ini bila DHCP TIDAK memberi gateway, jadi topologi flat (ada router) tidak
+      // berubah perilakunya.
       cmdline = `${args(
         "initrd=initrd",
         "auto=true",
@@ -134,6 +139,7 @@ export function installerScript(i: InstallerScriptInput): string {
         `url=${c}preseed.cfg`,
         "interface=auto",
         "netcfg/dhcp_timeout=60",
+        "netcfg/no_default_route=true",
       )} ---`
       break
     case "kickstart":
