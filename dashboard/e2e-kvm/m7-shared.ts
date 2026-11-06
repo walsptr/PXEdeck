@@ -14,7 +14,7 @@ function infraKey(): string {
 
 function vmRun(host: "10.99.0.2" | "10.99.0.3", script: string, envs: Record<string, string>, timeoutMs: number): { code: number; out: string } {
   const assigns = Object.entries(envs).map(([k, v]) => {
-    if (!/^[A-Z][A-Z0-9_]*$/.test(k) || !/^[A-Za-z0-9.:_/-]*$/.test(v)) throw new Error(`env VM ${k}`)
+    if (!/^[A-Z][A-Z0-9_]*$/.test(k) || !/^[A-Za-z0-9.:_/,-]*$/.test(v)) throw new Error(`env VM ${k}`)
     return `${k}=${v}`
   })
   const r = spawnSync("ssh", ["-i", infraKey(), ...SSH_OPTS, `root@${host}`, `${assigns.join(" ")} bash -s`], {
