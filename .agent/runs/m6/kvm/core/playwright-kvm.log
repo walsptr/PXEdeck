@@ -1,16 +1,16 @@
 
 Running 9 tests using 1 worker
 
-  ✓  1 e2e-kvm/m6-core.spec.ts:345:7 › AC-6.43a perimeter host tanpa sesi: /api/hosts 401, /hosts → /login (77ms)
-  ✓  2 e2e-kvm/m6-core.spec.ts:367:7 › AC-6.45 (mulai) pxe-test-m6core-node21: login UI, host muncul, Sheet lengkap disk /dev/vdz → Simpan & Install (19.4s)
-  ✓  3 e2e-kvm/m6-core.spec.ts:386:7 › AC-6.47 (a)(b) IP bentrok UI+API, IP lease aktif, CSV invalid per baris tanpa efek (3.9s)
-  ✓  4 e2e-kvm/m6-core.spec.ts:473:7 › AC-6.46 (bagian 1) pxe-test-m6core-node22 (BIOS): Installing + event installer → poweroff → start → boot lokal (1.6m)
-  ✓  5 e2e-kvm/m6-core.spec.ts:507:7 › AC-6.45 pxe-test-m6core-node21: /dev/vdz → Failed installer-error ≤ 15 mnt, event error-commands, log bersih (2.8m)
-  ✓  6 e2e-kvm/m6-core.spec.ts:540:7 › AC-6.46 (bagian 2) pxe-test-m6core-node22: Failed timeout-installing di UI tanpa reload → install ulang → Done → SSH + reboot, 2 job (18.0m)
-  ✓  7 e2e-kvm/m6-core.spec.ts:577:7 › AC-6.44 + AC-6.47c + AC-6.51b pxe-test-m6core-node21: install ulang UI → token per-MAC ditolak, banjir /boot dari pxe-test-m6core-node22, Done → SSH + reboot (12.9m)
-  ✓  8 e2e-kvm/m6-core.spec.ts:668:7 › AC-6.43b perimeter dari pxe-test-m6core-node22: /api/hosts 403, varian SR-5-6 tidak 200 berisi MAC (562ms)
-  ✓  9 e2e-kvm/m6-core.spec.ts:689:7 › AC-6.51a 6 login gagal bruteuser → ke-6 429; login admin sesudahnya berhasil (15.5s)
+  ✓  1 e2e-kvm/m6-core.spec.ts:345:7 › AC-6.43a perimeter host tanpa sesi: /api/hosts 401, /hosts → /login (56ms)
+  ✓  2 e2e-kvm/m6-core.spec.ts:367:7 › AC-6.45 (mulai) pxe-test-m6core-node21: login UI, host muncul, Sheet lengkap disk /dev/vdz → Simpan & Install (19.0s)
+  ✓  3 e2e-kvm/m6-core.spec.ts:386:7 › AC-6.47 (a)(b) IP bentrok UI+API, IP lease aktif, CSV invalid per baris tanpa efek (2.9s)
+  ✓  4 e2e-kvm/m6-core.spec.ts:473:7 › AC-6.46 (bagian 1) pxe-test-m6core-node22 (BIOS): Installing + event installer → poweroff → start → boot lokal (1.4m)
+  ✓  5 e2e-kvm/m6-core.spec.ts:507:7 › AC-6.45 pxe-test-m6core-node21: /dev/vdz → Failed installer-error ≤ 15 mnt, event error-commands, log bersih (3.0m)
+  ✓  6 e2e-kvm/m6-core.spec.ts:540:7 › AC-6.46 (bagian 2) pxe-test-m6core-node22: Failed timeout-installing di UI tanpa reload → install ulang → Done → SSH + reboot, 2 job (18.1m)
+  ✓  7 e2e-kvm/m6-core.spec.ts:577:7 › AC-6.44 + AC-6.47c + AC-6.51b pxe-test-m6core-node21: install ulang UI → token per-MAC ditolak, banjir /boot dari pxe-test-m6core-node22, Done → SSH + reboot (13.2m)
+  ✓  8 e2e-kvm/m6-core.spec.ts:669:7 › AC-6.43b perimeter dari pxe-test-m6core-node22: /api/hosts 403, varian SR-5-6 tidak 200 berisi MAC (589ms)
+  ✓  9 e2e-kvm/m6-core.spec.ts:690:7 › AC-6.51a 6 login gagal bruteuser → ke-6 429; login admin sesudahnya berhasil (15.5s)
 
-  Slow test file: e2e-kvm/m6-core.spec.ts (36.0m)
+  Slow test file: e2e-kvm/m6-core.spec.ts (36.3m)
   Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
-  9 passed (36.0m)
+  9 passed (36.3m)

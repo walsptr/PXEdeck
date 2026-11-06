@@ -1,0 +1,8 @@
+
+Running 1 test using 1 worker
+
+  ✓  1 e2e-kvm/m6-bulk.spec.ts:96:7 › AC-6.50 bulk 3× UEFI Ubuntu: satu Simpan & Install (password acak, IP increment, template hostname, key) → gelombang → Done + SSH (10.6m)
+
+  Slow test file: e2e-kvm/m6-bulk.spec.ts (10.6m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 passed (10.6m)

@@ -1,14 +1,14 @@
-2026-11-06T01:36:11.543Z muncul di tabel tanpa reload; firmware=bios
-2026-11-06T01:36:22.188Z install dibuat (UI) disk=(otomatis) generator=false
-2026-11-06T01:36:22.286Z node.sh reset
-2026-11-06T01:37:02.372Z installing (UI)
-2026-11-06T01:37:30.513Z node.sh poweroff (virsh destroy)
-2026-11-06T01:37:36.086Z node.sh start
-2026-11-06T01:37:53.869Z sebelum destroy installerBoots=1 kernelSerial=4 nginx=2; sesudah start status=installing installerBoots=1 kernelSerial=4 nginx=3
-2026-11-06T01:52:06.730Z Failed di UI tanpa reload=true: failed/timeout-installing installerBoots=1
-2026-11-06T01:52:08.559Z install ulang (UI) disk=(tetap)
-2026-11-06T01:52:08.630Z node.sh reset (install ulang)
-2026-11-06T01:52:08.634Z job2: booting (UI)
-2026-11-06T01:52:44.925Z job2: installing (UI)
-2026-11-06T01:57:44.394Z job2: configuring (UI)
-2026-11-06T01:58:14.553Z job2: done (UI)
+2026-11-06T03:17:28.322Z muncul di tabel tanpa reload; firmware=bios
+2026-11-06T03:17:36.686Z install dibuat (UI) disk=(otomatis) generator=false
+2026-11-06T03:17:36.759Z node.sh reset
+2026-11-06T03:18:16.817Z installing (UI)
+2026-11-06T03:18:34.905Z node.sh poweroff (virsh destroy)
+2026-11-06T03:18:40.162Z node.sh start
+2026-11-06T03:18:57.511Z sebelum destroy installerBoots=1 kernelSerial=4 nginx=2; sesudah start status=installing installerBoots=1 kernelSerial=4 nginx=3
+2026-11-06T03:33:19.474Z Failed di UI tanpa reload=true: failed/timeout-installing installerBoots=1
+2026-11-06T03:33:21.323Z install ulang (UI) disk=(tetap)
+2026-11-06T03:33:21.407Z node.sh reset (install ulang)
+2026-11-06T03:33:21.412Z job2: booting (UI)
+2026-11-06T03:33:57.621Z job2: installing (UI)
+2026-11-06T03:39:08.465Z job2: configuring (UI)
+2026-11-06T03:39:38.575Z job2: done (UI)

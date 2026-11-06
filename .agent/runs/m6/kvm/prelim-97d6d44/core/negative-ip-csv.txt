@@ -1,0 +1,7 @@
+# (a) UI node22 IP=10.99.0.31: field-error="Bentrok dengan m6-node21" simpan nonaktif; PATCH/bulk terkirim dari UI: 0
+# (a) API PATCH node22 IP=10.99.0.31: 422 {"error":"52:54:00:99:00:22: Bentrok dengan m6-node21","errors":[{"section":"network","hostId":"525400990022","message":"52:54:00:99:00:22: Bentrok dengan m6-node21"}]}
+# (a) API PATCH node22 IP lease aktif node21 (10.99.0.200): 422 {"error":"52:54:00:99:00:22: Di dalam range DHCP dinamis 10.99.0.100–10.99.0.200","errors":[{"section":"network","hostId":"525400990022","message":"52:54:00:99:00:22: Di dalam range DHCP dinamis 10.99.0.100–10.99.0.200"}]}
+# (b) preview CSV (line:state:teks): 2:error:2—opsMAC tidak valid | 3:error:352:54:00:99:00:99opsMAC bukan host terpilih | 4:ok:452:54:00:99:00:22opsOK
+# (b) tombol Simpan konfigurasi nonaktif: true
+# (b) API POST /api/hosts/bulk csv: 422 {"error":"2 baris CSV tidak valid (baris 2, 3)","errors":[{"section":"credentials","message":"2 baris CSV tidak valid (baris 2, 3)"}]}
+# konfigurasi node21/node22 identik sebelum/sesudah: true

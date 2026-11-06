@@ -1,4 +1,4 @@
-# preflight 2026-11-06T01:35:07Z
+# preflight 2026-11-06T03:16:21Z
 virsh         /usr/bin/virsh
 virt-install  /usr/bin/virt-install
 qemu-img      /usr/bin/qemu-img
@@ -18,7 +18,7 @@ e2e-kvm       ok
 verify-node   ok
 # meminfo: /proc/meminfo
 MemTotal:       24289248 kB
-MemAvailable:   15025276 kB
+MemAvailable:   16127840 kB
 # virsh list --all
  Id   Name          State
 ------------------------------

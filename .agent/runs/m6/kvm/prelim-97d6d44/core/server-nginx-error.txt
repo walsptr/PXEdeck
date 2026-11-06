@@ -1,0 +1,8 @@
+2026/11/05 07:00:01 [notice] 2341#2341: using inherited sockets from "5;6;"
+2026/11/06 02:11:39 [error] 1896#1896: *1525 access forbidden by rule, client: 10.99.0.32, server: _, request: "GET /api/hosts HTTP/1.1", host: "10.99.0.2"
+2026/11/06 02:11:39 [error] 1896#1896: *1526 access forbidden by rule, client: 10.99.0.32, server: _, request: "GET /api/settings HTTP/1.1", host: "10.99.0.2"
+2026/11/06 02:11:39 [error] 1896#1896: *1527 access forbidden by rule, client: 10.99.0.32, server: _, request: "GET /boot/%2e%2e/api/hosts HTTP/1.1", host: "10.99.0.2"
+2026/11/06 02:11:39 [error] 1896#1896: *1528 access forbidden by rule, client: 10.99.0.32, server: _, request: "GET /boot/..%2Fapi/hosts HTTP/1.1", host: "10.99.0.2"
+2026/11/06 02:11:39 [error] 1896#1896: *1531 access forbidden by rule, client: 10.99.0.32, server: _, request: "GET //api/hosts HTTP/1.1", host: "10.99.0.2"
+2026/11/06 02:11:39 [error] 1896#1896: *1532 access forbidden by rule, client: 10.99.0.32, server: _, request: "GET /api/../api/hosts HTTP/1.1", host: "10.99.0.2"
+2026/11/06 02:11:39 [error] 1896#1896: *1533 access forbidden by rule, client: 10.99.0.32, server: _, request: "GET /%61pi/hosts HTTP/1.1", host: "10.99.0.2"

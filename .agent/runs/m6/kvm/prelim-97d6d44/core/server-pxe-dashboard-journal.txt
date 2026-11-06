@@ -1,0 +1,33 @@
+2026-11-06T01:35:47+00:00 pxe-test-server systemd[1]: Started pxe-dashboard.service - PXE dashboard (Next.js standalone).
+2026-11-06T01:35:47+00:00 pxe-test-server node[1891]: ▲ Next.js 16.4.5
+2026-11-06T01:35:47+00:00 pxe-test-server node[1891]: - Local:         http://127.0.0.1:3000
+2026-11-06T01:35:47+00:00 pxe-test-server node[1891]: - Network:       http://127.0.0.1:3000
+2026-11-06T01:35:47+00:00 pxe-test-server node[1891]: ✓ Ready in 0ms
+2026-11-06T01:35:47+00:00 pxe-test-server node[1891]: ✓ Running next.config took 0.8ms
+2026-11-06T01:35:48+00:00 pxe-test-server node[1891]: (node:1891) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+2026-11-06T01:35:48+00:00 pxe-test-server node[1891]: (Use `node --trace-warnings ...` to show where the warning was created)
+2026-11-06T01:59:17+00:00 pxe-test-server node[1891]: [boot] tolak file mac=52:54:00:99:00:21 alasan=ip
+2026-11-06T01:59:17+00:00 pxe-test-server node[1891]: [boot] tolak file mac=52:54:00:99:00:22 alasan=mac-mismatch
+2026-11-06T01:59:17+00:00 pxe-test-server node[1891]: [boot] tolak file mac=52:54:00:99:00:21 alasan=token-unknown
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak file mac=52:54:00:99:00:21 alasan=ip
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T01:59:18+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T02:00:18+00:00 pxe-test-server node[1891]: [boot] 271 penolakan log ditekan dalam 60 dtk

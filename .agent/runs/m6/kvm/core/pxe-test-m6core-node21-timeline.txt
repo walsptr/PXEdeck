@@ -1,11 +1,11 @@
-2026-11-06T01:36:11.532Z muncul di tabel tanpa reload; firmware=uefi
-2026-11-06T01:36:14.909Z install dibuat (UI) disk=/dev/vdz generator=true
-2026-11-06T01:36:15.033Z node.sh reset
-2026-11-06T01:40:44.406Z job1 failed/installer-error +264 dtk; error-commands=1; temuan=0
-2026-11-06T01:58:46.402Z install ulang (UI) disk=(otomatis)
-2026-11-06T01:58:46.514Z node.sh reset (install ulang)
-2026-11-06T01:58:46.526Z job2: booting (UI)
-2026-11-06T01:59:16.712Z job2: installing (UI)
-2026-11-06T02:00:44.752Z AC-6.47c neg ok=true; AC-6.51b flood ok=true (429=9)
-2026-11-06T02:04:17.650Z job2: configuring (UI)
-2026-11-06T02:07:58.257Z job2: done (UI)
+2026-11-06T03:17:28.315Z muncul di tabel tanpa reload; firmware=uefi
+2026-11-06T03:17:31.304Z install dibuat (UI) disk=/dev/vdz generator=true
+2026-11-06T03:17:31.393Z node.sh reset
+2026-11-06T03:21:57.764Z job1 failed/installer-error +264 dtk; error-commands=1; temuan=0
+2026-11-06T03:40:06.695Z install ulang (UI) disk=(otomatis)
+2026-11-06T03:40:06.785Z node.sh reset (install ulang)
+2026-11-06T03:40:06.799Z job2: booting (UI)
+2026-11-06T03:40:37.029Z job2: installing (UI)
+2026-11-06T03:42:04.715Z AC-6.47c neg ok=true; AC-6.51b flood ok=true (429=9)
+2026-11-06T03:45:57.317Z job2: configuring (UI)
+2026-11-06T03:49:37.908Z job2: done (UI)

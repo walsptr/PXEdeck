@@ -2,13 +2,13 @@
   "config": {
     "argv": [
       "/usr/bin/node-22",
-      "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/node_modules/.bin/playwright",
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-kvm/dashboard/node_modules/.bin/playwright",
       "test",
       "-c",
-      "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/playwright.config.ts"
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-kvm/dashboard/e2e-kvm/playwright.config.ts"
     ],
-    "configFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/playwright.config.ts",
-    "rootDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm",
+    "configFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-kvm/dashboard/e2e-kvm/playwright.config.ts",
+    "rootDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-kvm/dashboard/e2e-kvm",
     "failOnFlakyTests": false,
     "forbidOnly": true,
     "fullyParallel": false,
@@ -32,7 +32,7 @@
         },
         "id": "",
         "name": "",
-        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-kvm/dashboard/e2e-kvm",
         "testIgnore": [],
         "testMatch": [
           "/(^|\\/)m6-[^/]*\\.spec\\.ts$/"
@@ -51,8 +51,8 @@
           "actualWorkers": 1
         },
         "name": "",
-        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm",
-        "snapshotDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-kvm/dashboard/e2e-kvm",
+        "snapshotDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-kvm/dashboard/e2e-kvm",
         "testIgnore": [],
         "testMatch": {},
         "timeout": 3000000,
@@ -129,12 +129,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 637385,
+                  "duration": 638085,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T02:14:30.647Z",
+                  "startTime": "2026-11-06T03:55:24.627Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -152,8 +152,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-06T02:14:29.721Z",
-    "duration": 638992.945,
+    "startTime": "2026-11-06T03:55:23.992Z",
+    "duration": 639683.4450000001,
     "expected": 1,
     "skipped": 0,
     "unexpected": 0,

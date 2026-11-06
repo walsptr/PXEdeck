@@ -1,0 +1,19 @@
+# kvm-run m6 scenario=core run=m6core 20261106T013507Z nodes=[21:uefi:failpath 22:bios:destroy] waves=0 keep_server=0 dry=0
+2026-11-06T01:35:07Z preflight          ok max_nodes=3 avail_mb=11601 mem_available_mb=14673 waves=—
+2026-11-06T01:35:07Z net-up             ok 
+2026-11-06T01:35:20Z server-up          ok 
+2026-11-06T01:35:20Z admin-pass         ok m6core-admin.pass (0600, isi tidak dicetak)
+2026-11-06T01:35:49Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-06T01:35:49Z server-check       ok 
+2026-11-06T01:35:50Z node-create        ok pxe-test-m6core-node21 uefi 52:54:00:99:00:21
+2026-11-06T01:35:52Z node-create        ok pxe-test-m6core-node22 bios 52:54:00:99:00:22
+2026-11-06T02:11:55Z playwright         ok exit=0 (playwright-kvm.log)
+2026-11-06T02:11:55Z verify             ok pxe-test-m6core-node21 (pxe-test-m6core-node21-verify.txt)
+2026-11-06T02:11:55Z evidence           start 
+2026-11-06T02:11:56Z evidence           done 
+2026-11-06T02:11:57Z server-logs        ok 
+2026-11-06T02:12:00Z cleanup            done 
+2026-11-06T02:12:00Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-06T02:12:07Z redact             ok 
+2026-11-06T02:12:08Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T02:12:08Z result             FAIL exit=1 stage=verify

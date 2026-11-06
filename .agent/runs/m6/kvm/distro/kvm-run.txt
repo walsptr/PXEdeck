@@ -1,0 +1,20 @@
+# kvm-run m6 scenario=distro run=m6distro 20261106T040640Z nodes=[23:uefi:os=debian 24:uefi:os=rocky] waves=0 keep_server=0 dry=0
+2026-11-06T04:06:40Z preflight          ok max_nodes=3 avail_mb=13063 mem_available_mb=16135 waves=—
+2026-11-06T04:06:40Z net-up             ok 
+2026-11-06T04:06:53Z server-up          ok 
+2026-11-06T04:06:53Z admin-pass         ok m6distro-admin.pass (0600, isi tidak dicetak)
+2026-11-06T04:07:16Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-06T04:07:17Z server-check       ok 
+2026-11-06T04:07:18Z node-create        ok pxe-test-m6distro-node23 uefi 52:54:00:99:00:23
+2026-11-06T04:07:19Z node-create        ok pxe-test-m6distro-node24 uefi 52:54:00:99:00:24
+2026-11-06T04:26:36Z playwright         ok exit=0 (playwright-kvm.log)
+2026-11-06T04:26:37Z verify             ok pxe-test-m6distro-node23 (pxe-test-m6distro-node23-verify.txt)
+2026-11-06T04:26:37Z verify             ok pxe-test-m6distro-node24 (pxe-test-m6distro-node24-verify.txt)
+2026-11-06T04:26:37Z evidence           start 
+2026-11-06T04:26:38Z evidence           done 
+2026-11-06T04:26:38Z server-logs        ok 
+2026-11-06T04:26:42Z cleanup            done 
+2026-11-06T04:26:42Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-06T04:26:48Z redact             ok 
+2026-11-06T04:26:48Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T04:26:48Z result             PASS exit=0
