@@ -1,6 +1,6 @@
 // M5-T13 E2E (server "m5-library": subnet KVM, DB kosong + image bawaan, lease fixture, media palsu
 // tanpa ubuntu-22.04). Satu host memakai ubuntu-24.04 + key A dari library (→ "dipakai").
-//  - AC-5.27 OS Images: seed (id/sumber/URL mono), image tanpa media "tidak tersedia" muted (bukan
+//  - AC-5.27 OS Images: seed (id/sumber/URL mono), image tanpa media "tidak tersedia" body — DEC-022 §1 — (bukan
 //            #cf2d56); dialog daftar: error server per field, 409 id ganda, valid → baris baru; hapus
 //            terpakai → 409, tidak terpakai → hilang setelah konfirmasi
 //  - AC-5.28 SSH Keys: tambah via paste & unggah .pub (fingerprint = `ssh-keygen -lf`), invalid →
@@ -42,7 +42,7 @@ test.beforeAll(async ({ request }) => {
   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
 })
 
-test("AC-5.27/5.32 OS Images: tabel seed, mono, tidak tersedia muted, judul 26 px", async ({ page }) => {
+test("AC-5.27/5.32 OS Images: tabel seed, mono, tidak tersedia body (DEC-022 §1), judul 26 px", async ({ page }) => {
   await page.goto("/os-images")
   await expect(page.getByTestId("os-images-page")).toBeVisible()
   await expect(page.locator("header h1")).toHaveCSS("font-size", "26px")
@@ -57,10 +57,11 @@ test("AC-5.27/5.32 OS Images: tabel seed, mono, tidak tersedia muted, judul 26 p
   expect(await u24.getByTestId("img-repo-url").evaluate((e) => getComputedStyle(e).fontFamily)).toMatch(/JetBrains Mono/)
   await expect(u24.getByTestId("img-available")).toHaveAttribute("data-available", "true")
   await expect(u24.getByTestId("img-used-by")).toContainText("1")
-  // Tanpa media → tidak tersedia, muted (bukan merah).
+  // Tanpa media → tidak tersedia, bukan merah. DEC-022 §1 (gate M6 R3) menggantikan "muted" DR-4-5:
+  // teks body + ikon info (DEC-017 §9: informasi penting tidak muted).
   const u22 = page.locator('[data-testid="os-image-row"][data-image-id="ubuntu-22.04"]').getByTestId("img-available")
   await expect(u22).toHaveAttribute("data-available", "false")
-  await expect(u22).toHaveCSS("color", HEX.muted)
+  await expect(u22).toHaveCSS("color", HEX.body)
   expect(await u22.evaluate((e) => getComputedStyle(e).color)).not.toBe(HEX.failed)
   expect(await rows.count()).toBeGreaterThanOrEqual(4)
   expect(await dropShadowViolations(page)).toEqual([])

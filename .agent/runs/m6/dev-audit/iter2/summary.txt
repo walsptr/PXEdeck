@@ -1,0 +1,9 @@
+Audit mandiri frontend-dev M6 iter2 (DEC-018 §6). Harness = salinan design-review iter1 (dev-audit/iter2/audit.{config,spec}.ts),
+seed m6-ui + host Failed (seedM6Iter2), build produksi. Lebar: 375 414 768 800 1024 1279 1280 1440; Sheet 375/768/1440.
+overflow halaman (scrollWidth != vw): tidak ada
+shadow: tidak ada
+bg != #f7f7f4: tidak ada
+nonMono: tidak ada
+mutedImportant hilang dibanding design-review iter1: ['"Configuring"', '"Installer melaporkan gagal"', '"Installing"', '"Media  tidak tersedia  tidak ada)"']
+mutedImportant baru: ['"job-iter2-failed-001"'] (id job seed berisi kata 'failed' — positif palsu heuristik kata kunci; id job memang muted seperti id job lain)
+mutedImportant tersisa sama dengan iter1 (teks bantuan Settings/Credentials yang memuat kata 'Failed'/'tidak bisa', bukan error/label status): 9

@@ -8,6 +8,10 @@ import { useJobLog, type LogConnection } from "@/hooks/use-job-log"
 import { formatClock } from "@/lib/jobs"
 import { cn } from "@/lib/utils"
 
+/** DR-6-8: penjelasan 404 job, dipakai bersama log viewer dan detail job (tanpa mengulang judul). */
+export const JOB_NOT_FOUND_EXPLANATION =
+  "Mungkin sudah dihapus oleh retensi riwayat atau host dihapus."
+
 const CONNECTION: Record<LogConnection, { label: string; dot: string; important?: boolean }> = {
   connecting: { label: "Menyambung…", dot: "bg-muted-soft" },
   live: { label: "Live", dot: "bg-success" },
@@ -79,11 +83,20 @@ export function LogViewer({ jobId }: { jobId: string }) {
         className="h-96 overflow-auto rounded-xl border border-border bg-card py-2 font-mono text-[13px] leading-5 focus-visible:outline-2 focus-visible:outline-ring/50"
       >
         {events.length === 0 ? (
-          <p className="px-4 py-2 text-muted-foreground">
+          <p
+            data-testid="log-empty"
+            data-state={connection}
+            className={cn(
+              "px-4 py-2",
+              connection === "not-found" || connection === "session"
+                ? "text-body"
+                : "text-muted-foreground",
+            )}
+          >
             {connection === "ended"
               ? "Job ini tidak punya log."
               : connection === "not-found"
-                ? "Job tidak ditemukan — mungkin sudah dihapus oleh retensi riwayat atau host dihapus."
+                ? `Job tidak ditemukan — ${JOB_NOT_FOUND_EXPLANATION.toLowerCase()}`
                 : connection === "session"
                   ? "Sesi berakhir. Masuk lagi untuk melihat log."
                   : "Menunggu log…"}

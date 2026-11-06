@@ -111,7 +111,7 @@ function LastJobNote({ host }: { host: HostWithJob }) {
   return (
     <p
       data-testid="sheet-last-job-failure"
-      className="type-caption flex flex-wrap items-baseline gap-x-2 text-muted-foreground"
+      className="type-caption flex flex-wrap items-baseline gap-x-2 text-body"
     >
       <span>
         <span className="font-medium text-destructive">Install terakhir gagal:</span>{" "}

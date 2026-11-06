@@ -31,6 +31,7 @@ import {
   type Context,
   type NetForm,
 } from "@/components/host-config/form-state"
+import { IpText } from "@/components/host-config/ip-text"
 import { PlanTable } from "@/components/host-config/plan-table"
 import { isHostInSubnet, isIpv4, parseCidr } from "@/lib/net"
 
@@ -98,7 +99,9 @@ export function TabNetwork({
                 onChange={(e) => onChange({ ip: e.target.value })}
               />
               {plan[0]?.error && value.ip ? (
-                <FieldError>{plan[0].error}</FieldError>
+                <FieldError>
+                  <IpText text={plan[0].error} />
+                </FieldError>
               ) : (
                 <FieldDescription>
                   Di dalam{" "}

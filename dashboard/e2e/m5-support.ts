@@ -97,6 +97,7 @@ export const HEX = {
   done: "rgb(192, 133, 50)", // #c08532
   failed: "rgb(207, 45, 86)", // #cf2d56
   muted: "rgb(128, 125, 114)", // #807d72
+  body: "rgb(90, 88, 82)", // #5a5852
 } as const
 
 /** Elemen terlihat ber-latar pastel tahap DI LUAR `[data-status]` (audit AC-5.23). */

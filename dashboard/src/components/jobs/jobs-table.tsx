@@ -80,7 +80,7 @@ function StatusCell({ job }: { job: JobSummary }) {
       {reason && (
         <span
           data-testid="job-row-failure"
-          className="type-caption max-w-56 whitespace-normal text-muted-foreground"
+          className="type-caption max-w-56 whitespace-normal text-body"
         >
           {reason}
         </span>

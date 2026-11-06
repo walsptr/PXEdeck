@@ -5,6 +5,7 @@ import { defineConfig, devices } from "@playwright/test"
 
 import { e2eAdminEnv, storageStatePath } from "./e2e/support/e2e-auth"
 import { e2eDb, e2eLeaseFile, e2eMedia } from "./e2e/support/e2e-env"
+import { seedM6Iter2 } from "./e2e/support/m6-iter2-seed"
 import { seedM6Ui } from "./e2e/support/m6-seed"
 
 const PORT = 3100
@@ -140,6 +141,14 @@ const FILE_SERVERS = [
     port: 3116,
     testMatch: /m6-ui\.spec\.ts/,
     env: { ...M4_ENV, ...dbEnv("m6-ui", "demo", seedM6Ui), PXE_DNSMASQ_LEASES: e2eLeaseFile("m6-ui") },
+  },
+  {
+    // Gate M6 iter1 R1/R2/R3/R7 + DEC-022 §3: informasi penting tidak muted, status server tanpa
+    // bergantung warna, kosmetik DR-6-4/6/7/8. Data = seed m6-ui + host Failed dengan job failed.
+    name: "m6-ui-iter2",
+    port: 3117,
+    testMatch: /m6-ui-iter2\.spec\.ts/,
+    env: { ...M4_ENV, ...dbEnv("m6-ui-iter2", "demo", seedM6Iter2), PXE_DNSMASQ_LEASES: e2eLeaseFile("m6-ui-iter2") },
   },
 ] as const
 

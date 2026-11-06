@@ -92,7 +92,10 @@ function SourceCell({ img }: { img: OsImageInfo }) {
   )
 }
 
-/** DR-4-5: "tidak tersedia" = keterbatasan, bukan error → muted + ikon info (bukan merah). */
+/**
+ * DR-4-5: "tidak tersedia" = keterbatasan, bukan error → ikon info, tidak merah. DEC-022 §1 (DR-6-3):
+ * teks `text-body`, bukan muted (DEC-017 §9).
+ */
 function AvailabilityCell({ img }: { img: OsImageInfo }) {
   if (img.available)
     return (
@@ -103,7 +106,7 @@ function AvailabilityCell({ img }: { img: OsImageInfo }) {
     )
   return (
     <span
-      className="type-caption flex items-start gap-1.5 whitespace-normal text-muted-foreground xl:w-[24ch]"
+      className="type-caption flex items-start gap-1.5 whitespace-normal text-body xl:w-[24ch]"
       data-testid="img-available"
       data-available="false"
     >

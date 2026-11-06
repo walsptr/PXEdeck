@@ -41,7 +41,7 @@ export function JobTimeline({ job }: { job: JobSummary }) {
             ) : (
               <Badge
                 variant="outline"
-                className="h-6 bg-card px-2.5 font-medium text-muted-foreground"
+                className="h-6 bg-card px-2.5 font-medium text-body"
               >
                 {JOB_STATUS_LABEL[s.stage]}
               </Badge>

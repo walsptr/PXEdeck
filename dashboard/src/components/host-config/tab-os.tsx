@@ -287,8 +287,9 @@ export function TabOs({
 }
 
 /**
- * Kartu image. DR-4-5: alasan "tidak tersedia"/keterbatasan = keterangan, bukan error → muted +
- * ikon info; merah hanya bila image itu yang sedang terpilih (install akan ditolak).
+ * Kartu image. DR-4-5: alasan "tidak tersedia"/keterbatasan = keterangan, bukan error → ikon info,
+ * `text-body` (DEC-022 §1, bukan muted); merah hanya bila image itu yang sedang terpilih (install
+ * akan ditolak).
  */
 function OsImageOption({
   img,
@@ -320,7 +321,7 @@ function OsImageOption({
           </FieldTitle>
           {/*
             AC-6.38 (BUG-M6-L3): kartu terpilih/hover berlatar canvas-soft / input — muted di sana
-            < 4,5:1 → body. Catatan "tidak tersedia" (kartu disabled, latar putih) tetap muted (DR-4-5).
+            < 4,5:1 → body. Catatan "tidak tersedia" juga body + ikon info (DEC-022 §1), bukan merah.
           */}
           <FieldDescription className="text-body" data-slot-detail="os-platform">
             <span className="type-data text-xs">{img.arch}</span> · {img.method}
@@ -332,8 +333,9 @@ function OsImageOption({
                 "flex items-start gap-1.5",
                 disabled && selected
                   ? "text-destructive"
-                  : "text-muted-foreground",
+                  : "text-body",
               )}
+              data-testid="os-option-note"
             >
               <HugeiconsIcon
                 icon={InformationCircleIcon}
