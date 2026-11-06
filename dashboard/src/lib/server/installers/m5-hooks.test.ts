@@ -65,7 +65,7 @@ describe("hook generator", () => {
     expect(late[2]).toBe(logCmd("preseed", MAC, DEBIAN_LOG.late))
     expect(late.at(-1)).toBe(logCmd("preseed", MAC, DEBIAN_LOG.lateDone))
     const ks = rockyKickstart(ctx).split("\n")
-    expect(ks[ks.indexOf("%pre") + 1]).toBe(logCmd("kickstart", MAC, ROCKY_LOG.start))
+    expect(ks[ks.indexOf("%pre --erroronfail") + 1] /* M6 BUG-M6-7: header %pre --erroronfail */).toBe(logCmd("kickstart", MAC, ROCKY_LOG.start))
     const post = rockyPostScript(ctx).trimEnd().split("\n")
     expect(post[1]).toBe(logCmd("kickstart", MAC, ROCKY_LOG.post))
     expect(post.at(-1)).toBe(logCmd("kickstart", MAC, ROCKY_LOG.postDone))

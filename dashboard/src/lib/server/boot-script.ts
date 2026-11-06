@@ -140,13 +140,17 @@ export function installerScript(i: InstallerScriptInput): string {
       // DEC-020 (BUG-M6-4): stage2 (`images/install.img` ±1,2 GB) di-mount lewat NFS read-only dari
       // server (seperti root live Ubuntu, DEC-009), bukan diunduh dracut ke RAM (node 2 GB habis).
       // Repo paket = `url` di kickstart (HTTP); kickstart tetap HTTP per-MAC (`inst.ks=`).
-      cmdline = args(
+      // BUG-M6-7: console serial (`console=ttyS*`) dipindah ke AKHIR — console terakhir menjadi
+      // /dev/console, tempat anaconda mode cmdline menulis pesan/error (bukti di log serial).
+      cmdline = [
         "initrd=initrd",
         "ip=dhcp",
         `inst.stage2=nfs:${ipxeSafe(i.serverIp, "server IP")}:${ipxeSafe(i.mediaRoot, "media root")}/${repo}`,
         `inst.ks=${c}ks.cfg`,
         "inst.cmdline", // BUG-M6-5: non-interaktif (selaras `cmdline` di kickstart; mode boot diutamakan anaconda)
-      )
+        ...x.filter((a) => !/^console=ttyS/.test(a)),
+        ...x.filter((a) => /^console=ttyS/.test(a)),
+      ].join(" ")
       break
     default:
       throw new Error(`Metode ${i.method} tidak bisa di-boot via iPXE`)

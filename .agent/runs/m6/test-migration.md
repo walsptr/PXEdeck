@@ -159,3 +159,19 @@ Test baru: `src/lib/m6-api-client.test.ts`, `src/lib/m6-jobs-head.test.ts`, `src
 
 Test baru: `installers/m6-smoke-fixes.test.ts` (12), `infra/test/m6-nfs.sh` (3, di-source `run.sh`).
 Mutasi: `.agent/runs/m6/mutation-dev-T6b.txt` (14 mutan, semua merah).
+
+## T6c — perbaikan smoke ulang (backend-dev; BUG-M6-6, BUG-M6-7)
+
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `installers/installers.test.ts` › AC-4.19 "hash, root-login …" | `d-i partman-auto/disk string /dev/vda` ada | tidak ada baris statis; `partman/early_command` memuat `d='/dev/vda'; ` | BUG-M6-6: disk dipilih/divalidasi saat runtime (`debconf-set`). |
+| `installers/installers.test.ts` › AC-4.19 "variasi …" | disk kosong → `not.toContain("partman-auto/disk")` | `not.toContain("d-i partman-auto/disk")` + early_command `d=''` | Teks `partman-auto/disk` kini muncul di argumen `debconf-set`; yang dilarang tetap baris statis. |
+| `installers/installers.test.ts` › AC-4.20 "sudo=false … partisi plain tanpa disk" | `clearpart --all --initlabel` tanpa `--drives`, tanpa `ignoredisk` | `%include /tmp/pxe-disk.ks`; tidak ada baris `clearpart`/`ignoredisk` statis | BUG-M6-7: %pre memilih SATU disk (sebelumnya `clearpart --all` menghapus semua disk). |
+| `m5-hooks.test.ts`, `m5-te-hooks.test.ts` (3 tempat) | `ks.indexOf("%pre")` | `ks.indexOf("%pre --erroronfail")` | Header %pre berubah; asersi (baris pertama = log mulai, dijalankan sh) tetap. |
+| `m6-generator.test.ts`, `app/boot/boot-routes.test.ts` snapshot Rocky | `… inst.cmdline console=ttyS0,115200n8 console=tty0` | `… inst.cmdline console=tty0 console=ttyS0,115200n8` | BUG-M6-7: console serial terakhir (= /dev/console) hanya untuk Rocky; Ubuntu/Debian tidak berubah (diuji). |
+| golden `debian-preseed.cfg`, `rocky-ks.cfg` | — | + `partman/early_command`, label gpt, purge LVM, vg name, no_swap; ks: `%pre --erroronfail` + validasi disk | Diperbarui (`-u`), ditinjau. |
+| golden BARU `debian-preseed-auto-disk.cfg`, `rocky-ks-auto-disk.cfg` | — | disk otomatis | Diminta Orchestrator: golden disk otomatis DAN eksplisit. |
+
+Test baru di `installers/m6-smoke-fixes.test.ts` (+11): early_command/%pre dijalankan `sh` dengan stub
+`list-devices`/`lsblk`/`debconf-set`/`curl`/`wget` (seam: `[ -b` → `[ -e`, root palsu). Mutasi:
+`.agent/runs/m6/mutation-dev-T6c.txt` (14/14 merah).

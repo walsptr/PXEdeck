@@ -89,7 +89,8 @@ describe("AC-6.28 SR-4-6 preseed ` ---`", () => {
     expect(u.split(" ").filter((a) => a === "---")).toHaveLength(1)
     const r = kernelLine(installerScript({ ...BASE, method: "kickstart", source: SRC.kickstart }))
     expect(r.split(" ")).not.toContain("---")
-    expect(r.endsWith("inst.cmdline console=ttyS0,115200n8 console=tty0")).toBe(true)
+    // M6 BUG-M6-7: Rocky menaruh console serial terakhir (/dev/console = ttyS0).
+    expect(r.endsWith("inst.cmdline console=tty0 console=ttyS0,115200n8")).toBe(true)
   })
 })
 

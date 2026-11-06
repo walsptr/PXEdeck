@@ -344,7 +344,7 @@ describe("AC-4.16 installer Debian & Rocky; image tidak tersedia / Windows", () 
     expect(rocky.script).toContain(`inst.ks=http://10.99.0.2/boot/${MAC2}/${rocky.token}/ks.cfg`)
     expect(redact(rocky.script)).toMatchInlineSnapshot(`
       "#!ipxe
-      kernel http://10.99.0.2/media/rocky-9/images/pxeboot/vmlinuz initrd=initrd ip=dhcp inst.stage2=nfs:10.99.0.2:<media-root>/rocky-9 inst.ks=http://10.99.0.2/boot/<mac>/<token>/ks.cfg inst.cmdline console=ttyS0,115200n8 console=tty0
+      kernel http://10.99.0.2/media/rocky-9/images/pxeboot/vmlinuz initrd=initrd ip=dhcp inst.stage2=nfs:10.99.0.2:<media-root>/rocky-9 inst.ks=http://10.99.0.2/boot/<mac>/<token>/ks.cfg inst.cmdline console=tty0 console=ttyS0,115200n8
       initrd --name initrd http://10.99.0.2/media/rocky-9/images/pxeboot/initrd.img
       boot
       "

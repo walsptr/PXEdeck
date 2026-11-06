@@ -16,7 +16,25 @@ export const DEBIAN_LOG = {
   start: "installer: preseed mulai",
   late: "installer: late_command mulai",
   lateDone: "installer: konfigurasi target selesai",
+  disk: "installer: disk target dipilih",
+  noDisk: "ERROR installer gagal: disk target tidak ditemukan",
 } as const
+
+/**
+ * BUG-M6-6: `partman/early_command` (d-i busybox, berjalan tepat sebelum partman). Disk target =
+ * disk eksplisit dari config, atau (otomatis) disk pertama non-removable dari `list-devices disk`.
+ * Disk ada → `debconf-set partman-auto/disk` + `grub-installer/bootdev` (tanpa ini partman tidak
+ * memilih disk dan berhenti di "No root file system"). Disk tidak ada → log ERROR + callback
+ * `failed` lalu exit 1 (job langsung final, tidak menunggu watchdog). Diekspor untuk test.
+ */
+export function debianDiskCmd(ctx: InstallContext): string {
+  const c = validateContext(ctx)
+  return [
+    `d=${shQuote(c.storage.disk)}`,
+    'if [ -z "$d" ]; then for x in $(list-devices disk); do [ "$(cat "/sys/block/${x##*/}/removable" 2>/dev/null)" = 1 ] || { d=$x; break; }; done; fi',
+    `if [ -n "$d" ] && [ -b "$d" ]; then debconf-set partman-auto/disk "$d"; debconf-set grub-installer/bootdev "$d"; ${logCmd("preseed", c.mac, DEBIAN_LOG.disk)}; else ${logCmd("preseed", c.mac, DEBIAN_LOG.noDisk)}; ${callbackCmd("preseed", c.mac, "failed")}; exit 1; fi`,
+  ].join("; ")
+}
 
 /** Konfigurasi ifupdown untuk interface `$IF` (dicari dari MAC saat runtime). */
 function interfacesText(c: InstallContext): string {
@@ -131,7 +149,8 @@ export function debianPreseed(ctx: InstallContext): string {
     di("clock-setup/utc", "boolean", true),
     di("time/zone", "string", c.timezone),
     di("clock-setup/ntp", "boolean", false),
-    ...(c.storage.disk ? [di("partman-auto/disk", "string", c.storage.disk)] : []),
+    // Disk dipilih/divalidasi saat runtime (BUG-M6-6); partman-auto/disk di-set lewat debconf-set.
+    di("partman/early_command", "string", debianDiskCmd(c)),
     di("partman-auto/method", "string", recipe),
     di("partman-auto-lvm/guided_size", "string", "max"),
     di("partman-lvm/device_remove_lvm", "boolean", true),
@@ -139,7 +158,12 @@ export function debianPreseed(ctx: InstallContext): string {
     di("partman-lvm/confirm", "boolean", true),
     di("partman-lvm/confirm_nooverwrite", "boolean", true),
     di("partman-auto/choose_recipe", "select", "atomic"),
+    di("partman-auto/purge_lvm_from_device", "boolean", true),
+    di("partman-auto-lvm/new_vg_name", "string", "pxe-vg"),
     di("partman-efi/non_efi_system", "boolean", true),
+    di("partman-partitioning/choose_label", "select", "gpt"),
+    di("partman-partitioning/default_label", "string", "gpt"),
+    di("partman-basicfilesystems/no_swap", "boolean", false),
     di("partman-partitioning/confirm_write_new_label", "boolean", true),
     di("partman/choose_partition", "select", "finish"),
     di("partman/confirm", "boolean", true),
@@ -149,6 +173,7 @@ export function debianPreseed(ctx: InstallContext): string {
     di("pkgsel/upgrade", "select", "none"),
     di("popularity-contest/popularity-contest", "boolean", false),
     di("grub-installer/only_debian", "boolean", true),
+    // Nilai awal; `partman/early_command` menimpanya dengan disk terpilih (otomatis maupun eksplisit).
     di("grub-installer/bootdev", "string", c.storage.disk || "default"),
     di(
       "preseed/late_command",

@@ -234,7 +234,9 @@ describe("AC-4.19 Debian preseed", () => {
     expect(lines).toContain("d-i mirror/http/directory string /media/debian-12")
     expect(lines).toContain("d-i pkgsel/include string openssh-server curl sudo")
     expect(lines).toContain("d-i partman-auto/method string lvm")
-    expect(lines).toContain("d-i partman-auto/disk string /dev/vda")
+    // M6 (BUG-M6-6): disk diset saat runtime di partman/early_command (debconf-set), bukan statis.
+    expect(lines).not.toContain("d-i partman-auto/disk string /dev/vda")
+    expect(lines.find((l) => l.startsWith("d-i partman/early_command string "))).toContain("d='/dev/vda'; ")
     expect(lines).toContain("d-i grub-installer/bootdev string /dev/vda")
     expect(lines.at(-1)).toBe("d-i finish-install/reboot_in_progress note")
   })
@@ -267,11 +269,14 @@ describe("AC-4.19 Debian preseed", () => {
     expect(Buffer.from(/printf %s '([A-Za-z0-9+/=]+)' \| base64 -d \| sed/.exec(l3)![1], "base64").toString()).toMatch(/^auto \$IF\niface \$IF inet manual\nauto \$IF\.7\niface \$IF\.7 inet static/)
     const p = debianPreseed(ctx({ storage: { partition: "auto", disk: "" } }))
     expect(p).toContain("d-i partman-auto/method string regular")
-    expect(p).not.toContain("partman-auto/disk")
+    expect(p).not.toContain("d-i partman-auto/disk")
+    expect(p).toContain("d-i partman/early_command string d=''; ")
     expect(p).toContain("d-i grub-installer/bootdev string default")
   })
   it("golden file", async () => {
     await expect(ps).toMatchFileSnapshot("../../../test/golden/installers/debian-preseed.cfg")
+    // M6 BUG-M6-6: disk otomatis (disk kosong, partisi auto) — golden terpisah.
+    await expect(debianPreseed(ctx({ imageRepo: "debian-12", storage: { partition: "auto", disk: "" } }))).toMatchFileSnapshot("../../../test/golden/installers/debian-preseed-auto-disk.cfg")
     await expect(late).toMatchFileSnapshot("../../../test/golden/installers/debian-late.sh")
   })
 })
@@ -304,8 +309,11 @@ describe("AC-4.20 Rocky kickstart", () => {
     expect(k).not.toContain("--groups=wheel")
     expect(k).toContain(`network --device=${MAC} --bootproto=dhcp --hostname=m4-node11 --activate --onboot=yes`)
     expect(k).toContain("autopart --type=plain")
-    expect(k).toContain("clearpart --all --initlabel\n")
-    expect(k).not.toContain("ignoredisk")
+    // M6 (BUG-M6-7): disk otomatis → %pre memilih SATU disk dan menulis include (tidak lagi
+    // `clearpart --all` tanpa --drives yang menghapus semua disk).
+    const kl = k.split("\n")
+    expect(kl).toContain("%include /tmp/pxe-disk.ks")
+    expect(kl.filter((l) => /^(clearpart|ignoredisk)\b/.test(l))).toEqual([])
   })
   it("section %…/%end seimbang; %post (didekode) + %onerror callback failed", () => {
     const opens = lines.filter((l) => /^%(?!end$)/.test(l))
@@ -338,6 +346,8 @@ describe("AC-4.20 Rocky kickstart", () => {
   })
   it("golden file", async () => {
     await expect(ks).toMatchFileSnapshot("../../../test/golden/installers/rocky-ks.cfg")
+    // M6 BUG-M6-7: disk otomatis → %pre memilih disk + %include.
+    await expect(rockyKickstart(ctx({ imageRepo: "rocky-9", storage: { partition: "lvm", disk: "" } }))).toMatchFileSnapshot("../../../test/golden/installers/rocky-ks-auto-disk.cfg")
   })
 })
 

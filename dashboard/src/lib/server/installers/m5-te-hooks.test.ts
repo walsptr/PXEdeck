@@ -226,7 +226,7 @@ describe("AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl)", ()
   it("Rocky %pre, %post (log sebelum configuring + akhir), %onerror (tail lalu failed)", () => {
     const ks = rockyKickstart(ctx({ imageRepo: "rocky-9" })).split("\n")
     const k = kcmd("kickstart")
-    const pre = ks[ks.indexOf("%pre") + 1]
+    const pre = ks[ks.indexOf("%pre --erroronfail") + 1] /* M6 BUG-M6-7: header %pre --erroronfail */
     expect(runSh(pre, k).calls.map((c) => [url(c), c.stdin])).toEqual([[LOG_URL, `${ROCKY_LOG.start}\n`]])
     const post = rockyPostScript(ctx({ imageRepo: "rocky-9" })).trimEnd().split("\n")
     const iLog = post.indexOf(logCmd("kickstart", MAC, ROCKY_LOG.post))
@@ -284,7 +284,7 @@ describe("AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl)", ()
       expect(r.calls.some((x) => x.argv.some((a) => a.includes("/boot/"))), c).toBe(false)
     }
     const ks = rockyKickstart(ctx({ imageRepo: "rocky-9" })).split("\n")
-    const r = runSh(ks[ks.indexOf("%pre") + 1], k().replace("ds=nocloud-net;s=", "inst.ks="))
+    const r = runSh(ks[ks.indexOf("%pre --erroronfail") + 1] /* M6 BUG-M6-7: header %pre --erroronfail */, k().replace("ds=nocloud-net;s=", "inst.ks="))
     expect(r.calls).toEqual([])
   })
   it("curl gagal → fallback wget ke URL yang sama; keduanya gagal → tetap exit 0", () => {
