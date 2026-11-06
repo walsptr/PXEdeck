@@ -1,0 +1,6 @@
+PASS  CR-4-12-dnsmasq  pxe-test-m6bulk-node25       TFTP snponly.efi terkirim ke 10.99.0.103 (lease 52:54:00:99:00:25)
+PASS  CR-4-12-nginx    pxe-test-m6bulk-node25       user-data 200 x1 (min 1)
+PASS  CR-4-12-dnsmasq  pxe-test-m6bulk-node26       TFTP snponly.efi terkirim ke 10.99.0.104 (lease 52:54:00:99:00:26)
+PASS  CR-4-12-nginx    pxe-test-m6bulk-node26       user-data 200 x1 (min 1)
+PASS  CR-4-12-dnsmasq  pxe-test-m6bulk-node27       TFTP snponly.efi terkirim ke 10.99.0.105 (lease 52:54:00:99:00:27)
+PASS  CR-4-12-nginx    pxe-test-m6bulk-node27       user-data 200 x1 (min 1)

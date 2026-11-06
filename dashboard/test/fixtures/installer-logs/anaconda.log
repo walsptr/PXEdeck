@@ -1,0 +1,243 @@
+# FIXTURE log installer nyata (run KVM M6 T15, smoke attempt5 node42 Rocky); disanitasi + secret sintetis {{..}} (AC-6.17)
+23:33:56,761 INF core.configuration.product: Loading information about products from /etc/anaconda/product.d.
+23:33:56,764 INF core.configuration.product: Found AlmaLinux at /etc/anaconda/product.d/almalinux.conf.
+23:33:56,764 INF core.configuration.product: Found CentOS Stream at /etc/anaconda/product.d/centos-stream.conf.
+23:33:56,765 INF core.configuration.product: Found CentOS Linux at /etc/anaconda/product.d/centos.conf.
+23:33:56,765 INF core.configuration.product: Found Circle Linux at /etc/anaconda/product.d/circle.conf.
+23:33:56,765 INF core.configuration.product: Found Fedora-ELN at /etc/anaconda/product.d/fedora-eln.conf.
+23:33:56,766 INF core.configuration.product: Found Fedora-IoT IoT at /etc/anaconda/product.d/fedora-iot.conf.
+23:33:56,766 INF core.configuration.product: Found Fedora Server at /etc/anaconda/product.d/fedora-server.conf.
+23:33:56,766 INF core.configuration.product: Found Fedora Silverblue at /etc/anaconda/product.d/fedora-silverblue.conf.
+23:33:56,766 INF core.configuration.product: Found Fedora Workstation Live at /etc/anaconda/product.d/fedora-workstation-live.conf.
+23:33:56,767 INF core.configuration.product: Found Fedora Workstation at /etc/anaconda/product.d/fedora-workstation.conf.
+23:33:56,767 INF core.configuration.product: Found Fedora at /etc/anaconda/product.d/fedora.conf.
+23:33:56,767 INF core.configuration.product: Found oVirt Node Next at /etc/anaconda/product.d/ovirt.conf.
+23:33:56,767 INF core.configuration.product: Found Red Hat Enterprise Linux at /etc/anaconda/product.d/rhel.conf.
+23:33:56,768 INF core.configuration.product: Found RHVH at /etc/anaconda/product.d/rhvh.conf.
+23:33:56,768 INF core.configuration.product: Found Rocky Linux at /etc/anaconda/product.d/rocky.conf.
+23:33:56,768 INF core.configuration.product: Found Scientific Linux at /etc/anaconda/product.d/scientific-linux.conf.
+23:33:56,769 INF core.configuration.product: Found Virtuozzo Linux at /etc/anaconda/product.d/virtuozzo-linux.conf.
+23:33:56,769 WRN core.configuration.product: No support for the product Rocky Linux Minimal Minimal.
+23:33:56,769 WRN core.configuration.product: No support for the product Rocky Linux Minimal.
+23:33:56,769 INF core.configuration.product: The product Rocky Linux is supported.
+23:33:56,769 WRN misc: /usr/lib64/python3.9/site-packages/pyanaconda/core/configuration/anaconda.py:89: DeprecationWarning: The kickstart_modules configuration option is deprecated and will be removed in in the future.
+  warnings.warn(
+
+23:33:56,773 INF main: /sbin/anaconda 34.25.7.14-1.el9.rocky.0.6
+23:33:56,794 INF core.util: Reporting the IPMI event: 7
+23:33:56,839 WRN misc: /usr/lib64/python3.9/site-packages/dbus/connection.py:337: DeprecationWarning: invalid escape sequence \ 
+  """Arrange for the given function to be called when a signal matching
+
+23:33:56,842 WRN misc: /usr/lib64/python3.9/site-packages/dbus/proxies.py:307: DeprecationWarning: invalid escape sequence \ 
+  """Arrange for the given function to be called when the given signal
+
+23:33:57,053 INF isys: 2138076 kB (2087 MB) are available
+23:33:57,054 WRN misc: /usr/lib64/python3.9/subprocess.py:941: RuntimeWarning: line buffering (buffering=1) isn't supported in binary mode, the default buffer size will be used
+  self.stdout = io.open(c2pread, 'rb', bufsize)
+
+23:33:57,065 INF startup_utils: check_memory(): total:2087, needed:320, graphical:410
+23:33:57,066 DBG startup_utils: Don't set up proxy variables.
+23:33:57,074 INF main: anaconda called with cmdline = ['/sbin/anaconda']
+23:33:57,075 INF main: Default encoding = utf-8 
+23:33:57,075 INF misc: Writing a temporary configuration loaded from: ['/etc/anaconda/anaconda.conf', '/etc/anaconda/product.d/rhel.conf', '/etc/anaconda/product.d/rocky.conf', '/etc/anaconda/conf.d/00-do-nothing.conf', '/etc/anaconda/conf.
+23:33:57,096 INF core.dbus: Connecting to the Anaconda bus at unix:abstract=/tmp/dbus-s0Y6eu2tsm,guid=7ae3b50a94fe39569b5085ad6aed1265.
+23:34:02,410 INF main: Found a kickstart file: /run/install/ks.cfg
+23:34:02,442 INF kickstart.script: Running kickstart %%pre script(s)
+23:34:02,411 INF main: kernel command line: vmlinuz initrd=initrd ip=dhcp inst.stage2=nfs:10.99.0.2:/srv/pxe/media/rocky-9 inst.ks=http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/ks.cfg inst.cmdline console=ttyS0,115200n8
+23:34:02,499 DBG kickstart: user --name=m6admin --groups=wheel --iscrypted --password={{HASH}}
+23:34:02,442 INF stdout: Running pre-installation scripts
+23:34:02,488 INF kickstart.script: All kickstart %%pre script(s) have been run
+23:34:02,498 INF startup_utils: Parsing kickstart: /run/install/ks.cfg
+23:34:02,791 WRN kickstart: Command url will be parsed in DBus module.
+23:34:02,791 WRN kickstart: Command lang will be parsed in DBus module.
+23:34:02,791 WRN kickstart: Command keyboard will be parsed in DBus module.
+23:34:02,791 WRN kickstart: Command timezone will be parsed in DBus module.
+23:34:02,791 WRN kickstart: Command network will be parsed in DBus module.
+23:34:02,791 WRN kickstart: Command rootpw will be parsed in DBus module.
+23:34:02,792 WRN kickstart: Command user will be parsed in DBus module.
+23:34:02,792 WRN kickstart: Command sshkey will be parsed in DBus module.
+23:34:02,792 WRN kickstart: Command firstboot will be parsed in DBus module.
+23:34:02,792 WRN kickstart: Command selinux will be parsed in DBus module.
+23:34:02,792 WRN kickstart: Command firewall will be parsed in DBus module.
+23:34:02,792 WRN kickstart: Command clearpart will be parsed in DBus module.
+23:34:02,792 WRN kickstart: Command zerombr will be parsed in DBus module.
+23:34:02,792 WRN kickstart: Command autopart will be parsed in DBus module.
+23:34:02,792 WRN kickstart: Command bootloader will be parsed in DBus module.
+23:34:02,794 DBG pwpolicy: Using the password policy from the configuration.
+23:34:03,912 DBG modules.payloads.payload.dnf.dnf_manager: The DNF base has been reset.
+23:34:03,983 DBG modules.payloads.payload.dnf.utils: Release version of Rocky Linux Minimal is 9.8.
+23:34:03,985 DBG modules.payloads.payload.dnf.dnf_manager: The DNF base has been created.
+23:34:03,994 DBG modules.payloads.payload.dnf.dnf_manager: DNF configuration:
+[main]
+allow_vendor_change = 1
+assumeno = 0
+assumeyes = 0
+autocheck_running_kernel = 1
+bandwidth = 0
+best = 1
+bugtracker_url = https://bugs.rockylinux.org/
+cachedir = /tmp/dnf.cache
+cacheonly = 0
+check_config_file_age = 1
+clean_requirements_on_remove = 1
+color = auto
+color_list_available_downgrade = magenta
+color_list_available_install = bold,cyan
+color_list_available_reinstall = bold,underline,green
+color_list_available_upgrade = bold,blue
+color_list_installed_extra = bold,red
+color_list_installed_newer = bold,yellow
+color_list_installed_older = yellow
+color_list_installed_reinstall = cyan
+color_search_match = bold,magenta
+color_update_installed = red
+color_update_local = green
+color_update_remote = bold,green
+config_file_path = /etc/dnf/dnf.conf
+countme = 0
+debug_solver = 0
+debuglevel = 2
+defaultyes = 0
+deltarpm = 1
+deltarpm_percentage = 75
+disable_excludes = 
+diskspacecheck = 1
+enabled = 1
+enablegroups = 1
+errorlevel = 3
+exclude = 
+exclude_from_weak = 
+exclude_from_weak_autodetect = 1
+excludepkgs = 
+exit_on_lock = 0
+fastestmirror = 0
+gpgcheck = 0
+gpgkey_dns_verification = 0
+group_package_types = mandatory, default, conditional
+history_list_view = commands
+history_record = 1
+history_record_packages = dnf, rpm
+ignorearch = 0
+includepkgs = 
+install_weak_deps = 1
+installonly_limit = 3
+installonlypkgs = kernel, kernel-PAE, installonlypkg(kernel), installonlypkg(kernel-module), installonlypkg(vm), multiversion(kernel)
+installroot = /mnt/sysroot
+ip_resolve = whatever
+keepcache = 0
+localpkg_gpgcheck = 0
+log_compress = 0
+log_rotate = 4
+log_size = 1048576
+logdir = /tmp/
+logfilelevel = 9
+max_downloads_per_mirror = 3
+max_parallel_downloads = 3
+metadata_expire = 172800
+metadata_timer_sync = 10800
+minrate = 1000
+module_obsoletes = 0
+module_platform_id = platform:el9
+module_stream_switch = 0
+multilib_policy = best
+obsoletes = 1
+password = 
+persistdir = /mnt/sysroot/var/lib/dnf
+persistence = auto
+pluginconfpath = /tmp/dnf.pluginconf
+pluginpath = /usr/lib/python3.9/site-packages/dnf-plugins
+plugins = 1
+protect_running_kernel = 1
+protected_packages = dnf, dnf, grub2-tools-minimal, setup, shim-aa64, shim-arm, shim-ia32, shim-x64, systemd, systemd-udev
+proxy = 
+proxy_auth_method = any
+proxy_password = 
+proxy_sslcacert = 
+proxy_sslclientcert = 
+proxy_sslclientkey = 
+proxy_sslverify = 1
+proxy_username = 
+recent = 7
+repo_gpgcheck = 0
+reposdir = /etc/yum.repos.d, /etc/anaconda.repos.d
+reset_nice = 1
+retries = 10
+rpmverbosity = info
+showdupesfromrepos = 0
+skip_broken = 0
+skip_if_unavailable = 0
+sslcacert = 
+sslclientcert = 
+sslclientkey = 
+sslverify = 1
+sslverifystatus = 0
+strict = 1
+system_cachedir = /var/cache/dnf
+throttle = 0
+timeout = 30
+transformdb = 1
+tsflags = 
+upgrade_group_objects_upgrade = 1
+user_agent = libdnf (Rocky Linux 9.8; generic; Linux.x86_64)
+username = 
+usr_drift_protected_paths = 
+varsdir = /etc/yum/vars, /etc/dnf/vars
+zchunk = 1
+
+23:34:04,027 DBG modules.payloads.payload.dnf.dnf_manager: The DNF base has been reset.
+23:34:04,031 DBG modules.payloads.payload.dnf.utils: Release version of Rocky Linux Minimal is 9.8.
+23:34:04,032 DBG modules.payloads.payload.dnf.dnf_manager: The DNF base has been created.
+23:34:04,035 DBG modules.payloads.payload.dnf.dnf_manager: DNF configuration:
+[main]
+allow_vendor_change = 1
+assumeno = 0
+assumeyes = 0
+autocheck_running_kernel = 1
+bandwidth = 0
+best = 1
+bugtracker_url = https://bugs.rockylinux.org/
+cachedir = /tmp/dnf.cache
+cacheonly = 0
+check_config_file_age = 1
+clean_requirements_on_remove = 1
+color = auto
+color_list_available_downgrade = magenta
+color_list_available_install = bold,cyan
+color_list_available_reinstall = bold,underline,green
+color_list_available_upgrade = bold,blue
+color_list_installed_extra = bold,red
+color_list_installed_newer = bold,yellow
+color_list_installed_older = yellow
+color_list_installed_reinstall = cyan
+color_search_match = bold,magenta
+color_update_installed = red
+color_update_local = green
+color_update_remote = bold,green
+config_file_path = /etc/dnf/dnf.conf
+countme = 0
+debug_solver = 0
+debuglevel = 2
+defaultyes = 0
+deltarpm = 1
+deltarpm_percentage = 75
+disable_excludes = 
+diskspacecheck = 1
+enabled = 1
+enablegroups = 1
+errorlevel = 3
+exclude = 
+exclude_from_weak = 
+exclude_from_weak_autodetect = 1
+excludepkgs = 
+exit_on_lock = 0
+fastestmirror = 0
+gpgcheck = 0
+gpgkey_dns_verification = 0
+group_package_types = mandatory, default, conditional
+history_list_view = commands
+history_record = 1
+history_record_packages = dnf, rpm
+ignorearch = 0
+includepkgs = 
+install_weak_deps = 1
+installonly_limit = 3

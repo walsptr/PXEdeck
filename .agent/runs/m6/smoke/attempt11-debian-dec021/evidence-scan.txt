@@ -1,0 +1,2 @@
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt11-debian-dec021/installer-logs/pxe-test-m6-node41-syslog: token pada path /boot/
+/home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt11-debian-dec021/installer-logs/pxe-test-m6-node45-syslog: token pada path /boot/

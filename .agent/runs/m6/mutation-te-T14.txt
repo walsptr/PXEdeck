@@ -1,0 +1,7 @@
+# Mutasi test-engineer T14 — fixture log installer nyata (AC-6.17), 2026-11-06
+Target: dashboard/test/fixtures/installer-logs/anaconda.log
+Mutasi: placeholder {{TOKEN}} diganti token literal 43 karakter (seolah fixture memuat token tak tersamar
+di posisi baris biasa).
+Hasil: src/lib/server/m6-kvm-installer-logs.test.ts → 3 failed | 13 passed (anaconda.log LF/CRLF/7 baris:
+baris yang seharusnya biasa ikut tersamar → checkStored melapor baris biasa tidak identik).
+Pulih: berkas dikembalikan dari salinan, `sha256sum -c` OK; test kembali 16/16 lulus.

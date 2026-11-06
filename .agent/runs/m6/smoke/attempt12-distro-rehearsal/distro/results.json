@@ -1,0 +1,20 @@
+{
+  "run": "m6distro",
+  "session": "1793933061435-37b00425",
+  "generatedAt": "2026-11-06T03:03:36.603Z",
+  "results": [
+    {"ac": "AC-6.48", "node": "pxe-test-m6distro-node23", "status": "PASS", "durationS": 602, "note": "booting→installing→configuring→done 602s; verify 0/0", "evidence": ["pxe-test-m6distro-node23-verify-ssh.txt", "pxe-test-m6distro-node23-timeline.txt", "installer-logs/"]},
+    {"ac": "AC-6.49", "node": "pxe-test-m6distro-node24", "status": "FAIL", "durationS": 692, "note": "login password tidak ditolak", "evidence": ["pxe-test-m6distro-node24-verify-ssh.txt", "pxe-test-m6distro-node24-timeline.txt", "installer-logs/"]},
+    {"ac": "AC-6.52-scan", "status": "PASS", "note": "0 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6distro-node23", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.101 (lease 52:54:00:99:00:23)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6distro-node23", "status": "PASS", "note": "preseed.cfg 200 x1 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6distro-node24", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.102 (lease 52:54:00:99:00:24)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6distro-node24", "status": "PASS", "note": "ks.cfg 200 x1 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m6distro-node23", "status": "PASS", "note": "verify-node.sh exit=0 + cek login password (verifikasi parsial, Playwright exit=1)", "evidence": ["pxe-test-m6distro-node23-verify.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m6distro-node24", "status": "PASS", "note": "verify-node.sh exit=0 + cek login password (verifikasi parsial, Playwright exit=1)", "evidence": ["pxe-test-m6distro-node24-verify.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "verify", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "scenario": "distro",
+  "nodes": [{"name": "pxe-test-m6distro-node23", "os": "debian", "ip": "10.99.0.33", "hostname": "m6-node23"}, {"name": "pxe-test-m6distro-node24", "os": "rocky", "ip": "10.99.0.34", "hostname": "m6-node24"}],
+  "harness": {"milestone": "m6", "scenario": "distro", "runId": "m6distro", "nodes": "23:uefi:os=debian 24:uefi:os=rocky", "maxNodes": 3, "memAvailableMb": 15880, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "verify", "exit": 1, "dryRun": false, "startedAt": "2026-11-06T02:43:43Z", "durationSec": 1205}
+}

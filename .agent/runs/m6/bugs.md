@@ -232,3 +232,24 @@ Dicatat test-engineer; tidak diperbaiki test-engineer (kode produk/infra milik d
   test generator; smoke ulang Debian.
 - Akibat: d-i syslog untuk fixture AC-6.17 masih belum bisa diambil (instalasi tidak selesai).
   Run disk eksplisit `/dev/vda` (permintaan poin 4) tidak dijalankan: akan berhenti di tahap yang sama.
+
+## BUG-M6-10 — `kvm-run.sh` berhenti setelah verifikasi node PERTAMA bila Playwright lulus (set -e + substitusi perintah di `verify_one`)
+
+- Ditemukan: run resmi `core` (`.agent/runs/m6/kvm/core/`), 2026-11-06T02:11Z, commit `97d6d44`.
+- Komponen: `infra/kvm-run.sh` `verify_one()` (dari `b36a7db`):
+  `VERIFY_NOTE[$i]="verify-node.sh exit=$rc + cek login password$( ((e2e_rc != 0)) && echo " (verifikasi parsial, …)")"`.
+  Bila `e2e_rc == 0`, substitusi `$( ((e2e_rc != 0)) && … )` keluar 1 → status assignment = 1 → di bawah
+  `set -euo pipefail` (verify_one dipanggil sebagai perintah terakhir `verify_eligible && verify_one`,
+  dan langsung pada mode `--waves`) skrip keluar → trap `finish`.
+- Severity (usulan): **major** — setiap run yang Playwright-nya LULUS ditandai FAIL (`failedStage: verify`)
+  dan node ke-2 dst. tidak diverifikasi harness (`verify-node … NOT_RUN: run berhenti di tahap verify`).
+  Di `core`: node21 PASS, node22 NOT_RUN walaupun suite sudah memverifikasi node22 sendiri
+  (`pxe-test-m6core-node22-verify-ssh.txt`, verify-node.sh exit 0 sebelum & sesudah reboot). Juga mengenai
+  `bulk` (`--waves`) dan `distro`.
+- Reproduksi minimal:
+  `bash -c 'set -euo pipefail; declare -a A=(); e=0; f(){ A[0]="x$( ((e != 0)) && echo y)"; echo after; }; for i in 1 2; do true && f; done; echo end'; echo rc=$?`
+  → tidak mencetak `after`/`end`, `rc=1`.
+- Bukti: `.agent/runs/m6/kvm/core/kvm-run.txt` (`playwright ok exit=0`, `verify ok …node21`, tanpa baris
+  node22, `result FAIL exit=1 stage=verify`), `results.json` (entri `verify-node` node22 NOT_RUN).
+- Saran: `local suffix=""; ((e2e_rc != 0)) && suffix=" (…)" || true` atau `if`; tambah kasus test infra
+  "Playwright lulus, 2 node → keduanya diverifikasi" (dry-run dengan PXE_KVM_DRY_PLAYWRIGHT_RC=0).

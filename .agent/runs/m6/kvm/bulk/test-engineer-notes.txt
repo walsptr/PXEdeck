@@ -1,0 +1,10 @@
+# Catatan test-engineer untuk run bulk 20261106T021328Z (commit 97d6d44)
+1. AC-6.50 PASS (Playwright 1/1): satu aksi bulk (POST /api/hosts/bulk=1, install=1), 3 password acak unik
+   16 karakter, CSV unduhan valid lalu tidak tersedia lagi (tidak ada di UI/API), preview IP .35/.36/.37 dan
+   hostname m6-bulk-01..03 sesuai urutan MAC naik, ketiga node Done 612–627 dtk sejak dinyalakan, SSH
+   hostname/IP/sudo OK + password ditolak, nginx tanpa 429.
+2. max_nodes = 3 saat run (MemAvailable 15176 MB) → satu gelombang berisi 3 node; mode --waves aktif tetapi
+   jalur multi-gelombang (poweroff/start antargelombang) tidak terlatih di run ini.
+3. Status run FAIL (`failedStage: verify`) karena BUG-M6-10: harness hanya memverifikasi node25
+   (verify-node PASS); node26/27 diverifikasi ringkas oleh suite (bulk-ac-6.50.txt), verify-node.sh harness
+   NOT_RUN. Perlu run konfirmasi setelah perbaikan BUG-M6-10.

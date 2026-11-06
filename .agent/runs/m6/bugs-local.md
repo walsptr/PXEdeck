@@ -66,3 +66,16 @@ Test yang membuktikan bug dibiarkan MERAH (tidak di-skip/dilonggarkan). Kode pro
   setelah `goto` sehingga mengukur halaman kosong (hampa atau 0 px) secara intermiten; diperbaiki dengan
   menunggu judul top bar `toBeVisible()` (lihat `test-migration.md` §M6-T12). Untuk design reviewer:
   kilasan halaman kosong ±300 ms di setiap muat penuh.
+
+## BUG-M6-L4 — `m6-session.spec.ts` menulis screenshot ke `.agent/runs/m4/screenshots/` bila `PXE_E2E_MILESTONE` tidak diset
+
+- Severity: minor (kebersihan bukti; tidak memengaruhi hasil test). Dicatat oleh test-engineer KVM,
+  tidak diperbaiki (test milik test-engineer lokal).
+- Gejala: dua file untracked `.agent/runs/m4/screenshots/m6-session-expired-db.png` dan
+  `m6-session-expired-logout.png` di worktree `.agent/wt-m6`.
+- Akar: `dashboard/e2e/helpers.ts` `SHOTS()` memakai `RUN_MILESTONE = Number(process.env.PXE_E2E_MILESTONE ?? 4)`;
+  `m6-session.spec.ts:52` memanggil `SHOTS(6, shot)` → tanpa env, path menjadi
+  `.agent/runs/m4/screenshots/m6-<nama>.png` (direktori milestone yang sudah di-approve).
+- Reproduksi: `npx playwright test --project m6-session` tanpa `PXE_E2E_MILESTONE=6`.
+- Saran: default `PXE_E2E_MILESTONE` ke milestone aktif (6) atau wajibkan env di `playwright.config.ts`;
+  hapus dua file m4 yang tidak sengaja dibuat (jangan di-commit).

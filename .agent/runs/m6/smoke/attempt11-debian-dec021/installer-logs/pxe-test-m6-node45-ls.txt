@@ -1,0 +1,12 @@
+ls: cannot access '/var/log/anaconda': No such file or directory
+/var/log/installer:
+total 1264
+drwxr-xr-x  3 root root    4096 Nov  6 02:35 .
+drwxr-xr-x 10 root root    4096 Nov  6 02:38 ..
+drwxr-xr-x  2 root root    4096 Nov  6 02:35 cdebconf
+-rw-r--r--  1 root root     117 Nov  6 02:35 firmware-summary
+-rw-r--r--  1 root root   31049 Nov  6 02:35 hardware-summary
+-rw-r--r--  1 root root     165 Nov  6 02:35 lsb-release
+-rw-------  1 root root  127294 Nov  6 02:35 partman
+-rw-r--r--  1 root root   53210 Nov  6 02:35 status
+-rw-------  1 root root 1053209 Nov  6 02:35 syslog

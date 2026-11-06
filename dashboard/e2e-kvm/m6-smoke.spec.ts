@@ -198,7 +198,7 @@ function fetchInstallerLogs(node: KvmNode): string[] {
   writeFileSync(path.join(dir, `${node.name}-ls.txt`), ls.out)
   for (const f of INSTALLER_LOGS[node.os]) {
     const r = ssh(node.ip, `sudo -n cat ${f}`, undefined, { maxBuffer: 256 * 1024 * 1024, stdoutOnly: true })
-    const out = `${node.name}-${path.basename(f)}`
+    const out = `${node.name}-${path.basename(f)}${path.extname(f) ? "" : ".log"}`
     if (r.code === 0 && r.out.length > 0) {
       writeFileSync(path.join(dir, out), r.out)
       got.push(`installer-logs/${out}`)
@@ -258,10 +258,14 @@ async function runInstallNode(node: KvmNode): Promise<Outcome> {
     if (!up) problems.push("SSH key gagal")
     else {
       evidence.push(...fetchInstallerLogs(node))
-      const f = ssh(node.ip, "echo \"# hostname: $(hostname)\"; echo '# locale'; localectl status 2>&1; cat /etc/default/locale /etc/locale.conf 2>/dev/null; echo '# timezone'; timedatectl show -p Timezone 2>&1; echo '# id'; id; echo '# sudo -n true'; sudo -n true && echo sudo-ok; echo '# os-release'; head -n 3 /etc/os-release; echo '# lsblk'; lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT 2>&1")
+      const f = ssh(node.ip, "echo \"# hostname: $(hostname)\"; echo '# locale'; localectl status 2>&1; cat /etc/default/locale /etc/locale.conf 2>/dev/null; echo '# timezone'; timedatectl show -p Timezone 2>&1; echo '# id'; id; echo '# sudo -n true'; sudo -n true && echo sudo-ok; echo '# os-release'; head -n 3 /etc/os-release; echo '# lsblk'; lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT 2>&1; echo \"# apt trusted_files=$(sudo -n grep -rl 'trusted=yes' /etc/apt 2>/dev/null | wc -l)\"; if sudo -n test -e /etc/apt/apt.conf.d/00AllowUnauthenticated; then echo '# allow_unauth=ADA'; else echo '# allow_unauth=tidak-ada'; fi; if sudo -n test -f /boot/efi/EFI/BOOT/BOOTX64.EFI; then echo '# bootx64=ADA'; else echo '# bootx64=TIDAK'; fi")
       writeFileSync(path.join(KVM.runsDir, `${node.name}-facts.txt`), f.out)
       evidence.push(`${node.name}-facts.txt`)
       if (!new RegExp(`# hostname: ${node.hostname}\\b`).test(f.out)) problems.push("hostname target tidak sesuai config")
+      // DEC-021 §2: sistem terpasang tidak menyimpan sumber apt tak terautentikasi; fallback UEFI ada.
+      if (node.os === "debian" && !f.out.includes("# apt trusted_files=0")) problems.push("trusted=yes tersisa di /etc/apt")
+      if (node.os === "debian" && !f.out.includes("# allow_unauth=tidak-ada")) problems.push("00AllowUnauthenticated tersisa")
+      if (node.os === "debian" && !f.out.includes("# bootx64=ADA")) problems.push("\\EFI\\BOOT\\BOOTX64.EFI tidak ada")
       // Reboot → boot dari disk tanpa reinstall: SSH kembali, hostname sama, status host done, jumlah job tetap.
       const jobsBefore = await jobsCount(node.mac)
       ssh(node.ip, "sudo -n systemctl reboot")

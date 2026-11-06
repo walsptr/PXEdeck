@@ -1,0 +1,13 @@
+# verifikasi checksum resmi media lokal (DEC-021 §3, DEC-018 §2) 2026-11-06T02:44:40Z
+# debian: debian-dvd.SHA256SUMS
+debian-12.15.0-amd64-DVD-1.iso: OK
+# rocky: rocky.CHECKSUM
+SHA256 (Rocky-9.8-x86_64-minimal.iso) = d338032cd1cdd41c67139f2f71b4c832c8e4a21943106519db9c7137df7a63d4
+# Rocky-9-latest-x86_64-minimal.iso: 1480048640 bytes
+SHA256 (Rocky-9-latest-x86_64-minimal.iso) = d338032cd1cdd41c67139f2f71b4c832c8e4a21943106519db9c7137df7a63d4
+aktual: d338032cd1cdd41c67139f2f71b4c832c8e4a21943106519db9c7137df7a63d4  Rocky-9-latest-x86_64-minimal.iso
+# ubuntu: ubuntu-iso.SHA256SUMS
+ubuntu-24.04.5-live-server-amd64.iso: OK
+# debian netboot vs debian-netboot.SHA256SUMS (linux, initrd.gz)
+linux diharapkan=d8808aa4ca188560da1e6d749dcb930c87a5fd8b11ebff1f3fa6d728af35203d aktual=d8808aa4ca188560da1e6d749dcb930c87a5fd8b11ebff1f3fa6d728af35203d OK
+initrd.gz diharapkan=cb24a28a5ba13dfb22e6e75bdd8ab997dbdee6e3ec6c1102f6c7f93044bd817d aktual=cb24a28a5ba13dfb22e6e75bdd8ab997dbdee6e3ec6c1102f6c7f93044bd817d OK

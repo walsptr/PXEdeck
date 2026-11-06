@@ -1,0 +1,15 @@
+2026-11-06T02:27:46.478Z discovered firmware=uefi
+2026-11-06T02:27:46.524Z konfigurasi tersimpan os=debian-12 disk=(otomatis) ip=10.99.0.51 hostname=m6-node41
+2026-11-06T02:27:46.570Z install dibuat job=job-d07812ce-160a-4d43-86f6-94e216824f48 status=booting
+2026-11-06T02:27:46.649Z node.sh reset
+2026-11-06T02:27:46.746Z job1: booting (+0 dtk, installerBoots=0)
+2026-11-06T02:28:16.796Z job1: installing (+30 dtk, installerBoots=1)
+2026-11-06T02:34:27.417Z job1: configuring (+401 dtk, installerBoots=1)
+2026-11-06T02:38:07.786Z job1: done (+621 dtk, installerBoots=1)
+2026-11-06T02:38:07.795Z job1 akhir=done/- dalam 621 dtk; urutan=booting>installing>configuring>done; stages=booting@install,booting@boot-script,installing@config-fetch,configuring@callback,done@callback
+2026-11-06T02:38:07.796Z event installer (7): installer: preseed mulai | installer: modul disk virtio dimuat | installer: modul disk virtio dimuat | installer: disk target dipilih | installer: late_command mulai | installer: konfigurasi target selesai | first-boot: OS terpasang boot dari disk: m6-node41 enp1s0=10.99.0.51/24 
+2026-11-06T02:38:08.078Z ssh key yang di-inject: OK
+2026-11-06T02:38:08.442Z log installer /var/log/installer/syslog: exit=0 bytes=1057047
+2026-11-06T02:41:55.025Z reboot: kembali=true hostname=m6-node41 status=done job 1->1 installerCmdline=false
+2026-11-06T02:41:55.027Z console log: 200000 byte terakhir dibaca; kernel panic=false
+2026-11-06T02:41:55.033Z jumlah job host=1

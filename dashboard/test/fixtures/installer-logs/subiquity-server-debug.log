@@ -1,0 +1,241 @@
+# FIXTURE log installer nyata (run KVM M6 T15, smoke attempt2 node43 Ubuntu); disanitasi + secret sintetis {{..}} (AC-6.17)
+2026-11-05 22:34:09,985 INFO subiquity:207 Starting Subiquity server revision 7424 of snap /snap/subiquity/7424 of version 24.04.5
+2026-11-05 22:34:09,985 INFO subiquity:211 Arguments passed: ['/snap/subiquity/7424/lib/python3.10/site-packages/subiquity/cmd/server.py']
+2026-11-05 22:34:09,985 DEBUG subiquity:212 Kernel commandline: CommandLineParams(_raw='vmlinuz initrd=initrd ip=dhcp netboot=nfs nfsroot=10.99.0.2:/srv/pxe/media/ubuntu-24.04 autoinstall ds=nocloud-net;s=http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}
+2026-11-05 22:34:09,985 DEBUG subiquity:213 Environment: environ({'PYTHONIOENCODING': 'utf-8', 'SNAP_COMMON': '/var/snap/subiquity/common', 'SNAP_INSTANCE_KEY': '', 'USER': 'root', 'SNAP_UID': '0', 'SNAP_LIBRARY_PATH': '/var/lib/snapd/lib/g
+2026-11-05 22:34:09,985 DEBUG asyncio:54 Using selector: EpollSelector
+2026-11-05 22:34:09,986 DEBUG subiquitycore.prober:33 Prober() init finished, data:None
+2026-11-05 22:34:10,025 DEBUG curtin:120 Running command ['dpkg', '--print-architecture'] with allowed return codes [0] (capture=True)
+2026-11-05 22:34:10,032 DEBUG subiquity.models.source:93 loaded 2 sources from '/cdrom/casper/install-sources.yaml'
+2026-11-05 22:34:10,079 DEBUG subiquitycore.utils:77 run_command called: ['dpkg-query', '-W', '-f=${Version}', 'cloud-init']
+2026-11-05 22:34:10,088 DEBUG subiquitycore.utils:96 run_command ['dpkg-query', '-W', '-f=${Version}', 'cloud-init'] exited with code 0
+2026-11-05 22:34:10,088 DEBUG subiquity.cloudinit:65 cloud-init version: 26.1
+2026-11-05 22:34:10,088 DEBUG subiquitycore.utils:119 arun_command called: ['cloud-init', 'status', '--wait', '--format=json']
+2026-11-05 22:34:10,817 DEBUG curtin.reporting.start.subiquity/Meta/status_GET:45 start: subiquity/Meta/status_GET: 
+2026-11-05 22:34:10,818 DEBUG curtin.reporting.finish.subiquity/Meta/status_GET:45 finish: subiquity/Meta/status_GET: SUCCESS: 200 {"state": "CLOUD_INIT_WAIT", "confirming_tty": "", "error": null, "nonreporta...
+2026-11-05 22:34:10,836 DEBUG curtin.reporting.start.subiquity/Meta/status_GET:45 start: subiquity/Meta/status_GET: 
+2026-11-05 22:34:11,051 DEBUG curtin.reporting.start.subiquity/Meta/status_GET:45 start: subiquity/Meta/status_GET: 
+2026-11-05 22:34:11,051 DEBUG curtin.reporting.finish.subiquity/Meta/status_GET:45 finish: subiquity/Meta/status_GET: SUCCESS: 200 {"state": "CLOUD_INIT_WAIT", "confirming_tty": "", "error": null, "nonreporta...
+2026-11-05 22:34:11,054 DEBUG curtin.reporting.start.subiquity/Meta/status_GET:45 start: subiquity/Meta/status_GET: 
+2026-11-05 22:34:11,232 DEBUG subiquitycore.utils:133 arun_command ['cloud-init', 'status', '--wait', '--format=json'] exited with code 0
+2026-11-05 22:34:11,232 DEBUG subiquity.server.server:881 waited 1.1530342102050781s for cloud-init
+2026-11-05 22:34:11,232 DEBUG subiquity.server.server:882 cloud-init status: 'degraded done'
+2026-11-05 22:34:11,233 DEBUG curtin.reporting.start.subiquity/load_cloud_config:45 start: subiquity/load_cloud_config: 
+2026-11-05 22:34:11,233 DEBUG subiquity.cloudinit:45 Loaded cloud config from /run/cloud-init/combined-cloud-config.json
+2026-11-05 22:34:11,233 DEBUG curtin.reporting.start.subiquity/load_cloud_config/extract_autoinstall:45 start: subiquity/load_cloud_config/extract_autoinstall: 
+2026-11-05 22:34:11,233 DEBUG curtin.reporting.start.subiquity/load_cloud_config/extract_autoinstall:45 start: subiquity/load_cloud_config/extract_autoinstall: 
+2026-11-05 22:34:11,234 DEBUG subiquitycore.utils:119 arun_command called: ['cloud-init', 'schema', '--system']
+2026-11-05 22:34:12,380 DEBUG subiquitycore.utils:133 arun_command ['cloud-init', 'schema', '--system'] exited with code 0
+2026-11-05 22:34:12,380 DEBUG curtin.reporting.finish.subiquity/load_cloud_config/extract_autoinstall:45 finish: subiquity/load_cloud_config/extract_autoinstall: SUCCESS: 
+2026-11-05 22:34:12,380 DEBUG subiquity.server.server:866 autoinstall found in cloud-config
+2026-11-05 22:34:12,387 DEBUG curtin.reporting.finish.subiquity/load_cloud_config:45 finish: subiquity/load_cloud_config: SUCCESS: 
+2026-11-05 22:34:12,387 DEBUG subiquitycore.utils:77 run_command called: ['ssh-keygen', '-lf', '/home/installer/.ssh/authorized_keys']
+2026-11-05 22:34:12,394 DEBUG subiquitycore.utils:96 run_command ['ssh-keygen', '-lf', '/home/installer/.ssh/authorized_keys'] exited with code 255
+2026-11-05 22:34:12,394 DEBUG subiquitycore.ssh:53 ssh-keygen -lf /home/installer/.ssh/authorized_keys failed '/home/installer/.ssh/authorized_keys is not a public key file.\r\n'
+2026-11-05 22:34:12,394 DEBUG subiquitycore.utils:77 run_command called: chpasswd
+2026-11-05 22:34:12,441 DEBUG subiquitycore.utils:96 run_command chpasswd exited with code 0
+2026-11-05 22:34:12,442 DEBUG curtin.reporting.start.subiquity/load_autoinstall_config:45 start: subiquity/load_autoinstall_config: 
+2026-11-05 22:34:12,442 DEBUG subiquity.server.server:704 load_autoinstall_config only_early True file /autoinstall.yaml
+2026-11-05 22:34:12,442 DEBUG curtin.reporting.start.subiquity/load_autoinstall_config/read_config:45 start: subiquity/load_autoinstall_config/read_config: 
+2026-11-05 22:34:12,451 DEBUG curtin.reporting.finish.subiquity/load_autoinstall_config/read_config:45 finish: subiquity/load_autoinstall_config/read_config: SUCCESS: 
+2026-11-05 22:34:12,451 DEBUG curtin.reporting.start.subiquity/Reporting/load_autoinstall_data:45 start: subiquity/Reporting/load_autoinstall_data: 
+2026-11-05 22:34:12,451 DEBUG curtin.reporting.finish.subiquity/Reporting/load_autoinstall_data:45 finish: subiquity/Reporting/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:12,451 DEBUG root:38 start: subiquity/Error/load_autoinstall_data: 
+2026-11-05 22:34:12,452 DEBUG root:38 finish: subiquity/Error/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:12,452 INFO root:38 start: subiquity/core_validation: 
+2026-11-05 22:34:12,453 INFO root:38 start: subiquity/core_validation/top_level_keys: 
+2026-11-05 22:34:12,453 INFO root:38 finish: subiquity/core_validation/top_level_keys: SUCCESS: 
+2026-11-05 22:34:12,453 INFO root:38 finish: subiquity/core_validation: SUCCESS: 
+2026-11-05 22:34:12,453 DEBUG root:38 start: subiquity/Early/load_autoinstall_data: 
+2026-11-05 22:34:12,454 DEBUG root:38 finish: subiquity/Early/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:12,454 INFO root:38 finish: subiquity/load_autoinstall_config: SUCCESS: 
+2026-11-05 22:34:12,454 INFO root:38 finish: subiquity/Meta/status_GET: SUCCESS: 200 {"state": "EARLY_COMMANDS", "confirming_tty": "", "error": null, "nonreportab...
+2026-11-05 22:34:12,455 INFO root:38 finish: subiquity/Meta/status_GET: SUCCESS: 200 {"state": "EARLY_COMMANDS", "confirming_tty": "", "error": null, "nonreportab...
+2026-11-05 22:34:12,457 INFO root:38 start: subiquity/Meta/status_GET: 
+2026-11-05 22:34:12,457 INFO root:38 start: subiquity/Meta/status_GET: 
+2026-11-05 22:34:13,455 DEBUG root:38 start: subiquity/Early/run: 
+2026-11-05 22:34:13,455 DEBUG root:38 start: subiquity/Early/run/command_0: b=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1#p' | head -n 1); if [ -n "$b" ]; then
+2026-11-05 22:34:13,456 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_echo.1656', 'sh', '-c', 'b=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https
+2026-11-05 22:34:13,539 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_echo.1656', 'sh', '-c', 'b=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https\\{0,1\\
+2026-11-05 22:34:13,540 DEBUG root:38 finish: subiquity/Early/run/command_0: SUCCESS: b=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1#p' | head -n 1); if [ -n "$
+2026-11-05 22:34:13,540 DEBUG root:38 finish: subiquity/Early/run: SUCCESS: 
+2026-11-05 22:34:14,541 INFO root:38 start: subiquity/load_autoinstall_config: 
+2026-11-05 22:34:14,541 DEBUG subiquity.server.server:704 load_autoinstall_config only_early False file /autoinstall.yaml
+2026-11-05 22:34:14,541 INFO root:38 start: subiquity/load_autoinstall_config/read_config: 
+2026-11-05 22:34:14,550 INFO root:38 finish: subiquity/load_autoinstall_config/read_config: SUCCESS: 
+2026-11-05 22:34:14,550 DEBUG root:38 start: subiquity/Early/load_autoinstall_data: 
+2026-11-05 22:34:14,551 DEBUG root:38 finish: subiquity/Early/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,551 DEBUG root:38 start: subiquity/Reporting/load_autoinstall_data: 
+2026-11-05 22:34:14,551 DEBUG root:38 finish: subiquity/Reporting/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,551 DEBUG root:38 start: subiquity/Error/load_autoinstall_data: 
+2026-11-05 22:34:14,551 DEBUG root:38 finish: subiquity/Error/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,551 DEBUG root:38 start: subiquity/Userdata/load_autoinstall_data: 
+2026-11-05 22:34:14,552 DEBUG root:38 finish: subiquity/Userdata/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,552 DEBUG root:38 start: subiquity/Package/load_autoinstall_data: 
+2026-11-05 22:34:14,552 DEBUG root:38 finish: subiquity/Package/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,552 DEBUG root:38 start: subiquity/Debconf/load_autoinstall_data: 
+2026-11-05 22:34:14,552 DEBUG root:38 finish: subiquity/Debconf/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,552 DEBUG root:38 start: subiquity/Locale/load_autoinstall_data: 
+2026-11-05 22:34:14,553 DEBUG root:38 finish: subiquity/Locale/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,553 DEBUG root:38 start: subiquity/Refresh/load_autoinstall_data: 
+2026-11-05 22:34:14,553 DEBUG root:38 finish: subiquity/Refresh/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,553 DEBUG root:38 start: subiquity/Kernel/load_autoinstall_data: 
+2026-11-05 22:34:14,553 DEBUG root:38 finish: subiquity/Kernel/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,553 DEBUG root:38 start: subiquity/Integrity/load_autoinstall_data: 
+2026-11-05 22:34:14,553 DEBUG root:38 finish: subiquity/Integrity/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,554 DEBUG root:38 start: subiquity/Keyboard/load_autoinstall_data: 
+2026-11-05 22:34:14,554 DEBUG root:38 finish: subiquity/Keyboard/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,554 DEBUG root:38 start: subiquity/Zdev/load_autoinstall_data: 
+2026-11-05 22:34:14,554 DEBUG root:38 finish: subiquity/Zdev/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,554 DEBUG root:38 start: subiquity/Source/load_autoinstall_data: 
+2026-11-05 22:34:14,555 DEBUG root:38 finish: subiquity/Source/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,555 DEBUG root:38 start: subiquity/Network/load_autoinstall_data: 
+2026-11-05 22:34:14,556 DEBUG root:38 finish: subiquity/Network/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,556 DEBUG root:38 start: subiquity/UbuntuPro/load_autoinstall_data: 
+2026-11-05 22:34:14,556 DEBUG root:38 finish: subiquity/UbuntuPro/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,556 DEBUG root:38 start: subiquity/Proxy/load_autoinstall_data: 
+2026-11-05 22:34:14,556 DEBUG root:38 finish: subiquity/Proxy/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,556 DEBUG root:38 start: subiquity/Mirror/load_autoinstall_data: 
+2026-11-05 22:34:14,557 DEBUG root:38 finish: subiquity/Mirror/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,557 DEBUG root:38 start: subiquity/Filesystem/load_autoinstall_data: 
+2026-11-05 22:34:14,557 DEBUG root:38 finish: subiquity/Filesystem/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,558 DEBUG root:38 start: subiquity/Identity/load_autoinstall_data: 
+2026-11-05 22:34:14,558 DEBUG root:38 finish: subiquity/Identity/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,559 DEBUG root:38 start: subiquity/SSH/load_autoinstall_data: 
+2026-11-05 22:34:14,559 DEBUG root:38 finish: subiquity/SSH/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,559 DEBUG root:38 start: subiquity/SnapList/load_autoinstall_data: 
+2026-11-05 22:34:14,560 DEBUG root:38 finish: subiquity/SnapList/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,560 DEBUG root:38 start: subiquity/Ad/load_autoinstall_data: 
+2026-11-05 22:34:14,560 DEBUG root:38 finish: subiquity/Ad/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,560 DEBUG root:38 start: subiquity/Codecs/load_autoinstall_data: 
+2026-11-05 22:34:14,560 DEBUG root:38 finish: subiquity/Codecs/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,561 DEBUG root:38 start: subiquity/Drivers/load_autoinstall_data: 
+2026-11-05 22:34:14,561 DEBUG root:38 finish: subiquity/Drivers/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,561 DEBUG root:38 start: subiquity/OEM/load_autoinstall_data: 
+2026-11-05 22:34:14,561 DEBUG root:38 finish: subiquity/OEM/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,561 DEBUG root:38 start: subiquity/TimeZone/load_autoinstall_data: 
+2026-11-05 22:34:14,607 DEBUG root:38 finish: subiquity/TimeZone/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,607 DEBUG root:38 start: subiquity/Install/load_autoinstall_data: 
+2026-11-05 22:34:14,608 DEBUG root:38 finish: subiquity/Install/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:14,608 DEBUG root:38 start: subiquity/Updates/load_autoinstall_data: 
+2026-11-05 22:34:14,608 DEBUG root:38 finish: subiquity/Updates/load_autoinstall_data: SUCCESS: 
+2026-11-05 22:34:12,390 DEBUG subiquity.server.controllers.identity:61 identity: {'username': 'm6admin', 'hostname': 'm6-node43', 'password': '{{HASH}}'}
+2026-11-05 22:39:09,915 DEBUG subiquity.server.curtin:130 waited 0.4 seconds for events to drain
+2026-11-05 22:39:09,916 DEBUG subiquitycore.utils:152 astart_command called: ['systemd-run', '--wait', '--same-dir', '--property', 'SyslogIdentifier=subiquity_log.1656', '--pipe', '--setenv', 'PATH=/snap/subiquity/7424/bin:/snap/subiquity/7
+2026-11-05 22:39:10,530 DEBUG root:38 start: subiquity/Install/install/postinstall/cmd-in-target: curtin command in-target
+2026-11-05 22:39:10,531 DEBUG root:38 finish: subiquity/Install/install/postinstall/cmd-in-target: SUCCESS: curtin command in-target
+2026-11-05 22:39:10,550 DEBUG root:38 start: subiquity/Install/install/postinstall/get_target_packages: calculating extra packages to install
+2026-11-05 22:39:10,551 DEBUG root:38 finish: subiquity/Install/install/postinstall/get_target_packages: SUCCESS: calculating extra packages to install
+2026-11-05 22:39:10,551 DEBUG root:38 start: subiquity/Install/install/postinstall/install_openssh-server: installing openssh-server
+2026-11-05 22:39:10,551 DEBUG root:38 start: subiquity/Install/install/postinstall/install_openssh-server/retrieving: retrieving openssh-server
+2026-11-05 22:39:10,551 DEBUG subiquitycore.utils:152 astart_command called: ['systemd-run', '--wait', '--same-dir', '--property', 'SyslogIdentifier=subiquity_log.1656', '--setenv', 'PATH=/snap/subiquity/7424/bin:/snap/subiquity/7424/usr/bi
+2026-11-05 22:39:11,301 DEBUG root:38 start: subiquity/Install/install/postinstall/install_openssh-server/cmd-system-install: curtin command system-install
+2026-11-05 22:39:11,453 DEBUG subiquity.server.curtin:130 waited 0.1 seconds for events to drain
+2026-11-05 22:39:11,553 DEBUG subiquity.server.curtin:130 waited 0.2 seconds for events to drain
+2026-11-05 22:39:11,603 DEBUG root:38 finish: subiquity/Install/install/postinstall/install_openssh-server/cmd-system-install: SUCCESS: curtin command system-install
+2026-11-05 22:39:11,654 DEBUG subiquity.server.curtin:130 waited 0.30000000000000004 seconds for events to drain
+2026-11-05 22:39:11,655 DEBUG root:38 finish: subiquity/Install/install/postinstall/install_openssh-server/retrieving: SUCCESS: retrieving openssh-server
+2026-11-05 22:39:11,655 DEBUG root:38 start: subiquity/Install/install/postinstall/install_openssh-server/unpacking: unpacking openssh-server
+2026-11-05 22:39:11,655 DEBUG subiquitycore.utils:152 astart_command called: ['systemd-run', '--wait', '--same-dir', '--property', 'SyslogIdentifier=subiquity_log.1656', '--setenv', 'PATH=/snap/subiquity/7424/bin:/snap/subiquity/7424/usr/bi
+2026-11-05 22:39:12,354 DEBUG root:38 start: subiquity/Install/install/postinstall/install_openssh-server/cmd-system-install: curtin command system-install
+2026-11-05 22:39:15,354 DEBUG subiquity.server.curtin:130 waited 0.1 seconds for events to drain
+2026-11-05 22:39:15,455 DEBUG subiquity.server.curtin:130 waited 0.2 seconds for events to drain
+2026-11-05 22:39:15,555 DEBUG subiquity.server.curtin:130 waited 0.30000000000000004 seconds for events to drain
+2026-11-05 22:39:15,604 DEBUG root:38 finish: subiquity/Install/install/postinstall/install_openssh-server/cmd-system-install: SUCCESS: curtin command system-install
+2026-11-05 22:39:15,657 DEBUG subiquity.server.curtin:130 waited 0.4 seconds for events to drain
+2026-11-05 22:39:15,658 DEBUG root:38 finish: subiquity/Install/install/postinstall/install_openssh-server/unpacking: SUCCESS: unpacking openssh-server
+2026-11-05 22:39:15,658 DEBUG root:38 finish: subiquity/Install/install/postinstall/install_openssh-server: SUCCESS: installing openssh-server
+2026-11-05 22:39:15,659 DEBUG root:38 start: subiquity/Install/install/postinstall/configure_cloud_init: configuring cloud-init
+2026-11-05 22:39:15,671 DEBUG cloudinit.util:1553 Reading from /snap/subiquity/7424/usr/lib/python3/dist-packages/cloudinit/config/schemas/schema-cloud-config-v1.json (quiet=False)
+2026-11-05 22:39:15,681 DEBUG cloudinit.util:1563 Reading 157242 bytes from /snap/subiquity/7424/usr/lib/python3/dist-packages/cloudinit/config/schemas/schema-cloud-config-v1.json
+2026-11-05 22:39:15,686 DEBUG subiquity.cloudinit:45 Loaded cloud config from /run/cloud-init/combined-cloud-config.json
+2026-11-05 22:39:15,689 DEBUG root:38 finish: subiquity/Install/install/postinstall/configure_cloud_init: SUCCESS: configuring cloud-init
+2026-11-05 22:39:15,689 DEBUG root:38 start: subiquity/Install/install/postinstall/restore_apt_config: restoring apt configuration
+2026-11-05 22:39:15,690 DEBUG subiquitycore.utils:152 astart_command called: ['systemd-run', '--wait', '--same-dir', '--property', 'SyslogIdentifier=subiquity_log.1656', '--setenv', 'PATH=/snap/subiquity/7424/bin:/snap/subiquity/7424/usr/bi
+2026-11-05 22:39:18,757 DEBUG curtin:120 Running command ['umount', '/tmp/tmpihbn56uy/root.dir'] with allowed return codes [0] (capture=True)
+2026-11-05 22:39:18,759 DEBUG curtin:120 Running command ['umount', '/tmp/tmpihbn56uy/ubuntu-server-minimal.ubuntu-server.squashfs.dir'] with allowed return codes [0] (capture=True)
+2026-11-05 22:39:18,761 DEBUG curtin:120 Running command ['umount', '/tmp/tmpihbn56uy/ubuntu-server-minimal.squashfs.dir'] with allowed return codes [0] (capture=True)
+2026-11-05 22:39:18,764 WARNING subiquity.server.apt:359 failed to rmdir /target/cdrom: [Errno 16] Device or resource busy: '/target/cdrom'
+2026-11-05 22:39:18,764 DEBUG root:38 finish: subiquity/Install/install/postinstall/restore_apt_config: SUCCESS: restoring apt configuration
+2026-11-05 22:39:18,764 INFO root:38 finish: subiquity/Install/install/postinstall: SUCCESS: final system configuration
+2026-11-05 22:39:18,765 DEBUG root:38 start: subiquity/Late/run: 
+2026-11-05 22:39:18,765 DEBUG root:38 start: subiquity/Late/run/command_0: b=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1#p' | head -n 1); if [ -n "$b" ]; then 
+2026-11-05 22:39:18,765 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'b=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https\
+2026-11-05 22:39:18,771 INFO root:38 finish: subiquity/Meta/status_GET: SUCCESS: 200 {"state": "LATE_COMMANDS", "confirming_tty": "", "error": null, "nonreportabl...
+2026-11-05 22:39:18,771 INFO root:38 finish: subiquity/Meta/status_GET: SUCCESS: 200 {"state": "LATE_COMMANDS", "confirming_tty": "", "error": null, "nonreportabl...
+2026-11-05 22:39:18,776 INFO root:38 start: subiquity/Meta/status_GET: 
+2026-11-05 22:39:18,777 INFO root:38 start: subiquity/Meta/status_GET: 
+2026-11-05 22:39:18,954 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'b=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https\\{0,1\\}
+2026-11-05 22:39:18,954 DEBUG root:38 finish: subiquity/Late/run/command_0: SUCCESS: b=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1#p' | head -n 1); if [ -n "$b
+2026-11-05 22:39:18,955 DEBUG root:38 start: subiquity/Late/run/command_1: u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); curl -fsS -m 15
+2026-11-05 22:39:18,955 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'u=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https\
+2026-11-05 22:39:18,976 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'u=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https\\{0,1\\}
+2026-11-05 22:39:18,976 DEBUG root:38 finish: subiquity/Late/run/command_1: SUCCESS: u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); curl 
+2026-11-05 22:39:18,976 DEBUG root:38 start: subiquity/Late/run/command_2: printf %s 'bTZhZG1pbiBBTEw9KEFMTCkgTk9QQVNTV0Q6QUxMCg==' | base64 -d > /target/etc/sudoers.d/90-m6admin && chmod 440 /target/etc/sudoers.d/90-m6admin
+2026-11-05 22:39:18,977 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', "printf %s 'bTZhZG1pbiBBTEw9KEFMTCkgTk9QQVNTV0Q6QUxMCg==' | base64 -d > /targe
+2026-11-05 22:39:18,987 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', "printf %s 'bTZhZG1pbiBBTEw9KEFMTCkgTk9QQVNTV0Q6QUxMCg==' | base64 -d > /target/etc/su
+2026-11-05 22:39:18,987 DEBUG root:38 finish: subiquity/Late/run/command_2: SUCCESS: printf %s 'bTZhZG1pbiBBTEw9KEFMTCkgTk9QQVNTV0Q6QUxMCg==' | base64 -d > /target/etc/sudoers.d/90-m6admin && chmod 440 /target/etc/sudoers.d/90-m6admin
+2026-11-05 22:39:18,987 DEBUG root:38 start: subiquity/Late/run/command_3: mkdir -p /target/etc/ssh/sshd_config.d
+2026-11-05 22:39:18,987 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'mkdir -p /target/etc/ssh/sshd_config.d']
+2026-11-05 22:39:18,994 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'mkdir -p /target/etc/ssh/sshd_config.d'] exited with code 0
+2026-11-05 22:39:18,994 DEBUG root:38 finish: subiquity/Late/run/command_3: SUCCESS: mkdir -p /target/etc/ssh/sshd_config.d
+2026-11-05 22:39:18,994 DEBUG root:38 start: subiquity/Late/run/command_4: printf %s 'IyBEaXBhc2FuZyBQWEUgZGFzaGJvYXJkOiBsb2dpbiBoYW55YSBkZW5nYW4ga2V5ClBhc3N3b3JkQXV0aGVudGljYXRpb24gbm8KS2JkSW50ZXJhY3RpdmVBdXRoZW50aWNhdGlvbiBubwo=' | base64
+2026-11-05 22:39:18,994 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', "printf %s 'IyBEaXBhc2FuZyBQWEUgZGFzaGJvYXJkOiBsb2dpbiBoYW55YSBkZW5nYW4ga2V5Cl
+2026-11-05 22:39:18,999 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', "printf %s 'IyBEaXBhc2FuZyBQWEUgZGFzaGJvYXJkOiBsb2dpbiBoYW55YSBkZW5nYW4ga2V5ClBhc3N3b3
+2026-11-05 22:39:18,999 DEBUG root:38 finish: subiquity/Late/run/command_4: SUCCESS: printf %s 'IyBEaXBhc2FuZyBQWEUgZGFzaGJvYXJkOiBsb2dpbiBoYW55YSBkZW5nYW4ga2V5ClBhc3N3b3JkQXV0aGVudGljYXRpb24gbm8KS2JkSW50ZXJhY3RpdmVBdXRoZW50aWNhdGlvbiBubwo=
+2026-11-05 22:39:19,000 DEBUG root:38 start: subiquity/Late/run/command_5: mkdir -p /target/etc/pxe-callback /target/usr/local/sbin /target/etc/systemd/system/multi-user.target.wants && chmod 700 /target/etc/pxe-callback
+2026-11-05 22:39:19,000 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'mkdir -p /target/etc/pxe-callback /target/usr/local/sbin /target/etc/systemd/
+2026-11-05 22:39:19,022 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'mkdir -p /target/etc/pxe-callback /target/usr/local/sbin /target/etc/systemd/system/m
+2026-11-05 22:39:19,022 DEBUG root:38 finish: subiquity/Late/run/command_5: SUCCESS: mkdir -p /target/etc/pxe-callback /target/usr/local/sbin /target/etc/systemd/system/multi-user.target.wants && chmod 700 /target/etc/pxe-callback
+2026-11-05 22:39:19,022 DEBUG root:38 start: subiquity/Late/run/command_6: u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); if [ -n "$u" ];
+2026-11-05 22:39:19,023 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'u=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https\
+2026-11-05 22:39:19,029 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'u=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https\\{0,1\\}
+2026-11-05 22:39:19,029 DEBUG root:38 finish: subiquity/Late/run/command_6: SUCCESS: u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); if [ 
+2026-11-05 22:39:19,030 DEBUG root:38 start: subiquity/Late/run/command_7: printf %s 'IyEvYmluL3NoCiMgS2lyaW0gbG9nICJPUyB0ZXJwYXNhbmciIGxhbHUgc3RhZ2U9ZG9uZSBrZSBQWEUgZGFzaGJvYXJkLCBrZW11ZGlhbiBoYXB1cyBkaXJpICh0b2tlbiBzZWthbGkgcGFrYWkpLgojIF
+2026-11-05 22:39:19,030 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', "printf %s 'IyEvYmluL3NoCiMgS2lyaW0gbG9nICJPUyB0ZXJwYXNhbmciIGxhbHUgc3RhZ2U9ZG
+2026-11-05 22:39:19,035 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', "printf %s 'IyEvYmluL3NoCiMgS2lyaW0gbG9nICJPUyB0ZXJwYXNhbmciIGxhbHUgc3RhZ2U9ZG9uZSBrZS
+2026-11-05 22:39:19,035 DEBUG root:38 finish: subiquity/Late/run/command_7: SUCCESS: printf %s 'IyEvYmluL3NoCiMgS2lyaW0gbG9nICJPUyB0ZXJwYXNhbmciIGxhbHUgc3RhZ2U9ZG9uZSBrZSBQWEUgZGFzaGJvYXJkLCBrZW11ZGlhbiBoYXB1cyBkaXJpICh0b2tlbiBzZWthbGkgcGFr
+2026-11-05 22:39:19,035 DEBUG root:38 start: subiquity/Late/run/command_8: printf %s 'W1VuaXRdCkRlc2NyaXB0aW9uPVBYRSBkYXNoYm9hcmQ6IGxhcG9yIGluc3RhbGFzaSBzZWxlc2FpIChzZWthbGkgamFsYW4pCldhbnRzPW5ldHdvcmstb25saW5lLnRhcmdldApBZnRlcj1uZXR3b3JrLW
+2026-11-05 22:39:19,036 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', "printf %s 'W1VuaXRdCkRlc2NyaXB0aW9uPVBYRSBkYXNoYm9hcmQ6IGxhcG9yIGluc3RhbGFzaS
+2026-11-05 22:39:19,041 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', "printf %s 'W1VuaXRdCkRlc2NyaXB0aW9uPVBYRSBkYXNoYm9hcmQ6IGxhcG9yIGluc3RhbGFzaSBzZWxlc2
+2026-11-05 22:39:19,041 DEBUG root:38 finish: subiquity/Late/run/command_8: SUCCESS: printf %s 'W1VuaXRdCkRlc2NyaXB0aW9uPVBYRSBkYXNoYm9hcmQ6IGxhcG9yIGluc3RhbGFzaSBzZWxlc2FpIChzZWthbGkgamFsYW4pCldhbnRzPW5ldHdvcmstb25saW5lLnRhcmdldApBZnRlcj1u
+2026-11-05 22:39:19,041 DEBUG root:38 start: subiquity/Late/run/command_9: ln -sf /etc/systemd/system/pxe-callback-done.service /target/etc/systemd/system/multi-user.target.wants/pxe-callback-done.service
+2026-11-05 22:39:19,041 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'ln -sf /etc/systemd/system/pxe-callback-done.service /target/etc/systemd/syst
+2026-11-05 22:39:19,047 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'ln -sf /etc/systemd/system/pxe-callback-done.service /target/etc/systemd/system/multi
+2026-11-05 22:39:19,047 DEBUG root:38 finish: subiquity/Late/run/command_9: SUCCESS: ln -sf /etc/systemd/system/pxe-callback-done.service /target/etc/systemd/system/multi-user.target.wants/pxe-callback-done.service
+2026-11-05 22:39:19,048 DEBUG root:38 start: subiquity/Late/run/command_10: b=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1#p' | head -n 1); if [ -n "$b" ]; then
+2026-11-05 22:39:19,048 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'b=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https\
+2026-11-05 22:39:19,066 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'b=$(tr \' \' \'\\n\' < /proc/cmdline | sed -n \'s#^ds=nocloud-net;s=\\(https\\{0,1\\}
+2026-11-05 22:39:19,066 DEBUG root:38 finish: subiquity/Late/run/command_10: SUCCESS: b=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^ds=nocloud-net;s=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1#p' | head -n 1); if [ -n "$
+2026-11-05 22:39:19,066 DEBUG root:38 start: subiquity/Late/run/command_11: if [ -d /sys/firmware/efi ]; then
+  n=$(efibootmgr | awk '/[Uu]buntu/ {print substr($1,5,4); exit}')
+  o=$(efibootmgr | awk -F': ' '/^BootOrder/ {print $2}')
+  if [ -n "$n" ]; then
+    efibootmgr -o "$(echo "$n,$o" | tr ',' '\n' | awk '!s[$0]++' | paste -sd,)" || true
+  fi
+fi
+
+2026-11-05 22:39:19,066 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'if [ -d /sys/firmware/efi ]; then\n  n=$(efibootmgr | awk \'/[Uu]buntu/ {prin
+2026-11-05 22:39:19,125 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'if [ -d /sys/firmware/efi ]; then\n  n=$(efibootmgr | awk \'/[Uu]buntu/ {print substr
+2026-11-05 22:39:19,125 DEBUG root:38 finish: subiquity/Late/run/command_11: SUCCESS: if [ -d /sys/firmware/efi ]; then
+  n=$(efibootmgr | awk '/[Uu]buntu/ {print substr($1,5,4); exit}')
+  o=$(efibootmgr | awk -F': ' '/^BootOrder/ {print $2}')
+  if [ -n "$n" ]; then
+    efibootmgr -o "$(echo "$n,$o" | tr ',' '\n' | awk '!s[$0]++' | paste -sd,)" || true
+  fi
+fi
+
+2026-11-05 22:39:19,126 DEBUG root:38 start: subiquity/Late/run/command_12: systemd-run --unit=pxe-force-reboot -p DefaultDependencies=no /bin/sh -c 'until [ "$(systemctl is-system-running)" = stopping ]; do sleep 2; done; sleep 45; echo s 
+2026-11-05 22:39:19,126 DEBUG subiquitycore.utils:119 arun_command called: ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'systemd-run --unit=pxe-force-reboot -p DefaultDependencies=no /bin/sh -c \'un
+2026-11-05 22:39:19,143 DEBUG subiquitycore.utils:133 arun_command ['systemd-cat', '--level-prefix=false', '--identifier=subiquity_log.1656', 'sh', '-c', 'systemd-run --unit=pxe-force-reboot -p DefaultDependencies=no /bin/sh -c \'until [ "$
+2026-11-05 22:39:19,143 DEBUG root:38 finish: subiquity/Late/run/command_12: SUCCESS: systemd-run --unit=pxe-force-reboot -p DefaultDependencies=no /bin/sh -c 'until [ "$(systemctl is-system-running)" = stopping ]; do sleep 2; done; sleep 4
+2026-11-05 22:39:19,143 DEBUG root:38 finish: subiquity/Late/run: SUCCESS: 
+2026-11-05 22:39:19,144 DEBUG root:38 finish: subiquity/Install/install: SUCCESS: 
+2026-11-05 22:39:19,144 INFO root:38 finish: subiquity/Meta/status_GET: SUCCESS: 200 {"state": "DONE", "confirming_tty": "", "error": null, "nonreportable_error":...
+2026-11-05 22:39:19,145 INFO root:38 finish: subiquity/Meta/status_GET: SUCCESS: 200 {"state": "DONE", "confirming_tty": "", "error": null, "nonreportable_error":...
+2026-11-05 22:39:19,145 DEBUG root:38 start: subiquity/Shutdown/copy_logs_to_target: 
+2026-11-05 22:39:19,145 DEBUG subiquitycore.utils:152 astart_command called: ['systemd-run', '--wait', '--same-dir', '--property', 'SyslogIdentifier=subiquity_log.1656', '--setenv', 'PATH=/snap/subiquity/7424/bin:/snap/subiquity/7424/usr/bi
+2026-11-05 22:39:19,149 INFO root:38 start: subiquity/Meta/status_GET: 
+2026-11-05 22:39:19,151 INFO root:38 start: subiquity/Meta/status_GET: 
+2026-11-05 22:39:19,177 DEBUG subiquitycore.utils:152 astart_command called: ['systemd-run', '--wait', '--same-dir', '--property', 'SyslogIdentifier=subiquity_log.1656', '--setenv', 'PATH=/snap/subiquity/7424/bin:/snap/subiquity/7424/usr/bi
+2026-11-05 22:39:19,204 DEBUG subiquitycore.utils:152 astart_command called: ['systemd-run', '--wait', '--same-dir', '--property', 'SyslogIdentifier=subiquity_log.1656', '--setenv', 'PATH=/snap/subiquity/7424/bin:/snap/subiquity/7424/usr/bi

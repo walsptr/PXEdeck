@@ -116,7 +116,12 @@ export function passwordLoginRejected(ip: string): { ok: boolean; out: string } 
     { encoding: "utf8", timeout: 60_000, input: "" },
   )
   const out = `${r.stdout ?? ""}${r.stderr ?? ""}`
-  return { ok: r.status !== 0 && /Permission denied \(publickey\)/.test(out), out }
+  // Daftar metode yang ditawarkan sshd (mis. "(publickey)" atau "(publickey,gssapi-keyex,gssapi-with-mic)"
+  // di Rocky) wajib memuat publickey dan tidak boleh memuat password/keyboard-interactive (selaras
+  // verify_one di infra/kvm-run.sh).
+  const methods = (/Permission denied \(([a-z,-]*)\)/.exec(out)?.[1] ?? "").split(",")
+  const ok = r.status !== 0 && methods.includes("publickey") && !methods.includes("password") && !methods.includes("keyboard-interactive")
+  return { ok, out }
 }
 
 /** `infra/node.sh reset <name>` (virsh reset satu node milik run; bukan server). */

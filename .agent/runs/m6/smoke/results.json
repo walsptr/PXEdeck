@@ -2,7 +2,7 @@
   "task": "M6-T15 smoke KVM dini",
   "commit": "30c88c9",
   "worktree": ".agent/wt-m6-smoke (detached)",
-  "generatedAt": "2026-11-06T01:30:00Z",
+  "generatedAt": "2026-11-06T03:10:00Z",
   "memAvailableMbAtStart": 15317,
   "maxNodes": 3,
   "attempts": [
@@ -230,6 +230,55 @@
           "status": "FAIL",
           "durationS": 989,
           "note": "job1 /dev/vdz -> failed/installer-error 40 dtk, event 'ERROR diagnosis disk d-i' (vda di /sys/block, list-devices /dev/vda, virtio_blk dimuat); job2 otomatis -> BUG-M6-9 timeout-installing"
+        }
+      ]
+    },
+    {
+      "dir": "attempt11-debian-dec021",
+      "commit": "fc2f31a",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 45:uefi:failpath:os=debian'",
+      "result": "FAIL (harness BUG-M6-10; Playwright 3/3 lulus)",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "disk": "otomatis",
+          "status": "PASS",
+          "durationS": 866,
+          "note": "preseed > modul virtio x2 > disk target > late_command > konfigurasi target selesai > first-boot; Done 621 dtk; tanpa '[!!] Configure the package manager'; d-i syslog: '50mirror returned error code 126; discarding output'; apt target: Release 304 + pool .deb 200, tanpa by-hash (by-hash 404 hanya dari net-retriever d-i); trusted_files=0, 00AllowUnauthenticated tidak ada, BOOTX64.EFI ada; locale en_US.UTF-8, sudo, key; reboot dari disk (status done, job 1->1); verify-node harness PASS"
+        },
+        {
+          "node": "pxe-test-m6-node45",
+          "os": "debian-12",
+          "role": "failpath",
+          "status": "PASS",
+          "durationS": 915,
+          "note": "job1 /dev/vdz failed/installer-error 40 dtk; job2 otomatis Done 632 dtk; fakta DEC-021 sama; reboot OK job 2->2; verify-node harness NOT_RUN (BUG-M6-10)"
+        }
+      ],
+      "scan": "spec scan FAIL 2 temuan: syslog d-i tanpa ekstensi tidak disamarkan scanEvidence (token /boot/ yang sudah dicabut, SR-4-7(b)); redact-evidence.sh kvm-run menyamarkannya (redact ok). Spec diperbaiki: berkas log disimpan *.log"
+    },
+    {
+      "dir": "attempt12-distro-rehearsal/distro",
+      "commit": "fc2f31a",
+      "cmd": "PXE_RUNS_DIR=attempt12-distro-rehearsal infra/kvm-run.sh m6 --scenario distro (gladi, bukan run resmi)",
+      "result": "FAIL (suite: cek password Rocky terlalu ketat)",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6distro-node23",
+          "os": "debian-12",
+          "status": "PASS",
+          "durationS": 602,
+          "note": "AC-6.48 semua cek lulus (event berurutan, verify 0/0, DEC-021, BOOTX64, reboot)"
+        },
+        {
+          "node": "pxe-test-m6distro-node24",
+          "os": "rocky-9",
+          "status": "FAIL(suite)",
+          "durationS": 692,
+          "note": "semua cek lulus kecuali passwordLoginRejected harness: sshd Rocky menawarkan (publickey,gssapi-keyex,gssapi-with-mic) sedangkan harness menuntut tepat '(publickey)'; verify-node harness kvm-run PASS. Harness diperbaiki (publickey wajib, password/keyboard-interactive dilarang)."
         }
       ]
     }
