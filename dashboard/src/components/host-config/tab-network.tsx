@@ -28,12 +28,17 @@ import {
   defaultIpRange,
   ipPlan,
   mgmtOf,
+  parseVlan,
+  requiredPrefix,
+  staticNetworkOf,
+  vlanNetworksOf,
+  vlanPatch,
   type Context,
   type NetForm,
 } from "@/components/host-config/form-state"
 import { IpText } from "@/components/host-config/ip-text"
 import { PlanTable } from "@/components/host-config/plan-table"
-import { isHostInSubnet, isIpv4, parseCidr } from "@/lib/net"
+import { isHostInSubnet, isIpv4, isVlanNetwork } from "@/lib/net"
 
 export function TabNetwork({
   value,
@@ -50,9 +55,15 @@ export function TabNetwork({
   // Subnet aktif dari server (CR-3-2), bukan konstanta lab.
   const mgmt = mgmtOf(ctx)
   const [lo, hi] = mgmt.dynamicRange
-  // Sama dengan aturan server (DEC-006); pesan lengkap tampil di ringkasan error tab.
-  const prefixInvalid = value.prefix !== parseCidr(mgmt.cidr).prefix
-  const gatewayInvalid = !isHostInSubnet(value.gateway, mgmt.cidr)
+  // M7 (DEC-024 §4): VLAN terdaftar → IP/prefix/gateway mengikuti subnet VLAN itu.
+  const net = staticNetworkOf(value, ctx)
+  const vlanNet = isVlanNetwork(net) ? net : null
+  const vlanNetworks = vlanNetworksOf(ctx)
+  const vlanId = parseVlan(value.vlan)
+  const vlanOutOfRange = vlanId !== null && (vlanId < 1 || vlanId > 4094)
+  // Sama dengan aturan server (DEC-006/DEC-024); pesan lengkap tampil di ringkasan error tab.
+  const prefixInvalid = value.prefix !== requiredPrefix(net)
+  const gatewayInvalid = !isHostInSubnet(value.gateway, net.cidr)
 
   function addDns() {
     const v = dnsDraft.trim()
@@ -79,9 +90,11 @@ export function TabNetwork({
           </ToggleGroupItem>
         </ToggleGroup>
         <FieldDescription>
-          {value.mode === "static"
-            ? "IP management statis di NIC yang dipilih; dipakai juga sebagai reservasi DHCP saat PXE."
-            : "Host memakai IP dinamis dari dnsmasq. IP bisa berubah antar boot."}
+          {value.mode === "dhcp"
+            ? "Host memakai IP dinamis dari dnsmasq. IP bisa berubah antar boot."
+            : vlanNet
+              ? `IP management statis di VLAN ${vlanNet.vlan} pada NIC yang dipilih. Saat PXE, host tetap memakai IP dinamis dari dnsmasq.`
+              : "IP management statis di NIC yang dipilih; dipakai juga sebagai reservasi DHCP saat PXE."}
         </FieldDescription>
       </Field>
 
@@ -93,7 +106,7 @@ export function TabNetwork({
               <Input
                 id="net-ip"
                 className="type-data"
-                placeholder={defaultIpRange(mgmt).start}
+                placeholder={defaultIpRange(net).start}
                 value={value.ip}
                 aria-invalid={plan[0]?.error ? true : undefined}
                 onChange={(e) => onChange({ ip: e.target.value })}
@@ -103,14 +116,24 @@ export function TabNetwork({
                   <IpText text={plan[0].error} />
                 </FieldError>
               ) : (
-                <FieldDescription>
-                  Di dalam{" "}
-                  <span className="type-data text-xs">{mgmt.cidr}</span>
-                  , di luar range dinamis{" "}
-                  <span className="type-data text-xs">
-                    {lo}–{hi}
-                  </span>
-                  .
+                <FieldDescription data-testid="net-ip-hint">
+                  {vlanNet ? (
+                    <>
+                      Di dalam{" "}
+                      <span className="type-data text-xs">{vlanNet.cidr}</span>{" "}
+                      (VLAN {vlanNet.vlan}).
+                    </>
+                  ) : (
+                    <>
+                      Di dalam{" "}
+                      <span className="type-data text-xs">{mgmt.cidr}</span>
+                      , di luar range dinamis{" "}
+                      <span className="type-data text-xs">
+                        {lo}–{hi}
+                      </span>
+                      .
+                    </>
+                  )}
                 </FieldDescription>
               )}
             </Field>
@@ -179,8 +202,9 @@ export function TabNetwork({
                     onCheckedChange={(v) => onChange({ skipUsed: v === true })}
                   />
                   <FieldLabel htmlFor="net-skip" className="font-normal">
-                    Lewati IP yang sudah dipakai host lain, lease aktif, atau
-                    range dinamis
+                    {vlanNet
+                      ? "Lewati IP yang sudah dipakai host lain atau lease aktif"
+                      : "Lewati IP yang sudah dipakai host lain, lease aktif, atau range dinamis"}
                   </FieldLabel>
                 </Field>
                 <PlanTable
@@ -292,7 +316,7 @@ export function TabNetwork({
           </Field>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            <Field>
+            <Field data-invalid={vlanOutOfRange || undefined}>
               <FieldLabel htmlFor="net-vlan">VLAN ID (opsional)</FieldLabel>
               <Input
                 id="net-vlan"
@@ -300,10 +324,23 @@ export function TabNetwork({
                 className="type-data"
                 placeholder="tanpa VLAN"
                 value={value.vlan}
+                aria-invalid={vlanOutOfRange || undefined}
                 onChange={(e) =>
-                  onChange({ vlan: e.target.value.replace(/\D/g, "") })
+                  onChange(
+                    vlanPatch(value, e.target.value.replace(/\D/g, ""), ctx),
+                  )
                 }
               />
+              {vlanOutOfRange ? (
+                <FieldError>VLAN ID 1–4094</FieldError>
+              ) : (
+                <VlanHint
+                  vlanId={vlanId}
+                  registered={vlanNet !== null}
+                  vlanNetworks={vlanNetworks}
+                  mgmtCidr={mgmt.cidr}
+                />
+              )}
             </Field>
             <Field>
               <FieldLabel>Interface</FieldLabel>
@@ -348,5 +385,56 @@ export function TabNetwork({
         </>
       )}
     </FieldGroup>
+  )
+}
+
+/**
+ * Petunjuk field VLAN (M7 §2.5c): daftar VLAN management terdaftar (`PXE_VLAN_NETWORKS`, mono) dan,
+ * bila VLAN yang diketik tidak terdaftar, penjelasan bahwa aturan subnet PXE (DEC-006) yang berlaku.
+ * Teks penjelasan memakai warna teks utama (informasi penting, DEC-017 §9).
+ */
+function VlanHint({
+  vlanId,
+  registered,
+  vlanNetworks,
+  mgmtCidr,
+}: {
+  vlanId: number | null
+  registered: boolean
+  vlanNetworks: readonly { vlan: number; cidr: string }[]
+  mgmtCidr: string
+}) {
+  const unregistered = vlanId !== null && !registered
+  if (!vlanNetworks.length && !unregistered) return null
+  return (
+    <>
+      {vlanNetworks.length > 0 && (
+        <FieldDescription data-testid="vlan-registered">
+          Terdaftar:{" "}
+          {vlanNetworks.map((v, i) => (
+            <React.Fragment key={v.vlan}>
+              {i > 0 && ", "}
+              <span
+                data-slot="vlan-hint"
+                className="type-data text-xs whitespace-nowrap"
+              >
+                {v.vlan} · {v.cidr}
+              </span>
+            </React.Fragment>
+          ))}
+        </FieldDescription>
+      )}
+      {unregistered && (
+        <FieldDescription
+          data-testid="vlan-unregistered"
+          className="text-foreground"
+        >
+          VLAN {vlanId} tidak terdaftar di{" "}
+          <span className="type-data text-xs">PXE_VLAN_NETWORKS</span>; IP,
+          prefix, dan gateway mengikuti subnet PXE{" "}
+          <span className="type-data text-xs">{mgmtCidr}</span>.
+        </FieldDescription>
+      )}
+    </>
   )
 }

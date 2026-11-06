@@ -4,9 +4,13 @@ import { useQuery } from "@tanstack/react-query"
 
 import { toActiveNetwork, type ActiveNetwork } from "@/hooks/use-network-config"
 import { apiJson } from "@/lib/api-client"
-import type { NetworkResponse } from "@/lib/net"
+import type { NetworkResponse, VlanNetwork } from "@/lib/net"
 
-/** Respons `GET /api/settings` (salinan klien `SettingsResponse` di lib/server/settings.ts). */
+/**
+ * Respons `GET /api/settings` (salinan klien `SettingsResponse` di lib/server/settings.ts).
+ * M7: `vlanNetworks` (dari `NetworkResponse`) hanya ada bila `PXE_VLAN_NETWORKS` berisi entri —
+ * baca lewat `vlanNetworksOf(s)`.
+ */
 export type SettingsResponse = NetworkResponse & {
   interface: string
   baseUrl: string
@@ -53,13 +57,23 @@ export function useSettings() {
 }
 
 /**
- * Subnet management aktif dari settings server (DEC-006). Satu cache dengan `useSettings`,
+ * Subnet management aktif dari settings server (DEC-006) + VLAN terdaftar (M7). Satu cache dengan `useSettings`,
  * jadi form Network, sidebar, dan halaman Settings memakai sumber yang sama.
  */
 export function useActiveNetwork() {
   return useQuery({ ...queryOptions, select: selectNetwork })
 }
 
-function selectNetwork(s: SettingsResponse): ActiveNetwork {
-  return toActiveNetwork(s)
+/** VLAN management terdaftar dari respons settings/network (key tidak ada = `[]`, DEC-024 §4). */
+export function vlanNetworksOf(r: NetworkResponse): VlanNetwork[] {
+  return r.vlanNetworks ?? []
+}
+
+/** Subnet management aktif + VLAN management terdaftar (M7) untuk form Network. */
+export type ActiveSettingsNetwork = ActiveNetwork & {
+  vlanNetworks: VlanNetwork[]
+}
+
+function selectNetwork(s: SettingsResponse): ActiveSettingsNetwork {
+  return { ...toActiveNetwork(s), vlanNetworks: vlanNetworksOf(s) }
 }

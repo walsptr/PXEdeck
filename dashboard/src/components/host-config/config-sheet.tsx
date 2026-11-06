@@ -37,6 +37,7 @@ import {
   SECTION_ORDER,
   sectionErrors,
   type Context,
+  type FormNetwork,
   type FormState,
 } from "@/components/host-config/form-state"
 import { SectionErrors } from "@/components/host-config/section-errors"
@@ -61,7 +62,6 @@ import type {
   SaveResult,
   SectionKey,
 } from "@/lib/host-config"
-import type { MgmtNetwork } from "@/lib/net"
 import { canonicalOsImageId, osLabel } from "@/lib/os-images"
 import type { Host, HostWithJob } from "@/lib/types"
 import { jobsHref } from "@/lib/jobs"
@@ -240,7 +240,7 @@ function ConfigForm({
   hosts: Host[]
   allHosts: Host[]
   config?: PublicHostConfig
-  net: MgmtNetwork
+  net: FormNetwork
   initialTab: SectionKey
   preselect: boolean
   onClose: () => void
