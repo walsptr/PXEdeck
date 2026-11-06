@@ -140,3 +140,27 @@ export async function waitForAnimations(page: Page) {
     )
     .toBe(0)
 }
+
+/**
+ * Flake DR-5-5/DR-5-6 (gate M6 iter2, `.agent/runs/m6/final-iter2/flaky-dr55-diagnosis.txt`): tunggu semua
+ * animasi/transisi berhingga pada elemen `loc` dan turunannya (mis. Dialog `zoom-in-95`, Sheet `slide-in-*`)
+ * selesai sebelum geometri diukur. Dua panggilan `boundingBox()` terpisah selama animasi buka dapat
+ * mengambil sampel dari frame berbeda (skala berbeda), sehingga selisih tepi bawah dialog vs footer
+ * terlihat > 1 px walau layout final rata. Animasi tak berhingga (spinner) diabaikan agar tidak menggantung.
+ */
+export async function waitForLocatorAnimations(loc: Locator) {
+  await expect
+    .poll(
+      () =>
+        loc.evaluate(async (el) => {
+          const active = () =>
+            el
+              .getAnimations({ subtree: true })
+              .filter((a) => (a.playState === "running" || a.pending) && a.effect?.getComputedTiming().iterations !== Infinity)
+          await Promise.all(active().map((a) => a.finished.catch(() => undefined)))
+          return active().length
+        }),
+      { timeout: 5_000 },
+    )
+    .toBe(0)
+}

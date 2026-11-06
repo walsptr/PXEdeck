@@ -1,0 +1,122 @@
+===== D-old-1.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.3s)
+  ✘  2 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1.2s)
+
+
+  1) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.716796875
+
+      580 |     return Math.abs(d.y + d.height - (f.y + f.height))
+      581 |   }
+    > 582 |   expect(await flush()).toBeLessThanOrEqual(1)
+          |                         ^
+      583 |   await expect(dlg.getByTestId("img-hint-id")).toBeVisible()
+      584 |   // Semua field kosong → server 400 → pesan per field berbahasa Indonesia.
+      585 |   const r = page.waitForResponse((x) => x.url().endsWith("/api/os-images") && x.request().method() === "POST")
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:582:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+  1 passed (30.7s)
+===== D-old-2.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+  ✘  2 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1.2s)
+
+
+  1) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.30865478515625
+
+      580 |     return Math.abs(d.y + d.height - (f.y + f.height))
+      581 |   }
+    > 582 |   expect(await flush()).toBeLessThanOrEqual(1)
+          |                         ^
+      583 |   await expect(dlg.getByTestId("img-hint-id")).toBeVisible()
+      584 |   // Semua field kosong → server 400 → pesan per field berbahasa Indonesia.
+      585 |   const r = page.waitForResponse((x) => x.url().endsWith("/api/os-images") && x.request().method() === "POST")
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:582:25
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+  1 passed (28.7s)
+===== D-old-3.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.3s)
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (2.2s)
+
+  2 passed (30.2s)
+===== D-old-4.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (2.3s)
+
+  2 passed (30.5s)
+===== D-new-1.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (782ms)
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (2.6s)
+
+  2 passed (30.4s)
+===== D-new-2.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.3s)
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (2.8s)
+
+  2 passed (30.0s)
+===== D-new-3.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.3s)
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (2.8s)
+
+  2 passed (30.4s)

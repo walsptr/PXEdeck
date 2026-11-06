@@ -1,0 +1,6 @@
+// beforeEach sementara (tidak di-commit) yang ditempel ke akhir e2e/m5-library.spec.ts untuk run D (lama = HEAD 2d70da0, baru = fix):
+test.beforeEach(async ({ page }) => {
+  const cdp = await page.context().newCDPSession(page)
+  await cdp.send("Animation.enable")
+  await cdp.send("Animation.setPlaybackRate", { playbackRate: Number(process.env.DIAG_RATE) })
+})

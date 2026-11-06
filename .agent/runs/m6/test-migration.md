@@ -327,3 +327,18 @@ Jumlah statik `expect(` file ini: 113 → 110 (−3; `.agent/runs/m6/final-iter2
 statik bukan pelemahan: 8 asersi atas jalur yang dihapus diganti 6 asersi runtime (2 × 3 URL) yang menolak jalur itu, dan
 mutasi `requireLocalMedia` no-op membuat test pengganti merah (`.agent/runs/m6/final-iter2/mutation.txt` R4a; urutan
 SR-6-6: R4c).
+
+## Flake DR-5-5/DR-5-6 (gate M6 iter2 run2) — tunggu animasi buka Dialog/Sheet sebelum mengukur geometri (test-engineer, iter2)
+
+Diagnosis + bukti: `.agent/runs/m6/final-iter2/flaky-dr55-diagnosis.txt` (log `flaky-dr55-diag-{A,BC,D}.log`). Akar masalah:
+dua `boundingBox()` terpisah selama animasi `zoom-in-95` (100 ms) mengambil sampel dari frame berbeda; geometri atomik
+selalu rata (≤ 3e-5 px) dan 0 setelah animasi selesai → bukan bug produk. Kode produk tidak diubah. Ambang ≤ 1 px dan
+semua asersi tetap; hanya ditambah penantian. Jumlah asersi statik `expect(`: m5-library 185 → 185, m3-sheet 73 → 73,
+iter2-ui 82 → 82 (token `expect(`+`toHave*(`+`toBe*(`: 324 → 324, 126 → 126, 152 → 152).
+
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `e2e/helpers.ts` (helper, bukan test) | — | `waitForLocatorAnimations(loc)`: `expect.poll` hingga 0 animasi berhingga running/pending pada `loc` + turunan (`getAnimations({ subtree: true })`, menunggu `.finished`) | versi ber-cakupan elemen dari `waitForAnimations(page)` (CR-1-3); animasi tak berhingga diabaikan agar tidak menggantung |
+| `e2e/m5-library.spec.ts` › "DR-5-5/DR-5-6 Daftarkan image … footer sticky terlihat di 1440×900" | `footer` bottom ≤ 900 dan `flush()` (dlg vs footer, ≤ 1 px) diukur langsung setelah dialog terbuka | `await waitForLocatorAnimations(dlg)` sebelum cek ≤ 900 dan di awal `flush()` (kedua pemanggilan) | gagal 1× di gate run2 (1.27 px). Repro CDP `Animation.setPlaybackRate` 0.25: test lama gagal 2/4 di baris 582 (1.72/1.31 px), badan lama + jeda 1 frame gagal 15/15; versi baru 3/3 dan 0/60 iterasi gagal |
+| `e2e/m3-sheet.spec.ts` › "AC-3.12 Sheet single host …" | `sheet.boundingBox()` tepat setelah Sheet terlihat (slide-in 200 ms) | `await waitForLocatorAnimations(sheet)` sebelum `boundingBox()`; asersi x+w ≥ 1439, x > 500 tetap | pola sama (posisi diukur di tengah animasi); diperkeras preventif |
+| `e2e/iter2-ui.spec.ts` › "toolbar & bulk bar 36px; Sheet radius 12px …" | radius/tinggi tombol/area klik Sheet diukur tepat setelah Sheet terlihat | `await waitForLocatorAnimations(sheet)` setelah `toBeVisible()`; semua asersi tetap | pola sama; diperkeras preventif |

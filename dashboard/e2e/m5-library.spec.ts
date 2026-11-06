@@ -14,7 +14,7 @@ import path from "node:path"
 import { expect, test, type APIRequestContext, type Locator, type Page } from "@playwright/test"
 
 import { SSH_ED25519, SSH_ED25519_B, SSH_RSA } from "../src/test/fixtures"
-import { dropShadowViolations, orangeElements, rowByMac, SHOTS } from "./helpers"
+import { dropShadowViolations, orangeElements, rowByMac, SHOTS, waitForLocatorAnimations } from "./helpers"
 import { HEX, leaseWriter, makeHost } from "./m5-support"
 import { e2eLeaseFile, e2eRoot } from "./support/e2e-env"
 
@@ -572,9 +572,13 @@ test("DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyik
   await expect(submit).toBeInViewport({ ratio: 1 })
   const footer = dlg.getByTestId("img-dialog-footer")
   await expect(footer).toHaveCSS("position", "sticky")
+  // Ukur geometri setelah animasi buka Dialog (zoom-in-95) selesai: dua boundingBox() terpisah selama
+  // animasi bisa mengambil frame berbeda (flake gate M6 iter2, final-iter2/flaky-dr55-diagnosis.txt).
+  await waitForLocatorAnimations(dlg)
   expect((await footer.boundingBox())!.y + (await footer.boundingBox())!.height).toBeLessThanOrEqual(900)
   // Footer rata di tepi bawah dialog (konten yang di-scroll tidak terlihat di bawahnya).
   const flush = async () => {
+    await waitForLocatorAnimations(dlg)
     const d = (await dlg.boundingBox())!
     const f = (await footer.boundingBox())!
     return Math.abs(d.y + d.height - (f.y + f.height))

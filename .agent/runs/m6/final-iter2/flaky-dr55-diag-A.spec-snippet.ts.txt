@@ -1,0 +1,44 @@
+
+// ===== DIAG-DR55 (sementara, tidak di-commit) =====
+async function diagOpen(page: Page, rate: number | null) {
+  await page.goto("/os-images")
+  await page.evaluate(() => document.fonts.ready)
+  if (rate !== null) {
+    const cdp = await page.context().newCDPSession(page)
+    await cdp.send("Animation.enable")
+    await cdp.send("Animation.setPlaybackRate", { playbackRate: rate })
+  }
+  await page.getByTestId("img-register").click()
+  return page.getByRole("dialog", { name: "Daftarkan OS image" })
+}
+const atomic = (dlg: Locator) =>
+  dlg.evaluate((el) => {
+    const d = el.getBoundingClientRect()
+    const f = el.querySelector('[data-testid="img-dialog-footer"]')!.getBoundingClientRect()
+    const anims = el.getAnimations({ subtree: true }).map((a) => ({ name: (a as CSSAnimation).animationName, state: a.playState, t: a.currentTime, target: (a.effect as KeyframeEffect).target?.getAttribute("data-slot") ?? (a.effect as KeyframeEffect).target?.tagName }))
+    return { transform: getComputedStyle(el).transform, dBottom: d.bottom, fBottom: f.bottom, gap: Math.abs(d.bottom - f.bottom), dH: d.height, cls: el.className, state: el.getAttribute("data-state"), open: el.hasAttribute("data-open"), anims, scrollH: el.scrollHeight, clientH: el.clientHeight }
+  })
+const settle = (dlg: Locator) => dlg.evaluate((el) => Promise.all(el.getAnimations({ subtree: true }).map((a) => a.finished)).then(() => undefined))
+
+for (const rate of [null, 0.02] as const) {
+  test(`DIAG-DR55 A rate=${rate}: atomic vs non-atomic flush during/after open animation`, async ({ page }) => {
+    const dlg = await diagOpen(page, rate)
+    await expect(dlg).toBeVisible()
+    const log: unknown[] = []
+    log.push({ phase: "t0-atomic", ...(await atomic(dlg)) })
+    const footer = dlg.getByTestId("img-dialog-footer")
+    // pola lama: 2 panggilan boundingBox terpisah
+    for (let i = 0; i < 6; i++) {
+      const d = (await dlg.boundingBox())!
+      const f = (await footer.boundingBox())!
+      const a = await atomic(dlg)
+      log.push({ phase: `nonatomic-${i}`, gapNonAtomic: Math.abs(d.y + d.height - (f.y + f.height)), dBottomBB: d.y + d.height, fBottomBB: f.y + f.height, atomicGap: a.gap, transform: a.transform, anims: a.anims.map((x) => `${x.name}:${x.state}@${x.t}`) })
+    }
+    await settle(dlg)
+    const fin = await atomic(dlg)
+    const d = (await dlg.boundingBox())!
+    const f = (await footer.boundingBox())!
+    log.push({ phase: "after-finished", atomicGap: fin.gap, nonAtomicGap: Math.abs(d.y + d.height - (f.y + f.height)), transform: fin.transform, anims: fin.anims, dH: fin.dH, scrollH: fin.scrollH, clientH: fin.clientH, cls: fin.cls })
+    console.log(`DIAG rate=${rate} ` + JSON.stringify(log, null, 1))
+  })
+}
