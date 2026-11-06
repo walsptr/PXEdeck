@@ -28,9 +28,22 @@ test("AC-4.6 GET /api/settings + halaman Settings read-only", async ({ page }) =
     jobTimeouts: { bootingMin: 60, installingMin: 120, configuringMin: 60 },
     maxInstallerBoots: 3,
     insecureNoLeaseCheck: false,
+    // M6 (AC-6.1, test-migration M6-T12): blok auth non-rahasia + konfirmasi insecure (admin E2E).
+    insecureConfirmed: false,
+    auth: {
+      adminUsername: "e2eadmin",
+      adminConfigured: true,
+      sessionIdleMin: 120,
+      sessionMaxHours: 12,
+      loginMaxFailures: 5,
+      loginWindowMin: 15,
+      apiRatePerMin: 600,
+    },
   })
   // Tanpa path DB / seed / allowlist (non-rahasia saja).
   expect(JSON.stringify(s)).not.toMatch(/\.db|seed|allowed|PXE_DB/i)
+  // M6: tanpa hash admin dalam bentuk apa pun.
+  expect(JSON.stringify(s)).not.toMatch(/scrypt|PXE_ADMIN_PASSWORD_HASH/)
 
   await page.goto("/settings")
   const main = page.locator("main")

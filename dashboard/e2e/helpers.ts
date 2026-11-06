@@ -8,7 +8,7 @@ import { expect, type Locator, type Page } from "@playwright/test"
  * sama, sehingga bukti milestone yang sudah di-approve tidak tertimpa.
  */
 const RUN_MILESTONE = Number(process.env.PXE_E2E_MILESTONE ?? 4)
-export const SHOTS = (m: 1 | 2 | 3 | 4 | 5, name: string) =>
+export const SHOTS = (m: 1 | 2 | 3 | 4 | 5 | 6, name: string) =>
   path.resolve(__dirname, `../../.agent/runs/m${RUN_MILESTONE}/screenshots/${m === RUN_MILESTONE ? "" : `m${m}-`}${name}.png`)
 
 /** Tabel host utama (bukan tabel preview di Sheet). */

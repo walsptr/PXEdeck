@@ -397,7 +397,15 @@ test_deploy_dry_run_no_secrets() {
   assert_match "$env" "^PXE_TRUST_PROXY=1$"
   assert_match "$env" "^PXE_MGMT_CIDR=10\.99\.0\.0/24$"
   assert_no_match "$env" "^PXE_SEED=demo"
-  ! grep -Eiq 'password|secret|\$6\$|PRIVATE KEY' "$INFRA_DIR_UNDER_TEST/server/dashboard.env" || _fail "dashboard.env memuat secret"
+  # M6 (AC-6.53, test-migration M6-T13): satu-satunya pengecualian = baris placeholder hash PERSIS
+  # `PXE_ADMIN_PASSWORD_HASH=@PXE_ADMIN_PASSWORD_HASH@` (hash disisipkan saat deploy lewat stdin).
+  # Nilai lain untuk variabel itu, `scrypt$`, `$6$`, `PRIVATE KEY`, dan kata password/secret di
+  # baris mana pun tetap ditolak.
+  local placeholder='PXE_ADMIN_PASSWORD_HASH=@PXE_ADMIN_PASSWORD_HASH@'
+  assert_eq "$(grep -cxF "$placeholder" "$INFRA_DIR_UNDER_TEST/server/dashboard.env")" 1
+  assert_eq "$(grep -c 'PXE_ADMIN_PASSWORD_HASH=' "$INFRA_DIR_UNDER_TEST/server/dashboard.env")" 1
+  ! grep -vxF "$placeholder" "$INFRA_DIR_UNDER_TEST/server/dashboard.env" |
+    grep -Eiq 'password|secret|scrypt\$|\$6\$|PRIVATE KEY' || _fail "dashboard.env memuat secret"
   # Stage sementara (TMPDIR sandbox) dibersihkan trap.
   assert_eq "$(ls -A "$TMPDIR")" ""
 }

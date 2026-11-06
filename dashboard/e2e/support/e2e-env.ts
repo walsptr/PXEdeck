@@ -14,7 +14,12 @@ import { openDbAt } from "../../src/lib/server/db"
 import { BUILTIN_SOURCES } from "../../src/lib/server/db/seed"
 import type { SeedName } from "../../src/lib/server/settings"
 
-export type E2eDb = { name: string; seed: SeedName }
+export type E2eDb = {
+  name: string
+  seed: SeedName
+  /** M6: data tambahan ditulis langsung ke file DB sebelum server start (sekali per run). */
+  extra?: (file: string) => void
+}
 
 /**
  * Induk direktori data E2E: di dalam project (`dashboard/.e2e-data`, gitignored) — batas keras
@@ -36,11 +41,12 @@ export function e2eRoot(): string {
 }
 
 /** Path DB untuk server `name`; dibuat + di-seed bila proses ini yang membuat root. */
-export function e2eDb({ name, seed }: E2eDb): string {
+export function e2eDb({ name, seed, extra }: E2eDb): string {
   const file = path.join(e2eRoot(), "db", `${name}.db`)
   if (e2eRoot() && createdHere) {
     mkdirSync(path.dirname(file), { recursive: true })
     openDbAt(file, seed).close()
+    extra?.(file)
   }
   return file
 }
