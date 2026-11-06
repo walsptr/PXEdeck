@@ -235,6 +235,14 @@ Dicatat test-engineer; tidak diperbaiki test-engineer (kode produk/infra milik d
 
 ## BUG-M6-10 — `kvm-run.sh` berhenti setelah verifikasi node PERTAMA bila Playwright lulus (set -e + substitusi perintah di `verify_one`)
 
+- **Status: FIXED** — commit `9aeac33` (`9aeac331cb65ddd79442afef21b44d2ee89ca078`), backend-dev,
+  2026-11-06. `verify_one` memakai `verify_partial_suffix` (if, selalu status 0) + `return 0`;
+  pola sama di `finish` (`step cleanup … "$(if …)"`) dan clamp `max_nodes` (if/elif) ikut diganti.
+  Test: `infra/test/m6-bug10.sh` (jalur verifikasi non-dry lewat `PXE_KVM_DRY_VERIFY_EXEC=1` + ssh
+  palsu): Playwright lulus 2 node & `--waves` 3 node → semua PASS exit 0; Playwright gagal → catatan
+  parsial + FAIL; node1 gagal → node2 tetap diverifikasi; cek statis. Suite infra 76/76
+  (`infra-bug10.log`); mutasi baris asli → 4 test merah (`mutation-dev-BUG10.txt`). Belum diverifikasi
+  ulang di KVM (run core/bulk ulang diperlukan).
 - Ditemukan: run resmi `core` (`.agent/runs/m6/kvm/core/`), 2026-11-06T02:11Z, commit `97d6d44`.
 - Komponen: `infra/kvm-run.sh` `verify_one()` (dari `b36a7db`):
   `VERIFY_NOTE[$i]="verify-node.sh exit=$rc + cek login password$( ((e2e_rc != 0)) && echo " (verifikasi parsial, …)")"`.
