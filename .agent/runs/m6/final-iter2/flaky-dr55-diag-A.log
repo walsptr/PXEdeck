@@ -1,0 +1,734 @@
+(node:3104687) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node --trace-warnings ...` to show where the warning was created)
+[WebServer] 
+[WebServer] > dashboard@0.1.0 build
+[WebServer] > next build
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5 (Turbopack)
+
+[WebServer] ✓ Running next.config.ts took 25ms
+
+[WebServer] - Cache Components enabled
+
+[WebServer] - Partial Prefetching enabled
+[WebServer] 
+
+[WebServer]   Creating an optimized production build ...
+
+[WebServer] ✓ Compiled successfully in 619ms
+
+[WebServer]   Running TypeScript ...
+
+[WebServer]   Finished TypeScript in 2.7s ...
+
+[WebServer]   Collecting page data using 11 workers ...
+
+[WebServer] (node:3104809) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+[WebServer] (node:3104812) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer] (node:3104825) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer] (node:3104803) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer] (node:3104797) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer] (node:3104831) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer] (node:3104838) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer] (node:3104796) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer] (node:3104840) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer] (node:3104854) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer] (node:3104852) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[WebServer]   Generating static pages using 11 workers (0/23) ...
+
+[WebServer]   Generating static pages using 11 workers (5/23) 
+
+[WebServer]   Generating static pages using 11 workers (11/23) 
+
+[WebServer]   Generating static pages using 11 workers (17/23) 
+
+[WebServer] ✓ Generating static pages using 11 workers (23/23) in 610ms
+
+[WebServer]   Finalizing page optimization ...
+
+[WebServer] 
+
+[WebServer] Route (app)
+[WebServer] ┌ ○ /_not-found
+[WebServer] ├ ƒ /api/auth/login
+[WebServer] ├ ƒ /api/auth/logout
+[WebServer] ├ ƒ /api/auth/session
+[WebServer] ├ ƒ /api/credentials/import
+[WebServer] ├ ƒ /api/hosts
+[WebServer] ├ ƒ /api/hosts/[id]
+[WebServer] ├ ƒ /api/hosts/[id]/config
+[WebServer] ├ ƒ /api/hosts/[id]/install
+[WebServer] ├ ƒ /api/hosts/[id]/reboot
+[WebServer] ├ ƒ /api/hosts/bulk
+[WebServer] ├ ƒ /api/hosts/bulk/install
+[WebServer] ├ ƒ /api/jobs
+[WebServer] ├ ƒ /api/jobs/[id]
+[WebServer] ├ ƒ /api/jobs/[id]/logs
+[WebServer] ├ ƒ /api/network
+[WebServer] ├ ƒ /api/os-images
+[WebServer] ├ ƒ /api/os-images/[id]
+[WebServer] ├ ƒ /api/server-status
+[WebServer] ├ ƒ /api/settings
+[WebServer] ├ ƒ /api/ssh-keys
+[WebServer] ├ ƒ /api/ssh-keys/[id]
+[WebServer] ├ ƒ /boot/[name]
+[WebServer] ├ ƒ /boot/[name]/[token]/[file]
+[WebServer] ├ ƒ /boot/[name]/[token]/log
+[WebServer] ├ ƒ /boot/[name]/[token]/status
+[WebServer] ├ ◐ /design
+[WebServer] ├ ◐ /hosts
+[WebServer] ├ ◐ /jobs
+[WebServer] ├ ◐ /login
+[WebServer] ├ ◐ /os-images
+[WebServer] ├ ◐ /settings
+[WebServer] └ ◐ /ssh-keys
+[WebServer] 
+[WebServer] 
+[WebServer] ƒ Proxy (Middleware)
+
+[WebServer] 
+[WebServer] ○  (Static)             prerendered as static content
+[WebServer] ◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+[WebServer] ƒ  (Dynamic)            server-rendered on demand
+[WebServer] 
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3100
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3100
+[WebServer] - Network:       http://192.168.0.207:3100
+
+[WebServer] ✓ Ready in 145ms
+
+[WebServer] ✓ Running next.config.ts took 28ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105039) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3101
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3101
+
+[WebServer] - Network:       http://192.168.0.207:3101
+
+[WebServer] ✓ Ready in 141ms
+
+[WebServer] ✓ Running next.config.ts took 29ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105076) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3102
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3102
+
+[WebServer] - Network:       http://192.168.0.207:3102
+
+[WebServer] ✓ Ready in 162ms
+
+[WebServer] ✓ Running next.config.ts took 33ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105112) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3103
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3103
+
+[WebServer] - Network:       http://192.168.0.207:3103
+
+[WebServer] ✓ Ready in 149ms
+
+[WebServer] ✓ Running next.config.ts took 30ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105148) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3104
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3104
+[WebServer] - Network:       http://192.168.0.207:3104
+
+[WebServer] ✓ Ready in 134ms
+
+[WebServer] ✓ Running next.config.ts took 27ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105185) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3105
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3105
+
+[WebServer] - Network:       http://192.168.0.207:3105
+
+[WebServer] ✓ Ready in 154ms
+
+[WebServer] ✓ Running next.config.ts took 29ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105221) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3106
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3106
+
+[WebServer] - Network:       http://192.168.0.207:3106
+
+[WebServer] ✓ Ready in 140ms
+
+[WebServer] ✓ Running next.config.ts took 28ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105259) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3107
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3107
+[WebServer] - Network:       http://192.168.0.207:3107
+[WebServer] ✓ Ready in 146ms
+
+[WebServer] ✓ Running next.config.ts took 29ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105293) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3108
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3108
+
+[WebServer] - Network:       http://192.168.0.207:3108
+
+[WebServer] ✓ Ready in 153ms
+
+[WebServer] ✓ Running next.config.ts took 27ms
+
+[WebServer] (node:3105335) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3109
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3109
+
+[WebServer] - Network:       http://192.168.0.207:3109
+
+[WebServer] ✓ Ready in 142ms
+
+[WebServer] ✓ Running next.config.ts took 28ms
+
+[WebServer] (node:3105371) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3110
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3110
+
+[WebServer] - Network:       http://192.168.0.207:3110
+
+[WebServer] ✓ Ready in 155ms
+
+[WebServer] ✓ Running next.config.ts took 31ms
+
+[WebServer] (node:3105409) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3111
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3111
+
+[WebServer] - Network:       http://192.168.0.207:3111
+
+[WebServer] ✓ Ready in 161ms
+
+[WebServer] ✓ Running next.config.ts took 42ms
+
+[WebServer] (node:3105445) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3112
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3112
+
+[WebServer] - Network:       http://192.168.0.207:3112
+
+[WebServer] ✓ Ready in 142ms
+
+[WebServer] ✓ Running next.config.ts took 30ms
+
+[WebServer] (node:3105482) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3113
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3113
+[WebServer] - Network:       http://192.168.0.207:3113
+
+[WebServer] ✓ Ready in 156ms
+
+[WebServer] ✓ Running next.config.ts took 34ms
+
+[WebServer] (node:3105518) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3114
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3114
+[WebServer] - Network:       http://192.168.0.207:3114
+
+[WebServer] ✓ Ready in 151ms
+
+[WebServer] ✓ Running next.config.ts took 31ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105555) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3115
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3115
+
+[WebServer] - Network:       http://192.168.0.207:3115
+
+[WebServer] ✓ Ready in 140ms
+
+[WebServer] ✓ Running next.config.ts took 29ms
+
+[WebServer] [pxe] peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama 15 menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan PXE_TRUST_PROXY=1
+
+[WebServer] (node:3105592) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3116
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3116
+
+[WebServer] - Network:       http://192.168.0.207:3116
+
+[WebServer] ✓ Ready in 159ms
+
+[WebServer] ✓ Running next.config.ts took 31ms
+
+[WebServer] (node:3105628) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+[WebServer] 
+[WebServer] > dashboard@0.1.0 start
+[WebServer] > next start -p 3117
+[WebServer] 
+
+[WebServer] ▲ Next.js 16.4.5
+
+[WebServer] - Local:         http://localhost:3117
+[WebServer] - Network:       http://192.168.0.207:3117
+
+[WebServer] ✓ Ready in 145ms
+
+[WebServer] ✓ Running next.config.ts took 29ms
+
+[WebServer] (node:3105664) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+[WebServer] (Use `node --trace-warnings ...` to show where the warning was created)
+
+
+Running 3 tests using 1 worker
+
+[1/3] [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState
+[setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState
+(node:3105689) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+[2/3] [m5-library] › e2e/m5-library.spec.ts:751:7 › DIAG-DR55 A rate=null: atomic vs non-atomic flush during/after open animation
+[m5-library] › e2e/m5-library.spec.ts:751:7 › DIAG-DR55 A rate=null: atomic vs non-atomic flush during/after open animation
+(node:3105788) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+DIAG rate=null [
+ {
+  "phase": "t0-atomic",
+  "transform": "matrix3d(0.99624, 0, 0, 0, 0, 0.99624, 0, 0, 0, 0, 0.99624, 0, 0, 0, 0, 1)",
+  "dBottom": 882.3683185577393,
+  "fBottom": 882.3683471679688,
+  "gap": 0.0000286102294921875,
+  "dH": 864.7366943359375,
+  "cls": "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-xl bg-popover p-6 text-sm text-popover-foreground ring-1 ring-border duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl",
+  "state": "open",
+  "open": false,
+  "anims": [
+   {
+    "state": "running",
+    "t": 66.66399999999994,
+    "target": "input"
+   },
+   {
+    "state": "running",
+    "t": 66.66399999999994,
+    "target": "input"
+   },
+   {
+    "state": "running",
+    "t": 66.66399999999994,
+    "target": "input"
+   },
+   {
+    "state": "running",
+    "t": 66.66399999999994,
+    "target": "input"
+   },
+   {
+    "name": "enter",
+    "state": "running",
+    "t": 66.66399999999994,
+    "target": "dialog-content"
+   }
+  ],
+  "scrollH": 988,
+  "clientH": 868
+ },
+ {
+  "phase": "nonatomic-0",
+  "gapNonAtomic": 0.3587646484375,
+  "dBottomBB": 883.6412353515625,
+  "fBottomBB": 884,
+  "atomicGap": 0,
+  "transform": "matrix(1, 0, 0, 1, 0, 0)",
+  "anims": [
+   "undefined:running@99.99599999999998",
+   "undefined:running@99.99599999999998",
+   "undefined:running@99.99599999999998",
+   "undefined:running@99.99599999999998",
+   "enter:running@99.99599999999998"
+  ]
+ },
+ {
+  "phase": "nonatomic-1",
+  "gapNonAtomic": 0,
+  "dBottomBB": 884,
+  "fBottomBB": 884,
+  "atomicGap": 0,
+  "transform": "none",
+  "anims": [
+   "undefined:running@133.336",
+   "undefined:running@133.336",
+   "undefined:running@133.336",
+   "undefined:running@133.336"
+  ]
+ },
+ {
+  "phase": "nonatomic-2",
+  "gapNonAtomic": 0,
+  "dBottomBB": 884,
+  "fBottomBB": 884,
+  "atomicGap": 0,
+  "transform": "none",
+  "anims": []
+ },
+ {
+  "phase": "nonatomic-3",
+  "gapNonAtomic": 0,
+  "dBottomBB": 884,
+  "fBottomBB": 884,
+  "atomicGap": 0,
+  "transform": "none",
+  "anims": []
+ },
+ {
+  "phase": "nonatomic-4",
+  "gapNonAtomic": 0,
+  "dBottomBB": 884,
+  "fBottomBB": 884,
+  "atomicGap": 0,
+  "transform": "none",
+  "anims": []
+ },
+ {
+  "phase": "nonatomic-5",
+  "gapNonAtomic": 0,
+  "dBottomBB": 884,
+  "fBottomBB": 884,
+  "atomicGap": 0,
+  "transform": "none",
+  "anims": []
+ },
+ {
+  "phase": "after-finished",
+  "atomicGap": 0,
+  "nonAtomicGap": 0,
+  "transform": "none",
+  "anims": [],
+  "dH": 868,
+  "scrollH": 988,
+  "clientH": 868,
+  "cls": "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-xl bg-popover p-6 text-sm text-popover-foreground ring-1 ring-border duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl"
+ }
+]
+
+[3/3] [m5-library] › e2e/m5-library.spec.ts:751:7 › DIAG-DR55 A rate=0.02: atomic vs non-atomic flush during/after open animation
+[m5-library] › e2e/m5-library.spec.ts:751:7 › DIAG-DR55 A rate=0.02: atomic vs non-atomic flush during/after open animation
+DIAG rate=0.02 [
+ {
+  "phase": "t0-atomic",
+  "transform": "matrix3d(0.95031, 0, 0, 0, 0, 0.95031, 0, 0, 0, 0, 0.95031, 0, 0, 0, 0, 1)",
+  "dBottom": 862.4346656799316,
+  "fBottom": 862.4346923828125,
+  "gap": 0.000026702880859375,
+  "dH": 824.869384765625,
+  "cls": "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-xl bg-popover p-6 text-sm text-popover-foreground ring-1 ring-border duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl",
+  "state": "open",
+  "open": false,
+  "anims": [
+   {
+    "state": "running",
+    "t": 1.3340000000000019,
+    "target": "input"
+   },
+   {
+    "state": "running",
+    "t": 1.3340000000000019,
+    "target": "input"
+   },
+   {
+    "state": "running",
+    "t": 1.3340000000000019,
+    "target": "input"
+   },
+   {
+    "state": "running",
+    "t": 1.3340000000000019,
+    "target": "input"
+   },
+   {
+    "name": "enter",
+    "state": "running",
+    "t": 1.3340000000000019,
+    "target": "dialog-content"
+   }
+  ],
+  "scrollH": 988,
+  "clientH": 868
+ },
+ {
+  "phase": "nonatomic-0",
+  "gapNonAtomic": 0.04217529296875,
+  "dBottomBB": 862.4745483398438,
+  "fBottomBB": 862.5167236328125,
+  "atomicGap": 0.00002288818359375,
+  "transform": "matrix3d(0.950499, 0, 0, 0, 0, 0.950499, 0, 0, 0, 0, 0.950499, 0, 0, 0, 0, 1)",
+  "anims": [
+   "undefined:running@2.001000000000003",
+   "undefined:running@2.001000000000003",
+   "undefined:running@2.001000000000003",
+   "undefined:running@2.001000000000003",
+   "enter:running@2.001000000000003"
+  ]
+ },
+ {
+  "phase": "nonatomic-1",
+  "gapNonAtomic": 0.04742431640625,
+  "dBottomBB": 862.5614624023438,
+  "fBottomBB": 862.60888671875,
+  "atomicGap": 0.000030517578125,
+  "transform": "matrix3d(0.950712, 0, 0, 0, 0, 0.950712, 0, 0, 0, 0, 0.950712, 0, 0, 0, 0, 1)",
+  "anims": [
+   "undefined:running@2.6680000000000037",
+   "undefined:running@2.6680000000000037",
+   "undefined:running@2.6680000000000037",
+   "undefined:running@2.6680000000000037",
+   "enter:running@2.6680000000000037"
+  ]
+ },
+ {
+  "phase": "nonatomic-2",
+  "gapNonAtomic": 0,
+  "dBottomBB": 862.6588134765625,
+  "fBottomBB": 862.6588134765625,
+  "atomicGap": 0.0000152587890625,
+  "transform": "matrix3d(0.950948, 0, 0, 0, 0, 0.950948, 0, 0, 0, 0, 0.950948, 0, 0, 0, 0, 1)",
+  "anims": [
+   "undefined:running@3.3340000000000036",
+   "undefined:running@3.3340000000000036",
+   "undefined:running@3.3340000000000036",
+   "undefined:running@3.3340000000000036",
+   "enter:running@3.3340000000000036"
+  ]
+ },
+ {
+  "phase": "nonatomic-3",
+  "gapNonAtomic": 0,
+  "dBottomBB": 862.7667846679688,
+  "fBottomBB": 862.7667846679688,
+  "atomicGap": 0.000003814697265625,
+  "transform": "matrix3d(0.951209, 0, 0, 0, 0, 0.951209, 0, 0, 0, 0, 0.951209, 0, 0, 0, 0, 1)",
+  "anims": [
+   "undefined:running@4.001000000000005",
+   "undefined:running@4.001000000000005",
+   "undefined:running@4.001000000000005",
+   "undefined:running@4.001000000000005",
+   "enter:running@4.001000000000005"
+  ]
+ },
+ {
+  "phase": "nonatomic-4",
+  "gapNonAtomic": 0,
+  "dBottomBB": 862.8853759765625,
+  "fBottomBB": 862.8853759765625,
+  "atomicGap": 0.000026702880859375,
+  "transform": "matrix3d(0.951495, 0, 0, 0, 0, 0.951495, 0, 0, 0, 0, 0.951495, 0, 0, 0, 0, 1)",
+  "anims": [
+   "undefined:running@4.6680000000000055",
+   "undefined:running@4.6680000000000055",
+   "undefined:running@4.6680000000000055",
+   "undefined:running@4.6680000000000055",
+   "enter:running@4.6680000000000055"
+  ]
+ },
+ {
+  "phase": "nonatomic-5",
+  "gapNonAtomic": 0,
+  "dBottomBB": 863.0152587890625,
+  "fBottomBB": 863.0152587890625,
+  "atomicGap": 0.000011444091796875,
+  "transform": "matrix3d(0.951807, 0, 0, 0, 0, 0.951807, 0, 0, 0, 0, 0.951807, 0, 0, 0, 0, 1)",
+  "anims": [
+   "undefined:running@5.334000000000005",
+   "undefined:running@5.334000000000005",
+   "undefined:running@5.334000000000005",
+   "undefined:running@5.334000000000005",
+   "enter:running@5.334000000000005"
+  ]
+ },
+ {
+  "phase": "after-finished",
+  "atomicGap": 0,
+  "nonAtomicGap": 0,
+  "transform": "none",
+  "anims": [],
+  "dH": 868,
+  "scrollH": 988,
+  "clientH": 868,
+  "cls": "fixed top-1/2 left-1/2 z-50 grid w-full max-w-[calc(100%-2rem)] -translate-x-1/2 -translate-y-1/2 gap-6 rounded-xl bg-popover p-6 text-sm text-popover-foreground ring-1 ring-border duration-100 outline-none data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:fade-out-0 data-closed:zoom-out-95 max-h-[calc(100dvh-2rem)] overflow-y-auto sm:max-w-xl"
+ }
+]
+
+  3 passed (35.0s)

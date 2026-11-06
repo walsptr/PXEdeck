@@ -46,6 +46,8 @@ for d in "$VMS_DIR/$prefix"*.qcow2; do
   [[ "$(basename "$d")" == "$SERVER_NAME"* ]] && continue
   assert_path_in_vms "$d"; run rm -f "$d"
 done
+# Password admin per run (M6, .agent/keys/<run>-admin.pass) + sisa cookie jar/key node run ini.
+rm -f "$KEYS_DIR/$run_id-admin.pass" "$KEYS_DIR/pxe-test-$run_id-"*-session.jar
 if ((server)); then "$INFRA_DIR/server-down.sh" --purge; fi
 if ((base)); then
   run rm -f "$SERVER_BASE" "$VMS_DIR/pxe-test-server-base.ready"

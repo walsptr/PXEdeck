@@ -1,0 +1,393 @@
+# M6 iter2 test-engineer — 2026-11-06T12:18:39+07:00 — HEAD 2b90cf5; debian.ts sha256 ddc360e5a384643a26082a41ceb9725cc42f908f7f5b842d4995449d3585fab6
+$ npx vitest run src/lib/server/installers/m5-te-hooks.test.ts --reporter=verbose
+
+ RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard
+
+(node:2633038) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > autoinstall: baris kernel → URL status <base>/boot/<mac>/<token>/status 14ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > preseed: baris kernel → URL status <base>/boot/<mac>/<token>/status 9ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > kickstart: baris kernel → URL status <base>/boot/<mac>/<token>/status 9ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > negatif kickstart: script dimutasi (inst.ks= → ks=) → evaluasi gagal (kopling terdeteksi) 5ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > negatif preseed: script dimutasi ( url= →  preseed/url=) → evaluasi gagal (kopling terdeteksi) 4ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > negatif autoinstall: script dimutasi (ds=nocloud-net;s= → ds=nocloud;s=) → evaluasi gagal (kopling terdeteksi) 4ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > cmdline MAC lain / token 42 karakter → URL kosong 8ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Ubuntu early-commands → POST <base>/log berisi penanda mulai 10ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Ubuntu late-commands: log 'late-commands mulai' SEBELUM callback configuring; penanda selesai di akhir 39ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Ubuntu error-commands: tail log (berurutan) lalu callback failed 15ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Ubuntu error-commands tanpa file log → hanya callback failed, exit 0 10ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Debian early_command + late (log sebelum configuring, penanda di akhir) 58ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Rocky %pre, %post (log sebelum configuring + akhir), %onerror (tail lalu failed) 46ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > first-boot: log 'OS terpasang' ke <base>/log lalu stage=done ke <base>/status, file URL dihapus 12ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > MAC lain → tidak ada request, exit 0 (installer tidak gagal) 33ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > token 42 karakter → tidak ada request, exit 0 (installer tidak gagal) 34ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > token 44 karakter → tidak ada request, exit 0 (installer tidak gagal) 35ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > cmdline tanpa parameter → tidak ada request, exit 0 (installer tidak gagal) 32ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > curl gagal → fallback wget ke URL yang sama; keduanya gagal → tetap exit 0 13ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > ubuntu user-data: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 2ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > debian preseed: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 4ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > debian late: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 2ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > rocky ks: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 2ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > rocky post: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 2ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > first-boot: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 0ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > setiap pesan logCmd di output adalah konstanta generator: tanpa hostname/username/hash 3ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > logCmd menolak pesan dari nilai pengguna yang berbahaya (kutip/subshell) 1ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > sh -n: semua perintah hook valid secara sintaks 37ms
+
+ Test Files  1 passed (1)
+      Tests  28 passed (28)
+   Start at  12:18:39
+   Duration  782ms (tests 73%, import 19%, transform 8%, worker 1%)
+
+exit=0
+$ npx vitest run src/lib/server/installers/ --reporter=verbose
+
+ RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard
+
+(node:2633731) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+ ✓ |node| src/lib/server/installers/m5-hooks.test.ts > helper log > callbackBaseCmd memakai pola MAC + 43 karakter, tanpa 'status' 5ms
+ ✓ |node| src/lib/server/installers/m5-hooks.test.ts > helper log > logCmd hanya menerima pesan konstan aman; logTailCmd menolak path tak aman 2ms
+ ✓ |node| src/lib/server/installers/m5-hooks.test.ts > hook generator > Ubuntu: early, late (log sebelum configuring), error (tail lalu failed) 3ms
+ ✓ |node| src/lib/server/installers/m5-hooks.test.ts > hook generator > Debian early_command + late; Rocky %pre/%post/%onerror 3ms
+ ✓ |node| src/lib/server/installers/m5-hooks.test.ts > hook generator > pesan log tidak memuat nilai pengguna 1ms
+ ✓ |node| src/lib/server/installers/m5-hooks.test.ts > hook generator > first-boot: log via base URL file (tanpa status) sebelum done 0ms
+ ✓ |node| src/lib/server/installers/m5-hooks.test.ts > CR-4-5 > waitScript chain --replace --autofree; semua exit = exit 1 1ms
+(node:2633729) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-3 preseed Debian tanpa prompt interaktif > locale en_US.UTF-8 → language en, country dari locale, locale + supported-locales 6ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-3 preseed Debian tanpa prompt interaktif > locale id_ID.UTF-8 → language en, country dari locale, locale + supported-locales 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-3 preseed Debian tanpa prompt interaktif > locale en_GB.UTF-8 → language en, country dari locale, locale + supported-locales 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-3 preseed Debian tanpa prompt interaktif > localeLines menolak locale tak valid 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-3 preseed Debian tanpa prompt interaktif > semua pertanyaan d-i yang muncul pada instalasi netboot + mirror DVD lokal dipreseed 2ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-3 preseed Debian tanpa prompt interaktif > late script menulis hostname target (preseed jaringan dimuat setelah netcfg) 8ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-4 / DEC-020 stage2 Rocky lewat NFS > kernel: inst.stage2=nfs:<server>:<media root>/<repo>; install.img tidak lewat HTTP 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-4 / DEC-020 stage2 Rocky lewat NFS > path NFS diekspor read-only hanya untuk 10.99.0.0/24 di infra/server/exports 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-4 / DEC-020 stage2 Rocky lewat NFS > nilai server/media root tidak aman tetap ditolak 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-5 kickstart sesuai media minimal + non-interaktif > satu sumber `url` root media; tanpa `repo` BaseOS/AppStream 0ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-5 kickstart sesuai media minimal + non-interaktif > %packages hanya grup/paket yang ada di repo Minimal 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-5 kickstart sesuai media minimal + non-interaktif > mode cmdline (kickstart + kernel) agar kegagalan → %onerror, bukan menunggu UI 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > preseed: partman/early_command ada, partman-auto/disk tidak statis, konfirmasi partman lengkap 2ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > otomatis: disk pertama non-removable → debconf-set partman-auto/disk + grub bootdev, log 21ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > eksplisit ada → dipakai apa adanya 17ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → eksplisit /dev/vda dipakai 28ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → otomatis dipakai 28ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > autoinstall: baris kernel → URL status <base>/boot/<mac>/<token>/status 15ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > preseed: baris kernel → URL status <base>/boot/<mac>/<token>/status 9ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > kickstart: baris kernel → URL status <base>/boot/<mac>/<token>/status 10ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > negatif kickstart: script dimutasi (inst.ks= → ks=) → evaluasi gagal (kopling terdeteksi) 6ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > negatif preseed: script dimutasi ( url= →  preseed/url=) → evaluasi gagal (kopling terdeteksi) 4ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > negatif autoinstall: script dimutasi (ds=nocloud-net;s= → ds=nocloud;s=) → evaluasi gagal (kopling terdeteksi) 5ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.20 CR-4-4: cmdline evaluasi callback diturunkan dari installerScript() nyata > cmdline MAC lain / token 42 karakter → URL kosong 9ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Ubuntu early-commands → POST <base>/log berisi penanda mulai 10ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Ubuntu late-commands: log 'late-commands mulai' SEBELUM callback configuring; penanda selesai di akhir 24ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Ubuntu error-commands: tail log (berurutan) lalu callback failed 18ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > preseed/early_command juga memuat driver (sebelum disk-detect), log mulai tetap pertama 30ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > eksplisit tidak ada (/dev/vdz) → log ERROR + diagnosis + stage=failed, exit 1, tanpa debconf-set 47ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > otomatis tanpa disk non-removable → log ERROR + diagnosis + stage=failed, exit 1, tanpa debconf-set 49ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Ubuntu error-commands tanpa file log → hanya callback failed, exit 0 11ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Debian early_command + late (log sebelum configuring, penanda di akhir) 63ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Rocky %pre, %post (log sebelum configuring + akhir), %onerror (tail lalu failed) 60ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > driver tidak tersedia di server (disk tak pernah muncul) → log ERROR + diagnosis + stage=failed, exit 1, tanpa debconf-set 38ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk > string preseed aman dilewatkan debconf: satu baris, tanpa backslash akhir (lanjutan baris d-i) 13ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-7 Rocky %pre memilih/memvalidasi disk > kickstart: otomatis → %include, eksplisit → ignoredisk/clearpart statis; tanpa clearpart semua disk 2ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-7 Rocky %pre memilih/memvalidasi disk > otomatis: disk pertama non-removable selain zram → include untuk disk itu saja 14ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-7 Rocky %pre memilih/memvalidasi disk > eksplisit ada → lanjut tanpa include 12ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-7 Rocky %pre memilih/memvalidasi disk > eksplisit tidak ada (/dev/vdz) → log ERROR + stage=failed, exit 1 (%pre --erroronfail menghentikan anaconda) 18ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-7 Rocky %pre memilih/memvalidasi disk > otomatis tanpa disk → log ERROR + stage=failed, exit 1 (%pre --erroronfail menghentikan anaconda) 20ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-7 Rocky %pre memilih/memvalidasi disk > kernel Rocky: console serial terakhir (/dev/console = ttyS0); urutan lain tetap 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-9 / DEC-021 sumber apt media lokal tanpa tanda tangan > media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-9 / DEC-021 sumber apt media lokal tanpa tanda tangan > mirror bertanda tangan (mediaSigned): TIDAK ada trusted=yes, by-hash override, hook, maupun untrust 2ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-9 / DEC-021 sumber apt media lokal tanpa tanda tangan > pertanyaan apt-setup/tasksel/pkgsel/grub yang bisa muncul dipreseed (tanpa NAT) 1ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-9 / DEC-021 sumber apt media lokal tanpa tanda tangan > hook post-base-installer dijalankan sh: 50mirror jadi tidak executable (apt-setup membuang keluarannya) 9ms
+ ✓ |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-9 / DEC-021 sumber apt media lokal tanpa tanda tangan > late script (sh) menghapus trusted=yes dari sources target dan 00AllowUnauthenticated 5ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > first-boot: log 'OS terpasang' ke <base>/log lalu stage=done ke <base>/status, file URL dihapus 17ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > MAC lain → tidak ada request, exit 0 (installer tidak gagal) 41ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > token 42 karakter → tidak ada request, exit 0 (installer tidak gagal) 44ms
+(node:2633732) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:2633730) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > token 44 karakter → tidak ada request, exit 0 (installer tidak gagal) 40ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > cmdline tanpa parameter → tidak ada request, exit 0 (installer tidak gagal) 39ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > curl gagal → fallback wget ke URL yang sama; keduanya gagal → tetap exit 0 15ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > ubuntu user-data: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 2ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > debian preseed: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 4ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > debian late: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 2ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > rocky ks: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 3ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > rocky post: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 2ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > first-boot: tidak memuat token (teks maupun base64 bertingkat) dan tidak memuat '/log' ber-token 0ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > setiap pesan logCmd di output adalah konstanta generator: tanpa hostname/username/hash 3ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > logCmd menolak pesan dari nilai pengguna yang berbahaya (kutip/subshell) 1ms
+ ✓ |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 output generator: tanpa token / /log ber-token / nilai pengguna di pesan log > sh -n: semua perintah hook valid secara sintaks 43ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.28 SR-4-6 preseed ` ---` > preseed (extraArgs ""): diakhiri ` ---`, semua parameter (termasuk url=) sebelum `---` 5ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.28 SR-4-6 preseed ` ---` > preseed (extraArgs "console=ttyS0,115200n8 console=tty0"): diakhiri ` ---`, semua parameter (termasuk url=) sebelum `---` 1ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.28 SR-4-6 preseed ` ---` > preseed (extraArgs "quiet"): diakhiri ` ---`, semua parameter (termasuk url=) sebelum `---` 0ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.28 SR-4-6 preseed ` ---` > Ubuntu tetap (diakhiri ` ---` seperti M4); Rocky tanpa `---` 1ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 CR-4-7 / SR-4-3 Windows unattend tanpa token/URL > static + disable password: tidak memuat /boot/, token, maupun pola 43 karakter (semua lapisan dekode) 10ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 CR-4-7 / SR-4-3 Windows unattend tanpa token/URL > dhcp: tidak memuat /boot/, token, maupun pola 43 karakter (semua lapisan dekode) 6ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 CR-4-7 / SR-4-3 Windows unattend tanpa token/URL > password SSH aktif: tidak memuat /boot/, token, maupun pola 43 karakter (semua lapisan dekode) 6ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 CR-4-7 / SR-4-3 Windows unattend tanpa token/URL > https base ber-path: tidak memuat /boot/, token, maupun pola 43 karakter (semua lapisan dekode) 5ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 CR-4-7 / SR-4-3 Windows unattend tanpa token/URL > token lain: tidak memuat /boot/, token, maupun pola 43 karakter (semua lapisan dekode) 6ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 CR-4-7 / SR-4-3 Windows unattend tanpa token/URL > kontrol positif sintetis: pemindai yang sama menemukan URL ber-token di -EncodedCommand 1ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 CR-4-7 / SR-4-3 Windows unattend tanpa token/URL > FirstLogonCommands diakhiri berurutan: hapus Panther/Sysprep → AutoLogon off → acak password → logoff 131ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > #cloud-config + YAML valid, version 1, identity apa adanya (hash tersimpan) 3ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > network statis match MAC: addresses, route default, nameservers 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > mode DHCP → dhcp4: true match MAC 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > VLAN + iface by name 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > ssh: authorized-keys = key persis, allow-pw = kebalikan disableSshPassword 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > sudo=true → sudoers 0440 NOPASSWD; sudo=false → tidak ada 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > disableSshPassword → drop-in sshd PasswordAuthentication no; false → tidak ada 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > storage lvm/direct + match.path bila disk diisi 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > timezone/locale, apt offline, refresh-installer off, shutdown reboot 2ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > late-commands: callback configuring, unit first-boot done, BootOrder UEFI, guard pxe-force-reboot 17ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > error-commands: callback failed 6ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > meta-data: instance-id = jobId + local-hostname; vendor-data kosong 3ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.18 Ubuntu autoinstall > golden file 7ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.19 Debian preseed > setiap baris cocok ^(#.*|d-i \S+ \S+( .*)?|)$ 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.19 Debian preseed > hash, root-login false, hostname, mirror lokal, pkgsel 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.19 Debian preseed > late_command (didekode): authorized_keys 0600 milik user, sudoers, sshd drop-in, interface via MAC, first-boot, callback 14ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.19 Debian preseed > variasi: DHCP, sudo=false, password SSH diizinkan, iface by name + VLAN, partisi regular 2ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.19 Debian preseed > golden file 2ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.20 Rocky kickstart > cmdline (BUG-M6-5), url, rootpw --lock, user --iscrypted + wheel, sshkey per key, network statis, reboot 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.20 Rocky kickstart > sudo=false → tanpa wheel; DHCP; partisi plain tanpa disk 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.20 Rocky kickstart > section %…/%end seimbang; %post (didekode) + %onerror callback failed 18ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.20 Rocky kickstart > VLAN + iface by name 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.20 Rocky kickstart > golden file 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.21 Windows unattend.xml > well-formed, 3 pass, ComputerName = hostname 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.21 Windows unattend.xml > hostname > 15 karakter → error 2ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.21 Windows unattend.xml > Identifier = MAC 52-54-00-… uppercase, IP/prefix, gateway, DNS 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.21 Windows unattend.xml > DHCP → tanpa komponen TCPIP/DNS 10ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.21 Windows unattend.xml > FirstLogonCommands: OpenSSH + administrators_authorized_keys berisi key + PasswordAuthentication no 12ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 CR-4-7 / SR-4-3 Windows unattend tanpa token/URL > password AutoLogon sementara = password akun; LogonCount 1; password tidak dari config 12ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 CR-4-7 / SR-4-3 Windows unattend tanpa token/URL > Windows tetap tidak dilayani: INSTALLER_FILES.unattend kosong; unattend bootable ditolak validasi 6ms
+ ✓ |node| src/lib/server/installers/m6-generator.test.ts > AC-6.29 regresi: install host dengan OS Windows gagal (route → 422) > installHosts: windows-2022 → failed 'hanya generator', tanpa job 72ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.21 Windows unattend.xml > tidak ada hash $6$ maupun password/username dari config; password akun acak per render 14ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.21 Windows unattend.xml > golden file (password acak disamarkan) 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: hostname = "n1\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: username = "ops\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: disk = "/dev/vda\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "\n" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "\r" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "'" disanitasi (buildContext) → struktur tetap 4ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "\"" disanitasi (buildContext) → struktur tetap 5ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "$(reboot)" disanitasi (buildContext) → struktur tetap 3ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "`reboot`" disanitasi (buildContext) → struktur tetap 3ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "; reboot" disanitasi (buildContext) → struktur tetap 3ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key ": #" disanitasi (buildContext) → struktur tetap 3ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "%post" disanitasi (buildContext) → struktur tetap 3ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "]]>" disanitasi (buildContext) → struktur tetap 2ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "<!--" disanitasi (buildContext) → struktur tetap 2ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > ubuntu: komentar key "&" disanitasi (buildContext) → struktur tetap 4ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: hostname = "n1\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: username = "ops\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: disk = "/dev/vda\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "\n" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "\r" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "'" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "\"" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "$(reboot)" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "`reboot`" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "; reboot" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key ": #" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "%post" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "]]>" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "<!--" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > debian: komentar key "&" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: hostname = "n1\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: username = "ops\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: disk = "/dev/vda\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "\n" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "\r" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "'" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "\"" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "$(reboot)" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "`reboot`" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "; reboot" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key ": #" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "%post" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "]]>" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "<!--" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > rocky: komentar key "&" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: hostname = "n1\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: username = "ops\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda\n" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda\r" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda'" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda\"" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda$(reboot)" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda`reboot`" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda; reboot" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda: #" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda%post" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda]]>" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda<!--" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda&" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: disk = "/dev/vda\u0000" 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "\n" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "\r" disanitasi (buildContext) → struktur tetap 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "'" disanitasi (buildContext) → struktur tetap 8ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "\"" disanitasi (buildContext) → struktur tetap 7ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "$(reboot)" disanitasi (buildContext) → struktur tetap 7ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "`reboot`" disanitasi (buildContext) → struktur tetap 14ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "; reboot" disanitasi (buildContext) → struktur tetap 8ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key ": #" disanitasi (buildContext) → struktur tetap 7ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "%post" disanitasi (buildContext) → struktur tetap 6ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "]]>" disanitasi (buildContext) → struktur tetap 6ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "<!--" disanitasi (buildContext) → struktur tetap 9ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > windows: komentar key "&" disanitasi (buildContext) → struktur tetap 6ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > key tanpa normalisasi / berisi baris baru ditolak validateContext 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > hash bukan $6$ ditolak keempat generator; password plaintext test tidak pernah muncul 3ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > AC-4.22 injeksi: tolak atau nilai persis dengan struktur tetap > field lain berbahaya ditolak: IP/gateway/DNS/VLAN/iface/timezone/locale/URL/MAC/jobId 3ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > buildContext / helper > key library + extraKeys (komentar disanitasi, duplikat disatukan), hostname fallback 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > buildContext / helper > tanpa OS / credentials / user SSH berbeda / partisi custom → InstallerInputError 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > buildContext / helper > prefixToNetmask 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > buildContext / helper > shQuote / b64write / callbackCmd 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > buildContext / helper > xmlEscape / singleLine / di / firstboot 1ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > buildContext / helper > installerFile: hanya file yang dikenal per metode; Windows tidak dilayani 0ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > B-5 token callback tidak pernah tertulis di konfigurasi installer > Ubuntu/Debian/Rocky: token tidak muncul plaintext maupun di payload base64 (bertingkat) 7ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > B-5 token callback tidak pernah tertulis di konfigurasi installer > parameter cmdline per metode selaras dengan installerScript; URL diturunkan hanya untuk MAC & token valid 141ms
+ ✓ |node| src/lib/server/installers/installers.test.ts > B-5 token callback tidak pernah tertulis di konfigurasi installer > URL tidak ditemukan → file URL tidak ditulis (unit first-boot tidak aktif, ConditionPathExists) 20ms
+
+ Test Files  5 passed (5)
+      Tests  328 passed (328)
+   Start at  12:18:41
+   Duration  1.51s (import 52%, tests 43%, transform 5%, worker 1%)
+
+exit=0
+$ npx tsc --noEmit
+exit=0
+$ npx eslint src/lib/server/installers/m5-te-hooks.test.ts
+exit=0

@@ -1,0 +1,22 @@
+2026-11-05T22:29:00.979Z discovered firmware=uefi
+2026-11-05T22:29:01.048Z konfigurasi tersimpan os=ubuntu-24.04 disk=/dev/vdz ip=10.99.0.53 hostname=m6-node43
+2026-11-05T22:29:01.182Z install dibuat job=job-433f2390-92c5-480a-aca5-a154b90ccc79 status=booting
+2026-11-05T22:29:01.276Z node.sh reset
+2026-11-05T22:29:01.286Z job1(/dev/vdz): booting (+0 dtk, installerBoots=0)
+2026-11-05T22:29:41.367Z job1(/dev/vdz): installing (+40 dtk, installerBoots=1)
+2026-11-05T22:33:31.752Z job1(/dev/vdz): failed/installer-error (+270 dtk, installerBoots=1)
+2026-11-05T22:33:31.764Z job1 akhir=failed/installer-error dalam 270 dtk; event installer error-commands=1; urutan=booting>installing>failed
+2026-11-05T22:33:31.784Z konfigurasi tersimpan os=ubuntu-24.04 disk=(otomatis) ip=10.99.0.53 hostname=m6-node43
+2026-11-05T22:33:31.802Z install dibuat job=job-94a50a36-a4f5-43c2-a21f-67f0c81aa957 status=booting
+2026-11-05T22:33:31.879Z node.sh reset
+2026-11-05T22:33:31.885Z job2: booting (+0 dtk, installerBoots=0)
+2026-11-05T22:34:01.910Z job2: installing (+30 dtk, installerBoots=1)
+2026-11-05T22:39:22.366Z job2: configuring (+350 dtk, installerBoots=1)
+2026-11-05T22:43:02.731Z job2: done (+571 dtk, installerBoots=1)
+2026-11-05T22:43:02.737Z job2 akhir=done/- dalam 571 dtk; urutan=booting>installing>configuring>done; stages=booting@install,booting@boot-script,installing@config-fetch,configuring@callback,done@callback
+2026-11-05T22:43:02.738Z event installer (4): installer: autoinstall mulai | installer: late-commands mulai | installer: konfigurasi target selesai | first-boot: OS terpasang boot dari disk: m6-node43 enp1s0=10.99.0.53/24 
+2026-11-05T22:43:03.646Z ssh key yang di-inject: OK
+2026-11-05T22:43:04.020Z log installer /var/log/installer/subiquity-server-debug.log: exit=0 bytes=161983
+2026-11-05T22:43:04.198Z log installer /var/log/installer/curtin-install.log: exit=0 bytes=132670
+2026-11-05T22:43:04.201Z console log: 200000 byte terakhir dibaca; kernel panic=false
+2026-11-05T22:43:04.208Z jumlah job host=2

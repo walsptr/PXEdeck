@@ -1,0 +1,14 @@
+{
+  "run": "m6",
+  "session": "1793919489547-04c7b2df",
+  "generatedAt": "2026-11-05T23:13:59.326Z",
+  "results": [
+    {"ac": "smoke-login", "status": "PASS", "note": "401/401/204/200", "evidence": ["smoke-login.txt"]},
+    {"ac": "smoke-rocky", "node": "pxe-test-m6-node42", "status": "FAIL", "durationS": 949, "note": "job1 failed/timeout-installing", "evidence": ["pxe-test-m6-node42-timeline.txt", "pxe-test-m6-node42-job1-events.txt"]},
+    {"ac": "smoke-scan", "status": "PASS", "note": "0 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node42", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.132 (lease 52:54:00:99:00:42)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node42", "status": "PASS", "note": "ks.cfg 200 x1 (min 1)", "evidence": ["server-nginx.txt"]}
+  ],
+  "smoke": true,
+  "nodes": [{"name": "pxe-test-m6-node42", "fw": "uefi", "os": "rocky", "role": "install", "hostname": "m6-node42"}]
+}

@@ -34,6 +34,21 @@ export const LIMITS = {
   disk: 128,
 } as const
 
+/**
+ * CR-6-1 (DEC-022 §3): batas total byte `authorized_keys` per host (key library terpilih + key baru,
+ * satu baris per key termasuk newline). Isi `authorized_keys` ikut di-base64 dua kali ke satu argumen
+ * `late_command` Debian (≈ 1,78× per byte); 32 KiB menjaga baris itu ≈ 66 KB, jauh di bawah
+ * `MAX_ARG_STRLEN` (131072) dan batas aman generator 100 000 byte, untuk semua OS.
+ */
+export const AUTHORIZED_KEYS_MAX_BYTES = 32_768
+
+/** Ukuran `authorized_keys` (byte UTF-8, satu baris + newline per key). */
+export function authorizedKeysBytes(keys: readonly string[]): number {
+  let n = 0
+  for (const k of keys) n += new TextEncoder().encode(k).length + 1
+  return n
+}
+
 /** Id host = MAC 12 hex huruf kecil tanpa pemisah (lihat mock-hosts). */
 export const HOST_ID_RE = /^[0-9a-f]{12}$/
 

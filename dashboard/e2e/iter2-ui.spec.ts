@@ -10,7 +10,7 @@ import { readFileSync } from "node:fs"
 
 import { expect, test, type Page } from "@playwright/test"
 
-import { gotoHosts, hostRows, hostsTable, rowByMac, SHOTS } from "./helpers"
+import { gotoHosts, hostRows, hostsTable, rowByMac, SHOTS, waitForLocatorAnimations } from "./helpers"
 
 const BULK = ["b0:83:fe:5c:19:e2", "b0:83:fe:5c:19:e3", "a0:36:9f:0b:72:5d"]
 
@@ -297,6 +297,8 @@ test.describe("DR-2-1/2-2, DR-3-2, DR-3-3 ukuran & radius", () => {
     await bar.getByRole("button", { name: "Set IP" }).click()
     const sheet = page.getByRole("dialog", { name: "Konfigurasi 2 host" })
     await expect(sheet).toBeVisible()
+    // Geometri tombol Sheet diukur setelah animasi slide-in selesai (pola flake DR-5-5, gate M6 iter2).
+    await waitForLocatorAnimations(sheet)
     const r = await page.locator('[data-slot="sheet-content"]').evaluate((el) => {
       const cs = getComputedStyle(el)
       return { tl: cs.borderTopLeftRadius, bl: cs.borderBottomLeftRadius, tr: cs.borderTopRightRadius, br: cs.borderBottomRightRadius }

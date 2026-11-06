@@ -1,0 +1,231 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node-22",
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/playwright.config.ts"
+    ],
+    "configFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/playwright.config.ts",
+    "rootDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt12-distro-rehearsal/distro/playwright-kvm-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm",
+        "testIgnore": [],
+        "testMatch": [
+          "/(^|\\/)m6-[^/]*\\.spec\\.ts$/"
+        ],
+        "timeout": 3000000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt12-distro-rehearsal/distro/playwright-kvm-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm",
+        "snapshotDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 3000000,
+        "use": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "baseURL": "http://10.99.0.2",
+          "locale": "id-ID",
+          "trace": "off",
+          "video": "off",
+          "screenshot": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt12-distro-rehearsal/distro/playwright-kvm.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "m6-distro.spec.ts",
+      "file": "m6-distro.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "distro: konfigurasi + Simpan & Install untuk semua node lewat UI",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 1200000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 14872,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T02:44:22.394Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "df0c5115fc12c65b57ec-75acdd49760a7ed13a33",
+          "file": "m6-distro.spec.ts",
+          "line": 116,
+          "column": 7
+        },
+        {
+          "title": "distro: semua node Done ≤ 30 mnt tanpa reload, event berurutan, SSH + DEC-021 + reboot dari disk",
+          "ok": false,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 4500000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "failed",
+                  "duration": 1138249,
+                  "error": {
+                    "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"pxe-test-m6distro-node24: login password tidak ditolak\",\u001b[39m\n\u001b[31m+ ]\u001b[39m",
+                    "stack": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"pxe-test-m6distro-node24: login password tidak ditolak\",\u001b[39m\n\u001b[31m+ ]\u001b[39m\n    at /home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/m6-distro.spec.ts:277:22",
+                    "location": {
+                      "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/m6-distro.spec.ts",
+                      "column": 22,
+                      "line": 277
+                    },
+                    "snippet": "  275 |       if (problems.length) failures.push(`${n.name}: ${problems.join(\"; \")}`)\n  276 |     }\n> 277 |     expect(failures).toEqual([])\n      |                      ^\n  278 |   })\n  279 | }\n  280 |"
+                  },
+                  "errors": [
+                    {
+                      "location": {
+                        "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/m6-distro.spec.ts",
+                        "column": 22,
+                        "line": 277
+                      },
+                      "message": "Error: \u001b[2mexpect(\u001b[22m\u001b[31mreceived\u001b[39m\u001b[2m).\u001b[22mtoEqual\u001b[2m(\u001b[22m\u001b[32mexpected\u001b[39m\u001b[2m) // deep equality\u001b[22m\n\n\u001b[32m- Expected  - 1\u001b[39m\n\u001b[31m+ Received  + 3\u001b[39m\n\n\u001b[32m- Array []\u001b[39m\n\u001b[31m+ Array [\u001b[39m\n\u001b[31m+   \"pxe-test-m6distro-node24: login password tidak ditolak\",\u001b[39m\n\u001b[31m+ ]\u001b[39m\n\n  275 |       if (problems.length) failures.push(`${n.name}: ${problems.join(\"; \")}`)\n  276 |     }\n> 277 |     expect(failures).toEqual([])\n      |                      ^\n  278 |   })\n  279 | }\n  280 |\n    at /home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/m6-distro.spec.ts:277:22"
+                    }
+                  ],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T02:44:38.248Z",
+                  "annotations": [],
+                  "attachments": [
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt12-distro-rehearsal/distro/playwright-kvm-artifacts/m6-distro-distro-semua-nod-fe14f-SH-DEC-021-reboot-dari-disk/error-context.md"
+                    },
+                    {
+                      "name": "error-context",
+                      "contentType": "text/markdown",
+                      "path": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt12-distro-rehearsal/distro/playwright-kvm-artifacts/m6-distro-distro-semua-nod-fe14f-SH-DEC-021-reboot-dari-disk/error-context.md"
+                    }
+                  ],
+                  "errorLocation": {
+                    "file": "/home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/m6-distro.spec.ts",
+                    "column": 22,
+                    "line": 277
+                  }
+                }
+              ],
+              "status": "unexpected"
+            }
+          ],
+          "id": "df0c5115fc12c65b57ec-ded22108cf3fc5768f6e",
+          "file": "m6-distro.spec.ts",
+          "line": 164,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-06T02:44:21.440Z",
+    "duration": 1155202.895,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 1,
+    "flaky": 0
+  }
+}

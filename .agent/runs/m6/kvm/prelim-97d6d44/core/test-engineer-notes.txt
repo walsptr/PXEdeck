@@ -1,0 +1,19 @@
+# Catatan test-engineer untuk run core 20261106T013507Z (commit 97d6d44)
+1. AC-6.51b: saat run ini filter spec untuk baris journal salah (`[boot] tolak /log`; format sebenarnya
+   `[boot] tolak log mac=…`), sehingga hitungan per menit = 0 dan asersi "≤ 20 per menit" lolos secara
+   hampa. Bukti mentah di server-pxe-dashboard-journal.txt diperiksa manual:
+     20  2026-11-06T01:59 [boot] tolak log   (detail, = BOOT_LOG_MAX_PER_WINDOW)
+      4  2026-11-06T01:59 [boot] tolak file  (uji token AC-6.47c, jalur lain)
+      1  2026-11-06T02:00 [boot] 271 penolakan log ditekan dalam 60 dtk
+   20 + 271 = 291 = jumlah respons 404 banjir (9 lainnya 429 nginx). Perilaku benar, tetapi asersi otomatis
+   tidak membuktikannya di run ini. Spec diperbaiki (filter `[boot] tolak log `, wajib ≥ 1 baris detail);
+   PASS AC-6.51b di results.json run ini jangan dipakai sebagai bukti otomatis — perlu run konfirmasi.
+2. AC-6.47a "IP lease aktif": node21 lease 10.99.0.200 ditolak 422, tetapi alasannya "Di dalam range DHCP
+   dinamis", bukan bentrok lease. IP lease selalu di dalam range dinamis, jadi aturan bentrok-lease
+   (config-service ipUsage) tidak bisa diamati terpisah lewat KVM; yang terbukti: IP yang sedang dipegang
+   lease host lain ditolak (UI tidak diuji untuk kasus lease).
+3. Status run FAIL (`failedStage: verify`) karena BUG-M6-10 (kvm-run.sh), bukan karena AC: 9/9 test
+   Playwright lulus; verify-node node22 dijalankan suite (pxe-test-m6core-node22-verify-ssh.txt, exit 0
+   sebelum & sesudah reboot) tetapi entri harness NOT_RUN.
+4. AC-6.51a: login admin pertama sesudah 6 gagal mendapat 429 (limit nginx per IP), berhasil 15 dtk
+   kemudian (204 + /api/settings 200).

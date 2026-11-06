@@ -112,7 +112,51 @@ function sections(s: SettingsResponse): {
         },
       ],
     },
+    accessSection(s),
   ]
+}
+
+/**
+ * M6 (AC-6.1): blok "Akses" read-only — admin (username mono; hash password tidak pernah dikirim
+ * server), sesi, dan rate limit dari env `PXE_SESSION_*`, `PXE_LOGIN_*`, `PXE_API_RATE_PER_MIN`.
+ */
+function accessSection(s: SettingsResponse) {
+  const a = s.auth
+  return {
+    title: "Akses",
+    description: "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta request API.",
+    rows: [
+      a?.adminConfigured && a.adminUsername
+        ? { label: "Admin", value: a.adminUsername, mono: true }
+        : {
+            label: "Admin",
+            value: "Belum dikonfigurasi",
+            hint: "Isi PXE_ADMIN_USERNAME dan PXE_ADMIN_PASSWORD_HASH (npm run admin:hash), lalu restart.",
+          },
+      ...(a
+        ? [
+            {
+              label: "Sesi idle",
+              value: `${a.sessionIdleMin} menit`,
+              mono: true,
+              hint: "Sesi berakhir bila tidak ada aktivitas selama ini.",
+            },
+            { label: "Masa berlaku sesi maks.", value: `${a.sessionMaxHours} jam`, mono: true },
+            {
+              label: "Batas login gagal",
+              value: `${a.loginMaxFailures} kali / ${a.loginWindowMin} menit`,
+              mono: true,
+              hint: "Per IP + username; lewat batas, login dikunci sementara.",
+            },
+            {
+              label: "Batas request API",
+              value: `${a.apiRatePerMin} / menit per sesi`,
+              mono: true,
+            },
+          ]
+        : []),
+    ] satisfies Row[],
+  }
 }
 
 const noopSubscribe = () => () => {}
@@ -171,6 +215,13 @@ export function SettingsView() {
                 : installer dan konfigurasi per host dilayani tanpa mencocokkan IP
                 klien dengan lease dnsmasq. Gunakan hanya di lab terisolasi.
               </span>
+              {settings.data.insecureConfirmed && (
+                <span data-testid="insecure-confirmed" className="mt-1 block">
+                  Mode production: dikonfirmasi lewat{" "}
+                  <span className="type-data text-xs">PXE_INSECURE_NO_LEASE_CHECK_CONFIRM</span>.
+                  Nonaktifkan flag ini setelah selesai.
+                </span>
+              )}
             </AlertDescription>
           </Alert>
         )}
@@ -192,7 +243,7 @@ export function SettingsView() {
                     <dt className="type-caption text-muted-foreground">
                       {r.label}
                     </dt>
-                    <dd className="flex min-w-0 flex-col gap-0.5">
+                    <dd className="flex min-w-0 flex-col gap-0.5" data-label={r.label}>
                       <span
                         className={
                           r.mono

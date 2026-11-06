@@ -52,7 +52,31 @@ log "SSH siap dalam $(( $(date +%s) - t0 ))s"
 scp_server "$INFRA_DIR/tftp/snponly.efi" "$INFRA_DIR/tftp/undionly.kpxe" /srv/pxe/tftp/
 if [[ -f "$MEDIA_DIR/debian-netboot/linux" ]]; then
   scp_server "$MEDIA_DIR/debian-netboot/linux" "$MEDIA_DIR/debian-netboot/initrd.gz" /srv/pxe/media/debian-netboot/
+  # BUG-M6-8: driver disk virtio untuk d-i netboot (tidak ada di initrd netboot maupun pool DVD-1)
+  # disalin dari initrd DVD (kver sama) → http://$SERVER_IP/media/debian-netboot/modules/<kver>/.
+  # Biner .ko hanya di .agent/vms (gitignored), bukan di bukti .agent/runs (di-commit).
+  mod_dir="$VMS_DIR/pxe-test-debian-disk-modules"
+  assert_path_in_vms "$mod_dir"
+  run rm -rf "$mod_dir"
+  run "$INFRA_DIR/server/debian-disk-modules.sh" "$ISO_DEBIAN" "$MEDIA_DIR/debian-netboot/initrd.gz" "$mod_dir"
+  ssh_root "install -d -o pxe -g pxe /srv/pxe/media/debian-netboot/modules"
+  run scp -r "${SSH_OPTS[@]}" "$mod_dir/." "$SERVER_USER@$SERVER_IP:/srv/pxe/media/debian-netboot/modules/"
 fi
+# O11-C / DEC-018 §2 (cadangan, hanya bila smoke membuktikan paket kurang): repo tambahan yang
+# sudah diunduh host dari mirror resmi + diverifikasi ke .agent/media/extra-<nama>/ disajikan
+# nginx sebagai http://10.99.0.2/media/extra-<nama>/ (node tetap tanpa NAT). Tidak ada = dilewati.
+shopt -s nullglob
+for xd in "$MEDIA_DIR"/extra-*/; do
+  xn="$(basename "$xd")"
+  [[ "$xn" =~ ^extra-[a-z0-9][a-z0-9.-]*$ ]] || die "nama repo tambahan '$xn' tidak valid"
+  ssh_root "install -d -o pxe -g pxe /srv/pxe/media/$xn"
+  run scp -r "${SSH_OPTS[@]}" "${xd%/}/." "$SERVER_USER@$SERVER_IP:/srv/pxe/media/$xn/"
+  log "repo tambahan $xn disajikan di http://$SERVER_IP/media/$xn/"
+done
+shopt -u nullglob
+# Ekspor NFS selalu diperbarui dari repo (base VM di-cache; DEC-020 menambah stage2 Rocky). Hanya
+# read-only + 10.99.0.0/24 (diasersi infra/test/m6.sh).
+ssh_root 'cat > /etc/exports.d/pxe.exports' < "$INFRA_DIR/server/exports"
 ssh_root 'mount -a 2>/dev/null; exportfs -ra; systemctl restart dnsmasq' || true
 
 out="$RUNS_DIR/server-listen.txt"

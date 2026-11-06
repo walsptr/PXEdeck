@@ -51,7 +51,7 @@ const CONFIG_PREFIX = CALLBACK.replace(/status$/, "")
 const KCMD = {
   autoinstall: `initrd=initrd ip=dhcp netboot=nfs nfsroot=10.99.0.2:/srv/pxe/media/ubuntu-24.04 autoinstall ds=nocloud-net;s=${CONFIG_PREFIX} cloud-config-url=/dev/null console=ttyS0,115200n8 ---`,
   preseed: `initrd=initrd auto=true priority=critical url=${CONFIG_PREFIX}preseed.cfg interface=auto netcfg/dhcp_timeout=60`,
-  kickstart: `initrd=initrd ip=dhcp inst.repo=http://10.99.0.2/media/rocky-9 inst.ks=${CONFIG_PREFIX}ks.cfg inst.text`,
+  kickstart: `initrd=initrd ip=dhcp inst.stage2=nfs:10.99.0.2:/srv/pxe/media/rocky-9 inst.ks=${CONFIG_PREFIX}ks.cfg inst.cmdline`,
 } as const
 /** Perintah firstboot penulis file URL callback. */
 const urlFileCmd = (cmds: string[]) => {
@@ -109,7 +109,11 @@ function xmlDoc(xml: string): Document {
 const texts = (d: Document, tag: string) => Array.from(d.getElementsByTagName(tag)).map((e) => e.textContent)
 
 /** Decode `powershell … -EncodedCommand <b64 utf16le>`. */
-const psDecode = (cmd: string) => Buffer.from(/-EncodedCommand (\S+)/.exec(cmd)![1], "base64").toString("utf16le")
+/** Isi -EncodedCommand (UTF-16LE); perintah polos (`logoff`, M6) dikembalikan apa adanya. */
+const psDecode = (cmd: string) => {
+  const m = /-EncodedCommand (\S+)/.exec(cmd)
+  return m ? Buffer.from(m[1], "base64").toString("utf16le") : cmd
+}
 
 describe("AC-4.18 Ubuntu autoinstall", () => {
   const ud = ubuntuUserData(ctx())
@@ -230,7 +234,9 @@ describe("AC-4.19 Debian preseed", () => {
     expect(lines).toContain("d-i mirror/http/directory string /media/debian-12")
     expect(lines).toContain("d-i pkgsel/include string openssh-server curl sudo")
     expect(lines).toContain("d-i partman-auto/method string lvm")
-    expect(lines).toContain("d-i partman-auto/disk string /dev/vda")
+    // M6 (BUG-M6-6): disk diset saat runtime di partman/early_command (debconf-set), bukan statis.
+    expect(lines).not.toContain("d-i partman-auto/disk string /dev/vda")
+    expect(lines.find((l) => l.startsWith("d-i partman/early_command string "))).toContain("d='/dev/vda'; ")
     expect(lines).toContain("d-i grub-installer/bootdev string /dev/vda")
     expect(lines.at(-1)).toBe("d-i finish-install/reboot_in_progress note")
   })
@@ -263,11 +269,14 @@ describe("AC-4.19 Debian preseed", () => {
     expect(Buffer.from(/printf %s '([A-Za-z0-9+/=]+)' \| base64 -d \| sed/.exec(l3)![1], "base64").toString()).toMatch(/^auto \$IF\niface \$IF inet manual\nauto \$IF\.7\niface \$IF\.7 inet static/)
     const p = debianPreseed(ctx({ storage: { partition: "auto", disk: "" } }))
     expect(p).toContain("d-i partman-auto/method string regular")
-    expect(p).not.toContain("partman-auto/disk")
+    expect(p).not.toContain("d-i partman-auto/disk")
+    expect(p).toMatch(/^d-i partman\/early_command string .*; d=''; /m)
     expect(p).toContain("d-i grub-installer/bootdev string default")
   })
   it("golden file", async () => {
     await expect(ps).toMatchFileSnapshot("../../../test/golden/installers/debian-preseed.cfg")
+    // M6 BUG-M6-6: disk otomatis (disk kosong, partisi auto) — golden terpisah.
+    await expect(debianPreseed(ctx({ imageRepo: "debian-12", storage: { partition: "auto", disk: "" } }))).toMatchFileSnapshot("../../../test/golden/installers/debian-preseed-auto-disk.cfg")
     await expect(late).toMatchFileSnapshot("../../../test/golden/installers/debian-late.sh")
   })
 })
@@ -277,8 +286,9 @@ describe("AC-4.20 Rocky kickstart", () => {
   const ks = rockyKickstart(c)
   const lines = ks.trimEnd().split("\n")
 
-  it("text, url, rootpw --lock, user --iscrypted + wheel, sshkey per key, network statis, reboot", () => {
-    expect(lines).toContain("text")
+  it("cmdline (BUG-M6-5), url, rootpw --lock, user --iscrypted + wheel, sshkey per key, network statis, reboot", () => {
+    expect(lines).toContain("cmdline")
+    expect(lines).not.toContain("text")
     expect(lines).toContain("url --url=http://10.99.0.2/media/rocky-9")
     expect(lines).toContain("rootpw --lock")
     expect(lines).toContain(`user --name=ops --password=${FAKE_HASH} --iscrypted --groups=wheel`)
@@ -299,8 +309,11 @@ describe("AC-4.20 Rocky kickstart", () => {
     expect(k).not.toContain("--groups=wheel")
     expect(k).toContain(`network --device=${MAC} --bootproto=dhcp --hostname=m4-node11 --activate --onboot=yes`)
     expect(k).toContain("autopart --type=plain")
-    expect(k).toContain("clearpart --all --initlabel\n")
-    expect(k).not.toContain("ignoredisk")
+    // M6 (BUG-M6-7): disk otomatis → %pre memilih SATU disk dan menulis include (tidak lagi
+    // `clearpart --all` tanpa --drives yang menghapus semua disk).
+    const kl = k.split("\n")
+    expect(kl).toContain("%include /tmp/pxe-disk.ks")
+    expect(kl.filter((l) => /^(clearpart|ignoredisk)\b/.test(l))).toEqual([])
   })
   it("section %…/%end seimbang; %post (didekode) + %onerror callback failed", () => {
     const opens = lines.filter((l) => /^%(?!end$)/.test(l))
@@ -333,6 +346,8 @@ describe("AC-4.20 Rocky kickstart", () => {
   })
   it("golden file", async () => {
     await expect(ks).toMatchFileSnapshot("../../../test/golden/installers/rocky-ks.cfg")
+    // M6 BUG-M6-7: disk otomatis → %pre memilih disk + %include.
+    await expect(rockyKickstart(ctx({ imageRepo: "rocky-9", storage: { partition: "lvm", disk: "" } }))).toMatchFileSnapshot("../../../test/golden/installers/rocky-ks-auto-disk.cfg")
   })
 })
 
@@ -371,7 +386,14 @@ describe("AC-4.21 Windows unattend.xml", () => {
     const keysB64 = /FromBase64String\('([A-Za-z0-9+/=]+)'\)/.exec(cmds[1])![1]
     expect(Buffer.from(keysB64, "base64").toString()).toBe(`${SSH_ED25519.publicKey}\n${SSH_ED25519_B.publicKey}\n`)
     expect(cmds[2]).toContain("PasswordAuthentication no")
-    expect(cmds.at(-1)).toContain(`-Body 'stage=done' -Uri '${CALLBACK}'`)
+    // M6 (CR-4-7/SR-4-3): tanpa callback ber-token; empat langkah terakhir = pembersihan.
+    expect(cmds.slice(-4)).toEqual([
+      expect.stringContaining("Remove-Item -Path 'C:\\Windows\\Panther\\unattend*.xml'"),
+      expect.stringContaining("AutoAdminLogon -Value '0'"),
+      expect.stringContaining("Set-LocalUser -Name 'pxeadmin'"),
+      "logoff",
+    ])
+    expect(cmds.join("\n")).not.toContain(CALLBACK)
     const noDisable = texts(xmlDoc(windowsUnattend(ctx({ disableSshPassword: false }))), "CommandLine").map((c) => psDecode(c!))
     expect(noDisable.some((c) => c.includes("PasswordAuthentication no"))).toBe(false)
   })
@@ -632,9 +654,11 @@ describe("B-5 token callback tidak pernah tertulis di konfigurasi installer", ()
       expect(containsSecret(text, TOKEN), name).toBe(false)
       expect(text, name).not.toContain("/status'")
     }
-    // Kontrol positif pemindai: Windows (belum dilayani M4) masih menyisipkan URL di
-    // -EncodedCommand UTF-16LE → terdeteksi.
-    expect(containsSecret(windowsUnattend(ctx()), TOKEN)).toBe(true)
+    // M6 (CR-4-7/SR-4-3): Windows tidak lagi menyisipkan URL ber-token. Kontrol positif pemindai
+    // kini sintetis: URL di -EncodedCommand UTF-16LE (bentuk generator M4) tetap terdeteksi.
+    expect(containsSecret(windowsUnattend(ctx()), TOKEN)).toBe(false)
+    const synthetic = `powershell -EncodedCommand ${Buffer.from(`Invoke-WebRequest -Uri '${CALLBACK}'`, "utf16le").toString("base64")}`
+    expect(containsSecret(`<CommandLine>${synthetic}</CommandLine>`, TOKEN)).toBe(true)
     expect(containsSecret(b64write("/x", "600", Buffer.from(`a ${CALLBACK}`).toString("base64")), TOKEN)).toBe(true)
   })
   it("parameter cmdline per metode selaras dengan installerScript; URL diturunkan hanya untuk MAC & token valid", () => {

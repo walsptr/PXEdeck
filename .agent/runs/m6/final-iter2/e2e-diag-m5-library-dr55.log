@@ -1,0 +1,833 @@
+# Diagnostik flake (BUKAN pengganti run penuh): m5-library DR-5-5/DR-5-6 --repeat-each=30, retries 0, workers 1 @ fdc0abf 2026-11-06T08:00:06Z
+
+Running 31 tests using 1 worker
+
+  ✓   1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.0s)
+  ✓   2 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1.6s)
+  ✘   3 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘   4 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘   5 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘   6 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘   7 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (0ms)
+  ✘   8 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (0ms)
+  ✘   9 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  10 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  11 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  12 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  13 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  14 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  15 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  16 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  17 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  18 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  19 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  20 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  21 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  22 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  23 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  24 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  25 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  26 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  27 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  28 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  29 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  30 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+  ✘  31 [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 (1ms)
+
+
+  1) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat1/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat1/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat1/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  2) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat2/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat2/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat2/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  3) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat3/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat3/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat3/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  4) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat4/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat4/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat4/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  5) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat5/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat5/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat5/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  6) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat6/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat6/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat6/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  7) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat7/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat7/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat7/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  8) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat8/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat8/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat8/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  9) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat9/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat9/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat9/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  10) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat10/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat10/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat10/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  11) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat11/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat11/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat11/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  12) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat12/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat12/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat12/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  13) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat13/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat13/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat13/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  14) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat14/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat14/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat14/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  15) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat15/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat15/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat15/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  16) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat16/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat16/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat16/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  17) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat17/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat17/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat17/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  18) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat18/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat18/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat18/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  19) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat19/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat19/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat19/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  20) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat20/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat20/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat20/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  21) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat21/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat21/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat21/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  22) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat22/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat22/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat22/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  23) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat23/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat23/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat23/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  24) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat24/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat24/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat24/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  25) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat25/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat25/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat25/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  26) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat26/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat26/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat26/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  27) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat27/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat27/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat27/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  28) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat28/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat28/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat28/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  29) [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+
+    Error: expect(received).toBe(expected) // Object.is equality
+
+    Expected: 201
+    Received: 409
+
+      38 | test.beforeAll(async ({ request }) => {
+      39 |   const r = await request.post("/api/ssh-keys", { headers: { "content-type": "application/json" }, data: { name: "kunci-a", publicKey: SSH_ED25519.publicKey } })
+    > 40 |   expect(r.status()).toBe(201)
+         |                      ^
+      41 |   keyA = (await r.json()).id
+      42 |   await makeHost(request, lease, { ...HOST, sshKeyIds: [keyA] })
+      43 | })
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:40:22
+
+    Error Context: test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat29/error-context.md
+
+    attachment #2: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat29/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DR-5-5-DR-5-6-D-5162c-sticky-terlihat-di-1440×900-m5-library-repeat29/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  29 failed
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+    [m5-library] › e2e/m5-library.spec.ts:566:5 › DR-5-5/DR-5-6 Daftarkan image: error bahasa Indonesia, hint ID disembunyikan saat invalid, footer sticky terlihat di 1440×900 
+  2 passed (53.2s)
+exit=1
+
+# Catatan: --repeat-each tidak valid untuk test ini (stateful: daftar image yang sama → 409 pada pengulangan); diganti 8 invokasi terpisah (server+DB baru tiap invokasi), seluruh project m5-library
+invokasi 1:  12 passed (50.1s);  
+invokasi 2:  12 passed (51.7s);  
+invokasi 3:  12 passed (49.2s);  
+invokasi 4:  12 passed (50.0s);  
+invokasi 5:  12 passed (49.1s);  
+invokasi 6:  12 passed (49.6s);  
+invokasi 7:  12 passed (47.5s);  
+invokasi 8:  12 passed (50.7s);  

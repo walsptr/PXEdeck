@@ -120,7 +120,7 @@ function StatusCell({ host }: { host: HostWithJob }) {
         <span
           data-testid="host-failure-reason"
           data-reason={job?.failureReason ?? ""}
-          className="type-caption max-w-52 whitespace-normal text-muted-foreground"
+          className="type-caption max-w-52 whitespace-normal text-body"
         >
           {reason}
         </span>
@@ -178,8 +178,20 @@ export const columns = helper.columns([
     ),
     sortFn: "alphanumeric",
     sortUndefined: "last",
+    // DR-6-6: hostname valid bisa 63 karakter → dipotong 24ch (+ `title`) agar STATUS/aksi tidak
+    // terdorong ke scroll tabel; nama lengkap ada di Sheet.
     cell: ({ row }) =>
-      row.original.hostname ? <Mono>{row.original.hostname}</Mono> : <Dash />,
+      row.original.hostname ? (
+        <span
+          data-testid="host-hostname"
+          title={row.original.hostname}
+          className="type-data inline-block max-w-[24ch] truncate align-bottom"
+        >
+          {row.original.hostname}
+        </span>
+      ) : (
+        <Dash />
+      ),
   }),
   helper.accessor((h) => ipToNumber(h.currentIp ?? h.mgmtIp), {
     id: "ip",

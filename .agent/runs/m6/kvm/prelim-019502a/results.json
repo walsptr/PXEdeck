@@ -1,0 +1,571 @@
+{
+  "run": "m6",
+  "generatedAt": "2026-11-06T03:53:43Z",
+  "runs": {
+    "core": {
+      "status": "PASS",
+      "summarizedAt": "2026-11-06T03:53:43Z",
+      "run": "m6core",
+      "session": "1793935030240-9d5ca4af",
+      "generatedAt": "2026-11-06T03:53:30.556Z",
+      "results": [
+        {
+          "ac": "AC-6.43-host",
+          "status": "PASS",
+          "note": "401=401 /hosts=307 → /login?next=%2Fhosts",
+          "evidence": [
+            "perimeter-host.txt",
+            "server-check.txt"
+          ]
+        },
+        {
+          "ac": "AC-6.45-start",
+          "node": "pxe-test-m6core-node21",
+          "status": "PASS",
+          "durationS": 19,
+          "note": "job booting",
+          "evidence": [
+            "pxe-test-m6core-node21-timeline.txt",
+            "screenshots/pxe-test-m6core-node21-sheet.png"
+          ]
+        },
+        {
+          "ac": "AC-6.47a",
+          "status": "PASS",
+          "durationS": 3,
+          "note": "UI \"Bentrok dengan m6-node21\", API 422, lease 10.99.0.200 → 422",
+          "evidence": [
+            "negative-ip-csv.txt",
+            "screenshots/core-ac-6.47a-ip-conflict-ui.png"
+          ]
+        },
+        {
+          "ac": "AC-6.47b",
+          "status": "PASS",
+          "durationS": 3,
+          "note": "preview 2:error,3:error,4:ok, simpan nonaktif=true, API 422, identik=true",
+          "evidence": [
+            "negative-ip-csv.txt",
+            "screenshots/core-ac-6.47b-csv-preview.png"
+          ]
+        },
+        {
+          "ac": "AC-6.46-destroy",
+          "node": "pxe-test-m6core-node22",
+          "status": "PASS",
+          "durationS": 83,
+          "note": "installerBoots 1→1, kernel serial 4→4, nginx .ipxe 2→3",
+          "evidence": [
+            "pxe-test-m6core-node22-timeline.txt"
+          ]
+        },
+        {
+          "ac": "AC-6.45",
+          "node": "pxe-test-m6core-node21",
+          "status": "PASS",
+          "durationS": 264,
+          "note": "failed/installer-error +264s, error-commands 1, temuan 0",
+          "evidence": [
+            "pxe-test-m6core-node21-job1-failpath.txt",
+            "screenshots/pxe-test-m6core-node21-job1-failed.png"
+          ]
+        },
+        {
+          "ac": "AC-6.46-timeout",
+          "node": "pxe-test-m6core-node22",
+          "status": "PASS",
+          "durationS": 682,
+          "note": "timeout-installing, installerBoots 1, tanpa reload true",
+          "evidence": [
+            "pxe-test-m6core-node22-timeline.txt",
+            "screenshots/pxe-test-m6core-node22-job1-failed.png"
+          ]
+        },
+        {
+          "ac": "AC-6.46",
+          "node": "pxe-test-m6core-node22",
+          "status": "PASS",
+          "durationS": 1087,
+          "note": "install ulang booting → installing → configuring → done 379s; verify 0/0; pw ditolak true; kernel 8→8; job [[\"done\",null],[\"failed\",\"timeout-installing\"]]",
+          "evidence": [
+            "pxe-test-m6core-node22-verify-ssh.txt",
+            "pxe-test-m6core-node22-timeline.txt"
+          ]
+        },
+        {
+          "ac": "AC-6.47c",
+          "node": "pxe-test-m6core-node21",
+          "status": "PASS",
+          "note": "GET /boot/<mac21>/<token21>/user-data dari host 10.99.0.1: 404; GET /boot/<mac22>/<token21>/user-data dari host: 404; GET /boot/<mac21>/<token acak>/user-data: 404; GET /boot/<mac21>/<token21>/user-data dari pxe-test-m6core-node22 (SSH): 404 (ssh exit=0); event job node21 baru yang menyebut host/node22: 0; nginx 404 total: 0 → 4",
+          "evidence": [
+            "negative-token.txt",
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "AC-6.51b",
+          "node": "pxe-test-m6core-node22",
+          "status": "PASS",
+          "note": "291 404       9 429; node21 booting→installing→configuring→done",
+          "evidence": [
+            "flood-boot.txt",
+            "server-pxe-dashboard-journal.txt"
+          ]
+        },
+        {
+          "ac": "AC-6.44",
+          "node": "pxe-test-m6core-node21",
+          "status": "PASS",
+          "durationS": 573,
+          "note": "booting → installing → configuring → done 573s; verify 0/0; pw ditolak true; kernel 8→8; job [[\"done\",null],[\"failed\",\"installer-error\"]]",
+          "evidence": [
+            "pxe-test-m6core-node21-verify-ssh.txt",
+            "pxe-test-m6core-node21-timeline.txt"
+          ]
+        },
+        {
+          "ac": "AC-6.43-node",
+          "node": "pxe-test-m6core-node22",
+          "status": "PASS",
+          "note": "/api/hosts 403 mac=0; /api/settings 403 mac=0; /boot/%2e%2e/api/hosts 403 mac=0; /boot/..%2Fapi/hosts 403 mac=0; /boot/..\\api/hosts 308 mac=0; //api/hosts 403 mac=0; /api/../api/hosts 403 mac=0; /%61pi/hosts 403 mac=0",
+          "evidence": [
+            "perimeter-node.txt"
+          ]
+        },
+        {
+          "ac": "AC-6.51a",
+          "status": "PASS",
+          "note": "bruteuser 401,401,401,401,401,429; admin 0s:429 15s:204",
+          "evidence": [
+            "rate-limit-login.txt"
+          ]
+        },
+        {
+          "ac": "AC-6.52-scan",
+          "status": "PASS",
+          "note": "0 temuan (scan harness; generator=1)",
+          "evidence": [
+            "evidence-scan.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m6core-node21",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.0.101 (lease 52:54:00:99:00:21)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m6core-node21",
+          "status": "PASS",
+          "note": "user-data 200 x2 (min 2)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m6core-node22",
+          "status": "PASS",
+          "note": "user-data 200 x2 (min 2)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m6core-node21",
+          "status": "PASS",
+          "note": "verify-node.sh exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m6core-node21-verify.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m6core-node22",
+          "status": "PASS",
+          "note": "verify-node.sh exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m6core-node22-verify.txt"
+          ]
+        },
+        {
+          "ac": "cleanup",
+          "status": "PASS",
+          "note": "semua resource run dihapus; resource terlindungi identik",
+          "failedStage": "",
+          "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)",
+          "protectedIdentical": true,
+          "runDomainsRemaining": 0,
+          "serverStopped": true,
+          "evidence": [
+            "libvirt-before.txt",
+            "libvirt-after.txt",
+            "libvirt-diff.txt",
+            "cleanup.txt",
+            "kvm-run.txt"
+          ]
+        }
+      ],
+      "scenario": "core",
+      "nodes": [
+        {
+          "name": "pxe-test-m6core-node21",
+          "fw": "uefi",
+          "role": "failpath",
+          "hostname": "m6-node21",
+          "ip": "10.99.0.31"
+        },
+        {
+          "name": "pxe-test-m6core-node22",
+          "fw": "bios",
+          "role": "destroy",
+          "hostname": "m6-node22",
+          "ip": "10.99.0.32"
+        }
+      ],
+      "harness": {
+        "milestone": "m6",
+        "scenario": "core",
+        "runId": "m6core",
+        "nodes": "21:uefi:failpath 22:bios:destroy",
+        "maxNodes": 3,
+        "memAvailableMb": 15747,
+        "wavesMode": false,
+        "waves": [],
+        "bootingTimeoutMin": null,
+        "failedStage": "",
+        "exit": 0,
+        "dryRun": false,
+        "startedAt": "2026-11-06T03:16:21Z",
+        "durationSec": 2242
+      }
+    },
+    "bulk": {
+      "status": "PASS",
+      "summarizedAt": "2026-11-06T04:06:18Z",
+      "run": "m6bulk",
+      "session": "1793937323988-efdeef62",
+      "generatedAt": "2026-11-06T04:06:03.609Z",
+      "results": [
+        {
+          "ac": "AC-6.50",
+          "status": "PASS",
+          "durationS": 638,
+          "note": "gelombang 3; m6-bulk-01 627s, m6-bulk-02 618s, m6-bulk-03 618s; SSH true; 429 node 0",
+          "evidence": [
+            "bulk-ac-6.50.txt",
+            "bulk-timeline.txt",
+            "screenshots/bulk-ip-preview.png",
+            "screenshots/bulk-hostname-preview.png"
+          ]
+        },
+        {
+          "ac": "AC-6.52-scan",
+          "status": "PASS",
+          "note": "0 temuan (password acak di memori: 3)",
+          "evidence": [
+            "evidence-scan.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m6bulk-node25",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.0.103 (lease 52:54:00:99:00:25)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m6bulk-node25",
+          "status": "PASS",
+          "note": "user-data 200 x1 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m6bulk-node26",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.0.104 (lease 52:54:00:99:00:26)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m6bulk-node26",
+          "status": "PASS",
+          "note": "user-data 200 x1 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m6bulk-node27",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.0.105 (lease 52:54:00:99:00:27)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m6bulk-node27",
+          "status": "PASS",
+          "note": "user-data 200 x1 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m6bulk-node25",
+          "status": "PASS",
+          "note": "verify-node.sh exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m6bulk-node25-verify.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m6bulk-node26",
+          "status": "PASS",
+          "note": "verify-node.sh exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m6bulk-node26-verify.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m6bulk-node27",
+          "status": "PASS",
+          "note": "verify-node.sh exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m6bulk-node27-verify.txt"
+          ]
+        },
+        {
+          "ac": "cleanup",
+          "status": "PASS",
+          "note": "semua resource run dihapus; resource terlindungi identik",
+          "failedStage": "",
+          "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)",
+          "protectedIdentical": true,
+          "runDomainsRemaining": 0,
+          "serverStopped": true,
+          "evidence": [
+            "libvirt-before.txt",
+            "libvirt-after.txt",
+            "libvirt-diff.txt",
+            "cleanup.txt",
+            "kvm-run.txt"
+          ]
+        }
+      ],
+      "scenario": "bulk",
+      "waves": [
+        [
+          "pxe-test-m6bulk-node25",
+          "pxe-test-m6bulk-node26",
+          "pxe-test-m6bulk-node27"
+        ]
+      ],
+      "maxNodes": 3,
+      "nodes": [
+        {
+          "name": "pxe-test-m6bulk-node25",
+          "ip": "10.99.0.35",
+          "hostname": "m6-bulk-01"
+        },
+        {
+          "name": "pxe-test-m6bulk-node26",
+          "ip": "10.99.0.36",
+          "hostname": "m6-bulk-02"
+        },
+        {
+          "name": "pxe-test-m6bulk-node27",
+          "ip": "10.99.0.37",
+          "hostname": "m6-bulk-03"
+        }
+      ],
+      "harness": {
+        "milestone": "m6",
+        "scenario": "bulk",
+        "runId": "m6bulk",
+        "nodes": "25:uefi 26:uefi 27:uefi",
+        "maxNodes": 3,
+        "memAvailableMb": 15671,
+        "wavesMode": true,
+        "waves": [
+          [
+            "pxe-test-m6bulk-node25",
+            "pxe-test-m6bulk-node26",
+            "pxe-test-m6bulk-node27"
+          ]
+        ],
+        "bootingTimeoutMin": null,
+        "failedStage": "",
+        "exit": 0,
+        "dryRun": false,
+        "startedAt": "2026-11-06T03:54:22Z",
+        "durationSec": 716
+      }
+    },
+    "distro": {
+      "status": "PASS",
+      "summarizedAt": "2026-11-06T04:26:48Z",
+      "run": "m6distro",
+      "session": "1793938040543-db5c7803",
+      "generatedAt": "2026-11-06T04:26:36.619Z",
+      "results": [
+        {
+          "ac": "AC-6.48",
+          "node": "pxe-test-m6distro-node23",
+          "status": "PASS",
+          "durationS": 599,
+          "note": "booting→installing→configuring→done 599s; verify 0/0",
+          "evidence": [
+            "pxe-test-m6distro-node23-verify-ssh.txt",
+            "pxe-test-m6distro-node23-timeline.txt",
+            "installer-logs/"
+          ]
+        },
+        {
+          "ac": "AC-6.49",
+          "node": "pxe-test-m6distro-node24",
+          "status": "PASS",
+          "durationS": 692,
+          "note": "booting→installing→configuring→done 692s; verify 0/0",
+          "evidence": [
+            "pxe-test-m6distro-node24-verify-ssh.txt",
+            "pxe-test-m6distro-node24-timeline.txt",
+            "installer-logs/"
+          ]
+        },
+        {
+          "ac": "AC-6.52-scan",
+          "status": "PASS",
+          "note": "0 temuan (scan harness)",
+          "evidence": [
+            "evidence-scan.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m6distro-node23",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.0.101 (lease 52:54:00:99:00:23)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m6distro-node23",
+          "status": "PASS",
+          "note": "preseed.cfg 200 x1 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m6distro-node24",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.0.102 (lease 52:54:00:99:00:24)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m6distro-node24",
+          "status": "PASS",
+          "note": "ks.cfg 200 x1 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m6distro-node23",
+          "status": "PASS",
+          "note": "verify-node.sh exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m6distro-node23-verify.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m6distro-node24",
+          "status": "PASS",
+          "note": "verify-node.sh exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m6distro-node24-verify.txt"
+          ]
+        },
+        {
+          "ac": "cleanup",
+          "status": "PASS",
+          "note": "semua resource run dihapus; resource terlindungi identik",
+          "failedStage": "",
+          "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)",
+          "protectedIdentical": true,
+          "runDomainsRemaining": 0,
+          "serverStopped": true,
+          "evidence": [
+            "libvirt-before.txt",
+            "libvirt-after.txt",
+            "libvirt-diff.txt",
+            "cleanup.txt",
+            "kvm-run.txt"
+          ]
+        }
+      ],
+      "scenario": "distro",
+      "nodes": [
+        {
+          "name": "pxe-test-m6distro-node23",
+          "os": "debian",
+          "ip": "10.99.0.33",
+          "hostname": "m6-node23"
+        },
+        {
+          "name": "pxe-test-m6distro-node24",
+          "os": "rocky",
+          "ip": "10.99.0.34",
+          "hostname": "m6-node24"
+        }
+      ],
+      "harness": {
+        "milestone": "m6",
+        "scenario": "distro",
+        "runId": "m6distro",
+        "nodes": "23:uefi:os=debian 24:uefi:os=rocky",
+        "maxNodes": 3,
+        "memAvailableMb": 16135,
+        "wavesMode": false,
+        "waves": [],
+        "bootingTimeoutMin": null,
+        "failedStage": "",
+        "exit": 0,
+        "dryRun": false,
+        "startedAt": "2026-11-06T04:06:40Z",
+        "durationSec": 1208
+      }
+    }
+  },
+  "commit": "019502a",
+  "worktree": ".agent/wt-m6-kvm (detached 019502a)",
+  "note": "Run resmi M6 (core, bulk --waves, distro) berurutan pada commit 019502a; bukti awal 97d6d44 di prelim-97d6d44/ (bukan bukti resmi).",
+  "superseded": "digantikan run iterasi 2 pada commit 18913b5 (DEC-022 §4)"
+}

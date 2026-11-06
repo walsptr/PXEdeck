@@ -136,8 +136,11 @@ describe("CR-5-18 sekuens ANSI di tengah secret", () => {
 
   it("stripAnsi: membuang sekuens utuh, OSC tanpa terminator tidak menelan baris berikutnya", () => {
     expect(stripAnsi(`a${ESC}[0mb${ESC}[31;1mc${ESC}]0;t${BEL}d${ESC}]8;;u${ESC}\\e\x9b2Kf${ESC}(Bg`)).toBe("abcdefg")
-    // OSC tanpa terminator: hanya `ESC]` (escape dua byte) yang dibuang; baris berikutnya utuh.
-    expect(stripAnsi(`a${ESC}]0;tanpa-akhir\nbaris2`)).toBe("a0;tanpa-akhir\nbaris2")
+    // OSC tanpa terminator: bukan sekuens utuh; baris berikutnya utuh. M6 (CR-5-30): `ESC]` tanpa
+    // byte intermediate tidak lagi dibuang `stripAnsi` (sebelumnya alternatif ke-4 menelan `]`);
+    // hanya byte ESC-nya yang dibuang `stripControl`.
+    expect(stripAnsi(`a${ESC}]0;tanpa-akhir\nbaris2`)).toBe(`a${ESC}]0;tanpa-akhir\nbaris2`)
+    expect(stripControl(stripAnsi(`a${ESC}]0;tanpa-akhir\nbaris2`), true)).toBe("a]0;tanpa-akhir\nbaris2")
     expect(stripAnsi("teks biasa [31m")).toBe("teks biasa [31m")
   })
 

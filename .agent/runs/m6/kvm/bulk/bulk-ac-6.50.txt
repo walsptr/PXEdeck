@@ -1,0 +1,16 @@
+# urutan tabel (MAC naik): 52:54:00:99:00:25, 52:54:00:99:00:26, 52:54:00:99:00:27
+# preview IP: [["52:54:00:99:00:25","10.99.0.103","10.99.0.35"],["52:54:00:99:00:26","10.99.0.104","10.99.0.36"],["52:54:00:99:00:27","10.99.0.105","10.99.0.37"]]
+# preview hostname: [["52:54:00:99:00:25","—","m6-bulk-01"],["52:54:00:99:00:26","—","m6-bulk-02"],["52:54:00:99:00:27","—","m6-bulk-03"]]
+# satu aksi: POST /api/hosts/bulk=1, POST install=1
+# password acak: 3 ditampilkan, unik=3, panjang=16,16,16; CSV unduhan valid=true; tersisa di UI/API sesudah dialog ditutup=false
+# gelombang (max_nodes=3): pxe-test-m6bulk-node25,pxe-test-m6bulk-node26,pxe-test-m6bulk-node27
+# pxe-test-m6bulk-node25: booting → installing → configuring → done dalam 627 dtk sejak start; job ["done"]
+# pxe-test-m6bulk-node26: booting → installing → configuring → done dalam 606 dtk sejak start; job ["done"]
+# pxe-test-m6bulk-node27: booting → installing → configuring → done dalam 621 dtk sejak start; job ["done"]
+# UI tanpa reload: true
+# SSH
+pxe-test-m6bulk-node25: hostname=m6-bulk-01 ip=10.99.0.35/24  | sudo-ok ; password ditolak=true → OK
+pxe-test-m6bulk-node26: hostname=m6-bulk-02 ip=10.99.0.36/24  | sudo-ok ; password ditolak=true → OK
+pxe-test-m6bulk-node27: hostname=m6-bulk-03 ip=10.99.0.37/24  | sudo-ok ; password ditolak=true → OK
+# nginx 429 per IP (semua): tidak ada
+# nginx 429 untuk IP node (10.99.0.35,10.99.0.36,10.99.0.37): tidak ada

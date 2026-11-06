@@ -2,27 +2,13 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
-import { ApiError } from "@/hooks/use-host-config"
+import { ApiError, apiJson } from "@/lib/api-client"
 
 import { canonicalOsImageId, osLabel, type OsImage } from "@/lib/os-images"
+import type { OsImageInfo } from "@/lib/types"
 
-/** Item `GET /api/os-images` (salinan klien `OsImageInfo`). */
-export type OsImageInfo = OsImage & {
-  bootable: boolean
-  available: boolean
-  /** Alasan tidak tersedia (null bila tersedia). */
-  reason: string | null
-  builtin?: boolean
-  // Field M5 selalu dikirim `GET /api/os-images`; opsional di tipe klien agar data parsial
-  // (cache lama / fixture M4) tetap aman dirender.
-  /** M5: path media relatif `PXE_MEDIA_ROOT`. */
-  source?: { kernel: string; initrd: string; repo: string }
-  /** M5: `${PXE_MEDIA_URL}/${source.repo}`. */
-  repoUrl?: string
-  /** M5: jumlah host yang mereferensikan image. */
-  usedBy?: number
-  createdAt?: string
-}
+/** Item `GET /api/os-images` — satu sumber di `lib/types.ts` (CR-5-9). */
+export type { OsImageInfo }
 
 /** Body `POST /api/os-images` (salinan klien `newOsImagePayload`, DEC-015: path lokal saja). */
 export type NewOsImagePayload = {
@@ -41,14 +27,7 @@ export const OS_IMAGES_KEY = ["os-images"] as const
 export function useOsImages() {
   return useQuery({
     queryKey: OS_IMAGES_KEY,
-    queryFn: async (): Promise<OsImageInfo[]> => {
-      const res = await fetch("/api/os-images", { cache: "no-store" })
-      if (!res.ok) {
-        const body = await res.json().catch(() => null)
-        throw new Error(body?.error ?? `${res.status} ${res.statusText}`)
-      }
-      return (await res.json()) as OsImageInfo[]
-    },
+    queryFn: () => apiJson<OsImageInfo[]>("/api/os-images", { cache: "no-store" }),
     staleTime: 30_000,
   })
 }
@@ -76,19 +55,7 @@ export function useOsLabel(): (id: string | null | undefined) => string | null {
   }
 }
 
-async function mutate<T>(url: string, init: RequestInit): Promise<T> {
-  const res = await fetch(url, init)
-  const body =
-    res.status === 204 ? undefined : await res.json().catch(() => undefined)
-  if (!res.ok)
-    throw new ApiError(
-      body?.error ?? `${res.status} ${res.statusText}`,
-      res.status,
-      body?.errors ?? [],
-      body,
-    )
-  return body as T
-}
+const mutate = apiJson
 
 /** Daftarkan OS image (201) — 400 per field (`errors[]`), 409 id sudah ada. */
 export function useCreateOsImage() {

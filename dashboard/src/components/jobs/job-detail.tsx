@@ -16,7 +16,7 @@ import { Separator } from "@/components/ui/separator"
 import { Skeleton } from "@/components/ui/skeleton"
 import { StatusPill } from "@/components/status-pill"
 import { JobTimeline } from "@/components/jobs/job-timeline"
-import { LogViewer } from "@/components/jobs/log-viewer"
+import { JOB_NOT_FOUND_EXPLANATION, LogViewer } from "@/components/jobs/log-viewer"
 import { JobsApiError, useFailureText, useJob } from "@/hooks/use-jobs"
 import { useOsLabel } from "@/hooks/use-os-images"
 import { useSettings } from "@/hooks/use-settings"
@@ -29,15 +29,15 @@ export function JobDetail({ jobId, initial }: { jobId: string; initial?: JobSumm
   const job = q.data ?? initial
   if (!job) {
     if (q.isError) {
+      const notFound = q.error instanceof JobsApiError && q.error.status === 404
       return (
         <Alert variant="destructive" data-testid="job-detail-error">
           <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} />
-          <AlertTitle>
-            {q.error instanceof JobsApiError && q.error.status === 404
-              ? "Job tidak ditemukan"
-              : "Gagal memuat job"}
-          </AlertTitle>
-          <AlertDescription>{q.error.message}</AlertDescription>
+          <AlertTitle>{notFound ? "Job tidak ditemukan" : "Gagal memuat job"}</AlertTitle>
+          {/* DR-6-8: deskripsi 404 menjelaskan sebab, tidak mengulang judul. */}
+          <AlertDescription data-testid="job-detail-error-description">
+            {notFound ? JOB_NOT_FOUND_EXPLANATION : q.error.message}
+          </AlertDescription>
         </Alert>
       )
     }

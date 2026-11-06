@@ -16,6 +16,7 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar"
+import { SidebarAccount } from "@/components/auth/sidebar-account"
 import { NAV_ITEMS, navItemFor } from "@/lib/nav"
 import { useActiveNetwork } from "@/hooks/use-settings"
 
@@ -78,10 +79,9 @@ export function AppSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
+      {/* M6: identitas admin + logout (menggantikan caption statis "Ubuntu 24.04.5 · dnsmasq"). */}
       <SidebarFooter className="border-t border-sidebar-border">
-        <p className="type-caption truncate px-2 text-muted-foreground group-data-[collapsible=icon]:hidden">
-          Ubuntu 24.04.5 · dnsmasq
-        </p>
+        <SidebarAccount />
       </SidebarFooter>
     </Sidebar>
   )

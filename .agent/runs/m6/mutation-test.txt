@@ -1,0 +1,189 @@
+# M6 mutasi test-engineer (T10–T13) — revert/rusak perbaikan → test MERAH → pulihkan sha256 identik
+# HEAD a67bcf6; skrip: .agent/runs/m6/mutate.py (satu mutasi per run) dan mutate-e2e.py (E2E gabungan, file berbeda).
+# Mutasi dev sebelumnya: mutation-dev-T4.txt, mutation-dev-T8T9.txt, test-migration.md §Mutasi mandiri.
+
+## Unit / integration (vitest)
+[MU1 CR-5-7 jendela dari at (bukan lastAt)] src/lib/server/db/repos/job-events.ts
+   mutasi: 'Date.parse(e.at) - Date.parse(last.lastAt) <= MERGE_WINDOW_MS &&' -> 'Date.parse(e.at) - Date.parse(last.at) <= MERGE_WINDOW_MS &&'
+   perintah: npx vitest run src/app/boot/m6-te-boot.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/app/boot/m6-te-boot.test.ts (4 tests | 1 failed) 229ms
+     × event identik tiap 30 dtk selama 5 mnt → 1 event repeat=11, lastAt terakhir; jeda > 60 dtk → event baru 30ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 3 passed (4)
+     FAIL  |node| src/app/boot/m6-te-boot.test.ts > AC-6.22 CR-5-7 jendela gabung dari kemunculan terakhir > event identik tiap 30 dtk selama 5 mnt → 1 event repeat=11, lastAt terakhir; jeda > 60 dtk → eve
+   pulih sha256 identik=ya
+[MU2 SR-5-4 konfirmasi di-trim/case-insensitive] src/lib/server/settings.ts
+   mutasi: 'env.PXE_INSECURE_NO_LEASE_CHECK_CONFIRM === INSECURE_CONFIRM_PHRASE' -> '(env.PXE_INSECURE_NO_LEASE_CHECK_CONFIRM ?? "").trim().toUpperCase() === INSECURE_CONFIRM_PHRASE'
+   perintah: npx vitest run src/lib/server/m6-backend.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/m6-backend.test.ts (31 tests | 1 failed) 86ms
+     × SR-5-4: production + insecure tanpa/beda konfirmasi → ditolak (pesan menyebut kedua variabel); frasa tepat → start + peringatan 8ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 30 passed (31)
+     FAIL  |node| src/lib/server/m6-backend.test.ts > aturan start (AC-6.2, AC-6.3) > SR-5-4: production + insecure tanpa/beda konfirmasi → ditolak (pesan menyebut kedua variabel); frasa tepat → start + pe
+   pulih sha256 identik=ya
+[MU3 SR-5-3 logBootDenied tanpa throttle (route)] src/lib/server/boot-http.ts
+   mutasi: '  bootThrottle().log(path, bootDeniedLine(path, rawMac, reason))' -> '  console.warn(bootDeniedLine(path, rawMac, reason))'
+   perintah: npx vitest run src/app/boot/m6-te-boot.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/app/boot/m6-te-boot.test.ts (4 tests | 1 failed) 237ms
+     × 100 POST log ditolak dalam 60 dtk → 20 detail + 1 ringkasan; file kuota sendiri; satu baris, ter-escape, tanpa token 35ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 3 passed (4)
+     FAIL  |node| src/app/boot/m6-te-boot.test.ts > AC-6.12 SR-5-3 throttle log penolakan lewat route > 100 POST log ditolak dalam 60 dtk → 20 detail + 1 ringkasan; file kuota sendiri; satu baris, ter-esca
+   pulih sha256 identik=ya
+[MU5 rate limit login per IP 4x -> 100x] src/lib/server/auth/rate-limit.ts
+   mutasi: 'max * 4, windowMs' -> 'max * 100, windowMs'
+   perintah: npx vitest run src/app/api/auth/auth-routes.test.ts src/lib/server/auth/rate-limit.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/auth/rate-limit.test.ts (8 tests | 2 failed) 85ms
+     × 5 gagal per (IP, username) → ke-6 ditolak; username lain dari IP sama masih boleh sampai 20 per IP 10ms
+     × login sukses mereset (IP, username) dan tidak dihitung gagal per IP 1ms
+     ❯ |node| src/app/api/auth/auth-routes.test.ts (15 tests | 1 failed) 2645ms
+     × dari IP sama username lain masih bisa sampai total 20 gagal per IP → 429 716ms
+     Test Files  2 failed (2)
+     Tests  3 failed | 20 passed (23)
+     FAIL  |node| src/app/api/auth/auth-routes.test.ts > rate limit login (AC-6.10) > dari IP sama username lain masih bisa sampai total 20 gagal per IP → 429
+     FAIL  |node| src/lib/server/auth/rate-limit.test.ts > login (DEC-017 §5) > 5 gagal per (IP, username) → ke-6 ditolak; username lain dari IP sama masih boleh sampai 20 per IP
+     FAIL  |node| src/lib/server/auth/rate-limit.test.ts > login (DEC-017 §5) > login sukses mereset (IP, username) dan tidak dihitung gagal per IP
+   pulih sha256 identik=ya
+  (awal) [MU6 SSE per sesi 5 -> 6] src/lib/server/sse.ts
+  (awal)    mutasi: 'export const SSE_MAX_PER_SESSION = 5' -> 'export const SSE_MAX_PER_SESSION = 6'
+  (awal)    perintah: npx vitest run src/app/api/m6-carryover-api.test.ts
+  (awal)    hasil: HIJAU (exit 0); diharapkan RED
+  (awal)      Test Files  1 passed (1)
+  (awal)      Tests  11 passed (11)
+  (awal)    pulih sha256 identik=ya
+[MU7 cookie Secure tidak pernah dipasang] src/lib/server/auth/session.ts
+   mutasi: 'return s.baseUrl.startsWith("https://") ? "; Secure" : ""' -> 'return ""'
+   perintah: npx vitest run src/app/api/auth/auth-routes.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/app/api/auth/auth-routes.test.ts (15 tests | 1 failed) 2611ms
+     × PXE_BASE_URL https → cookie Secure 48ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 14 passed (15)
+     FAIL  |node| src/app/api/auth/auth-routes.test.ts > POST /api/auth/login (AC-6.5) > PXE_BASE_URL https → cookie Secure
+   pulih sha256 identik=ya
+[MU8 /api/settings membocorkan hash admin] src/lib/server/settings.ts
+   mutasi: '    insecureConfirmed: s.insecureConfirmed,' -> '    insecureConfirmed: s.insecureConfirmed,\n    ...({ adminHash: s.admin?.passwordHash } as object),'
+   perintah: npx vitest run src/lib/server/m6-backend.test.ts src/app/api/m4-api-routes.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/m6-backend.test.ts (31 tests | 1 failed) 97ms
+     × GET /api/settings: blok auth + insecureConfirmed; tanpa hash/`scrypt` dalam bentuk apa pun (rekursif) 10ms
+     ❯ |node| src/app/api/m4-api-routes.test.ts (14 tests | 1 failed) 392ms
+     × cidr, gateway, dns, dynamicRange, pxeServer, baseUrl, tftpRoot, interface; tanpa path DB/rahasia; no-store 119ms
+     Test Files  2 failed (2)
+     Tests  2 failed | 43 passed (45)
+     FAIL  |node| src/app/api/m4-api-routes.test.ts > AC-4.6 GET /api/settings > cidr, gateway, dns, dynamicRange, pxeServer, baseUrl, tftpRoot, interface; tanpa path DB/rahasia; no-store
+     FAIL  |node| src/lib/server/m6-backend.test.ts > settings auth (AC-6.1) > GET /api/settings: blok auth + insecureConfirmed; tanpa hash/`scrypt` dalam bentuk apa pun (rekursif)
+   pulih sha256 identik=ya
+[MU9 startOrExit tidak keluar (unit)] src/lib/server/startup.ts
+   mutasi: '    return exit(1)' -> '    return undefined as never'
+   perintah: npx vitest run src/lib/server/m6-backend.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/m6-backend.test.ts (31 tests | 1 failed) 88ms
+     × production logN=21 → start ditolak (startOrExit exit 1, baris `[pxe] start ditolak:` tanpa nilai hash) 8ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 30 passed (31)
+     FAIL  |node| src/lib/server/m6-backend.test.ts > aturan start (AC-6.2, AC-6.3) > production logN=21 → start ditolak (startOrExit exit 1, baris `[pxe] start ditolak:` tanpa nilai hash)
+   pulih sha256 identik=ya
+
+  CATATAN MU6 (awal): menaikkan SSE_MAX_PER_SESSION 5 → 6 TIDAK terdeteksi oleh test lama (test memakai konstanta
+  itu sendiri, relatif). Ditutup dengan test baru src/lib/server/m6-te-limits.test.ts yang mengunci nilai DEC literal:
+[MU4 guardRead tanpa requireSession] src/lib/server/http.ts
+   mutasi: '    return errorResponse(403, "Host tidak diizinkan")\n  }\n  const auth = requireSession(req)\n  return "respons' -> '    return errorResponse(403, "Host tidak diizinkan")\n  }\n  return null\n}'
+   perintah: npx vitest run src/app/api/m6-auth-matrix.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/app/api/m6-auth-matrix.test.ts (28 tests | 5 failed) 198ms
+     × tanpa cookie: setiap route × method 59ms
+     × cookie palsu (bentuk benar): setiap route × method 5ms
+     × cookie rusak: setiap route × method 5ms
+     × cookie kedaluwarsa: setiap route × method 5ms
+     × cookie setelah logout: setiap route × method 5ms
+     Test Files  1 failed (1)
+     Tests  5 failed | 23 passed (28)
+     FAIL  |node| src/app/api/m6-auth-matrix.test.ts > integration: tanpa sesi valid → 401 Perlu login tanpa efek > tanpa cookie: setiap route × method
+     FAIL  |node| src/app/api/m6-auth-matrix.test.ts > integration: tanpa sesi valid → 401 Perlu login tanpa efek > cookie palsu (bentuk benar): setiap route × method
+     FAIL  |node| src/app/api/m6-auth-matrix.test.ts > integration: tanpa sesi valid → 401 Perlu login tanpa efek > cookie rusak: setiap route × method
+     FAIL  |node| src/app/api/m6-auth-matrix.test.ts > integration: tanpa sesi valid → 401 Perlu login tanpa efek > cookie kedaluwarsa: setiap route × method
+   pulih sha256 identik=ya
+[MU6 SSE per sesi 5 -> 6 (ulang dengan m6-te-limits)] src/lib/server/sse.ts
+   mutasi: 'export const SSE_MAX_PER_SESSION = 5' -> 'export const SSE_MAX_PER_SESSION = 6'
+   perintah: npx vitest run src/app/api/m6-carryover-api.test.ts src/lib/server/m6-te-limits.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/m6-te-limits.test.ts (3 tests | 2 failed) 72ms
+     × konstanta: SSE 5 per sesi, 50 global; log penolakan /boot 20 per 60 dtk 55ms
+     × SSE: tepat 5 stream untuk satu sesi, stream ke-6 ditolak `session`; sesi lain tetap dapat 14ms
+     Test Files  1 failed | 1 passed (2)
+     Tests  2 failed | 12 passed (14)
+     FAIL  |node| src/lib/server/m6-te-limits.test.ts > nilai DEC terkunci literal > konstanta: SSE 5 per sesi, 50 global; log penolakan /boot 20 per 60 dtk
+     FAIL  |node| src/lib/server/m6-te-limits.test.ts > nilai DEC terkunci literal > SSE: tepat 5 stream untuk satu sesi, stream ke-6 ditolak `session`; sesi lain tetap dapat
+   pulih sha256 identik=ya
+
+## Tipe (AC-6.24 CR-5-9: mutasi tipe server → typecheck merah)
+[MT1 CR-5-9 field server JobSummary.failureReason -> string] src/lib/server/jobs-service.ts
+   mutasi: '    failureReason: j.failureReason,\n    installerBoots' -> '    failureReason: String(j.failureReason),\n    installerBoots'
+   perintah: npx tsc --noEmit
+   hasil: MERAH (exit 2); diharapkan RED
+   pulih sha256 identik=ya
+[MT2 CR-5-9 tipe server JobEvent + field] src/lib/server/db/repos/job-events.ts
+   mutasi: 'export type JobEvent = {\n  seq: number\n' -> 'export type JobEvent = {\n  seq: number\n  debug?: string\n'
+   perintah: npx tsc --noEmit
+   hasil: MERAH (exit 2); diharapkan RED
+   pulih sha256 identik=ya
+
+## Proses (test/process/start-guard.test.ts, build standalone)
+[MP1 startOrExit tidak exit (proses tetap hidup)] src/lib/server/startup.ts
+   mutasi: '    return exit(1)' -> '    return undefined as never'
+   perintah: npm run test:process
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |process| test/process/start-guard.test.ts (13 tests | 11 failed) 172635ms
+     × tanpa PXE_ADMIN_USERNAME 15030ms
+     × tanpa PXE_ADMIN_PASSWORD_HASH 15022ms
+     × hash format salah 15023ms
+     × logN=21 (di luar batas) 15011ms
+     × username admin tidak valid 15030ms
+     × tanpa konfirmasi → ditolak, pesan menyebut kedua variabel 15027ms
+     × konfirmasi yes → ditolak 15009ms
+     × konfirmasi huruf kecil → ditolak 15026ms
+     × konfirmasi berspasi → ditolak 15033ms
+     × konfirmasi frasa beda → ditolak 15013ms
+     × exit ≠ 0 + baris penolakan menyebut variabel 15024ms
+   pulih sha256 identik=ya
+
+## E2E (Playwright, satu build, mutasi di file berbeda; merah lain = BUG-M6-L3 yang sudah terbuka)
+[ME1 OS Images breakpoint kartu xl → md (AC-6.37)] src/components/os-images/os-images-view.tsx: 'max-xl:' -> 'max-md:' (43x)
+[ME2 layout tanpa SessionGate (lapis kedua, AC-6.8)] src/app/(dashboard)/layout.tsx: '      <SessionGate>\n' -> '      <>\n' (1x)
+[ME2b (pasangan ME2: tag penutup)] src/app/(dashboard)/layout.tsx: '      </SessionGate>\n' -> '      </>\n' (1x)
+[ME3 filter axe: verified-pass juga di luar Sheet (DEC-019 §3)] e2e/support/axe.ts: 'if (inSheet && ratio >= need)' -> 'if (ratio >= need)' (1x)
+perintah: npx playwright test --project m6-ui --project m6-auth → exit 1
+ringkasan: 12 failed; 39 passed (2.7m)
+[ME1 OS Images breakpoint kartu xl → md (AC-6.37)] test merah yang diharapkan: 3 → MERAH
+     × e2e/m6-ui.spec.ts:297:9 › AC-6.37 OS Images 768–1279 kartu, ≥ 1280 tabel; DR-5-1 › 1024: mode kartu
+     × e2e/m6-ui.spec.ts:297:9 › AC-6.37 OS Images 768–1279 kartu, ≥ 1280 tabel; DR-5-1 › 1279: mode kartu
+     × e2e/m6-ui.spec.ts:297:9 › AC-6.37 OS Images 768–1279 kartu, ≥ 1280 tabel; DR-5-1 › 768: mode kartu
+[ME2 layout tanpa SessionGate (lapis kedua, AC-6.8)] test merah yang diharapkan: 1 → MERAH
+     × e2e/m6-auth.spec.ts:56:7 › AC-6.8 halaman tanpa sesi → /login?next= › cookie berbentuk valid tapi palsu → layout server (lapis kedua) tetap mengalihkan tanpa data
+[ME2b (pasangan ME2: tag penutup)] test merah yang diharapkan: 1 → MERAH
+     × e2e/m6-auth.spec.ts:56:7 › AC-6.8 halaman tanpa sesi → /login?next= › cookie berbentuk valid tapi palsu → layout server (lapis kedua) tetap mengalihkan tanpa data
+[ME3 filter axe: verified-pass juga di luar Sheet (DEC-019 §3)] test merah yang diharapkan: 1 → MERAH
+     × e2e/m6-ui.spec.ts:420:7 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › filter `classifyContrastFinding`: kontrol positif & negatif (halaman sintetis)
+merah lain (bukan dari mutasi; mis. bug terbuka): 7
+     · e2e/m6-ui.spec.ts:485:7 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /login (tanpa sesi) 1440 & 375
+     · e2e/m6-ui.spec.ts:505:9 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /hosts 1440 & 375
+     · e2e/m6-ui.spec.ts:505:9 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /os-images 1440 & 375
+     · e2e/m6-ui.spec.ts:505:9 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /settings 1440 & 375
+     · e2e/m6-ui.spec.ts:505:9 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /ssh-keys 1440 & 375
+     · e2e/m6-ui.spec.ts:516:7 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /hosts dengan Sheet terbuka (1440 & 375)
+     · e2e/m6-ui.spec.ts:534:7 › AC-6.38 aksesibilitas (axe, filter kontras DEC-019 §3) › /jobs detail job failed (1440 & 375)
+pulih src/components/os-images/os-images-view.tsx: sha256 identik=ya
+pulih src/app/(dashboard)/layout.tsx: sha256 identik=ya
+pulih e2e/support/axe.ts: sha256 identik=ya
+
+## Infra shell (infra/test/run.sh › deploy-dashboard dry-run + dashboard.env tanpa secret)
+  MI [s/^PXE_ADMIN_PASSWORD_HASH=@PXE_ADMIN_PASSWORD_HASH@$/PXE_ADMIN_PASSWORD_HASH=scrypt$15$8$1$QUFBQUFBQUFBQUFBQUFBQQ==$x/] =>   FAIL deploy-dashboard dry-run + dashboard.env tanpa secret
+  MI [s/^PXE_ADMIN_PASSWORD_HASH=@PXE_ADMIN_PASSWORD_HASH@$/PXE_ADMIN_PASSWORD_HASH=@PXE_ADMIN_PASSWORD_HASH@x/] =>   FAIL deploy-dashboard dry-run + dashboard.env tanpa secret
+  MI [$a PXE_ADMIN_PASSWORD_HASH=@PXE_ADMIN_PASSWORD_HASH@] =>   FAIL deploy-dashboard dry-run + dashboard.env tanpa secret
+  MI [$a # root $6$saltsalt$abc] =>   FAIL deploy-dashboard dry-run + dashboard.env tanpa secret
+pulih sha256 identik=ya

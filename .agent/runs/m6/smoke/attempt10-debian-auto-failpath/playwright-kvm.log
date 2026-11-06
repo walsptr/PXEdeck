@@ -1,0 +1,38 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 e2e-kvm/m6-smoke.spec.ts:307:7 › T15 login admin API: tanpa sesi 401, login 204 + cookie pxe_session, sesi → 200 (312ms)
+  ✘  2 e2e-kvm/m6-smoke.spec.ts:337:7 › T15 smoke: Debian 12 & Rocky 9 UEFI → Done + SSH; Ubuntu /dev/vdz → Failed installer-error → install ulang (16.5m)
+
+
+  1) e2e-kvm/m6-smoke.spec.ts:337:7 › T15 smoke: Debian 12 & Rocky 9 UEFI → Done + SSH; Ubuntu /dev/vdz → Failed installer-error → install ulang 
+
+    Error: expect(received).toEqual(expected) // deep equality
+
+    - Expected  - 1
+    + Received  + 4
+
+    - Array []
+    + Array [
+    +   "pxe-test-m6-node41: job1 failed/timeout-installing",
+    +   "pxe-test-m6-node45: job2 failed/timeout-installing",
+    + ]
+
+      347 |       record({ ac: `smoke-${n.os}${n.role === "failpath" ? "-failpath" : ""}`, node: o.node, status: o.ok ? "PASS" : "FAIL", durationS: o.durationS, note: o.note, evidence: o.evidence })
+      348 |     }
+    > 349 |     expect(outcomes.filter((o) => !o.ok).map((o) => `${o.node}: ${o.note}`)).toEqual([])
+          |                                                                              ^
+      350 |   })
+      351 | }
+      352 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6-smoke/dashboard/e2e-kvm/m6-smoke.spec.ts:349:78
+
+    Error Context: ../../wt-m6/.agent/runs/m6/smoke/attempt10-debian-auto-failpath/playwright-kvm-artifacts/m6-smoke-T15-smoke-Debian--106d9-aller-error-→-install-ulang/error-context.md
+
+    Error Context: ../../wt-m6/.agent/runs/m6/smoke/attempt10-debian-auto-failpath/playwright-kvm-artifacts/m6-smoke-T15-smoke-Debian--106d9-aller-error-→-install-ulang/error-context.md
+
+  Slow test file: e2e-kvm/m6-smoke.spec.ts (16.5m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 failed
+    e2e-kvm/m6-smoke.spec.ts:337:7 › T15 smoke: Debian 12 & Rocky 9 UEFI → Done + SSH; Ubuntu /dev/vdz → Failed installer-error → install ulang 
+  1 passed (16.5m)

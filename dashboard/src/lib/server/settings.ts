@@ -8,6 +8,7 @@
 // nilai) supaya test bisa mengganti env tanpa reload modul.
 import { z } from "zod"
 
+import { passwordHashProblem } from "@/lib/server/auth/password"
 import {
   ipToInt,
   isIpv4,
@@ -61,6 +62,29 @@ export type Settings = {
    * installer tanpa verifikasi lease (DEC-013). Diperingatkan saat start.
    */
   insecureNoLeaseCheck: boolean
+  /**
+   * `NODE_ENV=production` + `PXE_INSECURE_NO_LEASE_CHECK=1` dikonfirmasi dengan frasa literal
+   * `PXE_INSECURE_NO_LEASE_CHECK_CONFIRM` (SR-5-4, DEC-016 §2, DEC-017 §7).
+   */
+  insecureConfirmed: boolean
+  /** Admin tunggal (DEC-017 §3); null = belum dikonfigurasi (hanya non-production). */
+  admin: AdminCredential | null
+  auth: AuthSettings
+}
+
+/** Kredensial admin dari env. `passwordHash` TIDAK PERNAH masuk log/respons API. */
+export type AdminCredential = { username: string; passwordHash: string }
+
+export type AuthSettings = {
+  /** Idle maksimum sesi (menit, geser). */
+  sessionIdleMin: number
+  /** Umur absolut sesi (jam). */
+  sessionMaxHours: number
+  /** Login gagal per (IP, username) per jendela; per IP = 4× nilai ini. */
+  loginMaxFailures: number
+  loginWindowMin: number
+  /** Request API per sesi per 60 dtk. */
+  apiRatePerMin: number
 }
 
 export type JobTimeouts = {
@@ -75,6 +99,9 @@ export type SettingsEnv = Record<string, string | undefined>
 export const URL_SAFE_RE = /^[A-Za-z0-9.:/_-]+$/
 const KERNEL_ARGS_RE = /^[A-Za-z0-9 ,._=:/@+-]*$/
 const PATH_RE = /^\/[A-Za-z0-9._/-]*$/
+const ADMIN_USERNAME_RE = /^[a-z_][a-z0-9_-]{0,31}$/
+/** Frasa konfirmasi literal SR-5-4 (DEC-016 §2). */
+export const INSECURE_CONFIRM_PHRASE = "I_UNDERSTAND_CONFIG_LEAKS"
 const HOSTNAME_RE = /^(\[[0-9a-f:]+\]|[a-z0-9.-]+)(:\d{1,5})?$/
 
 function fail(msg: string): never {
@@ -250,6 +277,26 @@ export function settingsFromEnv(env: SettingsEnv): Settings {
       fail(`PXE_ALLOWED_HOSTS memuat entri tidak valid "${h}"`)
   }
 
+  // SR-5-4 / DEC-016 §2: production + flag insecure butuh konfirmasi kedua (nilai mentah, tanpa
+  // trim — frasa berspasi/beda huruf ditolak).
+  const insecureConfirmed =
+    insecureNoLeaseCheck && env.PXE_INSECURE_NO_LEASE_CHECK_CONFIRM === INSECURE_CONFIRM_PHRASE
+  if (production && insecureNoLeaseCheck && !insecureConfirmed)
+    fail(
+      "PXE_INSECURE_NO_LEASE_CHECK=1 di NODE_ENV=production membutuhkan " +
+        `PXE_INSECURE_NO_LEASE_CHECK_CONFIRM=${INSECURE_CONFIRM_PHRASE} (file konfigurasi installer ` +
+        "bisa diambil siapa pun di LAN; DEC-016 §2)",
+    )
+
+  const admin = adminFromEnv(env, production)
+  const auth: AuthSettings = {
+    sessionIdleMin: intEnv(env, "PXE_SESSION_IDLE_MIN", 120, 1, 1440),
+    sessionMaxHours: intEnv(env, "PXE_SESSION_MAX_HOURS", 12, 1, 168),
+    loginMaxFailures: intEnv(env, "PXE_LOGIN_MAX_FAILURES", 5, 3, 100),
+    loginWindowMin: intEnv(env, "PXE_LOGIN_WINDOW_MIN", 15, 1, 1440),
+    apiRatePerMin: intEnv(env, "PXE_API_RATE_PER_MIN", 600, 60, 10_000),
+  }
+
   return {
     network,
     dhcpInterface: iface,
@@ -272,7 +319,36 @@ export function settingsFromEnv(env: SettingsEnv): Settings {
     jobLogMaxEvents: intEnv(env, "PXE_JOB_LOG_MAX_EVENTS", 5000, 100, 100_000),
     jobHistoryPerHost: intEnv(env, "PXE_JOB_HISTORY_PER_HOST", 20, 1, 1000),
     insecureNoLeaseCheck,
+    insecureConfirmed,
+    admin,
+    auth,
   }
+}
+
+/**
+ * Admin dari `PXE_ADMIN_USERNAME` + `PXE_ADMIN_PASSWORD_HASH` (DEC-017 §3). Nilai yang diisi tetapi
+ * tidak valid → error (semua mode). Keduanya/salah satunya kosong → production: error (tolak
+ * start); non-production: null (login selalu gagal, semua API 401 — tanpa kredensial default).
+ * Pesan error tidak pernah memuat nilai hash.
+ */
+function adminFromEnv(env: SettingsEnv, production: boolean): AdminCredential | null {
+  const username = str(env, "PXE_ADMIN_USERNAME")
+  const passwordHash = str(env, "PXE_ADMIN_PASSWORD_HASH")
+  if (username !== undefined && !ADMIN_USERNAME_RE.test(username))
+    fail("PXE_ADMIN_USERNAME harus cocok ^[a-z_][a-z0-9_-]{0,31}$")
+  if (passwordHash !== undefined) {
+    const problem = passwordHashProblem(passwordHash)
+    if (problem) fail(`PXE_ADMIN_PASSWORD_HASH ${problem}`)
+  }
+  if (username === undefined || passwordHash === undefined) {
+    if (production)
+      fail(
+        "NODE_ENV=production membutuhkan PXE_ADMIN_USERNAME dan PXE_ADMIN_PASSWORD_HASH " +
+          "(buat hash dengan `npm run admin:hash`; tidak ada kredensial default)",
+      )
+    return null
+  }
+  return { username, passwordHash }
 }
 
 /**
@@ -287,6 +363,35 @@ export function settingsWarnings(s: Settings): string[] {
         "script installer & file konfigurasi dilayani tanpa binding lease (HANYA untuk dev, DEC-013)",
     )
   return out
+}
+
+/**
+ * Peringatan autentikasi saat start (M6, DEC-017 §3): non-production tanpa admin → satu baris
+ * (production tanpa admin sudah ditolak `settingsFromEnv`). Tanpa nilai hash.
+ */
+export function authWarnings(s: Settings): string[] {
+  return s.admin
+    ? []
+    : [
+        "PERINGATAN: admin belum dikonfigurasi (PXE_ADMIN_USERNAME + PXE_ADMIN_PASSWORD_HASH, " +
+          "buat hash dengan `npm run admin:hash`) — semua login ditolak dan semua API membalas 401",
+      ]
+}
+
+/**
+ * SR-6-3 / CR-6-6 (DEC-022 §3): production tanpa `PXE_TRUST_PROXY=1` → IP klien tidak diketahui
+ * (`X-Real-IP` diabaikan), sehingga batas login per IP (`PXE_LOGIN_MAX_FAILURES`, 20/IP) berlaku
+ * GLOBAL untuk semua klien: satu pihak bisa mengunci login admin selama `PXE_LOGIN_WINDOW_MIN`.
+ * Peringatan saja (start tidak ditolak); deploy rujukan memakai nginx + `PXE_TRUST_PROXY=1`.
+ */
+export function trustProxyWarnings(s: Settings, nodeEnv: string | undefined = process.env.NODE_ENV): string[] {
+  if (nodeEnv !== "production" || s.trustProxy) return []
+  return [
+    "peringatan: NODE_ENV=production tanpa PXE_TRUST_PROXY=1 — IP klien tidak diketahui, batas login " +
+      "per IP berlaku global untuk semua klien (satu pihak dapat mengunci login admin selama " +
+      `${s.auth.loginWindowMin} menit); jalankan di belakang nginx (infra/server/nginx-pxe.conf) dengan ` +
+      "PXE_TRUST_PROXY=1",
+  ]
 }
 
 /** Nama env yang memengaruhi `getSettings()` (kunci cache). */
@@ -319,6 +424,14 @@ export const SETTINGS_ENV_KEYS = [
   "PXE_JOB_LOG_MAX_EVENTS",
   "PXE_JOB_HISTORY_PER_HOST",
   "PXE_INSECURE_NO_LEASE_CHECK",
+  "PXE_INSECURE_NO_LEASE_CHECK_CONFIRM",
+  "PXE_ADMIN_USERNAME",
+  "PXE_ADMIN_PASSWORD_HASH",
+  "PXE_SESSION_IDLE_MIN",
+  "PXE_SESSION_MAX_HOURS",
+  "PXE_LOGIN_MAX_FAILURES",
+  "PXE_LOGIN_WINDOW_MIN",
+  "PXE_API_RATE_PER_MIN",
   "NODE_ENV",
   "VITEST",
 ] as const
@@ -345,6 +458,20 @@ export type SettingsResponse = NetworkResponse & {
   jobTimeouts: JobTimeouts
   maxInstallerBoots: number
   insecureNoLeaseCheck: boolean
+  /** SR-5-4: flag insecure aktif DAN dikonfirmasi frasa (production). */
+  insecureConfirmed: boolean
+  /** Blok "Akses" Settings (M6). Tanpa hash password dalam bentuk apa pun. */
+  auth: AuthResponse
+}
+
+export type AuthResponse = {
+  adminUsername: string | null
+  adminConfigured: boolean
+  sessionIdleMin: number
+  sessionMaxHours: number
+  loginMaxFailures: number
+  loginWindowMin: number
+  apiRatePerMin: number
 }
 
 export function toSettingsResponse(s: Settings): SettingsResponse {
@@ -359,6 +486,16 @@ export function toSettingsResponse(s: Settings): SettingsResponse {
     jobTimeouts: { ...s.jobTimeouts },
     maxInstallerBoots: s.maxInstallerBoots,
     insecureNoLeaseCheck: s.insecureNoLeaseCheck,
+    insecureConfirmed: s.insecureConfirmed,
+    auth: {
+      adminUsername: s.admin?.username ?? null,
+      adminConfigured: s.admin !== null,
+      sessionIdleMin: s.auth.sessionIdleMin,
+      sessionMaxHours: s.auth.sessionMaxHours,
+      loginMaxFailures: s.auth.loginMaxFailures,
+      loginWindowMin: s.auth.loginWindowMin,
+      apiRatePerMin: s.auth.apiRatePerMin,
+    },
   }
 }
 

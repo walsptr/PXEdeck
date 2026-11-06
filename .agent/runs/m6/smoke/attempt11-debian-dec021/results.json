@@ -1,0 +1,21 @@
+{
+  "run": "m6",
+  "session": "1793932048062-515796dd",
+  "generatedAt": "2026-11-06T02:42:44.426Z",
+  "results": [
+    {"ac": "smoke-login", "status": "PASS", "note": "401/401/204/200", "evidence": ["smoke-login.txt"]},
+    {"ac": "smoke-debian", "node": "pxe-test-m6-node41", "status": "PASS", "durationS": 866, "note": "Done + SSH key", "evidence": ["pxe-test-m6-node41-timeline.txt", "pxe-test-m6-node41-job1-events.txt", "installer-logs/pxe-test-m6-node41-syslog", "pxe-test-m6-node41-facts.txt"]},
+    {"ac": "smoke-debian-failpath", "node": "pxe-test-m6-node45", "status": "PASS", "durationS": 915, "note": "Done + SSH key", "evidence": ["pxe-test-m6-node45-timeline.txt", "pxe-test-m6-node45-job1-events.txt", "pxe-test-m6-node45-job2-events.txt", "installer-logs/pxe-test-m6-node45-syslog", "pxe-test-m6-node45-facts.txt"]},
+    {"ac": "smoke-scan", "status": "FAIL", "note": "2 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node41", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.131 (lease 52:54:00:99:00:41)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node41", "status": "PASS", "note": "preseed.cfg 200 x1 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node45", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.135 (lease 52:54:00:99:00:45)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node45", "status": "PASS", "note": "preseed.cfg 200 x2 (min 2)", "evidence": ["server-nginx.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m6-node41", "status": "PASS", "note": "verify-node.sh exit=0 + cek login password", "evidence": ["pxe-test-m6-node41-verify.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m6-node45", "status": "NOT_RUN", "note": "tidak diverifikasi: run berhenti di tahap verify", "evidence": ["pxe-test-m6-node45-verify.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "verify", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "smoke": true,
+  "nodes": [{"name": "pxe-test-m6-node41", "fw": "uefi", "os": "debian", "role": "install", "hostname": "m6-node41"}, {"name": "pxe-test-m6-node45", "fw": "uefi", "os": "debian", "role": "failpath", "hostname": "m6-node45"}],
+  "harness": {"milestone": "m6", "scenario": "", "runId": "m6", "nodes": "41:uefi:os=debian 45:uefi:failpath:os=debian", "maxNodes": 3, "memAvailableMb": 15753, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "verify", "exit": 1, "dryRun": false, "startedAt": "2026-11-06T02:26:37Z", "durationSec": 980}
+}

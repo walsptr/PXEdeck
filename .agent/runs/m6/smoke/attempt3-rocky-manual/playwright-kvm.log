@@ -1,0 +1,11 @@
+
+Running 2 tests using 1 worker
+
+  ✓  1 e2e-kvm/m6-smoke.spec.ts:251:7 › T15 login admin API: tanpa sesi 401, login 204 + cookie pxe_session, sesi → 200 (287ms)
+  ✘  2 e2e-kvm/m6-smoke.spec.ts:281:7 › T15 smoke: Debian 12 & Rocky 9 UEFI → Done + SSH; Ubuntu /dev/vdz → Failed installer-error → install ulang (10.4m)
+
+  Slow test file: e2e-kvm/m6-smoke.spec.ts (10.4m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  1 interrupted
+    e2e-kvm/m6-smoke.spec.ts:281:7 › T15 smoke: Debian 12 & Rocky 9 UEFI → Done + SSH; Ubuntu /dev/vdz → Failed installer-error → install ulang 
+  1 passed (10.4m)

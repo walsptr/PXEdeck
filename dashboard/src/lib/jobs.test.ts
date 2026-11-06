@@ -45,6 +45,8 @@ const ev = (seq: number, p: Partial<JobLogEvent> = {}): JobLogEvent => ({
   message: `m${seq}`,
   repeat: 1,
   ...p,
+  // M6 (CR-5-7): field kontrak baru `lastAt` (= at bila tidak digabung).
+  lastAt: p.lastAt ?? p.at ?? T(0, seq),
 })
 
 describe("failureReasonText", () => {
@@ -183,7 +185,7 @@ describe("parseLogEvent", () => {
     expect(parseLogEvent(JSON.stringify(ev(5, { level: "error" })))).toEqual(ev(5, { level: "error" }))
     expect(
       parseLogEvent(JSON.stringify({ seq: 1, at: T(0), message: "x", level: "weird", repeat: 0 })),
-    ).toEqual({ seq: 1, at: T(0), kind: "system", level: "info", source: "", message: "x", repeat: 1 })
+    ).toEqual({ seq: 1, at: T(0), kind: "system", level: "info", source: "", message: "x", repeat: 1, lastAt: T(0) }) // M6 CR-5-7: lastAt default = at
   })
   it("data rusak → null", () => {
     expect(parseLogEvent("{")).toBeNull()

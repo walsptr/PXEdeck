@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest"
 import { z } from "zod"
 
+import { authHeaders } from "@/test/auth"
 import { isolateEnv } from "@/test/env"
 
 import {
@@ -85,7 +86,8 @@ describe("iter2 http: batas body, no-store, guardMutation", () => {
     expect(await r.json()).toEqual({ a: 1 })
   })
   it("guardMutation: null bila same-origin + JSON; host dibandingkan case-insensitive", () => {
-    const mk = (h: Record<string, string>) => new Request("http://Pxe.Lab:3000/api", { method: "POST", headers: h })
+    // M6: + cookie sesi admin sungguhan (guardMutation kini juga memeriksa sesi, DEC-017 §4).
+    const mk = (h: Record<string, string>) => new Request("http://Pxe.Lab:3000/api", { method: "POST", headers: { ...authHeaders(), ...h } })
     // SR-3-5 (M4): host pxe.lab harus terdaftar di PXE_ALLOWED_HOSTS; tanpa itu → 403.
     expect(guardMutation(mk({ "content-type": "application/json" }), "json")!.status).toBe(403)
     process.env.PXE_ALLOWED_HOSTS = "PXE.lab"
@@ -113,7 +115,7 @@ describe("SR-3-5 isHostAllowed / allowlist default", () => {
   it("default: localhost, 127.0.0.1, [::1], IP PXE server, host PXE_BASE_URL; domain asing → 403", async () => {
     process.env.PXE_BASE_URL = "http://pxe.lab.example:8080"
     const mk = (host: string) =>
-      new Request(`http://${host}/api/x`, { method: "POST", headers: { "content-type": "application/json", "x-forwarded-host": host } })
+      new Request(`http://${host}/api/x`, { method: "POST", headers: { "content-type": "application/json", "x-forwarded-host": host, ...authHeaders() } })
     for (const h of ["localhost:3100", "127.0.0.1", "[::1]:3000", "10.10.10.1", "pxe.lab.example:8080"])
       expect(guardMutation(mk(h), "json"), h).toBeNull()
     for (const h of ["evil.example", "pxe.lab.example:9999", "10.10.10.2"]) {

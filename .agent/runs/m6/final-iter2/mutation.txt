@@ -1,0 +1,366 @@
+# Mutasi spot-check M6 iterasi 2 @ fdc0abf (kode produk = 18913b5) 2026-11-06T07:34:18Z — test-engineer
+# Bagian A: unit/jsdom — skrip .agent/runs/m6/mutate.py, spec: lihat blok JSON di akhir bagian A
+# sha256 sebelum:
+c378b73d7568c5e3c768d5c487b6d53b1d887bf1eeb53af7afa4884f92580803  src/lib/server/installers/debian.ts
+5a02fb3485657b73d3f473d73724a28299ff9237586d16619d881cfc65afe734  src/lib/server/install-service.ts
+525140c7cde5f415f88c17cd4b7c317a56de4cf797a7b4c7542713650398d8b5  src/components/jobs/log-viewer.tsx
+36b264a0222b140eeb16731a31b60d2fabb791c74a3c3c8def4675100e99079e  src/components/jobs/job-timeline.tsx
+f9d03e16156c29c9fbef42e7f4cf3360e0d2f32618600c9f79fe3dca45d01e6b  src/components/server-status.tsx
+fd2009f357f49637fc0ca093353e5b85c5c6593c6d7266702219794d659c55d7  src/lib/server/config-service.ts
+c776308d1d45ffbe9fb70bce75c4d7094b1311ab159834d818d458d0966e6acd  src/components/jobs/jobs-table.tsx
+4925653c6660ef1791315db41251157636c28abeedecf048a87b772fc73be607  src/components/hosts/columns.tsx
+
+[R4a generator: requireLocalMedia no-op (trusted=yes/allow_unauthenticated ke media eksternal)] src/lib/server/installers/debian.ts
+   mutasi: '  if (!isLocalMedia(c.mediaUrl, c.serverIp)) throw' -> '  if (false && !isLocalMedia(c.mediaUrl, c.serverIp)) throw'
+   perintah: npx vitest run src/lib/server/installers/m6-iter2-debian.test.ts src/lib/server/installers/m6-smoke-fixes.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/installers/m6-iter2-debian.test.ts (23 tests | 5 failed) 235ms
+     × media eksternal http://deb.debian.org/debian → InstallerInputError, tidak ada preseed (tanpa trusted=yes / allow_unauthenticated) 7ms
+     × media eksternal http://10.99.0.3/media → InstallerInputError, tidak ada preseed (tanpa trusted=yes / allow_unauthenticated) 1ms
+     × media eksternal http://pxe.lab.example/media → InstallerInputError, tidak ada preseed (tanpa trusted=yes / allow_unauthenticated) 1ms
+     × media eksternal http://10.99.0.20/media → InstallerInputError, tidak ada preseed (tanpa trusted=yes / allow_unauthenticated) 1ms
+     × serverIp berbeda dari host media yang sama → ditolak (aturan memakai PXE_SERVER_IP, bukan host media saja) 3ms
+     ❯ |node| src/lib/server/installers/m6-smoke-fixes.test.ts (33 tests | 1 failed) 363ms
+     × DEC-022 §2 media eksternal (host ≠ PXE_SERVER_IP): generator menolak, tanpa trusted=yes/allow_unauthenticated 8ms
+     Test Files  2 failed (2)
+     Tests  6 failed | 50 passed (56)
+     FAIL  |node| src/lib/server/installers/m6-iter2-debian.test.ts > SR-6-1 / CR-6-3 DEC-021 fail-closed di generator Debian > media eksternal http://deb.debian.org/debian → InstallerInputError, tidak ada
+     FAIL  |node| src/lib/server/installers/m6-iter2-debian.test.ts > SR-6-1 / CR-6-3 DEC-021 fail-closed di generator Debian > media eksternal http://10.99.0.3/media → InstallerInputError, tidak ada prese
+   pulih sha256 identik=ya
+[R4b install-service: blocker Debian media eksternal (422) dihapus] src/lib/server/install-service.ts
+   mutasi: '  if (img.method === "preseed" && !isLocalMedia(' -> '  if (false && img.method === "preseed" && !isLocalMedia('
+   perintah: npx vitest run src/lib/server/m6-iter2-be.test.ts src/lib/server/installers/m6-iter2-debian.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/m6-iter2-be.test.ts (30 tests | 4 failed) 574ms
+     × PXE_MEDIA_URL=http://deb.debian.org/media → install Debian 422 dengan pesan jelas, tanpa job 42ms
+     × PXE_MEDIA_URL=http://10.10.10.2/media → install Debian 422 dengan pesan jelas, tanpa job 24ms
+     × PXE_MEDIA_URL=http://pxe.lab.example/media → install Debian 422 dengan pesan jelas, tanpa job 22ms
+     × media eksternal tidak memblokir OS lain: bulk Ubuntu mulai, Debian gagal per host 45ms
+     Test Files  1 failed | 1 passed (2)
+     Tests  4 failed | 49 passed (53)
+     FAIL  |node| src/lib/server/m6-iter2-be.test.ts > R4 SR-6-1 / CR-6-3: install Debian hanya dari media server PXE lokal (DEC-022 §2) > PXE_MEDIA_URL=http://deb.debian.org/media → install Debian 422 den
+     FAIL  |node| src/lib/server/m6-iter2-be.test.ts > R4 SR-6-1 / CR-6-3: install Debian hanya dari media server PXE lokal (DEC-022 §2) > PXE_MEDIA_URL=http://10.10.10.2/media → install Debian 422 dengan 
+     FAIL  |node| src/lib/server/m6-iter2-be.test.ts > R4 SR-6-1 / CR-6-3: install Debian hanya dari media server PXE lokal (DEC-022 §2) > PXE_MEDIA_URL=http://pxe.lab.example/media → install Debian 422 de
+     FAIL  |node| src/lib/server/m6-iter2-be.test.ts > R4 SR-6-1 / CR-6-3: install Debian hanya dari media server PXE lokal (DEC-022 §2) > media eksternal tidak memblokir OS lain: bulk Ubuntu mulai, Debian
+   pulih sha256 identik=ya
+[R4c SR-6-6: DEBIAN_UNTRUST_CMD dipindah SETELAH firstbootInstallCmds] src/lib/server/installers/debian.ts
+   mutasi: '    DEBIAN_UNTRUST_CMD,\n    ...firstbootInstallCmds("", "preseed", c.mac),' -> '    ...firstbootInstallCmds("", "preseed", c.mac),\n    DEBIAN_UNTRUST_CMD,'
+   perintah: npx vitest run src/lib/server/installers/m6-iter2-debian.test.ts src/lib/server/installers/m6-smoke-fixes.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/installers/m6-iter2-debian.test.ts (23 tests | 1 failed) 227ms
+     × baris DEBIAN_UNTRUST_CMD mendahului semua perintah firstboot (pxe-callback) di late script 4ms
+     ❯ |node| src/lib/server/installers/m6-smoke-fixes.test.ts (33 tests | 1 failed) 376ms
+     × media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late 6ms
+     Test Files  2 failed (2)
+     Tests  2 failed | 54 passed (56)
+     FAIL  |node| src/lib/server/installers/m6-iter2-debian.test.ts > SR-6-6 pembersihan trusted=yes sebelum firstboot > baris DEBIAN_UNTRUST_CMD mendahului semua perintah firstboot (pxe-callback) di late 
+     FAIL  |node| src/lib/server/installers/m6-smoke-fixes.test.ts > BUG-M6-9 / DEC-021 sumber apt media lokal tanpa tanda tangan > media lokal (default): local0 trusted + by-hash=no, hook 50mirror di pres
+   pulih sha256 identik=ya
+[R6a early_command: urutan modul disk ditukar (virtio_scsi sebelum virtio_blk)] src/lib/server/installers/debian.ts
+   mutasi: '["virtio_blk", "virtio_scsi"] as const' -> '["virtio_scsi", "virtio_blk"] as const'
+   perintah: npx vitest run src/lib/server/installers/m5-te-hooks.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/installers/m5-te-hooks.test.ts (28 tests | 1 failed) 417ms
+     × Debian early_command + late (log sebelum configuring, penanda di akhir) 37ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 27 passed (28)
+     FAIL  |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Debian early_command + late (log sebelum configuring, penanda di akhir)
+   pulih sha256 identik=ya
+[R6b early_command: udevadm settle dihapus] src/lib/server/installers/debian.ts
+   mutasi: '    "udevadm settle --timeout=15 2>/dev/null || sleep 3",\n' -> ''
+   perintah: npx vitest run src/lib/server/installers/m5-te-hooks.test.ts
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |node| src/lib/server/installers/m5-te-hooks.test.ts (28 tests | 1 failed) 427ms
+     × Debian early_command + late (log sebelum configuring, penanda di akhir) 37ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 27 passed (28)
+     FAIL  |node| src/lib/server/installers/m5-te-hooks.test.ts > AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl) > Debian early_command + late (log sebelum configuring, penanda di akhir)
+   pulih sha256 identik=ya
+[R1 log-viewer: not-found/sesi kembali muted (jsdom)] src/components/jobs/log-viewer.tsx
+   mutasi: 'connection === "not-found" || connection === "session"\n                ? "text-body"' -> 'connection === "not-found" || connection === "session"\n                ? "text-muted-foreground"'
+   perintah: npx vitest run src/components/m6-iter2-ui.test.tsx
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |dom| src/components/m6-iter2-ui.test.tsx (9 tests | 2 failed) 175ms
+     × 404 → pesan 'Job tidak ditemukan — …' text-body 44ms
+     × 401 → 'Sesi berakhir…' text-body 11ms
+     Test Files  1 failed (1)
+     Tests  2 failed | 7 passed (9)
+     FAIL  |dom| src/components/m6-iter2-ui.test.tsx > R1 / DR-6-1 LogViewer: pesan 404 dan sesi berakhir tidak muted > 404 → pesan 'Job tidak ditemukan — …' text-body
+     FAIL  |dom| src/components/m6-iter2-ui.test.tsx > R1 / DR-6-1 LogViewer: pesan 404 dan sesi berakhir tidak muted > 401 → 'Sesi berakhir…' text-body
+   pulih sha256 identik=ya
+[R2 job-timeline: label tahap belum tercapai muted (jsdom)] src/components/jobs/job-timeline.tsx
+   mutasi: 'px-2.5 font-medium text-body"' -> 'px-2.5 font-medium text-muted-foreground"'
+   perintah: npx vitest run src/components/m6-iter2-ui.test.tsx
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |dom| src/components/m6-iter2-ui.test.tsx (9 tests | 1 failed) 173ms
+     × Installing/Configuring/Done belum tercapai → bukan muted 13ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 8 passed (9)
+     FAIL  |dom| src/components/m6-iter2-ui.test.tsx > R2 / DR-6-2 JobTimeline: label tahap belum tercapai text-body > Installing/Configuring/Done belum tercapai → bukan muted
+   pulih sha256 identik=ya
+[R7 server-status: glyph offline = glyph online (hanya warna) (jsdom)] src/components/server-status.tsx
+   mutasi: '  offline: Cancel01Icon,' -> '  offline: Tick02Icon,'
+   perintah: npx vitest run src/components/m6-iter2-ui.test.tsx
+   hasil: MERAH (exit 1); diharapkan RED
+     ❯ |dom| src/components/m6-iter2-ui.test.tsx (9 tests | 1 failed) 166ms
+     × tiap state punya glyph SVG berbeda di indikator; nama layanan bukan sr-only 84ms
+     Test Files  1 failed (1)
+     Tests  1 failed | 8 passed (9)
+     FAIL  |dom| src/components/m6-iter2-ui.test.tsx > R7 / DR-6-5 ServerStatus: state tidak hanya warna, nama layanan terlihat > tiap state punya glyph SVG berbeda di indikator; nama layanan bukan sr-only
+   pulih sha256 identik=ya
+
+# sha256 sesudah bagian A:
+c378b73d7568c5e3c768d5c487b6d53b1d887bf1eeb53af7afa4884f92580803  src/lib/server/installers/debian.ts
+5a02fb3485657b73d3f473d73724a28299ff9237586d16619d881cfc65afe734  src/lib/server/install-service.ts
+525140c7cde5f415f88c17cd4b7c317a56de4cf797a7b4c7542713650398d8b5  src/components/jobs/log-viewer.tsx
+36b264a0222b140eeb16731a31b60d2fabb791c74a3c3c8def4675100e99079e  src/components/jobs/job-timeline.tsx
+f9d03e16156c29c9fbef42e7f4cf3360e0d2f32618600c9f79fe3dca45d01e6b  src/components/server-status.tsx
+fd2009f357f49637fc0ca093353e5b85c5c6593c6d7266702219794d659c55d7  src/lib/server/config-service.ts
+c776308d1d45ffbe9fb70bce75c4d7094b1311ab159834d818d458d0966e6acd  src/components/jobs/jobs-table.tsx
+4925653c6660ef1791315db41251157636c28abeedecf048a87b772fc73be607  src/components/hosts/columns.tsx
+# git status dashboard/src (harus kosong):
+## spec bagian A (JSON)
+[
+ {
+  "id": "R4a generator: requireLocalMedia no-op (trusted=yes/allow_unauthenticated ke media eksternal)",
+  "file": "src/lib/server/installers/debian.ts",
+  "old": "  if (!isLocalMedia(c.mediaUrl, c.serverIp)) throw",
+  "new": "  if (false && !isLocalMedia(c.mediaUrl, c.serverIp)) throw",
+  "cmd": [
+   "npx",
+   "vitest",
+   "run",
+   "src/lib/server/installers/m6-iter2-debian.test.ts",
+   "src/lib/server/installers/m6-smoke-fixes.test.ts"
+  ],
+  "expect": "red"
+ },
+ {
+  "id": "R4b install-service: blocker Debian media eksternal (422) dihapus",
+  "file": "src/lib/server/install-service.ts",
+  "old": "  if (img.method === \"preseed\" && !isLocalMedia(",
+  "new": "  if (false && img.method === \"preseed\" && !isLocalMedia(",
+  "cmd": [
+   "npx",
+   "vitest",
+   "run",
+   "src/lib/server/m6-iter2-be.test.ts",
+   "src/lib/server/installers/m6-iter2-debian.test.ts"
+  ],
+  "expect": "red"
+ },
+ {
+  "id": "R4c SR-6-6: DEBIAN_UNTRUST_CMD dipindah SETELAH firstbootInstallCmds",
+  "file": "src/lib/server/installers/debian.ts",
+  "old": "    DEBIAN_UNTRUST_CMD,\n    ...firstbootInstallCmds(\"\", \"preseed\", c.mac),",
+  "new": "    ...firstbootInstallCmds(\"\", \"preseed\", c.mac),\n    DEBIAN_UNTRUST_CMD,",
+  "cmd": [
+   "npx",
+   "vitest",
+   "run",
+   "src/lib/server/installers/m6-iter2-debian.test.ts",
+   "src/lib/server/installers/m6-smoke-fixes.test.ts"
+  ],
+  "expect": "red"
+ },
+ {
+  "id": "R6a early_command: urutan modul disk ditukar (virtio_scsi sebelum virtio_blk)",
+  "file": "src/lib/server/installers/debian.ts",
+  "old": "[\"virtio_blk\", \"virtio_scsi\"] as const",
+  "new": "[\"virtio_scsi\", \"virtio_blk\"] as const",
+  "cmd": [
+   "npx",
+   "vitest",
+   "run",
+   "src/lib/server/installers/m5-te-hooks.test.ts"
+  ],
+  "expect": "red"
+ },
+ {
+  "id": "R6b early_command: udevadm settle dihapus",
+  "file": "src/lib/server/installers/debian.ts",
+  "old": "    \"udevadm settle --timeout=15 2>/dev/null || sleep 3\",\n",
+  "new": "",
+  "cmd": [
+   "npx",
+   "vitest",
+   "run",
+   "src/lib/server/installers/m5-te-hooks.test.ts"
+  ],
+  "expect": "red"
+ },
+ {
+  "id": "R1 log-viewer: not-found/sesi kembali muted (jsdom)",
+  "file": "src/components/jobs/log-viewer.tsx",
+  "old": "connection === \"not-found\" || connection === \"session\"\n                ? \"text-body\"",
+  "new": "connection === \"not-found\" || connection === \"session\"\n                ? \"text-muted-foreground\"",
+  "cmd": [
+   "npx",
+   "vitest",
+   "run",
+   "src/components/m6-iter2-ui.test.tsx"
+  ],
+  "expect": "red"
+ },
+ {
+  "id": "R2 job-timeline: label tahap belum tercapai muted (jsdom)",
+  "file": "src/components/jobs/job-timeline.tsx",
+  "old": "px-2.5 font-medium text-body\"",
+  "new": "px-2.5 font-medium text-muted-foreground\"",
+  "cmd": [
+   "npx",
+   "vitest",
+   "run",
+   "src/components/m6-iter2-ui.test.tsx"
+  ],
+  "expect": "red"
+ },
+ {
+  "id": "R7 server-status: glyph offline = glyph online (hanya warna) (jsdom)",
+  "file": "src/components/server-status.tsx",
+  "old": "  offline: Cancel01Icon,",
+  "new": "  offline: Tick02Icon,",
+  "cmd": [
+   "npx",
+   "vitest",
+   "run",
+   "src/components/m6-iter2-ui.test.tsx"
+  ],
+  "expect": "red"
+ }
+]
+# Bagian B: E2E (satu build, mutasi di file berbeda) — skrip .agent/runs/m6/mutate-e2e.py, PXE_E2E_MILESTONE=6, project m6-ui-iter2 @ 2026-11-06T07:35:00Z
+# sha256 sebelum:
+c776308d1d45ffbe9fb70bce75c4d7094b1311ab159834d818d458d0966e6acd  src/components/jobs/jobs-table.tsx
+4925653c6660ef1791315db41251157636c28abeedecf048a87b772fc73be607  src/components/hosts/columns.tsx
+525140c7cde5f415f88c17cd4b7c317a56de4cf797a7b4c7542713650398d8b5  src/components/jobs/log-viewer.tsx
+36b264a0222b140eeb16731a31b60d2fabb791c74a3c3c8def4675100e99079e  src/components/jobs/job-timeline.tsx
+f9d03e16156c29c9fbef42e7f4cf3360e0d2f32618600c9f79fe3dca45d01e6b  src/components/server-status.tsx
+fd2009f357f49637fc0ca093353e5b85c5c6593c6d7266702219794d659c55d7  src/lib/server/config-service.ts
+[R1 jobs-table job-row-failure muted] src/components/jobs/jobs-table.tsx: 'max-w-56 whitespace-normal text-body"' -> 'max-w-56 whitespace-normal text-muted-foreground"' (1x)
+[R1 hosts host-failure-reason muted] src/components/hosts/columns.tsx: 'max-w-52 whitespace-normal text-body"' -> 'max-w-52 whitespace-normal text-muted-foreground"' (1x)
+[R1 log-viewer not-found/sesi muted] src/components/jobs/log-viewer.tsx: 'connection === "not-found" || connection === "session"\n                ? "text-body"' -> 'connection === "not-found" || connection === "session"\n                ? "text-muted-foreg' (1x)
+[R2 timeline label belum tercapai muted] src/components/jobs/job-timeline.tsx: 'px-2.5 font-medium text-body"' -> 'px-2.5 font-medium text-muted-foreground"' (1x)
+[R7 server-status glyph offline = online] src/components/server-status.tsx: '  offline: Cancel01Icon,' -> '  offline: Tick02Icon,' (1x)
+[CR-6-9 batas authorized_keys x4 (32 KiB+1 lolos)] src/lib/server/config-service.ts: 'if (keyBytes > AUTHORIZED_KEYS_MAX_BYTES) {' -> 'if (keyBytes > AUTHORIZED_KEYS_MAX_BYTES * 4) {' (1x)
+perintah: npx playwright test --project=m6-ui-iter2 --retries=0 --workers=1 --reporter=list → exit 1
+ringkasan: 18 failed; 10 passed (1.6m)
+[R1 jobs-table job-row-failure muted] test merah yang diharapkan: 1 → MERAH
+     × e2e/m6-ui-iter2.spec.ts:51:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Jobs: job-row-failure = body di 375 dan 1440
+[R1 hosts host-failure-reason muted] test merah yang diharapkan: 1 → MERAH
+     × e2e/m6-ui-iter2.spec.ts:62:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Hosts: host-failure-reason = body; Sheet: sheet-last-job-failure selur
+[R1 log-viewer not-found/sesi muted] test merah yang diharapkan: 2 → MERAH
+     × e2e/m6-ui-iter2.spec.ts:103:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Sesi berakhir…' (SSE end session) tidak muted — diukur s
+     × e2e/m6-ui-iter2.spec.ts:88:7 › R1 / DR-6-1 alasan Failed dan pesan error tidak muted (DEC-017 §9) › Log viewer: 'Job tidak ditemukan — …' (SSE end deleted) tidak muted
+[R2 timeline label belum tercapai muted] test merah yang diharapkan: 1 → MERAH
+     × e2e/m6-ui-iter2.spec.ts:132:5 › R2 / DR-6-2 timeline: label tahap belum tercapai = body
+[R7 server-status glyph offline = online] test merah yang diharapkan: 8 → MERAH
+     × e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @1024: glyph berbeda per state, nama DHCP/TFTP/HTTP terl
+     × e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @1279: glyph berbeda per state, nama DHCP/TFTP/HTTP terl
+     × e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @1280: glyph berbeda per state, nama DHCP/TFTP/HTTP terl
+     × e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @1440: glyph berbeda per state, nama DHCP/TFTP/HTTP terl
+     × e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @375: glyph berbeda per state, nama DHCP/TFTP/HTTP terli
+     × e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @414: glyph berbeda per state, nama DHCP/TFTP/HTTP terli
+     × e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @768: glyph berbeda per state, nama DHCP/TFTP/HTTP terli
+     × e2e/m6-ui-iter2.spec.ts:207:9 › R7 / DR-6-5 status server tidak hanya warna (WCAG 1.4.1); nama layanan terlihat › @800: glyph berbeda per state, nama DHCP/TFTP/HTTP terli
+[CR-6-9 batas authorized_keys x4 (32 KiB+1 lolos)] test merah yang diharapkan: 1 → MERAH
+     × e2e/m6-ui-iter2.spec.ts:341:5 › CR-6-9 / CR-6-1 batas total authorized_keys 32 KiB tampil di tab SSH Sheet; config host tidak berubah
+merah lain (bukan dari mutasi; mis. bug terbuka): 4
+     · e2e/m6-ui-iter2.spec.ts:404:9 › axe (filter tidak berubah) pada halaman yang diubah › /hosts 1440 & 375
+     · e2e/m6-ui-iter2.spec.ts:404:9 › axe (filter tidak berubah) pada halaman yang diubah › /jobs 1440 & 375
+     · e2e/m6-ui-iter2.spec.ts:404:9 › axe (filter tidak berubah) pada halaman yang diubah › /jobs 404 1440 & 375
+     · e2e/m6-ui-iter2.spec.ts:404:9 › axe (filter tidak berubah) pada halaman yang diubah › /jobs detail 1440 & 375
+pulih src/components/jobs/jobs-table.tsx: sha256 identik=ya
+pulih src/components/hosts/columns.tsx: sha256 identik=ya
+pulih src/components/jobs/log-viewer.tsx: sha256 identik=ya
+pulih src/components/jobs/job-timeline.tsx: sha256 identik=ya
+pulih src/components/server-status.tsx: sha256 identik=ya
+pulih src/lib/server/config-service.ts: sha256 identik=ya
+# sha256 sesudah:
+c776308d1d45ffbe9fb70bce75c4d7094b1311ab159834d818d458d0966e6acd  src/components/jobs/jobs-table.tsx
+4925653c6660ef1791315db41251157636c28abeedecf048a87b772fc73be607  src/components/hosts/columns.tsx
+525140c7cde5f415f88c17cd4b7c317a56de4cf797a7b4c7542713650398d8b5  src/components/jobs/log-viewer.tsx
+36b264a0222b140eeb16731a31b60d2fabb791c74a3c3c8def4675100e99079e  src/components/jobs/job-timeline.tsx
+f9d03e16156c29c9fbef42e7f4cf3360e0d2f32618600c9f79fe3dca45d01e6b  src/components/server-status.tsx
+fd2009f357f49637fc0ca093353e5b85c5c6593c6d7266702219794d659c55d7  src/lib/server/config-service.ts
+# git status dashboard/src (harus kosong):
+## spec bagian B (JSON)
+{
+ "cmd": [
+  "npx",
+  "playwright",
+  "test",
+  "--project=m6-ui-iter2",
+  "--retries=0",
+  "--workers=1",
+  "--reporter=list"
+ ],
+ "mutations": [
+  {
+   "id": "R1 jobs-table job-row-failure muted",
+   "file": "src/components/jobs/jobs-table.tsx",
+   "old": "max-w-56 whitespace-normal text-body\"",
+   "new": "max-w-56 whitespace-normal text-muted-foreground\"",
+   "expect_red": [
+    "Jobs: job-row-failure"
+   ]
+  },
+  {
+   "id": "R1 hosts host-failure-reason muted",
+   "file": "src/components/hosts/columns.tsx",
+   "old": "max-w-52 whitespace-normal text-body\"",
+   "new": "max-w-52 whitespace-normal text-muted-foreground\"",
+   "expect_red": [
+    "Hosts: host-failure-reason"
+   ]
+  },
+  {
+   "id": "R1 log-viewer not-found/sesi muted",
+   "file": "src/components/jobs/log-viewer.tsx",
+   "old": "connection === \"not-found\" || connection === \"session\"\n                ? \"text-body\"",
+   "new": "connection === \"not-found\" || connection === \"session\"\n                ? \"text-muted-foreground\"",
+   "expect_red": [
+    "Log viewer"
+   ]
+  },
+  {
+   "id": "R2 timeline label belum tercapai muted",
+   "file": "src/components/jobs/job-timeline.tsx",
+   "old": "px-2.5 font-medium text-body\"",
+   "new": "px-2.5 font-medium text-muted-foreground\"",
+   "expect_red": [
+    "R2 / DR-6-2"
+   ]
+  },
+  {
+   "id": "R7 server-status glyph offline = online",
+   "file": "src/components/server-status.tsx",
+   "old": "  offline: Cancel01Icon,",
+   "new": "  offline: Tick02Icon,",
+   "expect_red": [
+    "R7 / DR-6-5"
+   ]
+  },
+  {
+   "id": "CR-6-9 batas authorized_keys x4 (32 KiB+1 lolos)",
+   "file": "src/lib/server/config-service.ts",
+   "old": "if (keyBytes > AUTHORIZED_KEYS_MAX_BYTES) {",
+   "new": "if (keyBytes > AUTHORIZED_KEYS_MAX_BYTES * 4) {",
+   "expect_red": [
+    "CR-6-9"
+   ]
+  }
+ ]
+}
+# Catatan bagian B: 4 test axe m6-ui-iter2 ikut merah karena mutasi R1/R2 menurunkan kontras teks yang bukan
+# pengecualian DEC-019 §3 (deteksi tambahan oleh axe, bukan bug terbuka). Run E2E penuh 2x setelah pemulihan: lihat e2e-run1/2.log.
+# Screenshot/axe-results yang ditulis saat run mutasi ditimpa oleh run E2E penuh sesudahnya.
+
+# Bukti dev yang sudah ada (dirujuk, kode produk tidak berubah sejak itu: `git diff --stat c67d438 HEAD -- dashboard/src` = hanya m6-kvm-apt-trust.test.ts):
+#   .agent/runs/m6/mutation-dev-iter2-fe.txt  R1 (4 situs), R2, R3 (2), R7 (seluruh file), DR-6-4 (2), DR-6-6, DR-6-7, DR-6-8 — semua merah, pulih identik
+#   .agent/runs/m6/mutation-dev-iter2-be.txt  R4 (M1 generator, M2 install 422, M3 SR-6-6 urutan), CR-6-1 (M4 API, M5 generator), SR-6-3 (M6),
+#                                               SR-6-4 (M7-M9), R5 README (M10-M12) merah; M13 ekuivalen (hanya performa) hijau seperti diharapkan
+#   .agent/runs/m6/mutation-te-iter2.txt      R6/CR-6-4 (4 mutasi early_command) merah
+# Ringkasan iterasi 2 (independen, di HEAD ini): R1 merah (jsdom + E2E 4 situs), R2 merah (jsdom + E2E), R4 merah (generator,
+# install 422, urutan SR-6-6), R6 merah (urutan modul, udevadm), R7 merah (jsdom + E2E 8 lebar), CR-6-9 E2E baru merah. Semua file
+# dipulihkan sha256 identik; `git status --short dashboard/src` kosong.

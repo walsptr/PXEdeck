@@ -1,8 +1,12 @@
-// Generator Windows unattend.xml (generator + unit test saja di M4, DEC-010).
+// Generator Windows unattend.xml (generator + unit test saja, DEC-010; tetap TIDAK dilayani di M6,
+// DEC-017 §8: `INSTALLER_FILES.unattend` kosong, image `unattend` tidak bisa bootable, install 422).
 // O9: TIDAK ada password/hash dari konfigurasi. Akun lokal dibuat dengan
 // password acak yang dibuang setelah render; akses hanya lewat OpenSSH +
 // administrators_authorized_keys. Semua teks lewat `xmlEscape`; key SSH
 // dikirim ke PowerShell sebagai base64.
+// M6 (CR-4-7/SR-4-3): unattend tidak memuat URL `/boot/` maupun token dalam bentuk apa pun
+// (`InstallContext.callbackUrl` sengaja tidak dipakai); FirstLogonCommands diakhiri pembersihan
+// (`cleanupCommands`).
 import { randomBytes } from "node:crypto"
 
 import { InstallerInputError, validateContext, type InstallContext } from "./context"
@@ -48,10 +52,59 @@ function throwawayPassword(): string {
 
 const ADMIN_USER = "pxeadmin"
 
+/** File unattend yang disalin Setup ke disk target (memuat password AutoLogon sementara). */
+export const WINDOWS_UNATTEND_PATHS = [
+  "C:\\Windows\\Panther\\unattend*.xml",
+  "C:\\Windows\\Panther\\Unattend\\unattend*.xml",
+  "C:\\Windows\\System32\\Sysprep\\unattend.xml",
+] as const
+
+const WINLOGON = "HKLM:\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"
+
+const encoded = (script: string) =>
+  `powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${Buffer.from(script, "utf16le").toString("base64")}`
+
+/**
+ * M6 (CR-4-7/SR-4-3, DEC-017 §8): langkah TERAKHIR FirstLogonCommands, berurutan:
+ *  1. hapus salinan unattend di disk target (Panther/Sysprep) — memuat password AutoLogon;
+ *  2. matikan AutoLogon: `AutoAdminLogon=0`, hapus `DefaultPassword`/`AutoLogonCount`;
+ *  3. acak ulang password `pxeadmin` (RandomNumberGenerator di host, tidak pernah dicetak/di-log) —
+ *     password sementara dari unattend tidak berlaku lagi; akses hanya lewat OpenSSH + key;
+ *  4. `logoff` sesi AutoLogon admin.
+ * Tidak ada URL `/boot/` atau token: callback status Windows tidak didukung (install Windows 422).
+ */
+export function cleanupCommands(): string[] {
+  return [
+    encoded(
+      `Remove-Item -Path ${WINDOWS_UNATTEND_PATHS.map((p) => `'${p}'`).join(", ")} -Force -ErrorAction SilentlyContinue`,
+    ),
+    encoded(
+      [
+        `$k = '${WINLOGON}'`,
+        "Set-ItemProperty -Path $k -Name AutoAdminLogon -Value '0'",
+        "Remove-ItemProperty -Path $k -Name DefaultPassword -ErrorAction SilentlyContinue",
+        "Remove-ItemProperty -Path $k -Name AutoLogonCount -ErrorAction SilentlyContinue",
+      ].join("; "),
+    ),
+    encoded(
+      [
+        "$b = New-Object byte[] 48",
+        "$r = [Security.Cryptography.RandomNumberGenerator]::Create()",
+        "$r.GetBytes($b)",
+        "$r.Dispose()",
+        "$s = ConvertTo-SecureString -String ([Convert]::ToBase64String($b) + 'a1!') -AsPlainText -Force",
+        `Set-LocalUser -Name '${ADMIN_USER}' -Password $s`,
+        "[Array]::Clear($b, 0, $b.Length)",
+        "Remove-Variable -Name b, r, s",
+      ].join("; "),
+    ),
+    "logoff",
+  ]
+}
+
 function firstLogonCommands(c: InstallContext): string[] {
   const keysB64 = b64(authorizedKeysText(c.authorizedKeys))
-  const ps = (script: string) =>
-    `powershell -NoProfile -ExecutionPolicy Bypass -EncodedCommand ${Buffer.from(script, "utf16le").toString("base64")}`
+  const ps = encoded
   const cmds = [
     ps("Add-WindowsCapability -Online -Name OpenSSH.Server~~~~0.0.1.0"),
     ps(
@@ -73,10 +126,7 @@ function firstLogonCommands(c: InstallContext): string[] {
   }
   cmds.push(
     ps("Set-Service -Name sshd -StartupType Automatic; Start-Service sshd; New-NetFirewallRule -Name sshd -DisplayName 'OpenSSH Server' -Protocol TCP -LocalPort 22 -Action Allow -ErrorAction SilentlyContinue | Out-Null"),
-    // B-5: Windows tidak punya argumen kernel untuk menurunkan URL callback, jadi token ikut
-    // tertulis (base64 UTF-16LE -EncodedCommand) di unattend. Unattend belum dilayani M4
-    // (INSTALLER_FILES.unattend kosong); wajib dirancang ulang sebelum dilayani.
-    ps(`try { Invoke-WebRequest -UseBasicParsing -Method Post -Body 'stage=done' -Uri '${c.callbackUrl}' | Out-Null } catch {}`),
+    ...cleanupCommands(),
   )
   return cmds
 }

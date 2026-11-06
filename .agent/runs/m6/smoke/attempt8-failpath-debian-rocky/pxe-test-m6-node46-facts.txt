@@ -1,0 +1,23 @@
+# hostname: m6-node46
+# locale
+System Locale: LANG=en_US.UTF-8
+    VC Keymap: us
+   X11 Layout: us
+LANG="en_US.UTF-8"
+# timezone
+Timezone=UTC
+# id
+uid=1000(m6admin) gid=1000(m6admin) groups=1000(m6admin),10(wheel) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+# sudo -n true
+sudo-ok
+# os-release
+NAME="Rocky Linux"
+VERSION="9.8 (Blue Onyx)"
+RELEASE_TYPE="stable"
+# lsblk
+NAME    SIZE TYPE FSTYPE MOUNTPOINT
+vda      20G disk        
+├─vda1  600M part vfat   /boot/efi
+├─vda2    1G part xfs    /boot
+├─vda3    2G part swap   [SWAP]
+└─vda4 16.4G part xfs    /

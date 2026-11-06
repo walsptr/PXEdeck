@@ -1,0 +1,234 @@
+# Flaky watch 16 KB redaksi (<20 ms terbaik dari 5) — 10x per file, sendirian, @ 105727e 2026-11-06T04:53:48Z
+# load awal: 0.55 0.70 1.14 1/2433 2603493; nproc 12
+m5-iter3-redact.test.ts iter 1: exit=0 total 144/144 lulus, gagal 0
+   passed    3.58 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   31.16 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    3.27 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   19.23 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 2: exit=0 total 144/144 lulus, gagal 0
+   passed    3.68 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   31.10 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    3.06 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   19.44 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 3: exit=0 total 144/144 lulus, gagal 0
+   passed    3.90 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   32.46 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    3.45 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   21.68 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 4: exit=0 total 144/144 lulus, gagal 0
+   passed    3.74 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   33.00 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    3.04 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   20.94 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 5: exit=0 total 144/144 lulus, gagal 0
+   passed    3.50 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   29.32 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    3.08 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   20.96 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 6: exit=0 total 144/144 lulus, gagal 0
+   passed    3.91 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   32.25 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    3.31 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   20.44 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 7: exit=0 total 144/144 lulus, gagal 0
+   passed    3.53 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   28.26 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    2.92 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   19.46 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 8: exit=0 total 144/144 lulus, gagal 0
+   passed    3.58 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   30.81 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    3.05 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   19.22 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 9: exit=0 total 144/144 lulus, gagal 0
+   passed    3.67 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   32.31 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    3.00 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   19.18 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m5-iter3-redact.test.ts iter 10: exit=0 total 144/144 lulus, gagal 0
+   passed    3.79 ms  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed   31.18 ms  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+   passed    3.06 ms  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+   passed   19.62 ms  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-25)
+m6-redact.test.ts iter 1: exit=0 total 306/306 lulus, gagal 0
+   passed   29.55 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.87 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    2.02 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   16.29 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.85 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   30.11 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   21.77 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    8.37 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   70.04 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   24.36 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   22.19 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   21.45 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   19.39 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   22.50 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+m6-redact.test.ts iter 2: exit=0 total 306/306 lulus, gagal 0
+   passed   27.02 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.73 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.80 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   14.40 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.06 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   28.95 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   19.62 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    7.61 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   62.30 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   21.58 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   19.99 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   18.52 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   17.81 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   20.53 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+m6-redact.test.ts iter 3: exit=0 total 306/306 lulus, gagal 0
+   passed   26.04 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.71 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.81 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   14.37 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.44 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   28.39 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   19.40 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    7.49 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   62.50 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   20.55 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   20.32 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   20.67 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   18.75 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   21.62 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+m6-redact.test.ts iter 4: exit=0 total 306/306 lulus, gagal 0
+   passed   26.31 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.81 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.94 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   16.26 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.90 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   30.08 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   21.78 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    8.19 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   68.00 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   19.81 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   19.85 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   18.60 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   17.72 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   19.95 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+m6-redact.test.ts iter 5: exit=0 total 306/306 lulus, gagal 0
+   passed   35.42 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.71 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.84 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   14.96 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.19 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   26.39 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   19.66 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    7.32 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   60.54 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   20.24 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   21.05 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   21.09 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   20.15 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   49.84 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+m6-redact.test.ts iter 6: exit=0 total 306/306 lulus, gagal 0
+   passed   35.39 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.62 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.73 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   14.61 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.47 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   28.07 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   19.78 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    8.36 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   61.55 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   18.81 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   20.31 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   19.00 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   17.71 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   44.93 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+m6-redact.test.ts iter 7: exit=0 total 306/306 lulus, gagal 0
+   passed   29.79 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.90 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    2.20 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   16.48 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.78 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   30.24 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   21.71 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    8.35 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   70.50 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   23.50 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   23.16 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   20.99 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   19.33 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   22.63 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+m6-redact.test.ts iter 8: exit=0 total 306/306 lulus, gagal 0
+   passed   23.53 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.71 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.80 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   14.02 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.02 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   25.92 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   19.11 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    7.45 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   61.47 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   21.68 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   20.26 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   18.96 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   17.78 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   19.42 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+m6-redact.test.ts iter 9: exit=0 total 306/306 lulus, gagal 0
+   passed   24.47 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.71 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.84 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   14.23 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.09 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   27.16 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   19.83 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    7.46 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   61.05 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   21.07 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   19.80 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   18.71 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   17.48 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   19.23 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+m6-redact.test.ts iter 10: exit=0 total 306/306 lulus, gagal 0
+   passed   40.21 ms  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.74 ms  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+   passed    1.81 ms  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   14.91 ms  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+   passed    4.05 ms  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+   passed   26.77 ms  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+   passed   20.07 ms  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+   passed    7.57 ms  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+   passed   61.37 ms  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat handleLog
+   passed   18.61 ms  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bias
+   passed   20.54 ms  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, bari
+   passed   18.86 ms  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris bia
+   passed   17.57 ms  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, baris biasa
+   passed   46.73 ms  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersam
+# load akhir: 1.01 0.80 1.15 1/2434 2604816
+# Ringkasan durasi test (ms, durasi test vitest = 10 pemanggilan 16 KB: best-of-5 redactSecrets + best-of-5 cleanEventMessage; handleLogPost = 5 POST)
+  m5-iter3-redact.test.t n=10 min=   3.50 median=   3.68 max=   3.91  16 KB spasi + ! + footer: diredaksi < 20 ms (terbaik dari 5)
+  m5-iter3-redact.test.t n=10 min=  28.26 median=  31.18 max=  33.00  16 KB spasi + ! + spasi + footer: diredaksi < 20 ms (terbaik dari 5)
+  m5-iter3-redact.test.t n=10 min=   2.92 median=   3.06 max=   3.45  16 KB tab + footer di baris sama: diredaksi < 20 ms (terbaik dari 5)
+  m5-iter3-redact.test.t n=10 min=  19.18 median=  19.62 max=  21.68  16 KB lewat handleLogPost < 50 ms (termasuk transaksi DB; terbaik dari 5, CR-5-2
+  m6-redact.test.ts      n=10 min=  23.53 median=  29.55 max=  40.21  16 KB %25 berulang: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts      n=10 min=   1.62 median=   1.73 max=   1.90  16 KB backslash berulang: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts      n=10 min=   1.73 median=   1.84 max=   2.20  16 KB $ berulang: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts      n=10 min=  14.02 median=  14.91 max=  16.48  16 KB ESC + SGR campur: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts      n=10 min=   4.02 median=   4.44 max=   4.90  16 KB karakter tak terlihat: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts      n=10 min=  25.92 median=  28.39 max=  30.24  16 KB base64 64 kolom tanpa END: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts      n=10 min=  19.11 median=  19.83 max=  21.78  16 KB log campur: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts      n=10 min=   7.32 median=   7.61 max=   8.37  16 KB footer yatim berulang: linear (≤ 20 ms terbaik dari 5)
+  m6-redact.test.ts      n=10 min=  60.54 median=  62.30 max=  70.50  16 KB log campuran (log installer + encoding/escape/tak terlihat + secret) lewat
+  m6-redact.test.ts      n=10 min=  18.61 median=  21.07 max=  24.36  anaconda.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, 
+  m6-redact.test.ts      n=10 min=  19.80 median=  20.32 max=  23.16  curtin-install.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis ters
+  m6-redact.test.ts      n=10 min=  18.52 median=  19.00 max=  21.45  di-syslog.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar,
+  m6-redact.test.ts      n=10 min=  17.48 median=  17.81 max=  20.15  program.log (LF, 200 baris/16 KB) via handleLogPost: secret sintetis tersamar, b
+  m6-redact.test.ts      n=10 min=  19.23 median=  22.50 max=  49.84  subiquity-server-debug.log (LF, 200 baris/16 KB) via handleLogPost: secret sinte
+
+# Pengukuran langsung redactSecrets best-of-5 (node v22.22.2 type-stripping, proses terpisah; pelengkap, bukan pengganti test; cleanEventMessage ada di modul lain ber-alias @/ sehingga hanya diukur lewat test di atas) — batas test < 20 ms
+m5 spasi+!+spasi+footer (16419 char)
+   redactSecrets best-of-5 x10: min 0.24 max 0.48 [0.5 0.3 0.3 0.3 0.2 0.2 0.2 0.3 0.3 0.3]
+m5 spasi+!+footer (16419 char)
+   redactSecrets best-of-5 x10: min 0.25 max 0.27 [0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3 0.3]
+m6 %25 berulang (16383 char)
+   redactSecrets best-of-5 x10: min 0.79 max 1.08 [1.1 0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.8 0.9]
+m6 base64 64 kolom tanpa END (sintetis) (16250 char)
+   redactSecrets best-of-5 x10: min 0.35 max 0.41 [0.4 0.4 0.4 0.4 0.4 0.3 0.4 0.4 0.4 0.4]
+m6 ESC+SGR campur (16500 char)
+   redactSecrets best-of-5 x10: min 0.54 max 0.90 [0.9 0.5 0.5 0.5 0.6 0.6 0.6 0.6 0.6 0.6]

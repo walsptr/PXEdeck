@@ -1,0 +1,10 @@
+# 300 POST /boot/zz/zz/log dari pxe-test-m6core-node22 (±10 dtk), kode → jumlah:
+294 404
+      6 429
+# journal [boot] sejak 2026-11-06T06:37:30: 20 baris tolak log; per menit [["2026-11-06T06:37",20]]; ringkasan 1
+2026-11-06T06:38:30+00:00 pxe-test-server node[1891]: [boot] 274 penolakan log ditekan dalam 60 dtk
+# contoh baris
+2026-11-06T06:37:30+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T06:37:30+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+2026-11-06T06:37:30+00:00 pxe-test-server node[1891]: [boot] tolak log mac=- alasan=mac-invalid
+# pxe-test-m6core-node21 tetap maju selama banjir: booting → installing → configuring → done

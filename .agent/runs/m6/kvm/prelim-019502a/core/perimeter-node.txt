@@ -1,0 +1,10 @@
+# dari pxe-test-m6core-node22 (10.99.0.32) via SSH, exit=0
+/api/hosts 403 mac=0
+/api/settings 403 mac=0
+/boot/%2e%2e/api/hosts 403 mac=0
+/boot/..%2Fapi/hosts 403 mac=0
+/boot/..\api/hosts 308 mac=0
+//api/hosts 403 mac=0
+/api/../api/hosts 403 mac=0
+/%61pi/hosts 403 mac=0
+

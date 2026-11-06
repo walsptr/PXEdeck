@@ -1,0 +1,8 @@
+2026-11-06T04:07:34.909Z install dibuat (UI) os=debian-12 disk=(otomatis)
+2026-11-06T04:07:35.016Z node.sh reset
+2026-11-06T04:07:37.239Z booting (UI, +0 dtk)
+2026-11-06T04:08:07.513Z installing (UI, +30 dtk)
+2026-11-06T04:13:53.393Z configuring (UI, +376 dtk)
+2026-11-06T04:17:35.976Z done (UI, +599 dtk)
+2026-11-06T04:19:12.228Z event installer: installer: preseed mulai | installer: modul disk virtio dimuat | installer: modul disk virtio dimuat | installer: disk target dipilih | installer: late_command mulai | installer: konfigurasi target selesai | first-boot: OS terpasang boot dari disk: m6-node23 enp1s0=10.99.0.33/24 
+2026-11-06T04:19:13.406Z log installer /var/log/installer/syslog: exit=0 bytes=1063115

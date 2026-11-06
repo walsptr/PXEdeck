@@ -43,7 +43,10 @@ describe("AC-1.6 StatusPill", () => {
     render(<StatusPill status="offline" />)
     const cls = screen.getByText("Offline").className
     expect(cls).toMatch(/\bbg-secondary\b/)
-    expect(cls).toMatch(/\btext-muted-foreground\b/)
+    // M6 (DEC-017 §9): label status tidak boleh muted → teks `body` (abu netral, kontras AA).
+    // Asersi diganti setara (kelas teks spesifik), dicatat di .agent/runs/m6/test-migration.md.
+    expect(cls).toMatch(/\btext-body\b/)
+    expect(cls).not.toMatch(/\btext-muted-foreground\b/)
     expect(cls).not.toMatch(/stage-/)
   })
 

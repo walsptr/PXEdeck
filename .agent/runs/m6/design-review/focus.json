@@ -1,0 +1,34 @@
+[
+ {
+  "el": "INPUT#login-username[]",
+  "fv": true,
+  "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.15) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+  "outline": "none 1px oklab(0.652196 0.168318 0.131453 / 0.5) off=0px",
+  "border": "rgb(207, 205, 196)",
+  "bg": "rgb(255, 255, 255)"
+ },
+ {
+  "el": "INPUT#login-password[]",
+  "fv": true,
+  "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.15) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+  "outline": "none 1px oklab(0.652196 0.168318 0.131453 / 0.5) off=0px",
+  "border": "rgb(207, 205, 196)",
+  "bg": "rgba(0, 0, 0, 0)"
+ },
+ {
+  "el": "BUTTON#[Tampilkan kata sandi]",
+  "fv": true,
+  "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+  "outline": "none 1px oklab(0.652196 0.168318 0.131453 / 0.5) off=0px",
+  "border": "rgb(245, 78, 0)",
+  "bg": "rgba(0, 0, 0, 0)"
+ },
+ {
+  "el": "BUTTON#[Masuk]",
+  "fv": true,
+  "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+  "outline": "none 1px oklab(0.652196 0.168318 0.131453 / 0.5) off=0px",
+  "border": "rgb(245, 78, 0)",
+  "bg": "rgb(245, 78, 0)"
+ }
+]

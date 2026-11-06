@@ -86,9 +86,9 @@ describe("JobTimeline", () => {
 
 describe("LogViewer (fallback JSON tanpa EventSource)", () => {
   const events: JobLogEvent[] = [
-    { seq: 1, at: T(0), kind: "stage", level: "info", source: "install", message: "Job install dibuat", repeat: 1 },
-    { seq: 2, at: T(1), kind: "system", level: "warn", source: "boot-script", message: "PXE boot ulang", repeat: 3 },
-    { seq: 3, at: T(2), kind: "installer", level: "error", source: "installer", message: "ERROR gagal", repeat: 1 },
+    { seq: 1, at: T(0), kind: "stage", level: "info", source: "install", message: "Job install dibuat", repeat: 1, lastAt: T(0) },
+    { seq: 2, at: T(1), kind: "system", level: "warn", source: "boot-script", message: "PXE boot ulang", repeat: 3, lastAt: T(1) },
+    { seq: 3, at: T(2), kind: "installer", level: "error", source: "installer", message: "ERROR gagal", repeat: 1, lastAt: T(2) },
   ]
   beforeEach(() => {
     vi.stubGlobal(

@@ -1,10 +1,16 @@
 "use client"
 
-import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import {
+  useInfiniteQuery,
+  useQuery,
+  useQueryClient,
+  type InfiniteData,
+} from "@tanstack/react-query"
 
 import { syncServerClock } from "@/hooks/use-now"
 import { useSettings } from "@/hooks/use-settings"
-import { failureReasonText, isFinalJob } from "@/lib/jobs"
+import { ApiError, apiFetch, errorFromResponse } from "@/lib/api-client"
+import { failureReasonText, isFinalJob, mergeJobsHead } from "@/lib/jobs"
 import type { JobStatus, JobSummary, JobsResponse } from "@/lib/types"
 
 export const JOBS_KEY = ["jobs"] as const
@@ -14,23 +20,23 @@ export const JOBS_PAGE_SIZE = 50
 
 export const jobKey = (id: string) => ["jobs", "detail", id] as const
 
-export class JobsApiError extends Error {
-  constructor(
-    message: string,
-    public status: number,
-  ) {
-    super(message)
+/** Error API job (turunan `ApiError` M6 → kebijakan 401/429 bersama berlaku). */
+export class JobsApiError extends ApiError {
+  constructor(message: string, status: number, retryAfterSec?: number) {
+    super(message, status, [], undefined, retryAfterSec)
   }
 }
 
 async function getJson<T>(url: string): Promise<T> {
-  const res = await fetch(url, { cache: "no-store" })
+  const res = await apiFetch(url, { cache: "no-store" }).catch((e: unknown) => {
+    // Request ditahan lokal (sesi habis / jeda rate limit) → bentuk error job yang sama.
+    if (e instanceof ApiError) throw new JobsApiError(e.message, e.status, e.retryAfterSec)
+    throw e
+  })
   if (!res.ok) {
     const body = await res.json().catch(() => null)
-    throw new JobsApiError(
-      body?.error ?? `${res.status} ${res.statusText}`,
-      res.status,
-    )
+    const e = errorFromResponse(res, body)
+    throw new JobsApiError(e.message, e.status, e.retryAfterSec)
   }
   return (await res.json()) as T
 }
@@ -49,28 +55,50 @@ export function jobsUrl(
 }
 
 /**
- * Daftar job (terbaru dulu) dengan paginasi cursor `before` (`nextBefore`), polling 5 dtk.
- * Polling memuat ulang semua halaman yang sudah dibuka.
+ * Daftar job (terbaru dulu) dengan paginasi cursor opak `before` (`nextBefore`), polling 5 dtk.
+ * CR-5-4 (M6): polling hanya meminta HALAMAN PERTAMA (query "head") lalu menggabungkannya ke
+ * halaman yang sudah dimuat (`mergeJobsHead`) — halaman lama tidak di-refetch tiap 5 dtk.
+ * Status error/fetching gabungan daftar + head.
  */
 export function useJobs(filter: JobsFilter) {
-  return useInfiniteQuery({
-    queryKey: [
-      ...JOBS_KEY,
-      "list",
-      { hostId: filter.hostId ?? null, status: filter.status ?? null },
-    ],
+  const qc = useQueryClient()
+  const f = { hostId: filter.hostId ?? null, status: filter.status ?? null }
+  const listKey = [...JOBS_KEY, "list", f] as const
+  const list = useInfiniteQuery({
+    queryKey: listKey,
     queryFn: async ({ pageParam }) => {
-      const data = await getJson<JobsResponse>(
-        jobsUrl({ ...filter, before: pageParam }),
-      )
+      const data = await getJson<JobsResponse>(jobsUrl({ ...f, before: pageParam }))
       syncServerClock(data.serverTime)
       return data
     },
     initialPageParam: null as string | null,
     getNextPageParam: (last) => last.nextBefore,
+  })
+  const head = useQuery({
+    queryKey: [...JOBS_KEY, "head", f],
+    queryFn: async () => {
+      const st = qc.getQueryState<InfiniteData<JobsResponse, string | null>>(listKey)
+      // Daftar baru saja dimuat (mount / ganti filter / invalidasi) → tidak perlu request kedua.
+      if (st?.data && Date.now() - st.dataUpdatedAt < JOBS_POLL_MS / 2) return st.data.pages[0]
+      const page = await getJson<JobsResponse>(jobsUrl(f))
+      syncServerClock(page.serverTime)
+      qc.setQueryData<InfiniteData<JobsResponse, string | null>>(listKey, (old) =>
+        mergeJobsHead(old, page),
+      )
+      return page
+    },
+    enabled: list.isSuccess,
     refetchInterval: JOBS_POLL_MS,
     refetchIntervalInBackground: false,
   })
+  const headError = head.isError && !head.isFetching ? head.error : null
+  // Hasil TanStack punya getter tanpa setter → objek baru (spread), bukan mutasi.
+  return {
+    ...list,
+    isError: list.isError || headError !== null,
+    error: list.error ?? headError,
+    isFetching: list.isFetching || head.isFetching,
+  }
 }
 
 /** Detail job; polling 5 dtk selama job aktif (event `stage` SSE juga memperbaruinya). */

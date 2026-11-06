@@ -18,6 +18,7 @@ import { handleLogPost, handleStatusCallback } from "@/lib/server/provisioning"
 import { jobLogStream, SSE_MAX_CONNECTIONS, sseConnections } from "@/lib/server/sse"
 import { makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ED25519, SSH_ED25519_B } from "@/test/fixtures"
+import { authHeaders } from "@/test/auth"
 import { getReq, jsonReq } from "@/test/route"
 
 import { DELETE as hostDELETE, GET as hostGET } from "./hosts/[id]/route"
@@ -184,7 +185,7 @@ describe("AC-5.4 allowlist Host untuk semua GET /api/** + CR-4-15 X-Forwarded-Ho
     const id = (await (await keysGET(getReq("/api/ssh-keys"))).json())[0].id
     process.env.PXE_ALLOWED_HOSTS = "pxe.lab.example"
     const hdr = { host: "evil.example", "x-forwarded-host": "pxe.lab.example" }
-    const mut = () => keyPATCH(new Request(`http://evil.example/api/ssh-keys/${id}`, { method: "PATCH", headers: { ...hdr, "content-type": "application/json" }, body: JSON.stringify({ name: "x" }) }), p({ id }))
+    const mut = () => keyPATCH(new Request(`http://evil.example/api/ssh-keys/${id}`, { method: "PATCH", headers: { ...hdr, "content-type": "application/json", ...authHeaders() }, body: JSON.stringify({ name: "x" }) }), p({ id }))
     expect((await hostsGET(getReq("/api/hosts", hdr))).status).toBe(403)
     expect((await mut()).status).toBe(403)
     process.env.PXE_TRUST_PROXY = "1"
@@ -254,7 +255,7 @@ describe("AC-5.15 retensi riwayat per host + cascade", () => {
     await install(0)
     expect(listJobsForHost(IDS[1])).toHaveLength(1)
     expect(listJobsForHost(IDS[0])).toHaveLength(2)
-    const res = await hostDELETE(new Request(`http://localhost/api/hosts/${IDS[0]}`, { method: "DELETE" }), p({ id: IDS[0] }))
+    const res = await hostDELETE(new Request(`http://localhost/api/hosts/${IDS[0]}`, { method: "DELETE", headers: authHeaders() }), p({ id: IDS[0] }))
     expect([200, 204]).toContain(res.status)
     const n = (sql: string, ...a: string[]) => (getDb().prepare(sql).get(...a) as { n: number }).n
     expect(n("SELECT count(*) AS n FROM jobs WHERE host_id = ?", IDS[0])).toBe(0)
@@ -399,7 +400,7 @@ describe("AC-5.17 SSE GET /api/jobs/:id/logs", () => {
       })
   const sse = (jobId: string, headers: Record<string, string> = {}, signal?: AbortSignal, q = "") =>
     logsGET(
-      new Request(`http://localhost/api/jobs/${jobId}/logs${q}`, { headers: { accept: "text/event-stream", ...headers }, signal }),
+      new Request(`http://localhost/api/jobs/${jobId}/logs${q}`, { headers: { accept: "text/event-stream", ...authHeaders(), ...headers }, signal }),
       p({ id: jobId }),
     )
   async function activeJob() {
@@ -422,7 +423,7 @@ describe("AC-5.17 SSE GET /api/jobs/:id/logs", () => {
     const backlog = logFrames(c.st.buf)
     const dbEv = eventsAfter(jobId, 0, 100)
     expect(backlog.map((f) => f.id)).toEqual(dbEv.map((e) => e.seq))
-    expect(backlog[0].data).toEqual({ seq: dbEv[0].seq, at: dbEv[0].at, kind: dbEv[0].kind, level: dbEv[0].level, source: dbEv[0].source, message: dbEv[0].message, repeat: dbEv[0].repeat })
+    expect(backlog[0].data).toEqual({ seq: dbEv[0].seq, at: dbEv[0].at, kind: dbEv[0].kind, level: dbEv[0].level, source: dbEv[0].source, message: dbEv[0].message, repeat: dbEv[0].repeat, lastAt: dbEv[0].lastAt }) // M6 CR-5-7: + lastAt
     // event baru setelah tersambung
     handleLogPost({ mac: MACS[0], token, text: "installer: live 1\n", ip: IP, now: new Date() })
     await vi.advanceTimersByTimeAsync(2000)
@@ -450,14 +451,15 @@ describe("AC-5.17 SSE GET /api/jobs/:id/logs", () => {
     expect(sseConnections()).toBe(0)
     expect(vi.getTimerCount()).toBe(0)
   })
-  it("Last-Event-ID: k → hanya seq > k; ?after=k sama", async () => {
+  // M6 CR-5-6 (AC-6.21): resume `k` mengirim ulang event k TEPAT SEKALI (repeat terkini) lalu seq > k.
+  it("Last-Event-ID: k → event k sekali lalu seq > k; ?after=k sama", async () => {
     const { jobId, token } = await activeJob()
     handleLogPost({ mac: MACS[0], token, text: "a\nb\nc\n", ip: IP, now: new Date() })
     const total = eventsAfter(jobId, 0, 100).length
     for (const res of [await sse(jobId, { "last-event-id": "3" }), await sse(jobId, {}, undefined, "?after=3")]) {
       const c = collect(res)
       await vi.advanceTimersByTimeAsync(10)
-      expect(logFrames(c.st.buf).map((f) => f.id)).toEqual(Array.from({ length: total - 3 }, (_, i) => i + 4))
+      expect(logFrames(c.st.buf).map((f) => f.id)).toEqual([3, ...Array.from({ length: total - 3 }, (_, i) => i + 4)])
       await c.reader.cancel()
     }
     expect(sseConnections()).toBe(0)
@@ -540,7 +542,7 @@ describe("AC-5.18 PATCH /api/ssh-keys/:id + usedBy + 409", () => {
     return (await (await keysGET(getReq("/api/ssh-keys"))).json())[0] as { id: string; name: string; publicKey: string; fingerprint: string; usedBy: number }
   }
   const patch = (id: string, body: unknown, headers: Record<string, string> = { "content-type": "application/json" }) =>
-    keyPATCH(new Request(`http://localhost/api/ssh-keys/${id}`, { method: "PATCH", headers, body: JSON.stringify(body) }), p({ id }))
+    keyPATCH(new Request(`http://localhost/api/ssh-keys/${id}`, { method: "PATCH", headers: { ...authHeaders(), ...headers }, body: JSON.stringify(body) }), p({ id }))
 
   it("{name} → 200 dan tersimpan (GET); nama 64 karakter diterima", async () => {
     const k = await keyId()
@@ -565,7 +567,7 @@ describe("AC-5.18 PATCH /api/ssh-keys/:id + usedBy + 409", () => {
     expect((await patch(k.id, { name: "a" }, {})).status).toBe(415)
     expect((await patch(k.id, { name: "a" }, { "content-type": "text/plain" })).status).toBe(415)
     expect((await patch(k.id, { name: "a" }, { "content-type": "application/json", origin: "http://evil.example" })).status).toBe(403)
-    const bad = await keyPATCH(new Request(`http://localhost/api/ssh-keys/${k.id}`, { method: "PATCH", headers: { "content-type": "application/json" }, body: "{" }), p({ id: k.id }))
+    const bad = await keyPATCH(new Request(`http://localhost/api/ssh-keys/${k.id}`, { method: "PATCH", headers: { "content-type": "application/json", ...authHeaders() }, body: "{" }), p({ id: k.id }))
     expect(bad.status).toBe(400)
     expect((await (await keysGET(getReq("/api/ssh-keys"))).json())[0].name).toBe(k.name)
   })
@@ -581,11 +583,11 @@ describe("AC-5.18 PATCH /api/ssh-keys/:id + usedBy + 409", () => {
     const used = Object.fromEntries(imgs.map((i: { id: string; usedBy: number }) => [i.id, i.usedBy]))
     expect(used["ubuntu-24.04"]).toBe(2)
     expect(used["debian-12"]).toBe(0)
-    const del = await keyDELETE(new Request(`http://localhost/api/ssh-keys/${k.id}`, { method: "DELETE" }), p({ id: k.id }))
+    const del = await keyDELETE(new Request(`http://localhost/api/ssh-keys/${k.id}`, { method: "DELETE", headers: authHeaders() }), p({ id: k.id }))
     expect(del.status).toBe(409)
     expect(JSON.stringify(await del.json())).toMatch(/2 host|dipakai/)
-    expect((await keyDELETE(new Request(`http://localhost/api/ssh-keys/${other.id}`, { method: "DELETE" }), p({ id: other.id }))).status).toBe(204)
-    const imgDel = await imageDELETE(new Request("http://localhost/api/os-images/ubuntu-24.04", { method: "DELETE" }), p({ id: "ubuntu-24.04" }))
+    expect((await keyDELETE(new Request(`http://localhost/api/ssh-keys/${other.id}`, { method: "DELETE", headers: authHeaders() }), p({ id: other.id }))).status).toBe(204)
+    const imgDel = await imageDELETE(new Request("http://localhost/api/os-images/ubuntu-24.04", { method: "DELETE", headers: authHeaders() }), p({ id: "ubuntu-24.04" }))
     expect(imgDel.status).toBe(409)
   })
 })

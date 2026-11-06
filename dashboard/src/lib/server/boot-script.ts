@@ -124,23 +124,33 @@ export function installerScript(i: InstallerScriptInput): string {
         "boot",
       )
     case "preseed":
-      cmdline = args(
+      // SR-4-6 (M6): ` ---` di akhir. d-i menyalin parameter SETELAH `---` ke bootloader sistem
+      // terpasang; semua parameter (termasuk `url=…/<token>/preseed.cfg`) berada sebelum `---`
+      // sehingga URL ber-token tidak tertulis ke GRUB target.
+      cmdline = `${args(
         "initrd=initrd",
         "auto=true",
         "priority=critical",
         `url=${c}preseed.cfg`,
         "interface=auto",
         "netcfg/dhcp_timeout=60",
-      )
+      )} ---`
       break
     case "kickstart":
-      cmdline = args(
+      // DEC-020 (BUG-M6-4): stage2 (`images/install.img` ±1,2 GB) di-mount lewat NFS read-only dari
+      // server (seperti root live Ubuntu, DEC-009), bukan diunduh dracut ke RAM (node 2 GB habis).
+      // Repo paket = `url` di kickstart (HTTP); kickstart tetap HTTP per-MAC (`inst.ks=`).
+      // BUG-M6-7: console serial (`console=ttyS*`) dipindah ke AKHIR — console terakhir menjadi
+      // /dev/console, tempat anaconda mode cmdline menulis pesan/error (bukti di log serial).
+      cmdline = [
         "initrd=initrd",
         "ip=dhcp",
-        `inst.repo=${m}/${repo}`,
+        `inst.stage2=nfs:${ipxeSafe(i.serverIp, "server IP")}:${ipxeSafe(i.mediaRoot, "media root")}/${repo}`,
         `inst.ks=${c}ks.cfg`,
-        "inst.text",
-      )
+        "inst.cmdline", // BUG-M6-5: non-interaktif (selaras `cmdline` di kickstart; mode boot diutamakan anaconda)
+        ...x.filter((a) => !/^console=ttyS/.test(a)),
+        ...x.filter((a) => /^console=ttyS/.test(a)),
+      ].join(" ")
       break
     default:
       throw new Error(`Metode ${i.method} tidak bisa di-boot via iPXE`)

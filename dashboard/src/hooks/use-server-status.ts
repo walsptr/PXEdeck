@@ -2,6 +2,8 @@
 
 import { useQuery } from "@tanstack/react-query"
 
+import { apiJson } from "@/lib/api-client"
+
 export type ServiceState = "online" | "offline" | "unknown"
 
 /** Respons `GET /api/server-status` (salinan klien `ServerStatusResponse`). */
@@ -22,16 +24,9 @@ export const SERVER_STATUS_POLL_MS = 15_000
 export function useServerStatus() {
   return useQuery({
     queryKey: SERVER_STATUS_KEY,
-    queryFn: async (): Promise<ServerStatusResponse> => {
-      const res = await fetch("/api/server-status", { cache: "no-store" })
-      if (!res.ok) {
-        const body = await res.json().catch(() => null)
-        throw new Error(body?.error ?? `${res.status} ${res.statusText}`)
-      }
-      return (await res.json()) as ServerStatusResponse
-    },
+    queryFn: () =>
+      apiJson<ServerStatusResponse>("/api/server-status", { cache: "no-store" }),
     refetchInterval: SERVER_STATUS_POLL_MS,
     refetchOnWindowFocus: true,
-    retry: 1,
   })
 }

@@ -1,0 +1,18 @@
+# kvm-run m6 scenario=— run=m6 20261105T222805Z nodes=[41:uefi:os=debian 43:uefi:failpath] waves=0 keep_server=0 dry=0
+2026-11-05T22:28:05Z preflight          ok max_nodes=3 avail_mb=12470 mem_available_mb=15542 waves=—
+2026-11-05T22:28:05Z net-up             ok 
+2026-11-05T22:28:16Z server-up          ok 
+2026-11-05T22:28:16Z admin-pass         ok m6-admin.pass (0600, isi tidak dicetak)
+2026-11-05T22:28:38Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-05T22:28:39Z server-check       ok 
+2026-11-05T22:28:40Z node-create        ok pxe-test-m6-node41 uefi 52:54:00:99:00:41
+2026-11-05T22:28:41Z node-create        ok pxe-test-m6-node43 uefi 52:54:00:99:00:43
+2026-11-05T22:44:32Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-05T22:44:32Z evidence           start 
+2026-11-05T22:44:34Z evidence           done 
+2026-11-05T22:44:34Z server-logs        ok 
+2026-11-05T22:44:37Z cleanup            done 
+2026-11-05T22:44:37Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-05T22:44:42Z redact             ok 
+2026-11-05T22:44:42Z admin-pass         ok password admin tidak ada di bukti
+2026-11-05T22:44:43Z result             FAIL exit=1 stage=playwright

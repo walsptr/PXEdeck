@@ -1,0 +1,305 @@
+{
+  "task": "M6-T15 smoke KVM dini",
+  "commit": "30c88c9",
+  "worktree": ".agent/wt-m6-smoke (detached)",
+  "generatedAt": "2026-11-06T03:10:00Z",
+  "memAvailableMbAtStart": 15317,
+  "maxNodes": 3,
+  "attempts": [
+    {
+      "dir": "attempt1-servercheck-rocky",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 42:uefi:os=rocky 43:uefi:failpath'",
+      "result": "FAIL",
+      "failedStage": "server-check",
+      "note": "BUG-M6-1: HEAD rocky-9/BaseOS/repodata/repomd.xml 404 (ISO minimal memakai Minimal/); node tidak dibuat",
+      "cleanup": "PASS"
+    },
+    {
+      "dir": "attempt2-debian-failpath",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 43:uefi:failpath'",
+      "result": "FAIL",
+      "failedStage": "playwright",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "fw": "uefi",
+          "status": "FAIL",
+          "durationS": 949,
+          "note": "BUG-M6-3: d-i macet di '[!!] Select your location' -> failed/timeout-installing; preseed.cfg 200 via url= dengan ':' di path MAC, early_command callback OK"
+        },
+        {
+          "node": "pxe-test-m6-node43",
+          "os": "ubuntu-24.04",
+          "fw": "uefi",
+          "role": "failpath",
+          "status": "PASS",
+          "durationS": 860,
+          "note": "job1 /dev/vdz -> failed/installer-error dalam 270 dtk, 1 event installer error-commands (tail subiquity-server-debug.log); job2 disk otomatis -> Done dalam 571 dtk; SSH key yang di-inject OK; verify-node.sh tidak dijalankan kvm-run (playwright exit 1 karena node41)"
+        }
+      ],
+      "login": "PASS (tanpa sesi 401, salah 401, login 204 + Set-Cookie pxe_session HttpOnly SameSite=Strict, sesi 200)"
+    },
+    {
+      "dir": "attempt3-rocky-manual",
+      "cmd": "rocky-manual.sh (diagnostik; script infra tanpa modifikasi, cek media Minimal/)",
+      "result": "FAIL",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node42",
+          "os": "rocky-9",
+          "fw": "uefi",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "note": "BUG-M6-4: dracut unduh install.img 1.2 GB ke RAM -> ENOSPC, halt; ks.cfg tidak diambil; playwright dihentikan manual (SIGINT)"
+        }
+      ]
+    },
+    {
+      "dir": "attempt4-rocky-manual-4g",
+      "cmd": "NODE_RAM_MB=4096 rocky-manual.sh (diagnostik, menyimpang dari CLAUDE.md 2 GB)",
+      "result": "FAIL",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node42",
+          "os": "rocky-9",
+          "fw": "uefi",
+          "ramMb": 4096,
+          "status": "FAIL",
+          "durationS": 932,
+          "note": "BUG-M6-5: ks.cfg 200 via inst.ks= dengan ':' di path MAC, %pre callback OK; anaconda macet setelah AppStream/repodata 404 x4 -> failed/timeout-installing"
+        }
+      ]
+    },
+    {
+      "dir": "attempt5-debian-rocky",
+      "commit": "a67bcf6",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 42:uefi:os=rocky'",
+      "maxNodes": 2,
+      "memAvailableMb": 12456,
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "fw": "uefi",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 949,
+          "note": "BUG-M6-6: disk otomatis -> d-i '[!!] Partition disks: No root file system' -> failed/timeout-installing. BUG-M6-3 terkonfirmasi diperbaiki (tanpa prompt lokasi; mirror DVD terbaca)"
+        },
+        {
+          "node": "pxe-test-m6-node42",
+          "os": "rocky-9",
+          "fw": "uefi",
+          "ramMb": 2048,
+          "status": "PASS",
+          "durationS": 672,
+          "note": "stage2 NFS (exportfs ro 10.99.0.0/24, koneksi :2049 dari node, GET install.img = 0), ks.cfg 200 x1, Minimal/Packages 342 GET, AppStream 0; kickstart mulai > post mulai > konfigurasi target selesai > first-boot; Done; verify-node fails=0 (hostname, IP/GW/DNS, user+sudo, authorized_keys, passwordauthentication no, bebas token 8 file, root fs disk lokal); login password ditolak; locale en_US.UTF-8, TZ UTC"
+        }
+      ]
+    },
+    {
+      "dir": "attempt6-rocky-failpath",
+      "commit": "a67bcf6",
+      "cmd": "infra/kvm-run.sh m6 --nodes '44:uefi:failpath:os=rocky'",
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node44",
+          "os": "rocky-9",
+          "fw": "uefi",
+          "ramMb": 2048,
+          "role": "failpath",
+          "status": "FAIL",
+          "durationS": 920,
+          "note": "BUG-M6-7: /dev/vdz -> setelah %pre tidak ada request lagi; %onerror tidak mengirim stage=failed/tail log; job masih installing pada 15 mnt (watchdog)"
+        }
+      ]
+    },
+    {
+      "dir": "attempt7-debian-rocky-auto",
+      "commit": "f2f848d",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 42:uefi:os=rocky'",
+      "maxNodes": 2,
+      "memAvailableMb": 12489,
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "disk": "otomatis",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 87,
+          "note": "BUG-M6-8: ERROR disk target tidak ditemukan dalam 70 dtk (failed/installer-error)"
+        },
+        {
+          "node": "pxe-test-m6-node42",
+          "os": "rocky-9",
+          "disk": "otomatis",
+          "ramMb": 2048,
+          "status": "PASS",
+          "durationS": 682,
+          "note": "regresi disk otomatis: event 'disk target dipilih', NFS stage2 (GET install.img 0, Minimal/Packages 342), Done 662 dtk, verify-node fails=0, lsblk vda1 ESP vfat /boot/efi + xfs /boot + swap + xfs /"
+        }
+      ]
+    },
+    {
+      "dir": "attempt8-failpath-debian-rocky",
+      "commit": "f2f848d",
+      "cmd": "infra/kvm-run.sh m6 --nodes '45:uefi:failpath:os=debian 46:uefi:failpath:os=rocky'",
+      "maxNodes": 2,
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node45",
+          "os": "debian-12",
+          "role": "failpath",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 158,
+          "note": "job1 /dev/vdz -> failed/installer-error 70 dtk dengan event ERROR (benar, cepat); job2 disk otomatis -> gagal sama (BUG-M6-8)"
+        },
+        {
+          "node": "pxe-test-m6-node46",
+          "os": "rocky-9",
+          "role": "failpath",
+          "ramMb": 2048,
+          "status": "PASS",
+          "durationS": 732,
+          "note": "job1 /dev/vdz -> %pre: ERROR disk target tidak ditemukan + tail /tmp/anaconda.log + stage=failed -> failed/installer-error dalam 41 dtk; pesan anaconda/traceback preScriptPass di serial; job2 otomatis -> Done, verify-node fails=0; ks.cfg 200 x2"
+        }
+      ]
+    },
+    {
+      "dir": "attempt9-debian-explicit-vda",
+      "commit": "f2f848d",
+      "cmd": "PXE_KVM_SMOKE_DISK=/dev/vda infra/kvm-run.sh m6 --nodes '41:uefi:os=debian'",
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "disk": "/dev/vda",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 87,
+          "note": "diagnostik BUG-M6-8: disk eksplisit /dev/vda juga 'tidak ditemukan' -> [ -b /dev/vda ] gagal di d-i"
+        }
+      ]
+    },
+    {
+      "dir": "attempt10-debian-auto-failpath",
+      "commit": "feb866e",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 45:uefi:failpath:os=debian'",
+      "maxNodes": 2,
+      "memAvailableMb": 12936,
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "server": "GET /media/debian-netboot/modules/6.1.0-50-amd64/virtio_blk.ko 200 (dan virtio_scsi.ko 200)",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "disk": "otomatis",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 949,
+          "note": "preseed mulai > modul disk virtio dimuat > disk target dipilih > partman + base system OK; BUG-M6-9: apt-setup menolak mirror DVD tanpa Release.gpg/InRelease -> prompt 'Configure the package manager' -> timeout-installing"
+        },
+        {
+          "node": "pxe-test-m6-node45",
+          "os": "debian-12",
+          "role": "failpath",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 989,
+          "note": "job1 /dev/vdz -> failed/installer-error 40 dtk, event 'ERROR diagnosis disk d-i' (vda di /sys/block, list-devices /dev/vda, virtio_blk dimuat); job2 otomatis -> BUG-M6-9 timeout-installing"
+        }
+      ]
+    },
+    {
+      "dir": "attempt11-debian-dec021",
+      "commit": "fc2f31a",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 45:uefi:failpath:os=debian'",
+      "result": "FAIL (harness BUG-M6-10; Playwright 3/3 lulus)",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "disk": "otomatis",
+          "status": "PASS",
+          "durationS": 866,
+          "note": "preseed > modul virtio x2 > disk target > late_command > konfigurasi target selesai > first-boot; Done 621 dtk; tanpa '[!!] Configure the package manager'; d-i syslog: '50mirror returned error code 126; discarding output'; apt target: Release 304 + pool .deb 200, tanpa by-hash (by-hash 404 hanya dari net-retriever d-i); trusted_files=0, 00AllowUnauthenticated tidak ada, BOOTX64.EFI ada; locale en_US.UTF-8, sudo, key; reboot dari disk (status done, job 1->1); verify-node harness PASS"
+        },
+        {
+          "node": "pxe-test-m6-node45",
+          "os": "debian-12",
+          "role": "failpath",
+          "status": "PASS",
+          "durationS": 915,
+          "note": "job1 /dev/vdz failed/installer-error 40 dtk; job2 otomatis Done 632 dtk; fakta DEC-021 sama; reboot OK job 2->2; verify-node harness NOT_RUN (BUG-M6-10)"
+        }
+      ],
+      "scan": "spec scan FAIL 2 temuan: syslog d-i tanpa ekstensi tidak disamarkan scanEvidence (token /boot/ yang sudah dicabut, SR-4-7(b)); redact-evidence.sh kvm-run menyamarkannya (redact ok). Spec diperbaiki: berkas log disimpan *.log"
+    },
+    {
+      "dir": "attempt12-distro-rehearsal/distro",
+      "commit": "fc2f31a",
+      "cmd": "PXE_RUNS_DIR=attempt12-distro-rehearsal infra/kvm-run.sh m6 --scenario distro (gladi, bukan run resmi)",
+      "result": "FAIL (suite: cek password Rocky terlalu ketat)",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6distro-node23",
+          "os": "debian-12",
+          "status": "PASS",
+          "durationS": 602,
+          "note": "AC-6.48 semua cek lulus (event berurutan, verify 0/0, DEC-021, BOOTX64, reboot)"
+        },
+        {
+          "node": "pxe-test-m6distro-node24",
+          "os": "rocky-9",
+          "status": "FAIL(suite)",
+          "durationS": 692,
+          "note": "semua cek lulus kecuali passwordLoginRejected harness: sshd Rocky menawarkan (publickey,gssapi-keyex,gssapi-with-mic) sedangkan harness menuntut tepat '(publickey)'; verify-node harness kvm-run PASS. Harness diperbaiki (publickey wajib, password/keyboard-interactive dilarang)."
+        }
+      ]
+    }
+  ],
+  "cr-4-6": {
+    "debian url= ':' path": "PASS",
+    "debian early_command /proc/cmdline": "PASS",
+    "debian late_command chroot + sed BRE busybox": "NOT_RUN (BUG-M6-6)",
+    "rocky inst.ks= ':' path": "PASS (node 4 GB)",
+    "rocky %pre /proc/cmdline": "PASS (node 4 GB)",
+    "rocky %post": "NOT_RUN (BUG-M6-5)",
+    "rocky %post (node 2 GB, NFS stage2)": "PASS",
+    "rocky %pre --erroronfail + stage=failed": "PASS (attempt8)"
+  },
+  "o11": {
+    "debian kernel netboot == DVD": "PASS (sha256 d8808aa4... sama)",
+    "debian paket dari DVD": "NOT_RUN (BUG-M6-6, berhenti di partman)",
+    "rocky paket": "PASS: semua paket dari Minimal/Packages (342 GET), tanpa AppStream; O11-C tidak dipakai"
+  },
+  "sr-5-5c": "PASS (attempt2 node43: Failed installer-error + event error-commands)",
+  "libvirtAfter": "hanya ubuntu24.04 (shut off); network default/int/pxe-test/pxe-test-nat aktif (pxe-test* dipertahankan sampai T16)",
+  "installerLogs": "installer-logs/: Ubuntu (subiquity-server-debug, curtin-install, event error-commands), Rocky (anaconda.log, program.log, event %pre ERROR + tail anaconda.log), Debian (event ERROR disk). Debian d-i syslog BELUM (BUG-M6-8); + event diagnosis disk d-i (attempt10)",
+  "dec-020": "PASS: node Rocky 2 GB, stage2 NFS (attempt5)"
+}

@@ -1,0 +1,210 @@
+{
+ "direct": {
+  "geo": {
+   "rect": [
+    811,
+    832
+   ],
+   "vh": 900,
+   "stack": [
+    "div[] bg=rgba(0, 0, 0, 0)",
+    "div[sheet-footer] bg=rgb(250, 250, 247)",
+    "div[sheet-content] bg=rgb(255, 255, 255)",
+    "div[sheet-overlay] bg=oklab(0 0 0 / 0.8)"
+   ]
+  },
+  "violations": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "targets": [
+     ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"]",
+     ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(1)",
+     ".leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(2)"
+    ],
+    "detail": [
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     },
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     },
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     }
+    ]
+   }
+  ]
+ },
+ "via-hostname-tab": {
+  "geo": {
+   "rect": [
+    811,
+    832
+   ],
+   "vh": 900,
+   "stack": [
+    "div[] bg=rgba(0, 0, 0, 0)",
+    "div[sheet-footer] bg=rgb(250, 250, 247)",
+    "div[sheet-content] bg=rgb(255, 255, 255)",
+    "div[sheet-overlay] bg=oklab(0 0 0 / 0.8)"
+   ]
+  },
+  "violations": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "targets": [
+     ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"]",
+     ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(1)",
+     ".leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(2)"
+    ],
+    "detail": [
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     },
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     },
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     }
+    ]
+   }
+  ]
+ },
+ "via-hostname-tab-mouseaway": {
+  "geo": {
+   "rect": [
+    811,
+    832
+   ],
+   "vh": 900,
+   "stack": [
+    "div[] bg=rgba(0, 0, 0, 0)",
+    "div[sheet-footer] bg=rgb(250, 250, 247)",
+    "div[sheet-content] bg=rgb(255, 255, 255)",
+    "div[sheet-overlay] bg=oklab(0 0 0 / 0.8)"
+   ]
+  },
+  "violations": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "targets": [
+     ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"]",
+     ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(1)",
+     ".leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(2)"
+    ],
+    "detail": [
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     },
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     },
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     }
+    ]
+   }
+  ]
+ },
+ "via-hostname-tab-wait2s": {
+  "geo": {
+   "rect": [
+    811,
+    832
+   ],
+   "vh": 900,
+   "stack": [
+    "div[] bg=rgba(0, 0, 0, 0)",
+    "div[sheet-footer] bg=rgb(250, 250, 247)",
+    "div[sheet-content] bg=rgb(255, 255, 255)",
+    "div[sheet-overlay] bg=oklab(0 0 0 / 0.8)"
+   ]
+  },
+  "violations": [
+   {
+    "id": "color-contrast",
+    "impact": "serious",
+    "targets": [
+     ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"]",
+     ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(1)",
+     ".leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(2)"
+    ],
+    "detail": [
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     },
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     },
+     {
+      "category": "kept",
+      "why": "kontras terhitung 3.94 < 4.5",
+      "fg": "#807d72",
+      "bg": "#fafaf7",
+      "ratio": 3.94,
+      "inSheet": true
+     }
+    ]
+   }
+  ]
+ }
+}

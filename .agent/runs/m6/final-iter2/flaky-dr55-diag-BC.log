@@ -1,0 +1,489 @@
+===== B-old-0.25.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+  ✘  2 [m5-library] › e2e/m5-library.spec.ts:762:7 › DIAG-DR55 B old rate=0.25 (1.1s)
+
+
+  1) [m5-library] › e2e/m5-library.spec.ts:762:7 › DIAG-DR55 B old rate=0.25 ───────────────────────
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.3072509765625
+
+      748 |     return Math.abs(d.y + d.height - (f.y + f.height))
+      749 |   }
+    > 750 |   expect(await flush()).toBeLessThanOrEqual(1)
+          |                         ^
+      751 |   await expect(dlg.getByTestId("img-hint-id")).toBeVisible()
+      752 |   const r = page.waitForResponse((x) => x.url().endsWith("/api/os-images") && x.request().method() === "POST")
+      753 |   await submit.click()
+        at dr55Body (/home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:750:25)
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:762:69
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/m5-library-DIAG-DR55-B-old-rate-0-25-m5-library/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/m5-library-DIAG-DR55-B-old-rate-0-25-m5-library/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DIAG-DR55-B-old-rate-0-25-m5-library/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DIAG-DR55-B-old-rate-0-25-m5-library/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [m5-library] › e2e/m5-library.spec.ts:762:7 › DIAG-DR55 B old rate=0.25 ────────────────────────
+  1 passed (28.0s)
+===== B-old-0.25-2.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:762:7 › DIAG-DR55 B old rate=0.25 (1.6s)
+
+  2 passed (27.3s)
+===== B-old-0.25-3.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (967ms)
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:762:7 › DIAG-DR55 B old rate=0.25 (1.6s)
+
+  2 passed (27.2s)
+===== B-old-0.25-4.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:762:7 › DIAG-DR55 B old rate=0.25 (1.5s)
+
+  2 passed (27.3s)
+===== B-old-0.25-5.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:762:7 › DIAG-DR55 B old rate=0.25 (1.5s)
+
+  2 passed (27.4s)
+===== C.log
+
+Running 9 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (971ms)
+DIAGC variant=old rate=1 delay=false N=15 gagal(flush>1)=0 flush1=[0,0,0,0,0,0.354,0,0.359,0.359,0,0,0.359,0.359,0.359,0] flush2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=1 delay=false (13.1s)
+DIAGC variant=new rate=1 delay=false N=15 gagal(flush>1)=0 flush1=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] flush2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ✓  3 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C new rate=1 delay=false (13.1s)
+DIAGC variant=old rate=0.25 delay=false N=15 gagal(flush>1)=10 flush1=[1.129,0,0,2.045,2.044,1.913,2.044,0,2.044,1.914,0,2.044,2.045,0,2.045] flush2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ✘  4 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=0.25 delay=false (16.6s)
+  -  5 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C new rate=0.25 delay=false
+  -  6 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=1 delay=true
+  -  7 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C new rate=1 delay=true
+  -  8 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=0.25 delay=true
+  -  9 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C new rate=0.25 delay=true
+
+
+  1) [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=0.25 delay=false ───────────
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.12933349609375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    2.044677734375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    2.04443359375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.91339111328125
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    2.0439453125
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    2.04443359375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.913818359375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    2.04443359375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    2.044677734375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    2.04461669921875
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/m5-library-DIAG-DR55-C-old-rate-0-25-delay-false-m5-library/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/m5-library-DIAG-DR55-C-old-rate-0-25-delay-false-m5-library/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DIAG-DR55-C-old-rate-0-25-delay-false-m5-library/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DIAG-DR55-C-old-rate-0-25-delay-false-m5-library/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=0.25 delay=false ────────────
+  5 did not run
+  3 passed (1.2m)
+===== C-new.log
+
+Running 5 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.2s)
+DIAGC variant=new rate=1 delay=false N=15 gagal(flush>1)=0 flush1=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] flush2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C new rate=1 delay=false (13.4s)
+DIAGC variant=new rate=0.25 delay=false N=15 gagal(flush>1)=0 flush1=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] flush2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ✓  3 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C new rate=0.25 delay=false (26.6s)
+DIAGC variant=new rate=1 delay=true N=15 gagal(flush>1)=0 flush1=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] flush2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ✓  4 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C new rate=1 delay=true (13.7s)
+DIAGC variant=new rate=0.25 delay=true N=15 gagal(flush>1)=0 flush1=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0] flush2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ✓  5 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C new rate=0.25 delay=true (26.8s)
+
+  5 passed (1.8m)
+===== C-C_old_rate=1_delay=true.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.0s)
+DIAGC variant=old rate=1 delay=true N=15 gagal(flush>1)=0 flush1=[0,0,0,0,0.359,0,0.356,0,0,0.359,0,0,0,0,0] flush2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ✓  2 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=1 delay=true (15.3s)
+
+  2 passed (41.4s)
+===== C-C_old_rate=0.25_delay=true.log
+
+Running 2 tests using 1 worker
+
+  ✓  1 [setup-m5-library] › e2e/auth.setup.ts:11:6 › login admin E2E → storageState (1.0s)
+DIAGC variant=old rate=0.25 delay=true N=15 gagal(flush>1)=15 flush1=[1.134,3.63,3.63,1.91,3.63,3.629,1.129,5.675,3.958,2.045,3.959,3.224,4.915,3.958,3.958] flush2=[0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+  ✘  2 [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=0.25 delay=true (19.9s)
+
+
+  1) [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=0.25 delay=true ────────────
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.13360595703125
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3.62957763671875
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3.62957763671875
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.91033935546875
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3.62994384765625
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3.62921142578125
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    1.1290283203125
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    5.67474365234375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3.9580078125
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    2.044677734375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3.9593505859375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3.2242431640625
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    4.9146728515625
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3.95843505859375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    Error: expect(received).toBeLessThanOrEqual(expected)
+
+    Expected: <= 1
+    Received:    3.95849609375
+
+      774 |     console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+      775 |     // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    > 776 |     for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+          |                                                ^
+      777 |   })
+      778 |
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m6/dashboard/e2e/m5-library.spec.ts:776:48
+
+    attachment #1: screenshot (image/png) ──────────────────────────────────────────────────────────
+    test-results/m5-library-DIAG-DR55-C-old-rate-0-25-delay-true-m5-library/test-failed-1.png
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+    Error Context: test-results/m5-library-DIAG-DR55-C-old-rate-0-25-delay-true-m5-library/error-context.md
+
+    attachment #3: trace (application/zip) ─────────────────────────────────────────────────────────
+    test-results/m5-library-DIAG-DR55-C-old-rate-0-25-delay-true-m5-library/trace.zip
+    Usage:
+
+        npx playwright show-trace test-results/m5-library-DIAG-DR55-C-old-rate-0-25-delay-true-m5-library/trace.zip
+
+    ────────────────────────────────────────────────────────────────────────────────────────────────
+
+  1 failed
+    [m5-library] › e2e/m5-library.spec.ts:770:7 › DIAG-DR55 C old rate=0.25 delay=true ─────────────
+  1 passed (46.2s)

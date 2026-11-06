@@ -90,19 +90,33 @@ export function timeoutMessage(status: JobStatus, minutes: number): string {
   return `Timeout di tahap ${STAGE_LABEL[status]} (> ${minutes} mnt)`
 }
 
+/** true bila job aktif sudah melewati timeout tahapnya pada `now`. */
+function isOverdue(job: Job, now: Date, t: JobTimeouts): boolean {
+  const min = stageTimeoutMin(job.status, t)
+  return min !== null && now.getTime() - stageEnteredAt(job) > min * 60_000
+}
+
 /**
  * Sapuan timeout (lihat header). `hostId` membatasi ke satu host (jalur `/boot`). Mengembalikan
  * id job yang baru ditandai gagal.
+ *
+ * CR-5-3: pra-cek TANPA transaksi (baca biasa, tidak mengambil write lock) — bila tidak ada job
+ * yang jatuh tempo, tidak ada `BEGIN IMMEDIATE` sehingga request baca tidak menjadi penulis dan
+ * tidak menunggu lock penulis lain. Bila ada kandidat, transaksi dibuka dan job dibaca ulang di
+ * dalamnya (status bisa sudah berubah). Di dalam transaksi luar (`tx` bertingkat, mis.
+ * `installHosts`) pra-cek tetap aman karena memakai koneksi yang sama.
  */
 export function sweepJobs(now: Date = new Date(), hostId?: string): string[] {
   const t = getSettings().jobTimeouts
   getDb()
+  const candidates = listActiveJobs(hostId).filter((j) => isOverdue(j, now, t))
+  if (!candidates.length) return []
   return tx(() => {
     const failed: string[] = []
-    for (const job of listActiveJobs(hostId)) {
-      const min = stageTimeoutMin(job.status, t)
-      if (min === null) continue
-      if (now.getTime() - stageEnteredAt(job) <= min * 60_000) continue
+    for (const c of candidates) {
+      const job = getJob(c.id)
+      if (!job || !isOverdue(job, now, t)) continue
+      const min = stageTimeoutMin(job.status, t)!
       const reason = `timeout-${job.status}` as FailureReason
       failJob(job, reason, now.toISOString(), "watchdog", timeoutMessage(job.status, min))
       failed.push(job.id)

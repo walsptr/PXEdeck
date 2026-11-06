@@ -3,13 +3,21 @@ import path from "node:path"
 import { expect, type Locator, type Page } from "@playwright/test"
 
 /**
- * Screenshot bukti run milestone aktif (`PXE_E2E_MILESTONE`, default 4) → `.agent/runs/m<aktif>/
- * screenshots/`. Screenshot regresi milik milestone lain diberi awalan `m<n>-` di direktori yang
- * sama, sehingga bukti milestone yang sudah di-approve tidak tertimpa.
+ * Screenshot bukti run milestone aktif (`PXE_E2E_MILESTONE`, default 6 = milestone aktif) →
+ * `.agent/runs/m<aktif>/screenshots/`. Screenshot regresi milik milestone lain diberi awalan `m<n>-`
+ * di direktori yang sama, sehingga bukti milestone yang sudah di-approve tidak tertimpa.
+ *
+ * BUG-M6-L4: screenshot milik milestone aktif (`EVIDENCE_MILESTONE`, spec `m6-*`) selalu ditulis ke
+ * `.agent/runs/m6/screenshots/` tanpa awalan, apa pun nilai env — jadi tidak pernah mencemari
+ * direktori bukti M1–M5 yang sudah di-approve.
  */
-const RUN_MILESTONE = Number(process.env.PXE_E2E_MILESTONE ?? 4)
-export const SHOTS = (m: 1 | 2 | 3 | 4 | 5, name: string) =>
-  path.resolve(__dirname, `../../.agent/runs/m${RUN_MILESTONE}/screenshots/${m === RUN_MILESTONE ? "" : `m${m}-`}${name}.png`)
+export const EVIDENCE_MILESTONE = 6
+const RUN_MILESTONE = Number(process.env.PXE_E2E_MILESTONE ?? EVIDENCE_MILESTONE)
+const RUNS_DIR = path.resolve(__dirname, "../../.agent/runs")
+export const SHOTS = (m: 1 | 2 | 3 | 4 | 5 | 6, name: string) =>
+  m === EVIDENCE_MILESTONE
+    ? path.join(RUNS_DIR, `m${EVIDENCE_MILESTONE}`, "screenshots", `${name}.png`)
+    : path.join(RUNS_DIR, `m${RUN_MILESTONE}`, "screenshots", `${m === RUN_MILESTONE ? "" : `m${m}-`}${name}.png`)
 
 /** Tabel host utama (bukan tabel preview di Sheet). */
 export function hostsTable(page: Page): Locator {
@@ -127,6 +135,30 @@ export async function waitForAnimations(page: Page) {
           const running = document.getAnimations().filter((a) => a.playState === "running" || a.pending)
           await Promise.all(running.map((a) => a.finished.catch(() => undefined)))
           return document.getAnimations().filter((a) => a.playState === "running" || a.pending).length
+        }),
+      { timeout: 5_000 },
+    )
+    .toBe(0)
+}
+
+/**
+ * Flake DR-5-5/DR-5-6 (gate M6 iter2, `.agent/runs/m6/final-iter2/flaky-dr55-diagnosis.txt`): tunggu semua
+ * animasi/transisi berhingga pada elemen `loc` dan turunannya (mis. Dialog `zoom-in-95`, Sheet `slide-in-*`)
+ * selesai sebelum geometri diukur. Dua panggilan `boundingBox()` terpisah selama animasi buka dapat
+ * mengambil sampel dari frame berbeda (skala berbeda), sehingga selisih tepi bawah dialog vs footer
+ * terlihat > 1 px walau layout final rata. Animasi tak berhingga (spinner) diabaikan agar tidak menggantung.
+ */
+export async function waitForLocatorAnimations(loc: Locator) {
+  await expect
+    .poll(
+      () =>
+        loc.evaluate(async (el) => {
+          const active = () =>
+            el
+              .getAnimations({ subtree: true })
+              .filter((a) => (a.playState === "running" || a.pending) && a.effect?.getComputedTiming().iterations !== Infinity)
+          await Promise.all(active().map((a) => a.finished.catch(() => undefined)))
+          return active().length
         }),
       { timeout: 5_000 },
     )

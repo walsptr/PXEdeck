@@ -1,0 +1,18 @@
+# Mutasi dev — BUG-M6-9 / DEC-021 (sumber apt media lokal Debian)
+
+Penulis: backend-dev, 2026-11-06. Satu penggantian string per mutan pada installers/debian.ts;
+vitest installers/**, boot-script.test.ts, app/boot/boot-routes.test.ts (baseline 423/423);
+berkas dipulihkan, md5 identik. Tidak ada mutan lolos.
+
+E9a local0 trusted dihapus: vitest 2 merah; contoh: ['golden file', 'media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late']
+E9b tanpa by-hash=no: vitest 2 merah; contoh: ['golden file', 'media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late']
+E9c hook 50mirror tidak dibuat: vitest 3 merah; contoh: ['golden file', 'hook post-base-installer dijalankan sh: 50mirror jadi tidak executable (apt-setup membuang keluarannya)', 'media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late']
+E9d hook tidak chmod a-x 50mirror: vitest 3 merah; contoh: ['golden file', 'hook post-base-installer dijalankan sh: 50mirror jadi tidak executable (apt-setup membuang keluarannya)', 'media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late']
+E9e hook tidak executable: vitest 2 merah; contoh: ['golden file', 'hook post-base-installer dijalankan sh: 50mirror jadi tidak executable (apt-setup membuang keluarannya)']
+E9f untrust di late dihapus: vitest 3 merah; contoh: ['golden file', 'late script (sh) menghapus trusted=yes dari sources target dan 00AllowUnauthenticated', 'media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late']
+E9g untrust tidak menghapus 00AllowUnauthenticated: vitest 3 merah; contoh: ['golden file', 'late script (sh) menghapus trusted=yes dari sources target dan 00AllowUnauthenticated', 'media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late']
+E9h mediaSigned diabaikan (trusted selalu): vitest 1 merah; contoh: ['mirror bertanda tangan (mediaSigned): TIDAK ada trusted=yes, by-hash override, hook, maupun untrust']
+E9i pkgsel/update-policy dihapus: vitest 2 merah; contoh: ['golden file', 'pertanyaan apt-setup/tasksel/pkgsel/grub yang bisa muncul dipreseed (tanpa NAT)']
+E9j force-efi-extra-removable dihapus: vitest 2 merah; contoh: ['golden file', 'pertanyaan apt-setup/tasksel/pkgsel/grub yang bisa muncul dipreseed (tanpa NAT)']
+E9k apt-setup/contrib dihapus: vitest 2 merah; contoh: ['golden file', 'pertanyaan apt-setup/tasksel/pkgsel/grub yang bisa muncul dipreseed (tanpa NAT)']
+E9l tasksel kembali standard: vitest 2 merah; contoh: ['golden file', 'pertanyaan apt-setup/tasksel/pkgsel/grub yang bisa muncul dipreseed (tanpa NAT)']

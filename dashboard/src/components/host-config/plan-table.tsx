@@ -7,6 +7,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { IpText } from "@/components/host-config/ip-text"
 import type { Host } from "@/lib/types"
 
 /** Preview pemetaan host → nilai baru (IP / hostname) dengan status per baris. */
@@ -59,7 +60,7 @@ export function PlanTable({
                       <span className="type-data">{r.value || "—"}</span>
                       {r.error && (
                         <span className="type-caption text-destructive">
-                          {r.error}
+                          <IpText text={r.error} />
                         </span>
                       )}
                     </div>

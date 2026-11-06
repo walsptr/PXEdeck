@@ -121,19 +121,19 @@ describe("installerScript (AC-4.15, AC-4.16)", () => {
     expect(s).toBe(
       [
         "#!ipxe",
-        `kernel http://10.99.0.2/media/debian-netboot/linux initrd=initrd auto=true priority=critical url=${BASE.configUrl}preseed.cfg interface=auto netcfg/dhcp_timeout=60 console=ttyS0,115200n8 console=tty0`,
+        `kernel http://10.99.0.2/media/debian-netboot/linux initrd=initrd auto=true priority=critical url=${BASE.configUrl}preseed.cfg interface=auto netcfg/dhcp_timeout=60 console=ttyS0,115200n8 console=tty0 ---`,
         "initrd --name initrd http://10.99.0.2/media/debian-netboot/initrd.gz",
         "boot",
         "",
       ].join("\n"),
     )
   })
-  it("Rocky: inst.repo + inst.ks + inst.text", () => {
+  it("Rocky: inst.stage2 NFS (DEC-020) + inst.ks + inst.cmdline (BUG-M6-5)", () => {
     const s = installerScript({ ...BASE, method: "kickstart", source: SRC.rocky, extraArgs: "" })
     expect(s).toBe(
       [
         "#!ipxe",
-        `kernel http://10.99.0.2/media/rocky-9/images/pxeboot/vmlinuz initrd=initrd ip=dhcp inst.repo=http://10.99.0.2/media/rocky-9 inst.ks=${BASE.configUrl}ks.cfg inst.text`,
+        `kernel http://10.99.0.2/media/rocky-9/images/pxeboot/vmlinuz initrd=initrd ip=dhcp inst.stage2=nfs:10.99.0.2:/srv/pxe/media/rocky-9 inst.ks=${BASE.configUrl}ks.cfg inst.cmdline`,
         "initrd --name initrd http://10.99.0.2/media/rocky-9/images/pxeboot/initrd.img",
         "boot",
         "",

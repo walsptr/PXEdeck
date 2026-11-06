@@ -140,13 +140,14 @@ test("AC-5.30 DR-4-4 bulk 1 sukses + 2 gagal: Sheet tetap terbuka, Alert per hos
   for (const h of [BAD1, BAD2]) await expect(rowByMac(page, h.mac).locator("[data-status]")).toHaveAttribute("data-status", "discovered")
 })
 
-test("AC-5.31 DR-4-5 'tidak tersedia' muted #807d72; DR-4-6 alasan Reboot ke PXE kontras ≥ 4,5:1", async ({ page }) => {
+test("AC-5.31 DR-4-5 'tidak tersedia' body #5a5852 bukan merah (DEC-022 §1); DR-4-6 alasan Reboot ke PXE kontras ≥ 4,5:1", async ({ page }) => {
   await page.goto("/hosts")
   const sheet = await openSheet(page, BAD1.mac, "Edit konfigurasi")
   const note = sheet.locator('[id="os-ubuntu-22.04-note"]')
   await expect(note).toContainText("tidak tersedia")
   await expect(sheet.locator('[id="os-ubuntu-22.04"]')).toHaveAttribute("aria-checked", "false")
-  await expect(note).toHaveCSS("color", HEX.muted)
+  // DEC-022 §1 (gate M6 R3): body, bukan muted (DEC-017 §9) dan bukan merah (DR-4-5 "bukan error").
+  await expect(note).toHaveCSS("color", HEX.body)
   expect(await note.evaluate((e) => getComputedStyle(e).color)).not.toBe(HEX.failed)
   await page.screenshot({ path: SHOTS(5, "ac-5.31-os-unavailable-muted") })
   await sheet.getByRole("button", { name: "Batal", exact: true }).click()

@@ -1,0 +1,35 @@
+
+// ===== DIAG-DR55 B (sementara, tidak di-commit): badan test DR-5-5/DR-5-6 lama vs baru di bawah animasi diperlambat =====
+async function dr55Body(page: Page, variant: "old" | "new", rate: number) {
+  await page.goto("/os-images")
+  const cdp = await page.context().newCDPSession(page)
+  await cdp.send("Animation.enable")
+  await cdp.send("Animation.setPlaybackRate", { playbackRate: rate })
+  await page.getByTestId("img-register").click()
+  const dlg = page.getByRole("dialog", { name: "Daftarkan OS image" })
+  const settleIfNew = async () => { if (variant === "new") await dlg.evaluate((el) => Promise.all(el.getAnimations({ subtree: true }).filter((a) => a.effect?.getComputedTiming().iterations !== Infinity).map((a) => a.finished)).then(() => undefined)) }
+  const submit = dlg.getByTestId("img-submit")
+  await expect(submit).toBeInViewport({ ratio: 1 })
+  const footer = dlg.getByTestId("img-dialog-footer")
+  await expect(footer).toHaveCSS("position", "sticky")
+  await settleIfNew()
+  expect((await footer.boundingBox())!.y + (await footer.boundingBox())!.height).toBeLessThanOrEqual(900)
+  const flush = async () => {
+    await settleIfNew()
+    const d = (await dlg.boundingBox())!
+    const f = (await footer.boundingBox())!
+    return Math.abs(d.y + d.height - (f.y + f.height))
+  }
+  expect(await flush()).toBeLessThanOrEqual(1)
+  await expect(dlg.getByTestId("img-hint-id")).toBeVisible()
+  const r = page.waitForResponse((x) => x.url().endsWith("/api/os-images") && x.request().method() === "POST")
+  await submit.click()
+  expect((await r).status()).toBe(400)
+  for (const f of ["id", "name", "version", "source.repo"]) await expect(dlg.getByTestId(`img-error-${f}`)).toHaveText("Wajib diisi")
+  await expect(submit).toBeInViewport({ ratio: 1 })
+  expect(await flush()).toBeLessThanOrEqual(1)
+  await dlg.getByRole("button", { name: "Batal", exact: true }).click()
+  await expect(dlg).toBeHidden()
+}
+for (const rate of [Number(process.env.DIAG_RATE ?? "0.25")]) for (const variant of ["old", "new"] as const)
+  test(`DIAG-DR55 B ${variant} rate=${rate}`, async ({ page }) => { await dr55Body(page, variant, rate) })

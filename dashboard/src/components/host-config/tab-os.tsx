@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/select"
 import { Textarea } from "@/components/ui/textarea"
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
+import { ReasonText } from "@/components/os-images/path-text"
 import type { OsForm } from "@/components/host-config/form-state"
 import { LOCALES, TIMEZONES } from "@/lib/host-config"
 import {
@@ -116,7 +117,7 @@ export function TabOs({
         )}
         {blocked && image?.method !== "unattend" && (
           <FieldDescription className="text-destructive">
-            {blocked}. Install akan ditolak server.
+            <ReasonText reason={blocked} />. Install akan ditolak server.
           </FieldDescription>
         )}
       </FieldSet>
@@ -286,8 +287,9 @@ export function TabOs({
 }
 
 /**
- * Kartu image. DR-4-5: alasan "tidak tersedia"/keterbatasan = keterangan, bukan error → muted +
- * ikon info; merah hanya bila image itu yang sedang terpilih (install akan ditolak).
+ * Kartu image. DR-4-5: alasan "tidak tersedia"/keterbatasan = keterangan, bukan error → ikon info,
+ * `text-body` (DEC-022 §1, bukan muted); merah hanya bila image itu yang sedang terpilih (install
+ * akan ditolak).
  */
 function OsImageOption({
   img,
@@ -314,10 +316,14 @@ function OsImageOption({
         data-available={img.available}
       >
         <FieldContent>
-          <FieldTitle>
+          <FieldTitle id={`${id}-title`}>
             {img.name} {img.version}
           </FieldTitle>
-          <FieldDescription>
+          {/*
+            AC-6.38 (BUG-M6-L3): kartu terpilih/hover berlatar canvas-soft / input — muted di sana
+            < 4,5:1 → body. Catatan "tidak tersedia" juga body + ikon info (DEC-022 §1), bukan merah.
+          */}
+          <FieldDescription className="text-body" data-slot-detail="os-platform">
             <span className="type-data text-xs">{img.arch}</span> · {img.method}
           </FieldDescription>
           {note && (
@@ -327,8 +333,9 @@ function OsImageOption({
                 "flex items-start gap-1.5",
                 disabled && selected
                   ? "text-destructive"
-                  : "text-muted-foreground",
+                  : "text-body",
               )}
+              data-testid="os-option-note"
             >
               <HugeiconsIcon
                 icon={InformationCircleIcon}
@@ -336,7 +343,8 @@ function OsImageOption({
                 aria-hidden
                 className="mt-0.5 size-3.5 shrink-0"
               />
-              <span>{note}</span>
+              {/* DR-5-11 (M6): path/id di alasan "tidak tersedia" mono, dipecah hanya di "/". */}
+              <ReasonText reason={note} />
             </FieldDescription>
           )}
           {windows && (
@@ -349,6 +357,9 @@ function OsImageOption({
           value={img.id}
           id={id}
           disabled={disabled}
+          // a11y (M6, O10): nama aksesibel radio = judul kartu (label pembungkus tidak terbaca oleh
+          // semua pembaca layar untuk role=radio berbasis <button>).
+          aria-labelledby={`${id}-title`}
           aria-describedby={note ? `${id}-note` : undefined}
         />
       </Field>

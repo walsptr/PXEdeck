@@ -1,0 +1,277 @@
+# FIXTURE log installer nyata (run KVM M6 T15, smoke attempt11 node41 Debian); disanitasi + secret sintetis {{..}} (AC-6.17)
+Nov  6 02:27:58 syslogd started: BusyBox v1.35.0
+Nov  6 02:27:58 kernel: klogd started: BusyBox v1.35.0 (Debian 1:1.35.0-4+deb12u1+b1)
+Nov  6 02:27:58 kernel: [    0.000000] Linux version 6.1.0-50-amd64 (debian-kernel@lists.debian.org) (gcc-12 (Debian 12.2.0-14+deb12u1) 12.2.0, GNU ld (GNU Binutils for Debian) 2.40) #1 SMP PREEMPT_DYNAMIC Debian 6.1.176-1 (2026-07-02)
+Nov  6 02:27:58 kernel: [    0.000000] Command line: linux initrd=initrd auto=true priority=critical url=http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/preseed.cfg interface=auto netcfg/dhcp_timeout=60 console=ttyS0,115200n8 console=tty0 ---
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-provided physical RAM map:
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009ffff] usable
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x0000000000100000-0x0000000000811fff] usable
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x0000000000812000-0x0000000000812fff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x0000000000813000-0x000000007f8ecfff] usable
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x000000007f8ed000-0x000000007fb6cfff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x000000007fb6d000-0x000000007fb7efff] ACPI data
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x000000007fb7f000-0x000000007fbfefff] ACPI NVS
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x000000007fbff000-0x000000007ffdffff] usable
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x000000007ffe0000-0x000000007fffffff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x00000000e0000000-0x00000000efffffff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x00000000feffc000-0x00000000feffffff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] BIOS-e820: [mem 0x00000000ffe00000-0x00000000ffffffff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] NX (Execute Disable) protection: active
+Nov  6 02:27:58 kernel: [    0.000000] e820: update [mem 0x7e4a8018-0x7e4e1857] usable ==> usable
+Nov  6 02:27:58 kernel: [    0.000000] e820: update [mem 0x7e4a8018-0x7e4e1857] usable ==> usable
+Nov  6 02:27:58 kernel: [    0.000000] extended physical RAM map:
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x0000000000000000-0x000000000009ffff] usable
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x0000000000100000-0x0000000000811fff] usable
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x0000000000812000-0x0000000000812fff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x0000000000813000-0x000000007e4a8017] usable
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x000000007e4a8018-0x000000007e4e1857] usable
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x000000007e4e1858-0x000000007f8ecfff] usable
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x000000007f8ed000-0x000000007fb6cfff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x000000007fb6d000-0x000000007fb7efff] ACPI data
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x000000007fb7f000-0x000000007fbfefff] ACPI NVS
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x000000007fbff000-0x000000007ffdffff] usable
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x000000007ffe0000-0x000000007fffffff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x00000000e0000000-0x00000000efffffff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x00000000feffc000-0x00000000feffffff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] reserve setup_data: [mem 0x00000000ffe00000-0x00000000ffffffff] reserved
+Nov  6 02:27:58 kernel: [    0.000000] efi: EFI v2.70 by EDK II
+Nov  6 02:27:58 kernel: [    0.000000] efi: SMBIOS=0x7f8f6000 ACPI=0x7fb7e000 ACPI 2.0=0x7fb7e014 MEMATTR=0x7e51a398 INITRD=0x7e649c18 RNG=0x7fb74018 
+Nov  6 02:27:58 kernel: [    0.000000] random: crng init done
+Nov  6 02:27:58 kernel: [    0.000000] secureboot: Secure boot disabled
+Nov  6 02:27:58 kernel: [    0.000000] SMBIOS 2.8 present.
+Nov  6 02:27:58 kernel: [    0.000000] DMI: QEMU Standard PC (Q35 + ICH9, 2009), BIOS edk2-20260508-6.fc44 05/08/2026
+Nov  6 02:27:58 kernel: [    0.000000] Hypervisor detected: KVM
+Nov  6 02:27:58 kernel: [    0.000000] kvm-clock: Using msrs 4b564d01 and 4b564d00
+Nov  6 02:27:58 kernel: [    0.000001] kvm-clock: using sched offset of 33124503534 cycles
+Nov  6 02:27:58 kernel: [    0.000002] clocksource: kvm-clock: mask: 0xffffffffffffffff max_cycles: 0x1cd42e4dffb, max_idle_ns: 881590591483 ns
+Nov  6 02:27:58 kernel: [    0.000004] tsc: Detected 2688.000 MHz processor
+Nov  6 02:27:58 kernel: [    0.000093] e820: update [mem 0x00000000-0x00000fff] usable ==> reserved
+Nov  6 02:27:58 kernel: [    0.000095] e820: remove [mem 0x000a0000-0x000fffff] usable
+Nov  6 02:27:58 kernel: [    0.000099] last_pfn = 0x7ffe0 max_arch_pfn = 0x400000000
+Nov  6 02:27:58 kernel: [    0.000140] x86/PAT: Configuration [0-7]: WB  WC  UC- UC  WB  WP  UC- WT  
+Nov  6 02:27:58 kernel: [    0.008669] Using GB pages for direct mapping
+Nov  6 02:27:58 kernel: [    0.008933] RAMDISK: [mem 0x77214000-0x798fffff]
+Nov  6 02:27:58 kernel: [    0.008935] ACPI: Early table checksum verification disabled
+Nov  6 02:27:58 kernel: [    0.008938] ACPI: RSDP 0x000000007FB7E014 000024 (v02 BOCHS )
+Nov  6 02:27:58 kernel: [    0.008941] ACPI: XSDT 0x000000007FB7D0E8 00004C (v01 BOCHS  BXPC     00000001      01000013)
+Nov  6 02:27:58 kernel: [    0.008945] ACPI: FACP 0x000000007FB79000 0000F4 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+Nov  6 02:27:58 kernel: [    0.008949] ACPI: DSDT 0x000000007FB7A000 002CEF (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+Nov  6 02:27:58 kernel: [    0.008951] ACPI: FACS 0x000000007FBCD000 000040
+Nov  6 02:27:58 kernel: [    0.008953] ACPI: APIC 0x000000007FB78000 000080 (v03 BOCHS  BXPC     00000001 BXPC 00000001)
+Nov  6 02:27:58 kernel: [    0.008955] ACPI: TPM2 0x000000007FB77000 00004C (v04 BOCHS  BXPC     00000001 BXPC 00000001)
+Nov  6 02:27:58 kernel: [    0.008957] ACPI: MCFG 0x000000007FB76000 00003C (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+Nov  6 02:27:58 kernel: [    0.008960] ACPI: WAET 0x000000007FB75000 000028 (v01 BOCHS  BXPC     00000001 BXPC 00000001)
+Nov  6 02:27:58 kernel: [    0.008961] ACPI: Reserving FACP table memory at [mem 0x7fb79000-0x7fb790f3]
+Nov  6 02:27:58 kernel: [    0.008962] ACPI: Reserving DSDT table memory at [mem 0x7fb7a000-0x7fb7ccee]
+Nov  6 02:27:58 kernel: [    0.008963] ACPI: Reserving FACS table memory at [mem 0x7fbcd000-0x7fbcd03f]
+Nov  6 02:27:58 kernel: [    0.008963] ACPI: Reserving APIC table memory at [mem 0x7fb78000-0x7fb7807f]
+Nov  6 02:27:58 kernel: [    0.008964] ACPI: Reserving TPM2 table memory at [mem 0x7fb77000-0x7fb7704b]
+Nov  6 02:27:58 kernel: [    0.008964] ACPI: Reserving MCFG table memory at [mem 0x7fb76000-0x7fb7603b]
+Nov  6 02:27:58 kernel: [    0.008965] ACPI: Reserving WAET table memory at [mem 0x7fb75000-0x7fb75027]
+Nov  6 02:27:58 kernel: [    0.009146] No NUMA configuration found
+Nov  6 02:27:58 kernel: [    0.009146] Faking a node at [mem 0x0000000000000000-0x000000007ffdffff]
+Nov  6 02:27:58 kernel: [    0.009152] NODE_DATA(0) allocated [mem 0x7ff14000-0x7ff3efff]
+Nov  6 02:27:58 kernel: [    0.009270] Zone ranges:
+Nov  6 02:27:58 kernel: [    0.009271]   DMA      [mem 0x0000000000001000-0x0000000000ffffff]
+Nov  6 02:27:58 kernel: [    0.009272]   DMA32    [mem 0x0000000001000000-0x000000007ffdffff]
+Nov  6 02:27:58 kernel: [    0.009273]   Normal   empty
+Nov  6 02:27:58 kernel: [    0.009274]   Device   empty
+Nov  6 02:27:58 kernel: [    0.009274] Movable zone start for each node
+Nov  6 02:27:58 kernel: [    0.009276] Early memory node ranges
+Nov  6 02:27:58 kernel: [    0.009276]   node   0: [mem 0x0000000000001000-0x000000000009ffff]
+Nov  6 02:27:58 kernel: [    0.009277]   node   0: [mem 0x0000000000100000-0x0000000000811fff]
+Nov  6 02:27:58 kernel: [    0.009278]   node   0: [mem 0x0000000000813000-0x000000007f8ecfff]
+Nov  6 02:27:58 kernel: [    0.009278]   node   0: [mem 0x000000007fbff000-0x000000007ffdffff]
+Nov  6 02:27:58 kernel: [    0.009279] Initmem setup node 0 [mem 0x0000000000001000-0x000000007ffdffff]
+Nov  6 02:27:58 kernel: [    0.009388] On node 0, zone DMA: 1 pages in unavailable ranges
+Nov  6 02:27:58 kernel: [    0.009399] On node 0, zone DMA: 96 pages in unavailable ranges
+Nov  6 02:27:58 kernel: [    0.009409] On node 0, zone DMA: 1 pages in unavailable ranges
+Nov  6 02:27:58 kernel: [    0.009857] On node 0, zone DMA32: 786 pages in unavailable ranges
+Nov  6 02:27:58 kernel: [    0.009859] On node 0, zone DMA32: 32 pages in unavailable ranges
+Nov  6 02:27:58 kernel: [    0.010678] ACPI: PM-Timer IO Port: 0x608
+Nov  6 02:27:58 kernel: [    0.010687] ACPI: LAPIC_NMI (acpi_id[0xff] dfl dfl lint[0x1])
+Nov  6 02:27:58 kernel: [    0.010715] IOAPIC[0]: apic_id 0, version 17, address 0xfec00000, GSI 0-23
+Nov  6 02:27:58 kernel: [    0.010717] ACPI: INT_SRC_OVR (bus 0 bus_irq 0 global_irq 2 dfl dfl)
+Nov  6 02:27:58 kernel: [    0.010719] ACPI: INT_SRC_OVR (bus 0 bus_irq 5 global_irq 5 high level)
+Nov  6 02:27:58 kernel: [    0.010719] ACPI: INT_SRC_OVR (bus 0 bus_irq 9 global_irq 9 high level)
+Nov  6 02:27:58 kernel: [    0.010720] ACPI: INT_SRC_OVR (bus 0 bus_irq 10 global_irq 10 high level)
+Nov  6 02:27:58 kernel: [    0.010721] ACPI: INT_SRC_OVR (bus 0 bus_irq 11 global_irq 11 high level)
+Nov  6 02:27:58 kernel: [    0.010723] ACPI: Using ACPI (MADT) for SMP configuration information
+Nov  6 02:27:58 kernel: [    0.010724] TSC deadline timer available
+Nov  6 02:27:58 kernel: [    0.010725] smpboot: Allowing 2 CPUs, 0 hotplug CPUs
+Nov  6 02:27:58 kernel: [    0.010744] kvm-guest: KVM setup pv remote TLB flush
+Nov  6 02:27:58 kernel: [    0.010748] kvm-guest: setup PV sched yield
+Nov  6 02:27:58 kernel: [    0.010755] PM: hibernation: Registered nosave memory: [mem 0x00000000-0x00000fff]
+Nov  6 02:27:58 kernel: [    0.010756] PM: hibernation: Registered nosave memory: [mem 0x000a0000-0x000fffff]
+Nov  6 02:27:58 kernel: [    0.010757] PM: hibernation: Registered nosave memory: [mem 0x00812000-0x00812fff]
+Nov  6 02:27:58 kernel: [    0.010758] PM: hibernation: Registered nosave memory: [mem 0x7f8ed000-0x7fbfefff]
+Nov  6 02:27:58 kernel: [    0.010759] [mem 0x80000000-0xdfffffff] available for PCI devices
+Nov  6 02:27:58 kernel: [    0.010760] Booting paravirtualized kernel on KVM
+Nov  6 02:27:58 kernel: [    0.010762] clocksource: refined-jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645519600211568 ns
+Nov  6 02:27:58 kernel: [    0.013788] setup_percpu: NR_CPUS:8192 nr_cpumask_bits:2 nr_cpu_ids:2 nr_node_ids:1
+Nov  6 02:27:58 kernel: [    0.013881] percpu: Embedded 62 pages/cpu s217088 r8192 d28672 u1048576
+Nov  6 02:27:58 kernel: [    0.013886] pcpu-alloc: s217088 r8192 d28672 u1048576 alloc=1*2097152
+Nov  6 02:27:58 kernel: [    0.013888] pcpu-alloc: [0] 0 1 
+Nov  6 02:27:58 kernel: [    0.013917] kvm-guest: PV spinlocks enabled
+Nov  6 02:27:58 kernel: [    0.013919] PV qspinlock hash table entries: 256 (order: 0, 4096 bytes, linear)
+Nov  6 02:27:58 kernel: [    0.013923] Fallback order for Node 0: 0 
+Nov  6 02:27:58 kernel: [    0.013926] Built 1 zonelists, mobility grouping on.  Total pages: 513003
+Nov  6 02:27:58 kernel: [    0.013927] Policy zone: DMA32
+Nov  6 02:27:58 kernel: [    0.013927] Kernel command line: linux initrd=initrd auto=true priority=critical url=http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/preseed.cfg interface=auto netcfg/dhcp_timeout=60 console=ttyS0,115200n8 console=tty0 --
+Nov  6 02:27:58 kernel: [    0.014012] Unknown kernel command line parameters "linux --- auto=true priority=critical url=http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/preseed.cfg interface=auto netcfg/dhcp_timeout=60", will be passed to user spac
+Nov  6 02:27:58 kernel: [    0.014089] Dentry cache hash table entries: 262144 (order: 9, 2097152 bytes, linear)
+Nov  6 02:27:58 kernel: [    0.014122] Inode-cache hash table entries: 131072 (order: 8, 1048576 bytes, linear)
+Nov  6 02:27:58 kernel: [    0.014156] mem auto-init: stack:all(zero), heap alloc:on, heap free:off
+Nov  6 02:27:58 kernel: [    0.017098] Memory: 245104K/2093488K available (14343K kernel code, 2338K rwdata, 9116K rodata, 2820K init, 17356K bss, 216344K reserved, 0K cma-reserved)
+Nov  6 02:27:58 kernel: [    0.017172] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=2, Nodes=1
+Nov  6 02:27:58 kernel: [    0.017187] ftrace: allocating 40432 entries in 158 pages
+Nov  6 02:27:58 kernel: [    0.022626] ftrace: allocated 158 pages with 5 groups
+Nov  6 02:27:58 kernel: [    0.023259] Dynamic Preempt: voluntary
+Nov  6 02:27:58 kernel: [    0.023391] rcu: Preemptible hierarchical RCU implementation.
+Nov  6 02:27:58 kernel: [    0.023392] rcu: 	RCU restricting CPUs from NR_CPUS=8192 to nr_cpu_ids=2.
+Nov  6 02:28:12 netcfg[561]: DEBUG: Writing informative header
+Nov  6 02:28:12 netcfg[561]: DEBUG: Success!
+Nov  6 02:28:12 netcfg[561]: DEBUG: Writing loopback interface
+Nov  6 02:28:12 netcfg[561]: DEBUG: Success!
+Nov  6 02:28:12 netcfg[561]: DEBUG: Writing DHCP stanza for enp1s0
+Nov  6 02:28:12 netcfg[561]: INFO: Detected enp1s0 as a hotpluggable device
+Nov  6 02:28:12 netcfg[561]: DEBUG: Success!
+Nov  6 02:28:13 main-menu[279]: (process:560): udhcpc: started, v1.35.0
+Nov  6 02:28:13 main-menu[279]: (process:560): udhcpc: broadcasting discover
+Nov  6 02:28:13 main-menu[279]: (process:560): udhcpc: broadcasting select for 10.99.0.131, server 10.99.0.2
+Nov  6 02:28:13 main-menu[279]: (process:560): udhcpc: lease of 10.99.0.131 obtained from 10.99.0.2, lease time 3600
+Nov  6 02:28:13 main-menu[279]: INFO: Falling back to the package description for brltty-udeb
+Nov  6 02:28:13 main-menu[279]: INFO: Falling back to the package description for brltty-udeb
+Nov  6 02:28:13 main-menu[279]: INFO: Menu item 'network-preseed' selected
+Nov  6 02:28:14 preseed: successfully loaded preseed file from http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/preseed.cfg
+Nov  6 02:28:14 preseed: running preseed command preseed/early_command: b=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^url=\(https\{0,1\}://.*/boot/{{MAC}}/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1#p' | head -n 1); if [ -n "$b" ]; then printf '%s\n' 'i
+Nov  6 02:28:14 kernel: [   17.091228] virtio_blk virtio2: 2/0/0 default/read/poll queues
+Nov  6 02:28:14 kernel: [   17.091748] virtio_blk virtio2: [vda] 41943040 512-byte logical blocks (21.5 GB/20.0 GiB)
+Nov  6 02:28:14 main-menu[279]: (process:634): 2026-11-06 02:28:13 URL:http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/preseed.cfg [15380] -> "/tmp/_fetch-url_debconf-seed.649" [1]
+Nov  6 02:28:14 main-menu[279]: INFO: Falling back to the package description for brltty-udeb
+Nov  6 02:28:14 main-menu[279]: INFO: Menu item 'localechooser' selected
+Nov  6 02:28:14 localechooser: info: debian-installer/language preseeded to 'en' (seen: true)
+Nov  6 02:28:14 localechooser: info: debian-installer/country preseeded to 'US' (seen: true)
+Nov  6 02:28:14 localechooser: info: debian-installer/locale preseeded to 'en_US.UTF-8' (seen: true)
+Nov  6 02:28:14 debconf: Setting debconf/language to en
+Nov  6 02:28:14 localechooser: info: Language = 'en'
+Nov  6 02:28:14 localechooser: info: line=en;0;US;en_US.UTF-8;;console-setup
+Nov  6 02:28:14 localechooser: info: Set debian-installer/language = 'en'
+Nov  6 02:28:14 localechooser: info: Default country = 'US'
+Nov  6 02:28:14 localechooser: info: Default locale = 'en_US.UTF-8'
+Nov  6 02:28:14 debconf: --> SET passwd/user-password-crypted {{HASH}}
+Nov  6 02:28:22 net-retriever: regular: pool/main/p/partman-auto-crypto/partman-auto-crypto_34_all.udeb /var/cache/anna/partman-auto-crypto_34_all.udeb
+Nov  6 02:28:22 anna[5654]: 2026-11-06 02:28:22 URL:http://10.99.0.2/media/debian-12/pool/main/p/partman-auto-crypto/partman-auto-crypto_34_all.udeb [5728/5728] -> "/var/cache/anna/_fetch-url_partman-auto-crypto_34_all.udeb.5659" [1]
+Nov  6 02:28:22 anna[5654]: DEBUG: retrieving partman-crypto 121
+Nov  6 02:28:22 net-retriever: regular: pool/main/p/partman-crypto/partman-crypto_121_amd64.udeb /var/cache/anna/partman-crypto_121_amd64.udeb
+Nov  6 02:28:22 anna[5654]: 2026-11-06 02:28:22 URL:http://10.99.0.2/media/debian-12/pool/main/p/partman-crypto/partman-crypto_121_amd64.udeb [215944/215944] -> "/var/cache/anna/_fetch-url_partman-crypto_121_amd64.udeb.5687" [1]
+Nov  6 02:28:23 preseed: running preseed command partman/early_command: for m in virtio virtio_ring virtio_pci scsi_mod; do modprobe $m 2>/dev/null; done; for m in virtio_blk virtio_scsi; do [ -d "/sys/module/$m" ] || { wget -q -T 15 -O "/t
+Nov  6 02:28:23 log-output: File descriptor 3 (pipe:[1357]) leaked on pvs invocation.
+Nov  6 02:28:23 log-output:  Parent PID 5741: /bin/sh
+Nov  6 02:28:23 log-output: File descriptor 4 (/dev/pts/4) leaked on pvs invocation.
+Nov  6 02:28:23 log-output:  Parent PID 5741: /bin/sh
+Nov  6 02:28:23 log-output: File descriptor 5 (/dev/pts/4) leaked on pvs invocation.
+Nov  6 02:28:23 log-output:  Parent PID 5741: /bin/sh
+Nov  6 02:28:23 log-output: File descriptor 6 (/dev/pts/4) leaked on pvs invocation.
+Nov  6 02:28:23 log-output:  Parent PID 5741: /bin/sh
+Nov  6 02:28:23 kernel: [   26.431344] raid6: avx512x4 gen() 42953 MB/s
+Nov  6 02:28:55 in-target: Unpacking locales (2.36-9+deb12u14) ...^M
+Nov  6 02:28:56 in-target: Setting up libc-l10n (2.36-9+deb12u14) ...^M
+Nov  6 02:28:56 in-target: Setting up locales (2.36-9+deb12u14) ...^M
+Nov  6 02:28:56 in-target: Generating locales (this might take a while)...^M
+Nov  6 02:28:56 in-target: Generation complete.^M
+Nov  6 02:28:56 localechooser: Adding locale 'en_US.UTF-8'
+Nov  6 02:28:56 localechooser: Generating added locales...
+Nov  6 02:28:57 pxe: 50mirror dinonaktifkan (DEC-021)
+Nov  6 02:28:57 install-firmware: queuing intel-microcode installation (GenuineIntel)
+Nov  6 02:28:57 install-firmware: pre-enabling non-free-firmware component for apt-setup
+Nov  6 02:28:57 base-installer: info: kernel linux-image-amd64 usable on amd64
+Nov  6 02:28:57 base-installer: info: kernel linux-image-6.1.0-50-amd64 usable on amd64
+Nov  6 02:28:57 base-installer: info: Found kernels 'linux-image-6.1.0-50-amd64,linux-image-amd64'
+Nov  6 02:28:57 base-installer: info: arch_kernel candidates: linux-image-amd64
+Nov  6 02:28:57 base-installer: info: arch_kernel: linux-image-amd64 (present)
+Nov  6 02:29:33 main-menu[279]: INFO: Falling back to the package description for brltty-udeb
+Nov  6 02:29:33 depthcharge-tools-installer: Not installing to non-ChromeOS board.
+Nov  6 02:29:33 main-menu[279]: INFO: Falling back to the package description for brltty-udeb
+Nov  6 02:29:33 main-menu[279]: INFO: Menu item 'apt-setup-udeb' selected
+Nov  6 02:29:33 apt-setup: warning: /usr/lib/apt-setup/generators/50mirror returned error code 126; discarding output
+Nov  6 02:29:33 apt-setup: dpkg-divert: warning: diverting file '/sbin/start-stop-daemon' from an Essential package with rename is dangerous, use --no-rename
+Nov  6 02:29:33 /bin/in-target: warning: /target/etc/mtab won't be updated since it is a symlink.
+Nov  6 02:29:33 in-target: Ign:1 http://10.99.0.2/media/debian-12 bookworm InRelease
+Nov  6 02:29:33 in-target: Hit:2 http://10.99.0.2/media/debian-12 bookworm Release
+Nov  6 02:29:33 in-target: Ign:3 http://10.99.0.2/media/debian-12 bookworm Release.gpg
+Nov  6 02:29:33 in-target: Reading package lists...
+Nov  6 02:29:33 in-target: 
+Nov  6 02:29:33 main-menu[279]: (process:16372): /usr/bin/apt-setup: line 61: /usr/lib/apt-setup/generators/50mirror: Permission denied
+Nov  6 02:29:33 main-menu[279]: INFO: Falling back to the package description for brltty-udeb
+Nov  6 02:29:33 depthcharge-tools-installer: Not installing to non-ChromeOS board.
+Nov  6 02:34:16 user-setup: Done.
+Nov  6 02:34:17 user-setup: Adding user `m6admin' to group `sudo' ...
+Nov  6 02:34:17 usermod[28197]: add 'm6admin' to group 'sudo'
+Nov  6 02:34:17 usermod[28197]: add 'm6admin' to shadow group 'sudo'
+Nov  6 02:34:17 user-setup: Done.
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/07brltty
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/07preseed
+Nov  6 02:34:17 preseed: running preseed command preseed/late_command: in-target sh -c 'echo IyEvYmluL3NoCnNldCAtZQpiPSQodHIgJyAnICdcbicgPCAvcHJvYy9jbWRsaW5lIHwgc2VkIC1uICdzI151cmw9XChodHRwc1x7MCwxXH06Ly8uKi9ib290LzUyOjU0OjAwOjk5OjAwOjQxL1t
+Nov  6 02:34:17 log-output: dpkg-divert: warning: diverting file '/sbin/start-stop-daemon' from an Essential package with rename is dangerous, use --no-rename
+Nov  6 02:34:17 /bin/in-target: warning: /target/etc/mtab won't be updated since it is a symlink.
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/07rootskel
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/07speakup
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/08hw-detect
+Nov  6 02:34:17 hw-detect: detected virtualization 'kvm' (with systemd-detect-virt)
+Nov  6 02:34:17 finish-install: dpkg-divert: warning: diverting file '/sbin/start-stop-daemon' from an Essential package with rename is dangerous, use --no-rename
+Nov  6 02:34:17 /bin/in-target: warning: /target/etc/mtab won't be updated since it is a symlink.
+Nov  6 02:34:17 in-target: Reading package lists...
+Nov  6 02:34:17 in-target: 
+Nov  6 02:34:17 in-target: Building dependency tree...
+Nov  6 02:34:17 in-target: 
+Nov  6 02:34:17 in-target: Reading state information...
+Nov  6 02:34:17 in-target: 
+Nov  6 02:34:17 in-target: E
+Nov  6 02:34:17 in-target: : 
+Nov  6 02:34:17 in-target: Unable to locate package qemu-guest-agent
+Nov  6 02:34:17 in-target: 
+Nov  6 02:34:17 hw-detect: installing intel-microcode
+Nov  6 02:34:17 finish-install: dpkg-divert: warning: diverting file '/sbin/start-stop-daemon' from an Essential package with rename is dangerous, use --no-rename
+Nov  6 02:34:17 /bin/in-target: warning: /target/etc/mtab won't be updated since it is a symlink.
+Nov  6 02:34:17 in-target: Reading package lists...
+Nov  6 02:34:17 in-target: 
+Nov  6 02:34:17 in-target: Building dependency tree...
+Nov  6 02:34:17 in-target: 
+Nov  6 02:34:17 in-target: Reading state information...
+Nov  6 02:34:17 in-target: 
+Nov  6 02:34:17 in-target: E
+Nov  6 02:34:17 in-target: : 
+Nov  6 02:34:17 in-target: Unable to locate package intel-microcode
+Nov  6 02:34:17 in-target: 
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/10clock-setup
+Nov  6 02:34:17 clock-setup: not setting hardware clock
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/10open-iscsi
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/10update-initramfs
+Nov  6 02:34:17 finish-install: dpkg-divert: warning: diverting file '/sbin/start-stop-daemon' from an Essential package with rename is dangerous, use --no-rename
+Nov  6 02:34:17 /bin/in-target: warning: /target/etc/mtab won't be updated since it is a symlink.
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/20final-message
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/30hw-detect
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/50config-target-network
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/55netcfg-copy-config
+Nov  6 02:34:17 finish-install: dpkg-divert: warning: diverting file '/sbin/start-stop-daemon' from an Essential package with rename is dangerous, use --no-rename
+Nov  6 02:34:17 /bin/in-target: warning: /target/etc/mtab won't be updated since it is a symlink.
+Nov  6 02:34:17 netcfg[28649]: INFO: Starting netcfg v.1.187+deb12u1
+Nov  6 02:34:17 netcfg[28649]: DEBUG: No interface given; clearing /etc/network/interfaces
+Nov  6 02:34:17 netcfg[28649]: DEBUG: Writing informative header
+Nov  6 02:34:17 netcfg[28649]: DEBUG: Success!
+Nov  6 02:34:17 netcfg[28649]: DEBUG: Writing loopback interface
+Nov  6 02:34:17 netcfg[28649]: DEBUG: Success!
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/60cleanup
+Nov  6 02:34:17 finish-install: Reading package lists...
+Nov  6 02:34:17 finish-install: 
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/65partman-md
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/70mtab
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/80hvcgetty
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/90base-installer
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/90console
+Nov  6 02:34:17 finish-install: Configuring init for serial console
+Nov  6 02:34:17 finish-install: grep: /target/etc/securetty: No such file or directory
+Nov  6 02:34:17 finish-install: grep: /target/etc/securetty: No such file or directory
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/94random-seed
+Nov  6 02:34:17 finish-install: info: Running /usr/lib/finish-install.d/94save-logs

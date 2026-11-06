@@ -1,0 +1,37 @@
+2026-11-06 10:00:01,104 INFO root:39 start: subiquity/Early/run_early_commands:
+2026-11-06 10:00:01,105 DEBUG subiquity.server.controllers.cmdlist:55 running early-commands: sh -c 'curl -fsS -m 10 --data-binary @- http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/log'
+2026-11-06 10:00:01,350 INFO root:39 finish: subiquity/Early/run_early_commands: SUCCESS: running early-commands
+2026-11-06 10:00:01,402 DEBUG subiquity.server.server:612 loaded autoinstall config from /autoinstall.yaml
+2026-11-06 10:00:01,403 DEBUG subiquity.server.server:615 autoinstall config: {'version': 1, 'identity': {'hostname': 'm6-node12', 'username': 'ops', 'password': '{{HASH}}'}, 'ssh': {'install-server': True, 'allow-pw': False}}
+2026-11-06 10:00:01,410 DEBUG subiquity.common.errorreport:301 ErrorReporter.load_reports(): crash dir /var/crash is empty
+2026-11-06 10:00:01,522 INFO subiquity.server.controllers.network:191 config: {'version': 2, 'ethernets': {'id0': {'match': {'macaddress': '{{MAC}}'}, 'addresses': ['10.99.0.21/24'], 'routes': [{'to': 'default', 'via': '10.99.0.1'}], 'nameservers': {'addresses': ['10.99.0.2']}}}}
+2026-11-06 10:00:01,523 DEBUG subiquity.server.controllers.network:242 apply_config: waiting for netplan apply
+2026-11-06 10:00:02,019 DEBUG subiquity.server.controllers.mirror:356 PrimaryEntry(uri='http://10.99.0.2/media/ubuntu-24.04', arches=['amd64'])
+2026-11-06 10:00:02,020 DEBUG subiquity.server.controllers.mirror:402 Mirror check http://10.99.0.2/media/ubuntu-24.04 → offline (no NAT), using pool from ISO
+2026-11-06 10:00:02,311 DEBUG subiquity.server.controllers.filesystem:1084 _probe_once: disks found: /dev/vda size=21474836480 serial=None wwn=None
+2026-11-06 10:00:02,312 DEBUG subiquity.server.controllers.filesystem:1120 storage layout: {'name': 'lvm', 'match': {'path': '/dev/vda'}}
+2026-11-06 10:00:02,450 INFO subiquity.server.controllers.filesystem:1203 partition uuid=6f2c3a50-7d1e-4b2a-9c0d-2e8f5a1b7c34 size=1127219200 flag=boot
+2026-11-06 10:00:02,451 INFO subiquity.server.controllers.filesystem:1203 partition uuid=0b6c3f0e-1d2a-4c6b-9f00-000000000011 size=2147483648 path=/boot
+2026-11-06 10:00:02,452 INFO subiquity.server.controllers.filesystem:1210 lvm vg ubuntu-vg pv /dev/vda3 lv ubuntu-lv size=10737418240 path=/
+2026-11-06 10:00:03,001 DEBUG subiquity.server.server:701 progress: [##########          ] 50% curtin partitioning
+2026-11-06 10:00:03,002 DEBUG subiquity.server.server:701 progress: [####################] 100% curtin partitioning
+2026-11-06 10:00:04,117 INFO subiquity.server.controllers.install:418 curtin command: /snap/subiquity/current/bin/subiquity-cmd /snap/subiquity/current/usr/bin/python3.12 -m curtin --showtrace -c /var/log/installer/curtin-install/subiquity-curthooks.conf curthooks
+2026-11-06 10:00:04,118 DEBUG subiquity.server.controllers.install:420 env: {'TARGET_MOUNT_POINT': '/target', 'CURTIN_CONFIG': '/var/log/installer/curtin-install/subiquity-curthooks.conf'}
+2026-11-06 10:00:05,330 INFO subiquity.server.controllers.install:502 installing packages: openssh-server, cloud-init, linux-generic
+2026-11-06 10:00:05,331 DEBUG subiquity.server.controllers.install:503 apt sources: deb [check-date=no] file:///cdrom noble main restricted
+2026-11-06 10:00:06,712 DEBUG subiquity.server.controllers.install:611 sha256 of /target/boot/vmlinuz-6.8.0-31-generic:
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08
+2026-11-06 10:00:06,900 INFO subiquity.server.controllers.userdata:88 identity: creating user ops with groups adm,sudo
+2026-11-06 10:00:06,901 DEBUG subiquity.server.controllers.userdata:92 chpasswd -e: ops:{{HASH}}
+2026-11-06 10:00:07,005 INFO subiquity.server.controllers.ssh:75 authorized_keys: 2 key(s) for ops
+2026-11-06 10:00:07,006 DEBUG subiquity.server.controllers.ssh:80 key fingerprint: 256 SHA256:tGtNbP1X+RksP19dZQTf2WS9arMo1SsDTGSaoVgrRRU fixture-ed25519@test (ED25519)
+2026-11-06 10:00:07,410 INFO root:39 start: subiquity/Late/run_late_commands:
+2026-11-06 10:00:07,411 DEBUG subiquity.server.controllers.cmdlist:55 running late-commands: sh -c 'u=$(tr " " "\n" < /proc/cmdline | sed -n "s|^ds=nocloud-net;s=||p" | head -n 1); curl -fsS -m 10 -X POST -d stage=configuring "${u}status"'
+2026-11-06 10:00:07,412 DEBUG subiquity.server.controllers.cmdlist:58 resolved url: http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/status
+2026-11-06 10:00:07,413 DEBUG subiquity.server.controllers.cmdlist:59 json payload: {"url":"http:\/\/10.99.0.2\/boot\/{{MAC}}\/{{TOKEN}}\/status","stage":"configuring"}
+2026-11-06 10:00:07,600 DEBUG subiquity.server.controllers.cmdlist:61 escaped: printf %s \$6\$ is not a hash marker here
+2026-11-06 10:00:07,700 INFO subiquity.server.controllers.cmdlist:62 late-commands output: Configuring networking... done
+2026-11-06 10:00:08,100 DEBUG subiquity.server.server:701 progress: [####################] 100% late-commands
+2026-11-06 10:00:08,101 INFO root:39 finish: subiquity/Late/run_late_commands: SUCCESS: running late-commands
+2026-11-06 10:00:08,500 DEBUG subiquity.server.server:800 shutdown: reboot requested by autoinstall (shutdown: reboot)

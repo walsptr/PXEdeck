@@ -1,0 +1,25 @@
+ls: cannot access '/var/log/anaconda': No such file or directory
+/var/log/installer:
+total 1096
+drwxrwx---  4 root adm      4096 Nov  5 22:39 .
+drwxrwxr-x 10 root syslog   4096 Nov  5 22:42 ..
+-r--------  1 root root     2843 Nov  5 22:39 autoinstall-user-data
+drwxr-xr-x  2 root root     4096 Nov  5 22:34 block
+-rw-r--r--  1 root root       52 Nov  5 22:38 casper-md5check.json
+-rw-------  1 root root    66522 Nov  5 22:34 cloud-init.log
+-rw-------  1 root root     5041 Nov  5 22:34 cloud-init-output.log
+drwxr-xr-x  2 root root     4096 Nov  5 22:38 curtin-install
+-rw-r--r--  1 root root   132692 Nov  5 22:39 curtin-install.log
+-rw-r--r--  1 root root       80 Nov  5 22:37 device-map.json
+-rw-------  1 root root   686272 Nov  5 22:39 installer-journal.txt
+-r--r--r--  1 root root       67 Nov  5 22:39 media-info
+lrwxrwxrwx  1 root root       31 Nov  5 22:34 subiquity-client-debug.log -> subiquity-client-debug.log.1402
+-rw-------  1 root root     2101 Nov  5 22:34 subiquity-client-debug.log.1402
+-rw-------  1 root root     2113 Nov  5 22:34 subiquity-client-debug.log.1634
+lrwxrwxrwx  1 root root       30 Nov  5 22:34 subiquity-client-info.log -> subiquity-client-info.log.1402
+-rw-------  1 root root      225 Nov  5 22:34 subiquity-client-info.log.1402
+-rw-------  1 root root      213 Nov  5 22:34 subiquity-client-info.log.1634
+lrwxrwxrwx  1 root root       31 Nov  5 22:34 subiquity-server-debug.log -> subiquity-server-debug.log.1656
+-rw-------  1 root root   161983 Nov  5 22:39 subiquity-server-debug.log.1656
+lrwxrwxrwx  1 root root       30 Nov  5 22:34 subiquity-server-info.log -> subiquity-server-info.log.1656
+-rw-------  1 root root     7513 Nov  5 22:39 subiquity-server-info.log.1656

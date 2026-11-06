@@ -1,0 +1,7 @@
+token diambil dari serial (memori): true
+GET /boot/<mac21>/<token21>/user-data dari host 10.99.0.1: 404
+GET /boot/<mac22>/<token21>/user-data dari host: 404
+GET /boot/<mac21>/<token acak>/user-data: 404
+GET /boot/<mac21>/<token21>/user-data dari pxe-test-m6core-node22 (SSH): 404 (ssh exit=0)
+event job node21 baru yang menyebut host/node22: 0
+nginx 404 total: 0 → 4

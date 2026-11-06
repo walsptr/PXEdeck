@@ -1,0 +1,36 @@
+Nov  6 10:00:01 syslogd started: BusyBox v1.36.1
+Nov  6 10:00:01 kernel: [    0.000000] Linux version 6.1.0-26-amd64 (debian-kernel@lists.debian.org)
+Nov  6 10:00:01 kernel: [    0.000000] Command line: initrd=initrd auto=true priority=critical url=http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/preseed.cfg interface=auto netcfg/dhcp_timeout=60 console=ttyS0,115200n8 ---
+Nov  6 10:00:02 main-menu[234]: INFO: Menu item 'localechooser' selected
+Nov  6 10:00:03 main-menu[234]: INFO: Menu item 'netcfg' selected
+Nov  6 10:00:03 netcfg[512]: INFO: Starting netcfg v.1.187
+Nov  6 10:00:04 netcfg[512]: DEBUG: State is now 6
+Nov  6 10:00:05 main-menu[234]: INFO: Menu item 'network-preseed' selected
+Nov  6 10:00:05 preseed: retrieving http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/preseed.cfg
+Nov  6 10:00:05 net-retriever: fetching http://10.99.0.2/media/debian-12/dists/bookworm/Release
+Nov  6 10:00:06 preseed: successfully loaded preseed file from http%3A%2F%2F10.99.0.2%2Fboot%2F{{MAC}}%2F{{TOKEN}}%2Fpreseed.cfg
+Nov  6 10:00:06 debconf: --> SET passwd/user-password-crypted {{HASH}}
+Nov  6 10:00:06 debconf: <-- 0 value set
+Nov  6 10:00:06 debconf: --> SET partman-auto/method lvm
+Nov  6 10:00:07 partman:   No matching physical volumes found
+Nov  6 10:00:08 partman-lvm:   Logical volume "root" created.
+Nov  6 10:00:09 kernel: [   21.384511] EXT4-fs (dm-0): mounted filesystem 1f6a8c2d-3b4e-4f5a-8b6c-7d8e9f0a1b2c r/w with ordered data mode.
+Nov  6 10:00:10 base-installer: info: Found initrd generator: initramfs-tools
+Nov  6 10:00:11 in-target: Reading package lists...
+Nov  6 10:00:12 in-target: Setting up openssh-server (1:9.2p1-2+deb12u3) ...
+Nov  6 10:00:12 in-target: Creating SSH2 ED25519 key; this may take some time ...
+Nov  6 10:00:13 in-target: 256 SHA256:tGtNbP1X+RksP19dZQTf2WS9arMo1SsDTGSaoVgrRRU root@m6-node14 (ED25519)
+Nov  6 10:00:14 pkgsel: installing additional packages
+Nov  6 10:00:15 in-target: 45% [Working]
+Nov  6 10:00:15 in-target: Progress: [ 87%] [##########################################........]
+Nov  6 10:00:16 grub-installer: info: Installing grub on '/dev/vda'
+Nov  6 10:00:17 grub-installer: Installing for x86_64-efi platform.
+Nov  6 10:00:18 grub-installer: Generating grub configuration file ...
+Nov  6 10:00:18 grub-installer: Found linux image: /boot/vmlinuz-6.1.0-26-amd64
+Nov  6 10:00:19 preseed: running preseed command preseed/late_command: sh -c 'u=$(tr " " "\n" < /proc/cmdline | sed -n "s|^url=||p" | head -n 1); in-target sh /tmp/pxe-late.sh'
+Nov  6 10:00:19 log-output: + curl -fsS -m 10 -X POST -d stage=configuring http://10.99.0.2/boot/{{MAC}}/{{TOKEN}}/status
+Nov  6 10:00:19 log-output: + echo "{\"token\":\"{{TOKEN}}\"}"
+Nov  6 10:00:20 log-output: + cat /tmp/debug-hostkey
+{{KEY}}
+Nov  6 10:00:20 finish-install: info: Running /usr/lib/finish-install.d/94save-logs
+Nov  6 10:00:21 finish-install: info: Running /usr/lib/finish-install.d/99reboot

@@ -1,0 +1,265 @@
+# FIXTURE log installer nyata (run KVM M6 T15, smoke attempt2 node43 Ubuntu); disanitasi + secret sintetis {{..}} (AC-6.17)
+
+---- [[ subiquity step initial ]] ----
+curtin: Installation started. (24.0.0-50-g8c8ca80d2)
+curtin: Installation finished.
+
+---- [[ subiquity step partitioning ]] ----
+curtin: Installation started. (24.0.0-50-g8c8ca80d2)
+start: cmd-install/stage-partitioning/builtin/cmd-block-meta: curtin command block-meta
+get_path_to_storage_volume for volume disk-vda({'ptable': 'gpt', 'path': '/dev/vda', 'wipe': 'superblock-recursive', 'preserve': False, 'name': '', 'grub_device': False, 'id': 'disk-vda', 'type': 'disk'})
+Running command ['udevadm', 'info', '--query=property', '--export', '/dev/vda'] with allowed return codes [0] (capture=True)
+/dev/vda is multipath device member? False
+Running command ['partprobe', '/dev/vda'] with allowed return codes [0, 1] (capture=False)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED udevadm_settle(): 0.026
+devsync happy - path /dev/vda now exists
+return volume path /dev/vda
+get_path_to_storage_volume for volume partition-0({'device': 'disk-vda', 'size': 999292928, 'wipe': 'superblock', 'flag': 'boot', 'number': 1, 'preserve': False, 'grub_device': True, 'offset': 1048576, 'id': 'partition-0', 'type': 'partitio
+get_path_to_storage_volume for volume disk-vda({'ptable': 'gpt', 'path': '/dev/vda', 'wipe': 'superblock-recursive', 'preserve': False, 'name': '', 'grub_device': False, 'id': 'disk-vda', 'type': 'disk'})
+Running command ['udevadm', 'info', '--query=property', '--export', '/dev/vda'] with allowed return codes [0] (capture=True)
+/dev/vda is multipath device member? False
+Running command ['partprobe', '/dev/vda'] with allowed return codes [0, 1] (capture=False)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED udevadm_settle(): 0.008
+devsync happy - path /dev/vda now exists
+return volume path /dev/vda
+get_path_to_storage_volume for volume partition-1({'device': 'disk-vda', 'size': 20473446400, 'wipe': 'superblock', 'number': 2, 'preserve': False, 'offset': 1000341504, 'id': 'partition-1', 'type': 'partition'})
+get_path_to_storage_volume for volume disk-vda({'ptable': 'gpt', 'path': '/dev/vda', 'wipe': 'superblock-recursive', 'preserve': False, 'name': '', 'grub_device': False, 'id': 'disk-vda', 'type': 'disk'})
+Running command ['udevadm', 'info', '--query=property', '--export', '/dev/vda'] with allowed return codes [0] (capture=True)
+/dev/vda is multipath device member? False
+Running command ['partprobe', '/dev/vda'] with allowed return codes [0, 1] (capture=False)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED udevadm_settle(): 0.011
+devsync happy - path /dev/vda now exists
+return volume path /dev/vda
+block-meta: extracted devices to clear: ['/dev/vda']
+Declared block devices: ['/dev/vda']
+clearing devices=['/dev/vda']
+start: cmd-install/stage-partitioning/builtin/cmd-block-meta/clear-holders: removing previous storage devices
+Running command ['mdadm', '--assemble', '--scan', '-v'] with allowed return codes [0, 1, 2] (capture=True)
+mdadm assemble scan results:
+
+mdadm: looking for devices for further assembly
+mdadm: no recogniseable superblock on /dev/loop8
+mdadm: no recogniseable superblock on /dev/vda
+mdadm: no recogniseable superblock on /dev/loop7
+mdadm: no recogniseable superblock on /dev/loop6
+mdadm: no recogniseable superblock on /dev/loop5
+mdadm: no recogniseable superblock on /dev/loop4
+mdadm: no recogniseable superblock on /dev/loop3
+mdadm: no recogniseable superblock on /dev/loop2
+mdadm: no recogniseable superblock on /dev/loop1
+mdadm: no recogniseable superblock on /dev/loop0
+mdadm: No arrays found in config file or automatically
+
+Running command ['mdadm', '--detail', '--scan', '-v'] with allowed return codes [0, 1] (capture=True)
+mdadm detail scan after assemble:
+
+
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED udevadm_settle(): 0.002
+    ssh_authorized_keys:
+    - ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFIXTUREpublicKeyNotSecret0000000000000000 m6
+    passwd: {{HASH}}
+  curtin: write_files /root/.ssh/id_ed25519:
+{{KEY_BODY}}
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', 'dpkg-divert', '--list'] with allowed return codes [0] (capture=True)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED subp(['udevadm', 'settle']): 0.007
+Running command ['mount', '--make-private', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/dev', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/proc', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/run', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys/firmware/efi/efivars', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/target/usr/bin/true', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', 'update-initramfs', '-c', '-k', '6.8.0-139-generic'] with allowed return codes [0] (capture=False)
+update-initramfs: Generating /boot/initrd.img-6.8.0-139-generic
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED subp(['udevadm', 'settle']): 0.008
+Running command ['mount', '--make-private', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/dev'] with allowed return codes [0] (capture=False)
+finish: cmd-install/stage-curthooks/builtin/cmd-curthooks/updating-initramfs-configuration: SUCCESS: updating initramfs configuration
+start: cmd-install/stage-curthooks/builtin/cmd-curthooks/configuring-bootloader: configuring target system bootloader
+start: cmd-install/stage-curthooks/builtin/cmd-curthooks/install-grub: installing grub to target devices
+setup grub on target /target
+Found primary UEFI ESP: partition-0
+Found UEFI ESP(s) for grub install: ['partition-0']
+get_path_to_storage_volume for volume partition-0({'device': 'disk-vda', 'size': 999292928, 'wipe': 'superblock', 'flag': 'boot', 'number': 1, 'preserve': False, 'grub_device': True, 'offset': 1048576, 'path': '/dev/vda1', 'id': 'partition-
+get_path_to_storage_volume for volume disk-vda({'ptable': 'gpt', 'path': '/dev/vda', 'wipe': 'superblock-recursive', 'preserve': False, 'name': '', 'grub_device': False, 'id': 'disk-vda', 'type': 'disk'})
+Running command ['udevadm', 'info', '--query=property', '--export', '/dev/vda'] with allowed return codes [0] (capture=True)
+/dev/vda is multipath device member? False
+Running command ['partprobe', '/dev/vda'] with allowed return codes [0, 1] (capture=False)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED udevadm_settle(): 0.044
+devsync happy - path /dev/vda now exists
+return volume path /dev/vda
+Running command ['partprobe', '/dev/vda'] with allowed return codes [0, 1] (capture=False)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED udevadm_settle(): 0.019
+devsync happy - path /dev/vda now exists
+return volume path /dev/vda1
+install_devices: ['/dev/vda1']
+Generating grub debconf_selections for devices=['/dev/vda1'] uefi=True
+Applying grub debconf_selections config:
+{'debconf_selections': {'grub': 'grub-pc grub-efi/install_devices multiselect /dev/vda1'}}
+Applying debconf selections
+Checking if target_proc (/target/proc) is a mount
+It's not, using normal behavior
+Running command ['unshare', '--fork', '--pid', '--', 'chroot', '/target', 'debconf-set-selections'] with allowed return codes [0] (capture=True)
+Checking if target_proc (/target/proc) is a mount
+It's not, using normal behavior
+Running command ['unshare', '--fork', '--pid', '--', 'chroot', '/target', 'dpkg-query', '--list'] with allowed return codes [0] (capture=True)
+Running command ['mount', '--bind', '/dev', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/proc', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/run', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys/firmware/efi/efivars', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/target/usr/bin/true', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', 'efibootmgr', '-v'] with allowed return codes [0] (capture=True)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED subp(['udevadm', 'settle']): 0.006
+Running command ['mount', '--make-private', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/dev', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/proc', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/run', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys/firmware/efi/efivars', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/target/usr/bin/true', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', 'efibootmgr', '-v'] with allowed return codes [0] (capture=True)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED subp(['udevadm', 'settle']): 0.006
+Running command ['mount', '--make-private', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/dev'] with allowed return codes [0] (capture=False)
+UEFI remove old olders efi state:
+EFIBootState(current='0003', timeout='0 seconds', order=['0003', '0004', '0005', '0006', '0002', '0000', '0001', '0007'], entries={'0000': EFIBootEntry(name='BootManagerMenuApp', path='FvVol(7cb8bdc9-f8eb-4f34-aaea-3ee4af6516a1)/FvFile(eec2
+installing grub to target=/target devices=['/dev/vda1'] [replace_defaults=True]
+Checking if target_proc (/target/proc) is a mount
+It's not, using normal behavior
+Running command ['unshare', '--fork', '--pid', '--', 'chroot', '/target', 'dpkg', '--print-architecture'] with allowed return codes [0] (capture=True)
+updated /target/etc/default/grub to set: GRUB_CMDLINE_LINUX_DEFAULT="console=ttyS0,115200n8 console=tty0"
+Using grub install command: /usr/lib/grub/grub-multi-install
+Grub install cmds:
+[['efibootmgr', '-v'], ['dpkg-reconfigure', 'grub-efi-amd64'], ['update-grub'], ['/usr/lib/grub/grub-multi-install'], ['efibootmgr', '-v']]
+Running command ['mount', '--bind', '/dev', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/proc', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/run', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys/firmware/efi/efivars', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/target/usr/bin/true', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', 'efibootmgr', '-v'] with allowed return codes [0] (capture=True)
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', 'dpkg-reconfigure', 'grub-efi-amd64'] with allowed return codes [0] (capture=True)
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', 'update-grub'] with allowed return codes [0] (capture=True)
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', '/usr/lib/grub/grub-multi-install'] with allowed return codes [0] (capture=True)
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', 'efibootmgr', '-v'] with allowed return codes [0] (capture=True)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED subp(['udevadm', 'settle']): 0.003
+Running command ['mount', '--make-private', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/dev'] with allowed return codes [0] (capture=False)
+Skipped reordering of UEFI boot methods.
+Currently booted UEFI loader might no longer boot.
+Running command ['mount', '--bind', '/dev', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/proc', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/run', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/sys/firmware/efi/efivars', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--bind', '/target/usr/bin/true', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Checking if target_proc (/target/proc) is a mount
+It is, so unshare will use --mount-proc=/target/proc
+Running command ['unshare', '--fork', '--pid', '--mount-proc=/target/proc', '--', 'chroot', '/target', 'efibootmgr', '-v'] with allowed return codes [0] (capture=True)
+Running command ['udevadm', 'settle'] with allowed return codes [0] (capture=False)
+TIMED subp(['udevadm', 'settle']): 0.005
+Running command ['mount', '--make-private', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/usr/bin/ischroot'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys/firmware/efi/efivars'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/sys'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/run'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/proc'] with allowed return codes [0] (capture=False)
+Running command ['mount', '--make-private', '/target/dev'] with allowed return codes [0] (capture=False)
+Running command ['umount', '/target/dev'] with allowed return codes [0] (capture=False)
+finish: cmd-install/stage-curthooks/builtin/cmd-curthooks/install-grub: SUCCESS: installing grub to target devices
+finish: cmd-install/stage-curthooks/builtin/cmd-curthooks/configuring-bootloader: SUCCESS: configuring target system bootloader
+start: cmd-install/stage-curthooks/builtin/cmd-curthooks/copy-cdrom-metadata: copying metadata from /cdrom
+copying media-info into target
+/cdrom/.disk/ubuntu_dist_channel not found, skipping
+finish: cmd-install/stage-curthooks/builtin/cmd-curthooks/copy-cdrom-metadata: SUCCESS: copying metadata from /cdrom
+finish: cmd-install/stage-curthooks/builtin/cmd-curthooks: SUCCESS: curtin command curthooks
+{'current': '0003', 'timeout': '0 seconds', 'order': '0003,0004,0005,0006,0002,0000,0001,0007'}
+{'current': '0003', 'timeout': '0 seconds', 'order': '0003,0004,0005,0006,0002,0000,0001,0007'}
+{'current': '0003', 'timeout': '0 seconds', 'order': '0008,0003,0004,0005,0006,0002,0000,0001,0007'}
+curtin: Installation finished.

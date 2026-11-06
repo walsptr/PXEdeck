@@ -1,0 +1,9 @@
+2026-11-06T04:07:37.121Z install dibuat (UI) os=rocky-9 disk=(otomatis)
+2026-11-06T04:07:37.222Z node.sh reset
+2026-11-06T04:07:37.315Z booting (UI, +0 dtk)
+2026-11-06T04:07:58.440Z installing (UI, +21 dtk)
+2026-11-06T04:15:29.660Z configuring (UI, +472 dtk)
+2026-11-06T04:19:09.137Z done (UI, +692 dtk)
+2026-11-06T04:22:53.848Z event installer: installer: kickstart mulai | installer: disk target dipilih | installer: post mulai | installer: konfigurasi target selesai | first-boot: OS terpasang boot dari disk: m6-node24 enp1s0=10.99.0.34/24 
+2026-11-06T04:22:54.998Z log installer /var/log/anaconda/anaconda.log: exit=0 bytes=38176
+2026-11-06T04:22:55.155Z log installer /var/log/anaconda/program.log: exit=0 bytes=8231

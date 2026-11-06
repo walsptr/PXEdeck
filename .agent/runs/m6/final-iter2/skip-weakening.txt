@@ -1,0 +1,74 @@
+# skip/weakening check @ fdc0abf 2026-11-06T07:30:11Z
+## (a) grep .skip/.only/.todo/.fixme/xit/xdescribe/skipIf/runIf/test.fail/ctx.skip di dashboard/{src,e2e,e2e-kvm,test} infra/test
+hit=0
+
+## (b) jumlah asersi file test LAMA yang berubah, main...HEAD (merge-base 31c506e; dashboard/src identik dgn 1a7be29) vs HEAD
+BASE=31c506e  metrik TS: expect( + expectTypeOf( + expect.poll/soft( ; shell: assert_* + _fail
+file                                                                    sebelum  sesudah
+dashboard/e2e/helpers.ts                                                      1        1
+dashboard/e2e/m1-design-system.spec.ts                                       36       42
+dashboard/e2e/m4-settings.spec.ts                                            25       26
+dashboard/e2e/m5-library.spec.ts                                            185      185
+dashboard/e2e/m5-support.ts                                                   7        7
+dashboard/e2e/m5-ui-fixes.spec.ts                                            44       44
+dashboard/e2e/support/e2e-env.ts                                              0        0
+dashboard/src/app/api/iter2-routes.test.ts                                   75       75
+dashboard/src/app/api/m4-api-routes.test.ts                                  74       75
+dashboard/src/app/api/m5-jobs-api.test.ts                                    44       45
+dashboard/src/app/api/m5-te-api.test.ts                                     140      140
+dashboard/src/app/boot/boot-routes.test.ts                                  182      182
+dashboard/src/components/jobs/jobs-components.test.tsx                       19       19
+dashboard/src/components/status-pill.test.tsx                                14       15
+dashboard/src/hooks/m4-hooks.test.ts                                         39       39
+dashboard/src/hooks/m5-jobs-hooks.test.ts                                    55       55
+dashboard/src/lib/jobs.test.ts                                               49       49
+dashboard/src/lib/server/boot-script.test.ts                                 64       64
+dashboard/src/lib/server/db/db.test.ts                                      152      152
+dashboard/src/lib/server/db/m5-jobs-repo.test.ts                             43       47
+dashboard/src/lib/server/db/m5-te-migration.test.ts                          16       16
+dashboard/src/lib/server/http.test.ts                                        44       44
+dashboard/src/lib/server/installers/installers.test.ts                      210      217
+dashboard/src/lib/server/installers/m5-hooks.test.ts                         26       26
+dashboard/src/lib/server/installers/m5-te-hooks.test.ts                      64       67
+dashboard/src/lib/server/m5-iter2-redact-timeout.test.ts                     70       71
+dashboard/src/lib/server/m5-iter3-redact.test.ts                             77       78
+dashboard/src/lib/server/m5-settings.test.ts                                 29       29
+dashboard/src/lib/server/m5-te-unit.test.ts                                  58       60
+dashboard/src/lib/server/settings.test.ts                                    32       32
+infra/test/harness.sh                                                        19       19
+infra/test/run.sh                                                           252      254
+
+file lama berubah: 32; turun/dihapus: 0 []
+grep skip/only/fixme/todo (test & e2e & infra/test): 0
+EXIT=0
+
+## (c) khusus iterasi 2: file test yang ada di 105727e (log final iter1) dan berubah sampai HEAD
+BASE=105727e  metrik TS: expect( + expectTypeOf( + expect.poll/soft( ; shell: assert_* + _fail
+file                                                                    sebelum  sesudah
+dashboard/e2e-kvm/m6-distro.spec.ts                                           9        9
+dashboard/e2e/m5-library.spec.ts                                            185      185
+dashboard/e2e/m5-support.ts                                                   7        7
+dashboard/e2e/m5-ui-fixes.spec.ts                                            44       44
+dashboard/src/lib/server/installers/m5-te-hooks.test.ts                      66       67
+dashboard/src/lib/server/installers/m6-smoke-fixes.test.ts                  113      110
+dashboard/src/lib/server/m6-backend.test.ts                                  74       77
+
+file lama berubah: 7; turun/dihapus: 1 ['dashboard/src/lib/server/installers/m6-smoke-fixes.test.ts']
+grep skip/only/fixme/todo (test & e2e & infra/test): 0
+EXIT=1
+
+## (d) rerun setelah menambah test CR-6-9 di e2e/m6-ui-iter2.spec.ts (working tree) — grep skip & hitung 105727e
+hit=0
+dashboard/src/lib/server/m6-backend.test.ts                                  74       77
+
+file lama berubah: 7; turun/dihapus: 1 ['dashboard/src/lib/server/installers/m6-smoke-fixes.test.ts']
+grep skip/only/fixme/todo (test & e2e & infra/test): 0
+m6-ui-iter2.spec.ts expect( HEAD=64 working-tree=76 (baris berisi expect)
+
+## Klasifikasi (test-engineer)
+- Kriteria gate (test LAMA terhadap main, bagian b): 32 file lama berubah, 0 turun → PASS.
+- Bagian c (dalam M6, 105727e → HEAD): m6-smoke-fixes.test.ts 113 → 110 (file baru M6, bukan test lama terhadap main).
+  Perubahan oleh backend-dev e273c67 (DEC-022 §2 / CR-6-3 / SR-6-6): test `mediaSigned` (8 expect, jalur kode yang dihapus)
+  diganti test penolakan media eksternal (2 expect × 3 URL), `at(-3)` diganti cek urutan untrust < firstboot (2 expect).
+  Dicatat di `.agent/runs/m6/test-migration.md` §CR-6-10; mutasi R4a/R4c (final-iter2/mutation.txt) membuktikan test
+  pengganti merah bila perbaikan di-revert. Bukan pelemahan.

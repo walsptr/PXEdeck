@@ -1,5 +1,13 @@
 #!/usr/bin/env bash
-# npm PALSU untuk test infra: hanya mencatat argumen (stdin dibuang). Tidak ada koneksi jaringan.
+# npm PALSU untuk test infra: hanya mencatat argumen. Tidak ada koneksi jaringan.
+# M6: `npm ... run --silent admin:hash` membaca password dari STDIN (disalin ke
+# $FAKE_STATE/admin-hash.stdin agar test bisa memastikan password lewat stdin, bukan argv) dan
+# mencetak $FAKE_ADMIN_HASH (kosong bila tidak diset). Selain itu stdin dibuang.
 echo "npm $*" >> "$FAKE_LOG"
+if [[ " $* " == *" admin:hash "* ]]; then
+  cat > "${FAKE_STATE:?}/admin-hash.stdin"
+  [[ -n "${FAKE_ADMIN_HASH:-}" ]] && printf '%s\n' "$FAKE_ADMIN_HASH"
+  exit "${FAKE_ADMIN_HASH_RC:-0}"
+fi
 cat >/dev/null 2>&1 || true
 exit 0

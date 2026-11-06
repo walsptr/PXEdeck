@@ -1,0 +1,25 @@
+10:00:01,500 INF program: Running... udevadm settle --timeout=300
+10:00:01,520 DBG program: Return code: 0
+10:00:01,600 INF program: Running... lsblk --bytes -n -o NAME,SIZE,TYPE /dev/vda
+10:00:01,601 INF program: vda   21474836480 disk
+10:00:01,602 DBG program: Return code: 0
+10:00:02,000 INF program: Running in chroot '/mnt/sysroot'... systemctl enable sshd.service
+10:00:02,001 INF program: Created symlink /etc/systemd/system/multi-user.target.wants/sshd.service → /usr/lib/systemd/system/sshd.service.
+10:00:02,100 INF program: Running in chroot '/mnt/sysroot'... chpasswd -e
+10:00:02,101 DBG program: stdin: ops:{{HASH}}
+10:00:02,200 INF program: Running in chroot '/mnt/sysroot'... grub2-mkconfig -o /boot/grub2/grub.cfg
+10:00:02,201 INF program: Generating grub configuration file ...
+10:00:02,202 INF program: Adding boot menu entry for UEFI Firmware Settings ...
+10:00:02,203 INF program: done
+10:00:02,300 INF program: Running... {{ESC}}[32mOK{{ESC}}[0m dracut -f --kver 5.14.0-427.13.1.el9_4.x86_64
+10:00:02,301 INF program: dracut: *** Including module: lvm ***
+10:00:02,302 INF program: dracut: *** Creating image file '/boot/initramfs-5.14.0-427.13.1.el9_4.x86_64.img' ***
+10:00:02,400 INF program: Running in chroot '/mnt/sysroot'... sh -c curl -fsS --data-binary @- http://10.99.0.2/boot/{{MAC}}/{{ESC}}[1m{{TOKEN}}{{ESC}}[0m/log
+10:00:02,401 DBG program: Return code: 0
+10:00:02,500 INF program: Running... restorecon -ir /etc/sysconfig/network-scripts /var/lib /etc/lvm /dev /etc/iscsi /var/lib/iscsi /root /var/lock /var/log /etc/modprobe.d /etc/sysconfig /var/cache/yum /home /boot
+10:00:02,501 DBG program: Return code: 0
+10:00:02,600 INF program: Running... cat /root/.ssh/stray_key (debug, synthetic)
+{{KEY_BODY}}
+10:00:02,601 DBG program: Return code: 0
+10:00:02,700 INF program: Running... sha256sum /boot/vmlinuz-5.14.0-427.13.1.el9_4.x86_64
+10:00:02,701 INF program: 9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08  /boot/vmlinuz-5.14.0-427.13.1.el9_4.x86_64

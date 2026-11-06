@@ -1,0 +1,24 @@
+{
+  "run": "m6bulk",
+  "session": "1793931269718-32f46bac",
+  "generatedAt": "2026-11-06T02:25:08.656Z",
+  "results": [
+    {"ac": "AC-6.50", "status": "PASS", "durationS": 637, "note": "gelombang 3; m6-bulk-01 618s, m6-bulk-02 612s, m6-bulk-03 627s; SSH true; 429 node 0", "evidence": ["bulk-ac-6.50.txt", "bulk-timeline.txt", "screenshots/bulk-ip-preview.png", "screenshots/bulk-hostname-preview.png"]},
+    {"ac": "AC-6.52-scan", "status": "PASS", "note": "0 temuan (password acak di memori: 3)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6bulk-node25", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.103 (lease 52:54:00:99:00:25)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6bulk-node25", "status": "PASS", "note": "user-data 200 x1 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6bulk-node26", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.104 (lease 52:54:00:99:00:26)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6bulk-node26", "status": "PASS", "note": "user-data 200 x1 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6bulk-node27", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.105 (lease 52:54:00:99:00:27)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6bulk-node27", "status": "PASS", "note": "user-data 200 x1 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m6bulk-node25", "status": "PASS", "note": "verify-node.sh exit=0 + cek login password", "evidence": ["pxe-test-m6bulk-node25-verify.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m6bulk-node26", "status": "NOT_RUN", "note": "tidak diverifikasi: run berhenti di tahap verify", "evidence": ["pxe-test-m6bulk-node26-verify.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m6bulk-node27", "status": "NOT_RUN", "note": "tidak diverifikasi: run berhenti di tahap verify", "evidence": ["pxe-test-m6bulk-node27-verify.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "verify", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "scenario": "bulk",
+  "waves": [["pxe-test-m6bulk-node25", "pxe-test-m6bulk-node26", "pxe-test-m6bulk-node27"]],
+  "maxNodes": 3,
+  "nodes": [{"name": "pxe-test-m6bulk-node25", "ip": "10.99.0.35", "hostname": "m6-bulk-01"}, {"name": "pxe-test-m6bulk-node26", "ip": "10.99.0.36", "hostname": "m6-bulk-02"}, {"name": "pxe-test-m6bulk-node27", "ip": "10.99.0.37", "hostname": "m6-bulk-03"}],
+  "harness": {"milestone": "m6", "scenario": "bulk", "runId": "m6bulk", "nodes": "25:uefi 26:uefi 27:uefi", "maxNodes": 3, "memAvailableMb": 15176, "wavesMode": true, "waves": [["pxe-test-m6bulk-node25", "pxe-test-m6bulk-node26", "pxe-test-m6bulk-node27"]], "bootingTimeoutMin": null, "failedStage": "verify", "exit": 1, "dryRun": false, "startedAt": "2026-11-06T02:13:28Z", "durationSec": 714}
+}

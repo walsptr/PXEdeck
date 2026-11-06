@@ -204,6 +204,17 @@ describe("getSettings (process.env) & toSettingsResponse", () => {
       jobTimeouts: { bootingMin: 60, installingMin: 120, configuringMin: 60 },
       maxInstallerBoots: 3,
       insecureNoLeaseCheck: false,
+      // M6 (AC-6.1): KVM tanpa env admin di objek ini → admin belum dikonfigurasi (non-production).
+      insecureConfirmed: false,
+      auth: {
+        adminUsername: null,
+        adminConfigured: false,
+        sessionIdleMin: 120,
+        sessionMaxHours: 12,
+        loginMaxFailures: 5,
+        loginWindowMin: 15,
+        apiRatePerMin: 600,
+      },
     })
     const json = JSON.stringify(r)
     for (const secret of ["pxe.db", "dnsmasq.leases", "dnsmasq.pid", "seed", "allowed"]) expect(json).not.toContain(secret)

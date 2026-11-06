@@ -12,6 +12,8 @@
 #                     utama git, sehingga worktree memakai media yang sama).
 #   PXE_RUN           nama run/milestone untuk bukti (default m4).
 #   PXE_RUNS_DIR      direktori bukti (default <repo>/.agent/runs/<run>/kvm).
+#   PXE_DASHBOARD_DIR direktori dashboard Next (default <repo>/dashboard).
+#   PXE_ADMIN_USERNAME username admin dashboard di VM server (default pxeadmin, non-rahasia).
 
 INFRA_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_DIR="$(cd "$INFRA_DIR/.." && pwd)"
@@ -48,6 +50,11 @@ CLOUD_IMG="$MEDIA_DIR/ubuntu-24.04-server-cloudimg-amd64.img"
 OVMF_CODE="/usr/share/edk2/ovmf/OVMF_CODE.fd"
 OVMF_VARS="/usr/share/edk2/ovmf/OVMF_VARS.fd"
 
+DASH_DIR="${PXE_DASHBOARD_DIR:-$REPO_DIR/dashboard}"
+ADMIN_USERNAME="${PXE_ADMIN_USERNAME:-pxeadmin}"
+# Format hash admin (DEC-017 §2): scrypt$N$r$p$salt$hash (N boleh log2 atau nilai penuh).
+SCRYPT_RE='^scrypt\$[0-9]{1,7}\$[0-9]{1,2}\$[0-9]{1,2}\$[A-Za-z0-9+/_=-]{16,}\$[A-Za-z0-9+/_=-]{16,}$'
+
 PROTECTED_NAMES=(pxe-test-node01 ubuntu24.04 default int)
 
 log() { printf '[%s] %s\n' "$(date -u +%Y-%m-%dT%H:%M:%SZ)" "$*" >&2; }
@@ -65,7 +72,17 @@ run() {
 }
 
 virsh_q() { virsh -c "$VIRSH_URI" "$@"; }   # baca saja
-virsh_m() { run virsh -c "$VIRSH_URI" "$@"; } # mutasi
+# virsh_m <args...>: mutasi. Guard lapis kedua (M6-T7): argumen yang sama persis dengan nama
+# resource terlindungi (pxe-test-node01, ubuntu24.04, default, int) ditolak sebelum virsh dipanggil.
+virsh_m() {
+  local a p
+  for a in "$@"; do
+    for p in "${PROTECTED_NAMES[@]}"; do
+      [[ "$a" == "$p" ]] && die "virsh $1 '$a' ditolak: resource milik user dan dilindungi"
+    done
+  done
+  run virsh -c "$VIRSH_URI" "$@"
+}
 
 # assert_name <name>: harus ^pxe-test-, bukan nama terlindungi.
 assert_name() {
@@ -159,3 +176,59 @@ serial_capture_stop() {
 }
 # Port serial per MAC 52:54:00:99:0X:NN -> 45000 + X*256 + NN.
 serial_port_for_mac() { local a="${1:12:2}" b="${1:15:2}"; echo $((45000 + 16#$a * 256 + 16#$b)); }
+
+# --- Admin dashboard per run (M6-T7, DEC-017 §3) ------------------------------------------------
+# Password admin acak per run disimpan HANYA di file 0600 di .agent/keys/ (tidak pernah di argv,
+# log, atau bukti). Hash dihitung di host lewat `npm run admin:hash` (password via stdin) dan
+# dikirim ke VM server lewat stdin ssh (deploy-dashboard.sh).
+
+# admin_pass_new <file>: password acak 24 karakter [A-Za-z0-9] (18 byte /dev/urandom, base64,
+# tanpa +/=) -> <file> mode 0600. File lama ditimpa (password baru per run).
+admin_pass_new() {
+  local f="$1"
+  [[ "$(dirname "$f")" == "$KEYS_DIR" ]] || die "file password admin harus di $KEYS_DIR"
+  mkdir -p "$KEYS_DIR"
+  rm -f "$f"
+  (umask 077 && head -c 18 /dev/urandom | base64 | tr '+/' 'Aa' | tr -d '\n=' > "$f")
+  chmod 600 "$f"
+  [[ "$(wc -c < "$f")" -eq 24 ]] || die "gagal membuat password admin di $f"
+}
+
+# admin_pass_check <file>: file ada, mode 0600, 12-256 karakter (tanpa mencetak isi).
+admin_pass_check() {
+  local f="$1" n
+  [[ -f "$f" ]] || die "file password admin $f tidak ada"
+  [[ "$(stat -c '%a' "$f")" == 600 ]] || die "file password admin $f harus mode 0600"
+  n="$(tr -d '\n' < "$f" | wc -c)"
+  ((n >= 12 && n <= 256)) || die "password admin di $f harus 12-256 karakter"
+}
+
+# admin_hash <file>: cetak hash scrypt dari password di <file> ke stdout. Password masuk ke
+# `npm run admin:hash` lewat stdin; stderr helper dibuang agar tidak ada keluaran tak terduga di log.
+# Dry-run: rencana dicetak ke stderr, keluaran = penanda DRY-RUN-HASH.
+admin_hash() {
+  local f="$1" h
+  if is_dry; then
+    run npm --prefix "$DASH_DIR" run --silent admin:hash >&2
+    echo "DRY-RUN-HASH"; return 0
+  fi
+  h="$(npm --prefix "$DASH_DIR" run --silent admin:hash < "$f" 2>/dev/null)" \
+    || die "npm run admin:hash gagal (keluaran tidak dicetak; jalankan manual di dashboard/)"
+  h="$(tr -d '\r' <<<"$h" | tail -n 1)"
+  [[ "$h" =~ $SCRYPT_RE ]] || die "npm run admin:hash: keluaran bukan format scrypt\$N\$r\$p\$salt\$hash (tidak dicetak)"
+  printf '%s\n' "$h"
+}
+
+# admin_login <passfile> <cookie-jar>: POST /api/auth/login lewat nginx (10.99.0.2). Body JSON
+# disusun dengan printf builtin + stdin curl (--data-binary @-): password tidak pernah di argv.
+# Cetak kode HTTP; exit 0 hanya bila 204 (AC-6.5) DAN cookie jar memuat `pxe_session`.
+admin_login() {
+  local f="$1" jar="$2" code
+  (umask 077 && : > "$jar")
+  code="$({ printf '{"username":"%s","password":"' "$ADMIN_USERNAME"; tr -d '\n' < "$f"; printf '"}'; } \
+    | curl -sS --max-time 10 -o /dev/null -w '%{http_code}' -c "$jar" \
+      -H 'Content-Type: application/json' -H "Origin: http://$SERVER_IP" -H 'Sec-Fetch-Site: same-origin' \
+      --data-binary @- "http://$SERVER_IP/api/auth/login" 2>/dev/null)" || true
+  printf '%s\n' "${code:-000}"
+  [[ "$code" == 204 ]] && grep -qE $'(^|\t)pxe_session\t[^\t]+$' "$jar"
+}

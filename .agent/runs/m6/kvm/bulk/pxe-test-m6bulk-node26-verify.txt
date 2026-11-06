@@ -1,0 +1,30 @@
+# verify-node 2026-11-06T07:02:14Z on m6-bulk-02
+# uname: 6.8.0-139-generic
+OK   hostname = m6-bulk-02 (aktual: m6-bulk-02)
+OK   NIC dengan MAC 52:54:00:99:00:26 ditemukan (enp1s0)
+# ip -4 addr (enp1s0): 10.99.0.36/24
+OK   ip -4 addr enp1s0 memuat 10.99.0.36/24
+OK   tidak ada IPv4 di NIC lain (—)
+OK   default via 10.99.0.1 (aktual: 10.99.0.1)
+OK   DNS memuat 10.99.0.2 (aktual: 10.99.0.2 127.0.0.53 2 )
+OK   login sebagai m6admin (aktual: m6admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m6admin (aktual: 600 m6admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/ubuntu/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=4 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/ubuntu--vg-ubuntu--lv), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+# verify-node exit=0
+# ssh PreferredAuthentications=password: Warning: Permanently added '10.99.0.36' (ED25519) to the list of known hosts.
+m6admin@10.99.0.36: Permission denied (publickey).
+OK   login password ditolak (server hanya menawarkan: publickey)

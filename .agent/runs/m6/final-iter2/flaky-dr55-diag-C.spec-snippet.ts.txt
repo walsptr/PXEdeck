@@ -1,0 +1,50 @@
+
+// ===== DIAG-DR55 C (sementara, tidak di-commit): badan test DR-5-5/DR-5-6 lama vs baru, animasi diperlambat via CDP,
+// diulang N kali dalam satu test (beforeAll file ini tidak idempoten untuk --repeat-each). "delay" = satu frame
+// (requestAnimationFrame) di antara boundingBox dialog dan footer — mensimulasikan latensi round-trip saat mesin sibuk.
+type Var = "old" | "new"
+async function dr55Iter(page: Page, variant: Var, rate: number, delay: boolean) {
+  await page.goto("/os-images")
+  const cdp = await page.context().newCDPSession(page)
+  await cdp.send("Animation.enable")
+  await cdp.send("Animation.setPlaybackRate", { playbackRate: rate })
+  await page.getByTestId("img-register").click()
+  const dlg = page.getByRole("dialog", { name: "Daftarkan OS image" })
+  const settleIfNew = async () => { if (variant === "new") await dlg.evaluate((el) => Promise.all(el.getAnimations({ subtree: true }).filter((a) => a.effect?.getComputedTiming().iterations !== Infinity).map((a) => a.finished)).then(() => undefined)) }
+  const submit = dlg.getByTestId("img-submit")
+  await expect(submit).toBeInViewport({ ratio: 1 })
+  const footer = dlg.getByTestId("img-dialog-footer")
+  await expect(footer).toHaveCSS("position", "sticky")
+  await settleIfNew()
+  expect((await footer.boundingBox())!.y + (await footer.boundingBox())!.height).toBeLessThanOrEqual(900)
+  const flush = async () => {
+    await settleIfNew()
+    const d = (await dlg.boundingBox())!
+    if (delay) await page.evaluate(() => new Promise((r) => requestAnimationFrame(() => r(null))))
+    const f = (await footer.boundingBox())!
+    return Math.abs(d.y + d.height - (f.y + f.height))
+  }
+  const f1 = await flush()
+  await expect(dlg.getByTestId("img-hint-id")).toBeVisible()
+  const r = page.waitForResponse((x) => x.url().endsWith("/api/os-images") && x.request().method() === "POST")
+  await submit.click()
+  expect((await r).status()).toBe(400)
+  for (const f of ["id", "name", "version", "source.repo"]) await expect(dlg.getByTestId(`img-error-${f}`)).toHaveText("Wajib diisi")
+  await expect(submit).toBeInViewport({ ratio: 1 })
+  const f2 = await flush()
+  await dlg.getByRole("button", { name: "Batal", exact: true }).click()
+  await expect(dlg).toBeHidden()
+  await cdp.send("Animation.setPlaybackRate", { playbackRate: 1 })
+  await cdp.detach()
+  return [f1, f2]
+}
+const N = Number(process.env.DIAG_N ?? "10")
+for (const delay of [false, true]) for (const rate of [1, 0.25]) for (const variant of ["old", "new"] as const)
+  test(`DIAG-DR55 C ${variant} rate=${rate} delay=${delay}`, async ({ page }) => {
+    const res: number[][] = []
+    for (let i = 0; i < N; i++) res.push(await dr55Iter(page, variant, rate, delay))
+    const bad = res.filter(([a, b]) => a > 1 || b > 1).length
+    console.log(`DIAGC variant=${variant} rate=${rate} delay=${delay} N=${N} gagal(flush>1)=${bad} flush1=${JSON.stringify(res.map((x) => +x[0].toFixed(3)))} flush2=${JSON.stringify(res.map((x) => +x[1].toFixed(3)))}`)
+    // asersi asli (≤ 1 px) atas SEMUA iterasi: varian lama diharapkan merah, varian baru hijau
+    for (const [a, b] of res) { expect.soft(a).toBeLessThanOrEqual(1); expect.soft(b).toBeLessThanOrEqual(1) }
+  })

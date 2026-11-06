@@ -8,12 +8,19 @@ import { useJobLog, type LogConnection } from "@/hooks/use-job-log"
 import { formatClock } from "@/lib/jobs"
 import { cn } from "@/lib/utils"
 
-const CONNECTION: Record<LogConnection, { label: string; dot: string }> = {
+/** DR-6-8: penjelasan 404 job, dipakai bersama log viewer dan detail job (tanpa mengulang judul). */
+export const JOB_NOT_FOUND_EXPLANATION =
+  "Mungkin sudah dihapus oleh retensi riwayat atau host dihapus."
+
+const CONNECTION: Record<LogConnection, { label: string; dot: string; important?: boolean }> = {
   connecting: { label: "Menyambung…", dot: "bg-muted-soft" },
   live: { label: "Live", dot: "bg-success" },
   reconnecting: { label: "Terputus — mencoba ulang", dot: "bg-muted-soft" },
   polling: { label: "Live (polling tiap 5 dtk)", dot: "bg-success" },
   ended: { label: "Selesai", dot: "bg-muted-soft" },
+  // CR-5-5 / M6: status final penting → bukan `muted` (DEC-017 §9).
+  "not-found": { label: "Job tidak ditemukan", dot: "bg-destructive", important: true },
+  session: { label: "Sesi berakhir — masuk lagi", dot: "bg-destructive", important: true },
 }
 
 /**
@@ -46,7 +53,10 @@ export function LogViewer({ jobId }: { jobId: string }) {
             data-testid="log-connection"
             data-state={connection}
             role="status"
-            className="type-caption flex items-center gap-1.5 text-muted-foreground"
+            className={cn(
+              "type-caption flex items-center gap-1.5",
+              conn.important ? "text-foreground" : "text-muted-foreground",
+            )}
           >
             <span aria-hidden className={cn("size-1.5 rounded-full", conn.dot)} />
             {conn.label}
@@ -73,8 +83,23 @@ export function LogViewer({ jobId }: { jobId: string }) {
         className="h-96 overflow-auto rounded-xl border border-border bg-card py-2 font-mono text-[13px] leading-5 focus-visible:outline-2 focus-visible:outline-ring/50"
       >
         {events.length === 0 ? (
-          <p className="px-4 py-2 text-muted-foreground">
-            {connection === "ended" ? "Job ini tidak punya log." : "Menunggu log…"}
+          <p
+            data-testid="log-empty"
+            data-state={connection}
+            className={cn(
+              "px-4 py-2",
+              connection === "not-found" || connection === "session"
+                ? "text-body"
+                : "text-muted-foreground",
+            )}
+          >
+            {connection === "ended"
+              ? "Job ini tidak punya log."
+              : connection === "not-found"
+                ? `Job tidak ditemukan — ${JOB_NOT_FOUND_EXPLANATION.toLowerCase()}`
+                : connection === "session"
+                  ? "Sesi berakhir. Masuk lagi untuk melihat log."
+                  : "Menunggu log…"}
           </p>
         ) : (
           events.map((e) => (
@@ -97,6 +122,16 @@ export function LogViewer({ jobId }: { jobId: string }) {
                 {e.repeat > 1 && (
                   <span data-testid="log-repeat" className="ml-2 text-muted-foreground">
                     ×{e.repeat}
+                    {/* CR-5-7: waktu kemunculan terakhir event gabungan. */}
+                    {e.lastAt && e.lastAt !== e.at && (
+                      <>
+                        {" "}
+                        · terakhir{" "}
+                        <time dateTime={e.lastAt} data-testid="log-last-at">
+                          {formatClock(e.lastAt)}
+                        </time>
+                      </>
+                    )}
                   </span>
                 )}
               </span>

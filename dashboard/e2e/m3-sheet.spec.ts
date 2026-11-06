@@ -3,7 +3,7 @@
 import { expect, test } from "@playwright/test"
 
 import { DUMMY_PASSWORD, FAKE_PRIVATE_KEY, SSH_ED25519, SSH_RSA, SSH_RSA_ADMIN } from "../src/test/fixtures"
-import { gotoHosts, rowByMac, SHOTS } from "./helpers"
+import { gotoHosts, rowByMac, SHOTS, waitForLocatorAnimations } from "./helpers"
 import { ensureAdminKey, readyLikeSeed } from "./support/seed-api"
 
 // M4: key "Admin workstation" & credentials `ubuntu` tidak lagi dari seed (SR-2-1) → disiapkan
@@ -21,7 +21,8 @@ test("AC-3.12 Sheet single host: lima tab, isi tiap tab, simpan → PATCH + toas
   await page.getByRole("menuitem", { name: "Edit konfigurasi" }).click()
   const sheet = page.getByRole("dialog", { name: "Konfigurasi storage-01" })
   await expect(sheet).toBeVisible()
-  // Sheet di sisi kanan viewport.
+  // Sheet di sisi kanan viewport — diukur setelah animasi slide-in selesai (pola flake DR-5-5, gate M6 iter2).
+  await waitForLocatorAnimations(sheet)
   const box = (await sheet.boundingBox())!
   expect(box.x + box.width).toBeGreaterThanOrEqual(1439)
   expect(box.x).toBeGreaterThan(500)

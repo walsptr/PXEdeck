@@ -2,47 +2,22 @@
 // dan masa berlaku token TIDAK PERNAH disajikan.
 import { z } from "zod"
 
+import type { HostLastJob, JobLogResponse, JobSummary, JobsResponse } from "@/lib/types"
 import { getHost } from "@/lib/server/db/repos/hosts"
-import { eventsAfter, type JobEvent } from "@/lib/server/db/repos/job-events"
+import { eventsAfter } from "@/lib/server/db/repos/job-events"
 import {
   FINAL_JOB_STATUSES,
   JOB_STATUSES,
   latestJobsByHost,
   listJobs,
-  type FailureReason,
   type Job,
-  type JobStage,
   type JobStatus,
 } from "@/lib/server/db/repos/jobs"
 
-export type JobSummary = {
-  id: string
-  hostId: string
-  host: { mac: string; hostname: string | null } | null
-  /** `jobs.kind` (nama SPEC §5: `type`). */
-  type: "install"
-  osImageId: string
-  status: JobStatus
-  stages: JobStage[]
-  failureReason: FailureReason | null
-  installerBoots: number
-  createdAt: string
-  updatedAt: string
-  finishedAt: string | null
-  eventCount: number
-}
-
-export type JobsResponse = { jobs: JobSummary[]; nextBefore: string | null; serverTime: string }
-
-/** Ringkasan job terakhir per host di `GET /api/hosts`. */
-export type LastJob = {
-  id: string
-  status: JobStatus
-  failureReason: FailureReason | null
-  createdAt: string
-}
-
-export type JobLogResponse = { events: JobEvent[]; lastSeq: number; final: boolean }
+// CR-5-9: tipe kontrak API satu sumber di `lib/types.ts` (dipakai klien juga).
+export type { JobLogResponse, JobSummary, JobsResponse }
+/** Ringkasan job terakhir per host di `GET /api/hosts` (= `HostLastJob` klien). */
+export type LastJob = HostLastJob
 
 export function toJobSummary(j: Job): JobSummary {
   const h = getHost(j.hostId)
@@ -99,7 +74,7 @@ export const jobsQuery = z
     hostId: z.string().regex(/^[0-9a-f]{12}$/, "harus 12 digit hex").optional(),
     status: z.enum(JOB_STATUSES).optional(),
     limit: intParam(1, 200).optional(),
-    before: z.string().regex(JOB_ID_RE, "id job tidak valid").optional(),
+    before: z.string().regex(/^[A-Za-z0-9_-]{1,200}$/, "cursor tidak valid").optional(),
   })
   .strict()
 

@@ -1,0 +1,155 @@
+## M1 R4 generator: requireLocalMedia jadi no-op (trusted=yes ke media eksternal)
+file: src/lib/server/installers/debian.ts
+mutasi: '  if (!isLocalMedia(c.mediaUrl, c.serverIp)) throw new InstallerInputError(debianExternalMediaError(c.mediaUrl, c.serverIp))' -> '  void isLocalMedia; void debianExternalMediaError'
+test: src/lib/server/installers/m6-iter2-debian.test.ts src/lib/server/installers/m6-smoke-fixes.test.ts
+hasil mutasi: RED (exit 1)
+  × media eksternal http://deb.debian.org/debian → InstallerInputError, tidak ada preseed (tanpa trusted=yes / allow_unauthenticated) 9ms
+  × media eksternal http://10.99.0.3/media → InstallerInputError, tidak ada preseed (tanpa trusted=yes / allow_unauthenticated) 2ms
+  × media eksternal http://pxe.lab.example/media → InstallerInputError, tidak ada preseed (tanpa trusted=yes / allow_unauthenticated) 1ms
+  × media eksternal http://10.99.0.20/media → InstallerInputError, tidak ada preseed (tanpa trusted=yes / allow_unauthenticated) 1ms
+  × serverIp berbeda dari host media yang sama → ditolak (aturan memakai PXE_SERVER_IP, bukan host media saja) 3ms
+  × DEC-022 §2 media eksternal (host ≠ PXE_SERVER_IP): generator menolak, tanpa trusted=yes/allow_unauthenticated 12ms
+  Tests  6 failed | 50 passed (56)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 6 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: c378b73d7568c5e3c768d5c487b6d53b1d887bf1eeb53af7afa4884f92580803 -> c378b73d7568c5e3c768d5c487b6d53b1d887bf1eeb53af7afa4884f92580803 IDENTIK
+
+## M2 R4 install: blocker Debian media eksternal dihapus (422 hilang)
+file: src/lib/server/install-service.ts
+mutasi: '  if (img.method === "preseed" && !isLocalMedia(media.mediaUrl, media.serverIp))' -> '  if (false && img.method === "preseed" && !isLocalMedia(media.mediaUrl, media.serverIp))'
+test: src/lib/server/m6-iter2-be.test.ts
+hasil mutasi: RED (exit 1)
+  × PXE_MEDIA_URL=http://deb.debian.org/media → install Debian 422 dengan pesan jelas, tanpa job 48ms
+  × PXE_MEDIA_URL=http://10.10.10.2/media → install Debian 422 dengan pesan jelas, tanpa job 28ms
+  × PXE_MEDIA_URL=http://pxe.lab.example/media → install Debian 422 dengan pesan jelas, tanpa job 26ms
+  × media eksternal tidak memblokir OS lain: bulk Ubuntu mulai, Debian gagal per host 53ms
+  Tests  4 failed | 26 passed (30)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 4 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: 5a02fb3485657b73d3f473d73724a28299ff9237586d16619d881cfc65afe734 -> 5a02fb3485657b73d3f473d73724a28299ff9237586d16619d881cfc65afe734 IDENTIK
+
+## M3 SR-6-6: DEBIAN_UNTRUST_CMD kembali SETELAH firstbootInstallCmds
+file: src/lib/server/installers/debian.ts
+mutasi: '    DEBIAN_UNTRUST_CMD,\n    ...firstbootInstallCmds("", "preseed", c.mac),\n' -> '    ...firstbootInstallCmds("", "preseed", c.mac),\n    DEBIAN_UNTRUST_CMD,\n'
+test: src/lib/server/installers/m6-iter2-debian.test.ts src/lib/server/installers/m6-smoke-fixes.test.ts src/lib/server/installers/installers.test.ts
+hasil mutasi: RED (exit 1)
+  × baris DEBIAN_UNTRUST_CMD mendahului semua perintah firstboot (pxe-callback) di late script 6ms
+  × media lokal (default): local0 trusted + by-hash=no, hook 50mirror di preseed/early_command, untrust di late 9ms
+  × golden file 253ms
+  Tests  3 failed | 299 passed (302)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: c378b73d7568c5e3c768d5c487b6d53b1d887bf1eeb53af7afa4884f92580803 -> c378b73d7568c5e3c768d5c487b6d53b1d887bf1eeb53af7afa4884f92580803 IDENTIK
+
+## M4 CR-6-1 API: batas total authorized_keys dihapus
+file: src/lib/server/config-service.ts
+mutasi: '    if (keyBytes > AUTHORIZED_KEYS_MAX_BYTES) {' -> '    if (keyBytes > AUTHORIZED_KEYS_MAX_BYTES * 1000) {'
+test: src/lib/server/m6-iter2-be.test.ts
+hasil mutasi: RED (exit 1)
+  × 32 KiB + 1 byte → 422 section ssh dengan pesan batas, tanpa efek 20ms
+  × key library terpilih ikut dihitung (library + baru > 32 KiB → 422; library saja ≤ batas → 200) 24ms
+  × bulk (applyConfig banyak host) juga ditolak, tidak ada host yang berubah 10ms
+  Tests  3 failed | 27 passed (30)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 3 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: fd2009f357f49637fc0ca093353e5b85c5c6593c6d7266702219794d659c55d7 -> fd2009f357f49637fc0ca093353e5b85c5c6593c6d7266702219794d659c55d7 IDENTIK
+
+## M5 CR-6-1 generator: guard late_command > 100000 byte dihapus
+file: src/lib/server/installers/debian.ts
+mutasi: '  if (lateBytes > DEBIAN_LATE_COMMAND_MAX_BYTES)' -> '  if (lateBytes > DEBIAN_LATE_COMMAND_MAX_BYTES * 10)'
+test: src/lib/server/installers/m6-iter2-debian.test.ts
+hasil mutasi: RED (exit 1)
+  × authorized_keys jauh di atas batas config (mis. config lama 64 KiB) → InstallerInputError, bukan preseed > batas 31ms
+  × tepat di sekitar ambang generator: ≤ batas lolos, > batas ditolak 43ms
+  Tests  2 failed | 21 passed (23)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: c378b73d7568c5e3c768d5c487b6d53b1d887bf1eeb53af7afa4884f92580803 -> c378b73d7568c5e3c768d5c487b6d53b1d887bf1eeb53af7afa4884f92580803 IDENTIK
+
+## M6 SR-6-3: trustProxyWarnings tidak dipanggil saat start
+file: src/lib/server/startup.ts
+mutasi: '...authWarnings(s), ...trustProxyWarnings(s)]' -> '...authWarnings(s), ...(trustProxyWarnings, [])]'
+test: src/lib/server/m6-iter2-be.test.ts src/lib/server/m6-backend.test.ts
+hasil mutasi: RED (exit 1)
+  × production + admin valid → start tanpa peringatan admin 8ms
+  × onServerStart di production tanpa PXE_TRUST_PROXY → logger.warn `[pxe] peringatan: …` 15ms
+  Tests  2 failed | 59 passed (61)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 2 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: 131b4a6fc60f66c629278c2272971dfd94deef90065d30b95a8e2b890ea76f26 -> 131b4a6fc60f66c629278c2272971dfd94deef90065d30b95a8e2b890ea76f26 IDENTIK
+
+## M7 SR-6-4: pass base64 ter-wrap dinonaktifkan
+file: src/lib/server/redact.ts
+mutasi: '  out = fillRanges(out, wrappedB64Ranges(out), MARK_B64)\n' -> '  void wrappedB64Ranges\n'
+test: src/lib/server/m6-iter2-be.test.ts
+hasil mutasi: RED (exit 1)
+  × PoC wrap76(b64(curl …/boot/<mac>/<tok>/status)): setiap baris → [REDACTED-B64], tanpa potongan body 14ms
+  × PoC wrap76(b64(password: "$6$…")): setiap baris → [REDACTED-B64], tanpa potongan body 3ms
+  × lebar 60, ≥ 3 baris, dengan prefiks log dan teks di sekitarnya 5ms
+  × lebar 76, ≥ 3 baris, dengan prefiks log dan teks di sekitarnya 3ms
+  × rangkaian berakhir di baris lebar penuh (panjang kelipatan lebar) juga tertangkap 3ms
+  × rahasia terpotong di batas baris (`/boot/<mac>/` di baris 1, token di baris 2) tertangkap 3ms
+  × dua lapis ter-wrap (base64 dari keluaran `base64` 76 kolom) dengan token melintasi batas baris lapis dalam 2ms
+  × baris tidak seragam (lebar berbeda di tengah) tidak digabung — rangkaian baru dimulai 2ms
+  Tests  8 failed | 22 passed (30)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 8 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: 5a0c1796068e3d79cfb3fa00819d768abb26f6ff94b5f4fe7dc4f522a983c398 -> 5a0c1796068e3d79cfb3fa00819d768abb26f6ff94b5f4fe7dc4f522a983c398 IDENTIK
+
+## M8 SR-6-4: aturan baris penutup kelipatan 4 dihapus (over-redaksi kata di bawah blok)
+file: src/lib/server/redact.ts
+mutasi: '(!last || (total + core.length) % 4 === 0)' -> '(!last || true)'
+test: src/lib/server/m6-iter2-be.test.ts
+hasil mutasi: RED (exit 1)
+  × lebar 60, ≥ 3 baris, dengan prefiks log dan teks di sekitarnya 14ms
+  Tests  1 failed | 29 passed (30)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: 5a0c1796068e3d79cfb3fa00819d768abb26f6ff94b5f4fe7dc4f522a983c398 -> 5a0c1796068e3d79cfb3fa00819d768abb26f6ff94b5f4fe7dc4f522a983c398 IDENTIK
+
+## M9 SR-6-4: base64 lapis dalam ter-wrap tidak digabung
+file: src/lib/server/redact.ts
+mutasi: 'clean.replace(/[\\r\\n]+/g, "").matchAll(B64_INNER_RE)' -> 'clean.matchAll(B64_INNER_RE)'
+test: src/lib/server/m6-iter2-be.test.ts
+hasil mutasi: RED (exit 1)
+  × dua lapis ter-wrap (base64 dari keluaran `base64` 76 kolom) dengan token melintasi batas baris lapis dalam 13ms
+  Tests  1 failed | 29 passed (30)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: 5a0c1796068e3d79cfb3fa00819d768abb26f6ff94b5f4fe7dc4f522a983c398 -> 5a0c1796068e3d79cfb3fa00819d768abb26f6ff94b5f4fe7dc4f522a983c398 IDENTIK
+
+## M10 R5: butir DEC-021 dihapus dari README
+file: ../infra/README.md
+mutasi: '- **Sisa risiko DEC-021 (apt Debian tanpa verifikasi tanda tangan selama instalasi).**' -> '- **Sisa risiko (apt Debian).**'
+test: src/lib/server/m6-iter2-be.test.ts
+hasil mutasi: RED (exit 1)
+  × (a) sisa risiko DEC-021: apt tanpa verifikasi tanda tangan, media lokal saja, dibersihkan di late_command + SSH, checksum ISO 10ms
+  Tests  1 failed | 29 passed (30)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: f105a80437b8e3167b2c9675e307038f96122c3b1d84c96669da1bb0925a9460 -> f105a80437b8e3167b2c9675e307038f96122c3b1d84c96669da1bb0925a9460 IDENTIK
+
+## M11 R5: butir DEC-019 dihapus dari README
+file: ../infra/README.md
+mutasi: '- **Sesi: polling memperpanjang idle (DEC-019 §1).**' -> '- **Sesi.**'
+test: src/lib/server/m6-iter2-be.test.ts
+hasil mutasi: RED (exit 1)
+  × (b) DEC-019 §1: polling memperpanjang idle, batas atas absolut PXE_SESSION_MAX_HOURS 11ms
+  Tests  1 failed | 29 passed (30)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: f105a80437b8e3167b2c9675e307038f96122c3b1d84c96669da1bb0925a9460 -> f105a80437b8e3167b2c9675e307038f96122c3b1d84c96669da1bb0925a9460 IDENTIK
+
+## M12 R5: butir SR-6-3 dihapus dari README
+file: ../infra/README.md
+mutasi: '- **Rate limit login tanpa `PXE_TRUST_PROXY` (SR-6-3).**' -> '- **Rate limit login.**'
+test: src/lib/server/m6-iter2-be.test.ts
+hasil mutasi: RED (exit 1)
+  × (c) SR-6-3: tanpa PXE_TRUST_PROXY batas login per IP menjadi global + peringatan start 8ms
+  Tests  1 failed | 29 passed (30)
+  ⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+restore sha256: f105a80437b8e3167b2c9675e307038f96122c3b1d84c96669da1bb0925a9460 -> f105a80437b8e3167b2c9675e307038f96122c3b1d84c96669da1bb0925a9460 IDENTIK
+
+## M13 SR-6-4 perf: lewati UTF-16LE tanpa byte nol dihapus (ekuivalen, hanya performa)
+file: src/lib/server/redact.ts
+mutasi: 'buf.includes(0) ? [buf.toString("utf8"), buf.toString("utf16le")] : [buf.toString("utf8")]' -> '[buf.toString("utf8"), buf.toString("utf16le")]'
+test: src/lib/server/m6-iter2-be.test.ts src/lib/server/m6-redact.test.ts src/lib/server/m5-iter3-redact.test.ts
+hasil mutasi: GREEN (exit 0)
+  Tests  480 passed (480)
+restore sha256: 5a0c1796068e3d79cfb3fa00819d768abb26f6ff94b5f4fe7dc4f522a983c398 -> 5a0c1796068e3d79cfb3fa00819d768abb26f6ff94b5f4fe7dc4f522a983c398 IDENTIK
+
+## Catatan
+- M13 GREEN sesuai harapan: perubahan ekuivalen (dekode UTF-16LE dilewati bila buffer tanpa byte 0x00 — tanpa
+  byte nol UTF-16LE tidak bisa menghasilkan karakter ASCII, semua pola deteksi ASCII). Hanya performa; dicatat
+  untuk transparansi, bukan perbaikan perilaku.
+- Header komentar redact.ts diperbarui setelah run mutasi (hanya komentar); M7–M9/M13 tidak terpengaruh.
+- Script mutasi: .agent/runs/m6/mutation-dev-iter2-be.py (apply -> vitest -> restore -> sha256).

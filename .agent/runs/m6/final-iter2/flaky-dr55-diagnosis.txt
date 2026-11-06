@@ -1,0 +1,72 @@
+Diagnosis flake e2e/m5-library.spec.ts:566 "DR-5-5/DR-5-6 ... footer sticky terlihat di 1440x900"
+==================================================================================================
+test-engineer, 2026-11-06, worktree .agent/wt-m6, HEAD 2d70da0 (kode produk 18913b5; kode produk TIDAK diubah)
+
+Gejala (gate iter2, final-iter2/e2e-run2.log): baris 582 `expect(await flush()).toBeLessThanOrEqual(1)` (flush PERTAMA,
+tepat setelah dialog dibuka) menerima 1.27288818359375. Lulus di run1, kedua run iter1, dan 8/8 run terisolasi.
+
+KESIMPULAN: masalah waktu pengukuran di test, BUKAN bug layout produk.
+ - DialogContent (src/components/ui/dialog.tsx) memakai `data-open:animate-in fade-in-0 zoom-in-95 duration-100`
+   (animasi CSS "enter", transform scale 0.95 -> 1 selama 100 ms, origin di tengah dialog).
+ - flush() lama memanggil dlg.boundingBox() dan footer.boundingBox() sebagai DUA round-trip terpisah. Bila animasi
+   masih berjalan, kedua sampel bisa jatuh pada frame berbeda (skala berbeda). Tinggi dialog 868 px -> tepi bawah
+   = 450 + 434*s; beda skala 0.003 antar-frame = ~1.3 px. Saat mesin sibuk (suite penuh) round-trip melambat
+   sehingga pengukuran pertama jatuh lebih awal/lebih panjang di dalam animasi.
+ - Geometri sebenarnya rata di SETIAP frame: diukur atomik (getBoundingClientRect dialog + footer dalam satu evaluate),
+   selisih <= 3e-5 px baik di tengah animasi maupun setelahnya; setelah animasi selesai selisih = 0 (dua metode).
+
+Bukti
+-----
+A. final-iter2/flaky-dr55-diag-A.log (snippet: flaky-dr55-diag-A.spec-snippet.ts.txt)
+   Tepat setelah dialog terlihat: className memuat `data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95
+   duration-100`, data-state=open, getAnimations({subtree:true}) = animasi "enter" pada dialog-content (running)
+   + 4 transisi pada input; transform = matrix3d(0.99624,...) (rate 1, t=66 ms) / matrix3d(0.95031,...) (rate 0.02).
+     rate 1   : t0 atomik gap 0.0000286; non-atomik (2 boundingBox) 0.3588 saat anim t=100ms; setelah finished: 0 / 0
+     rate 0.02: atomik gap <= 0.00003 di semua sampel; non-atomik 0.042 / 0.047 saat skala berubah antar-sampel;
+                setelah `Promise.all(getAnimations().finished)`: atomik 0, non-atomik 0, transform none, tinggi 868.
+   => gap hanya muncul bila dua sampel berasal dari frame berbeda selama animasi; layout final rata (bukan bug produk).
+
+B/C. final-iter2/flaky-dr55-diag-BC.log (snippet: -B-, -C-spec-snippet.ts.txt): badan test DR-5-5 yang sama,
+   varian "old" (tanpa tunggu) vs "new" (tunggu animasi berhingga dialog selesai sebelum boundingBox/flush),
+   animasi diperlambat via CDP `Animation.setPlaybackRate`. C = 15 iterasi per test dalam satu test (beforeAll file
+   tidak idempoten untuk --repeat-each, lihat log B-new: 409 di beforeAll pada repeat ke-2 — artefak diagnostik).
+     B old rate 0.25 : 1/5 invokasi gagal di flush pertama (Received 1.3072509765625)
+     C old rate=1    delay=false : 0/15 >1 px, tetapi flush1 = 0.354..0.359 pada 6/15 iterasi (sampel dalam animasi)
+     C old rate=1    delay=true  : 0/15 >1 px, flush1 0.356..0.359 pada 3/15
+     C old rate=0.25 delay=false : 10/15 GAGAL (flush1 1.129..2.045)
+     C old rate=0.25 delay=true  : 15/15 GAGAL (flush1 1.129..5.675)  <- repro deterministik
+     C new  rate=1/0.25 x delay=false/true : 0/60 gagal, flush1 = flush2 = 0 di semua iterasi
+   ("delay" = satu requestAnimationFrame di antara boundingBox dialog dan footer, mensimulasikan latensi round-trip
+   di mesin sibuk; flush2 (setelah submit, tanpa animasi) selalu 0 di semua varian.)
+
+D. final-iter2/flaky-dr55-diag-D.log (snippet: flaky-dr55-diag-D.spec-snippet.ts.txt): test ASLI, hanya ditambah
+   beforeEach sementara yang memperlambat animasi (rate 0.25) — tidak di-commit.
+     lama (HEAD 2d70da0)  : 2/4 invokasi GAGAL di baris 582 (Received 1.716796875, 1.30865478515625) — jalur & baris
+                            sama dengan kegagalan gate run2
+     baru (fix)           : 3/3 lulus
+
+Perbaikan (test saja; ambang <= 1 px dan seluruh asersi tidak berubah)
+---------------------------------------------------------------------
+ - e2e/helpers.ts: helper baru `waitForLocatorAnimations(loc)` — expect.poll sampai tidak ada animasi/transisi
+   berhingga yang running/pending pada `loc` + turunannya (getAnimations({subtree:true}), menunggu `.finished`);
+   animasi tak berhingga diabaikan agar tidak menggantung. Pola sama dengan `waitForAnimations(page)` (CR-1-3),
+   tetapi dicakup ke elemen.
+ - e2e/m5-library.spec.ts DR-5-5/DR-5-6: `await waitForLocatorAnimations(dlg)` sebelum cek `footer bottom <= 900` dan
+   di awal `flush()` (dipanggil sebelum kedua pengukuran flush).
+ Pemeriksaan pola serupa (boundingBox/getBoundingClientRect tepat setelah Dialog/Sheet dibuka) di e2e/:
+ - e2e/m3-sheet.spec.ts AC-3.12: `sheet.boundingBox()` tepat setelah Sheet terbuka (slide-in-from-right-10, 200 ms;
+   x bergeser hingga 40 px selama animasi). Ambang longgar (x+w >= 1439, x > 500) sehingga belum pernah flaky, tetapi
+   mengukur posisi di tengah animasi -> diperkeras: `await waitForLocatorAnimations(sheet)` sebelum boundingBox.
+ - e2e/iter2-ui.spec.ts DR-2-1/2-2, DR-3-2, DR-3-3: tinggi tombol "Tambah" + rect "Hapus DNS" di Sheet yang baru
+   dibuka (slide/fade hanya translate, ukuran tidak terpengaruh, tetapi pola sama) -> diperkeras dengan
+   `await waitForLocatorAnimations(sheet)` setelah Sheet terlihat.
+ Ditinjau, tidak diubah (bukan pola "ukur tepat setelah buka"):
+ - e2e/iter3-ui.spec.ts DR-3-4: sudah `waitForAnimations(page)` setelah Sheet/tab dibuka.
+ - e2e/m5-ui-fixes.spec.ts AC-5.30 (x2): footer Sheet vs toast diukur setelah Sheet lama terbuka + waitForTimeout(800);
+   menu reboot-reason sudah `waitForAnimations(page)`.
+ - e2e/m3-bulk.spec.ts, e2e/m1-design-system.spec.ts, e2e/m6-ui.spec.ts:524: sudah `waitForAnimations(page)`.
+ - boundingBox/getBoundingClientRect lain (m1-layout header, m5-library baris/tabel OS Images & SSH Keys, m6-ui,
+   m6-ui-iter2, m6-auth, iter3-ui hit-area, helpers dropShadow/orange) mengukur elemen halaman tanpa Dialog/Sheet
+   yang baru dibuka. Tidak ada boundingBox lain pada Dialog/AlertDialog di e2e/. e2e-kvm/ tidak memakai boundingBox.
+
+Jumlah asersi statik (`expect(`) tidak berubah: m5-library 185->185, m3-sheet 73->73, iter2-ui 82->82.

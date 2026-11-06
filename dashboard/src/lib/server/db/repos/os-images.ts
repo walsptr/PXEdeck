@@ -7,6 +7,7 @@ import { getDb } from "../index"
 import type { OsImageSource } from "../seed"
 
 import type { InstallMethod, OsImage } from "@/lib/os-images"
+import type { OsImageInfo } from "@/lib/types"
 
 export type OsImageRecord = OsImage & {
   source: OsImageSource
@@ -16,21 +17,8 @@ export type OsImageRecord = OsImage & {
   createdAt: string
 }
 
-/** Bentuk `GET /api/os-images`. */
-export type OsImageInfo = OsImage & {
-  bootable: boolean
-  available: boolean
-  /** Alasan tidak tersedia (null bila tersedia). */
-  reason: string | null
-  builtin: boolean
-  /** M5: path media relatif PXE_MEDIA_ROOT (UI OS Images). */
-  source: OsImageSource
-  /** M5: `${PXE_MEDIA_URL}/${source.repo}`. */
-  repoUrl: string
-  /** M5: jumlah host yang mereferensikan image (assigned, config, job aktif). */
-  usedBy: number
-  createdAt: string
-}
+/** Bentuk `GET /api/os-images` (satu sumber di `lib/types.ts`, CR-5-9). */
+export type { OsImageInfo }
 
 type Row = {
   id: string

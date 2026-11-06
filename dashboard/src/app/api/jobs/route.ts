@@ -8,8 +8,8 @@ import { parseJobsQuery, toJobSummary, type JobsResponse } from "@/lib/server/jo
 /**
  * `GET /api/jobs?hostId=&status=&limit=&before=` (M5): sapuan timeout dulu, lalu `JobsResponse`
  * `{jobs: JobSummary[], nextBefore, serverTime}` urut terbaru dulu (`created_at DESC, id DESC`).
- * `limit` 1–200 (default 50); `before` = `nextBefore` halaman sebelumnya. Param invalid / tak
- * dikenal / `before` tidak ada → 400. Tanpa token/hash token. no-store.
+ * `limit` 1–200 (default 50); `before` = `nextBefore` (cursor opak, CR-5-4) halaman sebelumnya.
+ * Param invalid / tak dikenal / cursor rusak → 400. Tanpa token/hash token. no-store.
  */
 export async function GET(req: Request) {
   const denied = guardRead(req)
@@ -19,7 +19,7 @@ export async function GET(req: Request) {
   if (!q.ok) return jsonNoStore({ error: q.error }, { status: 400 })
   sweepJobs(new Date())
   const page = listJobs(q.value)
-  if (!page) return jsonNoStore({ error: "Query tidak valid: before: job tidak ditemukan" }, { status: 400 })
+  if (!page) return jsonNoStore({ error: "Query tidak valid: before: cursor tidak valid" }, { status: 400 })
   const body: JobsResponse = {
     jobs: page.jobs.map(toJobSummary),
     nextBefore: page.nextBefore,

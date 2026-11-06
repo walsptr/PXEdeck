@@ -111,7 +111,7 @@ function LastJobNote({ host }: { host: HostWithJob }) {
   return (
     <p
       data-testid="sheet-last-job-failure"
-      className="type-caption flex flex-wrap items-baseline gap-x-2 text-muted-foreground"
+      className="type-caption flex flex-wrap items-baseline gap-x-2 text-body"
     >
       <span>
         <span className="font-medium text-destructive">Install terakhir gagal:</span>{" "}
@@ -525,7 +525,8 @@ function ConfigForm({
 
       <SheetFooter className="gap-3 border-t border-border bg-canvas-soft">
         <div className="flex min-h-7 flex-wrap items-center gap-1.5">
-          <span className="type-caption text-muted-foreground">
+          {/* AC-6.38: di atas canvas-soft, muted hanya 3,94:1 → body. */}
+          <span className="type-caption text-body">
             {dirtyList.length ? "Akan disimpan:" : "Belum ada perubahan."}
           </span>
           {dirtyList.map((k) => (

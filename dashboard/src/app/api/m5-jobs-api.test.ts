@@ -9,6 +9,7 @@ import { decideBoot } from "@/lib/server/discovery"
 import { installHosts } from "@/lib/server/install-service"
 import { handleStatusCallback } from "@/lib/server/provisioning"
 import { jobLogStream, SSE_MAX_CONNECTIONS, sseConnections } from "@/lib/server/sse"
+import { authHeaders } from "@/test/auth"
 import { makeMediaRoot, tmpDir, withDb } from "@/test/db"
 import { DUMMY_PASSWORD, SSH_ED25519, SSH_ED25519_B } from "@/test/fixtures"
 import { getReq, jsonReq } from "@/test/route"
@@ -120,7 +121,10 @@ describe("GET /api/jobs/:id/logs", () => {
     await vi.advanceTimersByTimeAsync(1100)
     const out = await text
     expect(out.startsWith("retry: 3000\n\n")).toBe(true)
-    expect(out).not.toContain("id: 1\n")
+    // M6 CR-5-6 (AC-6.21): resume `Last-Event-ID: 1` mengirim ulang event 1 TEPAT SEKALI (repeat
+    // terkini) sebagai frame pertama, lalu event > 1 (sebelumnya: event 1 tidak dikirim).
+    expect(out.match(/\nid: 1\n/g)).toHaveLength(1)
+    expect(out.indexOf("id: 1\n")).toBeLessThan(out.indexOf("id: 2\n"))
     expect(out).toContain("id: 2\n")
     expect(out).toMatch(/event: log\nid: 3\ndata: .*baris live/)
     expect(out).toContain("event: stage\n")
@@ -132,7 +136,7 @@ describe("GET /api/jobs/:id/logs", () => {
   it("SSE: abort klien membersihkan timer; batas koneksi → null", async () => {
     const { jobId } = await installed()
     const ac = new AbortController()
-    const res = await logsGET(new Request(`http://localhost/api/jobs/${jobId}/logs`, { headers: { accept: "text/event-stream" }, signal: ac.signal }), p({ id: jobId }))
+    const res = await logsGET(new Request(`http://localhost/api/jobs/${jobId}/logs`, { headers: { accept: "text/event-stream", ...authHeaders() }, signal: ac.signal }), p({ id: jobId }))
     expect(sseConnections()).toBe(1)
     await vi.advanceTimersByTimeAsync(15_100)
     ac.abort()

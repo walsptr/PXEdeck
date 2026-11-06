@@ -1,0 +1,67 @@
+2026-11-06T02:43:43Z preflight          ok max_nodes=3 avail_mb=12808 mem_available_mb=15880 waves=—
+[2026-11-06T02:43:43Z] network pxe-test sudah terdefinisi
+[2026-11-06T02:43:43Z] network pxe-test sudah aktif
+[2026-11-06T02:43:43Z] network pxe-test-nat sudah terdefinisi
+[2026-11-06T02:43:43Z] network pxe-test-nat sudah aktif
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+2026-11-06T02:43:43Z net-up             ok 
+[2026-11-06T02:43:43Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-06T02:43:43Z] network pxe-test sudah terdefinisi
+[2026-11-06T02:43:43Z] network pxe-test sudah aktif
+[2026-11-06T02:43:43Z] network pxe-test-nat sudah terdefinisi
+[2026-11-06T02:43:43Z] network pxe-test-nat sudah aktif
+[2026-11-06T02:43:43Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-06T02:43:53Z] SSH siap dalam 10s
+6.1.0-50-amd64
+[2026-11-06T02:43:55Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt12-distro-rehearsal/distro/server-listen.txt
+2026-11-06T02:43:55Z server-up          ok 
+2026-11-06T02:43:55Z admin-pass         ok m6distro-admin.pass (0600, isi tidak dicetak)
+[2026-11-06T02:43:56Z] build standalone (PXE_STANDALONE=1 npm run build)
+[2026-11-06T02:44:13Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261106T024355Z
+[2026-11-06T02:44:17Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt12-distro-rehearsal/distro/deploy-dashboard.txt)
+2026-11-06T02:44:17Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-06T02:44:18Z server-check       ok 
+[2026-11-06T02:44:18Z] create pxe-test-m6distro-node23 (uefi, 52:54:00:99:00:23, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+2026-11-06T02:44:19Z node-create        ok pxe-test-m6distro-node23 uefi 52:54:00:99:00:23
+[2026-11-06T02:44:19Z] create pxe-test-m6distro-node24 (uefi, 52:54:00:99:00:24, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+2026-11-06T02:44:20Z node-create        ok pxe-test-m6distro-node24 uefi 52:54:00:99:00:24
+2026-11-06T03:03:36Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-06T03:03:36Z verify             partial Playwright exit=1: hanya node berstatus done (2 host terbaca)
+2026-11-06T03:03:37Z verify             ok pxe-test-m6distro-node23 (pxe-test-m6distro-node23-verify.txt)
+2026-11-06T03:03:37Z verify             ok pxe-test-m6distro-node24 (pxe-test-m6distro-node24-verify.txt)
+2026-11-06T03:03:37Z evidence           start 
+2026-11-06T03:03:38Z evidence           done 
+PASS  CR-4-12-dnsmasq  pxe-test-m6distro-node23     TFTP snponly.efi terkirim ke 10.99.0.101 (lease 52:54:00:99:00:23)
+PASS  CR-4-12-nginx    pxe-test-m6distro-node23     preseed.cfg 200 x1 (min 1)
+PASS  CR-4-12-dnsmasq  pxe-test-m6distro-node24     TFTP snponly.efi terkirim ke 10.99.0.102 (lease 52:54:00:99:00:24)
+PASS  CR-4-12-nginx    pxe-test-m6distro-node24     ks.cfg 200 x1 (min 1)
+2026-11-06T03:03:38Z server-logs        ok 
+Domain 'pxe-test-server' is being shutdown
+
+Domain 'pxe-test-server' has been undefined
+
+[2026-11-06T03:03:43Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T03:03:43Z] cleanup run m6distro selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt12-distro-rehearsal/distro/cleanup.txt)
+2026-11-06T03:03:43Z cleanup            done 
+2026-11-06T03:03:43Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+exit=1

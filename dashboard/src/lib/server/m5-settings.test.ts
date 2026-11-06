@@ -5,6 +5,7 @@ import { describe, expect, it, vi } from "vitest"
 import { entryScript, installerScript } from "@/lib/server/boot-script"
 import { guardRead, requestHost } from "@/lib/server/http"
 import { onServerStart, startOrExit } from "@/lib/server/startup"
+import { authHeaders } from "@/test/auth"
 import { isolateEnv } from "@/test/env"
 
 import { settingsFromEnv, settingsWarnings, type SettingsEnv } from "./settings"
@@ -109,7 +110,8 @@ describe("CR-4-10 URL IPv6 ditolak; URL yang lolos aman untuk iPXE", () => {
 })
 
 describe("CR-4-15 requestHost & DEC-015 guardRead", () => {
-  const r = (h: Record<string, string>) => new Request("http://localhost/api/hosts", { headers: h })
+  // M6: + cookie sesi admin sungguhan agar guardRead lolos sampai pemeriksaan sesi (DEC-017 §4).
+  const r = (h: Record<string, string>) => new Request("http://localhost/api/hosts", { headers: { ...authHeaders(), ...h } })
   it("X-Forwarded-Host hanya dibaca bila trust proxy", () => {
     expect(requestHost(r({ host: "a.example", "x-forwarded-host": "b.example" }), false)).toBe("a.example")
     expect(requestHost(r({ host: "a.example", "x-forwarded-host": "b.example, c" }), true)).toBe("b.example")

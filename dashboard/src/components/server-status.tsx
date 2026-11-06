@@ -1,5 +1,12 @@
 "use client"
 
+import { HugeiconsIcon, type IconSvgElement } from "@hugeicons/react"
+import {
+  Cancel01Icon,
+  HelpCircleIcon,
+  Tick02Icon,
+} from "@hugeicons/core-free-icons"
+
 import { Badge } from "@/components/ui/badge"
 import {
   Tooltip,
@@ -25,10 +32,21 @@ const STATE_LABEL: Record<ServiceState, string> = {
   unknown: "tidak diketahui",
 }
 
+/**
+ * DR-6-5 (WCAG 1.4.1): state tidak hanya dibedakan warna — tiap state punya glyph sendiri
+ * (online = centang di lingkaran terisi, offline = silang di lingkaran terisi, tidak diketahui =
+ * tanda tanya bergaris tanpa isi). Warna tetap token status (hijau/merah/netral).
+ */
 const STATE_DOT: Record<ServiceState, string> = {
-  online: "bg-success",
-  offline: "bg-destructive",
-  unknown: "bg-muted-soft",
+  online: "bg-success text-white",
+  offline: "bg-destructive text-white",
+  unknown: "bg-transparent text-body",
+}
+
+const STATE_ICON: Record<ServiceState, IconSvgElement> = {
+  online: Tick02Icon,
+  offline: Cancel01Icon,
+  unknown: HelpCircleIcon,
 }
 
 // Nilai default hanya untuk pemakaian presentasional/test (AC-1.11). Top bar memakai
@@ -62,14 +80,28 @@ export function ServerStatus({
                 data-service={s.name}
                 data-online={state === "online"}
                 data-state={state}
-                className="h-6 gap-1.5 bg-card px-2 sm:px-2.5"
+                className="h-6 gap-1 bg-card px-1.5 sm:gap-1.5 sm:px-2.5"
               >
                 <span
                   aria-hidden
                   data-slot="status-dot"
-                  className={cn("size-1.5 rounded-full", STATE_DOT[state])}
-                />
-                <span className="type-data sr-only text-[11px] font-medium sm:not-sr-only">
+                  data-glyph={state}
+                  className={cn(
+                    "flex size-3.5 shrink-0 items-center justify-center rounded-full",
+                    STATE_DOT[state],
+                  )}
+                >
+                  <HugeiconsIcon
+                    icon={STATE_ICON[state]}
+                    strokeWidth={state === "unknown" ? 2 : 3}
+                    className={state === "unknown" ? "size-3.5" : "size-2.5"}
+                  />
+                </span>
+                {/* DR-6-5: nama layanan terlihat di semua lebar (bukan sr-only di < sm). */}
+                <span
+                  data-slot="service-name"
+                  className="type-data text-[11px] font-medium"
+                >
                   {s.name}
                 </span>
                 <span className="sr-only"> {STATE_LABEL[state]}</span>

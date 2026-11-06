@@ -1,0 +1,21 @@
+# Mutasi dev — perbaikan smoke M6 (BUG-M6-3, BUG-M6-4/DEC-020, BUG-M6-5)
+
+Penulis: backend-dev, 2026-11-06. Satu penggantian string per mutan pada kode produk/infra, lalu
+vitest (installers/**, boot-script.test.ts, app/boot/boot-routes.test.ts; baseline 353/353) dan, untuk
+mutan infra, infra/test/run.sh. Berkas dipulihkan dan md5 diverifikasi identik. Tidak ada mutan lolos.
+Catatan B4e: vitest tidak menguji server-up.sh (wajar); ditangkap test shell.
+
+B3a country tidak dipreseed: vitest 5 merah; contoh: ['golden file', 'locale en_GB.UTF-8 → language en, country dari locale, locale + supported-locales', 'locale en_US.UTF-8 → language en, country dari locale, locale + supported-locales']
+B3b supported-locales dihapus: vitest 4 merah; contoh: ['golden file', 'locale en_GB.UTF-8 → language en, country dari locale, locale + supported-locales', 'locale en_US.UTF-8 → language en, country dari locale, locale + supported-locales']
+B3c locale kembali en_US tanpa .UTF-8: vitest 4 merah; contoh: ['golden file', 'locale en_GB.UTF-8 → language en, country dari locale, locale + supported-locales', 'locale en_US.UTF-8 → language en, country dari locale, locale + supported-locales']
+B3d hw-detect/load_firmware dihapus: vitest 2 merah; contoh: ['golden file', 'semua pertanyaan d-i yang muncul pada instalasi netboot + mirror DVD lokal dipreseed']
+B3e hostname target tidak ditulis di late script: vitest 2 merah; contoh: ['golden file', 'late script menulis hostname target (preseed jaringan dimuat setelah netcfg)']
+B4a stage2 kembali inst.repo=http: vitest 5 merah; contoh: ['Debian (preseed) dan Rocky (kickstart) sesuai §2.3 (snapshot)', 'Rocky: inst.stage2 NFS (DEC-020) + inst.ks + inst.cmdline (BUG-M6-5)', 'kernel: inst.stage2=nfs:<server>:<media root>/<repo>; install.img tidak lewat HTTP']
+B4b ekspor rocky-9 dihapus: vitest 1 merah; contoh: ['path NFS diekspor read-only hanya untuk 10.99.0.0/24 di infra/server/exports']; shell merah: ['M6 NFS ekspor ro + hanya 10.99.0.0/24, rocky-9 diekspor (DEC-020)']
+B4c ekspor rocky-9 rw: vitest 1 merah; contoh: ['path NFS diekspor read-only hanya untuk 10.99.0.0/24 di infra/server/exports']; shell merah: ['M6 NFS ekspor ro + hanya 10.99.0.0/24, rocky-9 diekspor (DEC-020)']
+B4d ekspor rocky-9 ke semua klien: vitest 1 merah; contoh: ['path NFS diekspor read-only hanya untuk 10.99.0.0/24 di infra/server/exports']; shell merah: ['M6 NFS ekspor ro + hanya 10.99.0.0/24, rocky-9 diekspor (DEC-020)']
+B4e server-up tidak menyalin exports: vitest 0 merah; contoh: []; shell merah: ['M6 server-up menyalin exports sebelum exportfs -ra']
+B5a repo AppStream dikembalikan: vitest 2 merah; contoh: ['golden file', 'satu sumber `url` root media; tanpa `repo` BaseOS/AppStream']
+B5b kickstart kembali `text`: vitest 3 merah; contoh: ['cmdline (BUG-M6-5), url, rootpw --lock, user --iscrypted + wheel, sshkey per key, network statis, reboot', 'golden file', 'mode cmdline (kickstart + kernel) agar kegagalan → %onerror, bukan menunggu UI']
+B5c kernel kembali inst.text: vitest 4 merah; contoh: ['Debian (preseed) dan Rocky (kickstart) sesuai §2.3 (snapshot)', 'Rocky: inst.stage2 NFS (DEC-020) + inst.ks + inst.cmdline (BUG-M6-5)', 'Ubuntu tetap (diakhiri ` ---` seperti M4); Rocky tanpa `---`']
+B5d sudo dihapus dari %packages: vitest 2 merah; contoh: ['%packages hanya grup/paket yang ada di repo Minimal', 'golden file']

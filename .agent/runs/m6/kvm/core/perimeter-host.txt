@@ -1,0 +1,3 @@
+GET /api/hosts tanpa sesi: 401
+GET /hosts tanpa sesi: 307 location=/login?next=%2Fhosts
+server-check (ss/127.0.0.1:3000/nginx -t): true

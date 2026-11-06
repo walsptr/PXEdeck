@@ -1,0 +1,5 @@
+2026-11-05T22:47:17.797Z discovered firmware=uefi
+2026-11-05T22:47:17.863Z konfigurasi tersimpan os=rocky-9 disk=(otomatis) ip=10.99.0.52 hostname=m6-node42
+2026-11-05T22:47:17.900Z install dibuat job=job-d12c9997-0686-4288-8014-14f3714bf96e status=booting
+2026-11-05T22:47:17.988Z node.sh reset
+2026-11-05T22:47:17.997Z job1: booting (+0 dtk, installerBoots=0)

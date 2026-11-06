@@ -127,7 +127,7 @@ export function JobsView() {
           <HugeiconsIcon icon={Alert02Icon} strokeWidth={2} />
           <AlertTitle>Gagal memuat job</AlertTitle>
           <AlertDescription>
-            {jobsQuery.error.message}. Dashboard akan mencoba lagi otomatis.
+            {jobsQuery.error?.message}. Dashboard akan mencoba lagi otomatis.
           </AlertDescription>
         </Alert>
       )}

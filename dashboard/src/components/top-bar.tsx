@@ -48,26 +48,37 @@ export function TopBar() {
         orientation="vertical"
         className="data-[orientation=vertical]:h-5"
       />
-      <h1 className="type-page-title truncate">
+      {/* I-5-9: `min-w-0` → judul boleh dipotong (ellipsis) alih-alih mendorong klaster kanan keluar. */}
+      <h1 className="type-page-title min-w-0 truncate">
         {current?.label ??
           (pathname === "/design" ? "Design tokens" : "Dashboard")}
       </h1>
 
-      <div className="ml-auto flex items-center gap-3">
+      {/*
+        I-5-9 (M6): klaster kanan tidak boleh membuat halaman melebar di 768–1279 px. Pencarian
+        global menyusut: ikon saja di md, 192 px di lg, 256 px + Kbd di xl. Status DHCP/TFTP/HTTP
+        tetap tampil di semua lebar (SPEC §2). Nama aksesibel = teks tombol di semua lebar.
+      */}
+      <div className="ml-auto flex shrink-0 items-center gap-3">
         <button
           type="button"
           onClick={() => setOpen(true)}
           aria-haspopup="dialog"
           aria-keyshortcuts="Control+K Meta+K"
-          className="hidden h-9 w-64 items-center gap-2 rounded-lg border border-border bg-card px-3 text-left text-sm text-muted-soft transition-colors hover:border-hairline-strong md:flex"
+          title="Cari MAC, hostname, IP… (Ctrl K)"
+          data-testid="global-search"
+          className="hidden h-9 items-center gap-2 rounded-lg border border-border bg-card text-left text-sm text-muted-foreground transition-colors outline-none hover:border-hairline-strong focus-visible:border-hairline-strong focus-visible:ring-[3px] focus-visible:ring-ring/15 md:flex md:w-9 md:justify-center lg:w-48 lg:justify-start lg:px-3 xl:w-64"
         >
           <HugeiconsIcon
             icon={Search01Icon}
             strokeWidth={2}
-            className="size-4 text-muted-foreground"
+            className="size-4 shrink-0 text-muted-foreground"
           />
-          <span className="flex-1 truncate">Cari MAC, hostname, IP…</span>
-          <Kbd>Ctrl K</Kbd>
+          {/* md: ikon saja — teks tetap sebagai nama aksesibel (sr-only), bukan aria-label (WCAG 2.5.3). */}
+          <span className="sr-only lg:not-sr-only lg:flex-1 lg:truncate">Cari MAC, hostname, IP…</span>
+          <span className="hidden xl:inline-flex">
+            <Kbd>Ctrl K</Kbd>
+          </span>
         </button>
         <LiveServerStatus />
       </div>

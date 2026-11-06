@@ -1,0 +1,20 @@
+# Mutasi dev — perbaikan smoke ulang M6 (BUG-M6-6, BUG-M6-7)
+
+Penulis: backend-dev, 2026-11-06. Satu penggantian string per mutan; vitest installers/**,
+boot-script.test.ts, app/boot/boot-routes.test.ts (baseline 413/413); berkas dipulihkan, md5 identik.
+Tidak ada mutan lolos.
+
+C6a partman/early_command dihapus (kembali partman-auto/disk statis): vitest 8 merah; contoh: ['eksplisit ada → dipakai apa adanya', 'eksplisit tidak ada (/dev/vdz) → log ERROR + stage=failed, exit 1, tanpa debconf-set', 'golden file']
+C6b tanpa pemilihan otomatis (list-devices): vitest 2 merah; contoh: ['golden file', 'otomatis: disk pertama non-removable → debconf-set partman-auto/disk + grub bootdev, log']
+C6c removable tidak disaring: vitest 3 merah; contoh: ['golden file', 'otomatis tanpa disk non-removable → log ERROR + stage=failed, exit 1, tanpa debconf-set', 'otomatis: disk pertama non-removable → debconf-set partman-auto/disk + grub bootdev, log']
+C6d grub bootdev tidak di-set runtime: vitest 3 merah; contoh: ['eksplisit ada → dipakai apa adanya', 'golden file', 'otomatis: disk pertama non-removable → debconf-set partman-auto/disk + grub bootdev, log']
+C6e disk hilang tanpa callback failed: vitest 3 merah; contoh: ['eksplisit tidak ada (/dev/vdz) → log ERROR + stage=failed, exit 1, tanpa debconf-set', 'golden file', 'otomatis tanpa disk non-removable → log ERROR + stage=failed, exit 1, tanpa debconf-set']
+C6f disk hilang tidak exit 1: vitest 3 merah; contoh: ['eksplisit tidak ada (/dev/vdz) → log ERROR + stage=failed, exit 1, tanpa debconf-set', 'golden file', 'otomatis tanpa disk non-removable → log ERROR + stage=failed, exit 1, tanpa debconf-set']
+C6g choose_label gpt dihapus: vitest 2 merah; contoh: ['golden file', 'preseed: partman/early_command ada, partman-auto/disk tidak statis, konfirmasi partman lengkap']
+C7a %pre tanpa --erroronfail: vitest 8 merah; contoh: ['Debian early_command + late; Rocky %pre/%post/%onerror', 'Rocky %pre, %post (log sebelum configuring + akhir), %onerror (tail lalu failed)', 'eksplisit ada → lanjut tanpa include']
+C7b validasi disk %pre dihapus: vitest 4 merah; contoh: ['eksplisit tidak ada (/dev/vdz) → log ERROR + stage=failed, exit 1 (%pre --erroronfail menghentikan anaconda)', 'golden file', 'otomatis tanpa disk → log ERROR + stage=failed, exit 1 (%pre --erroronfail menghentikan anaconda)']
+C7c otomatis kembali clearpart semua disk: vitest 3 merah; contoh: ['golden file', 'kickstart: otomatis → %include, eksplisit → ignoredisk/clearpart statis; tanpa clearpart semua disk', 'sudo=false → tanpa wheel; DHCP; partisi plain tanpa disk']
+C7d zram tidak dikecualikan: vitest 2 merah; contoh: ['golden file', 'otomatis: disk pertama non-removable selain zram → include untuk disk itu saja']
+C7e disk hilang tanpa callback failed: vitest 3 merah; contoh: ['eksplisit tidak ada (/dev/vdz) → log ERROR + stage=failed, exit 1 (%pre --erroronfail menghentikan anaconda)', 'golden file', 'otomatis tanpa disk → log ERROR + stage=failed, exit 1 (%pre --erroronfail menghentikan anaconda)']
+C7f disk hilang tanpa exit 1: vitest 3 merah; contoh: ['eksplisit tidak ada (/dev/vdz) → log ERROR + stage=failed, exit 1 (%pre --erroronfail menghentikan anaconda)', 'golden file', 'otomatis tanpa disk → log ERROR + stage=failed, exit 1 (%pre --erroronfail menghentikan anaconda)']
+C7g console serial tidak dipindah ke akhir: vitest 3 merah; contoh: ['Debian (preseed) dan Rocky (kickstart) sesuai §2.3 (snapshot)', 'Ubuntu tetap (diakhiri ` ---` seperti M4); Rocky tanpa `---`', 'kernel Rocky: console serial terakhir (/dev/console = ttyS0); urutan lain tetap']

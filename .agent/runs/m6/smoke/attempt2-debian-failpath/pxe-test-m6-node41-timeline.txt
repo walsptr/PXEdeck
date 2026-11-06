@@ -1,0 +1,11 @@
+2026-11-05T22:29:00.974Z discovered firmware=uefi
+2026-11-05T22:29:01.025Z konfigurasi tersimpan os=debian-12 disk=(otomatis) ip=10.99.0.51 hostname=m6-node41
+2026-11-05T22:29:01.084Z install dibuat job=job-3a76d040-a467-4e25-986e-bd77ee3fc2d7 status=booting
+2026-11-05T22:29:01.177Z node.sh reset
+2026-11-05T22:29:01.280Z job1: booting (+0 dtk, installerBoots=0)
+2026-11-05T22:29:31.338Z job1: installing (+30 dtk, installerBoots=1)
+2026-11-05T22:44:32.856Z job1: failed/timeout-installing (+932 dtk, installerBoots=1)
+2026-11-05T22:44:32.862Z job1 akhir=failed/timeout-installing dalam 932 dtk; urutan=booting>installing>failed; stages=booting@install,booting@boot-script,installing@config-fetch,failed@watchdog
+2026-11-05T22:44:32.862Z event installer (1): installer: preseed mulai
+2026-11-05T22:44:32.862Z console log: 91859 byte terakhir dibaca; kernel panic=false
+2026-11-05T22:44:32.867Z jumlah job host=1

@@ -1,0 +1,103 @@
+# AC-6.48 pxe-test-m6distro-node23 (debian): booting → installing → configuring → done dalam 608 dtk; UI tanpa reload=true
+# event installer berurutan: true 
+  installer: preseed mulai
+  installer: modul disk virtio dimuat
+  installer: modul disk virtio dimuat
+  installer: disk target dipilih
+  installer: late_command mulai
+  installer: konfigurasi target selesai
+  first-boot: OS terpasang boot dari disk: m6-node23 enp1s0=10.99.0.33/24 
+# verify-node.sh sebelum reboot
+# verify-node 2026-11-06T07:15:28Z on m6-node23
+# uname: 6.1.0-50-amd64
+OK   hostname = m6-node23 (aktual: m6-node23)
+OK   NIC dengan MAC 52:54:00:99:00:23 ditemukan (enp1s0)
+# ip -4 addr (enp1s0): 10.99.0.33/24
+OK   ip -4 addr enp1s0 memuat 10.99.0.33/24
+OK   tidak ada IPv4 di NIC lain (—)
+OK   default via 10.99.0.1 (aktual: 10.99.0.1)
+OK   DNS memuat 10.99.0.2 (aktual: 10.99.0.2 )
+OK   login sebagai m6admin (aktual: m6admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m6admin (aktual: 600 m6admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/debian/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=4 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/pxe--vg-root), bukan NFS/live
+# uptime: up 2 minutes
+# verify-node fails=0
+
+# exit=0
+# login password
+m6admin@10.99.0.33: Permission denied (publickey).
+# ditolak=true
+# fakta node
+# hostname: m6-node23
+# locale
+System Locale: LANG=en_US.UTF-8
+    VC Keymap: (unset)
+   X11 Layout: us
+# sudo
+sudo-ok
+# UEFI fallback
+bootx64=ADA
+# cmdline
+BOOT_IMAGE=/vmlinuz-6.1.0-50-amd64 root=/dev/mapper/pxe--vg-root ro quiet
+# lsblk
+NAME                SIZE TYPE FSTYPE      MOUNTPOINT
+vda                  20G disk             
+├─vda1              512M part vfat        /boot/efi
+├─vda2              488M part ext2        /boot
+└─vda3               19G part LVM2_member 
+  ├─pxe--vg-root   18.1G lvm  ext4        /
+  └─pxe--vg-swap_1  980M lvm  swap        [SWAP]
+
+# /etc/apt (DEC-021 §2, wajib ada & bersih; ssh exit=0)
+apt_dir=ADA
+trusted_rc=1
+allow_file=TIDAK
+allow_grep_rc=1
+# /etc/apt masalah: tidak ada
+# reboot: kembali=true
+m6-node23
+BOOT_IMAGE=/vmlinuz-6.1.0-50-amd64 root=/dev/mapper/pxe--vg-root ro quiet
+
+# verify-node.sh sesudah reboot
+# verify-node 2026-11-06T07:19:07Z on m6-node23
+# uname: 6.1.0-50-amd64
+OK   hostname = m6-node23 (aktual: m6-node23)
+OK   NIC dengan MAC 52:54:00:99:00:23 ditemukan (enp1s0)
+# ip -4 addr (enp1s0): 10.99.0.33/24
+OK   ip -4 addr enp1s0 memuat 10.99.0.33/24
+OK   tidak ada IPv4 di NIC lain (—)
+OK   default via 10.99.0.1 (aktual: 10.99.0.1)
+OK   DNS memuat 10.99.0.2 (aktual: 10.99.0.2 )
+OK   login sebagai m6admin (aktual: m6admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m6admin (aktual: 600 m6admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/debian/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=4 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/pxe--vg-root), bukan NFS/live
+# uptime: up 0 minutes
+# verify-node fails=0
+
+# exit=0
+# host sesudah reboot: status=done hostname=m6-node23 mgmtIp=10.99.0.33; job 1->1
+# masalah: tidak ada

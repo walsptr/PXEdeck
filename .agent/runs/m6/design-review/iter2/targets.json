@@ -1,0 +1,2067 @@
+{
+ "colors": {
+  "375": {
+   "jobRowFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    }
+   ],
+   "hostFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    }
+   ],
+   "timeline": [
+    {
+     "text": "Booting",
+     "color": "#26251e",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#26251e \"Booting\""
+     ]
+    },
+    {
+     "text": "Installing",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installing\""
+     ]
+    },
+    {
+     "text": "Configuring",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Configuring\""
+     ]
+    },
+    {
+     "text": "Failed",
+     "color": "#ffffff",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#ffffff \"Failed\""
+     ]
+    }
+   ],
+   "osUnavailable": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  },
+  "414": {
+   "jobRowFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    }
+   ],
+   "hostFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    }
+   ],
+   "timeline": [
+    {
+     "text": "Booting",
+     "color": "#26251e",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#26251e \"Booting\""
+     ]
+    },
+    {
+     "text": "Installing",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installing\""
+     ]
+    },
+    {
+     "text": "Configuring",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Configuring\""
+     ]
+    },
+    {
+     "text": "Failed",
+     "color": "#ffffff",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#ffffff \"Failed\""
+     ]
+    }
+   ],
+   "osUnavailable": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  },
+  "768": {
+   "jobRowFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    }
+   ],
+   "hostFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    }
+   ],
+   "timeline": [
+    {
+     "text": "Booting",
+     "color": "#26251e",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#26251e \"Booting\""
+     ]
+    },
+    {
+     "text": "Installing",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installing\""
+     ]
+    },
+    {
+     "text": "Configuring",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Configuring\""
+     ]
+    },
+    {
+     "text": "Failed",
+     "color": "#ffffff",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#ffffff \"Failed\""
+     ]
+    }
+   ],
+   "osUnavailable": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  },
+  "800": {
+   "jobRowFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    }
+   ],
+   "hostFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    }
+   ],
+   "timeline": [
+    {
+     "text": "Booting",
+     "color": "#26251e",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#26251e \"Booting\""
+     ]
+    },
+    {
+     "text": "Installing",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installing\""
+     ]
+    },
+    {
+     "text": "Configuring",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Configuring\""
+     ]
+    },
+    {
+     "text": "Failed",
+     "color": "#ffffff",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#ffffff \"Failed\""
+     ]
+    }
+   ],
+   "osUnavailable": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  },
+  "1024": {
+   "jobRowFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    }
+   ],
+   "hostFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    }
+   ],
+   "timeline": [
+    {
+     "text": "Booting",
+     "color": "#26251e",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#26251e \"Booting\""
+     ]
+    },
+    {
+     "text": "Installing",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installing\""
+     ]
+    },
+    {
+     "text": "Configuring",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Configuring\""
+     ]
+    },
+    {
+     "text": "Failed",
+     "color": "#ffffff",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#ffffff \"Failed\""
+     ]
+    }
+   ],
+   "osUnavailable": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  },
+  "1279": {
+   "jobRowFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    }
+   ],
+   "hostFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    }
+   ],
+   "timeline": [
+    {
+     "text": "Booting",
+     "color": "#26251e",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#26251e \"Booting\""
+     ]
+    },
+    {
+     "text": "Installing",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installing\""
+     ]
+    },
+    {
+     "text": "Configuring",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Configuring\""
+     ]
+    },
+    {
+     "text": "Failed",
+     "color": "#ffffff",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#ffffff \"Failed\""
+     ]
+    }
+   ],
+   "osUnavailable": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  },
+  "1280": {
+   "jobRowFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    }
+   ],
+   "hostFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    }
+   ],
+   "timeline": [
+    {
+     "text": "Booting",
+     "color": "#26251e",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#26251e \"Booting\""
+     ]
+    },
+    {
+     "text": "Installing",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installing\""
+     ]
+    },
+    {
+     "text": "Configuring",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Configuring\""
+     ]
+    },
+    {
+     "text": "Failed",
+     "color": "#ffffff",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#ffffff \"Failed\""
+     ]
+    }
+   ],
+   "osUnavailable": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  },
+  "1440": {
+   "jobRowFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    },
+    {
+     "text": "Installer melaporkan gagal",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installer melaporkan gagal\""
+     ]
+    }
+   ],
+   "hostFailure": [
+    {
+     "text": "Timeout di tahap Installing (> 120 mnt)",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\""
+     ]
+    }
+   ],
+   "timeline": [
+    {
+     "text": "Booting",
+     "color": "#26251e",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#26251e \"Booting\""
+     ]
+    },
+    {
+     "text": "Installing",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Installing\""
+     ]
+    },
+    {
+     "text": "Configuring",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Configuring\""
+     ]
+    },
+    {
+     "text": "Failed",
+     "color": "#ffffff",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#ffffff \"Failed\""
+     ]
+    }
+   ],
+   "osUnavailable": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  }
+ },
+ "sheet": {
+  "375": {
+   "last": [
+    {
+     "text": "Install terakhir gagal: Timeout di tahap Installing (> 120 mnt)\nLihat log",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\"",
+      "#cf2d56 \"Install terakhir gagal:\"",
+      "#26251e \"Lihat log\""
+     ]
+    }
+   ],
+   "notes": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  },
+  "768": {
+   "last": [
+    {
+     "text": "Install terakhir gagal: Timeout di tahap Installing (> 120 mnt)\nLihat log",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\"",
+      "#cf2d56 \"Install terakhir gagal:\"",
+      "#26251e \"Lihat log\""
+     ]
+    }
+   ],
+   "notes": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  },
+  "1440": {
+   "last": [
+    {
+     "text": "Install terakhir gagal: Timeout di tahap Installing (> 120 mnt)\nLihat log",
+     "color": "#5a5852",
+     "svg": false,
+     "svgColor": null,
+     "parts": [
+      "#5a5852 \"Timeout di tahap Installing (> 120 mnt)\"",
+      "#cf2d56 \"Install terakhir gagal:\"",
+      "#26251e \"Lihat log\""
+     ]
+    }
+   ],
+   "notes": [
+    {
+     "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Media  tidak tersedia  tidak ada)\"",
+      "#5a5852 \"ubuntu-22.04\"",
+      "#5a5852 \"(ubuntu-22.04/\"",
+      "#5a5852 \"casper/\"",
+      "#5a5852 \"vmlinuz\""
+     ]
+    },
+    {
+     "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+     "color": "#5a5852",
+     "svg": true,
+     "svgColor": "#5a5852",
+     "parts": [
+      "#5a5852 \"Windows: hanya generator unattend.xml (install via\""
+     ]
+    }
+   ]
+  }
+ },
+ "log": {
+  "not-found": {
+   "text": "Job tidak ditemukan — mungkin sudah dihapus oleh retensi riwayat atau host dihapus.",
+   "color": "#5a5852",
+   "svg": false,
+   "svgColor": null,
+   "parts": [
+    "#5a5852 \"Job tidak ditemukan — mungkin sudah dihapus oleh r\""
+   ]
+  },
+  "session": {
+   "missing": true,
+   "url": "http://localhost:3194/jobs?job=job-m6ui-007"
+  }
+ },
+ "serverStatus": {
+  "375": [
+   {
+    "svc": "DHCP",
+    "state": "online",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "DHCP",
+    "badge": "60x24 right=227",
+    "glyph": "online",
+    "dotBg": "rgb(31, 138, 101)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M5 14L8.5 17.5L19 6.5\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "TFTP",
+    "state": "offline",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "TFTP",
+    "badge": "60x24 right=293",
+    "glyph": "offline",
+    "dotBg": "rgb(207, 45, 86)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M18.9991 19L5 5.00098\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "HTTP",
+    "state": "unknown",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "HTTP",
+    "badge": "60x24 right=359",
+    "glyph": "unknown",
+    "dotBg": "rgba(0, 0, 0, 0)",
+    "dotBorder": "0px solid",
+    "iconPath": "<circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-linecap=\"round\" stro",
+    "iconColor": "rgb(90, 88, 82)"
+   }
+  ],
+  "414": [
+   {
+    "svc": "DHCP",
+    "state": "online",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "DHCP",
+    "badge": "60x24 right=266",
+    "glyph": "online",
+    "dotBg": "rgb(31, 138, 101)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M5 14L8.5 17.5L19 6.5\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "TFTP",
+    "state": "offline",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "TFTP",
+    "badge": "60x24 right=332",
+    "glyph": "offline",
+    "dotBg": "rgb(207, 45, 86)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M18.9991 19L5 5.00098\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "HTTP",
+    "state": "unknown",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "HTTP",
+    "badge": "60x24 right=398",
+    "glyph": "unknown",
+    "dotBg": "rgba(0, 0, 0, 0)",
+    "dotBorder": "0px solid",
+    "iconPath": "<circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-linecap=\"round\" stro",
+    "iconColor": "rgb(90, 88, 82)"
+   }
+  ],
+  "768": [
+   {
+    "svc": "DHCP",
+    "state": "online",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "DHCP",
+    "badge": "70x24 right=584",
+    "glyph": "online",
+    "dotBg": "rgb(31, 138, 101)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M5 14L8.5 17.5L19 6.5\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "TFTP",
+    "state": "offline",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "TFTP",
+    "badge": "70x24 right=660",
+    "glyph": "offline",
+    "dotBg": "rgb(207, 45, 86)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M18.9991 19L5 5.00098\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "HTTP",
+    "state": "unknown",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "HTTP",
+    "badge": "70x24 right=736",
+    "glyph": "unknown",
+    "dotBg": "rgba(0, 0, 0, 0)",
+    "dotBorder": "0px solid",
+    "iconPath": "<circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-linecap=\"round\" stro",
+    "iconColor": "rgb(90, 88, 82)"
+   }
+  ],
+  "800": [
+   {
+    "svc": "DHCP",
+    "state": "online",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "DHCP",
+    "badge": "70x24 right=616",
+    "glyph": "online",
+    "dotBg": "rgb(31, 138, 101)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M5 14L8.5 17.5L19 6.5\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "TFTP",
+    "state": "offline",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "TFTP",
+    "badge": "70x24 right=692",
+    "glyph": "offline",
+    "dotBg": "rgb(207, 45, 86)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M18.9991 19L5 5.00098\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "HTTP",
+    "state": "unknown",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "HTTP",
+    "badge": "70x24 right=768",
+    "glyph": "unknown",
+    "dotBg": "rgba(0, 0, 0, 0)",
+    "dotBorder": "0px solid",
+    "iconPath": "<circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-linecap=\"round\" stro",
+    "iconColor": "rgb(90, 88, 82)"
+   }
+  ],
+  "1024": [
+   {
+    "svc": "DHCP",
+    "state": "online",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "DHCP",
+    "badge": "70x24 right=840",
+    "glyph": "online",
+    "dotBg": "rgb(31, 138, 101)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M5 14L8.5 17.5L19 6.5\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "TFTP",
+    "state": "offline",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "TFTP",
+    "badge": "70x24 right=916",
+    "glyph": "offline",
+    "dotBg": "rgb(207, 45, 86)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M18.9991 19L5 5.00098\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "HTTP",
+    "state": "unknown",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "HTTP",
+    "badge": "70x24 right=992",
+    "glyph": "unknown",
+    "dotBg": "rgba(0, 0, 0, 0)",
+    "dotBorder": "0px solid",
+    "iconPath": "<circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-linecap=\"round\" stro",
+    "iconColor": "rgb(90, 88, 82)"
+   }
+  ],
+  "1279": [
+   {
+    "svc": "DHCP",
+    "state": "online",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "DHCP",
+    "badge": "70x24 right=1095",
+    "glyph": "online",
+    "dotBg": "rgb(31, 138, 101)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M5 14L8.5 17.5L19 6.5\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "TFTP",
+    "state": "offline",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "TFTP",
+    "badge": "70x24 right=1171",
+    "glyph": "offline",
+    "dotBg": "rgb(207, 45, 86)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M18.9991 19L5 5.00098\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "HTTP",
+    "state": "unknown",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "HTTP",
+    "badge": "70x24 right=1247",
+    "glyph": "unknown",
+    "dotBg": "rgba(0, 0, 0, 0)",
+    "dotBorder": "0px solid",
+    "iconPath": "<circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-linecap=\"round\" stro",
+    "iconColor": "rgb(90, 88, 82)"
+   }
+  ],
+  "1280": [
+   {
+    "svc": "DHCP",
+    "state": "online",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "DHCP",
+    "badge": "70x24 right=1096",
+    "glyph": "online",
+    "dotBg": "rgb(31, 138, 101)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M5 14L8.5 17.5L19 6.5\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "TFTP",
+    "state": "offline",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "TFTP",
+    "badge": "70x24 right=1172",
+    "glyph": "offline",
+    "dotBg": "rgb(207, 45, 86)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M18.9991 19L5 5.00098\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "HTTP",
+    "state": "unknown",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "HTTP",
+    "badge": "70x24 right=1248",
+    "glyph": "unknown",
+    "dotBg": "rgba(0, 0, 0, 0)",
+    "dotBorder": "0px solid",
+    "iconPath": "<circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-linecap=\"round\" stro",
+    "iconColor": "rgb(90, 88, 82)"
+   }
+  ],
+  "1440": [
+   {
+    "svc": "DHCP",
+    "state": "online",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "DHCP",
+    "badge": "70x24 right=1256",
+    "glyph": "online",
+    "dotBg": "rgb(31, 138, 101)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M5 14L8.5 17.5L19 6.5\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "TFTP",
+    "state": "offline",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "TFTP",
+    "badge": "70x24 right=1332",
+    "glyph": "offline",
+    "dotBg": "rgb(207, 45, 86)",
+    "dotBorder": "0px solid",
+    "iconPath": "<path d=\"M18.9991 19L5 5.00098\" stroke=\"currentColor\" stroke-linecap=\"round\" str",
+    "iconColor": "rgb(255, 255, 255)"
+   },
+   {
+    "svc": "HTTP",
+    "state": "unknown",
+    "nameVisible": true,
+    "nameW": 28,
+    "nameText": "HTTP",
+    "badge": "70x24 right=1408",
+    "glyph": "unknown",
+    "dotBg": "rgba(0, 0, 0, 0)",
+    "dotBorder": "0px solid",
+    "iconPath": "<circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\" stroke-linecap=\"round\" stro",
+    "iconColor": "rgb(90, 88, 82)"
+   }
+  ],
+  "real": [
+   "DHCP=unknown",
+   "TFTP=unknown",
+   "HTTP=online"
+  ]
+ },
+ "focus": {
+  "before": {
+   "el": "#login-username",
+   "fv": false,
+   "border": "1px rgb(245, 78, 0)",
+   "boxShadow": "none",
+   "surroundBg": "rgb(255, 255, 255)",
+   "fieldBg": "rgb(255, 255, 255)"
+  },
+  "user": {
+   "el": "#login-username",
+   "fv": true,
+   "border": "1px rgb(245, 78, 0)",
+   "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+   "surroundBg": "rgb(255, 255, 255)",
+   "fieldBg": "rgb(255, 255, 255)"
+  },
+  "pass": {
+   "el": "#login-password",
+   "fv": true,
+   "border": "1px rgb(245, 78, 0)",
+   "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+   "surroundBg": "rgb(255, 255, 255)",
+   "fieldBg": "rgb(255, 255, 255)"
+  },
+  "sheet": {
+   "el": "#os-disk",
+   "fv": true,
+   "border": "1px rgb(245, 78, 0)",
+   "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+   "surroundBg": "rgb(255, 255, 255)",
+   "fieldBg": "rgb(255, 255, 255)"
+  }
+ },
+ "hostname": {
+  "375": {
+   "containerW": 325,
+   "scrollW": 1194,
+   "clientW": 325,
+   "overflowPx": 869,
+   "tableW": 1194,
+   "docOverflow": 0,
+   "hostnameCellW": 80,
+   "hostnameTitle": 10,
+   "truncated": false,
+   "ths": [
+    "(aksi):25-57",
+    "MAC ADDRESS:57-245",
+    "HOSTNAME:245-461 HIDDEN",
+    "IP:461-600 HIDDEN",
+    "VENDOR:600-702 HIDDEN",
+    "OS:702-912 HIDDEN",
+    "STATUS:912-1025 HIDDEN",
+    "LAST SEEN:1025-1159 HIDDEN",
+    "AKSI:1159-1219 HIDDEN"
+   ]
+  },
+  "414": {
+   "containerW": 364,
+   "scrollW": 1194,
+   "clientW": 364,
+   "overflowPx": 830,
+   "tableW": 1194,
+   "docOverflow": 0,
+   "hostnameCellW": 80,
+   "hostnameTitle": 10,
+   "truncated": false,
+   "ths": [
+    "(aksi):25-57",
+    "MAC ADDRESS:57-245",
+    "HOSTNAME:245-461 HIDDEN",
+    "IP:461-600 HIDDEN",
+    "VENDOR:600-702 HIDDEN",
+    "OS:702-912 HIDDEN",
+    "STATUS:912-1025 HIDDEN",
+    "LAST SEEN:1025-1159 HIDDEN",
+    "AKSI:1159-1219 HIDDEN"
+   ]
+  },
+  "768": {
+   "containerW": 446,
+   "scrollW": 1194,
+   "clientW": 446,
+   "overflowPx": 748,
+   "tableW": 1194,
+   "docOverflow": 0,
+   "hostnameCellW": 80,
+   "hostnameTitle": 10,
+   "truncated": false,
+   "ths": [
+    "(aksi):289-321",
+    "MAC ADDRESS:321-509",
+    "HOSTNAME:509-725",
+    "IP:725-864 HIDDEN",
+    "VENDOR:864-966 HIDDEN",
+    "OS:966-1176 HIDDEN",
+    "STATUS:1176-1289 HIDDEN",
+    "LAST SEEN:1289-1423 HIDDEN",
+    "AKSI:1423-1483 HIDDEN"
+   ]
+  },
+  "800": {
+   "containerW": 478,
+   "scrollW": 1194,
+   "clientW": 478,
+   "overflowPx": 716,
+   "tableW": 1194,
+   "docOverflow": 0,
+   "hostnameCellW": 80,
+   "hostnameTitle": 10,
+   "truncated": false,
+   "ths": [
+    "(aksi):289-321",
+    "MAC ADDRESS:321-509",
+    "HOSTNAME:509-725",
+    "IP:725-864 HIDDEN",
+    "VENDOR:864-966 HIDDEN",
+    "OS:966-1176 HIDDEN",
+    "STATUS:1176-1289 HIDDEN",
+    "LAST SEEN:1289-1423 HIDDEN",
+    "AKSI:1423-1483 HIDDEN"
+   ]
+  },
+  "1024": {
+   "containerW": 702,
+   "scrollW": 1194,
+   "clientW": 702,
+   "overflowPx": 492,
+   "tableW": 1194,
+   "docOverflow": 0,
+   "hostnameCellW": 80,
+   "hostnameTitle": 10,
+   "truncated": false,
+   "ths": [
+    "(aksi):289-321",
+    "MAC ADDRESS:321-509",
+    "HOSTNAME:509-725",
+    "IP:725-864",
+    "VENDOR:864-966",
+    "OS:966-1176 HIDDEN",
+    "STATUS:1176-1289 HIDDEN",
+    "LAST SEEN:1289-1423 HIDDEN",
+    "AKSI:1423-1483 HIDDEN"
+   ]
+  },
+  "1279": {
+   "containerW": 957,
+   "scrollW": 1194,
+   "clientW": 957,
+   "overflowPx": 237,
+   "tableW": 1194,
+   "docOverflow": 0,
+   "hostnameCellW": 80,
+   "hostnameTitle": 10,
+   "truncated": false,
+   "ths": [
+    "(aksi):289-321",
+    "MAC ADDRESS:321-509",
+    "HOSTNAME:509-725",
+    "IP:725-864",
+    "VENDOR:864-966",
+    "OS:966-1176",
+    "STATUS:1176-1289 HIDDEN",
+    "LAST SEEN:1289-1423 HIDDEN",
+    "AKSI:1423-1483 HIDDEN"
+   ]
+  },
+  "1280": {
+   "containerW": 958,
+   "scrollW": 1194,
+   "clientW": 958,
+   "overflowPx": 236,
+   "tableW": 1194,
+   "docOverflow": 0,
+   "hostnameCellW": 80,
+   "hostnameTitle": 10,
+   "truncated": false,
+   "ths": [
+    "(aksi):289-321",
+    "MAC ADDRESS:321-509",
+    "HOSTNAME:509-725",
+    "IP:725-864",
+    "VENDOR:864-966",
+    "OS:966-1176",
+    "STATUS:1176-1289 HIDDEN",
+    "LAST SEEN:1289-1423 HIDDEN",
+    "AKSI:1423-1483 HIDDEN"
+   ]
+  },
+  "1440": {
+   "containerW": 1118,
+   "scrollW": 1194,
+   "clientW": 1118,
+   "overflowPx": 76,
+   "tableW": 1194,
+   "docOverflow": 0,
+   "hostnameCellW": 80,
+   "hostnameTitle": 10,
+   "truncated": false,
+   "ths": [
+    "(aksi):289-321",
+    "MAC ADDRESS:321-509",
+    "HOSTNAME:509-725",
+    "IP:725-864",
+    "VENDOR:864-966",
+    "OS:966-1176",
+    "STATUS:1176-1289",
+    "LAST SEEN:1289-1423 HIDDEN",
+    "AKSI:1423-1483 HIDDEN"
+   ]
+  },
+  "compare1440_shortHostname": {
+   "overflowPx": 76,
+   "ths": [
+    "(aksi):32",
+    "MAC ADDRESS:188",
+    "HOSTNAME:216",
+    "IP:139",
+    "VENDOR:102",
+    "OS:210",
+    "STATUS:113",
+    "LAST SEEN:134",
+    "AKSI:60"
+   ]
+  }
+ },
+ "cidr": {
+  "text": "Di luar subnet 10.99.0.0/24",
+  "outerFont": "\"Inter Variable\", -a",
+  "tokens": [
+   "10.99.0.0/24 :: \"JetBrains Mono Vari rgb(207, 45, 86)"
+  ]
+ },
+ "notFound": {
+  "375": {
+   "title": "Job tidak ditemukan",
+   "desc": "Mungkin sudah dihapus oleh retensi riwayat atau host dihapus.",
+   "log": null
+  },
+  "1440": {
+   "title": "Job tidak ditemukan",
+   "desc": "Mungkin sudah dihapus oleh retensi riwayat atau host dihapus.",
+   "log": null
+  }
+ },
+ "axe": {
+  "/hosts@375": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 2,
+    "exception:muted/white": 2
+   }
+  },
+  "/jobs@375": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 52,
+    "exception:muted/white": 41,
+    "exception:white/stage-done": 42
+   }
+  },
+  "/jobs?job=job-iter2-failed-001@375": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 51,
+    "exception:muted/white": 52,
+    "exception:white/stage-done": 42
+   }
+  },
+  "/jobs?job=tidak-ada-xyz@375": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 52,
+    "exception:muted/white": 41,
+    "exception:white/stage-done": 42
+   }
+  },
+  "/os-images@375": {
+   "violations": [],
+   "filtered": {
+    "exception:on-primary/primary": 1,
+    "exception:muted/white": 25
+   }
+  },
+  "/ssh-keys@375": {
+   "violations": [],
+   "filtered": {
+    "exception:on-primary/primary": 1
+   }
+  },
+  "/settings@375": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/white": 32
+   }
+  },
+  "/hosts@1440": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 4,
+    "exception:muted/white": 27,
+    "exception:white/stage-done": 6
+   }
+  },
+  "/jobs@1440": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 3,
+    "exception:muted/white": 93,
+    "exception:white/stage-done": 42
+   }
+  },
+  "/jobs?job=job-iter2-failed-001@1440": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 3,
+    "exception:muted/white": 103,
+    "exception:white/stage-done": 42
+   }
+  },
+  "/jobs?job=tidak-ada-xyz@1440": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 3,
+    "exception:muted/white": 93,
+    "exception:white/stage-done": 42
+   }
+  },
+  "/os-images@1440": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 2,
+    "exception:muted/white": 32,
+    "exception:on-primary/primary": 1
+   }
+  },
+  "/ssh-keys@1440": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 2,
+    "exception:muted/white": 1,
+    "exception:on-primary/primary": 1
+   }
+  },
+  "/settings@1440": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/canvas": 2,
+    "exception:muted/white": 33
+   }
+  },
+  "sheet Hostname": {
+   "violations": [],
+   "filtered": {
+    "exception:muted/white": 2,
+    "exception:on-primary/primary": 1
+   }
+  },
+  "sheet OS": {
+   "violations": [
+    {
+     "id": "color-contrast",
+     "impact": "serious",
+     "targets": [
+      ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"]",
+      ".\\*\\:w-full.\\[\\&\\>\\.sr-only\\]\\:w-auto[data-orientation=\"vertical\"]:nth-child(1) > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(1)",
+      ".leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data:nth-child(2)"
+     ],
+     "detail": [
+      {
+       "category": "kept",
+       "why": "kontras terhitung 3.94 < 4.5",
+       "fg": "#807d72",
+       "bg": "#fafaf7",
+       "ratio": 3.94,
+       "inSheet": true
+      },
+      {
+       "category": "kept",
+       "why": "kontras terhitung 3.94 < 4.5",
+       "fg": "#807d72",
+       "bg": "#fafaf7",
+       "ratio": 3.94,
+       "inSheet": true
+      },
+      {
+       "category": "kept",
+       "why": "kontras terhitung 3.94 < 4.5",
+       "fg": "#807d72",
+       "bg": "#fafaf7",
+       "ratio": 3.94,
+       "inSheet": true
+      }
+     ]
+    }
+   ],
+   "filtered": {
+    "exception:muted/white": 1,
+    "exception:on-primary/primary": 1
+   }
+  }
+ }
+}

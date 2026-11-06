@@ -1,0 +1,48 @@
+== axe-results-run3.json generatedAt=2026-11-06T08:55:41.209Z audits=16
+filteredCount {'total': 549, 'byCategory': {'exception:muted/white': 380, 'exception:muted/canvas': 68, 'exception:white/stage-done': 91, 'exception:on-primary/primary': 10}}
+  self-test sintetis                           viol=['color-contrast'] kept=5 {'kept': 5}
+  /login@1440                                  viol=[] kept=0 {}
+  /login@375                                   viol=[] kept=0 {}
+  /login error@375                             viol=[] kept=0 {}
+  /hosts@1440                                  viol=[] kept=0 {}
+  /hosts@375                                   viol=[] kept=0 {}
+  /os-images@1440                              viol=[] kept=0 {}
+  /os-images@375                               viol=[] kept=0 {}
+  /ssh-keys@1440                               viol=[] kept=0 {}
+  /ssh-keys@375                                viol=[] kept=0 {}
+  /settings@1440                               viol=[] kept=0 {}
+  /settings@375                                viol=[] kept=0 {}
+  /hosts sheet@1440 [konteks: [data-slot="shee viol=[] kept=0 {}
+  /hosts sheet@375 [konteks: [data-slot="sheet viol=[] kept=0 {}
+  /jobs detail@1440                            viol=[] kept=0 {}
+  /jobs detail@375                             viol=[] kept=0 {}
+TOTAL kept (non-selftest) = 0
+== axe-results-iter2-ui-run3.json generatedAt=2026-11-06T08:56:31.539Z audits=26
+filteredCount {'total': 1504, 'byCategory': {'exception:muted/white': 902, 'exception:muted/canvas': 241, 'exception:white/stage-done': 349, 'exception:on-primary/primary': 12}}
+  self-test sintetis                           viol=['color-contrast'] kept=5 {'kept': 5}
+  /login@1440                                  viol=[] kept=0 {}
+  /login@375                                   viol=[] kept=0 {}
+  /login error@375                             viol=[] kept=0 {}
+  /hosts@1440                                  viol=[] kept=0 {}
+  /hosts@375                                   viol=[] kept=0 {}
+  /os-images@1440                              viol=[] kept=0 {}
+  /os-images@375                               viol=[] kept=0 {}
+  /ssh-keys@1440                               viol=[] kept=0 {}
+  /ssh-keys@375                                viol=[] kept=0 {}
+  /settings@1440                               viol=[] kept=0 {}
+  /settings@375                                viol=[] kept=0 {}
+  /hosts sheet@1440 [konteks: [data-slot="shee viol=[] kept=0 {}
+  /hosts sheet@375 [konteks: [data-slot="sheet viol=[] kept=0 {}
+  /jobs detail@1440                            viol=[] kept=0 {}
+  /jobs detail@375                             viol=[] kept=0 {}
+  iter2 /hosts@1440                            viol=[] kept=0 {}
+  iter2 /hosts@375                             viol=[] kept=0 {}
+  iter2 /jobs@1440                             viol=[] kept=0 {}
+  iter2 /jobs@375                              viol=[] kept=0 {}
+  iter2 /jobs detail@1440                      viol=[] kept=0 {}
+  iter2 /jobs detail@375                       viol=[] kept=0 {}
+  iter2 /jobs 404@1440                         viol=[] kept=0 {}
+  iter2 /jobs 404@375                          viol=[] kept=0 {}
+  iter2 /os-images@1440                        viol=[] kept=0 {}
+  iter2 /os-images@375                         viol=[] kept=0 {}
+TOTAL kept (non-selftest) = 0

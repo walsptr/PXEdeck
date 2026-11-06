@@ -34,7 +34,9 @@ describe("AC-5.15 migrasi 2 pada DB v1 berisi job M4", () => {
   it("kolom v1 utuh; installer_boots = jumlah stage boot-script; event_seq 0; failure_reason null; job_events kosong; migrasi ulang no-op", () => {
     const db = v1db()
     const before = db.prepare("SELECT * FROM jobs ORDER BY id").all() as Record<string, unknown>[]
-    expect(runMigrations(db)).toEqual([2])
+    // M6: dibatasi ≤ v2 — test ini khusus transisi v1 → v2 (migrasi 3 diuji di m6 test).
+    const V2 = MIGRATIONS.filter((m) => m.version <= 2)
+    expect(runMigrations(db, V2)).toEqual([2])
     const after = db.prepare("SELECT * FROM jobs ORDER BY id").all() as Record<string, unknown>[]
     expect(after).toHaveLength(3)
     for (const [i, b] of before.entries()) {
@@ -44,7 +46,7 @@ describe("AC-5.15 migrasi 2 pada DB v1 berisi job M4", () => {
     expect(extra).toEqual({ "job-active": [1, 0, null], "job-done": [4, 0, null], "job-none": [0, 0, null] })
     expect(db.prepare("SELECT count(*) AS n FROM job_events").get()).toEqual({ n: 0 })
     expect((db.prepare("SELECT version FROM schema_migrations ORDER BY version").all() as { version: number }[]).map((r) => r.version)).toEqual([1, 2])
-    expect(runMigrations(db)).toEqual([])
+    expect(runMigrations(db, V2)).toEqual([])
     expect(db.prepare("SELECT * FROM jobs ORDER BY id").all()).toEqual(after)
     db.close()
   })

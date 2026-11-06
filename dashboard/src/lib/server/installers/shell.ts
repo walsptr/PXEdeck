@@ -105,3 +105,14 @@ export function logTailCmd(method: CmdlineMethod, mac: string, files: string[], 
   for (const f of files) if (!PATH_RE.test(f) || f.includes("..")) throw new Error(`Path tidak aman: ${f}`)
   return `${callbackBaseCmd(method, mac, cmdline)}; if [ -n "$b" ]; then for f in ${files.join(" ")}; do [ -f "$f" ] && { printf 'ERROR installer gagal: %s\\n' "$f"; tail -n ${LOG_TAIL_LINES} "$f" | cut -c1-${LOG_TAIL_WIDTH}; } | curl -fsS -m 15 --data-binary @- -H 'Content-Type: text/plain' "\${b}log" >/dev/null 2>&1; done; fi; true`
 }
+
+/**
+ * Kirim isi `file` (hasil perintah diagnosis generator, mis. daftar disk/modul — bukan nilai pengguna
+ * dan tanpa token) ke `${b}log` sebagai satu request. curl bila ada, fallback busybox wget
+ * `--post-data` (d-i tidak punya curl). Isi dipotong 200 baris × 240 kolom (batas endpoint). Tidak
+ * pernah gagal. Jalur gagal saja (M6 BUG-M6-8).
+ */
+export function logFileCmd(method: CmdlineMethod, mac: string, file: string, cmdline?: string): string {
+  if (!PATH_RE.test(file) || file.includes("..")) throw new Error(`Path tidak aman: ${file}`)
+  return `${callbackBaseCmd(method, mac, cmdline)}; if [ -n "$b" ] && [ -f ${file} ]; then head -n 200 ${file} | cut -c1-${LOG_TAIL_WIDTH} > ${file}.cut; curl -fsS -m 15 --data-binary @${file}.cut -H 'Content-Type: text/plain' "\${b}log" >/dev/null 2>&1 || wget -q -T 15 -O /dev/null --header='Content-Type: text/plain' --post-data="$(cat ${file}.cut)" "\${b}log" >/dev/null 2>&1 || true; fi; true`
+}

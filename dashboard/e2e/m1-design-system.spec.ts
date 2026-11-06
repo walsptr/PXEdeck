@@ -17,6 +17,9 @@ test.describe("AC-1.2 warna dasar & font", () => {
   for (const url of ["/hosts", "/design"]) {
     test(`body bg/teks, font Inter + JetBrains Mono di ${url}`, async ({ page }) => {
       await page.goto(url)
+      // M6 (test-migration M6-T12): shell dashboard (Suspense SessionGate) di-reveal setelah event load →
+      // tunggu judul top bar TERLIHAT sebelum mengukur (tanpa ini pengukuran hampa / 0 px).
+      await expect(page.locator("header h1")).toBeVisible()
       await page.evaluate(() => document.fonts.ready)
       const s = await page.evaluate(() => ({
         bg: getComputedStyle(document.body).backgroundColor,
@@ -68,6 +71,10 @@ test.describe("AC-1.3 tanpa drop shadow", () => {
 
   test("/design", async ({ page }) => {
     await page.goto("/design")
+    // M6 (test-migration M6-T12): shell dashboard (Suspense SessionGate) di-reveal setelah event load →
+    // tunggu judul top bar TERLIHAT sebelum mengukur (tanpa ini pengukuran hampa / 0 px).
+    await expect(page.locator("header h1")).toBeVisible()
+    await expect(page.locator("header h1")).toHaveText("Design tokens")
     await page.evaluate(() => document.fonts.ready)
     expect(await dropShadowViolations(page)).toEqual([])
     await page.screenshot({ path: SHOTS(1, "ac-1.3-design"), fullPage: true })
@@ -77,6 +84,8 @@ test.describe("AC-1.3 tanpa drop shadow", () => {
 test.describe("AC-1.4 bentuk & ukuran di /design", () => {
   test("Button 40px/8px, Input 44px/8px border hairline, Card 12px putih, pill 9999px, placeholder muted-soft", async ({ page }) => {
     await page.goto("/design")
+    // M6 (test-migration M6-T12): tunggu shell dashboard ter-reveal sebelum mengukur geometri.
+    await expect(page.locator("header h1")).toBeVisible()
     const btn = page.locator('button[data-slot="button"][data-variant="default"][data-size="default"]').first()
     const b = await btn.evaluate((el) => {
       const cs = getComputedStyle(el)
@@ -167,6 +176,10 @@ test("oranye hanya pada tombol primary (/hosts, /design)", async ({ page }) => {
   const withBar = await orangeElements(page)
   expect(withBar).toEqual([{ tag: "button", slot: "button", variant: "default", text: "Install OS" }])
   await page.goto("/design")
+  // M6 (test-migration M6-T12): shell dashboard (Suspense SessionGate) di-reveal setelah event load →
+  // tunggu judul top bar TERLIHAT sebelum mengukur (tanpa ini pengukuran hampa / 0 px).
+  await expect(page.locator("header h1")).toBeVisible()
+  await expect(page.locator("header h1")).toHaveText("Design tokens")
   await page.evaluate(() => document.fonts.ready)
   const design = await orangeElementsDetailed(page)
   // CR-1-4: selain tepat satu Button default, satu-satunya elemen oranye yang boleh adalah swatch

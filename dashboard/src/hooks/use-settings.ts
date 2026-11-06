@@ -3,6 +3,7 @@
 import { useQuery } from "@tanstack/react-query"
 
 import { toActiveNetwork, type ActiveNetwork } from "@/hooks/use-network-config"
+import { apiJson } from "@/lib/api-client"
 import type { NetworkResponse } from "@/lib/net"
 
 /** Respons `GET /api/settings` (salinan klien `SettingsResponse` di lib/server/settings.ts). */
@@ -19,17 +20,24 @@ export type SettingsResponse = NetworkResponse & {
   maxInstallerBoots: number
   /** M5: binding IP lewat lease dinonaktifkan (PXE_INSECURE_NO_LEASE_CHECK=1). */
   insecureNoLeaseCheck: boolean
+  /** M6 (SR-5-4): flag insecure aktif DAN dikonfirmasi frasa `PXE_INSECURE_NO_LEASE_CHECK_CONFIRM`. */
+  insecureConfirmed: boolean
+  /** M6: blok "Akses" (tanpa hash password dalam bentuk apa pun). */
+  auth: {
+    adminUsername: string | null
+    adminConfigured: boolean
+    sessionIdleMin: number
+    sessionMaxHours: number
+    loginMaxFailures: number
+    loginWindowMin: number
+    apiRatePerMin: number
+  }
 }
 
 export const SETTINGS_KEY = ["settings"] as const
 
-async function fetchSettings(): Promise<SettingsResponse> {
-  const res = await fetch("/api/settings", { cache: "no-store" })
-  if (!res.ok) {
-    const body = await res.json().catch(() => null)
-    throw new Error(body?.error ?? `${res.status} ${res.statusText}`)
-  }
-  return (await res.json()) as SettingsResponse
+function fetchSettings(): Promise<SettingsResponse> {
+  return apiJson<SettingsResponse>("/api/settings", { cache: "no-store" })
 }
 
 const queryOptions = {

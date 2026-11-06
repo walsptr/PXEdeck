@@ -1,5 +1,23 @@
 #!/usr/bin/env bash
-# ssh PALSU untuk test infra: hanya mencatat argumen (stdin dibuang). Tidak ada koneksi jaringan.
+# ssh PALSU untuk test infra: hanya mencatat argumen. Tidak ada koneksi jaringan.
+# M6: stdin ditambahkan ke $FAKE_SSH_STDIN_LOG bila diset (memeriksa data yang HANYA dikirim
+# lewat stdin, mis. overlay admin.env); selain itu stdin dibuang.
+# BUG-M6-10 (jalur verifikasi kvm-run.sh non-dry):
+#   -o PreferredAuthentications=password -> seperti sshd yang hanya menawarkan publickey:
+#     "Permission denied (${FAKE_SSH_AUTH_METHODS:-publickey})." di stderr, exit 255.
+#   FAKE_SSH_FAIL_IP=<ip> -> perintah lain ke <user>@<ip> keluar 1 (verify-node.sh gagal).
 echo "ssh $*" >> "$FAKE_LOG"
-cat >/dev/null 2>&1 || true
+if [[ -n "${FAKE_SSH_STDIN_LOG:-}" ]]; then
+  { echo "### ssh ${*: -1}"; cat; } >> "$FAKE_SSH_STDIN_LOG" 2>/dev/null || true
+else
+  cat >/dev/null 2>&1 || true
+fi
+if [[ " $* " == *" PreferredAuthentications=password "* ]]; then
+  echo "fake@host: Permission denied (${FAKE_SSH_AUTH_METHODS:-publickey})." >&2
+  exit 255
+fi
+if [[ -n "${FAKE_SSH_FAIL_IP:-}" && " $* " == *"@$FAKE_SSH_FAIL_IP "* ]]; then
+  echo "FAIL fake verify-node ($FAKE_SSH_FAIL_IP)"
+  exit 1
+fi
 exit 0

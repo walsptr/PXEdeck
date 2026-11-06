@@ -3,7 +3,10 @@ import path from "node:path"
 
 import { defineConfig, devices } from "@playwright/test"
 
+import { e2eAdminEnv, storageStatePath } from "./e2e/support/e2e-auth"
 import { e2eDb, e2eLeaseFile, e2eMedia } from "./e2e/support/e2e-env"
+import { seedM6Iter2 } from "./e2e/support/m6-iter2-seed"
+import { seedM6Ui } from "./e2e/support/m6-seed"
 
 const PORT = 3100
 const BASE_URL = `http://localhost:${PORT}`
@@ -35,8 +38,8 @@ const KVM_ENV = {
  * M4 (DEC-007): setiap server memakai file DB SQLite sendiri yang di-seed sebelum start
  * (e2e/support/e2e-env.ts). `PXE_SEED=empty` di server: DB demo sudah berisi flag `meta.seeded`.
  */
-const dbEnv = (name: string, seed: "demo" | "empty" = "demo") => ({
-  PXE_DB_PATH: e2eDb({ name, seed }),
+const dbEnv = (name: string, seed: "demo" | "empty" = "demo", extra?: (file: string) => void) => ({
+  PXE_DB_PATH: e2eDb({ name, seed, extra }),
   PXE_SEED: "empty",
 })
 
@@ -112,6 +115,41 @@ const FILE_SERVERS = [
     testMatch: /m5-ui-fixes\.spec\.ts/,
     env: { ...M4_ENV, ...dbEnv("m5-ui", "empty"), PXE_DNSMASQ_LEASES: e2eLeaseFile("m5-ui") },
   },
+  // M6 (M6-T12). `fresh: true` → spec memakai konteks tanpa sesi dan login sendiri (tanpa storageState).
+  {
+    // Login, redirect `next`, lockout (AC-6.8, 6.30, 6.31, 6.33). Server sendiri: hitungan rate limit
+    // login in-memory tidak memengaruhi server lain.
+    name: "m6-auth",
+    port: 3114,
+    testMatch: /m6-auth\.spec\.ts/,
+    fresh: true,
+    env: { ...LAB_ENV, ...dbEnv("m6-auth") },
+  },
+  {
+    // Sesi habis (AC-6.32, DEC-019 §1): idle 1 menit — polling memperpanjang idle, sesi dicabut di
+    // sisi server (logout dari konteks lain / baris sesi dihapus).
+    name: "m6-session",
+    port: 3115,
+    testMatch: /m6-session\.spec\.ts/,
+    fresh: true,
+    env: { ...LAB_ENV, ...dbEnv("m6-session"), PXE_SESSION_IDLE_MIN: "1" },
+  },
+  {
+    // UI carry-over + axe (AC-6.1, 6.19, 6.20, 6.34–6.38). Subnet KVM + PXE_SERVER_IP (DR-5-1 diukur
+    // dengan env E2E/KVM), media palsu, 60 job sintetis.
+    name: "m6-ui",
+    port: 3116,
+    testMatch: /m6-ui\.spec\.ts/,
+    env: { ...M4_ENV, ...dbEnv("m6-ui", "demo", seedM6Ui), PXE_DNSMASQ_LEASES: e2eLeaseFile("m6-ui") },
+  },
+  {
+    // Gate M6 iter1 R1/R2/R3/R7 + DEC-022 §3: informasi penting tidak muted, status server tanpa
+    // bergantung warna, kosmetik DR-6-4/6/7/8. Data = seed m6-ui + host Failed dengan job failed.
+    name: "m6-ui-iter2",
+    port: 3117,
+    testMatch: /m6-ui-iter2\.spec\.ts/,
+    env: { ...M4_ENV, ...dbEnv("m6-ui-iter2", "demo", seedM6Iter2), PXE_DNSMASQ_LEASES: e2eLeaseFile("m6-ui-iter2") },
+  },
 ] as const
 
 const chromium = { ...devices["Desktop Chrome"], viewport: { width: 1440, height: 900 } }
@@ -120,6 +158,15 @@ const TEST_DIR = path.join(__dirname, "e2e")
 /** Pola `testMatch` project "chromium" (spec read-only di server :3100). */
 const SHARED_MATCH = [/m1-.*\.spec\.ts/, /smoke\.spec\.ts/]
 const POLLING_MATCH = /m2-polling\.spec\.ts/
+/** M6: file setup login (bukan `.spec.ts`, dikumpulkan hanya oleh project `setup-*`). */
+const SETUP_MATCH = /auth\.setup\.ts/
+
+/** Server yang spec-nya memakai sesi tersimpan (storageState) → butuh project setup. */
+const AUTH_SERVERS = [
+  { name: "chromium", baseURL: BASE_URL },
+  { name: "m2-polling", baseURL: `http://localhost:${DISCOVERY_PORT}` },
+  ...FILE_SERVERS.filter((s) => !("fresh" in s)).map((s) => ({ name: s.name, baseURL: `http://localhost:${s.port}` })),
+]
 
 /**
  * CR-1-9: setiap file spec di `e2e/` (termasuk subfolder) wajib terkumpul oleh tepat satu
@@ -162,28 +209,43 @@ export default defineConfig({
     trace: "retain-on-failure",
   },
   projects: [
+    // M6 (plan §2.10, DEC-018 §3): satu project setup per server — login lewat UI /login lalu simpan
+    // storageState; project spec bergantung padanya. Server `fresh` tidak memakai storageState.
+    ...AUTH_SERVERS.map((s) => ({
+      name: `setup-${s.name}`,
+      testMatch: SETUP_MATCH,
+      use: { ...chromium, baseURL: s.baseURL },
+    })),
     {
       // Spec read-only (M1 + smoke) berbagi server :3100.
       name: "chromium",
       testMatch: SHARED_MATCH,
-      use: { ...chromium, baseURL: BASE_URL },
+      dependencies: ["setup-chromium"],
+      use: { ...chromium, baseURL: BASE_URL, storageState: storageStatePath("chromium") },
     },
     {
       name: "m2-polling",
       testMatch: POLLING_MATCH,
-      use: { ...chromium, baseURL: `http://localhost:${DISCOVERY_PORT}` },
+      dependencies: ["setup-m2-polling"],
+      use: { ...chromium, baseURL: `http://localhost:${DISCOVERY_PORT}`, storageState: storageStatePath("m2-polling") },
     },
     ...FILE_SERVERS.map((s) => ({
       name: s.name,
       testMatch: s.testMatch,
-      use: { ...chromium, baseURL: `http://localhost:${s.port}` },
+      ...("fresh" in s
+        ? { use: { ...chromium, baseURL: `http://localhost:${s.port}` } }
+        : {
+            dependencies: [`setup-${s.name}`],
+            use: { ...chromium, baseURL: `http://localhost:${s.port}`, storageState: storageStatePath(s.name) },
+          }),
     })),
   ],
   webServer: [
     {
       command: `npm run build && npm run start -- -p ${PORT}`,
-      url: `${BASE_URL}/hosts`,
-      env: { ...LAB_ENV, ...dbEnv("shared") },
+      // M6: readiness lewat /login (halaman lain mengalihkan tanpa sesi).
+      url: `${BASE_URL}/login`,
+      env: { ...LAB_ENV, ...dbEnv("shared"), ...e2eAdminEnv() },
       reuseExistingServer: false,
       timeout: 300_000,
       stdout: "pipe",
@@ -193,8 +255,8 @@ export default defineConfig({
       // AC-2.9/AC-4.12: server kedua dari build yang sama. Simulasi discovery mock sudah dihapus
       // (M4); host baru muncul lewat request `/boot/{mac}.ipxe` dari test (discovery nyata).
       command: `npm run start -- -p ${DISCOVERY_PORT}`,
-      url: `http://localhost:${DISCOVERY_PORT}/design`,
-      env: { ...LAB_ENV, ...dbEnv("m2-polling") },
+      url: `http://localhost:${DISCOVERY_PORT}/login`,
+      env: { ...LAB_ENV, ...dbEnv("m2-polling"), ...e2eAdminEnv() },
       reuseExistingServer: false,
       timeout: 120_000,
       stdout: "pipe",
@@ -202,8 +264,8 @@ export default defineConfig({
     },
     ...FILE_SERVERS.map((s) => ({
       command: `npm run start -- -p ${s.port}`,
-      url: `http://localhost:${s.port}/design`,
-      env: s.env,
+      url: `http://localhost:${s.port}/login`,
+      env: { ...s.env, ...e2eAdminEnv() },
       reuseExistingServer: false,
       timeout: 120_000,
       stdout: "pipe" as const,

@@ -1,0 +1,14 @@
+# kvm-run m6 scenario=— run=m6 20261105T222647Z nodes=[41:uefi:os=debian 42:uefi:os=rocky 43:uefi:failpath] waves=0 keep_server=0 dry=0
+2026-11-05T22:26:47Z preflight          ok max_nodes=3 avail_mb=12245 mem_available_mb=15317 waves=—
+2026-11-05T22:26:47Z net-up             ok 
+2026-11-05T22:26:58Z server-up          ok 
+2026-11-05T22:26:58Z admin-pass         ok m6-admin.pass (0600, isi tidak dicetak)
+2026-11-05T22:27:30Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-05T22:27:31Z evidence           start 
+2026-11-05T22:27:31Z evidence           done 
+2026-11-05T22:27:31Z server-logs        FAIL server-log-asserts.txt
+2026-11-05T22:27:34Z cleanup            done 
+2026-11-05T22:27:34Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-05T22:27:35Z redact             ok 
+2026-11-05T22:27:35Z admin-pass         ok password admin tidak ada di bukti
+2026-11-05T22:27:35Z result             FAIL exit=1 stage=server-check

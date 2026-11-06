@@ -16,6 +16,12 @@ case "$cmd" in
   domstate) [[ -f "$D/$a1" ]] || exit 1; cat "$D/$a1" ;;
   dumpxml) [[ -f "$D/$a1" ]] || exit 1; echo "<domain><name>$a1</name>"; [[ -f "$D/$a1.nvram" ]] && echo "<nvram>/var/lib/libvirt/qemu/nvram/${a1}_VARS.fd</nvram>"; echo "  <on_reboot>$(cat "$FAKE_STATE/onreboot/$a1" 2>/dev/null || echo restart)</on_reboot>"; echo "</domain>" ;;
   list)
+    # M6: FAKE_VIRSH_FLIP_AFTER_FIRST_LIST=<dom> -> mulai panggilan `list --all` ke-2, domain itu
+    # berstatus "paused" (mensimulasikan resource yang berubah selama run; uji libvirt-diff).
+    if [[ -n "${FAKE_VIRSH_FLIP_AFTER_FIRST_LIST:-}" && " ${args[*]} " != *" --name "* ]]; then
+      c=$(( $(cat "$FAKE_STATE/list-count" 2>/dev/null || echo 0) + 1 )); echo "$c" > "$FAKE_STATE/list-count"
+      ((c >= 2)) && echo paused > "$D/$FAKE_VIRSH_FLIP_AFTER_FIRST_LIST"
+    fi
     if [[ " ${args[*]} " == *" --name "* ]]; then
       for f in "$D"/*; do [[ -f "$f" && "$f" != *.nvram ]] && basename "$f"; done; echo
     else

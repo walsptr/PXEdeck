@@ -9,14 +9,46 @@ import {
   sudoersText,
 } from "./firstboot"
 import { singleLine } from "./lines"
-import { b64, b64write, callbackCmd, logCmd, logTailCmd } from "./shell"
+import { b64, b64write, callbackCmd, logCmd, logTailCmd, shQuote } from "./shell"
 
 /** Penanda log installer (konstanta; M5 plan §2.5). */
 export const ROCKY_LOG = {
   start: "installer: kickstart mulai",
   post: "installer: post mulai",
   postDone: "installer: konfigurasi target selesai",
+  disk: "installer: disk target dipilih",
+  noDisk: "ERROR installer gagal: disk target tidak ditemukan",
 } as const
+
+/** Berkas kickstart partisi yang ditulis %pre untuk disk otomatis (BUG-M6-7). */
+export const ROCKY_DISK_INCLUDE = "/tmp/pxe-disk.ks"
+
+/**
+ * BUG-M6-7: baris %pre (bash anaconda) yang memvalidasi disk target SEBELUM anaconda memproses
+ * storage. Disk eksplisit dari config, atau (otomatis) disk pertama non-removable dari `lsblk`
+ * (tanpa zram/loop). Ada → log + (otomatis) tulis `ROCKY_DISK_INCLUDE` (`ignoredisk` + `clearpart`
+ * untuk disk itu saja). Tidak ada → log ERROR + tail log anaconda + callback `failed`, exit 1
+ * (`%pre --erroronfail` menghentikan anaconda) — error storage di mode cmdline tidak menjalankan
+ * %onerror, jadi job difinalkan dari sini. Diekspor untuk test.
+ */
+export function rockyDiskPreLines(ctx: InstallContext): string[] {
+  const c = validateContext(ctx)
+  return [
+    `p=${shQuote(c.storage.disk)}`,
+    `if [ -z "$p" ]; then n=$(lsblk -dnro NAME,TYPE,RM | awk '$2 == "disk" && $3 == "0" && $1 !~ /^(zram|loop)/ {print $1; exit}'); [ -n "$n" ] && p=/dev/$n; fi`,
+    `if [ -n "$p" ] && [ -b "$p" ]; then`,
+    `  ${logCmd("kickstart", c.mac, ROCKY_LOG.disk)}`,
+    ...(c.storage.disk
+      ? []
+      : [`  d=\${p#/dev/}; printf 'ignoredisk --only-use=%s\\nclearpart --all --initlabel --drives=%s\\n' "$d" "$d" > ${ROCKY_DISK_INCLUDE}`]),
+    "else",
+    `  ${logCmd("kickstart", c.mac, ROCKY_LOG.noDisk)}`,
+    `  ${logTailCmd("kickstart", c.mac, ROCKY_ERROR_LOGS)}`,
+    `  ${callbackCmd("kickstart", c.mac, "failed")}`,
+    "  exit 1",
+    "fi",
+  ]
+}
 
 /** Log anaconda yang di-tail saat gagal. */
 export const ROCKY_ERROR_LOGS = ["/tmp/anaconda.log", "/tmp/program.log"]
@@ -57,9 +89,13 @@ export function rockyKickstart(ctx: InstallContext): string {
   const drives = c.storage.disk ? ` --drives=${c.storage.disk.replace(/^\/dev\//, "")}` : ""
   const out = [
     "# Kickstart dibuat PXE dashboard (jangan edit manual)",
-    "text",
+    // BUG-M6-5: mode `cmdline` (non-interaktif) — pengaturan wajib yang gagal (mis. sumber paket)
+    // membuat anaconda berhenti dengan error dan menjalankan %onerror (callback failed), bukan
+    // menunggu input di UI teks tty1 sampai timeout.
+    "cmdline",
+    // Satu sumber: root media; anaconda membaca `.treeinfo` (`repository = Minimal` pada ISO minimal
+    // 9.x). Tidak ada `repo --name=AppStream/BaseOS` — tidak ada di media minimal (404 → macet).
     `url --url=${repo}`,
-    `repo --name=AppStream --baseurl=${repo}/AppStream`,
     `lang ${c.locale}`,
     "keyboard --vckeymap=us --xlayouts=us",
     `timezone ${c.timezone} --utc`,
@@ -70,20 +106,26 @@ export function rockyKickstart(ctx: InstallContext): string {
     "firstboot --disable",
     "selinux --enforcing",
     "firewall --enabled --ssh",
-    ...(c.storage.disk ? [`ignoredisk --only-use=${c.storage.disk.replace(/^\/dev\//, "")}`] : []),
-    `clearpart --all --initlabel${drives}`,
+    // Disk eksplisit: statis (divalidasi %pre). Otomatis: %pre memilih satu disk dan menulis include —
+    // tanpa itu `clearpart --all` tanpa --drives menghapus SEMUA disk node.
+    ...(c.storage.disk
+      ? [`ignoredisk --only-use=${c.storage.disk.replace(/^\/dev\//, "")}`, `clearpart --all --initlabel${drives}`]
+      : [`%include ${ROCKY_DISK_INCLUDE}`]),
     "zerombr",
     `autopart --type=${c.storage.partition === "lvm" ? "lvm" : "plain"}`,
     "bootloader --location=mbr",
     "reboot",
     "",
-    "%pre",
+    "%pre --erroronfail",
     logCmd("kickstart", c.mac, ROCKY_LOG.start),
+    ...rockyDiskPreLines(c),
     "%end",
     "",
     "%packages",
     "@^minimal-environment",
+    "openssh-server",
     "curl",
+    "sudo",
     "%end",
     "",
     "%post --log=/root/pxe-post.log",

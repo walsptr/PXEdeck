@@ -8,6 +8,8 @@ chown -R 'ops': /home/ops/.ssh
 printf %s 'b3BzIEFMTD0oQUxMKSBOT1BBU1NXRDpBTEwK' | base64 -d > /etc/sudoers.d/90-ops && chmod 440 /etc/sudoers.d/90-ops
 mkdir -p /etc/ssh/sshd_config.d
 printf %s 'IyBEaXBhc2FuZyBQWEUgZGFzaGJvYXJkOiBsb2dpbiBoYW55YSBkZW5nYW4ga2V5ClBhc3N3b3JkQXV0aGVudGljYXRpb24gbm8KS2JkSW50ZXJhY3RpdmVBdXRoZW50aWNhdGlvbiBubwo=' | base64 -d > /etc/ssh/sshd_config.d/60-pxe-no-password.conf && chmod 644 /etc/ssh/sshd_config.d/60-pxe-no-password.conf
+printf '%s\n' 'm4-node11' > /etc/hostname
+sed -i '/^127\.0\.1\.1[[:space:]]/d' /etc/hosts && printf '127.0.1.1\t%s\n' 'm4-node11' >> /etc/hosts
 IF=
 for d in /sys/class/net/*; do
   [ "$(cat "$d/address" 2>/dev/null)" = '52:54:00:99:00:11' ] && IF=$(basename "$d")
@@ -16,6 +18,7 @@ done
 printf %s 'YXV0byBsbwppZmFjZSBsbyBpbmV0IGxvb3BiYWNrCgpzb3VyY2UgL2V0Yy9uZXR3b3JrL2ludGVyZmFjZXMuZC8qCg==' | base64 -d > /etc/network/interfaces && chmod 644 /etc/network/interfaces
 mkdir -p /etc/network/interfaces.d
 printf %s 'YXV0byAkSUYKaWZhY2UgJElGIGluZXQgc3RhdGljCiAgICBhZGRyZXNzIDEwLjk5LjAuMjEvMjQKICAgIG5ldG1hc2sgMjU1LjI1NS4yNTUuMAogICAgZ2F0ZXdheSAxMC45OS4wLjEKICAgIGRucy1uYW1lc2VydmVycyAxMC45OS4wLjIK' | base64 -d | sed "s/\$IF/$IF/g" > /etc/network/interfaces.d/mgmt
+for f in /etc/apt/sources.list /etc/apt/sources.list.d/*.list; do if [ -f "$f" ]; then sed -i 's#^deb[[:space:]]*\[trusted=yes by-hash=no\][[:space:]]*#\# (media instalasi PXE tanpa tanda tangan, DEC-021) deb #' "$f"; fi; done; rm -f /etc/apt/apt.conf.d/00AllowUnauthenticated
 mkdir -p /etc/pxe-callback /usr/local/sbin /etc/systemd/system/multi-user.target.wants && chmod 700 /etc/pxe-callback
 u=$(tr ' ' '\n' < /proc/cmdline | sed -n 's#^url=\(https\{0,1\}://.*/boot/52:54:00:99:00:11/[A-Za-z0-9_-]\{43\}/\)[^/]*$#\1status#p' | head -n 1); if [ -n "$u" ]; then (umask 077; printf '%s\n' "$u" > /etc/pxe-callback/url) && chmod 600 /etc/pxe-callback/url; fi
 printf %s 'IyEvYmluL3NoCiMgS2lyaW0gbG9nICJPUyB0ZXJwYXNhbmciIGxhbHUgc3RhZ2U9ZG9uZSBrZSBQWEUgZGFzaGJvYXJkLCBrZW11ZGlhbiBoYXB1cyBkaXJpICh0b2tlbiBzZWthbGkgcGFrYWkpLgojIFVSTCAoYmVyaXNpIHRva2VuKSBoYW55YSBkaWJhY2EgZGFyaSBmaWxlIDA2MDA7IHRpZGFrIHBlcm5haCBkaWNldGFrLgp1cmw9JChjYXQgL2V0Yy9weGUtY2FsbGJhY2svdXJsKSB8fCBleGl0IDEKYmFzZT0ke3VybCVzdGF0dXN9Cm09ImZpcnN0LWJvb3Q6IE9TIHRlcnBhc2FuZyBib290IGRhcmkgZGlzazogJChob3N0bmFtZSkgJChpcCAtNCAtbyBhZGRyIHNob3cgc2NvcGUgZ2xvYmFsIDI+L2Rldi9udWxsIHwgYXdrICd7cHJpbnQgJDIiPSIkNH0nIHwgdHIgJ1xuJyAnICcpIgpsb2dnZWQ9MAppPTAKd2hpbGUgWyAkaSAtbHQgNjAgXTsgZG8KICBpZiBbICRsb2dnZWQgLWVxIDAgXTsgdGhlbgogICAgcHJpbnRmICclc1xuJyAiJG0iIHwgY3VybCAtZnNTIC1tIDE1IC0tZGF0YS1iaW5hcnkgQC0gLUggJ0NvbnRlbnQtVHlwZTogdGV4dC9wbGFpbicgIiR7YmFzZX1sb2ciID4vZGV2L251bGwgMj4mMSAmJiBsb2dnZWQ9MQogIGZpCiAgaWYgY3VybCAtZnNTIC1tIDE1IC1YIFBPU1QgLWQgc3RhZ2U9ZG9uZSAiJHVybCIgPi9kZXYvbnVsbCAyPiYxIHx8CiAgICAgd2dldCAtcSAtVCAxNSAtTyAvZGV2L251bGwgLS1wb3N0LWRhdGE9c3RhZ2U9ZG9uZSAiJHVybCIgMj4vZGV2L251bGw7IHRoZW4KICAgIHJtIC1yZiAvZXRjL3B4ZS1jYWxsYmFjawogICAgc3lzdGVtY3RsIGRpc2FibGUgcHhlLWNhbGxiYWNrLWRvbmUuc2VydmljZSA+L2Rldi9udWxsIDI+JjEgfHwgdHJ1ZQogICAgcm0gLWYgL2V0Yy9zeXN0ZW1kL3N5c3RlbS9weGUtY2FsbGJhY2stZG9uZS5zZXJ2aWNlIC91c3IvbG9jYWwvc2Jpbi9weGUtY2FsbGJhY2stZG9uZQogICAgZXhpdCAwCiAgZmkKICBpPSQoKGkgKyAxKSkKICBzbGVlcCAxMApkb25lCmV4aXQgMQo=' | base64 -d > /usr/local/sbin/pxe-callback-done && chmod 755 /usr/local/sbin/pxe-callback-done

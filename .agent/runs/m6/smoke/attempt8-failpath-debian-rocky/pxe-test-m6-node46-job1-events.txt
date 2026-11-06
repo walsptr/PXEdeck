@@ -1,0 +1,55 @@
+1 2026-11-06T00:29:34.273Z info stage/install Job install dibuat (OS rocky-9); menunggu PXE boot
+2 2026-11-06T00:29:45.501Z info system/boot-script Script installer dilayani (ke-1/3, platform efi, IP 10.99.0.136)
+3 2026-11-06T00:29:54.636Z info system/config-fetch File ks.cfg diambil dari IP 10.99.0.136
+4 2026-11-06T00:29:54.636Z info stage/config-fetch Installing: konfigurasi ks.cfg diambil installer
+5 2026-11-06T00:30:13.773Z info installer/installer installer: kickstart mulai
+6 2026-11-06T00:30:13.795Z error installer/installer ERROR installer gagal: disk target tidak ditemukan
+7 2026-11-06T00:30:13.813Z error installer/installer ERROR installer gagal: /tmp/anaconda.log
+8 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,896 INF core.configuration.product: Loading information about products from /etc/anaconda/product.d.
+9 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,899 INF core.configuration.product: Found AlmaLinux at /etc/anaconda/product.d/almalinux.conf.
+10 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,900 INF core.configuration.product: Found CentOS Stream at /etc/anaconda/product.d/centos-stream.conf.
+11 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,900 INF core.configuration.product: Found CentOS Linux at /etc/anaconda/product.d/centos.conf.
+12 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,900 INF core.configuration.product: Found Circle Linux at /etc/anaconda/product.d/circle.conf.
+13 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,901 INF core.configuration.product: Found Fedora-ELN at /etc/anaconda/product.d/fedora-eln.conf.
+14 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,901 INF core.configuration.product: Found Fedora-IoT IoT at /etc/anaconda/product.d/fedora-iot.conf.
+15 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,901 INF core.configuration.product: Found Fedora Server at /etc/anaconda/product.d/fedora-server.conf.
+16 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,901 INF core.configuration.product: Found Fedora Silverblue at /etc/anaconda/product.d/fedora-silverblue.conf.
+17 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,902 INF core.configuration.product: Found Fedora Workstation Live at /etc/anaconda/product.d/fedora-workstation-live.conf.
+18 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,902 INF core.configuration.product: Found Fedora Workstation at /etc/anaconda/product.d/fedora-workstation.conf.
+19 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,902 INF core.configuration.product: Found Fedora at /etc/anaconda/product.d/fedora.conf.
+20 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,902 INF core.configuration.product: Found oVirt Node Next at /etc/anaconda/product.d/ovirt.conf.
+21 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,903 INF core.configuration.product: Found Red Hat Enterprise Linux at /etc/anaconda/product.d/rhel.conf.
+22 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,903 INF core.configuration.product: Found RHVH at /etc/anaconda/product.d/rhvh.conf.
+23 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,903 INF core.configuration.product: Found Rocky Linux at /etc/anaconda/product.d/rocky.conf.
+24 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,904 INF core.configuration.product: Found Scientific Linux at /etc/anaconda/product.d/scientific-linux.conf.
+25 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,904 INF core.configuration.product: Found Virtuozzo Linux at /etc/anaconda/product.d/virtuozzo-linux.conf.
+26 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,904 WRN core.configuration.product: No support for the product Rocky Linux Minimal Minimal.
+27 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,904 WRN core.configuration.product: No support for the product Rocky Linux Minimal.
+28 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,904 INF core.configuration.product: The product Rocky Linux is supported.
+29 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,905 WRN misc: /usr/lib64/python3.9/site-packages/pyanaconda/core/configuration/anaconda.py:89: DeprecationWarning: The kickstart_modules configuration option is deprecated and will be removed in in the future.
+30 2026-11-06T00:30:13.813Z info installer/installer   warnings.warn(
+31 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,907 INF main: /sbin/anaconda 34.25.7.14-1.el9.rocky.0.6
+32 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,936 INF core.util: Reporting the IPMI event: 7
+33 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,989 WRN misc: /usr/lib64/python3.9/site-packages/dbus/connection.py:337: DeprecationWarning: invalid escape sequence \ 
+34 2026-11-06T00:30:13.813Z info installer/installer   """Arrange for the given function to be called when a signal matching
+35 2026-11-06T00:30:13.813Z info installer/installer 00:30:06,992 WRN misc: /usr/lib64/python3.9/site-packages/dbus/proxies.py:307: DeprecationWarning: invalid escape sequence \ 
+36 2026-11-06T00:30:13.813Z info installer/installer   """Arrange for the given function to be called when the given signal
+37 2026-11-06T00:30:13.813Z info installer/installer 00:30:07,213 INF isys: 2138076 kB (2087 MB) are available
+38 2026-11-06T00:30:13.813Z info installer/installer 00:30:07,214 WRN misc: /usr/lib64/python3.9/subprocess.py:941: RuntimeWarning: line buffering (buffering=1) isn't supported in binary mode, the default buffer size will be used
+39 2026-11-06T00:30:13.813Z info installer/installer   self.stdout = io.open(c2pread, 'rb', bufsize)
+40 2026-11-06T00:30:13.813Z info installer/installer 00:30:07,224 INF startup_utils: check_memory(): total:2087, needed:320, graphical:410
+41 2026-11-06T00:30:13.813Z info installer/installer 00:30:07,224 DBG startup_utils: Don't set up proxy variables.
+42 2026-11-06T00:30:13.813Z info installer/installer 00:30:07,231 INF main: anaconda called with cmdline = ['/sbin/anaconda']
+43 2026-11-06T00:30:13.813Z info installer/installer 00:30:07,232 INF main: Default encoding = utf-8 
+44 2026-11-06T00:30:13.813Z info installer/installer 00:30:07,232 INF misc: Writing a temporary configuration loaded from: ['/etc/anaconda/anaconda.conf', '/etc/anaconda/product.d/rhel.conf', '/etc/anaconda/product.d/rocky.conf', '/etc/anaconda/conf.d/00-do-nothing.conf', '/etc/anaconda/conf.
+45 2026-11-06T00:30:13.813Z info installer/installer 00:30:07,250 INF core.dbus: Connecting to the Anaconda bus at unix:abstract=/tmp/dbus-izqFOpfDiX,guid=87b134c6ec1dc75d7463c8556aed1f8f.
+46 2026-11-06T00:30:13.813Z info installer/installer 00:30:11,515 INF main: Found a kickstart file: /run/install/ks.cfg
+47 2026-11-06T00:30:13.813Z info installer/installer 00:30:11,546 INF kickstart.script: Running kickstart %%pre script(s)
+48 2026-11-06T00:30:13.813Z info installer/installer 00:30:11,546 INF stdout: Running pre-installation scripts
+49 2026-11-06T00:30:13.844Z error installer/installer ERROR installer gagal: /tmp/program.log
+50 2026-11-06T00:30:13.844Z info installer/installer 00:30:07,214 INF program: Running... losetup --list
+51 2026-11-06T00:30:13.844Z info installer/installer 00:30:07,224 INF program: Running... /sbin/auditd
+52 2026-11-06T00:30:13.844Z info installer/installer 00:30:07,231 DBG program: Return code: 0
+53 2026-11-06T00:30:13.844Z info installer/installer 00:30:07,233 INF program: Running... dbus-daemon --print-address --syslog --config-file=/usr/share/anaconda/dbus/anaconda-bus.conf
+54 2026-11-06T00:30:13.844Z info installer/installer 00:30:11,547 INF program: Running... /bin/sh /tmp/ks-script-ktgr2ltg
+55 2026-11-06T00:30:13.867Z error stage/callback Failed: installer melaporkan gagal (callback dari IP 10.99.0.136)

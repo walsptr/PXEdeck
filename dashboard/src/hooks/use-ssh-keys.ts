@@ -2,28 +2,16 @@
 
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 
-import { ApiError } from "@/hooks/use-host-config"
-import type { SshKey } from "@/lib/host-config"
+import { ApiError, apiJson } from "@/lib/api-client"
+import type { SshKeyInfo } from "@/lib/types"
 
-/** Item `GET /api/ssh-keys` (M5): key + jumlah host pemakai. */
-export type SshKeyInfo = SshKey & { usedBy: number }
+/** Item `GET /api/ssh-keys` (M5) — satu sumber di `lib/types.ts` (CR-5-9). */
+export type { SshKeyInfo }
 
 /** Sama dengan key `useSshKeys` (tab SSH Keys di Sheet) agar library selalu sinkron. */
 export const SSH_KEYS_KEY = ["ssh-keys"] as const
 
-async function api<T>(url: string, init?: RequestInit): Promise<T> {
-  const res = await fetch(url, init)
-  const body =
-    res.status === 204 ? undefined : await res.json().catch(() => undefined)
-  if (!res.ok)
-    throw new ApiError(
-      body?.error ?? `${res.status} ${res.statusText}`,
-      res.status,
-      body?.errors ?? [],
-      body,
-    )
-  return body as T
-}
+const api = apiJson
 
 const JSON_HEADERS = { "content-type": "application/json" }
 

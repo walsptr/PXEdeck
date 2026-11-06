@@ -1,0 +1,8 @@
+[L2 segmen inline < xl] src/components/os-images/path-text.tsx :: s/ max-xl:\[&_\[data-slot=path-segment\]\]:inline// =>  Tests 1 failed | 34 passed (35) ; pulih sha256 identik=ya
+[L2 id inline < xl] src/components/os-images/path-text.tsx :: s/wrap-anywhere max-xl:inline/wrap-anywhere/ =>  Tests 1 failed | 34 passed (35) ; pulih sha256 identik=ya
+[L3.2 tab inaktif] src/components/ui/tabs.tsx :: s/whitespace-nowrap text-body transition-all/whitespace-nowrap text-foreground\/60 transition-all/ =>  Tests 1 failed | 34 passed (35) ; pulih sha256 identik=ya
+[L3.4 alert destructive] src/components/ui/alert.tsx :: s/alert-description\]:text-destructive /alert-description]:text-destructive\/90 / =>  Tests 1 failed | 34 passed (35) ; pulih sha256 identik=ya
+[L3.1 pencarian] src/components/top-bar.tsx :: s/text-sm text-muted-foreground transition-colors/text-sm text-muted-soft transition-colors/ =>  Tests 1 failed | 34 passed (35) ; pulih sha256 identik=ya
+[L3.3 kartu OS Sheet] src/components/host-config/tab-os.tsx :: s/<FieldDescription className="text-body" data-slot-detail="os-platform">/<FieldDescription data-slot-detail="os-platform">/ =>  Tests 1 failed | 34 passed (35) ; pulih sha256 identik=ya
+[OBS-L1 fallback] src/components/dashboard-shell-fallback.tsx :: s/aria-busy="true"/aria-busy="false"/ =>  Tests 1 failed | 34 passed (35) ; pulih sha256 identik=ya
+Catatan: L3.3 caption footer Sheet (config-sheet.tsx 'text-body') dibuktikan oleh E2E m6-ui AC-6.38 Sheet (merah sebelum perbaikan, laporan test-engineer); tidak ada unit test komponen ConfigSheet.

@@ -1,0 +1,23 @@
+# kvm-run m6 scenario=bulk run=m6bulk 20261106T021328Z nodes=[25:uefi 26:uefi 27:uefi] waves=1 keep_server=0 dry=0
+2026-11-06T02:13:28Z preflight          ok max_nodes=3 avail_mb=12104 mem_available_mb=15176 waves=pxe-test-m6bulk-node25,pxe-test-m6bulk-node26,pxe-test-m6bulk-node27
+2026-11-06T02:13:28Z net-up             ok 
+2026-11-06T02:13:41Z server-up          ok 
+2026-11-06T02:13:41Z admin-pass         ok m6bulk-admin.pass (0600, isi tidak dicetak)
+2026-11-06T02:14:03Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-06T02:14:03Z server-check       ok 
+2026-11-06T02:14:04Z node-create        ok pxe-test-m6bulk-node25 uefi 52:54:00:99:00:25 (gelombang 1/1)
+2026-11-06T02:14:05Z node-create        ok pxe-test-m6bulk-node26 uefi 52:54:00:99:00:26 (gelombang 1/1)
+2026-11-06T02:14:06Z node-create        ok pxe-test-m6bulk-node27 uefi 52:54:00:99:00:27 (gelombang 1/1)
+2026-11-06T02:14:27Z discover           ok pxe-test-m6bulk-node25 (dimatikan untuk gelombang install)
+2026-11-06T02:14:28Z discover           ok pxe-test-m6bulk-node26 (dimatikan untuk gelombang install)
+2026-11-06T02:14:28Z discover           ok pxe-test-m6bulk-node27 (dimatikan untuk gelombang install)
+2026-11-06T02:25:08Z playwright         ok exit=0 (playwright-kvm.log)
+2026-11-06T02:25:09Z verify             ok pxe-test-m6bulk-node25 (pxe-test-m6bulk-node25-verify.txt)
+2026-11-06T02:25:09Z evidence           start 
+2026-11-06T02:25:10Z evidence           done 
+2026-11-06T02:25:10Z server-logs        ok 
+2026-11-06T02:25:14Z cleanup            done 
+2026-11-06T02:25:14Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-06T02:25:22Z redact             ok 
+2026-11-06T02:25:22Z admin-pass         ok password admin tidak ada di bukti
+2026-11-06T02:25:22Z result             FAIL exit=1 stage=verify

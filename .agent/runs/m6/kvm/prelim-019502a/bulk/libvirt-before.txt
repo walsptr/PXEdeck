@@ -1,0 +1,13 @@
+# 2026-11-06T03:54:22Z virsh -c qemu:///system list --all
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+# virsh -c qemu:///system net-list --all
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+

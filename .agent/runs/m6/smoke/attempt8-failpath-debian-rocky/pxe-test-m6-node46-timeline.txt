@@ -1,0 +1,22 @@
+2026-11-06T00:29:34.224Z discovered firmware=uefi
+2026-11-06T00:29:34.281Z konfigurasi tersimpan os=rocky-9 disk=/dev/vdz ip=10.99.0.56 hostname=m6-node46
+2026-11-06T00:29:34.391Z install dibuat job=job-387989f9-d121-45f0-b320-5050ebf01db1 status=booting
+2026-11-06T00:29:34.463Z node.sh reset
+2026-11-06T00:29:34.472Z job1(/dev/vdz): booting (+0 dtk, installerBoots=0)
+2026-11-06T00:30:04.524Z job1(/dev/vdz): installing (+30 dtk, installerBoots=1)
+2026-11-06T00:30:15.234Z job1(/dev/vdz): failed/installer-error (+41 dtk, installerBoots=1)
+2026-11-06T00:30:15.257Z job1 akhir=failed/installer-error dalam 41 dtk; event installer error-commands=3; urutan=booting>installing>failed
+2026-11-06T00:30:15.317Z konfigurasi tersimpan os=rocky-9 disk=(otomatis) ip=10.99.0.56 hostname=m6-node46
+2026-11-06T00:30:15.404Z install dibuat job=job-52df4921-9f5f-4feb-9704-2c5d38f43a73 status=booting
+2026-11-06T00:30:15.641Z node.sh reset
+2026-11-06T00:30:15.677Z job2: booting (+0 dtk, installerBoots=0)
+2026-11-06T00:30:35.700Z job2: installing (+20 dtk, installerBoots=1)
+2026-11-06T00:37:46.673Z job2: configuring (+451 dtk, installerBoots=1)
+2026-11-06T00:41:27.705Z job2: done (+672 dtk, installerBoots=1)
+2026-11-06T00:41:27.711Z job2 akhir=done/- dalam 672 dtk; urutan=booting>installing>configuring>done; stages=booting@install,booting@boot-script,installing@config-fetch,configuring@callback,done@callback
+2026-11-06T00:41:27.711Z event installer (5): installer: kickstart mulai | installer: disk target dipilih | installer: post mulai | installer: konfigurasi target selesai | first-boot: OS terpasang boot dari disk: m6-node46 enp1s0=10.99.0.56/24 
+2026-11-06T00:41:28.104Z ssh key yang di-inject: OK
+2026-11-06T00:41:28.428Z log installer /var/log/anaconda/anaconda.log: exit=0 bytes=37846
+2026-11-06T00:41:28.591Z log installer /var/log/anaconda/program.log: exit=0 bytes=8231
+2026-11-06T00:41:28.872Z console log: 200000 byte terakhir dibaca; kernel panic=false
+2026-11-06T00:41:29.438Z jumlah job host=2

@@ -9,6 +9,7 @@
 #     (MAC bisa berupa aa:bb:..., aa-bb-..., %3A-encoded, atau 12 hex)
 #   - parameter token=<43 char> / "token":"<43 char>"                -> REDACTED-TOKEN
 #   - hash SHA-512 crypt $6$[rounds=N$]salt$hash                      -> $6$REDACTED
+#   - hash admin scrypt$N$r$p$salt$hash (M6, DEC-017 §2)                -> scrypt$REDACTED
 #   - blob base64 (>= 40 char) yang ter-decode (UTF-8/UTF-16LE, offset 0-3, bertingkat hingga 3
 #     lapis) memuat token path /boot/<mac>/<token>, hash $6$, atau "PRIVATE KEY"
 #                                                                      -> REDACTED-B64-SECRET
@@ -30,6 +31,7 @@ B64U='[A-Za-z0-9_-]'
 TOKEN_PATH_RE="/boot/[0-9a-fA-F:%-]{12,40}/$B64U{43}([^A-Za-z0-9_-]|\$)"
 TOKEN_KV_RE="(token[\"']?[[:space:]]*[=:][[:space:]]*[\"']?)$B64U{43}([^A-Za-z0-9_-]|\$)"
 HASH_RE='\$6\$(rounds=[0-9]+\$)?[./A-Za-z0-9]{1,16}\$[./A-Za-z0-9]{20,}'
+SCRYPT_RE='scrypt\$[0-9]+\$[0-9]+\$[0-9]+\$[A-Za-z0-9+/_=-]+(\$[A-Za-z0-9+/_=-]+)?'
 PKEY_RE='-----BEGIN [A-Z ]*PRIVATE KEY-----'
 B64_RUN_RE='[A-Za-z0-9+/]{40,}={0,2}'
 B64_INNER_RE='[A-Za-z0-9+/]{16,}={0,2}'
@@ -46,7 +48,7 @@ _b64_secret() {
     # NUL dibuang (UTF-16LE -> ASCII) sebelum masuk variabel bash.
     dec="$(printf '%s' "$s" | base64 -d 2>/dev/null | tr -d '\000' || true)"
     [[ -n "$dec" ]] || continue
-    if grep -Eqa -e "$B64_DEC_SECRET_RE" -e '\$6\$' -e 'PRIVATE KEY' <<<"$dec"; then return 0; fi
+    if grep -Eqa -e "$B64_DEC_SECRET_RE" -e '\$6\$' -e 'scrypt\$[0-9]+\$' -e 'PRIVATE KEY' <<<"$dec"; then return 0; fi
     if ((depth > 0)); then
       while IFS= read -r inner; do
         _b64_secret "$inner" $((depth - 1)) && return 0
@@ -89,11 +91,12 @@ while IFS= read -r -d '' f; do
     -e "s#(/boot/[0-9a-fA-F:%-]{12,40}/)$B64U{43}([^A-Za-z0-9_-]|\$)#\1REDACTED-TOKEN\2#g" \
     -e "s#$TOKEN_KV_RE#\1REDACTED-TOKEN\2#gI" \
     -e "s#$HASH_RE#\$6\$REDACTED#g" \
+    -e "s#$SCRYPT_RE#scrypt\$REDACTED#g" \
     "$f"
   _b64_redact "$f"
 done < <(find "$dir" -type f -print0)
 
-hits="$(find "$dir" -type f -exec grep -EnaH -i -e "$TOKEN_PATH_RE" -e "$TOKEN_KV_RE" -e "$HASH_RE" -e "$PKEY_RE" {} + \
+hits="$(find "$dir" -type f -exec grep -EnaH -i -e "$TOKEN_PATH_RE" -e "$TOKEN_KV_RE" -e "$HASH_RE" -e "$SCRYPT_RE" -e "$PKEY_RE" {} + \
   | cut -d: -f1,2 | head -50 || true)"
 while IFS= read -r -d '' f; do
   b64hits="$(_b64_scan "$f" | head -50)"

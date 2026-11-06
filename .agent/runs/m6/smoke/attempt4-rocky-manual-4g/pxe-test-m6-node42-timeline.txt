@@ -1,0 +1,11 @@
+2026-11-05T22:58:27.608Z discovered firmware=uefi
+2026-11-05T22:58:27.651Z konfigurasi tersimpan os=rocky-9 disk=(otomatis) ip=10.99.0.52 hostname=m6-node42
+2026-11-05T22:58:27.682Z install dibuat job=job-4789723b-fe26-4c12-8ebf-31c02e09a081 status=booting
+2026-11-05T22:58:27.759Z node.sh reset
+2026-11-05T22:58:27.768Z job1: booting (+0 dtk, installerBoots=0)
+2026-11-05T22:58:57.825Z job1: installing (+30 dtk, installerBoots=1)
+2026-11-05T23:13:59.271Z job1: failed/timeout-installing (+932 dtk, installerBoots=1)
+2026-11-05T23:13:59.281Z job1 akhir=failed/timeout-installing dalam 932 dtk; urutan=booting>installing>failed; stages=booting@install,booting@boot-script,installing@config-fetch,failed@watchdog
+2026-11-05T23:13:59.281Z event installer (1): installer: kickstart mulai
+2026-11-05T23:13:59.282Z console log: 87984 byte terakhir dibaca; kernel panic=false
+2026-11-05T23:13:59.290Z jumlah job host=1

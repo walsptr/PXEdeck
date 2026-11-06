@@ -1,0 +1,3 @@
+PASS  CR-4-12-dnsmasq  pxe-test-m6core-node21       TFTP snponly.efi terkirim ke 10.99.0.101 (lease 52:54:00:99:00:21)
+PASS  CR-4-12-nginx    pxe-test-m6core-node21       user-data 200 x2 (min 2)
+PASS  CR-4-12-nginx    pxe-test-m6core-node22       user-data 200 x2 (min 2)

@@ -1,0 +1,94 @@
+# Coverage kode baru/berubah M6 (git diff --diff-filter=AM 31c506e..HEAD -- dashboard/src, non-test) @ fdc0abf
+# Sumber: dashboard/coverage/coverage-summary.json + coverage-final.json (vitest v8, include DEC-004)
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/app/(dashboard)/layout.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/app/(dashboard)/session-gate.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/app/login/login-gate.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/app/login/page.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/app-sidebar.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/auth/login-card.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/auth/login-form.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/auth/sidebar-account.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/dashboard-shell-fallback.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/config-sheet.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/ip-text.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/plan-table.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/tab-network.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/host-config/tab-os.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/hosts/columns.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/jobs/job-detail.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/jobs/job-timeline.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/jobs/jobs-table.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/jobs/jobs-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/jobs/log-viewer.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/os-images/os-images-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/os-images/path-text.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/providers.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/server-status.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/settings/settings-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ssh-keys/ssh-keys-view.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/status-pill.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/top-bar.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ui/alert.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ui/empty.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ui/input-group.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ui/input.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ui/kbd.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ui/select.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ui/tabs.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/components/ui/textarea.tsx
+   (di luar include DEC-004: komponen .tsx/halaman/tipe/skrip) dashboard/src/proxy.ts
+ 100.00% lines  100.00% branches  baris-berubah 10/10  dashboard/src/app/api/auth/login/route.ts
+ 100.00% lines  100.00% branches  baris-berubah 4/4  dashboard/src/app/api/auth/logout/route.ts
+ 100.00% lines   75.00% branches  baris-berubah 7/7  dashboard/src/app/api/auth/session/route.ts
+ 100.00% lines   95.83% branches  baris-berubah 7/7  dashboard/src/app/api/jobs/[id]/logs/route.ts
+ 100.00% lines  100.00% branches  baris-berubah 1/1  dashboard/src/app/api/jobs/route.ts
+ 100.00% lines  100.00% branches  baris-berubah 1/1  dashboard/src/hooks/use-host-config.ts
+ 100.00% lines  100.00% branches  baris-berubah 1/1  dashboard/src/hooks/use-hosts.ts
+ 100.00% lines   83.54% branches  baris-berubah 22/22  dashboard/src/hooks/use-job-log.ts
+  95.83% lines   93.18% branches  baris-berubah 19/21  dashboard/src/hooks/use-jobs.ts  (tak tereksekusi: [33, 34])
+ 100.00% lines  100.00% branches  baris-berubah 1/1  dashboard/src/hooks/use-network-config.ts
+ 100.00% lines   97.50% branches  baris-berubah 2/2  dashboard/src/hooks/use-os-images.ts
+ 100.00% lines  100.00% branches  baris-berubah 1/1  dashboard/src/hooks/use-server-status.ts
+ 100.00% lines   85.71% branches  baris-berubah 10/10  dashboard/src/hooks/use-session.ts
+ 100.00% lines  100.00% branches  baris-berubah 1/1  dashboard/src/hooks/use-settings.ts
+ 100.00% lines   90.91% branches  baris-berubah 1/1  dashboard/src/hooks/use-ssh-keys.ts
+ 100.00% lines  100.00% branches  baris-berubah 52/52  dashboard/src/lib/api-client.ts
+ 100.00% lines  100.00% branches  baris-berubah 15/15  dashboard/src/lib/auth-next.ts
+ 100.00% lines  100.00% branches  baris-berubah 4/4  dashboard/src/lib/host-config.ts
+ 100.00% lines  100.00% branches  baris-berubah 11/11  dashboard/src/lib/jobs.ts
+ 100.00% lines   94.74% branches  baris-berubah 13/13  dashboard/src/lib/server/auth/login-service.ts
+ 100.00% lines  100.00% branches  baris-berubah 50/50  dashboard/src/lib/server/auth/password.ts
+ 100.00% lines   95.00% branches  baris-berubah 62/62  dashboard/src/lib/server/auth/rate-limit.ts
+ 100.00% lines  100.00% branches  baris-berubah 45/45  dashboard/src/lib/server/auth/session.ts
+ 100.00% lines   92.86% branches  baris-berubah 38/38  dashboard/src/lib/server/boot-http.ts
+ 100.00% lines  100.00% branches  baris-berubah 4/4  dashboard/src/lib/server/boot-script.ts
+  97.93% lines   93.87% branches  baris-berubah 5/5  dashboard/src/lib/server/config-service.ts
+ 100.00% lines  100.00% branches  baris-berubah 0/0  dashboard/src/lib/server/db/migrations.ts
+  94.59% lines   90.00% branches  baris-berubah 1/1  dashboard/src/lib/server/db/repos/job-events.ts
+ 100.00% lines   95.45% branches  baris-berubah 16/16  dashboard/src/lib/server/db/repos/jobs.ts
+ 100.00% lines   90.00% branches  baris-berubah 0/0  dashboard/src/lib/server/db/repos/os-images.ts
+ 100.00% lines  100.00% branches  baris-berubah 8/8  dashboard/src/lib/server/db/repos/sessions.ts
+ 100.00% lines  100.00% branches  baris-berubah 0/0  dashboard/src/lib/server/db/reset.ts
+ 100.00% lines   98.53% branches  baris-berubah 14/14  dashboard/src/lib/server/http.ts
+  97.67% lines  100.00% branches  baris-berubah 5/5  dashboard/src/lib/server/install-service.ts
+ 100.00% lines   99.02% branches  baris-berubah 8/8  dashboard/src/lib/server/installers/context.ts
+ 100.00% lines  100.00% branches  baris-berubah 25/25  dashboard/src/lib/server/installers/debian.ts
+ 100.00% lines  100.00% branches  baris-berubah 3/3  dashboard/src/lib/server/installers/rocky.ts
+ 100.00% lines   97.06% branches  baris-berubah 2/2  dashboard/src/lib/server/installers/shell.ts
+ 100.00% lines   90.91% branches  baris-berubah 7/7  dashboard/src/lib/server/installers/windows.ts
+  93.33% lines   86.67% branches  baris-berubah 8/8  dashboard/src/lib/server/job-lifecycle.ts
+ 100.00% lines   96.30% branches  baris-berubah 0/0  dashboard/src/lib/server/jobs-service.ts
+  94.74% lines   91.30% branches  baris-berubah 5/5  dashboard/src/lib/server/library-service.ts
+ 100.00% lines   96.30% branches  baris-berubah 231/231  dashboard/src/lib/server/redact.ts
+ 100.00% lines   99.25% branches  baris-berubah 22/22  dashboard/src/lib/server/settings.ts
+  94.40% lines   89.80% branches  baris-berubah 46/47  dashboard/src/lib/server/sse.ts  (tak tereksekusi: [182])
+  88.89% lines   66.67% branches  baris-berubah 1/1  dashboard/src/lib/server/startup.ts
+ 100.00% lines  100.00% branches  baris-berubah 5/5  dashboard/src/lib/server/watchdog.ts
+ 100.00% lines  100.00% branches  baris-berubah 0/0  dashboard/src/lib/types.ts
+
+TOTAL kode baru M6 per file (include DEC-004): lines 2166/2189 = 98.95%  branches 1592/1665 = 95.62%
+TOTAL baris berubah ber-statement: 794/797 = 99.62%
+Repo (All files): lines 98.94%  branches 96.07%  functions 98.8%  statements 98.18%
+File kode baru < 80% lines: tidak ada
+Komponen .tsx di luar include DEC-004 dibuktikan per AC lewat E2E (m6-*.spec.ts) dan test komponen jsdom (m6-components.test.tsx).
+EXIT=0

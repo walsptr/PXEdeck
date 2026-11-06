@@ -97,7 +97,7 @@ describe("use-server-status (AC-4.7)", () => {
 })
 
 describe("use-os-images", () => {
-  const img = (o: Partial<OsImageInfo>): OsImageInfo => ({ id: "ubuntu-24.04", name: "Ubuntu", version: "24.04", arch: "amd64", method: "autoinstall", bootable: true, available: true, reason: null, ...o })
+  const img = (o: Partial<OsImageInfo>): OsImageInfo => ({ id: "ubuntu-24.04", name: "Ubuntu", version: "24.04", arch: "amd64", method: "autoinstall", bootable: true, available: true, reason: null, builtin: false, source: { kernel: "k", initrd: "i", repo: "r" }, repoUrl: "http://x/media/r", usedBy: 0, createdAt: "2026-01-01T00:00:00.000Z", ...o }) // M6 CR-5-9: tipe satu sumber, field M5 wajib
   it("GET /api/os-images; error pesan server / status", async () => {
     responder = () => json([img({})])
     const { qc, w } = wrapper()

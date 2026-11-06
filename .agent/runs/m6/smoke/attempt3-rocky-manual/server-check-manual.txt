@@ -1,0 +1,7 @@
+HEAD /media/rocky-9/images/pxeboot/vmlinuz 200
+HEAD /media/rocky-9/images/pxeboot/initrd.img 200
+HEAD /media/rocky-9/.treeinfo 200
+HEAD /media/rocky-9/Minimal/repodata/repomd.xml 200
+HEAD /media/rocky-9/BaseOS/repodata/repomd.xml 404
+GET /login 200
+GET /api/settings tanpa sesi 401

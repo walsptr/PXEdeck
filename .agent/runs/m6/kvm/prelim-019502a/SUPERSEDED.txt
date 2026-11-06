@@ -1,0 +1,4 @@
+# SUPERSEDED
+Bukti run KVM resmi iterasi 1 pada commit 019502a (core, bulk --waves, distro: harness PASS).
+Digantikan oleh run ulang iterasi 2 (DEC-022 §4) pada commit 18913b5 di .agent/runs/m6/kvm/{core,bulk,distro}.
+Jangan dipakai sebagai bukti gate iterasi 2.

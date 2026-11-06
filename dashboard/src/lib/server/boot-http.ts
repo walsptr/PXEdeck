@@ -26,7 +26,7 @@ export function escapeLogValue(v: string, max = 200): string {
   return v.length > max ? `${out}…` : out
 }
 
-export type BootDeniedPath = "file" | "status" | "log"
+export type BootDeniedPath = "ipxe" | "file" | "status" | "log"
 
 /**
  * Format baris log penolakan (fungsi murni, CR-4-8/SR-4-4). `mac` = MAC ternormalisasi dari
@@ -38,8 +38,99 @@ export function bootDeniedLine(path: BootDeniedPath, rawMac: string, reason: str
   return `[boot] tolak ${path} mac=${mac} alasan=${escapeLogValue(reason)}`
 }
 
-/** Catat alasan penolakan TANPA token (DEC-008). Dimatikan saat test (PXE_LOG_BOOT=0). */
+// ---- SR-5-3 (M6, DEC-017 §6): throttle log penolakan ----
+// Endpoint /boot/** terbuka untuk semua klien PXE; tanpa batas, request yang ditolak bisa membanjiri
+// journal. Per jalur (`ipxe|file|status|log`) maks `BOOT_LOG_MAX_PER_WINDOW` baris detail per
+// jendela tetap `BOOT_LOG_WINDOW_MS`; sisanya hanya dihitung lalu satu baris ringkasan berisi
+// JUMLAH saja (tanpa MAC/IP/alasan dari input) dicatat saat jendela berganti (timer `unref`, atau
+// panggilan pertama sesudah jendela habis — mana yang lebih dulu).
+
+export const BOOT_LOG_MAX_PER_WINDOW = 20
+export const BOOT_LOG_WINDOW_MS = 60_000
+
+type ThrottleWindow = { start: number; shown: number; suppressed: number; timer?: ReturnType<typeof setTimeout> }
+
+export type BootLogThrottle = {
+  /** Catat `line` untuk `path` bila kuota jendela masih ada. */
+  log(path: BootDeniedPath, line: string): void
+  /** Tulis ringkasan semua jendela yang menekan baris lalu reset (test/shutdown). */
+  flush(): void
+  /** Buang semua jendela + timer TANPA menulis ringkasan. */
+  dispose(): void
+}
+
+/** Baris ringkasan, mis. `[boot] 80 penolakan log ditekan dalam 60 dtk`. */
+export function bootSuppressedLine(path: BootDeniedPath, n: number): string {
+  return `[boot] ${n} penolakan ${path} ditekan dalam ${BOOT_LOG_WINDOW_MS / 1000} dtk`
+}
+
+/** Throttle per jalur dengan jam dan logger injeksi (fungsi murni terhadap `now`/`warn`). */
+export function createBootLogThrottle(
+  warn: (line: string) => void,
+  now: () => number = Date.now,
+): BootLogThrottle {
+  const windows = new Map<BootDeniedPath, ThrottleWindow>()
+  const close = (path: BootDeniedPath) => {
+    const w = windows.get(path)
+    if (!w) return
+    clearTimeout(w.timer)
+    windows.delete(path)
+    if (w.suppressed > 0) warn(bootSuppressedLine(path, w.suppressed))
+  }
+  return {
+    log(path, line) {
+      const t = now()
+      let w = windows.get(path)
+      if (w && t - w.start >= BOOT_LOG_WINDOW_MS) {
+        close(path)
+        w = undefined
+      }
+      if (!w) {
+        w = { start: t, shown: 0, suppressed: 0 }
+        windows.set(path, w)
+      }
+      if (w.shown < BOOT_LOG_MAX_PER_WINDOW) {
+        w.shown++
+        warn(line)
+        return
+      }
+      w.suppressed++
+      if (!w.timer) {
+        const cur = w
+        cur.timer = setTimeout(() => {
+          if (windows.get(path) === cur) close(path)
+        }, Math.max(0, cur.start + BOOT_LOG_WINDOW_MS - t))
+        cur.timer.unref?.()
+      }
+    },
+    flush() {
+      for (const p of [...windows.keys()]) close(p)
+    },
+    dispose() {
+      for (const w of windows.values()) clearTimeout(w.timer)
+      windows.clear()
+    },
+  }
+}
+
+const THROTTLE_KEY = Symbol.for("pxe.bootLogThrottle")
+const gt = globalThis as typeof globalThis & { [THROTTLE_KEY]?: BootLogThrottle }
+
+function bootThrottle(): BootLogThrottle {
+  return (gt[THROTTLE_KEY] ??= createBootLogThrottle((l) => console.warn(l)))
+}
+
+/** Reset throttle global tanpa menulis ringkasan (test). */
+export function resetBootLogThrottle(): void {
+  gt[THROTTLE_KEY]?.dispose()
+  delete gt[THROTTLE_KEY]
+}
+
+/**
+ * Catat alasan penolakan TANPA token (DEC-008) lewat throttle SR-5-3. Dimatikan saat test
+ * (PXE_LOG_BOOT=0 / Vitest).
+ */
 export function logBootDenied(path: BootDeniedPath, rawMac: string, reason: string) {
   if (process.env.PXE_LOG_BOOT === "0" || process.env.VITEST) return
-  console.warn(bootDeniedLine(path, rawMac, reason))
+  bootThrottle().log(path, bootDeniedLine(path, rawMac, reason))
 }

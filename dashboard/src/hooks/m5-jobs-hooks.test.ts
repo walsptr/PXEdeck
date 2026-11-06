@@ -55,6 +55,8 @@ const ev = (seq: number, p: Partial<JobLogEvent> = {}): JobLogEvent => ({
   message: `m${seq}`,
   repeat: 1,
   ...p,
+  // M6 (CR-5-7): field kontrak baru `lastAt` (= at bila tidak digabung).
+  lastAt: p.lastAt ?? p.at ?? "2026-11-05T10:00:00.000Z",
 })
 
 describe("use-jobs", () => {

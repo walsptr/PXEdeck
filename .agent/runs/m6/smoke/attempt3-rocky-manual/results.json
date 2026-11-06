@@ -1,0 +1,13 @@
+{
+  "run": "m6",
+  "session": "1793918819700-c33e88b3",
+  "generatedAt": "2026-11-05T22:57:22.074Z",
+  "results": [
+    {"ac": "smoke-login", "status": "PASS", "note": "401/401/204/200", "evidence": ["smoke-login.txt"]},
+    {"ac": "smoke-scan", "status": "PASS", "note": "0 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node42", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.132 (lease 52:54:00:99:00:42)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node42", "status": "FAIL", "note": "ks.cfg 200 x0 (min 1)", "evidence": ["server-nginx.txt"]}
+  ],
+  "smoke": true,
+  "nodes": [{"name": "pxe-test-m6-node42", "fw": "uefi", "os": "rocky", "role": "install", "hostname": "m6-node42"}]
+}

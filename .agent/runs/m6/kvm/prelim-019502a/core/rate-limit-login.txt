@@ -1,0 +1,3 @@
+bruteuser 6x: 401,401,401,401,401,429
+admin sesudahnya (detik:kode): 0s:429 15s:204
+/api/settings dengan sesi baru 200: true
