@@ -1,0 +1,82 @@
+# skip/weakening M7 iter2 — 2026-11-06T18:09:04Z @ 5220865
+## (1) Hitungan asersi file test lama vs m6-approved (count-assertions.py)
+BASE=m6-approved  metrik TS: expect( + expectTypeOf( + expect.poll/soft( ; shell: assert_* + _fail
+file                                                                    sebelum  sesudah
+dashboard/e2e/helpers.ts                                                      1        1
+dashboard/e2e/m6-ui-iter2.spec.ts                                            76       76
+dashboard/e2e/support/axe.ts                                                  0        0
+dashboard/src/app/boot/boot-routes.test.ts                                  182      182
+dashboard/src/lib/server/boot-script.test.ts                                 64       64
+dashboard/src/lib/server/installers/m5-te-hooks.test.ts                      67       67
+dashboard/src/lib/server/installers/m6-generator.test.ts                     56       56
+dashboard/src/lib/server/installers/m6-smoke-fixes.test.ts                  110      110
+dashboard/src/lib/server/m5-settings.test.ts                                 29       29
+dashboard/src/lib/server/m5-te-unit.test.ts                                  60       60
+infra/test/run.sh                                                           254      254
+
+file lama berubah: 11; turun/dihapus: 0 []
+grep skip/only/fixme/todo (test & e2e & infra/test): 0
+EXIT=0
+
+## (2) Penanda skip/only/todo/fixme di semua file test
+$ grep -rnE "\b(it|test|describe|suite)\.(skip|only|todo|fixme|skipIf|runIf)\b|\b(xit|xdescribe|xtest|fit|fdescribe)\(|test\.fail\(" dashboard/src dashboard/e2e dashboard/e2e-kvm
+(0 hit)
+$ grep -nE "^\s*#\s*t \"|\bskip\b" infra/test/*.sh
+(0 hit)
+
+## (3) Config test vs m6-approved dan vs 339f234
+- dashboard/vitest.config.mts: m6-approved: ; 339f234: 
+- dashboard/vitest.process.config.mts: m6-approved: ; 339f234: 
+- dashboard/vitest.setup.dom.ts: m6-approved: ; 339f234: 
+- dashboard/playwright.config.ts: m6-approved:  1 file changed, 28 insertions(+), 1 deletion(-); 339f234: 
+- dashboard/e2e-kvm/playwright.config.ts: m6-approved: ; 339f234: 
+$ git diff m6-approved HEAD -- dashboard/playwright.config.ts | grep -nE "^[+-].*(retries|forbidOnly|timeout|workers|testIgnore|grep)"
+(0 baris)
+
+## (4) File test dihapus sejak m6-approved
+(0 file test dihapus)
+
+## (5) Filter axe (dashboard/e2e/support/axe.ts): diff 339f234..HEAD (harus kosong) + stat vs m6-approved
+(akhir diff 339f234..HEAD)
+ dashboard/e2e/support/axe.ts | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+## (6) File test BARU M7 (merge-base main..HEAD): asersi saat pertama ditambahkan vs HEAD
+file                                                                         awal  HEAD  commit-ubah
+dashboard/e2e-kvm/m7-shared.ts                                                  0     0  d9d5308 6a26cc6 68ee54c 5220865
+dashboard/e2e-kvm/m7-vlan.spec.ts                                              25    25  -
+dashboard/e2e-kvm/m7-vlanneg.spec.ts                                            3     3  -
+dashboard/e2e-kvm/m7-vlansmoke.spec.ts                                         11    11  -
+dashboard/e2e/m7-login-no-url-creds.spec.ts                                    37    37  -
+dashboard/e2e/m7-novlan.spec.ts                                                21    21  -
+dashboard/e2e/m7-vlan.spec.ts                                                 144   144  -
+dashboard/src/app/api/m7-vlan-api.test.ts                                      50    50  -
+dashboard/src/app/boot/m7-debian-nameservers-route.test.ts                      7     7  -
+dashboard/src/app/boot/m7-te-vlan-callback.test.ts                             54    54  -
+dashboard/src/app/login/submit/route.test.ts                                    6     6  -
+dashboard/src/components/auth/m7-login-no-url-creds.test.tsx                   14    14  -
+dashboard/src/components/host-config/form-state-vlan.test.ts                   41    41  -
+dashboard/src/components/host-config/m7-vlan-ui.test.tsx                       50    50  -
+dashboard/src/components/host-config/plan-table-a11y.test.tsx                  11    16  2906f53
+dashboard/src/hooks/m7-settings-hooks.test.ts                                   6     6  -
+dashboard/src/lib/m7-net-vlan.test.ts                                          64    64  -
+dashboard/src/lib/server/installers/m7-te-generators.test.ts                   21    21  -
+dashboard/src/lib/server/installers/m7-vlan-generators.test.ts                 45    46  cdceb9f
+dashboard/src/lib/server/m7-debian-nameservers.test.ts                         12    12  -
+dashboard/src/lib/server/m7-debian-no-route.test.ts                             8     8  4c4b1e6
+dashboard/src/lib/server/m7-kvm-urlcred.test.ts                                 2     6  68ee54c 5220865
+dashboard/src/lib/server/m7-te-vlan-env.test.ts                                28    28  -
+infra/test/m7-dec027.sh                                                        28    28  -
+infra/test/m7-gk71.sh                                                          15    15  -
+infra/test/m7-infra.sh                                                        200   206  4c4b1e6
+infra/test/m7-te.sh                                                           100   116  6a26cc6 68ee54c 5220865
+file test baru turun asersi: 0 []
+
+## (7) Perubahan file test sejak 339f234 (iter2): asersi 339f234 vs HEAD
+dashboard/e2e-kvm/m7-shared.ts                                                  0     0  ok
+dashboard/e2e/m6-ui-iter2.spec.ts                                              76    76  ok
+dashboard/src/components/host-config/plan-table-a11y.test.tsx                  11    16  ok
+dashboard/src/lib/server/m7-kvm-urlcred.test.ts                                 2     6  ok
+infra/test/m7-gk71.sh                                                           0    15  ok (baru)
+infra/test/m7-te.sh                                                           110   116  ok
+infra/test/run.sh                                                             254   254  ok

@@ -142,3 +142,76 @@ Asersi tidak berubah:
 
 Nilai yang diperiksa tetap sama, yaitu entri `sessionStorage` yang direkam MutationObserver. Hitungan
 asersi file tetap 76 → 76 (`final/skip-weakening.txt`).
+
+## Iterasi 2 (DEC-028 §2): CR-7-4 label region scroll `plan-table-a11y.test.tsx` (frontend-dev 2906f53, dicatat test-engineer)
+
+Alasan: CR-7-4 (minor) meminta region scroll (`role=region`) dan `<table>` di `PlanTable` memakai label
+berbeda, agar pembaca layar tidak mengumumkan nama yang sama dua kali. Produk diubah:
+`scrollRegionLabel` `Preview ${valueLabel}` → `Area gulir preview ${valueLabel}` (`plan-table.tsx`) dan
+`Password yang dibuat` → `Area gulir password yang dibuat` (`passwords-dialog.tsx`). Label tabel
+(`aria-label`) tidak berubah. Asersi yang memakai nama region lama harus mengikuti nama baru.
+
+### 1. `dashboard/src/components/host-config/plan-table-a11y.test.tsx` ("PlanTable: region scroll bisa difokus (F-T8-1)")
+- Sebelum: `screen.getByRole("region", { name: "Preview IP baru" })`
+- Sesudah: `screen.getByRole("region", { name: "Area gulir preview IP baru" })`
+
+Asersi lama yang tetap (tidak dilemahkan): `tabindex="0"`, `data-slot="table-container"`, kotak scroll
+(tinggi maks + overflow) = elemen region yang sama, parent tanpa overflow, tabel `Preview IP baru` di
+dalam region, sel `10.99.20.41` ber-`type-data`, dan region bisa difokus.
+
+Diperkuat (asersi baru):
+- `expect(region.getAttribute("aria-label")).not.toBe(table.getAttribute("aria-label"))`: label region
+  harus berbeda dari label tabel, ini inti CR-7-4.
+- `expect(screen.queryByRole("region", { name: "Preview IP baru" })).toBeNull()`: tidak ada region yang
+  masih memakai label tabel.
+- Test baru "PasswordsDialog: label region scroll beda dari label tabel (CR-7-4)": region
+  `Area gulir password yang dibuat` (`tabindex=0`) membungkus tabel `Password yang dibuat` yang memuat MAC
+  baris, dan tidak ada region bernama `Password yang dibuat`.
+
+Pemakai lain nama region lama: dicek dengan `grep -rn 'region.*Preview \|name: "Password yang dibuat"'`
+di `dashboard/e2e`, `dashboard/e2e-kvm`, dan `dashboard/src`. Semua E2E memilih tabel lewat
+`getByRole("table", …)` atau teks, jadi tidak ada selector E2E yang berubah (bukti: E2E penuh 2×,
+`final-iter2/e2e-run{1,2}.log`).
+
+## Iterasi 2 (DEC-028 §2): CR-7-2/SR-7-5 scanner URL kredensial (test-engineer, commit 5220865)
+
+Alasan: pengecualian placeholder dulu hanya memeriksa AWAL nilai (`<REDACTED`, `***`, `…`, backtick),
+sehingga nilai nyata yang diawali karakter itu lolos, dan bentuk ter-encode tidak dipindai. Sekarang
+`URL_CRED` (`dashboard/e2e-kvm/m7-shared.ts`) dan `_url_cred_hits` (`infra/redact-evidence.sh`) hanya
+mengecualikan token placeholder UTUH: kosong, `***`, `…`, `<REDACTED…>` (juga versi ter-encode),
+diikuti `&`, spasi, `"`, backslash-quote JSON, `%26`, atau akhir teks. Selain itu dipindai juga
+`%3F`/`%26`/`%3D` (tanpa beda huruf) dan escape JSON backslash-u0026/u003f/u003d.
+
+Scanner jadi lebih ketat. Dua input dokumentasi yang dulu "tidak ditandai" kini ditandai, karena
+placeholder yang diikuti backtick bukan token utuh lagi. Asersi tidak dilonggarkan: kasus ini hanya
+pindah ke daftar "menandai".
+
+### 1. `dashboard/src/lib/server/m7-kvm-urlcred.test.ts`
+- Dipindah dari `tidak menandai` ke `menandai` (describe baru "hanya token placeholder utuh yang dikecualikan",
+  baris 44-45 file test; isi literal tidak dikutip di sini agar dokumen ini tidak ikut menjadi hit scanner):
+  - komentar kode "bukan GET /login dengan username/password bernilai elipsis" yang elipsis password-nya
+    diikuti backtick penutup kode;
+  - teks "pola (parameter password kosong lalu backtick, parameter username kosong lalu backtick) bernilai".
+- Tetap di `tidak menandai`: semua kasus lain dari DEC-027 (nilai `<REDACTED…>`, `/login?***`, nilai kosong,
+  `$6$REDACTED`, `?platform=efi`).
+- Ditambah: 7 kasus "menandai" baru (placeholder sebagai awalan, backtick, elipsis+teks) dan 5 kasus "tidak
+  menandai" (token utuh). Juga 11 + 7 kasus ter-encode (percent dan JSON). Total 42 test (sebelumnya 12).
+
+### 2. `infra/test/m7-te.sh` `test_m7te_redact_url_credentials` (DEC-027 §4)
+- Sebelum (`ok.txt`, baris 4): komentar "bukan GET /login dengan username/password bernilai elipsis (komentar
+  kode)", lalu "; pola" + parameter password kosong yang diikuti backtick.
+- Sesudah (`ok.txt`, baris 4): hanya komentar elipsis (token utuh, diikuti spasi). Bagian "pola" (nilai =
+  backtick) kini temuan dan diuji sebagai kasus `bad6` di test baru.
+- Asersi lain tidak berubah: exit 1, `server-nginx(-error).txt:1`, `ok.txt` tidak dilaporkan, nilai tidak
+  bocor, file tidak diubah, `username=` saja tetap temuan, dan direktori bersih → exit 0.
+- Test baru `test_m7te_redact_url_credentials_strict_encoded` berisi 18 kasus bad dan 12 kasus good, sama
+  dengan kasus vitest.
+- Mutasi (`final-iter2/mutation-te-iter2-urlcred.txt`): revert ke HEAD, exclusion awalan, atau tanpa
+  decode membuat run.sh merah. Revert TS, lookahead tanpa terminator, atau tanpa bentuk ter-encode membuat
+  vitest merah (21/14/11 gagal).
+
+### 3. `infra/test/m7-te.sh`: komentar/judul saja (SR-7-2, tanpa ubah asersi)
+- Baris 7 dan komentar di `test_m7te_nginx_vlan_acl`: "rpcbind/nfsd hanya 10.99.10.2" → "nfsd hanya 10.99.10.2;
+  OPTIONS rpcbind `-h` ditulis, tapi rpcbind wildcard (socket activation)".
+- Judul `t`: `…; rpcbind 10.99.10.2 (AC-7.16)` → `…; nfsd 10.99.10.2 + OPTIONS rpcbind (AC-7.16)`.
+- Asersi tetap: `OPTIONS="-w -h 10.99.10.2"` ditulis, `nfs-vlan.conf` tanpa host 10.99.0./10.99.20./0.0.0.0.

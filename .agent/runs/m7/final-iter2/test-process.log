@@ -1,0 +1,37 @@
+# npm run test:process @ 5220865 2026-11-06T18:06:57Z
+
+> dashboard@0.1.0 test:process
+> vitest run -c vitest.process.config.mts
+
+
+ RUN  v5.1.0 /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard
+
+(node:181635) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181607) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181695) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181661) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181721) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181755) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181809) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181868) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181781) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181834) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:181587) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+
+ Test Files  2 passed (2)
+      Tests  15 passed (15)
+   Start at  01:06:58
+   Duration  28.69s (tests 99%, import 1%)
+
+EXIT=0
