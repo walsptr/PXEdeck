@@ -250,6 +250,8 @@ async function runInstallNode(node: KvmNode): Promise<Outcome> {
   note(node, `event installer (${inst.length}): ${inst.join(" | ")}`)
   // M6-T15 (BUG-M6-6/7): disk otomatis Debian/Rocky dipilih saat runtime → event installer.
   if (node.os !== "ubuntu" && INSTALL_DISK === "" && r.job.status === "done" && !inst.some((m) => /disk target dipilih/.test(m))) problems.push("event 'disk target dipilih' tidak ada")
+  // BUG-M6-8: d-i netboot memuat driver disk virtio dari server sebelum partman.
+  if (node.os === "debian" && r.job.status === "done" && !inst.some((m) => /modul disk virtio dimuat/.test(m))) problems.push("event 'modul disk virtio dimuat' tidak ada")
   if (r.job.status === "done") {
     const up = await waitSsh(node, 10 * 60_000)
     note(node, `ssh key yang di-inject: ${up ? "OK" : "TIDAK tersambung dalam 10 mnt"}`)
@@ -260,6 +262,17 @@ async function runInstallNode(node: KvmNode): Promise<Outcome> {
       writeFileSync(path.join(KVM.runsDir, `${node.name}-facts.txt`), f.out)
       evidence.push(`${node.name}-facts.txt`)
       if (!new RegExp(`# hostname: ${node.hostname}\\b`).test(f.out)) problems.push("hostname target tidak sesuai config")
+      // Reboot → boot dari disk tanpa reinstall: SSH kembali, hostname sama, status host done, jumlah job tetap.
+      const jobsBefore = await jobsCount(node.mac)
+      ssh(node.ip, "sudo -n systemctl reboot")
+      await new Promise((res) => setTimeout(res, 20_000))
+      const back = await waitSsh(node, 10 * 60_000)
+      const hn = back ? ssh(node.ip, "hostname; cat /proc/cmdline").out : ""
+      const h = (await (await api.get(`/api/hosts/${hostId(node.mac)}`)).json()) as { status: string }
+      const jobsAfter = await jobsCount(node.mac)
+      const rb = `reboot: kembali=${back} hostname=${hn.split("\n")[0]} status=${h.status} job ${jobsBefore}->${jobsAfter} installerCmdline=${/\b(auto=true|inst\.ks=|autoinstall)\b/.test(hn)}`
+      note(node, rb)
+      if (!back || !hn.startsWith(node.hostname) || h.status !== "done" || jobsAfter !== jobsBefore || /\b(auto=true|inst\.ks=|autoinstall)\b/.test(hn)) problems.push(rb)
     }
   }
   const consoleTail = consoleLog(node).slice(-200_000)

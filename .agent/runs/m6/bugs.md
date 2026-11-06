@@ -199,3 +199,36 @@ Dicatat test-engineer; tidak diperbaiki test-engineer (kode produk/infra milik d
   `grep -c virtio /proc/modules`, `ls -l /dev/vd* /dev/sd*`) supaya smoke berikutnya menunjukkan akar
   masalahnya; tambahkan unit test yang menjalankan perintah early_command di sandbox busybox/sh dengan
   `/sys/block` palsu. Debian d-i syslog untuk fixture AC-6.17 masih belum bisa diambil.
+
+## BUG-M6-9 — Debian: apt-setup di target menolak mirror DVD tanpa tanda tangan → "[!!] Configure the package manager — The installer failed to access the mirror"
+
+- Ditemukan: smoke attempt 10, 2026-11-06T01:10Z, commit `feb866e`, node `pxe-test-m6-node41` (disk
+  otomatis) dan `pxe-test-m6-node45` (job2 setelah failpath), UEFI 2048 MB.
+- Komponen: `dashboard/src/lib/server/installers/debian.ts` (blok `mirror/*`, `apt-setup/*`,
+  `debian-installer/allow_unauthenticated`) dan/atau cara media DVD disajikan (`infra/server-up.sh`).
+- Severity (usulan): **critical untuk AC-6.48** — d-i menunggu input; job `failed/timeout-installing`
+  (15 mnt). `late_command`, Configuring, Done, SSH belum tercapai.
+- Perbaikan BUG-M6-8 terkonfirmasi: `GET /media/debian-netboot/modules/6.1.0-50-amd64/virtio_blk.ko`
+  dan `virtio_scsi.ko` 200 (nginx), event `modul disk virtio dimuat` ×2 → `disk target dipilih`,
+  partman tanpa prompt, base system (debootstrap dari DVD, 253 request `/pool/` 200) terpasang.
+  Failpath `/dev/vdz` gagal cepat (40 dtk) dengan event `ERROR diagnosis disk d-i` yang memuat `vda`
+  di `/sys/block`, `list-devices disk` = `/dev/vda`, `virtio_blk` di lsmod, `/proc/partitions` vda.
+- Reproduksi: `PXE_RUNS_DIR=<dir> infra/kvm-run.sh m6 --nodes "41:uefi:os=debian 45:uefi:failpath:os=debian"`.
+- Bukti `.agent/runs/m6/smoke/attempt10-debian-auto-failpath/`:
+  - `pxe-test-m6-node41-console.txt` (~baris 1470): `[!!] Configure the package manager` / `The
+    installer failed to access the mirror` / `Downloading a file failed: Retry / Change mirror / Ignore`.
+  - `server-nginx.txt`: UA `Debian APT-HTTP/1.3 (2.6.1)` (apt di target) →
+    `GET /media/debian-12/dists/bookworm/InRelease 404`, `Release 304`, `Release.gpg 404`, lalu tidak
+    ada request `Packages` — apt menolak repo tanpa tanda tangan (DVD hanya punya `dists/bookworm/Release`
+    tanpa `InRelease`/`Release.gpg`). Juga `Release` DVD menyatakan `Acquire-By-Hash: yes` padahal
+    direktori `by-hash/` tidak ada (`…/main/binary-amd64/by-hash/SHA256/… 404` dari d-i/wget).
+  - `pxe-test-m6-node41-job1-events.txt`, `pxe-test-m6-node45-job{1,2}-events.txt`.
+- Dugaan: `debian-installer/allow_unauthenticated=true` hanya berlaku untuk retriever d-i/debootstrap,
+  tidak membuat apt 2.6 di target menerima repo tanpa tanda tangan.
+- Opsi (keputusan dev/architect): (a) sajikan repo lokal bertanda tangan (Release ditandatangani key
+  lab sekali pakai, key dipasang via `apt-setup/local0/key`/keyring), (b) atur apt target agar
+  repo media dipercaya (mis. entri `[trusted=yes]`/`Acquire::AllowInsecureRepositories` yang
+  dibuat sebelum apt-setup), (c) `apt-setup/use_mirror false` + sumber lain untuk pkgsel. Tambahkan
+  test generator; smoke ulang Debian.
+- Akibat: d-i syslog untuk fixture AC-6.17 masih belum bisa diambil (instalasi tidak selesai).
+  Run disk eksplisit `/dev/vda` (permintaan poin 4) tidak dijalankan: akan berhenti di tahap yang sama.

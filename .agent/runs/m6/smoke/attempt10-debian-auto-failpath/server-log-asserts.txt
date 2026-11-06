@@ -1,0 +1,4 @@
+PASS  CR-4-12-dnsmasq  pxe-test-m6-node41           TFTP snponly.efi terkirim ke 10.99.0.131 (lease 52:54:00:99:00:41)
+PASS  CR-4-12-nginx    pxe-test-m6-node41           preseed.cfg 200 x1 (min 1)
+PASS  CR-4-12-dnsmasq  pxe-test-m6-node45           TFTP snponly.efi terkirim ke 10.99.0.135 (lease 52:54:00:99:00:45)
+PASS  CR-4-12-nginx    pxe-test-m6-node45           preseed.cfg 200 x2 (min 2)

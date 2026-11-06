@@ -1,0 +1,18 @@
+2026-11-06T01:09:09.187Z discovered firmware=uefi
+2026-11-06T01:09:09.259Z konfigurasi tersimpan os=debian-12 disk=/dev/vdz ip=10.99.0.55 hostname=m6-node45
+2026-11-06T01:09:09.391Z install dibuat job=job-18e4bdc8-5dc2-4d32-b3eb-ecf824422d8f status=booting
+2026-11-06T01:09:09.492Z node.sh reset
+2026-11-06T01:09:09.504Z job1(/dev/vdz): booting (+0 dtk, installerBoots=0)
+2026-11-06T01:09:39.552Z job1(/dev/vdz): installing (+30 dtk, installerBoots=1)
+2026-11-06T01:09:49.566Z job1(/dev/vdz): failed/installer-error (+40 dtk, installerBoots=1)
+2026-11-06T01:09:49.576Z job1 akhir=failed/installer-error dalam 40 dtk; event installer error-commands=1; urutan=booting>installing>failed
+2026-11-06T01:09:49.611Z konfigurasi tersimpan os=debian-12 disk=(otomatis) ip=10.99.0.55 hostname=m6-node45
+2026-11-06T01:09:49.634Z install dibuat job=job-b058edf8-8319-4d26-ba62-5a4a53b6132c status=booting
+2026-11-06T01:09:49.712Z node.sh reset
+2026-11-06T01:09:49.721Z job2: booting (+0 dtk, installerBoots=0)
+2026-11-06T01:10:19.748Z job2: installing (+30 dtk, installerBoots=1)
+2026-11-06T01:25:21.415Z job2: failed/timeout-installing (+932 dtk, installerBoots=1)
+2026-11-06T01:25:21.422Z job2 akhir=failed/timeout-installing dalam 932 dtk; urutan=booting>installing>failed; stages=booting@install,booting@boot-script,installing@config-fetch,failed@watchdog
+2026-11-06T01:25:21.422Z event installer (4): installer: preseed mulai | installer: modul disk virtio dimuat | installer: modul disk virtio dimuat | installer: disk target dipilih
+2026-11-06T01:25:21.422Z console log: 200000 byte terakhir dibaca; kernel panic=false
+2026-11-06T01:25:21.427Z jumlah job host=2

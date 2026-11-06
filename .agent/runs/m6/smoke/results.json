@@ -2,7 +2,7 @@
   "task": "M6-T15 smoke KVM dini",
   "commit": "30c88c9",
   "worktree": ".agent/wt-m6-smoke (detached)",
-  "generatedAt": "2026-11-06T00:50:00Z",
+  "generatedAt": "2026-11-06T01:30:00Z",
   "memAvailableMbAtStart": 15317,
   "maxNodes": 3,
   "attempts": [
@@ -201,6 +201,37 @@
           "note": "diagnostik BUG-M6-8: disk eksplisit /dev/vda juga 'tidak ditemukan' -> [ -b /dev/vda ] gagal di d-i"
         }
       ]
+    },
+    {
+      "dir": "attempt10-debian-auto-failpath",
+      "commit": "feb866e",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 45:uefi:failpath:os=debian'",
+      "maxNodes": 2,
+      "memAvailableMb": 12936,
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "server": "GET /media/debian-netboot/modules/6.1.0-50-amd64/virtio_blk.ko 200 (dan virtio_scsi.ko 200)",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "disk": "otomatis",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 949,
+          "note": "preseed mulai > modul disk virtio dimuat > disk target dipilih > partman + base system OK; BUG-M6-9: apt-setup menolak mirror DVD tanpa Release.gpg/InRelease -> prompt 'Configure the package manager' -> timeout-installing"
+        },
+        {
+          "node": "pxe-test-m6-node45",
+          "os": "debian-12",
+          "role": "failpath",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 989,
+          "note": "job1 /dev/vdz -> failed/installer-error 40 dtk, event 'ERROR diagnosis disk d-i' (vda di /sys/block, list-devices /dev/vda, virtio_blk dimuat); job2 otomatis -> BUG-M6-9 timeout-installing"
+        }
+      ]
     }
   ],
   "cr-4-6": {
@@ -220,6 +251,6 @@
   },
   "sr-5-5c": "PASS (attempt2 node43: Failed installer-error + event error-commands)",
   "libvirtAfter": "hanya ubuntu24.04 (shut off); network default/int/pxe-test/pxe-test-nat aktif (pxe-test* dipertahankan sampai T16)",
-  "installerLogs": "installer-logs/: Ubuntu (subiquity-server-debug, curtin-install, event error-commands), Rocky (anaconda.log, program.log, event %pre ERROR + tail anaconda.log), Debian (event ERROR disk). Debian d-i syslog BELUM (BUG-M6-8)",
+  "installerLogs": "installer-logs/: Ubuntu (subiquity-server-debug, curtin-install, event error-commands), Rocky (anaconda.log, program.log, event %pre ERROR + tail anaconda.log), Debian (event ERROR disk). Debian d-i syslog BELUM (BUG-M6-8); + event diagnosis disk d-i (attempt10)",
   "dec-020": "PASS: node Rocky 2 GB, stage2 NFS (attempt5)"
 }
