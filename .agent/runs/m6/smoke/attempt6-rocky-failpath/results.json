@@ -1,0 +1,17 @@
+{
+  "run": "m6",
+  "session": "1793922614700-e51933e1",
+  "generatedAt": "2026-11-06T00:05:35.430Z",
+  "results": [
+    {"ac": "smoke-login", "status": "PASS", "note": "401/401/204/200", "evidence": ["smoke-login.txt"]},
+    {"ac": "smoke-rocky-failpath", "node": "pxe-test-m6-node44", "status": "FAIL", "durationS": 920, "note": "job1 installing/null (harap failed/installer-error ≤ 15 mnt); job1 tanpa event installer dari error-commands", "evidence": ["pxe-test-m6-node44-timeline.txt", "pxe-test-m6-node44-job1-events.txt"]},
+    {"ac": "smoke-scan", "status": "PASS", "note": "0 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m6-node44", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.0.134 (lease 52:54:00:99:00:44)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m6-node44", "status": "FAIL", "note": "ks.cfg 200 x1 (min 2)", "evidence": ["server-nginx.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m6-node44", "status": "NOT_RUN", "note": "tidak diverifikasi: Playwright exit=1, status host installing (bukan done)", "evidence": ["pxe-test-m6-node44-verify.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "verify", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "smoke": true,
+  "nodes": [{"name": "pxe-test-m6-node44", "fw": "uefi", "os": "rocky", "role": "failpath", "hostname": "m6-node44"}],
+  "harness": {"milestone": "m6", "scenario": "", "runId": "m6", "nodes": "44:uefi:failpath:os=rocky", "maxNodes": 2, "memAvailableMb": 12833, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "verify", "exit": 1, "dryRun": false, "startedAt": "2026-11-05T23:49:38Z", "durationSec": 962}
+}

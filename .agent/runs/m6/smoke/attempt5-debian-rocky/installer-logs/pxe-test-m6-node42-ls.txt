@@ -1,0 +1,20 @@
+ls: cannot access '/var/log/installer': No such file or directory
+/var/log/anaconda:
+total 4172
+drwxr-xr-x. 2 root root    4096 Nov  5 23:40 .
+drwxr-xr-x. 7 root root    4096 Nov  5 23:44 ..
+-rw-------. 1 root root   37837 Nov  5 23:40 anaconda.log
+-rw-------. 1 root root    3330 Nov  5 23:40 dbus.log
+-rw-------. 1 root root   44256 Nov  5 23:40 dnf.librepo.log
+-rw-------. 1 root root     120 Nov  5 23:40 hawkey.log
+-rw-------. 1 root root 2990523 Nov  5 23:40 journal.log
+-rw-------. 1 root root      40 Nov  5 23:40 ks-script-4jpq6z4w.log
+-rw-------. 1 root root       0 Nov  5 23:40 ks-script-a92aw8nw.log
+-rw-------. 1 root root      63 Nov  5 23:40 ks-script-eo78p98q.log
+-rw-------. 1 root root       0 Nov  5 23:40 ks-script-j8ub1b_j.log
+-rw-r--r--. 1 root root   28955 Nov  5 23:40 lorax-packages.log
+-rw-------. 1 root root   26529 Nov  5 23:40 lvm.log
+-rw-------. 1 root root  197135 Nov  5 23:40 packaging.log
+-rw-------. 1 root root    8231 Nov  5 23:40 program.log
+-rw-------. 1 root root  136334 Nov  5 23:40 storage.log
+-rw-------. 1 root root  752007 Nov  5 23:40 syslog

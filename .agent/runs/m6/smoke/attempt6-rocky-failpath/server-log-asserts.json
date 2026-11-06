@@ -1,0 +1,20 @@
+[
+  {
+    "ac": "CR-4-12-dnsmasq",
+    "node": "pxe-test-m6-node44",
+    "status": "PASS",
+    "note": "TFTP snponly.efi terkirim ke 10.99.0.134 (lease 52:54:00:99:00:44)",
+    "evidence": [
+      "server-dnsmasq.txt"
+    ]
+  },
+  {
+    "ac": "CR-4-12-nginx",
+    "node": "pxe-test-m6-node44",
+    "status": "FAIL",
+    "note": "ks.cfg 200 x1 (min 2)",
+    "evidence": [
+      "server-nginx.txt"
+    ]
+  }
+]

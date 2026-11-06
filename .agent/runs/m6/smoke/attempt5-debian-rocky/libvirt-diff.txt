@@ -1,0 +1,2 @@
+# diff libvirt (dinormalisasi: tanpa kolom Id) before -> after
+# protectedIdentical=true runDomainsRemaining=0

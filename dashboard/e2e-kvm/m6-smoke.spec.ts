@@ -16,6 +16,7 @@
 //  - Log installer nyata dari target (lewat SSH key yang di-inject) → installer-logs/ (bahan
 //    fixture AC-6.17; disamarkan redact-evidence.sh oleh kvm-run.sh sebelum dipakai).
 // Password node per sesi & password admin hanya di memori; scanEvidence memastikan tidak tertulis.
+import { spawnSync } from "node:child_process"
 import { appendFileSync, mkdirSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
@@ -60,6 +61,32 @@ function note(node: KvmNode, msg: string) {
 }
 
 let api: APIRequestContext
+
+/**
+ * ssh root@10.99.0.2 dengan key infra (.agent/keys/infra_ed25519, sama dengan infra/lib.sh) — hanya
+ * perintah baca (bukti NFS stage2 Rocky, DEC-020).
+ */
+function serverSsh(remote: string): { code: number; out: string } {
+  const key = path.join(path.dirname(path.resolve(KVM.sshKey)), "infra_ed25519")
+  if (!/\/\.agent\/keys\/infra_ed25519$/.test(key)) throw new Error(`key ${key}`)
+  const r = spawnSync(
+    "ssh",
+    ["-i", key, "-o", "StrictHostKeyChecking=no", "-o", "UserKnownHostsFile=/dev/null", "-o", "LogLevel=ERROR", "-o", "ConnectTimeout=10", "-o", "BatchMode=yes", "-o", "IdentitiesOnly=yes", "root@10.99.0.2", remote],
+    { encoding: "utf8", timeout: 60_000, input: "" },
+  )
+  return { code: r.status ?? -1, out: `${r.stdout ?? ""}${r.stderr ?? ""}` }
+}
+
+/** Snapshot NFS server (exportfs, koneksi :2049, request install.img di nginx) → <node>-nfs.txt. */
+function nfsSnapshot(node: KvmNode, label: string) {
+  const r = serverSsh(
+    "echo '# exportfs -v'; exportfs -v; echo '# koneksi NFS (ss -tn sport = :2049)'; ss -tnH state established '( sport = :2049 )'; " +
+      "echo '# nginx GET install.img (harus 0)'; grep -c 'GET /media/rocky-9/images/install.img' /var/log/nginx/pxe-access.log; " +
+      "echo '# nginx GET Minimal/Packages'; grep -c 'GET /media/rocky-9/Minimal/Packages/' /var/log/nginx/pxe-access.log; " +
+      "echo '# nginx GET AppStream'; grep -c 'GET /media/rocky-9/AppStream' /var/log/nginx/pxe-access.log; true",
+  )
+  appendFileSync(path.join(KVM.runsDir, `${node.name}-nfs.txt`), `## ${new Date().toISOString()} ${label} (ssh exit=${r.code})\n${r.out}\n`)
+}
 
 async function latestJob(mac: string): Promise<Job | null> {
   const r = await api.get(`/api/jobs?hostId=${hostId(mac)}&limit=200`)
@@ -142,6 +169,7 @@ async function follow(node: KvmNode, jobId: string, label: string, timeoutMs: nu
     if (job && seen[seen.length - 1] !== job.status) {
       seen.push(job.status)
       note(node, `${label}: ${job.status}${job.failureReason ? `/${job.failureReason}` : ""} (+${Math.round((Date.now() - t0) / 1000)} dtk, installerBoots=${job.installerBoots})`)
+      if (node.os === "rocky" && (job.status === "installing" || job.status === "configuring")) nfsSnapshot(node, `${label} ${job.status}`)
     }
     if (job && (job.status === "done" || job.status === "failed")) break
     await new Promise((r) => setTimeout(r, 10_000))
@@ -221,10 +249,20 @@ async function runInstallNode(node: KvmNode): Promise<Outcome> {
     const up = await waitSsh(node, 10 * 60_000)
     note(node, `ssh key yang di-inject: ${up ? "OK" : "TIDAK tersambung dalam 10 mnt"}`)
     if (!up) problems.push("SSH key gagal")
-    else evidence.push(...fetchInstallerLogs(node))
+    else {
+      evidence.push(...fetchInstallerLogs(node))
+      const f = ssh(node.ip, "echo \"# hostname: $(hostname)\"; echo '# locale'; localectl status 2>&1; cat /etc/default/locale /etc/locale.conf 2>/dev/null; echo '# timezone'; timedatectl show -p Timezone 2>&1; echo '# id'; id; echo '# sudo -n true'; sudo -n true && echo sudo-ok; echo '# os-release'; head -n 3 /etc/os-release")
+      writeFileSync(path.join(KVM.runsDir, `${node.name}-facts.txt`), f.out)
+      evidence.push(`${node.name}-facts.txt`)
+      if (!new RegExp(`# hostname: ${node.hostname}\\b`).test(f.out)) problems.push("hostname target tidak sesuai config")
+    }
   }
   const consoleTail = consoleLog(node).slice(-200_000)
   note(node, `console log: ${consoleTail.length} byte terakhir dibaca; kernel panic=${/Kernel panic/.test(consoleTail)}`)
+  if (node.os === "rocky") {
+    nfsSnapshot(node, "akhir")
+    evidence.push(`${node.name}-nfs.txt`)
+  }
   note(node, `jumlah job host=${await jobsCount(node.mac)}`)
   return { node: node.name, ok: problems.length === 0, note: problems.join("; ") || "Done + SSH key", durationS: Math.round((Date.now() - t0) / 1000), evidence }
 }

@@ -1,0 +1,34 @@
+# verify-node 2026-11-05T23:48:51Z on m6-node42
+# uname: 5.14.0-687.10.1.el9_8.0.1.x86_64
+OK   hostname = m6-node42 (aktual: m6-node42)
+OK   NIC dengan MAC 52:54:00:99:00:42 ditemukan (enp1s0)
+# ip -4 addr (enp1s0): 10.99.0.52/24
+OK   ip -4 addr enp1s0 memuat 10.99.0.52/24
+OK   tidak ada IPv4 di NIC lain (—)
+OK   default via 10.99.0.1 (aktual: 10.99.0.1)
+OK   DNS memuat 10.99.0.2 (aktual: 10.99.0.2 )
+OK   login sebagai m6admin (aktual: m6admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m6admin (aktual: 600 m6admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/rocky/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub2/grub.cfg (cocok: 0)
+OK   bebas token: /boot/loader/entries/03cc4286ccee456a9b4d2f9d92dd0a67-0-rescue.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/03cc4286ccee456a9b4d2f9d92dd0a67-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /etc/kernel/cmdline (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+OK   bebas token: /root/anaconda-ks.cfg (cocok: 0)
+# token-scan files=8 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/vda4), bukan NFS/live
+# uptime: up 4 minutes
+# verify-node fails=0
+# verify-node exit=0
+# ssh PreferredAuthentications=password: Warning: Permanently added '10.99.0.52' (ED25519) to the list of known hosts.
+m6admin@10.99.0.52: Permission denied (publickey,gssapi-keyex,gssapi-with-mic).
+OK   login password ditolak (server hanya menawarkan: publickey,gssapi-keyex,gssapi-with-mic)

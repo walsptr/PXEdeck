@@ -1,0 +1,123 @@
+23:33:57,054 INF program: Running... losetup --list
+23:33:57,066 INF program: Running... /sbin/auditd
+23:33:57,074 DBG program: Return code: 0
+23:33:57,076 INF program: Running... dbus-daemon --print-address --syslog --config-file=/usr/share/anaconda/dbus/anaconda-bus.conf
+23:34:02,443 INF program: Running... /bin/sh /tmp/ks-script-a92aw8nw
+23:34:02,488 DBG program: Return code: 0
+23:34:04,046 INF program: Running... setfont eurlatgr
+23:34:04,062 DBG program: Return code: 0
+23:34:06,134 INF program: Running... losetup --list
+23:34:06,171 INF program: Running... udevadm settle --timeout=300
+23:34:06,189 DBG program: Return code: 0
+23:34:06,207 INF program: Running [1] mkdosfs --help ...
+23:34:06,211 INF program: stdout[1]: mkfs.fat 4.2 (2021-01-31)
+
+23:34:06,211 INF program: stderr[1]: Usage: mkdosfs [OPTIONS] TARGET [BLOCKS]
+Create FAT filesystem in TARGET, which can be a block device or file. Use only
+up to BLOCKS 1024 byte blocks if specified. With the -C option, file TARGET will be
+created with a size of 1024 bytes times BLOCKS, which must be specified.
+
+Options:
+  -a              Disable alignment of data structures
+  -A              Toggle Atari variant of the filesystem
+  -b SECTOR       Select SECTOR as location of the FAT32 backup boot sector
+  -c              Check device for bad blocks before creating the filesystem
+  -C              Create file TARGET then create filesystem in it
+  -D NUMBER       Write BIOS drive number NUMBER to boot sector
+  -f COUNT        Create COUNT file allocation tables
+  -F SIZE         Select FAT size SIZE (12, 16 or 32)
+  -g GEOM         Select disk geometry: heads/sectors_per_track
+  -h NUMBER       Write hidden sectors NUMBER to boot sector
+  -i VOLID        Set volume ID to VOLID (a 32 bit hexadecimal number)
+  -I              Ignore and disable safety checks
+  -l FILENAME     Read bad blocks list from FILENAME
+  -m FILENAME     Replace default error message in boot block with contents of FILENAME
+  -M TYPE         Set media type in boot sector to TYPE
+  --mbr[=y|n|a]   Fill (fake) MBR table with one partition which spans whole disk
+  -n LABEL        Set volume name to LABEL (up to 11 characters long)
+  --codepage=N    use DOS codepage N to encode label (default: 850)
+  -r COUNT        Make room for at least COUNT entries in the root directory
+  -R COUNT        Set minimal number of reserved sectors to COUNT
+  -s COUNT        Set number of sectors per cluster to COUNT
+  -S SIZE         Select a sector size of SIZE (a power of two, at least 512)
+  -v              Verbose execution
+  --variant=TYPE  Select variant TYPE of filesystem (standard or Atari)
+
+  --invariant     Use constants for randomly generated or time based values
+  --offset=SECTOR Write the filesystem at a specific sector into the device file.
+  --help          Show this help message and exit
+
+23:34:06,211 INF program: ...done [1] (exit code: 0)
+23:34:06,217 INF program: Running [2] lvm version ...
+23:34:06,222 INF program: stdout[2]:   LVM version:     2.03.33(2)-RHEL9 (2025-09-25)
+  Library version: 1.02.207-RHEL9 (2025-09-25)
+  Driver version:  4.50.0
+  Configuration:   ./configure --build=x86_64-redhat-linux-gnu --host=x86_64-redhat-linux-gnu --program-prefix= --disable-dependency-tracking --prefix=/usr --exec-prefix=/usr --bindir=/usr/bin --sbindir=/usr/sbin --sysconfdir=/etc --datadir=/usr/share --includedir=/usr/include --libdir=/usr/lib64 --libexecdir=/usr/libexec --localstatedir=/var --sharedstatedir=/var/lib --mandir=/usr/share/man --infodir=/usr/share/info --with-default-dm-run-dir=/run --with-default-run-dir=/run/lvm --with-default-pid-dir=/run --with-default-locking-dir=/run/lock/lvm --with-usrlibdir=/usr/lib64 --enable-fsadm --enable-write_install --with-user= --with-group= --with-device-uid=0 --with-device-gid=6 --with-device-mode=0660 --enable-pkgconfig --enable-cmdlib --enable-dmeventd --enable-blkid_wiping --with-udevdir=/usr/lib/udev/rules.d --enable-udev_sync --with-thin=internal --with-cache=internal --enable-lvmpolld --enable-lvmlockd-dlm --enable-lvmlockd-dlmcontrol --enable-lvmlockd-sanlock --enable-dbus-service --enable-notify-dbus --enable-dmfilemapd --with-writecache=internal --with-vdo=internal --with-vdo-format=/usr/bin/vdoformat --with-integrity=internal --with-default-use-devices-file=1 --disable-silent-rules --enable-app-machineid --enable-editline --disable-readline
+
+23:34:06,223 INF program: stderr[2]: 
+23:34:06,223 INF program: ...done [2] (exit code: 0)
+23:34:06,238 INF program: Running... udevadm settle --timeout=300
+23:34:06,250 DBG program: Return code: 0
+23:34:06,280 INF program: Running... hwclock --hctosys --utc
+23:37:10,273 INF program: Running... systemctl start chronyd
+23:37:10,339 DBG program: Return code: 0
+23:37:11,001 DBG program: Return code: 0
+23:37:13,673 INF program: Running... df --output=target,avail
+23:37:13,686 INF program: Mounted on                  Avail
+23:37:13,686 INF program: /dev                       891184
+23:37:13,686 INF program: /dev/shm                  1003496
+23:37:13,686 INF program: /run                       362604
+23:37:13,686 INF program: /sys/firmware/efi/efivars      36
+23:37:13,686 INF program: /run/install/repo               0
+23:37:13,686 INF program: /run/rootfsbase                 0
+23:37:13,686 INF program: /                          362604
+23:37:13,686 INF program: /tmp                       997732
+23:37:13,686 DBG program: Return code: 0
+23:37:13,973 INF program: Running... hwclock --systohc --utc
+23:37:14,501 DBG program: Return code: 0
+23:37:19,556 INF program: Running... systemd-detect-virt
+23:37:19,565 INF program: kvm
+23:37:19,566 DBG program: Return code: 0
+23:37:19,646 INF program: Running... df --output=target,avail
+23:37:19,653 INF program: Mounted on                   Avail
+23:37:19,654 INF program: /dev                        891184
+23:37:19,654 INF program: /dev/shm                   1003496
+23:37:19,654 INF program: /run                        362552
+23:37:19,654 INF program: /sys/firmware/efi/efivars       36
+23:37:19,654 INF program: /run/install/repo                0
+23:37:19,654 INF program: /run/rootfsbase                  0
+23:37:19,654 INF program: /                           362552
+23:37:19,654 INF program: /tmp                        997572
+23:37:19,654 INF program: /mnt/sysroot              16990852
+23:37:19,654 INF program: /mnt/sysroot/boot           943132
+23:37:19,654 INF program: /mnt/sysroot/boot/efi       613156
+23:37:19,654 INF program: /mnt/sysroot/dev/shm       1003500
+23:37:19,654 INF program: /mnt/sysroot/tmp           1003500
+23:37:19,655 DBG program: Return code: 0
+23:37:19,691 INF program: Running... df --output=target,avail
+23:37:19,699 INF program: Mounted on                   Avail
+23:37:19,699 INF program: /dev                        891184
+23:37:19,699 INF program: /dev/shm                   1003496
+23:37:19,699 INF program: /run                        362552
+23:37:19,699 INF program: /sys/firmware/efi/efivars       36
+23:37:19,699 INF program: /run/install/repo                0
+23:37:19,699 INF program: /run/rootfsbase                  0
+23:37:19,699 INF program: /                           362552
+23:37:19,699 INF program: /tmp                        997572
+23:37:19,700 INF program: /mnt/sysroot              16990852
+23:37:19,700 INF program: /mnt/sysroot/boot           943132
+23:37:19,700 INF program: /mnt/sysroot/boot/efi       613156
+23:37:19,700 INF program: /mnt/sysroot/dev/shm       1003500
+23:37:19,700 INF program: /mnt/sysroot/tmp           1003500
+23:37:19,700 DBG program: Return code: 0
+23:40:31,347 INF program: Running in chroot '/mnt/sysroot'... /bin/sh /tmp/ks-script-1x63v905
+23:40:31,525 DBG program: Return code: 0
+23:40:31,525 INF program: Running in chroot '/mnt/sysroot'... /bin/sh /tmp/ks-script-4jpq6z4w
+23:40:32,804 INF program: Restoring SElinux contexts...
+23:40:32,805 INF program: Finished.
+23:40:32,805 DBG program: Return code: 0
+23:40:32,805 INF program: Running... /bin/sh /tmp/ks-script-eo78p98q
+23:40:32,811 INF program: Copying screenshots from installation...
+23:40:32,811 INF program: No screenshots found.
+23:40:32,811 DBG program: Return code: 0
+23:40:32,811 INF program: Running... /bin/sh /tmp/ks-script-j8ub1b_j

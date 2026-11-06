@@ -1,0 +1,5 @@
+1 2026-11-05T23:50:32.731Z info stage/install Job install dibuat (OS rocky-9); menunggu PXE boot
+2 2026-11-05T23:50:43.829Z info system/boot-script Script installer dilayani (ke-1/3, platform efi, IP 10.99.0.134)
+3 2026-11-05T23:50:52.811Z info system/config-fetch File ks.cfg diambil dari IP 10.99.0.134
+4 2026-11-05T23:50:52.811Z info stage/config-fetch Installing: konfigurasi ks.cfg diambil installer
+5 2026-11-05T23:51:11.596Z info installer/installer installer: kickstart mulai

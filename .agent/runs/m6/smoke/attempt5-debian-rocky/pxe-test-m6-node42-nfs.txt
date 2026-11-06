@@ -1,0 +1,47 @@
+## 2026-11-05T23:33:50.583Z job1 installing (ssh exit=0)
+# exportfs -v
+/srv/pxe/media/ubuntu-24.04
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash)
+/srv/pxe/media/rocky-9
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash)
+# koneksi NFS (ss -tn sport = :2049)
+0      0      10.99.0.2:2049 10.99.0.132:936
+# nginx GET install.img (harus 0)
+0
+# nginx GET Minimal/Packages
+0
+# nginx GET AppStream
+0
+
+## 2026-11-05T23:40:41.572Z job1 configuring (ssh exit=0)
+# exportfs -v
+/srv/pxe/media/ubuntu-24.04
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash)
+/srv/pxe/media/rocky-9
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash)
+# koneksi NFS (ss -tn sport = :2049)
+0      0      10.99.0.2:2049 10.99.0.132:936
+0      0      10.99.0.2:2049  10.99.0.52:936
+# nginx GET install.img (harus 0)
+0
+# nginx GET Minimal/Packages
+342
+# nginx GET AppStream
+0
+
+## 2026-11-05T23:44:13.723Z akhir (ssh exit=0)
+# exportfs -v
+/srv/pxe/media/ubuntu-24.04
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash)
+/srv/pxe/media/rocky-9
+		10.99.0.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash)
+# koneksi NFS (ss -tn sport = :2049)
+0      0      10.99.0.2:2049 10.99.0.132:936
+0      0      10.99.0.2:2049  10.99.0.52:936
+# nginx GET install.img (harus 0)
+0
+# nginx GET Minimal/Packages
+342
+# nginx GET AppStream
+0
+

@@ -1,0 +1,56 @@
+2026-11-05T23:49:38Z preflight          ok max_nodes=2 avail_mb=9761 mem_available_mb=12833 waves=—
+[2026-11-05T23:49:38Z] network pxe-test sudah terdefinisi
+[2026-11-05T23:49:38Z] network pxe-test sudah aktif
+[2026-11-05T23:49:38Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T23:49:38Z] network pxe-test-nat sudah aktif
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+2026-11-05T23:49:38Z net-up             ok 
+[2026-11-05T23:49:38Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-05T23:49:38Z] network pxe-test sudah terdefinisi
+[2026-11-05T23:49:38Z] network pxe-test sudah aktif
+[2026-11-05T23:49:38Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T23:49:38Z] network pxe-test-nat sudah aktif
+[2026-11-05T23:49:38Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-05T23:49:48Z] SSH siap dalam 10s
+[2026-11-05T23:49:49Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt6-rocky-failpath/server-listen.txt
+2026-11-05T23:49:49Z server-up          ok 
+2026-11-05T23:49:49Z admin-pass         ok m6-admin.pass (0600, isi tidak dicetak)
+[2026-11-05T23:49:49Z] build standalone (PXE_STANDALONE=1 npm run build)
+[2026-11-05T23:50:07Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261105T234949Z
+[2026-11-05T23:50:11Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt6-rocky-failpath/deploy-dashboard.txt)
+2026-11-05T23:50:12Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-05T23:50:12Z server-check       ok 
+[2026-11-05T23:50:12Z] create pxe-test-m6-node44 (uefi, 52:54:00:99:00:44, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+2026-11-05T23:50:13Z node-create        ok pxe-test-m6-node44 uefi 52:54:00:99:00:44
+2026-11-06T00:05:35Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-06T00:05:35Z verify             partial Playwright exit=1: hanya node berstatus done (1 host terbaca)
+2026-11-06T00:05:35Z verify             NOT_RUN pxe-test-m6-node44 (status host installing)
+2026-11-06T00:05:35Z evidence           start 
+2026-11-06T00:05:36Z evidence           done 
+PASS  CR-4-12-dnsmasq  pxe-test-m6-node44           TFTP snponly.efi terkirim ke 10.99.0.134 (lease 52:54:00:99:00:44)
+FAIL  CR-4-12-nginx    pxe-test-m6-node44           ks.cfg 200 x1 (min 2)
+2026-11-06T00:05:36Z server-logs        FAIL server-log-asserts.txt
+Domain 'pxe-test-server' is being shutdown
+
+Domain 'pxe-test-server' has been undefined
+
+[2026-11-06T00:05:39Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T00:05:39Z] cleanup run m6 selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt6-rocky-failpath/cleanup.txt)
+2026-11-06T00:05:39Z cleanup            done 
+2026-11-06T00:05:39Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+exit=1

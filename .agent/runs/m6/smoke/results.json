@@ -2,7 +2,7 @@
   "task": "M6-T15 smoke KVM dini",
   "commit": "30c88c9",
   "worktree": ".agent/wt-m6-smoke (detached)",
-  "generatedAt": "2026-11-05T23:20:00Z",
+  "generatedAt": "2026-11-06T00:10:00Z",
   "memAvailableMbAtStart": 15317,
   "maxNodes": 3,
   "attempts": [
@@ -73,22 +73,74 @@
           "note": "BUG-M6-5: ks.cfg 200 via inst.ks= dengan ':' di path MAC, %pre callback OK; anaconda macet setelah AppStream/repodata 404 x4 -> failed/timeout-installing"
         }
       ]
+    },
+    {
+      "dir": "attempt5-debian-rocky",
+      "commit": "a67bcf6",
+      "cmd": "infra/kvm-run.sh m6 --nodes '41:uefi:os=debian 42:uefi:os=rocky'",
+      "maxNodes": 2,
+      "memAvailableMb": 12456,
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node41",
+          "os": "debian-12",
+          "fw": "uefi",
+          "ramMb": 2048,
+          "status": "FAIL",
+          "durationS": 949,
+          "note": "BUG-M6-6: disk otomatis -> d-i '[!!] Partition disks: No root file system' -> failed/timeout-installing. BUG-M6-3 terkonfirmasi diperbaiki (tanpa prompt lokasi; mirror DVD terbaca)"
+        },
+        {
+          "node": "pxe-test-m6-node42",
+          "os": "rocky-9",
+          "fw": "uefi",
+          "ramMb": 2048,
+          "status": "PASS",
+          "durationS": 672,
+          "note": "stage2 NFS (exportfs ro 10.99.0.0/24, koneksi :2049 dari node, GET install.img = 0), ks.cfg 200 x1, Minimal/Packages 342 GET, AppStream 0; kickstart mulai > post mulai > konfigurasi target selesai > first-boot; Done; verify-node fails=0 (hostname, IP/GW/DNS, user+sudo, authorized_keys, passwordauthentication no, bebas token 8 file, root fs disk lokal); login password ditolak; locale en_US.UTF-8, TZ UTC"
+        }
+      ]
+    },
+    {
+      "dir": "attempt6-rocky-failpath",
+      "commit": "a67bcf6",
+      "cmd": "infra/kvm-run.sh m6 --nodes '44:uefi:failpath:os=rocky'",
+      "result": "FAIL",
+      "failedStage": "verify",
+      "cleanup": "PASS",
+      "nodes": [
+        {
+          "node": "pxe-test-m6-node44",
+          "os": "rocky-9",
+          "fw": "uefi",
+          "ramMb": 2048,
+          "role": "failpath",
+          "status": "FAIL",
+          "durationS": 920,
+          "note": "BUG-M6-7: /dev/vdz -> setelah %pre tidak ada request lagi; %onerror tidak mengirim stage=failed/tail log; job masih installing pada 15 mnt (watchdog)"
+        }
+      ]
     }
   ],
   "cr-4-6": {
     "debian url= ':' path": "PASS",
     "debian early_command /proc/cmdline": "PASS",
-    "debian late_command chroot + sed BRE busybox": "NOT_RUN (BUG-M6-3)",
+    "debian late_command chroot + sed BRE busybox": "NOT_RUN (BUG-M6-6)",
     "rocky inst.ks= ':' path": "PASS (node 4 GB)",
     "rocky %pre /proc/cmdline": "PASS (node 4 GB)",
-    "rocky %post": "NOT_RUN (BUG-M6-5)"
+    "rocky %post": "NOT_RUN (BUG-M6-5)",
+    "rocky %post (node 2 GB, NFS stage2)": "PASS"
   },
   "o11": {
     "debian kernel netboot == DVD": "PASS (sha256 d8808aa4... sama)",
-    "debian paket dari DVD": "NOT_RUN (BUG-M6-3)",
-    "rocky paket": "curl/openssh-server/sudo ada di Minimal/Packages; repo AppStream tidak ada (BUG-M6-5); O11-C tidak dipakai"
+    "debian paket dari DVD": "NOT_RUN (BUG-M6-6, berhenti di partman)",
+    "rocky paket": "PASS: semua paket dari Minimal/Packages (342 GET), tanpa AppStream; O11-C tidak dipakai"
   },
   "sr-5-5c": "PASS (attempt2 node43: Failed installer-error + event error-commands)",
   "libvirtAfter": "hanya ubuntu24.04 (shut off); network default/int/pxe-test/pxe-test-nat aktif (pxe-test* dipertahankan sampai T16)",
-  "installerLogs": "installer-logs/ (Ubuntu subiquity-server-debug, curtin-install, event error-commands; Debian/Rocky tidak tersedia karena instalasi tidak selesai)"
+  "installerLogs": "installer-logs/: Ubuntu (subiquity-server-debug, curtin-install, event error-commands) + Rocky (anaconda.log, program.log dari attempt5); Debian d-i syslog BELUM (BUG-M6-6)",
+  "dec-020": "PASS: node Rocky 2 GB, stage2 NFS (attempt5)"
 }

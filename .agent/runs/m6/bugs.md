@@ -118,3 +118,54 @@ Dicatat test-engineer; tidak diperbaiki test-engineer (kode produk/infra milik d
 - `kvm-run.sh` keluar sebelum `verify-node.sh` bila Playwright gagal (`exit "$e2e_rc"`), sehingga node
   yang sukses di run yang sama (attempt 2: node43 Ubuntu Done + SSH key OK) tidak diverifikasi
   lengkap. Untuk run resmi: pertimbangkan verifikasi per node yang Done walau node lain gagal.
+
+## BUG-M6-6 — Preseed Debian dengan disk "otomatis" (tanpa `partman-auto/disk`) macet di "[!!] Partition disks — No root file system"
+
+- Ditemukan: smoke ulang attempt 5, 2026-11-05T23:35Z, commit `a67bcf6`, node `pxe-test-m6-node41`
+  (UEFI, 2048 MB, `debian-12`, disk kosong = otomatis, partisi `auto`).
+- Komponen: `dashboard/src/lib/server/installers/debian.ts` — `partman-auto/disk` hanya ditulis bila
+  `c.storage.disk` diisi (`...(c.storage.disk ? [di("partman-auto/disk", …)] : [])`), dan
+  `grub-installer/bootdev` = `default`. Golden `debian-preseed.cfg` hanya menguji disk `/dev/vda`.
+- Severity (usulan): **critical untuk AC-6.48** — mode disk otomatis (default UI) tidak pernah
+  mempartisi; d-i menampilkan error kritis dan menunggu `<Continue>`; job `failed/timeout-installing`
+  setelah 15 mnt (23:48:51).
+- Reproduksi: `PXE_RUNS_DIR=<dir> infra/kvm-run.sh m6 --nodes "41:uefi:os=debian 42:uefi:os=rocky"`
+  (suite `m6-smoke.spec.ts`, PATCH `os.disk = ""`).
+- Bukti: `.agent/runs/m6/smoke/attempt5-debian-rocky/pxe-test-m6-node41-console.txt` (sekitar baris
+  1260: `[!!] Partition disks` / `No root file system` / `No root file system is defined.` /
+  `Please correct this from the partitioning menu.`; jam d-i 23:35→23:44 tanpa progres);
+  `pxe-test-m6-node41-job1-events.txt` (6 event, berhenti setelah `preseed mulai`).
+- Perbaikan BUG-M6-3 terkonfirmasi: tidak ada lagi prompt bahasa/lokasi/keyboard; mirror DVD
+  terbaca ("Retrieving" dari mirror lokal) sebelum partman.
+- Saran: untuk disk otomatis, tentukan disk saat runtime di `preseed/early_command`
+  (mis. `debconf-set partman-auto/disk "$(list-devices disk | head -n1)"` dan
+  `debconf-set grub-installer/bootdev` yang sama), atau ekuivalen; tambah golden/test untuk disk
+  otomatis; smoke ulang Debian.
+
+## BUG-M6-7 — Rocky jalur gagal (disk `/dev/vdz`): `%onerror` tidak pernah mengirim `stage=failed` (mode `inst.cmdline`)
+
+- Ditemukan: smoke ulang attempt 6, 2026-11-05T23:50Z, commit `a67bcf6`, node `pxe-test-m6-node44`
+  (UEFI, 2048 MB, `rocky-9`, disk `/dev/vdz`, spec `44:uefi:failpath:os=rocky` — harness mendukung
+  `:failpath` untuk Rocky).
+- Komponen: `dashboard/src/lib/server/installers/rocky.ts` (`%onerror`, `ignoredisk --only-use=vdz`,
+  `clearpart --drives=vdz`), `boot-script.ts` (`inst.cmdline`).
+- Severity (usulan): **major** — kegagalan nyata Rocky tidak dilaporkan installer; job baru gagal
+  oleh watchdog (`timeout-installing`, 15 mnt) tanpa event log installer (tidak ada tail
+  anaconda.log/program.log di job). Paritas SR-5-5(c) Ubuntu tidak tercapai untuk Rocky. (AC-6.45
+  sendiri hanya Ubuntu; ini celah, bukan regresi AC.)
+- Reproduksi: `PXE_RUNS_DIR=<dir> infra/kvm-run.sh m6 --nodes "44:uefi:failpath:os=rocky"`.
+- Bukti `.agent/runs/m6/smoke/attempt6-rocky-failpath/`: `server-nginx.txt` — `GET …/ks.cfg 200`,
+  `POST …/log 200` (`%pre`: `installer: kickstart mulai` 23:51:11), lalu **tidak ada** request lagi
+  dari node (tidak ada `Minimal/repodata`, tidak ada `POST …/log` tail, tidak ada `POST …/status`);
+  `pxe-test-m6-node44-job1-events.txt` (5 event); timeline: masih `installing` pada +902 dtk (suite
+  berhenti di batas 15 mnt, sebelum watchdog menandai `timeout-installing`). Console serial berhenti di
+  "Starting pre-anaconda logging service" — UI/pesan anaconda keluar di `tty0` (console terakhir di
+  cmdline), jadi pesan error tidak terekam.
+- Dugaan: error validasi storage kickstart (disk tidak ada) terjadi sebelum fase instalasi; anaconda
+  `cmdline` berhenti/menunggu tanpa menjalankan `%onerror`.
+- Saran: di `%pre`, validasi disk target (`[ -b /dev/vdz ]`) dan kirim tail log + `stage=failed` bila
+  tidak ada; atau gunakan mekanisme lain yang dijamin jalan pada error storage; pertimbangkan
+  `console=tty0 console=ttyS0,…` (serial terakhir = console utama) agar pesan anaconda terekam di bukti.
+  Smoke ulang Rocky failpath sesudahnya.
+- Catatan suite: `m6-smoke.spec.ts` membatasi job gagal 15 mnt (`FAIL_TIMEOUT_MS`) sesuai AC-6.45; job
+  yang belum final pada batas itu tidak diinstal ulang (instal ulang ditolak selama job aktif).

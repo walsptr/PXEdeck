@@ -1,0 +1,7 @@
+2026-11-05T23:50:32.734Z discovered firmware=uefi
+2026-11-05T23:50:32.774Z konfigurasi tersimpan os=rocky-9 disk=/dev/vdz ip=10.99.0.54 hostname=m6-node44
+2026-11-05T23:50:32.802Z install dibuat job=job-880a3e72-f250-4360-88c4-57006a080c83 status=booting
+2026-11-05T23:50:32.877Z node.sh reset
+2026-11-05T23:50:32.884Z job1(/dev/vdz): booting (+0 dtk, installerBoots=0)
+2026-11-05T23:50:52.919Z job1(/dev/vdz): installing (+20 dtk, installerBoots=1)
+2026-11-06T00:05:35.399Z job1 akhir=installing/null dalam 902 dtk; event installer error-commands=0; urutan=booting>installing

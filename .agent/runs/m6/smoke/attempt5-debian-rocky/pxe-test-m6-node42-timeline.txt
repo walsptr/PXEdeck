@@ -1,0 +1,15 @@
+2026-11-05T23:33:19.209Z discovered firmware=uefi
+2026-11-05T23:33:19.272Z konfigurasi tersimpan os=rocky-9 disk=(otomatis) ip=10.99.0.52 hostname=m6-node42
+2026-11-05T23:33:19.406Z install dibuat job=job-ce8c1150-fd5d-4a97-918f-686a96b35eb2 status=booting
+2026-11-05T23:33:19.488Z node.sh reset
+2026-11-05T23:33:19.496Z job1: booting (+0 dtk, installerBoots=0)
+2026-11-05T23:33:49.555Z job1: installing (+30 dtk, installerBoots=1)
+2026-11-05T23:40:41.074Z job1: configuring (+442 dtk, installerBoots=1)
+2026-11-05T23:44:11.749Z job1: done (+652 dtk, installerBoots=1)
+2026-11-05T23:44:11.760Z job1 akhir=done/- dalam 652 dtk; urutan=booting>installing>configuring>done; stages=booting@install,booting@boot-script,installing@config-fetch,configuring@callback,done@callback
+2026-11-05T23:44:11.761Z event installer (4): installer: kickstart mulai | installer: post mulai | installer: konfigurasi target selesai | first-boot: OS terpasang boot dari disk: m6-node42 enp1s0=10.99.0.52/24 
+2026-11-05T23:44:12.221Z ssh key yang di-inject: OK
+2026-11-05T23:44:12.588Z log installer /var/log/anaconda/anaconda.log: exit=0 bytes=37837
+2026-11-05T23:44:12.795Z log installer /var/log/anaconda/program.log: exit=0 bytes=8231
+2026-11-05T23:44:13.093Z console log: 99034 byte terakhir dibaca; kernel panic=false
+2026-11-05T23:44:13.730Z jumlah job host=1

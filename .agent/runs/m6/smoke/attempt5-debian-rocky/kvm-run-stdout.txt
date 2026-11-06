@@ -1,0 +1,66 @@
+2026-11-05T23:32:07Z preflight          ok max_nodes=2 avail_mb=9384 mem_available_mb=12456 waves=—
+[2026-11-05T23:32:07Z] network pxe-test sudah terdefinisi
+[2026-11-05T23:32:07Z] network pxe-test sudah aktif
+[2026-11-05T23:32:07Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T23:32:07Z] network pxe-test-nat sudah aktif
+ Name           State    Autostart   Persistent
+-------------------------------------------------
+ default        active   yes         yes
+ int            active   yes         yes
+ pxe-test       active   no          yes
+ pxe-test-nat   active   no          yes
+
+2026-11-05T23:32:07Z net-up             ok 
+[2026-11-05T23:32:07Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-05T23:32:07Z] network pxe-test sudah terdefinisi
+[2026-11-05T23:32:07Z] network pxe-test sudah aktif
+[2026-11-05T23:32:07Z] network pxe-test-nat sudah terdefinisi
+[2026-11-05T23:32:07Z] network pxe-test-nat sudah aktif
+[2026-11-05T23:32:08Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+[2026-11-05T23:32:17Z] SSH siap dalam 10s
+[2026-11-05T23:32:19Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt5-debian-rocky/server-listen.txt
+2026-11-05T23:32:19Z server-up          ok 
+2026-11-05T23:32:19Z admin-pass         ok m6-admin.pass (0600, isi tidak dicetak)
+[2026-11-05T23:32:19Z] build standalone (PXE_STANDALONE=1 npm run build)
+[2026-11-05T23:32:51Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261105T233219Z
+[2026-11-05T23:32:56Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt5-debian-rocky/deploy-dashboard.txt)
+2026-11-05T23:32:56Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-05T23:32:56Z server-check       ok 
+[2026-11-05T23:32:57Z] create pxe-test-m6-node41 (uefi, 52:54:00:99:00:41, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+2026-11-05T23:32:58Z node-create        ok pxe-test-m6-node41 uefi 52:54:00:99:00:41
+[2026-11-05T23:32:58Z] create pxe-test-m6-node42 (uefi, 52:54:00:99:00:42, 2048 MB)
+WARNING  The guest's network configuration may not support PXE
+
+Starting install...
+Creating domain...                                          |         00:00     
+Domain creation completed.
+2026-11-05T23:32:59Z node-create        ok pxe-test-m6-node42 uefi 52:54:00:99:00:42
+2026-11-05T23:48:51Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-05T23:48:51Z verify             partial Playwright exit=1: hanya node berstatus done (2 host terbaca)
+2026-11-05T23:48:51Z verify             NOT_RUN pxe-test-m6-node41 (status host failed)
+2026-11-05T23:48:51Z verify             ok pxe-test-m6-node42 (pxe-test-m6-node42-verify.txt)
+2026-11-05T23:48:51Z evidence           start 
+2026-11-05T23:48:53Z evidence           done 
+PASS  CR-4-12-dnsmasq  pxe-test-m6-node41           TFTP snponly.efi terkirim ke 10.99.0.131 (lease 52:54:00:99:00:41)
+PASS  CR-4-12-nginx    pxe-test-m6-node41           preseed.cfg 200 x1 (min 1)
+PASS  CR-4-12-dnsmasq  pxe-test-m6-node42           TFTP snponly.efi terkirim ke 10.99.0.132 (lease 52:54:00:99:00:42)
+PASS  CR-4-12-nginx    pxe-test-m6-node42           ks.cfg 200 x1 (min 1)
+2026-11-05T23:48:53Z server-logs        ok 
+Domain 'pxe-test-server' is being shutdown
+
+Domain 'pxe-test-server' has been undefined
+
+[2026-11-05T23:48:56Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-05T23:48:56Z] cleanup run m6 selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/smoke/attempt5-debian-rocky/cleanup.txt)
+2026-11-05T23:48:56Z cleanup            done 
+2026-11-05T23:48:56Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+exit=1

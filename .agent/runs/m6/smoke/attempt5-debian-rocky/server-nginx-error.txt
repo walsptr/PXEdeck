@@ -1,0 +1,4 @@
+2026/11/05 07:00:01 [notice] 2341#2341: using inherited sockets from "5;6;"
+2026/11/05 23:33:50 [error] 1743#1743: *65 open() "/srv/pxe/media/debian-12/dists/stable/Release" failed (2: No such file or directory), client: 10.99.0.131, server: _, request: "GET /media/debian-12/dists/stable/Release HTTP/1.1", host: "10.99.0.2"
+2026/11/05 23:33:50 [error] 1743#1743: *66 open() "/srv/pxe/media/debian-12/dists/testing/Release" failed (2: No such file or directory), client: 10.99.0.131, server: _, request: "GET /media/debian-12/dists/testing/Release HTTP/1.1", host: "10.99.0.2"
+2026/11/05 23:33:50 [error] 1743#1743: *67 open() "/srv/pxe/media/debian-12/dists/unstable/Release" failed (2: No such file or directory), client: 10.99.0.131, server: _, request: "GET /media/debian-12/dists/unstable/Release HTTP/1.1", host: "10.99.0.2"
