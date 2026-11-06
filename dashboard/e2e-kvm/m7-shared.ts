@@ -115,5 +115,15 @@ ping -M do -s 1473 -c 1 -W 2 -I mgmt20 "$NODE_IP"; echo "# exit-1473=$?"
 /** Penanda kernel installer di serial (Ubuntu casper/NFS, Rocky inst.ks, Debian preseed). */
 export const INSTALLER_MARK = /netboot=nfs|casper\/vmlinuz|inst\.ks=|inst\.stage2=|preseed\/url=|auto=true priority=critical/g
 
-/** DEC-027 §4: `?password=…` / `&username=…` bernilai (bukan `<REDACTED…>`, `***`, atau kosong) = temuan scan bukti. */
-export const URL_CRED = /[?&](password|username)=(?!<REDACTED|\*\*\*|…|`)[^&\s"]+/i
+// DEC-027 §4 + DEC-028 §2 (CR-7-2/SR-7-5): parameter password/username bernilai di string mirip URL =
+// temuan scan bukti. Pemisah/`=` boleh mentah, percent-encoded (%3F %26 %3D) atau JSON-escaped
+// (backslash-u0026/u003f/u003d; `\x5C` = backslash literal agar tidak ditafsirkan sebagai escape).
+// Dikecualikan HANYA token placeholder UTUH (diikuti `&`, spasi, `"`, backslash-quote JSON, %26,
+// backslash-u0026, atau akhir teks): kosong, `***`, `…`, `<REDACTED…>` (juga bentuk ter-encode-nya).
+// Nilai yang sekadar diawali placeholder (`***x`, `<REDACTED>x`, backtick…) tetap temuan.
+// Selaras dengan `_url_cred_hits` di infra/redact-evidence.sh (test: m7-kvm-urlcred.test.ts, m7-te.sh).
+const URL_SEP = String.raw`(?:[?&]|%3F|%26|\x5Cu0026|\x5Cu003f)`
+const URL_EQ = String.raw`(?:=|%3D|\x5Cu003d)`
+const URL_END = String.raw`(?:[&\s"]|%26|\x5Cu0026|\x5C"|$)`
+const URL_PLACEHOLDER = String.raw`(?:(?:<|%3C|\x5Cu003c)REDACTED[^&\s"<>%\x5C]*(?:>|%3E|\x5Cu003e)|(?:\*|%2A){3}|…|%E2%80%A6)`
+export const URL_CRED = new RegExp(`${URL_SEP}(password|username)${URL_EQ}(?!${URL_PLACEHOLDER}?${URL_END})`, "i")

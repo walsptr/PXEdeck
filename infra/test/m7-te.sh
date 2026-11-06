@@ -4,7 +4,8 @@
 # Tidak pernah menyentuh libvirt/ssh/curl asli (harness: fake-bin + safe-bin, sandbox per test).
 #   AC-7.14 nama terlindungi ditolak lib.sh assert_name (dipakai net-up/net-down/cleanup)
 #   AC-7.16 nginx VLAN: allowlist hanya di `location /` + SSE; /boot/ & /media/ tanpa allow/deny;
-#           rpcbind/nfsd hanya 10.99.10.2; verify-listen-vlan: rpcbind/nfsd di 10.99.0.2 → FAIL + stop
+#           nfsd hanya 10.99.10.2:2049 (rpcbind: OPTIONS -h ditulis, tapi socket activation tetap
+#           wildcard 0.0.0.0:111, SR-7-2); verify-listen-vlan: nfsd di luar 10.99.10.2 → FAIL + stop
 #   AC-7.17 relay key lewat stdin (umask 077 + chmod 600), tanpa scp key; teardown di finish untuk
 #           kegagalan setiap tahap setelah relay-setup; statis infra/server/*.sh bagian host
 #   AC-7.18 verify-node tanpa EXPECT_VLAN = jalur M6 (tanpa `ip -d -o link`, tanpa baris VLAN);
@@ -71,7 +72,8 @@ test_m7te_nginx_vlan_acl() {
   done
   # Tidak ada allow untuk subnet VLAN node (10.99.10/20) di mana pun.
   assert_no_match "$(grep -vE '^\s*#' "$n")" 'allow 10\.99\.(10|20)\.'
-  # rpcbind/nfsd hanya 10.99.10.2.
+  # nfsd hanya 10.99.10.2 (nfs-vlan.conf); OPTIONS rpcbind `-h 10.99.10.2` tetap ditulis, walau di lab
+  # rpcbind listen wildcard lewat socket activation (SR-7-2, apply-profile.sh langkah 6).
   local a; a="$(grep -vE '^\s*#' "$INFRA_DIR_UNDER_TEST/server/vlan/apply-profile.sh")"
   assert_match "$a" "OPTIONS=\"-w -h 10\.99\.10\.2\"' > /etc/default/rpcbind"
   assert_no_match "$(grep -vE '^\s*#' "$INFRA_DIR_UNDER_TEST/server/vlan/nfs-vlan.conf")" '^host=(10\.99\.0\.|10\.99\.20\.|0\.0\.0\.0)'
@@ -316,7 +318,7 @@ test_m7te_redact_url_credentials() {
     echo "10.99.0.1 [2026-11-06T15:00:00+00:00] \"GET /login?***\" 200 1 \"curl\""
     echo "GET /login?username=<REDACTED>&password=<REDACTED-admin-password>"
     echo "GET /login?password= 200"
-    echo "# bukan GET /login?username=…&password=… (komentar kode); pola \`?password=\`"
+    echo "# bukan GET /login?username=…&password=… (komentar kode)"
     echo "d-i passwd/user-password-crypted password \$6\$REDACTED"
   } > "$d/ok.txt"
   run_infra redact-evidence.sh "$d"
@@ -340,9 +342,66 @@ test_m7te_redact_url_credentials() {
   assert_eq "$RC" 0 "$OUT"
 }
 
+# DEC-028 §2 (CR-7-2/SR-7-5): hanya token placeholder UTUH (kosong, ***, …, <REDACTED…>) yang
+# dikecualikan; nilai yang sekadar diawali placeholder/backtick = temuan. Bentuk percent-encoded
+# (%3F %26 %3D, huruf besar/kecil) dan JSON-escaped (backslash-u0026/u003f/u003d) juga dipindai.
+# Merah bila _url_cred_hits / prefilter URL_CRED_RE di redact-evidence.sh dikembalikan ke pola lama.
+test_m7te_redact_url_credentials_strict_encoded() {
+  local d="$SB/evidence-url2" bs i line
+  bs="$(printf '\x5c')"
+  mkdir -p "$d"
+  local -a bad=(
+    'GET /login?password=***x HTTP/1.1'
+    'GET /login?password=****'
+    'GET /login?password=`secret` HTTP/1.1'
+    'GET /login?username=<REDACTED>x'
+    'GET /login?password=<REDACTED>&username=<REDACTED>pxeadmin'
+    'GET /login?password=…abc'
+    'pola (`?password=`/`&username=` bernilai)'
+    'GET /x?next=%2Flogin%3Fpassword%3DSecret1 HTTP/1.1'
+    'GET /x?next=%2Flogin%3fPassword%3dSecret1'
+    'GET /x?next=%2Flogin%3Fa%3D1%26password%3DSecret1'
+    'GET /x?next=%2Flogin%3Fa%3D1%26USERNAME%3Dpxeadmin'
+    'GET /x%3Fusername=pxeadmin'
+    'GET /login?password%3Dabc'
+    'GET /x?next=%2Flogin%3Fpassword%3D%2A%2A%2Ax'
+    'GET /x?next=%2Flogin%3Fpassword%3D%3CREDACTED%3Ex'
+    "{\"url\":\"http://10.99.0.2/login?username=<REDACTED>${bs}u0026password=abc\"}"
+    "{\"url\":\"http://10.99.0.2/login${bs}u003fusername${bs}u003dpxeadmin\"}"
+    "{\"url\":\"/login?a=1${bs}u0026PASSWORD=abc\"}"
+  )
+  local -a good=(
+    'GET /login?password=***'
+    'GET /login?password=***&username=*** HTTP/1.1'
+    'GET /login?username=…&password=… HTTP/1.1'
+    'request: "GET /login?username=<REDACTED>&password=<REDACTED-admin-password>"'
+    'GET /login?password=&username='
+    'GET /x?next=%2Flogin%3Fpassword%3D%3CREDACTED%3E%26username%3D%2A%2A%2A HTTP/1.1'
+    'GET /x?next=%2Flogin%3Fpassword%3D HTTP/1.1'
+    'GET /x?next=%2Flogin%3Fpassword%3D%E2%80%A6'
+    "{\"message\":\"GET /login?username=<REDACTED>&password=<REDACTED-admin-password>${bs}\" 200\"}"
+    "{\"url\":\"/login?username=***${bs}u0026password=<REDACTED>\"}"
+    "{\"url\":\"/login?username=${bs}u003cREDACTED${bs}u003e${bs}u0026password=***\"}"
+    'GET /x?next=%2Fhosts%3Fq%3Dpassword'
+  )
+  for i in "${!bad[@]}"; do printf '%s\n' "${bad[$i]}" > "$d/bad$i.txt"; done
+  for i in "${!good[@]}"; do printf '%s\n' "${good[$i]}" > "$d/good$i.txt"; done
+  # Sanity: input JSON benar-benar memuat backslash literal (bukan & hasil decode).
+  assert_contains "$(cat "$d/bad15.txt")" "${bs}u0026password=abc"
+  run_infra redact-evidence.sh "$d"
+  assert_eq "$RC" 1 "$OUT"
+  for i in "${!bad[@]}"; do assert_match "$OUT" "/bad$i\.txt:1(\$|[^0-9])" "bad$i tidak dilaporkan: ${bad[$i]}"; done
+  for i in "${!good[@]}"; do assert_not_contains "$OUT" "/good$i.txt" "good$i ikut dilaporkan: ${good[$i]}"; done
+  assert_not_contains "$OUT" "Secret1" "isi kredensial bocor ke output"
+  # Hanya placeholder utuh tersisa → exit 0.
+  rm -f "$d"/bad*.txt
+  run_infra redact-evidence.sh "$d"
+  assert_eq "$RC" 0 "$OUT"
+}
+
 t "M7te assert_name menolak nama terlindungi/tanpa prefix (AC-7.14)"            test_m7te_assert_name_protected
 t "M7te net-up/net-down vlan (palsu): lima network hilang, default/int utuh (AC-7.14)" test_m7te_net_down_vlan_fake_state
-t "M7te nginx VLAN: ACL hanya / + SSE, /boot & /media terbuka; rpcbind 10.99.10.2 (AC-7.16)" test_m7te_nginx_vlan_acl
+t "M7te nginx VLAN: ACL hanya / + SSE, /boot & /media terbuka; nfsd 10.99.10.2 + OPTIONS rpcbind (AC-7.16)" test_m7te_nginx_vlan_acl
 t "M7te verify-listen-vlan: kasus FAIL tambahan + stop dnsmasq (AC-7.16)"       test_m7te_verify_listen_more_fail_cases
 t "M7te relay key via stdin 0600, urutan setup→key→status→teardown (AC-7.17)"   test_m7te_relay_key_via_stdin
 t "M7te statis: script server/switch & Playwright tidak menyasar VLAN (AC-7.17)" test_m7te_host_static_server_scripts
@@ -354,3 +413,4 @@ t "M7te skenario flat core/distro/bulk tanpa artefak VLAN (AC-7.19)"            
 t "M7te README §Topologi VLAN + .env.example (AC-7.31)"                         test_m7te_readme_vlan_section
 t "M7te diff M7 tanpa hash/private key nyata (AC-7.31)"                         test_m7te_no_new_secrets_in_m7_diff
 t "M7te redact-evidence: password=/username= di URL (nginx access+error) → exit 1 (DEC-027 §4)" test_m7te_redact_url_credentials
+t "M7te redact-evidence: hanya placeholder utuh dikecualikan + bentuk %3F/%26/%3D & JSON-escaped (DEC-028 §2)" test_m7te_redact_url_credentials_strict_encoded
