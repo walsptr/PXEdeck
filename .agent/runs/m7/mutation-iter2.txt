@@ -1,0 +1,59 @@
+# Mutasi GK-7-1 (DEC-028 §1) — 2026-11-06T17:43:01Z, HEAD 05d14ae + perubahan iter2 (belum commit)
+# Catatan: M4 dipotong 12 baris (ASSERT grep -c pemanggilan umask 077 = 0, FAIL).
+# Runner: hanya test m7-gk71.sh lewat harness infra/test (fake-bin, sandbox). File dipulihkan setelah tiap mutasi.
+=== M0 baseline (perbaikan terpasang)
+      ok   GK-7-1 deploy dry-run penulis lambat flat+vlan → exit 0, tanpa pipe (DEC-028 §1)
+      ok   GK-7-1 deploy non-dry: env admin lewat stdin ssh (umask 077), penulis lambat
+    hasil: 2 lulus, 0 gagal
+=== M1 revert deploy-dashboard.sh ke 339f234 (pipe ke ssh_server juga di dry-run) — harap (a) MERAH
+        ASSERT: dry-run flat penulis lambat (141 = SIGPIPE GK-7-1): [2026-11-06T17:43:01Z] membuat password admin acak per run -> /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.Zlqfpf/agent/keys/m7gk71-admin.pass (0600)
+    DRY-RUN: npm --prefix /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard run --silent admin:hash
+    [2026-11-06T17:43:01Z] build standalone (PXE_STANDALONE=1 npm run build)
+    DRY-RUN: env PXE_STANDALONE=1 npm --prefix /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard run build
+    DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.Zlqfpf/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes pxe@10.99.0.2 mkdir\ -m\ 700\ \'/tmp/pxe-test-deploy.20261106T174301Z\'
+    DRY-RUN: scp -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.Zlqfpf/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.Zlqfpf/tmp/pxe-test-deploy.qTNNNv/release.tar.xz /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.Zlqfpf/tmp/pxe-test-deploy.qTNNNv/dashboard.env /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.Zlqfpf/tmp/pxe-test-deploy.qTNNNv/pxe-dashboard.service /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.Zlqfpf/tmp/pxe-test-deploy.qTNNNv/nginx-pxe.conf pxe@10.99.0.2:/tmp/pxe-test-deploy.20261106T174301Z/
+    DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.Zlqfpf/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes pxe@10.99.0.2 umask\ 077\ \&\&\ cat\ \>\ \'/tmp/pxe-test-deploy.20261106T174301Z/admin.env\' expected '0' got '141'
+      FAIL GK-7-1 deploy dry-run penulis lambat flat+vlan → exit 0, tanpa pipe (DEC-028 §1)
+      ok   GK-7-1 deploy non-dry: env admin lewat stdin ssh (umask 077), penulis lambat
+    hasil: 1 lulus, 1 gagal
+=== M2 cabang dry-run tetap mem-pipe penulis ke ssh_server — harap (a) MERAH
+        ASSERT: dry-run flat penulis lambat (141 = SIGPIPE GK-7-1): [2026-11-06T17:43:02Z] membuat password admin acak per run -> /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.8RXTHY/agent/keys/m7gk71-admin.pass (0600)
+    DRY-RUN: npm --prefix /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard run --silent admin:hash
+    [2026-11-06T17:43:02Z] build standalone (PXE_STANDALONE=1 npm run build)
+    DRY-RUN: env PXE_STANDALONE=1 npm --prefix /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard run build
+    DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.8RXTHY/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes pxe@10.99.0.2 mkdir\ -m\ 700\ \'/tmp/pxe-test-deploy.20261106T174302Z\'
+    DRY-RUN: scp -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.8RXTHY/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.8RXTHY/tmp/pxe-test-deploy.X7XptJ/release.tar.xz /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.8RXTHY/tmp/pxe-test-deploy.X7XptJ/dashboard.env /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.8RXTHY/tmp/pxe-test-deploy.X7XptJ/pxe-dashboard.service /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.8RXTHY/tmp/pxe-test-deploy.X7XptJ/nginx-pxe.conf pxe@10.99.0.2:/tmp/pxe-test-deploy.20261106T174302Z/
+    DRY-RUN: ssh -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.8RXTHY/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes pxe@10.99.0.2 umask\ 077\ \&\&\ cat\ \>\ \'/tmp/pxe-test-deploy.20261106T174302Z/admin.env\' expected '0' got '141'
+      FAIL GK-7-1 deploy dry-run penulis lambat flat+vlan → exit 0, tanpa pipe (DEC-028 §1)
+      ok   GK-7-1 deploy non-dry: env admin lewat stdin ssh (umask 077), penulis lambat
+    hasil: 1 lulus, 1 gagal
+=== M3 non-dry tidak mengirim env lewat stdin (</dev/null) — harap (b) MERAH
+      ok   GK-7-1 deploy dry-run penulis lambat flat+vlan → exit 0, tanpa pipe (DEC-028 §1)
+        ASSERT: stdin admin.env expected 'PXE_ADMIN_USERNAME=pxeadmin
+    PXE_ADMIN_PASSWORD_HASH='<M6_HASH: hash dummy uji dari infra/test/m6.sh, disamarkan>'
+    PXE_JOB_BOOTING_TIMEOUT_MIN=120' got ''
+      FAIL GK-7-1 deploy non-dry: env admin lewat stdin ssh (umask 077), penulis lambat
+    hasil: 1 lulus, 1 gagal
+=== M4 non-dry tanpa umask 077 — harap (b) MERAH
+      ok   GK-7-1 deploy dry-run penulis lambat flat+vlan → exit 0, tanpa pipe (DEC-028 §1)
+        ASSERT: virsh -c qemu:///system domstate pxe-test-server
+    npm --prefix /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/dash run --silent admin:hash
+    ssh -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes pxe@10.99.0.2 mkdir -m 700 '/tmp/pxe-test-deploy.20261106T174304Z'
+    scp -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/tmp/pxe-test-deploy.USPZFX/release.tar.xz /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/tmp/pxe-test-deploy.USPZFX/dashboard.env /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/tmp/pxe-test-deploy.USPZFX/pxe-dashboard.service /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/tmp/pxe-test-deploy.USPZFX/nginx-pxe.conf pxe@10.99.0.2:/tmp/pxe-test-deploy.20261106T174304Z/
+    ssh -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes pxe@10.99.0.2 cat > '/tmp/pxe-test-deploy.20261106T174304Z/admin.env'
+    ssh -i /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/agent/keys/infra_ed25519 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o ConnectTimeout=5 -o BatchMode=yes root@10.99.0.2 RELEASE_TS=20261106T174304Z STAGE=/tmp/pxe-test-deploy.20261106T174304Z bash -s
+    curl -sS --max-time 5 -o /dev/null -w %{http_code} http://10.99.0.2/login
+    curl -sS --max-time 5 -o /dev/null -w %{http_code} http://10.99.0.2/api/settings
+    curl -sS --max-time 10 -o /dev/null -w %{http_code} -c /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/tmp/pxe-test-deploy.USPZFX/session.jar -H Content-Type: application/json -H Origin: http://10.99.0.2 -H Sec-Fetch-Site: same-origin --data-binary @- http://10.99.0.2/api/auth/login
+    curl -fsS --max-time 5 -b /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/tmp/infra-test/sandbox.ccyTN0/tmp/pxe-test-deploy.USPZFX/session.jar http://10.99.0.2/api/settings expected '1' got '0'
+      FAIL GK-7-1 deploy non-dry: env admin lewat stdin ssh (umask 077), penulis lambat
+=== M5 non-dry membuang baris PXE_JOB_BOOTING_TIMEOUT_MIN — harap (b) MERAH
+      ok   GK-7-1 deploy dry-run penulis lambat flat+vlan → exit 0, tanpa pipe (DEC-028 §1)
+        ASSERT: stdin admin.env expected 'PXE_ADMIN_USERNAME=pxeadmin
+    PXE_ADMIN_PASSWORD_HASH='<M6_HASH: hash dummy uji dari infra/test/m6.sh, disamarkan>'
+    PXE_JOB_BOOTING_TIMEOUT_MIN=120' got 'PXE_ADMIN_USERNAME=pxeadmin
+    PXE_ADMIN_PASSWORD_HASH='<M6_HASH: hash dummy uji dari infra/test/m6.sh, disamarkan>''
+      FAIL GK-7-1 deploy non-dry: env admin lewat stdin ssh (umask 077), penulis lambat
+    hasil: 1 lulus, 1 gagal
+=== pemulihan
+    deploy-dashboard.sh = versi perbaikan (cmp identik)
