@@ -17,6 +17,8 @@ import {
   type MgmtNetwork,
   type NetworkResponse,
   toNetworkResponse,
+  vlanNetworksFromEnv,
+  type VlanNetwork,
 } from "@/lib/net"
 
 export type SeedName = "empty" | "demo"
@@ -24,6 +26,11 @@ export type UnknownHostAction = "local" | "wait"
 
 export type Settings = {
   network: MgmtNetwork
+  /**
+   * VLAN management terdaftar (M7, DEC-024 §4, `PXE_VLAN_NETWORKS`); `[]` = tidak ada (aturan
+   * DEC-006 untuk semua IP statis).
+   */
+  vlanNetworks: VlanNetwork[]
   /** Nama NIC tempat dnsmasq melayani DHCP (hanya tampilan). */
   dhcpInterface: string
   /** URL dasar dashboard/boot untuk client PXE, tanpa "/" di akhir. */
@@ -181,6 +188,12 @@ export function settingsFromEnv(env: SettingsEnv): Settings {
     )
   }
   const { gateway, pxeServer, dynamicRange } = network
+  let vlanNetworks: VlanNetwork[]
+  try {
+    vlanNetworks = vlanNetworksFromEnv(env.PXE_VLAN_NETWORKS, network.cidr)
+  } catch (e) {
+    return fail((e as Error).message)
+  }
   // DNS tidak terikat subnet (DEC-011); format + alamat khusus sudah divalidasi
   // `mgmtNetworkFromEnv`. Gateway & PXE server tetap wajib di subnet (DEC-006).
   const [lo, hi] = dynamicRange.map(ipToInt)
@@ -299,6 +312,7 @@ export function settingsFromEnv(env: SettingsEnv): Settings {
 
   return {
     network,
+    vlanNetworks,
     dhcpInterface: iface,
     baseUrl,
     mediaUrl,
@@ -402,6 +416,7 @@ export const SETTINGS_ENV_KEYS = [
   "PXE_DHCP_RANGE",
   "PXE_DYNAMIC_RANGE",
   "PXE_SERVER_IP",
+  "PXE_VLAN_NETWORKS",
   "PXE_DHCP_INTERFACE",
   "PXE_BASE_URL",
   "PXE_MEDIA_URL",
@@ -447,7 +462,10 @@ export function getSettings(): Settings {
   return cache.settings
 }
 
-/** Bentuk `GET /api/settings`: nilai non-rahasia (tanpa path DB/seed). */
+/**
+ * Bentuk `GET /api/settings`: nilai non-rahasia (tanpa path DB/seed). `vlanNetworks` (M7) ikut dari
+ * `NetworkResponse` dan hanya ada bila `PXE_VLAN_NETWORKS` berisi entri.
+ */
 export type SettingsResponse = NetworkResponse & {
   interface: string
   baseUrl: string
@@ -476,7 +494,7 @@ export type AuthResponse = {
 
 export function toSettingsResponse(s: Settings): SettingsResponse {
   return {
-    ...toNetworkResponse(s.network),
+    ...toNetworkResponse(s.network, s.vlanNetworks),
     interface: s.dhcpInterface,
     baseUrl: s.baseUrl,
     mediaUrl: s.mediaUrl,
