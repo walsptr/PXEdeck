@@ -1,0 +1,278 @@
+{
+ "1024": {
+  "withLong": {
+   "overflowPx": 492,
+   "clientW": 702,
+   "longCell": {
+    "w": 192,
+    "truncated": true,
+    "title": 63,
+    "text": 63,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 32,
+    "MAC ADDRESS": 188,
+    "HOSTNAME": 216,
+    "IP": 139,
+    "VENDOR": 102,
+    "OS": 210,
+    "STATUS": 113,
+    "LAST SEEN": 134,
+    "AKSI": 60
+   }
+  },
+  "allShort": {
+   "overflowPx": 390,
+   "clientW": 702,
+   "longCell": {
+    "w": 56,
+    "truncated": false,
+    "title": 63,
+    "text": 7,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 32,
+    "MAC ADDRESS": 188,
+    "HOSTNAME": 114,
+    "IP": 139,
+    "VENDOR": 102,
+    "OS": 210,
+    "STATUS": 113,
+    "LAST SEEN": 134,
+    "AKSI": 60
+   }
+  }
+ },
+ "1279": {
+  "withLong": {
+   "overflowPx": 237,
+   "clientW": 957,
+   "longCell": {
+    "w": 192,
+    "truncated": true,
+    "title": 63,
+    "text": 63,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 32,
+    "MAC ADDRESS": 188,
+    "HOSTNAME": 216,
+    "IP": 139,
+    "VENDOR": 102,
+    "OS": 210,
+    "STATUS": 113,
+    "LAST SEEN": 134,
+    "AKSI": 60
+   }
+  },
+  "allShort": {
+   "overflowPx": 135,
+   "clientW": 957,
+   "longCell": {
+    "w": 56,
+    "truncated": false,
+    "title": 63,
+    "text": 7,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 32,
+    "MAC ADDRESS": 188,
+    "HOSTNAME": 114,
+    "IP": 139,
+    "VENDOR": 102,
+    "OS": 210,
+    "STATUS": 113,
+    "LAST SEEN": 134,
+    "AKSI": 60
+   }
+  }
+ },
+ "1280": {
+  "withLong": {
+   "overflowPx": 236,
+   "clientW": 958,
+   "longCell": {
+    "w": 192,
+    "truncated": true,
+    "title": 63,
+    "text": 63,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 32,
+    "MAC ADDRESS": 188,
+    "HOSTNAME": 216,
+    "IP": 139,
+    "VENDOR": 102,
+    "OS": 210,
+    "STATUS": 113,
+    "LAST SEEN": 134,
+    "AKSI": 60
+   }
+  },
+  "allShort": {
+   "overflowPx": 134,
+   "clientW": 958,
+   "longCell": {
+    "w": 56,
+    "truncated": false,
+    "title": 63,
+    "text": 7,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 32,
+    "MAC ADDRESS": 188,
+    "HOSTNAME": 114,
+    "IP": 139,
+    "VENDOR": 102,
+    "OS": 210,
+    "STATUS": 113,
+    "LAST SEEN": 134,
+    "AKSI": 60
+   }
+  }
+ },
+ "1440": {
+  "withLong": {
+   "overflowPx": 76,
+   "clientW": 1118,
+   "longCell": {
+    "w": 192,
+    "truncated": true,
+    "title": 63,
+    "text": 63,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 32,
+    "MAC ADDRESS": 188,
+    "HOSTNAME": 216,
+    "IP": 139,
+    "VENDOR": 102,
+    "OS": 210,
+    "STATUS": 113,
+    "LAST SEEN": 134,
+    "AKSI": 60
+   }
+  },
+  "allShort": {
+   "overflowPx": 0,
+   "clientW": 1118,
+   "longCell": {
+    "w": 56,
+    "truncated": false,
+    "title": 63,
+    "text": 7,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 40,
+    "MAC ADDRESS": 188,
+    "HOSTNAME": 114,
+    "IP": 139,
+    "VENDOR": 102,
+    "OS": 210,
+    "STATUS": 131,
+    "LAST SEEN": 134,
+    "AKSI": 60
+   }
+  }
+ },
+ "1600": {
+  "withLong": {
+   "overflowPx": 0,
+   "clientW": 1278,
+   "longCell": {
+    "w": 192,
+    "truncated": true,
+    "title": 63,
+    "text": 63,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 40,
+    "MAC ADDRESS": 188,
+    "HOSTNAME": 216,
+    "IP": 139,
+    "VENDOR": 102,
+    "OS": 210,
+    "STATUS": 189,
+    "LAST SEEN": 134,
+    "AKSI": 60
+   }
+  },
+  "allShort": {
+   "overflowPx": 0,
+   "clientW": 1278,
+   "longCell": {
+    "w": 56,
+    "truncated": false,
+    "title": 63,
+    "text": 7,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 40,
+    "MAC ADDRESS": 198,
+    "HOSTNAME": 120,
+    "IP": 146,
+    "VENDOR": 107,
+    "OS": 221,
+    "STATUS": 244,
+    "LAST SEEN": 141,
+    "AKSI": 60
+   }
+  }
+ },
+ "1920": {
+  "withLong": {
+   "overflowPx": 0,
+   "clientW": 1598,
+   "longCell": {
+    "w": 192,
+    "truncated": true,
+    "title": 63,
+    "text": 63,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 40,
+    "MAC ADDRESS": 231,
+    "HOSTNAME": 265,
+    "IP": 171,
+    "VENDOR": 125,
+    "OS": 258,
+    "STATUS": 285,
+    "LAST SEEN": 164,
+    "AKSI": 60
+   }
+  },
+  "allShort": {
+   "overflowPx": 0,
+   "clientW": 1598,
+   "longCell": {
+    "w": 56,
+    "truncated": false,
+    "title": 63,
+    "text": 7,
+    "font": "\"JetBrains Mono"
+   },
+   "cols": {
+    "sel": 40,
+    "MAC ADDRESS": 252,
+    "HOSTNAME": 153,
+    "IP": 186,
+    "VENDOR": 137,
+    "OS": 281,
+    "STATUS": 311,
+    "LAST SEEN": 179,
+    "AKSI": 60
+   }
+  }
+ }
+}

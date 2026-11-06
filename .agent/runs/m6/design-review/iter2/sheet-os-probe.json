@@ -1,0 +1,462 @@
+{
+ "compute-03@375": [
+  {
+   "text": "amd64 · preseed",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · kickstart",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak a",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#fafaf7 <label field-label items-center text-sm font-medium select-none group-data-[dis>",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · unattend",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Kosongkan untuk memilih disk terbesar, atau isi path seperti /dev/sda ",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  },
+  {
+   "text": "Volume group LVM di seluruh disk target — mudah diperbesar nanti.",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  }
+ ],
+ "compute-03@1440": [
+  {
+   "text": "amd64 · preseed",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · kickstart",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak a",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#fafaf7 <label field-label items-center text-sm font-medium select-none group-data-[dis>",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · unattend",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Kosongkan untuk memilih disk terbesar, atau isi path seperti /dev/sda ",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  },
+  {
+   "text": "Volume group LVM di seluruh disk target — mudah diperbesar nanti.",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  }
+ ],
+ "node-rack07@375": [
+  {
+   "text": "amd64 · preseed",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · kickstart",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak a",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · unattend",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#fafaf7 <label field-label items-center text-sm font-medium select-none group-data-[dis>",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+   "color": "#cf2d56",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#fafaf7 <label field-label items-center text-sm font-medium select-none group-data-[dis>",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Kosongkan untuk memilih disk terbesar, atau isi path seperti /dev/sda ",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  },
+  {
+   "text": "Volume group LVM di seluruh disk target — mudah diperbesar nanti.",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  },
+  {
+   "text": "1 host sudah punya OS terpasang — data di disknya akan hilang.",
+   "color": "#cf2d56",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=rad"
+  }
+ ],
+ "node-rack07@1440": [
+  {
+   "text": "amd64 · preseed",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · kickstart",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak a",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · unattend",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#fafaf7 <label field-label items-center text-sm font-medium select-none group-data-[dis>",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+   "color": "#cf2d56",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#fafaf7 <label field-label items-center text-sm font-medium select-none group-data-[dis>",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Kosongkan untuk memilih disk terbesar, atau isi path seperti /dev/sda ",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  },
+  {
+   "text": "Volume group LVM di seluruh disk target — mudah diperbesar nanti.",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  },
+  {
+   "text": "1 host sudah punya OS terpasang — data di disknya akan hilang.",
+   "color": "#cf2d56",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "flex flex-col gap-6 has-[>[data-slot=checkbox-group]]:gap-3 has-[>[data-slot=rad"
+  }
+ ],
+ "compute-01@375": [
+  {
+   "text": "amd64 · preseed",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · kickstart",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak a",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#fafaf7 <label field-label items-center text-sm font-medium select-none group-data-[dis>",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · unattend",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Kosongkan untuk memilih disk terbesar, atau isi path seperti /dev/sda ",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  },
+  {
+   "text": "Volume group LVM di seluruh disk target — mudah diperbesar nanti.",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  }
+ ],
+ "compute-01@1440": [
+  {
+   "text": "amd64 · preseed",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · kickstart",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak a",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · autoinstall",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#fafaf7 <label field-label items-center text-sm font-medium select-none group-data-[dis>",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "amd64 · unattend",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Windows: hanya generator unattend.xml (install via PXE belum didukung)",
+   "color": "#5a5852",
+   "cls": "text-left text-sm leading-normal font-normal group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-mt-1.5 last:mt-0 nth-la",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": null,
+   "parentCls": "group/field-content flex flex-1 flex-col gap-1 leading-snug"
+  },
+  {
+   "text": "Kosongkan untuk memilih disk terbesar, atau isi path seperti /dev/sda ",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  },
+  {
+   "text": "Volume group LVM di seluruh disk target — mudah diperbesar nanti.",
+   "color": "#807d72",
+   "cls": "text-left text-sm leading-normal font-normal text-muted-foreground group-has-data-horizontal/field:text-balance [[data-variant=legend]+&]:-m",
+   "bg": "#ffffff <div sheet-content fixed z-50 flex flex-col bg-popover bg-clip-padding text-sm >",
+   "fieldOrientation": "vertical",
+   "parentCls": "group/field flex w-full gap-3 data-[invalid=true]:text-destructive flex-col *:w-"
+  }
+ ]
+}

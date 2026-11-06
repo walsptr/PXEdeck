@@ -1,0 +1,4167 @@
+{
+ "login": {
+  "rows": {
+   "375": {
+    "bodyBg": "#f7f7f4",
+    "vw": 375,
+    "docScrollWidth": 375,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "shadow=#f54d00@0.40 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "bg=#f54e00 :: button[slot=button]{tid=login-submit} \"Masuk\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "Masuk sebagai admin untuk mengelola host PXE dan provisioning OS."
+    ],
+    "titles": [
+     "Masuk 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ],
+    "card": {
+     "bg": "rgb(255, 255, 255)",
+     "border": "1px rgb(230, 229, 224)",
+     "radius": "12px",
+     "shadow": "none",
+     "pad": "24px",
+     "width": 343
+    },
+    "fields": [
+     {
+      "id": "login-username",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"JetBrains Mono Vari"
+     },
+     {
+      "id": "login-password",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"Inter Variable\", -a"
+     }
+    ],
+    "btn": {
+     "h": 40,
+     "bg": "rgb(245, 78, 0)",
+     "fs": "14px",
+     "fw": "500",
+     "radius": "8px"
+    }
+   },
+   "414": {
+    "bodyBg": "#f7f7f4",
+    "vw": 414,
+    "docScrollWidth": 414,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "shadow=#f54d00@0.40 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "bg=#f54e00 :: button[slot=button]{tid=login-submit} \"Masuk\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "Masuk sebagai admin untuk mengelola host PXE dan provisioning OS."
+    ],
+    "titles": [
+     "Masuk 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ],
+    "card": {
+     "bg": "rgb(255, 255, 255)",
+     "border": "1px rgb(230, 229, 224)",
+     "radius": "12px",
+     "shadow": "none",
+     "pad": "24px",
+     "width": 382
+    },
+    "fields": [
+     {
+      "id": "login-username",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"JetBrains Mono Vari"
+     },
+     {
+      "id": "login-password",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"Inter Variable\", -a"
+     }
+    ],
+    "btn": {
+     "h": 40,
+     "bg": "rgb(245, 78, 0)",
+     "fs": "14px",
+     "fw": "500",
+     "radius": "8px"
+    }
+   },
+   "768": {
+    "bodyBg": "#f7f7f4",
+    "vw": 768,
+    "docScrollWidth": 768,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "shadow=#f54d00@0.40 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "bg=#f54e00 :: button[slot=button]{tid=login-submit} \"Masuk\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "Masuk sebagai admin untuk mengelola host PXE dan provisioning OS."
+    ],
+    "titles": [
+     "Masuk 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ],
+    "card": {
+     "bg": "rgb(255, 255, 255)",
+     "border": "1px rgb(230, 229, 224)",
+     "radius": "12px",
+     "shadow": "none",
+     "pad": "32px",
+     "width": 400
+    },
+    "fields": [
+     {
+      "id": "login-username",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"JetBrains Mono Vari"
+     },
+     {
+      "id": "login-password",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"Inter Variable\", -a"
+     }
+    ],
+    "btn": {
+     "h": 40,
+     "bg": "rgb(245, 78, 0)",
+     "fs": "14px",
+     "fw": "500",
+     "radius": "8px"
+    }
+   },
+   "800": {
+    "bodyBg": "#f7f7f4",
+    "vw": 800,
+    "docScrollWidth": 800,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "shadow=#f54d00@0.40 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "bg=#f54e00 :: button[slot=button]{tid=login-submit} \"Masuk\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "Masuk sebagai admin untuk mengelola host PXE dan provisioning OS."
+    ],
+    "titles": [
+     "Masuk 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ],
+    "card": {
+     "bg": "rgb(255, 255, 255)",
+     "border": "1px rgb(230, 229, 224)",
+     "radius": "12px",
+     "shadow": "none",
+     "pad": "32px",
+     "width": 400
+    },
+    "fields": [
+     {
+      "id": "login-username",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"JetBrains Mono Vari"
+     },
+     {
+      "id": "login-password",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"Inter Variable\", -a"
+     }
+    ],
+    "btn": {
+     "h": 40,
+     "bg": "rgb(245, 78, 0)",
+     "fs": "14px",
+     "fw": "500",
+     "radius": "8px"
+    }
+   },
+   "1024": {
+    "bodyBg": "#f7f7f4",
+    "vw": 1024,
+    "docScrollWidth": 1024,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "shadow=#f54d00@0.40 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "bg=#f54e00 :: button[slot=button]{tid=login-submit} \"Masuk\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "Masuk sebagai admin untuk mengelola host PXE dan provisioning OS."
+    ],
+    "titles": [
+     "Masuk 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ],
+    "card": {
+     "bg": "rgb(255, 255, 255)",
+     "border": "1px rgb(230, 229, 224)",
+     "radius": "12px",
+     "shadow": "none",
+     "pad": "32px",
+     "width": 400
+    },
+    "fields": [
+     {
+      "id": "login-username",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"JetBrains Mono Vari"
+     },
+     {
+      "id": "login-password",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"Inter Variable\", -a"
+     }
+    ],
+    "btn": {
+     "h": 40,
+     "bg": "rgb(245, 78, 0)",
+     "fs": "14px",
+     "fw": "500",
+     "radius": "8px"
+    }
+   },
+   "1279": {
+    "bodyBg": "#f7f7f4",
+    "vw": 1279,
+    "docScrollWidth": 1279,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "shadow=#f54d00@0.40 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "bg=#f54e00 :: button[slot=button]{tid=login-submit} \"Masuk\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "Masuk sebagai admin untuk mengelola host PXE dan provisioning OS."
+    ],
+    "titles": [
+     "Masuk 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ],
+    "card": {
+     "bg": "rgb(255, 255, 255)",
+     "border": "1px rgb(230, 229, 224)",
+     "radius": "12px",
+     "shadow": "none",
+     "pad": "32px",
+     "width": 400
+    },
+    "fields": [
+     {
+      "id": "login-username",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"JetBrains Mono Vari"
+     },
+     {
+      "id": "login-password",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"Inter Variable\", -a"
+     }
+    ],
+    "btn": {
+     "h": 40,
+     "bg": "rgb(245, 78, 0)",
+     "fs": "14px",
+     "fw": "500",
+     "radius": "8px"
+    }
+   },
+   "1280": {
+    "bodyBg": "#f7f7f4",
+    "vw": 1280,
+    "docScrollWidth": 1280,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "shadow=#f54d00@0.40 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "bg=#f54e00 :: button[slot=button]{tid=login-submit} \"Masuk\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "Masuk sebagai admin untuk mengelola host PXE dan provisioning OS."
+    ],
+    "titles": [
+     "Masuk 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ],
+    "card": {
+     "bg": "rgb(255, 255, 255)",
+     "border": "1px rgb(230, 229, 224)",
+     "radius": "12px",
+     "shadow": "none",
+     "pad": "32px",
+     "width": 400
+    },
+    "fields": [
+     {
+      "id": "login-username",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"JetBrains Mono Vari"
+     },
+     {
+      "id": "login-password",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"Inter Variable\", -a"
+     }
+    ],
+    "btn": {
+     "h": 40,
+     "bg": "rgb(245, 78, 0)",
+     "fs": "14px",
+     "fw": "500",
+     "radius": "8px"
+    }
+   },
+   "1440": {
+    "bodyBg": "#f7f7f4",
+    "vw": 1440,
+    "docScrollWidth": 1440,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "shadow=#f54d00@0.40 :: input[slot=input]{tid=login-card} \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t",
+     "bg=#f54e00 :: button[slot=button]{tid=login-submit} \"Masuk\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "Masuk sebagai admin untuk mengelola host PXE dan provisioning OS."
+    ],
+    "titles": [
+     "Masuk 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ],
+    "card": {
+     "bg": "rgb(255, 255, 255)",
+     "border": "1px rgb(230, 229, 224)",
+     "radius": "12px",
+     "shadow": "none",
+     "pad": "32px",
+     "width": 400
+    },
+    "fields": [
+     {
+      "id": "login-username",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"JetBrains Mono Vari"
+     },
+     {
+      "id": "login-password",
+      "h": 44,
+      "radius": "8px",
+      "ff": "\"Inter Variable\", -a"
+     }
+    ],
+    "btn": {
+     "h": 40,
+     "bg": "rgb(245, 78, 0)",
+     "fs": "14px",
+     "fw": "500",
+     "radius": "8px"
+    }
+   }
+  },
+  "seq": [
+   {
+    "el": "INPUT#login-username[]",
+    "fv": true,
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px | rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+    "outline": "none 1px oklab(0.652196 0.168318 0.131453 / 0.5)",
+    "border": "rgb(245, 78, 0)"
+   },
+   {
+    "el": "INPUT#login-password[]",
+    "fv": true,
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px | rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+    "outline": "none 1px oklab(0.652196 0.168318 0.131453 / 0.5)",
+    "border": "rgb(230, 224, 217)"
+   },
+   {
+    "el": "BUTTON#[Tampilkan kata sandi]",
+    "fv": true,
+    "boxShadow": "none | rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+    "outline": "none 3px oklab(0.652196 0.168318 0.131453 / 0.5)",
+    "border": "rgb(230, 224, 217)"
+   },
+   {
+    "el": "BUTTON#[Masuk]",
+    "fv": true,
+    "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px | rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0 0 0 / 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+    "outline": "none 3px oklab(0.652196 0.168318 0.131453 / 0.5)",
+    "border": "rgba(0, 0, 0, 0)"
+   },
+   {
+    "el": "BODY#[PXE LabMasukMasuk sebagai admin untuk mengelola host PXE dan provisioning OS.UsernamePasswordMasukrequestAnimationFrame(function(){$RT=performance.now()});(globalThis[\"TURBOPACK\"] || (globalThis[\"TURBOPACK\"] = [])).push({\"otherChunks\":[\"static/chunks/0-bed07lrcroa.js\",\"static/chunks/1xonfax3hcrx1.js\",\"static/chunks/12_0l0za3tog8.js\",\"static/chunks/258ayypbuvs_y.js\"],\"runtimeModuleIds\":[94553]});(self.__next_f=self.__next_f||[]).push([0])self.__next_f.push([1,\"1:\\\"$Sreact.fragment\\\"\\n2:\\\"/_next/static/chunks/2dxdye19043yf.js\\\"\\n3:\\\"/_next/static/chunks/37mffzueq_lqw.js\\\"\\n4:\\\"/_next/static/chunks/2zru0ok-p0ync.js\\\"\\n5:\\\"/_next/static/chunks/2jm0eurz5_je0.js\\\"\\n6:\\\"/_next/static/chunks/3qdmvzkemfe7v.js\\\"\\n7:\\\"/_next/static/chunks/1cdr2_azbjq1z.js\\\"\\n8:\\\"/_next/static/chunks/3i6i_0jtdzi35.js\\\"\\n9:I[1661,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\"],\\\"Providers\\\"]\\na:I[39756,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\"],\\\"default\\\"]\\nb:I[37457,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\"],\\\"default\\\"]\\nc:I[13354,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\"],\\\"Toaster\\\"]\\n1a:\\\"ViewportBoundary\\\"\\n1b:I[97367,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\"],\\\"$1a\\\"]\\n1d:\\\"MetadataBoundary\\\"\\n1e:I[97367,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\"],\\\"$1d\\\"]\\n1f:\\\"$Sreact.suspense\\\"\\n22:I[68027,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\"],\\\"default\\\",1]\\n:HL[\\\"/_next/static/chunks/1mrr3bvnelq5l.css\\\",\\\"style\\\"]\\n:HC[\\\"/\\\",\\\"\\\"]\\nd:X\\nf:X\\n19:X\\n10:[[\\\"children\\\",{\\\"s\\\":\\\"__PAGE__\\\",\\\"h\\\":49314,\\\"d\\\":{\\\"r\\\":[\\\"$\\\",\\\"$1\\\",\\\"c\\\",{\\\"children\\\":[[\\\"$\\\",\\\"main\\\",null,{\\\"className\\\":\\\"flex min-h-svh flex-col items-center justify-center gap-6 bg-background px-4 py-10 sm:px-6\\\",\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"className\\\":\\\"flex items-center gap-2.5\\\",\\\"data-testid\\\":\\\"login-brand\\\",\\\"children\\\":[[\\\"$\\\",\\\"span\\\",null,{\\\"aria-hidden\\\":true,\\\"className\\\":\\\"flex size-8 items-center justify-center rounded-lg bg-foreground text-background\\\",\\\"children\\\":[\\\"$\\\",\\\"svg\\\",null,{\\\"ref\\\":\\\"$undefined\\\",\\\"xmlns\\\":\\\"http://www.w3.org/2000/svg\\\",\\\"width\\\":24,\\\"height\\\":24,\\\"viewBox\\\":\\\"0 0 24 24\\\",\\\"fill\\\":\\\"none\\\",\\\"color\\\":\\\"currentColor\\\",\\\"className\\\":\\\"size-4\\\",\\\"strokeWidth\\\":2,\\\"stroke\\\":\\\"currentColor\\\",\\\"children\\\":[[\\\"$\\\",\\\"path\\\",\\\"0\\\",{\\\"d\\\":\\\"M19 4H5C4.06812 4 3.60218 4 3.23463 4.15224C2.74458 4.35523 2.35523 4.74458 2.15224 5.23463C2 5.60218 2 6.06812 2 7C2 7.93188 2 8.39782 2.15224 8.76537C2.35523 9.25542 2.74458 9.64477 3.23463 9.84776C3.60218 10 4.06812 10 5 10H19C19.9319 10 20.3978 10 20.7654 9.84776C21.2554 9.64477 21.6448 9.25542 21.8478 8.76537C22 8.39782 22 7.93188 22 7C22 6.06812 22 5.60218 21.8478 5.23463C21.6448 4.74458 21.2554 4.35523 20.7654 4.15224C20.3978 4 19.9319 4 19 4Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"path\\\",\\\"1\\\",{\\\"d\\\":\\\"M19 14H5C4.06812 14 3.60218 14 3.23463 14.1522C2.74458 14.3552 2.35523 14.7446 2.15224 15.2346C2 15.6022 2 16.0681 2 17C2 17.9319 2 18.3978 2.15224 18.7654C2.35523 19.2554 2.74458 19.6448 3.23463 19.8478C3.60218 20 4.06812 20 5 20H19C19.9319 20 20.3978 20 20.7654 19.8478C21.2554 19.6448 21.6448 19.2554 21.8478 18.7654C22 18.3978 22 17.9319 22 17C22 16.0681 22 15.6022 21.8478 15.2346C21.6448 14.7446 21.2554 14.3552 20.7654 14.1522C20.3978 14 19.9319 14 19 14Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}],\\\"$L11\\\",\\\"$L12\\\",\\\"$L13\\\",\\\"$L14\\\"]}]}],\\\"$L15\\\"]}],\\\"$L16\\\"]}],[\\\"$L17\\\"],\\\"$L18\\\"]}],\\\"p\\\":false,\\\"v\\\":\\\"$19\\\"}}]]\\ne:[[\\\"children\\\",{\\\"s\\\":\\\"login\\\",\\\"h\\\":49250,\\\"d\\\":{\\\"r\\\":[\\\"$\\\",\\\"$1\\\",\\\"c\\\",{\\\"children\\\":[null,[\\\"$\\\",\\\"$La\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$Lb\\\",null,{}],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":\\\"$undefined\\\",\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\"}]]}],\\\"p\\\":false,\\\"v\\\":\\\"$f\\\"},\\\"c\\\":\\\"$Q10\\\"}]]\\n21:X\\n23:X\\n24:X\\n27:R\\n0:{\\\"P\\\":null,\\\"c\\\":[\\\"\\\",\\\"login\\\"],\\\"q\\\":\\\"\\\",\\\"i\\\":false,\\\"t\\\":{\\\"t\\\":{\\\"s\\\":\\\"\\\",\\\"h\\\":49234,\\\"d\\\":{\\\"r\\\":[\\\"$\\\",\\\"$1\\\",\\\"c\\\",{\\\"children\\\":[[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/chunks/1mrr3bvnelq5l.css\\\",\\\"precedence\\\":\\\"next\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/2dxdye19043yf.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-1\\\",{\\\"src\\\":\\\"/_next/static/chunks/37mffzueq_lqw.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-2\\\",{\\\"src\\\":\\\"/_next/static/chunks/2zru0ok-p0ync.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-3\\\",{\\\"src\\\":\\\"/_next/static/chunks/2jm0eurz5_je0.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-4\\\",{\\\"src\\\":\\\"/_next/static/chunks/3qdmvzkemfe7v.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-5\\\",{\\\"src\\\":\\\"/_next/static/chunks/1cdr2_azbjq1z.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-6\\\",{\\\"src\\\":\\\"/_next/static/chunks/3i6i_0jtdzi35.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}]],[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"id\\\",\\\"className\\\":\\\"h-full antialiased\\\",\\\"children\\\":[\\\"$\\\",\\\"body\\\",null,{\\\"className\\\":\\\"min-h-full font-sans\\\",\\\"children\\\":[[\\\"$\\\",\\\"$L9\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$La\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$Lb\\\",null,{}],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":[[[\\\"$\\\",\\\"title\\\",null,{\\\"children\\\":\\\"404: This page could not be found.\\\"}],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"fontFamily\\\":\\\"system-ui,\\\\\\\"Segoe UI\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\"Apple Color Emoji\\\\\\\",\\\\\\\"Segoe UI Emoji\\\\\\\"\\\",\\\"height\\\":\\\"100vh\\\",\\\"textAlign\\\":\\\"center\\\",\\\"display\\\":\\\"flex\\\",\\\"flexDirection\\\":\\\"column\\\",\\\"alignItems\\\":\\\"center\\\",\\\"justifyContent\\\":\\\"center\\\"},\\\"children\\\":[\\\"$\\\",\\\"div\\\",null,{\\\"children\\\":[[\\\"$\\\",\\\"style\\\",null,{\\\"dangerouslySetInnerHTML\\\":{\\\"__html\\\":\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\"}}],[\\\"$\\\",\\\"h1\\\",null,{\\\"className\\\":\\\"next-error-h1\\\",\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\",\\\"margin\\\":\\\"0 20px 0 0\\\",\\\"padding\\\":\\\"0 23px 0 0\\\",\\\"fontSize\\\":24,\\\"fontWeight\\\":500,\\\"verticalAlign\\\":\\\"top\\\",\\\"lineHeight\\\":\\\"49px\\\"},\\\"children\\\":404}],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\"},\\\"children\\\":[\\\"$\\\",\\\"h2\\\",null,{\\\"style\\\":{\\\"fontSize\\\":14,\\\"fontWeight\\\":400,\\\"lineHeight\\\":\\\"49px\\\",\\\"margin\\\":0},\\\"children\\\":\\\"This page could not be found.\\\"}]}]]}]}]],[]],\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\"}]}],[\\\"$\\\",\\\"$Lc\\\",null,{\\\"theme\\\":\\\"light\\\",\\\"position\\\":\\\"bottom-right\\\"}]]}]}]]}],\\\"p\\\":false,\\\"v\\\":\\\"$d\\\"},\\\"c\\\":\\\"$Qe\\\"},\\\"h\\\":{\\\"r\\\":[\\\"$\\\",\\\"$1\\\",\\\"h\\\",{\\\"children\\\":[null,[\\\"$\\\",\\\"$L1b\\\",null,{\\\"children\\\":\\\"$L1c\\\"}],[\\\"$\\\",\\\"$L1e\\\",null,{\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"hidden\\\":true,\\\"children\\\":[\\\"$\\\",\\\"$1f\\\",null,{\\\"name\\\":\\\"Next.Metadata\\\",\\\"children\\\":\\\"$L20\\\"}]}],null]}],null]}],\\\"p\\\":false,\\\"v\\\":\\\"$21\\\"}},\\\"m\\\":\\\"$undefined\\\",\\\"G\\\":[\\\"$22\\\",[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/chunks/1mrr3bvnelq5l.css\\\",\\\"precedence\\\":\\\"next\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"}]]],\\\"S\\\":true,\\\"r\\\":\\\"$23\\\",\\\"s\\\":\\\"$24\\\",\\\"a\\\":\\\"$@25\\\",\\\"l\\\":\\\"$@26\\\",\\\"p\\\":\\\"$27\\\",\\\"d\\\":\\\"$undefined\\\",\\\"b\\\":\\\"XUOyvSO1wYx4Q_xr2NJiP\\\"}\\n29:I[97367,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\"],\\\"OutletBoundary\\\"]\\nf:C\\n11:[\\\"$\\\",\\\"path\\\",\\\"2\\\",{\\\"d\\\":\\\"M6.125 7H6M6.25 7C6.25 7.13807 6.13807 7.25 6 7.25C5.86193 7.25 5.75 7.13807 5.75 7C5.75 6.86193 5.86193 6.75 6 6.75C6.13807 6.75 6.25 6.86193 6.25 7Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}]\\n12:[\\\"$\\\",\\\"path\\\",\\\"3\\\",{\\\"d\\\":\\\"M10.125 7H10M10.25 7C10.25 7.13807 10.1381 7.25 10 7.25C9.86193 7.25 9.75 7.13807 9.75 7C9.75 6.86193 9.86193 6.75 10 6.75C10.1381 6.75 10.25 6.86193 10.25 7Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}]\\n13:[\\\"$\\\",\\\"path\\\",\\\"4\\\",{\\\"d\\\":\\\"M6.125 17H6M6.25 17C6.25 17.1381 6.13807 17.25 6 17.25C5.86193 17.25 5.75 17.1381 5.75 17C5.75 16.8619 5.86193 16.75 6 16.75C6.13807 16.75 6.25 16.8619 6.25 17Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}]\\n14:[\\\"$\\\",\\\"path\\\",\\\"5\\\",{\\\"d\\\":\\\"M10.125 17H10M10.25 17C10.25 17.1381 10.1381 17.25 10 17.25C9.86193 17.25 9.75 17.1381 9.75 17C9.75 16.8619 9.86193 16.75 10 16.75C10.1381 16.75 10.25 16.8619 10.25 17Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}]\\n15:[\\\"$\\\",\\\"span\\\",null,{\\\"className\\\":\\\"type-section-title\\\",\\\"children\\\":\\\"PXE Lab\\\"}]\\n16:[\\\"$\\\",\\\"section\\\",null,{\\\"aria-labelledby\\\":\\\"login-title\\\",\\\"data-testid\\\":\\\"login-card\\\",\\\"className\\\":\\\"flex w-full max-w-[400px] flex-col gap-6 rounded-xl border border-border bg-card p-6 sm:p-8\\\",\\\"children\\\":[[\\\"$\\\",\\\"header\\\",null,{\\\"className\\\":\\\"flex flex-col gap-1.5\\\",\\\"children\\\":[[\\\"$\\\",\\\"h1\\\",null,{\\\"id\\\":\\\"login-title\\\",\\\"className\\\":\\\"type-page-title text-foreground\\\",\\\"children\\\":\\\"Masuk\\\"}],[\\\"$\\\",\\\"p\\\",null,{\\\"className\\\":\\\"type-caption text-muted-foreground\\\",\\\"children\\\":\\\"Masuk sebagai admin untuk mengelola host PXE dan provisioning OS.\\\"}]]}],[\\\"$\\\",\\\"$1f\\\",null,{\\\"fallback\\\":[\\\"$\\\",\\\"div\\\",null,{\\\"className\\\":\\\"flex flex-col gap-6\\\",\\\"aria-hidden\\\":true,\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"className\\\":\\\"flex flex-col gap-5\\\",\\\"children\\\":[[\\\"$\\\",\\\"div\\\",\\\"0\\\",{\\\"className\\\":\\\"flex flex-col gap-3\\\",\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-4 w-20\\\"}],[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-11 w-full\\\"}]]}],[\\\"$\\\",\\\"div\\\",\\\"1\\\",{\\\"className\\\":\\\"flex flex-col gap-3\\\",\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-4 w-20\\\"}],[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-11 w-full\\\"}]]}]]}],[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-10 w-full\\\"}]]}],\\\"children\\\":\\\"$L28\\\"}]]}]\\n17:[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/406ydsk7qvdfg.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}]\\n18:[\\\"$\\\",\\\"$L29\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$1f\\\",null,{\\\"name\\\":\\\"Next.MetadataOutlet\\\",\\\"children\\\":\\\"$@2a\\\"}]}]\\n24:300\\n1c:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"charSet\\\":\\\"utf-8\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"viewport\\\",\\\"content\\\":\\\"width=device-width, initial-scale=1\\\"}]]\\n2b:I[27201,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\"],\\\"IconMark\\\"]\\n20:[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"Masuk · PXE Lab\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"description\\\",\\\"content\\\":\\\"Dashboard provisioning host lewat PXE boot\\\"}],[\\\"$\\\",\\\"link\\\",\\\"2\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon.ico?favicon.117ezoe8m31dk.ico\\\",\\\"sizes\\\":\\\"48x48\\\",\\\"type\\\":\\\"image/x-icon\\\"}],[\\\"$\\\",\\\"$L2b\\\",\\\"3\\\",{}]]\\n2a:null\\n24:C\\n21:C\\n23:C\\n19:C\\nd:C\\n2c:\\\"/_next/static/chunks/406ydsk7qvdfg.js\\\"\\n2d:I[28420,[\\\"$2\\\",\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\",\\\"$2c\\\"],\\\"LoginForm\\\"]\\n28:[false,[\\\"$\\\",\\\"$L2d\\\",null,{}]]\\n26:9889\\n25:9865\\n\"])$RB=[];$RV=function(a){$RT=performance.now();for(var b=0;b<a.length;b+=2){var c=a[b],e=a[b+1];null!==e.parentNode&&e.parentNode.removeChild(e);var f=c.parentNode;if(f){var g=c.previousSibling,h=0;do{if(c&&8===c.nodeType){var d=c.data;if(\"/$\"===d||\"/&\"===d)if(0===h)break;else h--;else\"$\"!==d&&\"$?\"!==d&&\"$~\"!==d&&\"$!\"!==d&&\"&\"!==d||h++}d=c.nextSibling;f.removeChild(c);c=d}while(c);for(;e.firstChild;)f.insertBefore(e.firstChild,c);g.data=\"$\";g._reactRetry&&requestAnimationFrame(g._reactRetry)}}a.length=0};\n$RC=function(a,b){if(b=document.getElementById(b))(a=document.getElementById(a))?(a.previousSibling.data=\"$~\",$RB.push(a,b),2===$RB.length&&(\"number\"!==typeof $RT?requestAnimationFrame($RV.bind(null,$RB)):(a=performance.now(),setTimeout($RV.bind(null,$RB),2300>a&&2E3<a?2300-a:$RT+300-a)))):b.parentNode.removeChild(b)};$RC(\"B:0\",\"S:0\")self.__next_f.push([1,\"27:o1,~27:o31c,2:\\\"$Sreact.fragment\\\"\\n3:\\\"/_next/static/chunks/2dxdye19043yf.js\\\"\\n4:\\\"/_next/static/chunks/37mffzueq_lqw.js\\\"\\n5:\\\"/_next/static/chunks/2zru0ok-p0ync.js\\\"\\n6:\\\"/_next/static/chunks/2jm0eurz5_je0.js\\\"\\n7:\\\"/_next/static/chunks/3qdmvzkemfe7v.js\\\"\\n8:\\\"/_next/static/chunks/1cdr2_azbjq1z.js\\\"\\n9:\\\"/_next/static/chunks/3i6i_0jtdzi35.js\\\"\\na:I[1661,[\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\",\\\"$9\\\"],\\\"Providers\\\"]\\nb:I[39756,[\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\",\\\"$9\\\"],\\\"default\\\"]\\nc:I[37457,[\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\",\\\"$9\\\"],\\\"default\\\"]\\nd:I[13354,[\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\",\\\"$9\\\"],\\\"Toaster\\\"]\\n1b:\\\"ViewportBoundary\\\"\\n1c:I[97367,[\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\",\\\"$9\\\"],\\\"$1b\\\"]\\n1e:\\\"MetadataBoundary\\\"\\n1f:I[97367,[\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\",\\\"$9\\\"],\\\"$1e\\\"]\\n20:\\\"$Sreact.suspense\\\"\\n:HL[\\\"/_next/static/chunks/1mrr3bvnelq5l.css\\\",\\\"style\\\"]\\n1:X\\ne:X\\n10:X\\n1a:X\\n27:o7b1,11:[[\\\"children\\\",{\\\"s\\\":\\\"__PAGE__\\\",\\\"h\\\":49314,\\\"d\\\":{\\\"r\\\":[\\\"$\\\",\\\"$2\\\",\\\"c\\\",{\\\"children\\\":[[\\\"$\\\",\\\"main\\\",null,{\\\"className\\\":\\\"flex min-h-svh flex-col items-center justify-center gap-6 bg-background px-4 py-10 sm:px-6\\\",\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"className\\\":\\\"flex items-center gap-2.5\\\",\\\"data-testid\\\":\\\"login-brand\\\",\\\"children\\\":[[\\\"$\\\",\\\"span\\\",null,{\\\"aria-hidden\\\":true,\\\"className\\\":\\\"flex size-8 items-center justify-center rounded-lg bg-foreground text-background\\\",\\\"children\\\":[\\\"$\\\",\\\"svg\\\",null,{\\\"ref\\\":\\\"$undefined\\\",\\\"xmlns\\\":\\\"http://www.w3.org/2000/svg\\\",\\\"width\\\":24,\\\"height\\\":24,\\\"viewBox\\\":\\\"0 0 24 24\\\",\\\"fill\\\":\\\"none\\\",\\\"color\\\":\\\"currentColor\\\",\\\"className\\\":\\\"size-4\\\",\\\"strokeWidth\\\":2,\\\"stroke\\\":\\\"currentColor\\\",\\\"children\\\":[[\\\"$\\\",\\\"path\\\",\\\"0\\\",{\\\"d\\\":\\\"M19 4H5C4.06812 4 3.60218 4 3.23463 4.15224C2.74458 4.35523 2.35523 4.74458 2.15224 5.23463C2 5.60218 2 6.06812 2 7C2 7.93188 2 8.39782 2.15224 8.76537C2.35523 9.25542 2.74458 9.64477 3.23463 9.84776C3.60218 10 4.06812 10 5 10H19C19.9319 10 20.3978 10 20.7654 9.84776C21.2554 9.64477 21.6448 9.25542 21.8478 8.76537C22 8.39782 22 7.93188 22 7C22 6.06812 22 5.60218 21.8478 5.23463C21.6448 4.74458 21.2554 4.35523 20.7654 4.15224C20.3978 4 19.9319 4 19 4Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"path\\\",\\\"1\\\",{\\\"d\\\":\\\"M19 14H5C4.06812 14 3.60218 14 3.23463 14.1522C2.74458 14.3552 2.35523 14.7446 2.15224 15.2346C2 15.6022 2 16.0681 2 17C2 17.9319 2 18.3978 2.15224 18.7654C2.35523 19.2554 2.74458 19.6448 3.23463 19.8478C3.60218 20 4.06812 20 5 20H19C19.9319 20 20.3978 20 20.7654 19.8478C21.2554 19.6448 21.6448 19.2554 21.8478 18.7654C22 18.3978 22 17.9319 22 17C22 16.0681 22 15.6022 21.8478 15.2346C21.6448 14.7446 21.2554 14.3552 20.7654 14.1522C20.3978 14 19.9319 14 19 14Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}],\\\"$L12\\\",\\\"$L13\\\",\\\"$L14\\\",\\\"$L15\\\"]}]}],\\\"$L16\\\"]}],\\\"$L17\\\"]}],[\\\"$L18\\\"],\\\"$L19\\\"]}],\\\"p\\\":false,\\\"v\\\":\\\"$1a\\\"}}]]\\n27:o1a6,f:[[\\\"children\\\",{\\\"s\\\":\\\"login\\\",\\\"h\\\":49250,\\\"d\\\":{\\\"r\\\":[\\\"$\\\",\\\"$2\\\",\\\"c\\\",{\\\"children\\\":[null,[\\\"$\\\",\\\"$Lb\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$Lc\\\",null,{}],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":\\\"$undefined\\\",\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\"}]]}],\\\"p\\\":false,\\\"v\\\":\\\"$10\\\"},\\\"c\\\":\\\"$Q11\\\"}]]\\n22:X\\n23:X\\n27:obb2,0:{\\\"q\\\":\\\"\\\",\\\"i\\\":false,\\\"S\\\":true,\\\"r\\\":\\\"$1\\\",\\\"b\\\":\\\"XUOyvSO1wYx4Q_xr2NJiP\\\",\\\"t\\\":{\\\"t\\\":{\\\"s\\\":\\\"\\\",\\\"h\\\":49234,\\\"d\\\":{\\\"r\\\":[\\\"$\\\",\\\"$2\\\",\\\"c\\\",{\\\"children\\\":[[[\\\"$\\\",\\\"link\\\",\\\"0\\\",{\\\"rel\\\":\\\"stylesheet\\\",\\\"href\\\":\\\"/_next/static/chunks/1mrr3bvnelq5l.css\\\",\\\"precedence\\\":\\\"next\\\",\\\"crossOrigin\\\":\\\"$undefined\\\",\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/2dxdye19043yf.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-1\\\",{\\\"src\\\":\\\"/_next/static/chunks/37mffzueq_lqw.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-2\\\",{\\\"src\\\":\\\"/_next/static/chunks/2zru0ok-p0ync.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-3\\\",{\\\"src\\\":\\\"/_next/static/chunks/2jm0eurz5_je0.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-4\\\",{\\\"src\\\":\\\"/_next/static/chunks/3qdmvzkemfe7v.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-5\\\",{\\\"src\\\":\\\"/_next/static/chunks/1cdr2_azbjq1z.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}],[\\\"$\\\",\\\"script\\\",\\\"script-6\\\",{\\\"src\\\":\\\"/_next/static/chunks/3i6i_0jtdzi35.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}]],[\\\"$\\\",\\\"html\\\",null,{\\\"lang\\\":\\\"id\\\",\\\"className\\\":\\\"h-full antialiased\\\",\\\"children\\\":[\\\"$\\\",\\\"body\\\",null,{\\\"className\\\":\\\"min-h-full font-sans\\\",\\\"children\\\":[[\\\"$\\\",\\\"$La\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$Lb\\\",null,{\\\"parallelRouterKey\\\":\\\"children\\\",\\\"error\\\":\\\"$undefined\\\",\\\"errorStyles\\\":\\\"$undefined\\\",\\\"errorScripts\\\":\\\"$undefined\\\",\\\"template\\\":[\\\"$\\\",\\\"$Lc\\\",null,{}],\\\"templateStyles\\\":\\\"$undefined\\\",\\\"templateScripts\\\":\\\"$undefined\\\",\\\"notFound\\\":[[[\\\"$\\\",\\\"title\\\",null,{\\\"children\\\":\\\"404: This page could not be found.\\\"}],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"fontFamily\\\":\\\"system-ui,\\\\\\\"Segoe UI\\\\\\\",Roboto,Helvetica,Arial,sans-serif,\\\\\\\"Apple Color Emoji\\\\\\\",\\\\\\\"Segoe UI Emoji\\\\\\\"\\\",\\\"height\\\":\\\"100vh\\\",\\\"textAlign\\\":\\\"center\\\",\\\"display\\\":\\\"flex\\\",\\\"flexDirection\\\":\\\"column\\\",\\\"alignItems\\\":\\\"center\\\",\\\"justifyContent\\\":\\\"center\\\"},\\\"children\\\":[\\\"$\\\",\\\"div\\\",null,{\\\"children\\\":[[\\\"$\\\",\\\"style\\\",null,{\\\"dangerouslySetInnerHTML\\\":{\\\"__html\\\":\\\"body{color:#000;background:#fff;margin:0}.next-error-h1{border-right:1px solid rgba(0,0,0,.3)}@media (prefers-color-scheme:dark){body{color:#fff;background:#000}.next-error-h1{border-right:1px solid rgba(255,255,255,.3)}}\\\"}}],[\\\"$\\\",\\\"h1\\\",null,{\\\"className\\\":\\\"next-error-h1\\\",\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\",\\\"margin\\\":\\\"0 20px 0 0\\\",\\\"padding\\\":\\\"0 23px 0 0\\\",\\\"fontSize\\\":24,\\\"fontWeight\\\":500,\\\"verticalAlign\\\":\\\"top\\\",\\\"lineHeight\\\":\\\"49px\\\"},\\\"children\\\":404}],[\\\"$\\\",\\\"div\\\",null,{\\\"style\\\":{\\\"display\\\":\\\"inline-block\\\"},\\\"children\\\":[\\\"$\\\",\\\"h2\\\",null,{\\\"style\\\":{\\\"fontSize\\\":14,\\\"fontWeight\\\":400,\\\"lineHeight\\\":\\\"49px\\\",\\\"margin\\\":0},\\\"children\\\":\\\"This page could not be found.\\\"}]}]]}]}]],[]],\\\"forbidden\\\":\\\"$undefined\\\",\\\"unauthorized\\\":\\\"$undefined\\\"}]}],[\\\"$\\\",\\\"$Ld\\\",null,{\\\"theme\\\":\\\"light\\\",\\\"position\\\":\\\"bottom-right\\\"}]]}]}]]}],\\\"p\\\":false,\\\"v\\\":\\\"$e\\\"},\\\"c\\\":\\\"$Qf\\\"},\\\"h\\\":{\\\"r\\\":[\\\"$\\\",\\\"$2\\\",\\\"h\\\",{\\\"children\\\":[null,[\\\"$\\\",\\\"$L1c\\\",\\\"elq-I3nb95ULz6RhW71B6v\\\",{\\\"children\\\":\\\"$L1d\\\"}],[\\\"$\\\",\\\"$L1f\\\",\\\"elq-I3nb95ULz6RhW71B6m\\\",{\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"hidden\\\":true,\\\"children\\\":[\\\"$\\\",\\\"$20\\\",null,{\\\"name\\\":\\\"Next.Metadata\\\",\\\"children\\\":\\\"$L21\\\"}]}],null]}]]}],\\\"p\\\":false,\\\"v\\\":\\\"$22\\\"}},\\\"s\\\":\\\"$23\\\",\\\"a\\\":\\\"$@24\\\",\\\"w\\\":\\\"$@25\\\"}\\n27:ob62,27:I[97367,[\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\",\\\"$9\\\"],\\\"OutletBoundary\\\"]\\n10:C\\n12:[\\\"$\\\",\\\"path\\\",\\\"2\\\",{\\\"d\\\":\\\"M6.125 7H6M6.25 7C6.25 7.13807 6.13807 7.25 6 7.25C5.86193 7.25 5.75 7.13807 5.75 7C5.75 6.86193 5.86193 6.75 6 6.75C6.13807 6.75 6.25 6.86193 6.25 7Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}]\\n13:[\\\"$\\\",\\\"path\\\",\\\"3\\\",{\\\"d\\\":\\\"M10.125 7H10M10.25 7C10.25 7.13807 10.1381 7.25 10 7.25C9.86193 7.25 9.75 7.13807 9.75 7C9.75 6.86193 9.86193 6.75 10 6.75C10.1381 6.75 10.25 6.86193 10.25 7Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}]\\n14:[\\\"$\\\",\\\"path\\\",\\\"4\\\",{\\\"d\\\":\\\"M6.125 17H6M6.25 17C6.25 17.1381 6.13807 17.25 6 17.25C5.86193 17.25 5.75 17.1381 5.75 17C5.75 16.8619 5.86193 16.75 6 16.75C6.13807 16.75 6.25 16.8619 6.25 17Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}]\\n15:[\\\"$\\\",\\\"path\\\",\\\"5\\\",{\\\"d\\\":\\\"M10.125 17H10M10.25 17C10.25 17.1381 10.1381 17.25 10 17.25C9.86193 17.25 9.75 17.1381 9.75 17C9.75 16.8619 9.86193 16.75 10 16.75C10.1381 16.75 10.25 16.8619 10.25 17Z\\\",\\\"stroke\\\":\\\"currentColor\\\",\\\"strokeLinecap\\\":\\\"round\\\",\\\"strokeLinejoin\\\":\\\"round\\\",\\\"strokeWidth\\\":2,\\\"opacity\\\":\\\"$undefined\\\"}]\\n16:[\\\"$\\\",\\\"span\\\",null,{\\\"className\\\":\\\"type-section-title\\\",\\\"children\\\":\\\"PXE Lab\\\"}]\\n17:[\\\"$\\\",\\\"section\\\",null,{\\\"aria-labelledby\\\":\\\"login-title\\\",\\\"data-testid\\\":\\\"login-card\\\",\\\"className\\\":\\\"flex w-full max-w-[400px] flex-col gap-6 rounded-xl border border-border bg-card p-6 sm:p-8\\\",\\\"children\\\":[[\\\"$\\\",\\\"header\\\",null,{\\\"className\\\":\\\"flex flex-col gap-1.5\\\",\\\"children\\\":[[\\\"$\\\",\\\"h1\\\",null,{\\\"id\\\":\\\"login-title\\\",\\\"className\\\":\\\"type-page-title text-foreground\\\",\\\"children\\\":\\\"Masuk\\\"}],[\\\"$\\\",\\\"p\\\",null,{\\\"className\\\":\\\"type-caption text-muted-foreground\\\",\\\"children\\\":\\\"Masuk sebagai admin untuk mengelola host PXE dan provisioning OS.\\\"}]]}],[\\\"$\\\",\\\"$20\\\",null,{\\\"fallback\\\":[\\\"$\\\",\\\"div\\\",null,{\\\"className\\\":\\\"flex flex-col gap-6\\\",\\\"aria-hidden\\\":true,\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"className\\\":\\\"flex flex-col gap-5\\\",\\\"children\\\":[[\\\"$\\\",\\\"div\\\",\\\"0\\\",{\\\"className\\\":\\\"flex flex-col gap-3\\\",\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-4 w-20\\\"}],[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-11 w-full\\\"}]]}],[\\\"$\\\",\\\"div\\\",\\\"1\\\",{\\\"className\\\":\\\"flex flex-col gap-3\\\",\\\"children\\\":[[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-4 w-20\\\"}],[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-11 w-full\\\"}]]}]]}],[\\\"$\\\",\\\"div\\\",null,{\\\"data-slot\\\":\\\"skeleton\\\",\\\"className\\\":\\\"animate-pulse rounded-xl bg-muted h-10 w-full\\\"}]]}],\\\"children\\\":\\\"$L26\\\"}]]}]\\n18:[\\\"$\\\",\\\"script\\\",\\\"script-0\\\",{\\\"src\\\":\\\"/_next/static/chunks/406ydsk7qvdfg.js\\\",\\\"async\\\":true,\\\"nonce\\\":\\\"$undefined\\\"}]\\n19:[\\\"$\\\",\\\"$L27\\\",null,{\\\"children\\\":[\\\"$\\\",\\\"$20\\\",null,{\\\"name\\\":\\\"Next.MetadataOutlet\\\",\\\"children\\\":\\\"$@28\\\"}]}]\\n27:o86,23:300\\n1d:[[\\\"$\\\",\\\"meta\\\",\\\"0\\\",{\\\"charSet\\\":\\\"utf-8\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"viewport\\\",\\\"content\\\":\\\"width=device-width, initial-scale=1\\\"}]]\\n27:o164,29:I[27201,[\\\"$3\\\",\\\"$4\\\",\\\"$5\\\",\\\"$6\\\",\\\"$7\\\",\\\"$8\\\",\\\"$9\\\"],\\\"IconMark\\\"]\\n21:[[\\\"$\\\",\\\"title\\\",\\\"0\\\",{\\\"children\\\":\\\"Masuk · PXE Lab\\\"}],[\\\"$\\\",\\\"meta\\\",\\\"1\\\",{\\\"name\\\":\\\"description\\\",\\\"content\\\":\\\"Dashboard provisioning host lewat PXE boot\\\"}],[\\\"$\\\",\\\"link\\\",\\\"2\\\",{\\\"rel\\\":\\\"icon\\\",\\\"href\\\":\\\"/favicon.ico?favicon.117ezoe8m31dk.ico\\\",\\\"sizes\\\":\\\"48x48\\\",\\\"type\\\":\\\"image/x-icon\\\"}],[\\\"$\\\",\\\"$L29\\\",\\\"3\\\",{}]]\\n28:null\\n27:oa,22:0\\n1a:0\\n27:o11,25:false\\n24:9585\\n27:o17,23:C\\n22:C\\n1:C\\n1a:C\\ne:C\\n27:C\\n\"])]",
+    "fv": false,
+    "boxShadow": "none | none",
+    "outline": "none 3px oklab(0.652196 0.168318 0.131453 / 0.5)",
+    "border": "rgb(230, 229, 224)"
+   }
+  ],
+  "afterErr": {
+   "el": "DIV#[Gagal masukUsername atau password salah]",
+   "fv": true,
+   "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.565937 0.192256 0.0417989 / 0.2) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px | rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.565937 0.192256 0.0417989 / 0.2) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+   "outline": "none 1px oklab(0.652196 0.168318 0.131453 / 0.5)",
+   "border": "rgb(230, 229, 224)"
+  },
+  "alert": {
+   "color": "rgb(207, 45, 86)",
+   "desc": "rgb(207, 45, 86)",
+   "border": "rgb(230, 229, 224)",
+   "bg": "rgb(255, 255, 255)"
+  },
+  "afterAlertTab": {
+   "el": "INPUT#login-username[]",
+   "fv": true,
+   "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px | rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, oklab(0.652196 0.168318 0.131453 / 0.4) 0px 0px 0px 3px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+   "outline": "none 1px oklab(0.652196 0.168318 0.131453 / 0.5)",
+   "border": "rgb(230, 229, 224)"
+  }
+ },
+ "/hosts": {
+  "375": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [
+    "table[slot=table] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI 0c:c\" .w-full caption-bottom text-sm right=1219",
+    "thead[slot=table-header] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=1219",
+    "tr[slot=table-row] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=1219",
+    "th[slot=table-head] \"HOSTNAME\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=461",
+    "th[slot=table-head] \"IP\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=600",
+    "button \"IP\" .-ml-1 inline-flex items-center gap-1 rounded-md px-1 py-0.5 uppercase  right=505"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "414": {
+   "bodyBg": "#f7f7f4",
+   "vw": 414,
+   "docScrollWidth": 414,
+   "offenders": [
+    "table[slot=table] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI 0c:c\" .w-full caption-bottom text-sm right=1219",
+    "thead[slot=table-header] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=1219",
+    "tr[slot=table-row] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=1219",
+    "th[slot=table-head] \"HOSTNAME\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=461",
+    "th[slot=table-head] \"IP\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=600",
+    "button \"IP\" .-ml-1 inline-flex items-center gap-1 rounded-md px-1 py-0.5 uppercase  right=505"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "768": {
+   "bodyBg": "#f7f7f4",
+   "vw": 768,
+   "docScrollWidth": 768,
+   "offenders": [
+    "table[slot=table] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI 0c:c\" .w-full caption-bottom text-sm right=1483",
+    "thead[slot=table-header] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=1483",
+    "tr[slot=table-row] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=1483",
+    "th[slot=table-head] \"IP\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=864",
+    "button \"IP\" .-ml-1 inline-flex items-center gap-1 rounded-md px-1 py-0.5 uppercase  right=769",
+    "th[slot=table-head] \"VENDOR\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=966"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "800": {
+   "bodyBg": "#f7f7f4",
+   "vw": 800,
+   "docScrollWidth": 800,
+   "offenders": [
+    "table[slot=table] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI 0c:c\" .w-full caption-bottom text-sm right=1483",
+    "thead[slot=table-header] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=1483",
+    "tr[slot=table-row] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=1483",
+    "th[slot=table-head] \"IP\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=864",
+    "th[slot=table-head] \"VENDOR\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=966",
+    "button \"VENDOR\" .-ml-1 inline-flex items-center gap-1 rounded-md px-1 py-0.5 uppercase  right=947"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1024": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1024,
+   "docScrollWidth": 1024,
+   "offenders": [
+    "table[slot=table] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI 0c:c\" .w-full caption-bottom text-sm right=1483",
+    "thead[slot=table-header] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=1483",
+    "tr[slot=table-row] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=1483",
+    "th[slot=table-head] \"OS\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=1176",
+    "th[slot=table-head] \"STATUS\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=1289",
+    "button \"STATUS\" .-ml-1 inline-flex items-center gap-1 rounded-md px-1 py-0.5 uppercase  right=1255"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1279": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1279,
+   "docScrollWidth": 1279,
+   "offenders": [
+    "table[slot=table] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI 0c:c\" .w-full caption-bottom text-sm right=1483",
+    "thead[slot=table-header] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=1483",
+    "tr[slot=table-row] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=1483",
+    "th[slot=table-head] \"STATUS\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=1289",
+    "th[slot=table-head] \"LAST SEEN\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=1423",
+    "button \"LAST SEEN\" .-ml-1 inline-flex items-center gap-1 rounded-md px-1 py-0.5 uppercase  right=1389"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1280": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1280,
+   "docScrollWidth": 1280,
+   "offenders": [
+    "table[slot=table] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI 0c:c\" .w-full caption-bottom text-sm right=1483",
+    "thead[slot=table-header] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=1483",
+    "tr[slot=table-row] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=1483",
+    "th[slot=table-head] \"STATUS\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=1289",
+    "th[slot=table-head] \"LAST SEEN\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=1423",
+    "button \"LAST SEEN\" .-ml-1 inline-flex items-center gap-1 rounded-md px-1 py-0.5 uppercase  right=1389"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1440": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [
+    "table[slot=table] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI 0c:c\" .w-full caption-bottom text-sm right=1483",
+    "thead[slot=table-header] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=1483",
+    "tr[slot=table-row] \"MAC ADDRESS HOSTNAME IP VENDOR OS STATUS LAST SEEN AKSI\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=1483",
+    "th[slot=table-head] \"AKSI\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=1483",
+    "tbody[slot=table-body] \"0c:c4:7a:91:5e:10 compute-01 10.10.10.31 mgmt statis Supermi\" .[&_tr:last-child]:border-0 right=1483",
+    "tr[slot=table-row] \"0c:c4:7a:91:5e:10 compute-01 10.10.10.31 mgmt statis Supermi\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=1483"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "host ·  sedang provisioning · live, tiap 5 detik",
+    "14",
+    "3",
+    "MAC Address",
+    "Hostname",
+    "IP",
+    "Vendor",
+    "OS",
+    "Status",
+    "Aksi",
+    "mgmt statis",
+    "Belum terpasang",
+    "→ Ubuntu Server 24.04.5 LTS",
+    "mgmt",
+    "10.10.10.42"
+   ],
+   "titles": [
+    "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "/jobs": {
+  "375": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [
+    "table[slot=table]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI compute-03 ac:1f:6b:22:7d:4\" .w-full caption-bottom text-sm right=452",
+    "thead[slot=table-header]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=452",
+    "tr[slot=table-row]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .border-b border-hairline-soft transition-colors has-aria-expanded:bg-c right=452",
+    "th[slot=table-head]{tid=jobs-table} \"DIBUAT / DURASI\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=452",
+    "tbody[slot=table-body]{tid=jobs-table} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .[&_tr:last-child]:border-0 right=452",
+    "tr[slot=table-row]{tid=job-row} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=452"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "414": {
+   "bodyBg": "#f7f7f4",
+   "vw": 414,
+   "docScrollWidth": 414,
+   "offenders": [
+    "table[slot=table]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI compute-03 ac:1f:6b:22:7d:4\" .w-full caption-bottom text-sm right=452",
+    "thead[slot=table-header]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=452",
+    "tr[slot=table-row]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .border-b border-hairline-soft transition-colors has-aria-expanded:bg-c right=452",
+    "th[slot=table-head]{tid=jobs-table} \"DIBUAT / DURASI\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=452",
+    "tbody[slot=table-body]{tid=jobs-table} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .[&_tr:last-child]:border-0 right=452",
+    "tr[slot=table-row]{tid=job-row} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=452"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "768": {
+   "bodyBg": "#f7f7f4",
+   "vw": 768,
+   "docScrollWidth": 768,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "800": {
+   "bodyBg": "#f7f7f4",
+   "vw": 800,
+   "docScrollWidth": 800,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1024": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1024,
+   "docScrollWidth": 1024,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1279": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1279,
+   "docScrollWidth": 1279,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1280": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1280,
+   "docScrollWidth": 1280,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1440": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "/jobs?job=job-m6ui-007": {
+  "375": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [
+    "table[slot=table]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI compute-03 ac:1f:6b:22:7d:4\" .w-full caption-bottom text-sm right=449",
+    "thead[slot=table-header]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=449",
+    "tr[slot=table-row]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .border-b border-hairline-soft transition-colors has-aria-expanded:bg-c right=449",
+    "th[slot=table-head]{tid=jobs-table} \"DIBUAT / DURASI\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=449",
+    "tbody[slot=table-body]{tid=jobs-table} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .[&_tr:last-child]:border-0 right=449",
+    "tr[slot=table-row]{tid=job-row} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=449"
+   ],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=card]{tid=job-detail} \"Job node01 Failed 52:54:00:10:10:11 Ubuntu Server 24.04.5 LT\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#dfa88f :: span[slot=badge]{tid=timeline-step} \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02",
+    "Ubuntu Server 24.04.5 LTS",
+    "dibuat",
+    "3 Nov 2026, 15.23.00",
+    "job-m6ui-007",
+    "·",
+    "15:23:30",
+    "Installer dilayani",
+    "Event",
+    "Host",
+    "Selesai",
+    "15:23:00",
+    "install",
+    "boot-script",
+    "×11 · terakhir",
+    "installer"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "414": {
+   "bodyBg": "#f7f7f4",
+   "vw": 414,
+   "docScrollWidth": 414,
+   "offenders": [
+    "table[slot=table]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI compute-03 ac:1f:6b:22:7d:4\" .w-full caption-bottom text-sm right=449",
+    "thead[slot=table-header]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=449",
+    "tr[slot=table-row]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .border-b border-hairline-soft transition-colors has-aria-expanded:bg-c right=449",
+    "th[slot=table-head]{tid=jobs-table} \"DIBUAT / DURASI\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=449",
+    "tbody[slot=table-body]{tid=jobs-table} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .[&_tr:last-child]:border-0 right=449",
+    "tr[slot=table-row]{tid=job-row} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=449"
+   ],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=card]{tid=job-detail} \"Job node01 Failed 52:54:00:10:10:11 Ubuntu Server 24.04.5 LT\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#dfa88f :: span[slot=badge]{tid=timeline-step} \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02",
+    "Ubuntu Server 24.04.5 LTS",
+    "dibuat",
+    "3 Nov 2026, 15.23.00",
+    "job-m6ui-007",
+    "·",
+    "15:23:30",
+    "Installer dilayani",
+    "Event",
+    "Host",
+    "Selesai",
+    "15:23:00",
+    "install",
+    "boot-script",
+    "×11 · terakhir",
+    "installer"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "768": {
+   "bodyBg": "#f7f7f4",
+   "vw": 768,
+   "docScrollWidth": 768,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=card]{tid=job-detail} \"Job node01 Failed 52:54:00:10:10:11 Ubuntu Server 24.04.5 LT\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#dfa88f :: span[slot=badge]{tid=timeline-step} \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02",
+    "Ubuntu Server 24.04.5 LTS",
+    "dibuat",
+    "3 Nov 2026, 15.23.00",
+    "job-m6ui-007",
+    "·",
+    "15:23:30",
+    "Installer dilayani",
+    "Event",
+    "Host",
+    "Selesai",
+    "15:23:00",
+    "install",
+    "boot-script",
+    "×11 · terakhir",
+    "installer"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "800": {
+   "bodyBg": "#f7f7f4",
+   "vw": 800,
+   "docScrollWidth": 800,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=card]{tid=job-detail} \"Job node01 Failed 52:54:00:10:10:11 Ubuntu Server 24.04.5 LT\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#dfa88f :: span[slot=badge]{tid=timeline-step} \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02",
+    "Ubuntu Server 24.04.5 LTS",
+    "dibuat",
+    "3 Nov 2026, 15.23.00",
+    "job-m6ui-007",
+    "·",
+    "15:23:30",
+    "Installer dilayani",
+    "Event",
+    "Host",
+    "Selesai",
+    "15:23:00",
+    "install",
+    "boot-script",
+    "×11 · terakhir",
+    "installer"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1024": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1024,
+   "docScrollWidth": 1024,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=card]{tid=job-detail} \"Job node01 Failed 52:54:00:10:10:11 Ubuntu Server 24.04.5 LT\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#dfa88f :: span[slot=badge]{tid=timeline-step} \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02",
+    "Ubuntu Server 24.04.5 LTS",
+    "dibuat",
+    "3 Nov 2026, 15.23.00",
+    "job-m6ui-007",
+    "·",
+    "15:23:30",
+    "Installer dilayani",
+    "Event",
+    "Host",
+    "Selesai",
+    "15:23:00",
+    "install",
+    "boot-script",
+    "×11 · terakhir",
+    "installer"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1279": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1279,
+   "docScrollWidth": 1279,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=card]{tid=job-detail} \"Job node01 Failed 52:54:00:10:10:11 Ubuntu Server 24.04.5 LT\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#dfa88f :: span[slot=badge]{tid=timeline-step} \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02",
+    "Ubuntu Server 24.04.5 LTS",
+    "dibuat",
+    "3 Nov 2026, 15.23.00",
+    "job-m6ui-007",
+    "·",
+    "15:23:30",
+    "Installer dilayani",
+    "Event",
+    "Host",
+    "Selesai",
+    "15:23:00",
+    "install",
+    "boot-script",
+    "×11 · terakhir",
+    "installer"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1280": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1280,
+   "docScrollWidth": 1280,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=card]{tid=job-detail} \"Job node01 Failed 52:54:00:10:10:11 Ubuntu Server 24.04.5 LT\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#dfa88f :: span[slot=badge]{tid=timeline-step} \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02",
+    "Ubuntu Server 24.04.5 LTS",
+    "dibuat",
+    "3 Nov 2026, 15.23.00",
+    "job-m6ui-007",
+    "·",
+    "15:23:30",
+    "Installer dilayani",
+    "Event",
+    "Host",
+    "Selesai",
+    "15:23:00",
+    "install",
+    "boot-script",
+    "×11 · terakhir",
+    "installer"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1440": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=card]{tid=job-detail} \"Job node01 Failed 52:54:00:10:10:11 Ubuntu Server 24.04.5 LT\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+    "#dfa88f :: span[slot=badge]{tid=timeline-step} \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02",
+    "Ubuntu Server 24.04.5 LTS",
+    "dibuat",
+    "3 Nov 2026, 15.23.00",
+    "job-m6ui-007",
+    "·",
+    "15:23:30",
+    "Installer dilayani",
+    "Event",
+    "Host",
+    "Selesai",
+    "15:23:00",
+    "install",
+    "boot-script",
+    "×11 · terakhir",
+    "installer"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "/os-images": {
+  "375": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=img-register} \"Daftarkan image\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "12 (bookworm)",
+    "kernel",
+    "initrd",
+    "URL",
+    "Dipakai",
+    "9",
+    "22.04.5 LTS",
+    "24.04.5 LTS",
+    "2022",
+    "tidak bootable"
+   ],
+   "titles": [
+    "OS Images 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "414": {
+   "bodyBg": "#f7f7f4",
+   "vw": 414,
+   "docScrollWidth": 414,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=img-register} \"Daftarkan image\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "12 (bookworm)",
+    "kernel",
+    "initrd",
+    "URL",
+    "Dipakai",
+    "9",
+    "22.04.5 LTS",
+    "24.04.5 LTS",
+    "2022",
+    "tidak bootable"
+   ],
+   "titles": [
+    "OS Images 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "768": {
+   "bodyBg": "#f7f7f4",
+   "vw": 768,
+   "docScrollWidth": 768,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=img-register} \"Daftarkan image\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "12 (bookworm)",
+    "kernel",
+    "initrd",
+    "URL",
+    "Dipakai",
+    "9",
+    "22.04.5 LTS",
+    "24.04.5 LTS",
+    "2022",
+    "tidak bootable"
+   ],
+   "titles": [
+    "OS Images 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "800": {
+   "bodyBg": "#f7f7f4",
+   "vw": 800,
+   "docScrollWidth": 800,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=img-register} \"Daftarkan image\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "12 (bookworm)",
+    "kernel",
+    "initrd",
+    "URL",
+    "Dipakai",
+    "9",
+    "22.04.5 LTS",
+    "24.04.5 LTS",
+    "2022",
+    "tidak bootable"
+   ],
+   "titles": [
+    "OS Images 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1024": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1024,
+   "docScrollWidth": 1024,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=img-register} \"Daftarkan image\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "12 (bookworm)",
+    "kernel",
+    "initrd",
+    "URL",
+    "Dipakai",
+    "9",
+    "22.04.5 LTS",
+    "24.04.5 LTS",
+    "2022",
+    "tidak bootable"
+   ],
+   "titles": [
+    "OS Images 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1279": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1279,
+   "docScrollWidth": 1279,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=img-register} \"Daftarkan image\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "12 (bookworm)",
+    "kernel",
+    "initrd",
+    "URL",
+    "Dipakai",
+    "9",
+    "22.04.5 LTS",
+    "24.04.5 LTS",
+    "2022",
+    "tidak bootable"
+   ],
+   "titles": [
+    "OS Images 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1280": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1280,
+   "docScrollWidth": 1280,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=img-register} \"Daftarkan image\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "ID",
+    "Nama",
+    "Platform",
+    "Sumber",
+    "Ketersediaan",
+    "Dipakai",
+    "Aksi",
+    "12 (bookworm)",
+    "kernel",
+    "initrd",
+    "repo",
+    "URL",
+    "9",
+    "22.04.5 LTS",
+    "24.04.5 LTS",
+    "2022",
+    "tidak bootable"
+   ],
+   "titles": [
+    "OS Images 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1440": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=img-register} \"Daftarkan image\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "ID",
+    "Nama",
+    "Platform",
+    "Sumber",
+    "Ketersediaan",
+    "Dipakai",
+    "Aksi",
+    "12 (bookworm)",
+    "kernel",
+    "initrd",
+    "repo",
+    "URL",
+    "9",
+    "22.04.5 LTS",
+    "24.04.5 LTS",
+    "2022",
+    "tidak bootable"
+   ],
+   "titles": [
+    "OS Images 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "/ssh-keys": {
+  "375": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=key-add} \"Tambah key\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [],
+   "titles": [
+    "SSH Keys 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "414": {
+   "bodyBg": "#f7f7f4",
+   "vw": 414,
+   "docScrollWidth": 414,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=key-add} \"Tambah key\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [],
+   "titles": [
+    "SSH Keys 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "768": {
+   "bodyBg": "#f7f7f4",
+   "vw": 768,
+   "docScrollWidth": 768,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=key-add} \"Tambah key\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…"
+   ],
+   "titles": [
+    "SSH Keys 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "800": {
+   "bodyBg": "#f7f7f4",
+   "vw": 800,
+   "docScrollWidth": 800,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=key-add} \"Tambah key\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…"
+   ],
+   "titles": [
+    "SSH Keys 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1024": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1024,
+   "docScrollWidth": 1024,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=key-add} \"Tambah key\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…"
+   ],
+   "titles": [
+    "SSH Keys 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1279": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1279,
+   "docScrollWidth": 1279,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=key-add} \"Tambah key\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…"
+   ],
+   "titles": [
+    "SSH Keys 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1280": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1280,
+   "docScrollWidth": 1280,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=key-add} \"Tambah key\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…"
+   ],
+   "titles": [
+    "SSH Keys 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1440": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [
+    "bg=#f54e00 :: button[slot=button]{tid=key-add} \"Tambah key\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+   ],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…"
+   ],
+   "titles": [
+    "SSH Keys 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "/settings": {
+  "375": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "414": {
+   "bodyBg": "#f7f7f4",
+   "vw": 414,
+   "docScrollWidth": 414,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "768": {
+   "bodyBg": "#f7f7f4",
+   "vw": 768,
+   "docScrollWidth": 768,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "800": {
+   "bodyBg": "#f7f7f4",
+   "vw": 800,
+   "docScrollWidth": 800,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1024": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1024,
+   "docScrollWidth": 1024,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1279": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1279,
+   "docScrollWidth": 1279,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1280": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1280,
+   "docScrollWidth": 1280,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1440": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [],
+   "shadows": [],
+   "rings": [
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Jaringan provisioning Subnet DHCP yang dilayani dnsmasq dan \" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Boot & media Lokasi file boot TFTP dan URL HTTP yang dipakai\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Provisioning Perilaku boot dan masa berlaku token konfiguras\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Job & watchdog Batas waktu tiap tahap job install; lewat bat\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-",
+    "rgb(230, 229, 224) 0px 0px 0px 1px :: div[slot=settings-section] \"Akses Login admin, masa berlaku sesi, dan pembatasan percoba\" .group/card flex flex-col gap-(--card-spacing) overflow-hidden rounded-"
+   ],
+   "orange": [],
+   "pastel": [],
+   "nonMono": [],
+   "mutedImportant": [
+    "\"Konfigurasi dibaca dari environment server (). Mengubahnya butuh menulis ulang konfigurasi\" :: div[slot=alert-description] \"Konfigurasi dibaca dari environment server (PXE_*). Mengubah\" .text-sm text-balance text-muted-foreground md:text-pretty [&_a]:underl",
+    "\"PXE_*\" :: span \"PXE_*\" .type-data text-xs",
+    "\"Batas waktu tiap tahap job install; lewat batas, job dan host ditandai Failed.\" :: div[slot=card-description] \"Batas waktu tiap tahap job install; lewat batas, job dan hos\" .text-sm text-muted-foreground type-caption",
+    "\"Timeout Booting\" :: dt \"Timeout Booting\" .type-caption text-muted-foreground",
+    "\"Timeout Installing\" :: dt \"Timeout Installing\" .type-caption text-muted-foreground",
+    "\"Timeout Configuring\" :: dt \"Timeout Configuring\" .type-caption text-muted-foreground",
+    "\"PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan job Failed.\" :: span \"PXE boot berikutnya saat Booting setelah batas ini → boot lo\" .type-caption text-muted-foreground",
+    "\"Sesi berakhir bila tidak ada aktivitas selama ini.\" :: span \"Sesi berakhir bila tidak ada aktivitas selama ini.\" .type-caption text-muted-foreground",
+    "\"Batas login gagal\" :: dt \"Batas login gagal\" .type-caption text-muted-foreground"
+   ],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "Konfigurasi dibaca dari environment server (). Mengubahnya butuh menul",
+    "PXE_*",
+    "Subnet DHCP yang dilayani dnsmasq dan aturan IP statis host.",
+    "Interface",
+    "Subnet",
+    "Gateway",
+    "DNS",
+    "Range DHCP dinamis",
+    "IP statis host tidak boleh berada di range ini.",
+    "PXE server",
+    "Lokasi file boot TFTP dan URL HTTP yang dipakai client PXE.",
+    "TFTP root",
+    "Base URL HTTP",
+    "Media URL",
+    "Perilaku boot dan masa berlaku token konfigurasi per host.",
+    "Host tanpa tugas install",
+    "TTL token konfigurasi",
+    "Batas waktu tiap tahap job install; lewat batas, job dan host ditandai",
+    "Timeout Booting",
+    "Timeout Installing",
+    "Timeout Configuring",
+    "Batas penyajian installer",
+    "PXE boot berikutnya saat Booting setelah batas ini → boot lokal dan jo",
+    "Pemeriksaan lease DHCP",
+    "Login admin, masa berlaku sesi, dan pembatasan percobaan login serta r",
+    "Admin",
+    "Sesi idle",
+    "Sesi berakhir bila tidak ada aktivitas selama ini.",
+    "Masa berlaku sesi maks.",
+    "Batas login gagal",
+    "Per IP + username; lewat batas, login dikunci sementara.",
+    "Batas request API"
+   ],
+   "titles": [
+    "Settings 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "/jobs?job=tidak-ada-xyz": {
+  "375": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [
+    "table[slot=table]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI compute-03 ac:1f:6b:22:7d:4\" .w-full caption-bottom text-sm right=449",
+    "thead[slot=table-header]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=449",
+    "tr[slot=table-row]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .border-b border-hairline-soft transition-colors has-aria-expanded:bg-c right=449",
+    "th[slot=table-head]{tid=jobs-table} \"DIBUAT / DURASI\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=449",
+    "tbody[slot=table-body]{tid=jobs-table} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .[&_tr:last-child]:border-0 right=449",
+    "tr[slot=table-row]{tid=job-row} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=449"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "414": {
+   "bodyBg": "#f7f7f4",
+   "vw": 414,
+   "docScrollWidth": 414,
+   "offenders": [
+    "table[slot=table]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI compute-03 ac:1f:6b:22:7d:4\" .w-full caption-bottom text-sm right=449",
+    "thead[slot=table-header]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=449",
+    "tr[slot=table-row]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .border-b border-hairline-soft transition-colors has-aria-expanded:bg-c right=449",
+    "th[slot=table-head]{tid=jobs-table} \"DIBUAT / DURASI\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=449",
+    "tbody[slot=table-body]{tid=jobs-table} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .[&_tr:last-child]:border-0 right=449",
+    "tr[slot=table-row]{tid=job-row} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=449"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "768": {
+   "bodyBg": "#f7f7f4",
+   "vw": 768,
+   "docScrollWidth": 768,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "800": {
+   "bodyBg": "#f7f7f4",
+   "vw": 800,
+   "docScrollWidth": 800,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1024": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1024,
+   "docScrollWidth": 1024,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1279": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1279,
+   "docScrollWidth": 1279,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1280": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1280,
+   "docScrollWidth": 1280,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1440": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "/jobs?host=tidak-ada": {
+  "375": {
+   "bodyBg": "#f7f7f4",
+   "vw": 375,
+   "docScrollWidth": 375,
+   "offenders": [
+    "table[slot=table]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI compute-03 ac:1f:6b:22:7d:4\" .w-full caption-bottom text-sm right=449",
+    "thead[slot=table-header]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=449",
+    "tr[slot=table-row]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .border-b border-hairline-soft transition-colors has-aria-expanded:bg-c right=449",
+    "th[slot=table-head]{tid=jobs-table} \"DIBUAT / DURASI\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=449",
+    "tbody[slot=table-body]{tid=jobs-table} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .[&_tr:last-child]:border-0 right=449",
+    "tr[slot=table-row]{tid=job-row} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=449"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "414": {
+   "bodyBg": "#f7f7f4",
+   "vw": 414,
+   "docScrollWidth": 414,
+   "offenders": [
+    "table[slot=table]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI compute-03 ac:1f:6b:22:7d:4\" .w-full caption-bottom text-sm right=452",
+    "thead[slot=table-header]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .[&_tr]:border-b [&_tr]:border-border [&_tr]:hover:bg-transparent right=452",
+    "tr[slot=table-row]{tid=jobs-table} \"HOST / OS STATUS DIBUAT / DURASI\" .border-b border-hairline-soft transition-colors has-aria-expanded:bg-c right=452",
+    "th[slot=table-head]{tid=jobs-table} \"DIBUAT / DURASI\" .type-column-label h-10 px-3 text-left align-middle whitespace-nowrap t right=452",
+    "tbody[slot=table-body]{tid=jobs-table} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .[&_tr:last-child]:border-0 right=452",
+    "tr[slot=table-row]{tid=job-row} \"compute-03 ac:1f:6b:22:7d:40 Ubuntu Server 24.04.5 LTS Faile\" .border-b border-hairline-soft transition-colors hover:bg-canvas-soft h right=452"
+   ],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "768": {
+   "bodyBg": "#f7f7f4",
+   "vw": 768,
+   "docScrollWidth": 768,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "800": {
+   "bodyBg": "#f7f7f4",
+   "vw": 800,
+   "docScrollWidth": 800,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1024": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1024,
+   "docScrollWidth": 1024,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1279": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1279,
+   "docScrollWidth": 1279,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1280": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1280,
+   "docScrollWidth": 1280,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  },
+  "1440": {
+   "bodyBg": "#f7f7f4",
+   "vw": 1440,
+   "docScrollWidth": 1440,
+   "offenders": [],
+   "shadows": [],
+   "rings": [],
+   "orange": [],
+   "pastel": [
+    "#c08532 :: span[slot=badge]{tid=job-row} \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+   ],
+   "nonMono": [],
+   "mutedImportant": [],
+   "mutedSample": [
+    "10.99.0.2",
+    "admin-dr",
+    "Masuk sebagai",
+    "Cari MAC, hostname, IP…",
+    "live, tiap 5 detik",
+    "Host / OS",
+    "Status",
+    "Dibuat / durasi",
+    "ac:1f:6b:22:7d:40",
+    "5 mnt",
+    "14:18:77:4a:2c:01",
+    "30 dtk",
+    "0c:c4:7a:91:5e:11",
+    "0c:c4:7a:91:5e:10",
+    "00:50:56:b2:3e:91",
+    "94:40:c9:6e:01:ab",
+    "94:40:c9:6e:01:aa",
+    "52:54:00:10:10:11",
+    "3c:a8:2a:10:44:7c",
+    "14:18:77:4a:2c:03",
+    "14:18:77:4a:2c:02"
+   ],
+   "titles": [
+    "Provisioning Jobs 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+   ]
+  }
+ },
+ "sheet": {
+  "375": {
+   "OS": {
+    "bodyBg": "#f7f7f4",
+    "vw": 375,
+    "docScrollWidth": 375,
+    "offenders": [
+     "div[slot=tabs-list] \"OS Credentials Network Hostname SSH Keys\" .group/tabs-list inline-flex w-fit items-center justify-center rounded- right=447",
+     "button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce right=444"
+    ],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "Password dari tab Credentials tidak dipakai (akses key-only).",
+     "Kosongkan untuk memilih disk terbesar, atau isi path seperti  / .",
+     "/dev/sda",
+     "/dev/nvme0n1",
+     "Volume group LVM di seluruh disk target — mudah diperbesar nanti."
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "Credentials": {
+    "bodyBg": "#f7f7f4",
+    "vw": 375,
+    "docScrollWidth": 375,
+    "offenders": [
+     "div[slot=tabs-list] \"OS Credentials Network Hostname SSH Keys\" .group/tabs-list inline-flex w-fit items-center justify-center rounded- right=447",
+     "button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce right=444"
+    ],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [
+     "\"Disimpan sebagai hash SHA-512 crypt; password asli tidak disimpan dan tidak bisa dilihat l\" :: p[slot=field-description] \"Disimpan sebagai hash SHA-512 crypt; password asli tidak dis\" .text-left text-sm leading-normal font-normal text-muted-foreground gro"
+    ],
+    "mutedSample": [
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "Disimpan sebagai hash SHA-512 crypt; password asli tidak disimpan dan ",
+     "sudo tanpa password (NOPASSWD), seperti lab saat ini.",
+     "Hanya login dengan SSH key. Pastikan tab SSH Keys berisi minimal satu "
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "Network": {
+    "bodyBg": "#f7f7f4",
+    "vw": 375,
+    "docScrollWidth": 375,
+    "offenders": [
+     "div[slot=tabs-list] \"OS Credentials Network Hostname SSH Keys\" .group/tabs-list inline-flex w-fit items-center justify-center rounded- right=447",
+     "button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce right=444"
+    ],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "oklab(0.565937 0.192256 0.0417989 / 0.2) 0px 0px 0px 3px :: input[slot=input] \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "IP management statis di NIC yang dipilih; dipakai juga sebagai reserva",
+     "/",
+     "Tambah",
+     "Maksimal 4. Tekan Enter untuk menambah.",
+     "NIC dipilih dari MAC PXE masing-masing host (). NIC lain dibiarkan tan",
+     "match: macaddress"
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "Hostname": {
+    "bodyBg": "#f7f7f4",
+    "vw": 375,
+    "docScrollWidth": 375,
+    "offenders": [
+     "div[slot=tabs-list] \"OS Credentials Network Hostname SSH Keys\" .group/tabs-list inline-flex w-fit items-center justify-center rounded- right=447",
+     "button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce right=444"
+    ],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "RFC 1123: huruf kecil, angka dan '-', maksimal 63 karakter. Hostname f"
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "SSH Keys": {
+    "bodyBg": "#f7f7f4",
+    "vw": 375,
+    "docScrollWidth": 375,
+    "offenders": [
+     "div[slot=tabs-list] \"OS Credentials Network Hostname SSH Keys\" .group/tabs-list inline-flex w-fit items-center justify-center rounded- right=378"
+    ],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "Library masih kosong — tambahkan key di bawah.",
+     "Key ditulis ke  user ini. Kosongkan untuk memakai user dari tab Creden",
+     "~/.ssh/authorized_keys"
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   }
+  },
+  "768": {
+   "OS": {
+    "bodyBg": "#f7f7f4",
+    "vw": 768,
+    "docScrollWidth": 768,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "Password dari tab Credentials tidak dipakai (akses key-only).",
+     "Kosongkan untuk memilih disk terbesar, atau isi path seperti  / .",
+     "/dev/sda",
+     "/dev/nvme0n1",
+     "Volume group LVM di seluruh disk target — mudah diperbesar nanti."
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "Credentials": {
+    "bodyBg": "#f7f7f4",
+    "vw": 768,
+    "docScrollWidth": 768,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [
+     "\"Disimpan sebagai hash SHA-512 crypt; password asli tidak disimpan dan tidak bisa dilihat l\" :: p[slot=field-description] \"Disimpan sebagai hash SHA-512 crypt; password asli tidak dis\" .text-left text-sm leading-normal font-normal text-muted-foreground gro"
+    ],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "Disimpan sebagai hash SHA-512 crypt; password asli tidak disimpan dan ",
+     "sudo tanpa password (NOPASSWD), seperti lab saat ini.",
+     "Hanya login dengan SSH key. Pastikan tab SSH Keys berisi minimal satu "
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "Network": {
+    "bodyBg": "#f7f7f4",
+    "vw": 768,
+    "docScrollWidth": 768,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "oklab(0.565937 0.192256 0.0417989 / 0.2) 0px 0px 0px 3px :: input[slot=input] \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "IP management statis di NIC yang dipilih; dipakai juga sebagai reserva",
+     "/",
+     "Tambah",
+     "Maksimal 4. Tekan Enter untuk menambah.",
+     "NIC dipilih dari MAC PXE masing-masing host (). NIC lain dibiarkan tan",
+     "match: macaddress"
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "Hostname": {
+    "bodyBg": "#f7f7f4",
+    "vw": 768,
+    "docScrollWidth": 768,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "RFC 1123: huruf kecil, angka dan '-', maksimal 63 karakter. Hostname f"
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "SSH Keys": {
+    "bodyBg": "#f7f7f4",
+    "vw": 768,
+    "docScrollWidth": 768,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "Library masih kosong — tambahkan key di bawah.",
+     "Key ditulis ke  user ini. Kosongkan untuk memakai user dari tab Creden",
+     "~/.ssh/authorized_keys"
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   }
+  },
+  "1440": {
+   "OS": {
+    "bodyBg": "#f7f7f4",
+    "vw": 1440,
+    "docScrollWidth": 1440,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"OS\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "Password dari tab Credentials tidak dipakai (akses key-only).",
+     "Kosongkan untuk memilih disk terbesar, atau isi path seperti  / .",
+     "/dev/sda",
+     "/dev/nvme0n1",
+     "Volume group LVM di seluruh disk target — mudah diperbesar nanti."
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "Credentials": {
+    "bodyBg": "#f7f7f4",
+    "vw": 1440,
+    "docScrollWidth": 1440,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"Credentials\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [
+     "\"Disimpan sebagai hash SHA-512 crypt; password asli tidak disimpan dan tidak bisa dilihat l\" :: p[slot=field-description] \"Disimpan sebagai hash SHA-512 crypt; password asli tidak dis\" .text-left text-sm leading-normal font-normal text-muted-foreground gro"
+    ],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "Disimpan sebagai hash SHA-512 crypt; password asli tidak disimpan dan ",
+     "sudo tanpa password (NOPASSWD), seperti lab saat ini.",
+     "Hanya login dengan SSH key. Pastikan tab SSH Keys berisi minimal satu "
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "Network": {
+    "bodyBg": "#f7f7f4",
+    "vw": 1440,
+    "docScrollWidth": 1440,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "oklab(0.565937 0.192256 0.0417989 / 0.2) 0px 0px 0px 3px :: input[slot=input] \"\" .h-11 w-full min-w-0 rounded-lg border border-input bg-card px-3 py-1 t"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"Network\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "IP management statis di NIC yang dipilih; dipakai juga sebagai reserva",
+     "/",
+     "Tambah",
+     "Maksimal 4. Tekan Enter untuk menambah.",
+     "NIC dipilih dari MAC PXE masing-masing host (). NIC lain dibiarkan tan",
+     "match: macaddress"
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "Hostname": {
+    "bodyBg": "#f7f7f4",
+    "vw": 1440,
+    "docScrollWidth": 1440,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"Hostname\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "RFC 1123: huruf kecil, angka dan '-', maksimal 63 karakter. Hostname f"
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   },
+   "SSH Keys": {
+    "bodyBg": "#f7f7f4",
+    "vw": 1440,
+    "docScrollWidth": 1440,
+    "offenders": [],
+    "shadows": [],
+    "rings": [
+     "oklab(0.652196 0.168318 0.131453 / 0.5) 0px 0px 0px 3px :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce"
+    ],
+    "orange": [
+     "border=#f54e00 :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "outline=#f54e00 :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "shadow=#f54e00@0.50 :: button[slot=tabs-trigger] \"SSH Keys\" .relative inline-flex h-[calc(100%-1px)] flex-1 items-center justify-ce",
+     "bg=#f54e00 :: button[slot=button] \"Install\" .group/button inline-flex shrink-0 items-center justify-center rounded-"
+    ],
+    "pastel": [
+     "#dfa88f :: span[slot=badge] \"Booting\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fc9a2 :: span[slot=badge] \"Configuring\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c0a8dd :: span[slot=badge] \"Installing\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#c08532 :: span[slot=badge] \"Done\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap",
+     "#9fbbe0 :: span[slot=badge] \"Discovered\" .group/badge inline-flex w-fit shrink-0 items-center justify-center gap"
+    ],
+    "nonMono": [],
+    "mutedImportant": [],
+    "mutedSample": [
+     "10.99.0.2",
+     "admin-dr",
+     "Masuk sebagai",
+     "Cari MAC, hostname, IP…",
+     "host ·  sedang provisioning · live, tiap 5 detik",
+     "14",
+     "3",
+     "MAC Address",
+     "Hostname",
+     "IP",
+     "Vendor",
+     "OS",
+     "Status",
+     "Aksi",
+     "mgmt statis",
+     "Belum terpasang",
+     "→ Ubuntu Server 24.04.5 LTS",
+     "mgmt",
+     "10.10.10.42",
+     "0c:c4:7a:91:5e:10",
+     "Library masih kosong — tambahkan key di bawah.",
+     "Key ditulis ke  user ini. Kosongkan untuk memakai user dari tab Creden",
+     "~/.ssh/authorized_keys"
+    ],
+    "titles": [
+     "Hosts 26px/400 ls=-0.325px ff=\"Inter Variabl color=#26251e"
+    ]
+   }
+  }
+ },
+ "logout": {
+  "user": {
+   "ff": "\"JetBrains Mono Vari",
+   "fs": "13px",
+   "color": "rgb(128, 125, 114)",
+   "text": "Masuk sebagai admin-dr"
+  },
+  "btn": {
+   "fs": "14px",
+   "fw": "500",
+   "color": "rgb(38, 37, 30)",
+   "bg": "rgba(0, 0, 0, 0)"
+  },
+  "reached": 1,
+  "focus": {
+   "fv": true,
+   "boxShadow": "rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgba(0, 0, 0, 0) 0px 0px 0px 0px, rgb(245, 78, 0) 0px 0px 0px 2px, rgba(0, 0, 0, 0) 0px 0px 0px 0px",
+   "outline": "none 1px oklab(0.652196 0.168318 0.131453 / 0.5)"
+  },
+  "collapsed": {
+   "w": 32,
+   "h": 32,
+   "visible": true,
+   "label": "Keluar"
+  },
+  "mobileVisible": true,
+  "afterLogout": "http://localhost:3194/login",
+  "loginFocus": "login-username"
+ }
+}
