@@ -32,7 +32,10 @@ import { TabOs } from "@/components/host-config/tab-os"
 import type { OsForm } from "@/components/host-config/form-state"
 import { SshKeysView } from "@/components/ssh-keys/ssh-keys-view"
 import { TopBar } from "@/components/top-bar"
+import { Alert, AlertDescription } from "@/components/ui/alert"
+import { DashboardShellFallback } from "@/components/dashboard-shell-fallback"
 import { EmptyDescription } from "@/components/ui/empty"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { SidebarProvider } from "@/components/ui/sidebar"
 import { TooltipProvider } from "@/components/ui/tooltip"
 import { OS_IMAGES_KEY } from "@/hooks/use-os-images"
@@ -380,6 +383,11 @@ describe("TabOs kartu image (DR-5-11 + a11y)", () => {
     const note = container.querySelector("#os-ubuntu-22\\.04-note")!
     expect(note.querySelector('[data-slot="path-text"]')).toHaveTextContent("ubuntu-22.04/casper/vmlinuz")
     expect(note.querySelector('[data-slot="path-text"]')).toHaveClass("type-data")
+    // BUG-M6-L3: baris arsitektur · metode tidak muted (latar kartu terpilih/hover canvas-soft).
+    for (const d of container.querySelectorAll('[data-slot-detail="os-platform"]')) {
+      expect(d).toHaveClass("text-body")
+      expect(d.className).not.toMatch(/(^|\s)text-muted-foreground/)
+    }
   })
 })
 
@@ -471,6 +479,64 @@ describe("LogViewer (CR-5-5, CR-5-7)", () => {
     expect(screen.getByTestId("log-connection")).toHaveClass("text-foreground")
     expect(screen.getByTestId("log-lines")).toHaveTextContent(/Job tidak ditemukan/)
     expect(f).toHaveBeenCalledTimes(1)
+  })
+})
+
+describe("BUG-M6-L3 kontras (AC-6.38)", () => {
+  it("tab tidak aktif memakai body (bukan foreground 60% = 3,84:1 di atas tab list)", () => {
+    render(
+      <Tabs defaultValue="a">
+        <TabsList>
+          <TabsTrigger value="a">OS</TabsTrigger>
+          <TabsTrigger value="b">Credentials</TabsTrigger>
+        </TabsList>
+      </Tabs>,
+    )
+    const inactive = screen.getByRole("tab", { name: "Credentials" })
+    expect(inactive).toHaveClass("text-body")
+    expect(inactive.className).not.toMatch(/text-foreground\/60/)
+  })
+
+  it("deskripsi Alert destructive memakai destructive penuh (bukan /90 = 4,4:1)", () => {
+    render(
+      <Alert variant="destructive" data-testid="a">
+        <AlertDescription>Username atau password salah</AlertDescription>
+      </Alert>,
+    )
+    const cls = screen.getByTestId("a").className
+    expect(cls).toContain("*:data-[slot=alert-description]:text-destructive")
+    expect(cls).not.toMatch(/alert-description\]:text-destructive\/90/)
+  })
+
+  it("teks tombol pencarian global muted (pengecualian muted/putih), bukan muted-soft", () => {
+    vi.stubGlobal("fetch", vi.fn(async () => json({ services: [], checkedAt: "x" })))
+    render(wrap(<SidebarProvider><TopBar /></SidebarProvider>))
+    const btn = screen.getByTestId("global-search")
+    expect(btn).toHaveClass("text-muted-foreground")
+    expect(btn.className).not.toMatch(/text-muted-soft/)
+  })
+})
+
+describe("BUG-M6-L2 ReasonText di kartu (< xl)", () => {
+  it("segmen path inline di bawah xl (baris terisi penuh), <wbr> setelah '/', id inline di bawah xl", () => {
+    const { container } = render(
+      <ReasonText reason="Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)" data-testid="r" />,
+    )
+    const r = screen.getByTestId("r")
+    expect(r.className).toContain("max-xl:[&_[data-slot=path-segment]]:inline")
+    expect(container.querySelector('[data-slot="data-token"]')).toHaveClass("max-xl:inline", "inline-block")
+    expect(container.querySelectorAll('[data-slot="path-segment"] wbr')).toHaveLength(2)
+    expect(r.textContent).toBe("Media ubuntu-22.04 tidak tersedia (ubuntu-22.04/casper/vmlinuz tidak ada)")
+  })
+})
+
+describe("DashboardShellFallback (OBS-M6-L1)", () => {
+  it("kerangka statis tanpa data/landmark: tanpa header, nav, tabel; aria-busy", () => {
+    const { container } = render(<DashboardShellFallback />)
+    const el = screen.getByTestId("shell-fallback")
+    expect(el).toHaveAttribute("aria-busy", "true")
+    expect(container.querySelector("header, nav, table, main, h1")).toBeNull()
+    expect(el.textContent).toBe("Memuat dashboard…")
   })
 })
 

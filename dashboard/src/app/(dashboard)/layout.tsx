@@ -1,6 +1,7 @@
 import { Suspense } from "react"
 
 import { AppSidebar } from "@/components/app-sidebar"
+import { DashboardShellFallback } from "@/components/dashboard-shell-fallback"
 import { TopBar } from "@/components/top-bar"
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar"
 
@@ -11,8 +12,9 @@ export default function DashboardLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     // M6: seluruh shell dashboard dirender hanya setelah sesi tervalidasi di server (SessionGate,
-    // di dalam Suspense karena membaca cookie — Cache Components). Tanpa flash konten terproteksi.
-    <Suspense fallback={null}>
+    // di dalam Suspense karena membaca cookie — Cache Components). Tanpa flash konten terproteksi;
+    // OBS-M6-L1: fallback = kerangka statis tanpa data (bukan layar kosong).
+    <Suspense fallback={<DashboardShellFallback />}>
       <SessionGate>
         <SidebarProvider>
           <AppSidebar />

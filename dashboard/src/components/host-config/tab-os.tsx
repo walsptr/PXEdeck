@@ -318,7 +318,11 @@ function OsImageOption({
           <FieldTitle id={`${id}-title`}>
             {img.name} {img.version}
           </FieldTitle>
-          <FieldDescription>
+          {/*
+            AC-6.38 (BUG-M6-L3): kartu terpilih/hover berlatar canvas-soft / input — muted di sana
+            < 4,5:1 → body. Catatan "tidak tersedia" (kartu disabled, latar putih) tetap muted (DR-4-5).
+          */}
+          <FieldDescription className="text-body" data-slot-detail="os-platform">
             <span className="type-data text-xs">{img.arch}</span> · {img.method}
           </FieldDescription>
           {note && (

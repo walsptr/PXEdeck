@@ -49,7 +49,7 @@
     },
     {
      "t": ".lg\\:not-sr-only",
-     "c": "#a09c92/#ffffff 2.73"
+     "c": "#807d72/#ffffff 4.12"
     },
     {
      "t": ".gap-2.type-caption.text-muted-foreground > span:nth-child(2)",
@@ -178,7 +178,7 @@
     },
     {
      "t": ".lg\\:not-sr-only",
-     "c": "#a09c92/#ffffff 2.73"
+     "c": "#807d72/#ffffff 4.12"
     },
     {
      "t": ".gap-2.items-center.type-caption > span:nth-child(2)",
@@ -851,7 +851,7 @@
     },
     {
      "t": ".lg\\:not-sr-only",
-     "c": "#a09c92/#ffffff 2.73"
+     "c": "#807d72/#ffffff 4.12"
     },
     {
      "t": ".bg-primary",
@@ -938,19 +938,19 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -974,23 +974,23 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -1014,19 +1014,19 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -1070,19 +1070,19 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
+     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -1106,15 +1106,15 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -1142,7 +1142,7 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     }
    ]
@@ -1164,7 +1164,7 @@
     },
     {
      "t": ".lg\\:not-sr-only",
-     "c": "#a09c92/#ffffff 2.73"
+     "c": "#807d72/#ffffff 4.12"
     },
     {
      "t": ".bg-primary",
@@ -1209,7 +1209,7 @@
     },
     {
      "t": ".lg\\:not-sr-only",
-     "c": "#a09c92/#ffffff 2.73"
+     "c": "#807d72/#ffffff 4.12"
     },
     {
      "t": ".text-balance",
@@ -1346,7 +1346,7 @@
   {
    "id": "color-contrast",
    "impact": "serious",
-   "n": 44,
+   "n": 37,
    "nodes": [
     {
      "t": ".text-xs.text-muted-foreground.type-data",
@@ -1358,7 +1358,7 @@
     },
     {
      "t": ".lg\\:not-sr-only",
-     "c": "#a09c92/#ffffff 2.73"
+     "c": "#807d72/#ffffff 4.12"
     },
     {
      "t": ".type-caption.gap-2.text-muted-foreground > span:nth-child(2)",
@@ -1490,39 +1490,11 @@
     },
     {
      "t": "#radix-_R_1lfivabrbH2_ > .type-data",
-     "c": "#7a776d/#efefef 3.89"
-    },
-    {
-     "t": "label[for=\"os-debian-12\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]",
-     "c": "#7a776d/#efefef 3.89"
-    },
-    {
-     "t": "label[for=\"os-debian-12\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data",
-     "c": "#7a776d/#efefef 3.89"
-    },
-    {
-     "t": "label[for=\"os-rocky-9\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]",
-     "c": "#7a776d/#efefef 3.89"
-    },
-    {
-     "t": "label[for=\"os-rocky-9\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data",
-     "c": "#7a776d/#efefef 3.89"
-    },
-    {
-     "t": "label[for=\"os-ubuntu-24.04\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]",
-     "c": "#7a776d/#eaeae7 3.71"
-    },
-    {
-     "t": "label[for=\"os-ubuntu-24.04\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data",
-     "c": "#7a776d/#eaeae7 3.71"
-    },
-    {
-     "t": ".min-h-7 > .type-caption.text-muted-foreground",
-     "c": "#7a776d/#eaeae7 3.71"
+     "c": "#757369/#e3e3e3 3.7"
     },
     {
      "t": ".bg-primary",
-     "c": "#efefef/#e64c04 3.38"
+     "c": "#e3e3e3/#da4a07 3.29"
     }
    ]
   }
@@ -2201,7 +2173,7 @@
   {
    "id": "color-contrast",
    "impact": "serious",
-   "n": 71,
+   "n": 72,
    "nodes": [
     {
      "t": ".bg-primary",
@@ -2260,23 +2232,23 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(3) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -2300,23 +2272,23 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
+     "t": "tr[data-image-id=\"ubuntu-22.04\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -2340,23 +2312,23 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
+     "t": ".max-xl\\:flex.max-xl\\:items-start.max-xl\\:gap-y-1:nth-child(5) > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -2400,23 +2372,23 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
+     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
+     "t": "tr[data-image-id=\"ubuntu-name-nospace-64\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -2440,19 +2412,23 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"data-token\"]",
+     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .max-xl\\:inline.text-xs[data-slot=\"data-token\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(1)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
+     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(2)",
+     "c": "#807d72/#ffffff 4.12"
+    },
+    {
+     "t": "tr[data-image-id=\"ubuntu-path-nobreak-110\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"] > .text-xs.wrap-anywhere[data-slot=\"path-text\"] > .inline-block.max-w-full[data-slot=\"path-segment\"]:nth-child(3)",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -2480,7 +2456,7 @@
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word[data-slot=\"reason-text\"][data-testid=\"img-reason\"]",
+     "t": "tr[data-image-id=\"windows-2022\"] > .max-xl\\:order-5.max-xl\\:basis-full.max-xl\\:min-w-0 > .items-start.xl\\:w-\\[24ch\\][data-available=\"false\"] > .wrap-break-word.max-xl\\:\\[\\&_\\[data-slot\\=path-segment\\]\\]\\:inline[data-slot=\"reason-text\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
@@ -2501,39 +2477,39 @@
      "c": "#ffffff/#f54e00 3.51"
     },
     {
-     "t": "tr[data-key-id=\"key-b1bc0ce7\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]",
+     "t": "tr[data-key-id=\"key-ef8bebc1\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-key-id=\"key-b1bc0ce7\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground",
+     "t": "tr[data-key-id=\"key-ef8bebc1\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-key-id=\"key-b1bc0ce7\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground",
+     "t": "tr[data-key-id=\"key-ef8bebc1\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-key-id=\"key-4d38590e\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]",
+     "t": "tr[data-key-id=\"key-cb38aff8\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-key-id=\"key-4d38590e\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground",
+     "t": "tr[data-key-id=\"key-cb38aff8\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-key-id=\"key-4d38590e\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground",
+     "t": "tr[data-key-id=\"key-cb38aff8\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-key-id=\"key-255a5d9e\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]",
+     "t": "tr[data-key-id=\"key-05c6cc26\"] > .align-top.max-lg\\:order-1.max-lg\\:flex-1 > .gap-0\\.5.flex-col.min-w-0 > .xl\\:hidden.text-muted-foreground[data-testid=\"key-type-inline\"]",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-key-id=\"key-255a5d9e\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground",
+     "t": "tr[data-key-id=\"key-05c6cc26\"] > .max-lg\\:order-3.max-lg\\:p-0:nth-child(5) > .lg\\:hidden.type-caption.text-muted-foreground",
      "c": "#807d72/#ffffff 4.12"
     },
     {
-     "t": "tr[data-key-id=\"key-255a5d9e\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground",
+     "t": "tr[data-key-id=\"key-05c6cc26\"] > .max-lg\\:order-3.text-body[data-testid=\"key-used-by\"] > .lg\\:hidden.type-caption.text-muted-foreground",
      "c": "#807d72/#ffffff 4.12"
     }
    ]
@@ -2680,7 +2656,7 @@
   {
    "id": "color-contrast",
    "impact": "serious",
-   "n": 18,
+   "n": 15,
    "nodes": [
     {
      "t": ".gap-2.type-caption.text-muted-foreground > span:nth-child(2)",
@@ -2736,23 +2712,11 @@
     },
     {
      "t": "#radix-_R_1lfivabrbH2_ > .type-data",
-     "c": "#7d7a6f/#f7f7f7 4.01"
-    },
-    {
-     "t": "label[for=\"os-ubuntu-24.04\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"]",
-     "c": "#7d7a6f/#f2f2ef 3.83"
-    },
-    {
-     "t": "label[for=\"os-ubuntu-24.04\"] > .has-\\[\\>\\[data-slot\\=field-content\\]\\]\\:items-start.\\*\\:data-\\[slot\\=field-label\\]\\:flex-auto[data-available=\"true\"] > .group\\/field-content.leading-snug[data-slot=\"field-content\"] > .leading-normal.font-normal[data-slot=\"field-description\"] > .text-xs.type-data",
-     "c": "#7d7a6f/#f2f2ef 3.83"
-    },
-    {
-     "t": ".min-h-7 > .type-caption.text-muted-foreground",
-     "c": "#7d7a6f/#f2f2ef 3.83"
+     "c": "#757369/#e3e3e3 3.7"
     },
     {
      "t": ".bg-primary",
-     "c": "#f7f7f7/#ed4d02 3.46"
+     "c": "#e3e3e3/#da4a07 3.29"
     }
    ]
   }

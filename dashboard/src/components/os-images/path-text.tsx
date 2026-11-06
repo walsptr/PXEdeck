@@ -31,7 +31,11 @@ export function PathText({
         <span key={i} data-slot="path-segment" className="inline-block max-w-full">
           {i === 0 && lead}
           {p}
-          {i < parts.length - 1 && "/"}
+          {i < parts.length - 1 && (
+            <>
+              /<wbr />
+            </>
+          )}
         </span>
       ))}
     </span>
@@ -41,7 +45,7 @@ export function PathText({
 /** Token data teknis tanpa "/" (mis. id image) — mono, utuh bila muat, dipecah hanya bila lebih lebar dari baris. */
 function DataToken({ value }: { value: string }) {
   return (
-    <span data-slot="data-token" className="type-data inline-block max-w-full text-xs wrap-anywhere">
+    <span data-slot="data-token" className="type-data inline-block max-w-full text-xs wrap-anywhere max-xl:inline">
       {value}
     </span>
   )
@@ -66,7 +70,15 @@ export function ReasonText({
 }: React.ComponentProps<"span"> & { reason: string }) {
   const m = MEDIA_MISSING_RE.exec(reason)
   return (
-    <span data-slot="reason-text" className={cn("min-w-0 wrap-break-word", className)} {...props}>
+    <span
+      data-slot="reason-text"
+      // BUG-M6-L2 (DR-5-8): di kartu (< xl) segmen path & id dirender `inline` (baris terisi penuh,
+      // pecah diutamakan di "/" lewat <wbr>, `wrap-anywhere` path hanya bila satu segmen > baris) —
+      // segmen inline-block meninggalkan sisa baris kosong sehingga kartu ID/path panjang > 520 px.
+      // Tabel (≥ xl, DR-5-14) tetap inline-block: nama file/id tidak terbelah.
+      className={cn("min-w-0 wrap-break-word max-xl:[&_[data-slot=path-segment]]:inline", className)}
+      {...props}
+    >
       {m ? (
         <>
           Media <DataToken value={m[1]} /> tidak tersedia <PathText lead="(" value={m[2]} /> tidak ada)

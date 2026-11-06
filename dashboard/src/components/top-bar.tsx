@@ -67,7 +67,7 @@ export function TopBar() {
           aria-keyshortcuts="Control+K Meta+K"
           title="Cari MAC, hostname, IP… (Ctrl K)"
           data-testid="global-search"
-          className="hidden h-9 items-center gap-2 rounded-lg border border-border bg-card text-left text-sm text-muted-soft transition-colors outline-none hover:border-hairline-strong focus-visible:border-hairline-strong focus-visible:ring-[3px] focus-visible:ring-ring/15 md:flex md:w-9 md:justify-center lg:w-48 lg:justify-start lg:px-3 xl:w-64"
+          className="hidden h-9 items-center gap-2 rounded-lg border border-border bg-card text-left text-sm text-muted-foreground transition-colors outline-none hover:border-hairline-strong focus-visible:border-hairline-strong focus-visible:ring-[3px] focus-visible:ring-ring/15 md:flex md:w-9 md:justify-center lg:w-48 lg:justify-start lg:px-3 xl:w-64"
         >
           <HugeiconsIcon
             icon={Search01Icon}

@@ -205,9 +205,10 @@ test("OS Images: alasan mono, token builtin tidak terbelah, DR-5-1 ≤ 200 px di
     rows[w] = m
     check(/JetBrains Mono/.test(m.pathFont) && /JetBrains Mono/.test(m.tokenFont), `os-images@${w}: path/id alasan bukan mono`)
     check(m.reasonOverflowWrap !== "anywhere", `os-images@${w}: span alasan masih wrap-anywhere`)
-    check(m.vmlinuz.lines === 1, `os-images@${w}: 'vmlinuz' terbelah (${m.vmlinuz.lines} baris)`)
-    check(m.id.lines === 1, `os-images@${w}: 'ubuntu-22.04' terbelah (${m.id.lines} baris)`)
-    check(m.segs.every((s) => s.lines === 1), `os-images@${w}: segmen path builtin terbelah ${JSON.stringify(m.segs)}`)
+    if (w >= 1280) check(m.vmlinuz.lines === 1, `os-images@${w}: 'vmlinuz' terbelah (${m.vmlinuz.lines} baris)`)
+    if (w >= 1280) check(m.id.lines === 1, `os-images@${w}: 'ubuntu-22.04' terbelah (${m.id.lines} baris)`)
+    // DR-5-14 berlaku di tabel (≥ xl). Kartu (< xl) sengaja inline (BUG-M6-L2/DR-5-8): boleh pecah di "-".
+    if (w >= 1280) check(m.segs.every((s) => s.lines === 1), `os-images@${w}: segmen path builtin terbelah ${JSON.stringify(m.segs)}`)
     check(m.layout === (w >= 1280 ? "table" : "block"), `os-images@${w}: mode ${m.layout}`)
     if (w === 375) {
       for (const id of ["ubuntu-24.04", "ubuntu-22.04", "debian-12", "rocky-9", "windows-server-2022"])
