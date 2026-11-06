@@ -1,0 +1,36 @@
+# Mutation DEC-027 §2 (backend-dev, nginx access log tanpa query non-/boot)
+# 2026-11-06T15:07:13Z, base 18ef4cb + perubahan kerja; runner: test DEC-027 saja (infra/test/m7-dec027.sh)
+# Mutan diterapkan ke flat+VLAN sekaligus (tidak tertangkap hanya oleh asersi map flat == VLAN) kecuali disebut.
+== BASELINE: hasil: 4 lulus, 0 gagal
+== MUTANT M1-hapus-aturan-strip-query [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 2 lulus, 2 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf output memuat: password
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf output memuat: password
+== MUTANT M1b-hapus-aturan-strip-query-hanya-VLAN [infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 1 lulus, 3 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/vlan/nginx-pxe-vlan.conf output memuat: password
+    ASSERT: map flat == VLAN expected 'map $request_uri $pxe_log_uri {
+== MUTANT M2-strip-query-jadi-request_uri [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 2 lulus, 2 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf output memuat: password
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf output memuat: password
+== MUTANT M3-aturan-ipxe-jadi-semua-boot [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 1 lulus, 3 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf output memuat: password
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf token expected '/boot/52:54:00:99:00:11/***/user-data' got '/boot/52:54:00:99:00:11/AbCdEfGhIjKlMnOpQrStUvWxYz0123456789_-AbCdE/user-data
+== MUTANT M4-aturan-ipxe-izinkan-garis-miring-persen [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 3 lulus, 1 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf output memuat: password
+== MUTANT M5-aturan-ipxe-izinkan-titik-awal [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 3 lulus, 1 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf output memuat: password
+== MUTANT M6-query-token-tidak-disamarkan [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 3 lulus, 1 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf token+query expected '/boot/52:54:00:99:00:11/***/log?***' got '/boot/52:54:00:99:00:11/***/log'
+== MUTANT M7-hapus-penyamaran-token [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 2 lulus, 2 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf token expected '/boot/52:54:00:99:00:11/***/user-data' got '/boot/52:54:00:99:00:11/AbCdEfGhIjKlMnOpQrStUvWxYz0123456789_-AbCdE/user-data
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf assert-server-logs: FAIL  CR-4-12-nginx    pxe-test-m7-node11           user-data 200 x0 (min 1)
+== MUTANT M8-log_format-pakai-request_uri [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 3 lulus, 1 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf output tidak memuat: $pxe_log_uri
+== MUTANT M9-query-ipxe-ikut-disamarkan [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 3 lulus, 1 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf ipxe expected '/boot/52:54:00:99:00:11.ipxe?platform=efi' got '/boot/52:54:00:99:00:11.ipxe?***'
+== MUTANT M10-revert-map-ke-18ef4cb [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 1 lulus, 3 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf output memuat: password
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf token+query expected '/boot/52:54:00:99:00:11/***/log?***' got '/boot/52:54:00:99:00:11/***/log?x=1'
+== MUTANT M11-access_log-format-combined [infra/server/nginx-pxe.conf infra/server/vlan/nginx-pxe-vlan.conf]: rc=1 (hasil: 3 lulus, 1 gagal) => KILLED
+    ASSERT: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/infra/server/nginx-pxe.conf access_log tidak cocok regex: ^\s*access_log /var/log/nginx/pxe-access\.log pxe;$
+  ok   DEC-027 nginx: konsumen log (assert-server-logs/kvm-run/e2e) tetap cocok
+hasil: 112 lulus, 0 gagal

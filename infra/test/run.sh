@@ -666,6 +666,8 @@ source "$(dirname "$0")/m6-bug10.sh"
 source "$(dirname "$0")/m7-infra.sh"
 # M7 (M7-T9, test-engineer): pelengkap infra M7 (AC-7.14–7.19, AC-7.31).
 source "$(dirname "$0")/m7-te.sh"
+# M7 (DEC-027 §2): access log nginx tanpa query string non-/boot.
+source "$(dirname "$0")/m7-dec027.sh"
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"
