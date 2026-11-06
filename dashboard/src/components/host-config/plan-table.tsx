@@ -34,7 +34,7 @@ export function PlanTable({
       </div>
       <Table
         aria-label={`Preview ${valueLabel}`}
-        scrollRegionLabel={`Preview ${valueLabel}`}
+        scrollRegionLabel={`Area gulir preview ${valueLabel}`}
         containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
       >
         <TableHeader>

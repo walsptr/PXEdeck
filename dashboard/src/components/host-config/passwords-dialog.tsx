@@ -111,7 +111,7 @@ export function PasswordsDialog({
         </Alert>
         <Table
           aria-label="Password yang dibuat"
-          scrollRegionLabel="Password yang dibuat"
+          scrollRegionLabel="Area gulir password yang dibuat"
           containerClassName="max-h-72 overflow-auto rounded-xl border border-border bg-card"
         >
           <TableHeader>

@@ -3,6 +3,7 @@
 import { render, screen, within } from "@testing-library/react"
 import { describe, expect, it } from "vitest"
 
+import { PasswordsDialog } from "@/components/host-config/passwords-dialog"
 import { PlanTable } from "@/components/host-config/plan-table"
 import { Table, TableBody, TableCell, TableRow } from "@/components/ui/table"
 import type { Host } from "@/lib/types"
@@ -39,7 +40,8 @@ describe("PlanTable: region scroll bisa difokus (F-T8-1)", () => {
         currentOf={(h) => h.currentIp}
       />,
     )
-    const region = screen.getByRole("region", { name: "Preview IP baru" })
+    // CR-7-4: region punya label sendiri agar pembaca layar tidak mengumumkan nama tabel dua kali.
+    const region = screen.getByRole("region", { name: "Area gulir preview IP baru" })
     expect(region).toHaveAttribute("tabindex", "0")
     expect(region).toHaveAttribute("data-slot", "table-container")
     // Kotak scroll (tinggi maks + overflow) adalah elemen yang sama dengan region fokusable,
@@ -50,8 +52,28 @@ describe("PlanTable: region scroll bisa difokus (F-T8-1)", () => {
     expect(region.parentElement?.className ?? "").not.toMatch(/overflow/)
     const table = within(region).getByRole("table", { name: "Preview IP baru" })
     expect(within(table).getByText("10.99.20.41")).toHaveClass("type-data")
+    expect(region.getAttribute("aria-label")).not.toBe(table.getAttribute("aria-label"))
+    expect(screen.queryByRole("region", { name: "Preview IP baru" })).toBeNull()
     region.focus()
     expect(region).toHaveFocus()
+  })
+})
+
+describe("PasswordsDialog: label region scroll beda dari label tabel (CR-7-4)", () => {
+  it("region 'Area gulir password yang dibuat' membungkus tabel 'Password yang dibuat'", () => {
+    render(
+      <PasswordsDialog
+        passwords={[
+          { mac: "52:54:00:99:00:01", hostname: "node-01", username: "admin", password: "dummy-pw-1" },
+        ]}
+        onClose={() => {}}
+      />,
+    )
+    const region = screen.getByRole("region", { name: "Area gulir password yang dibuat" })
+    expect(region).toHaveAttribute("tabindex", "0")
+    const table = within(region).getByRole("table", { name: "Password yang dibuat" })
+    expect(within(table).getByText("52:54:00:99:00:01")).toBeInTheDocument()
+    expect(screen.queryByRole("region", { name: "Password yang dibuat" })).toBeNull()
   })
 })
 

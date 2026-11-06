@@ -1,0 +1,13 @@
+# Mutation CR-7-4 (frontend iter2) 2026-11-07T00:41:51+07:00
+## M1: plan-table scrollRegionLabel kembali ke `Preview ${valueLabel}`
+     × container scroll = region berlabel, tabIndex 0, membungkus tabel, dengan focus ring 155ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |dom| src/components/host-config/plan-table-a11y.test.tsx > PlanTable: region scroll bisa difokus (F-T8-1) > container scroll = region berlabel, tabIndex 0, membungkus tabel, dengan focus ring
+      Tests  1 failed | 2 passed (3)
+## M2: passwords-dialog scrollRegionLabel kembali ke "Password yang dibuat"
+     × region 'Area gulir password yang dibuat' membungkus tabel 'Password yang dibuat' 115ms
+⎯⎯⎯⎯⎯⎯⎯ Failed Tests 1 ⎯⎯⎯⎯⎯⎯⎯
+ FAIL  |dom| src/components/host-config/plan-table-a11y.test.tsx > PasswordsDialog: label region scroll beda dari label tabel (CR-7-4) > region 'Area gulir password yang dibuat' membungkus tabel 'Password yang dibuat'
+      Tests  1 failed | 2 passed (3)
+## Dipulihkan
+      Tests  3 passed (3)
