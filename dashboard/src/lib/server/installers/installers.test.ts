@@ -270,7 +270,7 @@ describe("AC-4.19 Debian preseed", () => {
     const p = debianPreseed(ctx({ storage: { partition: "auto", disk: "" } }))
     expect(p).toContain("d-i partman-auto/method string regular")
     expect(p).not.toContain("d-i partman-auto/disk")
-    expect(p).toContain("d-i partman/early_command string d=''; ")
+    expect(p).toMatch(/^d-i partman\/early_command string .*; d=''; /m)
     expect(p).toContain("d-i grub-installer/bootdev string default")
   })
   it("golden file", async () => {

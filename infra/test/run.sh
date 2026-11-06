@@ -658,6 +658,8 @@ source "$(dirname "$0")/m5.sh"
 source "$(dirname "$0")/m6.sh"
 # M6 (DEC-020 / BUG-M6-4): ekspor NFS server test.
 source "$(dirname "$0")/m6-nfs.sh"
+# M6 (BUG-M6-8): modul disk Debian netboot.
+source "$(dirname "$0")/m6-debian-modules.sh"
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"

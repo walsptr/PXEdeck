@@ -6,7 +6,7 @@
 //   BUG-M6-5  kickstart tanpa `repo --name=AppStream` (ISO minimal hanya `Minimal/`), mode
 //             non-interaktif (`cmdline` + `inst.cmdline`) agar kegagalan memicu %onerror.
 import { spawnSync } from "node:child_process"
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs"
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from "node:fs"
 import path from "node:path"
 
 import { describe, expect, it } from "vitest"
@@ -17,7 +17,7 @@ import { TEST_TMP_ROOT } from "@/test/db"
 import { SSH_ED25519 } from "@/test/fixtures"
 
 import type { InstallContext } from "./context"
-import { debianLateScript, debianPreseed, localeLines } from "./debian"
+import { DEBIAN_LOG, debianLateScript, debianPreseed, localeLines } from "./debian"
 import { rockyKickstart } from "./rocky"
 
 const MAC = "52:54:00:99:00:41"
@@ -209,26 +209,59 @@ describe("BUG-M6-5 kickstart sesuai media minimal + non-interaktif", () => {
 // membuat block device tanpa root), `/sys/block/`, `/dev/`, `/tmp/pxe-disk.ks` → direktori sementara.
 const KCMD_URL = `url=http://10.99.0.2/boot/${MAC}/${TOKEN}/preseed.cfg`
 const KCMD_KS = `inst.ks=http://10.99.0.2/boot/${MAC}/${TOKEN}/ks.cfg`
-type RunResult = { code: number; calls: string[]; debconf: string[]; include: string | null; d: string }
+type RunResult = { code: number; calls: string[]; debconf: string[]; include: string | null; posted: string[]; d: string }
+type Disk = { name: string; removable: boolean }
+const KVER = "6.1.0-50-amd64"
 
-function runDisk(script: (d: string) => string, opts: { kcmd: string; disks: { name: string; removable: boolean }[]; lsblk?: string }): RunResult {
+/**
+ * Sandbox sh: root palsu `<d>/{dev,sys/block,sys/module,tmp}`. `disks` ada sejak awal; `onVirtio` muncul
+ * saat `insmod virtio_blk.ko` (meniru driver yang tidak ada di initrd netboot, BUG-M6-8). `serve` =
+ * server menyajikan `<media>/debian-netboot/modules/<KVER>/<m>.ko`. `loaded` = modul sudah dimuat.
+ * Stub: curl/wget (rekam; wget `-O <f> …/<KVER>/<m>.ko` menulis berkas bila `serve`), debconf-set,
+ * list-devices (dinamis dari sys/block), lsblk, uname, insmod, lsmod, udevadm.
+ */
+function runDisk(
+  script: (d: string) => string,
+  opts: { kcmd: string; disks: Disk[]; onVirtio?: Disk[]; serve?: boolean; loaded?: string[]; lsblk?: string },
+): RunResult {
   mkdirSync(TEST_TMP_ROOT, { recursive: true })
   const d = mkdtempSync(path.join(TEST_TMP_ROOT, "disk-"))
   try {
-    for (const sub of ["bin", "dev", "sys/block", "tmp"]) mkdirSync(path.join(d, sub), { recursive: true })
-    for (const k of opts.disks) {
-      writeFileSync(path.join(d, "dev", k.name), "")
-      mkdirSync(path.join(d, "sys/block", k.name))
-      writeFileSync(path.join(d, "sys/block", k.name, "removable"), k.removable ? "1\n" : "0\n")
+    for (const sub of ["bin", "dev", "sys/block", "sys/module", "tmp", "pending"]) mkdirSync(path.join(d, sub), { recursive: true })
+    const addDisk = (root: string, k: Disk) => {
+      writeFileSync(path.join(root, "dev", k.name), "")
+      mkdirSync(path.join(root, "sys/block", k.name), { recursive: true })
+      writeFileSync(path.join(root, "sys/block", k.name, "removable"), k.removable ? "1\n" : "0\n")
     }
+    for (const k of opts.disks) addDisk(d, k)
+    for (const k of opts.onVirtio ?? []) writeFileSync(path.join(d, "pending", k.name), k.removable ? "1" : "0")
+    for (const m of opts.loaded ?? []) mkdirSync(path.join(d, "sys/module", m))
     const rec = path.join(d, "rec.txt")
+    const posted = path.join(d, "posted")
+    mkdirSync(posted)
     const stub = (name: string, body: string) => {
       writeFileSync(path.join(d, "bin", name), `#!/bin/sh\n${body}\n`, { mode: 0o755 })
     }
-    stub("curl", `i=$(cat | tr '\\n' ' '); printf 'curl %s | %s\\n' "$*" "$i" >> ${rec}; exit 0`)
-    stub("wget", `printf 'wget %s\\n' "$*" >> ${rec}; exit 0`)
+    stub("curl", `i=$(cat | tr '\\n' ' '); printf 'curl %s | %s\\n' "$*" "$i" >> ${rec}; for a in "$@"; do case "$a" in @*) f=\${a#@}; [ -f "$f" ] && cp "$f" ${posted}/$(ls ${posted} | wc -l | tr -d \\' \\'); esac; done; exit 0`)
+    stub(
+      "wget",
+      [
+        `printf 'wget %s\\n' "$*" >> ${rec}`,
+        'out=""; prev=""; for a in "$@"; do [ "$prev" = -O ] && out=$a; case "$a" in --post-data=*) printf \'%s\' "\${a#--post-data=}" > ' + posted + '/w$(ls ' + posted + ' | wc -l);; esac; prev=$a; done',
+        `case "$*" in *"/${KVER}/"*.ko) ${opts.serve ? `printf 'ko' > "$out"; exit 0` : "exit 8"};; esac`,
+        "exit 0",
+      ].join("\n"),
+    )
     stub("debconf-set", `printf 'debconf %s %s\\n' "$1" "$2" >> ${rec}`)
-    stub("list-devices", `[ "$1" = disk ] && for x in ${opts.disks.map((k) => `${d}/dev/${k.name}`).join(" ")}; do echo "$x"; done; true`)
+    stub("list-devices", `[ "$1" = disk ] && for x in ${d}/sys/block/*; do [ -d "$x" ] && echo "${d}/dev/\${x##*/}"; done; true`)
+    stub("uname", `echo ${KVER}`)
+    stub(
+      "insmod",
+      `m=$(basename "$1" .ko); [ -f "$1" ] || exit 1; mkdir -p ${d}/sys/module/$m; printf 'insmod %s\\n' "$m" >> ${rec}; [ "$m" = virtio_blk ] && for p in ${d}/pending/*; do [ -f "$p" ] || continue; n=\${p##*/}; touch ${d}/dev/$n; mkdir -p ${d}/sys/block/$n; cat "$p" > ${d}/sys/block/$n/removable; echo >> ${d}/sys/block/$n/removable; done; exit 0`,
+    )
+    stub("lsmod", `for m in ${d}/sys/module/*; do [ -d "$m" ] && echo "\${m##*/} 16384 0"; done; true`)
+    stub("udevadm", "exit 0")
+    stub("modprobe", `printf 'modprobe %s\\n' "$1" >> ${rec}; exit 0`)
     writeFileSync(path.join(d, "lsblk.out"), opts.lsblk ?? "")
     stub("lsblk", `cat ${path.join(d, "lsblk.out")}`)
     writeFileSync(path.join(d, "cmdline"), `initrd=initrd ${opts.kcmd} console=ttyS0\n`)
@@ -241,14 +274,14 @@ function runDisk(script: (d: string) => string, opts: { kcmd: string; disks: { n
         return []
       }
     })()
-    const inc = path.join(d, "tmp/pxe-disk.ks")
     let include: string | null = null
     try {
-      include = readFileSync(inc, "utf8")
+      include = readFileSync(path.join(d, "tmp/pxe-disk.ks"), "utf8")
     } catch {
       include = null
     }
-    return { code: r.status ?? -1, calls: lines.filter((l) => !l.startsWith("debconf ")), debconf: lines.filter((l) => l.startsWith("debconf ")), include, d }
+    const postedBodies = readdirSync(posted).sort().map((f: string) => readFileSync(path.join(posted, f), "utf8")) as string[]
+    return { code: r.status ?? -1, calls: lines.filter((l) => !l.startsWith("debconf ")), debconf: lines.filter((l) => l.startsWith("debconf ")), include, posted: postedBodies, d }
   } finally {
     rmSync(d, { recursive: true, force: true })
   }
@@ -261,7 +294,12 @@ describe("BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk", () =>
     return l.slice("d-i partman/early_command string ".length)
   }
   const seam = (c: string) => (d: string) =>
-    c.replaceAll("[ -b ", "[ -e ").replaceAll("/sys/block/", `${d}/sys/block/`).replace(/^d='\/dev\//, `d='${d}/dev/`)
+    c
+      .replaceAll("[ -b ", "[ -e ")
+      .replaceAll("/sys/block/", `${d}/sys/block/`)
+      .replaceAll("/sys/module/", `${d}/sys/module/`)
+      .replaceAll("/tmp/", `${d}/tmp/`)
+      .replace(/; d='\/dev\//, `; d='${d}/dev/`)
   it("preseed: partman/early_command ada, partman-auto/disk tidak statis, konfirmasi partman lengkap", () => {
     for (const disk of ["", "/dev/vda"]) {
       const p = debianPreseed(ctx({ storage: { partition: "lvm", disk } }))
@@ -283,29 +321,81 @@ describe("BUG-M6-6 Debian partman/early_command memilih/memvalidasi disk", () =>
         expect(diValue(p, k), k).not.toBeNull()
     }
   })
+  const LOADED = ["virtio_blk", "virtio_scsi"]
+  const logs = (r: RunResult) => r.calls.filter((c) => c.includes(`/boot/${MAC}/${TOKEN}/log`))
   it("otomatis: disk pertama non-removable → debconf-set partman-auto/disk + grub bootdev, log", () => {
-    const r = runDisk(seam(cmd("")), { kcmd: KCMD_URL, disks: [{ name: "sda", removable: true }, { name: "vda", removable: false }, { name: "vdb", removable: false }] })
+    const r = runDisk(seam(cmd("")), { kcmd: KCMD_URL, loaded: LOADED, disks: [{ name: "sda", removable: true }, { name: "vda", removable: false }, { name: "vdb", removable: false }] })
     expect(r.code).toBe(0)
     expect(r.debconf).toEqual([`debconf partman-auto/disk ${r.d}/dev/vda`, `debconf grub-installer/bootdev ${r.d}/dev/vda`])
-    expect(r.calls).toHaveLength(1)
-    expect(r.calls[0]).toContain(`http://10.99.0.2/boot/${MAC}/${TOKEN}/log`)
+    // Modul sudah dimuat → tanpa unduhan .ko; log: modul dimuat + disk dipilih.
+    expect(r.calls.filter((c) => c.includes(".ko"))).toEqual([])
+    expect(logs(r).map((c) => c.split(" | ")[1]?.trim())).toEqual([DEBIAN_LOG.modules, DEBIAN_LOG.disk])
     expect(r.calls.join("\n")).not.toContain("stage=failed")
   })
   it("eksplisit ada → dipakai apa adanya", () => {
-    const r = runDisk(seam(cmd("/dev/vdb")), { kcmd: KCMD_URL, disks: [{ name: "vda", removable: false }, { name: "vdb", removable: false }] })
+    const r = runDisk(seam(cmd("/dev/vdb")), { kcmd: KCMD_URL, loaded: LOADED, disks: [{ name: "vda", removable: false }, { name: "vdb", removable: false }] })
     expect(r.code).toBe(0)
     expect(r.debconf).toEqual([`debconf partman-auto/disk ${r.d}/dev/vdb`, `debconf grub-installer/bootdev ${r.d}/dev/vdb`])
   })
   it.each([
-    ["eksplisit tidak ada (/dev/vdz)", "/dev/vdz", [{ name: "vda", removable: false }]],
-    ["otomatis tanpa disk non-removable", "", [{ name: "sda", removable: true }]],
-  ])("%s → log ERROR + stage=failed, exit 1, tanpa debconf-set", (_n, disk, disks) => {
-    const r = runDisk(seam(cmd(disk)), { kcmd: KCMD_URL, disks })
+    ["eksplisit /dev/vda", "/dev/vda"],
+    ["otomatis", ""],
+  ])("BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → %s dipakai", (_n, disk) => {
+    const r = runDisk(seam(cmd(disk)), { kcmd: KCMD_URL, disks: [], onVirtio: [{ name: "vda", removable: false }], serve: true })
+    expect(r.code).toBe(0)
+    const ko = r.calls.filter((c) => c.startsWith("wget") && c.includes(".ko"))
+    expect(ko.map((c) => /\S+\.ko/.exec(c.split(" ").at(-1)!)![0])).toEqual([
+      `http://10.99.0.2/media/debian-netboot/modules/${KVER}/virtio_blk.ko`,
+      `http://10.99.0.2/media/debian-netboot/modules/${KVER}/virtio_scsi.ko`,
+    ])
+    for (const c of ko) expect(c).not.toContain("/boot/")
+    expect(r.calls).toEqual(expect.arrayContaining(["insmod virtio_blk", "insmod virtio_scsi"]))
+    // Dependensi dimuat sebelum insmod.
+    expect(r.calls.indexOf("modprobe scsi_mod")).toBeGreaterThan(-1)
+    expect(r.calls.indexOf("modprobe scsi_mod")).toBeLessThan(r.calls.indexOf("insmod virtio_scsi"))
+    expect(r.calls.indexOf("modprobe virtio_ring")).toBeLessThan(r.calls.indexOf("insmod virtio_blk"))
+    expect(r.debconf).toEqual([`debconf partman-auto/disk ${r.d}/dev/vda`, `debconf grub-installer/bootdev ${r.d}/dev/vda`])
+  })
+  it("preseed/early_command juga memuat driver (sebelum disk-detect), log mulai tetap pertama", () => {
+    const p = debianPreseed(ctx())
+    const early = p.split("\n").find((x) => x.startsWith("d-i preseed/early_command string "))!.slice("d-i preseed/early_command string ".length)
+    const r = runDisk((d) => early.replaceAll("/sys/module/", `${d}/sys/module/`).replaceAll("/tmp/", `${d}/tmp/`), { kcmd: KCMD_URL, disks: [], onVirtio: [{ name: "vda", removable: false }], serve: true })
+    expect(r.code).toBe(0)
+    expect(logs(r)[0]).toContain(DEBIAN_LOG.start)
+    expect(r.calls).toEqual(expect.arrayContaining(["insmod virtio_blk"]))
+    expect(logs(r).at(-1)).toContain(DEBIAN_LOG.modules)
+  })
+  it.each([
+    ["eksplisit tidak ada (/dev/vdz)", "/dev/vdz", [{ name: "vda", removable: false }], true],
+    ["otomatis tanpa disk non-removable", "", [{ name: "sda", removable: true }], true],
+    ["driver tidak tersedia di server (disk tak pernah muncul)", "/dev/vda", [], false],
+  ] as const)("%s → log ERROR + diagnosis + stage=failed, exit 1, tanpa debconf-set", (_n, disk, disks, serve) => {
+    const r = runDisk(seam(cmd(disk)), { kcmd: KCMD_URL, disks: [...disks], onVirtio: serve ? [] : [{ name: "vda", removable: false }], serve })
     expect(r.code).toBe(1)
     expect(r.debconf).toEqual([])
     expect(r.calls.some((c) => c.includes("ERROR installer gagal: disk target tidak ditemukan"))).toBe(true)
     expect(r.calls.at(-1)).toContain("stage=failed")
     expect(r.calls.at(-1)).toContain(`http://10.99.0.2/boot/${MAC}/${TOKEN}/status`)
+    // Diagnosis dikirim ke /log (wget --post-data atau curl @file), tanpa token.
+    const diag = r.posted.find((b) => b.startsWith("ERROR diagnosis disk d-i"))
+    expect(diag, JSON.stringify(r.posted)).toBeDefined()
+    for (const h of [`kernel ${KVER}`, "# ls /sys/block", "# list-devices disk", "# ls -l /dev/vd* /dev/sd* /dev/nvme*", "# lsmod (virtio/scsi/ata)", "# /proc/partitions"])
+      expect(diag).toContain(h)
+    expect(diag).not.toContain(TOKEN)
+  })
+  it("string preseed aman dilewatkan debconf: satu baris, tanpa backslash akhir (lanjutan baris d-i)", () => {
+    for (const disk of ["", "/dev/vda"]) {
+      const p = debianPreseed(ctx({ storage: { partition: "lvm", disk } }))
+      for (const l of p.split("\n")) expect(l.endsWith("\\"), l.slice(0, 60)).toBe(false)
+      const early = p.split("\n").filter((x) => /^d-i (preseed|partman)\/early_command string /.test(x))
+      expect(early).toHaveLength(2)
+      // `sh -n` atas nilai persis seperti yang diterima preseed (sisa baris setelah tipe).
+      for (const l of early) {
+        const v = l.replace(/^d-i \S+ string /, "")
+        const r = spawnSync("sh", ["-n", "-c", v], { encoding: "utf8" })
+        expect(r.status, r.stderr).toBe(0)
+      }
+    }
   })
 })
 

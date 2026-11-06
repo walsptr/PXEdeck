@@ -1,0 +1,20 @@
+# Mutasi dev — BUG-M6-8 (driver disk virtio Debian netboot + diagnosis)
+
+Penulis: backend-dev, 2026-11-06. Satu penggantian string per mutan; vitest installers/**,
+boot-script.test.ts, app/boot/boot-routes.test.ts (baseline 418/418) dan, untuk mutan infra,
+infra/test/run.sh (baseline 71/71). Berkas dipulihkan, md5 identik. Tidak ada mutan lolos.
+
+D8a preseed/early_command tidak memuat driver: vitest 2 merah; contoh: ['golden file', 'preseed/early_command juga memuat driver (sebelum disk-detect), log mulai tetap pertama']
+D8b partman/early_command tidak memuat driver: vitest 6 merah; contoh: ['BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → eksplisit /dev/vda dipakai', 'BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → otomatis dipakai', 'eksplisit ada → dipakai apa adanya']
+D8c insmod dihapus (unduh saja): vitest 4 merah; contoh: ['BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → eksplisit /dev/vda dipakai', 'BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → otomatis dipakai', 'golden file']
+D8d virtio_scsi dihapus dari daftar: vitest 3 merah; contoh: ['BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → eksplisit /dev/vda dipakai', 'BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → otomatis dipakai', 'golden file']
+D8e dependensi modprobe dihapus: vitest 3 merah; contoh: ['BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → eksplisit /dev/vda dipakai', 'BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → otomatis dipakai', 'golden file']
+D8f modul tanpa $(uname -r) di URL: vitest 5 merah; contoh: ['BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → eksplisit /dev/vda dipakai', 'BUG-M6-8 repro: tanpa driver virtio_blk, disk belum terlihat → unduh + insmod → otomatis dipakai', 'Debian early_command + late (log sebelum configuring, penanda di akhir)']
+D8g diagnosis tidak dikirim: vitest 4 merah; contoh: ['driver tidak tersedia di server (disk tak pernah muncul) → log ERROR + diagnosis + stage=failed, exit 1, tanpa debconf-set', 'eksplisit tidak ada (/dev/vdz) → log ERROR + diagnosis + stage=failed, exit 1, tanpa debconf-set', 'golden file']
+D8h diagnosis tanpa /proc/partitions: vitest 4 merah; contoh: ['driver tidak tersedia di server (disk tak pernah muncul) → log ERROR + diagnosis + stage=failed, exit 1, tanpa debconf-set', 'eksplisit tidak ada (/dev/vdz) → log ERROR + diagnosis + stage=failed, exit 1, tanpa debconf-set', 'golden file']
+D8i log modul dimuat dihapus: vitest 4 merah; contoh: ['golden file', 'otomatis: disk pertama non-removable → debconf-set partman-auto/disk + grub bootdev, log', 'preseed/early_command juga memuat driver (sebelum disk-detect), log mulai tetap pertama']
+D8j helper: tanpa cek kver sama: vitest 0 merah; contoh: []; shell merah: ['M6 BUG-M6-8 modul disk Debian: kver beda/modul hilang/argumen → gagal']
+D8k helper: virtio_scsi tidak disalin: vitest 0 merah; contoh: []; shell merah: ['M6 BUG-M6-8 modul disk Debian: salin dari initrd DVD (kver sama)', 'M6 BUG-M6-8 modul disk Debian: kver beda/modul hilang/argumen → gagal']
+D8l helper: tanpa dukungan prefiks ./: vitest 0 merah; contoh: []; shell merah: ['M6 BUG-M6-8 modul disk Debian: salin dari initrd DVD (kver sama)']
+D8m server-up tidak menyalin modul: vitest 0 merah; contoh: []; shell merah: ['M6 BUG-M6-8 server-up menyalin modul disk Debian ke media server']
+D8n server-up: modul di luar .agent/vms (bukti): vitest 0 merah; contoh: []; shell merah: ['M6 BUG-M6-8 server-up menyalin modul disk Debian ke media server']

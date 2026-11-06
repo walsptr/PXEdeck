@@ -221,3 +221,28 @@ literal; temuan mutasi MU6), `src/lib/server/auth/m6-te-session.test.ts` (idle 1
 Test baru di `installers/m6-smoke-fixes.test.ts` (+11): early_command/%pre dijalankan `sh` dengan stub
 `list-devices`/`lsblk`/`debconf-set`/`curl`/`wget` (seam: `[ -b` → `[ -e`, root palsu). Mutasi:
 `.agent/runs/m6/mutation-dev-T6c.txt` (14/14 merah).
+
+## T6d — BUG-M6-8 (backend-dev): driver disk virtio untuk d-i netboot
+
+Diagnosis (bukti, bukan dugaan): initrd netboot Debian 12 (`.agent/media/debian-netboot/initrd.gz`,
+kernel 6.1.0-50) tidak memuat `virtio_blk.ko`/`virtio_scsi.ko`; d-i biasanya mengambilnya sebagai udeb
+`*-modules-6.1.0-50-amd64-di` dari mirror, tetapi pool DVD-1 12.15 (`dists/bookworm/main/debian-installer/
+binary-amd64/Packages.gz`) tidak memuat udeb disk (scsi-core/sata/virtio…), karena driver itu tertanam di
+initrd CD `install.amd/initrd.gz` (yang memuat `drivers/block/virtio_blk.ko`). Akibatnya d-i tidak pernah
+melihat `/dev/vda` (attempt5: "No root file system"; attempt7–9: `[ -b /dev/vda ]` gagal). String preseed
+tidak rusak oleh debconf: console attempt9 baris 1261 menampilkan perintah utuh, dan callback `failed` di
+ujung perintah (memakai sed yang sama) berhasil. `debconf-set-selections` d-i adalah skrip sh tanpa batas
+panjang baris.
+
+| File › test | Sebelum | Sesudah | Alasan |
+|---|---|---|---|
+| `installers/m5-te-hooks.test.ts` › "Debian early_command + late" | early_command hanya 1 panggilan (log mulai) | panggilan pertama = log mulai; sisanya hanya `wget …/media/debian-netboot/modules/<kver>/virtio_*.ko` (tanpa token) atau log "modul disk virtio dimuat" | early_command kini memuat driver disk. Asersi log mulai tidak berubah. |
+| `installers/installers.test.ts` › AC-4.19 "variasi …" | `partman/early_command string d=''; ` di awal | regex `partman/early_command string .*; d=''; ` | Pemuatan driver kini mendahului pemilihan disk. |
+| golden `debian-preseed.cfg`, `debian-preseed-auto-disk.cfg` | — | early_command (preseed & partman) + modprobe/insmod driver + diagnosis | Diperbarui (`-u`), ditinjau. |
+| `infra/test/harness.sh` SAFE_TOOLS | — | + `bsdtar gzip zcat install` | Dibutuhkan `debian-disk-modules.sh` di sandbox test (alat lokal, bukan jaringan/privilese). |
+
+Test baru: `installers/m6-smoke-fixes.test.ts` (+6: repro BUG-M6-8 di sandbox sh — disk baru muncul setelah
+`insmod virtio_blk`, eksplisit & otomatis; driver tidak tersedia → ERROR + diagnosis (`ls /sys/block`,
+`list-devices disk`, `ls -l /dev/vd*…`, `lsmod`, `/proc/partitions`, tanpa token) + `failed`; preseed
+satu baris tanpa backslash akhir + `sh -n`), `infra/test/m6-debian-modules.sh` (3: ISO/initrd palsu
+bsdtar). Mutasi: `.agent/runs/m6/mutation-dev-T6d.txt` (14/14 merah).

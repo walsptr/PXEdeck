@@ -9,7 +9,7 @@ import {
   SSHD_NO_PASSWORD_TEXT,
   sudoersText,
 } from "./firstboot"
-import { b64, b64write, callbackCmd, logCmd, shQuote } from "./shell"
+import { b64, b64write, callbackCmd, logCmd, logFileCmd, shQuote } from "./shell"
 
 /** Penanda log installer (konstanta; M5 plan §2.5). */
 export const DEBIAN_LOG = {
@@ -18,7 +18,38 @@ export const DEBIAN_LOG = {
   lateDone: "installer: konfigurasi target selesai",
   disk: "installer: disk target dipilih",
   noDisk: "ERROR installer gagal: disk target tidak ditemukan",
+  modules: "installer: modul disk virtio dimuat",
 } as const
+
+/**
+ * BUG-M6-8: driver disk yang TIDAK ada di initrd netboot Debian dan tidak ada sebagai udeb di pool
+ * DVD-1 (tertanam di initrd CD). Disajikan server di `<media>/debian-netboot/modules/<kver>/` (diisi
+ * `infra/server/debian-disk-modules.sh` dari initrd DVD, kver sama).
+ */
+export const DEBIAN_DISK_MODULES = ["virtio_blk", "virtio_scsi"] as const
+export const DEBIAN_MODULES_PATH = "debian-netboot/modules"
+/** Berkas diagnosis jalur gagal disk (d-i, tanpa token). */
+export const DEBIAN_DIAG_FILE = "/tmp/pxe-disk-diag.txt"
+
+/**
+ * Muat driver disk yang belum dimuat: unduh `<media>/debian-netboot/modules/$(uname -r)/<m>.ko` (tanpa
+ * token) lalu `insmod` (dependensinya dimuat `modprobe` dari initrd netboot lebih dulu); idempoten (`/sys/module/<m>` ada → lewati); kegagalan diabaikan (hardware
+ * non-virtio tidak memerlukannya). Lalu `udevadm settle` agar `/dev/vdX` muncul. Diekspor untuk test.
+ */
+export function debianModulesCmd(ctx: InstallContext): string {
+  const c = validateContext(ctx)
+  const base = shQuote(`${new URL(c.mediaUrl).href.replace(/\/$/, "")}/${DEBIAN_MODULES_PATH}`)
+  return [
+    // Dependensi (ada di initrd netboot): virtio, virtio_ring (virtio_blk), scsi_mod (virtio_scsi).
+    "for m in virtio virtio_ring virtio_pci scsi_mod; do modprobe $m 2>/dev/null; done",
+    `for m in ${DEBIAN_DISK_MODULES.join(" ")}; do [ -d "/sys/module/$m" ] || { wget -q -T 15 -O "/tmp/$m.ko" ${base}"/$(uname -r)/$m.ko" && insmod "/tmp/$m.ko"; }; done`,
+    "udevadm settle --timeout=15 2>/dev/null || sleep 3",
+    `if [ -d /sys/module/virtio_blk ]; then ${logCmd("preseed", c.mac, DEBIAN_LOG.modules)}; fi`,
+  ].join("; ")
+}
+
+/** Perintah diagnosis disk (jalur gagal) → `DEBIAN_DIAG_FILE`; hanya nama perangkat/modul, tanpa token. */
+export const DEBIAN_DIAG_CMD = `{ echo 'ERROR diagnosis disk d-i'; echo "kernel $(uname -r)"; echo '# ls /sys/block'; ls /sys/block; echo '# list-devices disk'; list-devices disk; echo '# ls -l /dev/vd* /dev/sd* /dev/nvme*'; ls -l /dev/vd* /dev/sd* /dev/nvme* 2>&1; echo '# lsmod (virtio/scsi/ata)'; lsmod | grep -E 'virtio|scsi|ata|sd_mod'; echo '# /proc/partitions'; cat /proc/partitions; } > ${DEBIAN_DIAG_FILE} 2>&1`
 
 /**
  * BUG-M6-6: `partman/early_command` (d-i busybox, berjalan tepat sebelum partman). Disk target =
@@ -30,9 +61,11 @@ export const DEBIAN_LOG = {
 export function debianDiskCmd(ctx: InstallContext): string {
   const c = validateContext(ctx)
   return [
+    // BUG-M6-8: driver disk dimuat ulang (idempoten) tepat sebelum pemilihan disk.
+    debianModulesCmd(c),
     `d=${shQuote(c.storage.disk)}`,
     'if [ -z "$d" ]; then for x in $(list-devices disk); do [ "$(cat "/sys/block/${x##*/}/removable" 2>/dev/null)" = 1 ] || { d=$x; break; }; done; fi',
-    `if [ -n "$d" ] && [ -b "$d" ]; then debconf-set partman-auto/disk "$d"; debconf-set grub-installer/bootdev "$d"; ${logCmd("preseed", c.mac, DEBIAN_LOG.disk)}; else ${logCmd("preseed", c.mac, DEBIAN_LOG.noDisk)}; ${callbackCmd("preseed", c.mac, "failed")}; exit 1; fi`,
+    `if [ -n "$d" ] && [ -b "$d" ]; then debconf-set partman-auto/disk "$d"; debconf-set grub-installer/bootdev "$d"; ${logCmd("preseed", c.mac, DEBIAN_LOG.disk)}; else ${logCmd("preseed", c.mac, DEBIAN_LOG.noDisk)}; ${DEBIAN_DIAG_CMD}; ${logFileCmd("preseed", c.mac, DEBIAN_DIAG_FILE)}; ${callbackCmd("preseed", c.mac, "failed")}; exit 1; fi`,
   ].join("; ")
 }
 
@@ -118,7 +151,8 @@ export function debianPreseed(ctx: InstallContext): string {
   const recipe = c.storage.partition === "lvm" ? "lvm" : "regular"
   const out = [
     "# Preseed dibuat PXE dashboard (jangan edit manual)",
-    di("preseed/early_command", "string", logCmd("preseed", c.mac, DEBIAN_LOG.start)),
+    // BUG-M6-8: driver disk virtio dimuat sedini mungkin (sebelum disk-detect/partman).
+    di("preseed/early_command", "string", `${logCmd("preseed", c.mac, DEBIAN_LOG.start)}; ${debianModulesCmd(c)}`),
     // BUG-M6-3: dengan `auto=true`, localechooser berjalan SETELAH preseed dimuat. Bila language/
     // locale dipreseed terpisah, country WAJIB ikut (example-preseed Debian), kalau tidak d-i bertanya
     // "Select your location" dan instalasi macet. Bahasa installer tetap English; locale target dari

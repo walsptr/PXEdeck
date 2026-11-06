@@ -16,7 +16,8 @@ SANDBOX_PARENT="${INFRA_TEST_SANDBOX_PARENT:-$REPO_UNDER_TEST/.agent/tmp/infra-t
 
 SAFE_TOOLS=(bash sh env grep sed awk cat mkdir rm cp mv date dirname basename seq tr mktemp ls tee
   sleep find tar base64 sha256sum cut du head tail wc chmod touch xz nohup sort uniq readlink realpath
-  id stat true false printf git ln diff cmp python3)
+  id stat true false printf git ln diff cmp python3
+  bsdtar gzip zcat install)  # bsdtar/gzip/zcat/install: debian-disk-modules.sh (BUG-M6-8)
 
 PASS=0; FAIL=0; FAILED_TESTS=()
 

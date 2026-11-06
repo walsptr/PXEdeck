@@ -52,6 +52,15 @@ log "SSH siap dalam $(( $(date +%s) - t0 ))s"
 scp_server "$INFRA_DIR/tftp/snponly.efi" "$INFRA_DIR/tftp/undionly.kpxe" /srv/pxe/tftp/
 if [[ -f "$MEDIA_DIR/debian-netboot/linux" ]]; then
   scp_server "$MEDIA_DIR/debian-netboot/linux" "$MEDIA_DIR/debian-netboot/initrd.gz" /srv/pxe/media/debian-netboot/
+  # BUG-M6-8: driver disk virtio untuk d-i netboot (tidak ada di initrd netboot maupun pool DVD-1)
+  # disalin dari initrd DVD (kver sama) → http://$SERVER_IP/media/debian-netboot/modules/<kver>/.
+  # Biner .ko hanya di .agent/vms (gitignored), bukan di bukti .agent/runs (di-commit).
+  mod_dir="$VMS_DIR/pxe-test-debian-disk-modules"
+  assert_path_in_vms "$mod_dir"
+  run rm -rf "$mod_dir"
+  run "$INFRA_DIR/server/debian-disk-modules.sh" "$ISO_DEBIAN" "$MEDIA_DIR/debian-netboot/initrd.gz" "$mod_dir"
+  ssh_root "install -d -o pxe -g pxe /srv/pxe/media/debian-netboot/modules"
+  run scp -r "${SSH_OPTS[@]}" "$mod_dir/." "$SERVER_USER@$SERVER_IP:/srv/pxe/media/debian-netboot/modules/"
 fi
 # O11-C / DEC-018 §2 (cadangan, hanya bila smoke membuktikan paket kurang): repo tambahan yang
 # sudah diunduh host dari mirror resmi + diverifikasi ke .agent/media/extra-<nama>/ disajikan

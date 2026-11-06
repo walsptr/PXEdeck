@@ -213,7 +213,14 @@ describe("AC-5.19 hook log dijalankan sh terhadap cmdline palsu (stub curl)", ()
     const early = /^d-i preseed\/early_command string (.*)$/m.exec(ps)![1]
     const k = kcmd("preseed")
     const r0 = runSh(early, k)
-    expect(r0.calls.map((c) => [url(c), c.stdin])).toEqual([[LOG_URL, `${DEBIAN_LOG.start}\n`]])
+    // M6 (BUG-M6-8): setelah log mulai, early_command mengunduh driver disk virtio dari media
+    // (tanpa token) untuk insmod — panggilan berikutnya hanya ke path media itu.
+    expect([url(r0.calls[0]), r0.calls[0].stdin]).toEqual([LOG_URL, `${DEBIAN_LOG.start}\n`])
+    // (Di host test, /sys/module asli dipakai: modul yang sudah ada dilewati, lalu log "modul dimuat".)
+    for (const c of r0.calls.slice(1)) {
+      if (url(c) === LOG_URL) expect(c.stdin).toBe(`${DEBIAN_LOG.modules}\n`)
+      else expect([c.prog, url(c)]).toEqual(["wget", expect.stringMatching(/^http:\/\/[^/]+\/media\/debian-netboot\/modules\/[^/]+\/virtio_(blk|scsi)\.ko$/)])
+    }
     const lateLines = debianLateScript(ctx({ imageRepo: "debian-12" })).trimEnd().split("\n")
     const iLog = lateLines.indexOf(logCmd("preseed", MAC, DEBIAN_LOG.late))
     const iCfg = lateLines.findIndex((l) => l.includes("stage=configuring"))
