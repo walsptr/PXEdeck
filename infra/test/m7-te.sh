@@ -316,6 +316,7 @@ test_m7te_redact_url_credentials() {
     echo "10.99.0.1 [2026-11-06T15:00:00+00:00] \"GET /login?***\" 200 1 \"curl\""
     echo "GET /login?username=<REDACTED>&password=<REDACTED-admin-password>"
     echo "GET /login?password= 200"
+    echo "# bukan GET /login?username=…&password=… (komentar kode); pola \`?password=\`"
     echo "d-i passwd/user-password-crypted password \$6\$REDACTED"
   } > "$d/ok.txt"
   run_infra redact-evidence.sh "$d"

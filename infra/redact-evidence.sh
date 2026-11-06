@@ -103,10 +103,10 @@ hits="$(find "$dir" -type f -exec grep -EnaH -i -e "$TOKEN_PATH_RE" -e "$TOKEN_K
   | cut -d: -f1,2 | head -50 || true)"
 # DEC-027 §4: kredensial di string mirip URL (`?password=…`, `&username=…`) = temuan, hanya dipindai
 # (tidak disamarkan otomatis; kebocoran seperti ini harus terlihat). Nilai yang sudah disamarkan
-# (`<REDACTED…>`, `***`) atau kosong tidak dihitung. Mencakup server-nginx.txt dan
+# (`<REDACTED…>`, `***`), placeholder dokumentasi (`…`, backtick penutup kode) atau kosong tidak dihitung. Mencakup server-nginx.txt dan
 # server-nginx-error.txt (semua file di <dir>).
 urlhits="$(find "$dir" -type f -exec grep -EnoaHi "$URL_CRED_RE" {} + 2>/dev/null \
-  | grep -Eiv "[?&](password|username)=(<REDACTED|\*\*\*|$)" | cut -d: -f1,2 | head -50 || true)"
+  | grep -Eiv "[?&](password|username)=(<REDACTED|\*\*\*|…|\`|$)" | cut -d: -f1,2 | head -50 || true)"
 [[ -z "$urlhits" ]] || hits+="${hits:+$'\n'}$urlhits"
 while IFS= read -r -d '' f; do
   b64hits="$(_b64_scan "$f" | head -50)"

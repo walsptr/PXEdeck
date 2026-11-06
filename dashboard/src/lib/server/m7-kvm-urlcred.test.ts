@@ -17,6 +17,8 @@ describe("URL_CRED (scan bukti KVM, DEC-027 §4)", () => {
     '10.99.0.1 [t] "GET /login?***" 200',
     "GET /login?username=<REDACTED>&password=<REDACTED-admin-password>",
     "GET /login?password= 200",
+    "// bukan `GET /login?username=…&password=…` (komentar kode)",
+    "pola (`?password=`/`&username=` bernilai)",
     "d-i passwd/user-password-crypted password $6$REDACTED",
     "password: $6$REDACTED",
     "GET /boot/52:54:00:99:00:31.ipxe?platform=efi",
