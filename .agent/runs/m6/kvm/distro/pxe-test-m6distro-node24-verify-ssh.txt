@@ -1,4 +1,4 @@
-# AC-6.49 pxe-test-m6distro-node24 (rocky): booting → installing → configuring → done dalam 692 dtk; UI tanpa reload=true
+# AC-6.49 pxe-test-m6distro-node24 (rocky): booting → installing → configuring → done dalam 713 dtk; UI tanpa reload=true
 # event installer berurutan: true 
   installer: kickstart mulai
   installer: disk target dipilih
@@ -6,7 +6,7 @@
   installer: konfigurasi target selesai
   first-boot: OS terpasang boot dari disk: m6-node24 enp1s0=10.99.0.34/24 
 # verify-node.sh sebelum reboot
-# verify-node 2026-11-06T04:22:52Z on m6-node24
+# verify-node 2026-11-06T07:19:08Z on m6-node24
 # uname: 5.14.0-687.10.1.el9_8.0.1.x86_64
 OK   hostname = m6-node24 (aktual: m6-node24)
 OK   NIC dengan MAC 52:54:00:99:00:24 ditemukan (enp1s0)
@@ -24,8 +24,8 @@ OK   unit first-boot & URL callback sudah dihapus
 OK   pxe-callback-done.service tidak aktif lagi
 OK   bebas token: /boot/efi/EFI/rocky/grub.cfg (cocok: 0)
 OK   bebas token: /boot/grub2/grub.cfg (cocok: 0)
-OK   bebas token: /boot/loader/entries/287709c6894d4ccbb483f6b614e5c598-0-rescue.conf (cocok: 0)
-OK   bebas token: /boot/loader/entries/287709c6894d4ccbb483f6b614e5c598-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/d18a1a183b66477096a7a9386ca374be-0-rescue.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/d18a1a183b66477096a7a9386ca374be-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
 OK   bebas token: /etc/default/grub (cocok: 0)
 OK   bebas token: /etc/kernel/cmdline (cocok: 0)
 OK   bebas token: /proc/cmdline (cocok: 0)
@@ -49,10 +49,6 @@ System Locale: LANG=en_US.UTF-8
    X11 Layout: us
 # sudo
 sudo-ok
-# apt trusted=yes (DEC-021 §2)
-trusted_files=0
-# 00AllowUnauthenticated
-allow_unauth=tidak-ada
 # UEFI fallback
 bootx64=ADA
 # cmdline
@@ -66,12 +62,20 @@ vda                       20G disk
   ├─rlm_m6--node24-root 16.4G lvm  xfs         /
   └─rlm_m6--node24-swap    2G lvm  swap        [SWAP]
 
+# /etc/apt (DEC-021 §2, tidak relevan bila tidak ada; ssh exit=0)
+apt_dir=TIDAK
+grep: /etc/apt: No such file or directory
+trusted_rc=2
+allow_file=TIDAK
+grep: /etc/apt: No such file or directory
+allow_grep_rc=2
+# /etc/apt masalah: tidak ada
 # reboot: kembali=true
 m6-node24
 BOOT_IMAGE=(hd0,gpt2)/vmlinuz-5.14.0-687.10.1.el9_8.0.1.x86_64 root=/dev/mapper/rlm_m6--node24-root ro crashkernel=1G-2G:192M,2G-64G:256M,64G-:512M resume=/dev/mapper/rlm_m6--node24-swap rd.lvm.lv=rlm_m6-node24/root rd.lvm.lv=rlm_m6-node24/swap console=ttyS0,115200n8
 
 # verify-node.sh sesudah reboot
-# verify-node 2026-11-06T04:26:34Z on m6-node24
+# verify-node 2026-11-06T07:22:47Z on m6-node24
 # uname: 5.14.0-687.10.1.el9_8.0.1.x86_64
 OK   hostname = m6-node24 (aktual: m6-node24)
 OK   NIC dengan MAC 52:54:00:99:00:24 ditemukan (enp1s0)
@@ -89,8 +93,8 @@ OK   unit first-boot & URL callback sudah dihapus
 OK   pxe-callback-done.service tidak aktif lagi
 OK   bebas token: /boot/efi/EFI/rocky/grub.cfg (cocok: 0)
 OK   bebas token: /boot/grub2/grub.cfg (cocok: 0)
-OK   bebas token: /boot/loader/entries/287709c6894d4ccbb483f6b614e5c598-0-rescue.conf (cocok: 0)
-OK   bebas token: /boot/loader/entries/287709c6894d4ccbb483f6b614e5c598-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/d18a1a183b66477096a7a9386ca374be-0-rescue.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/d18a1a183b66477096a7a9386ca374be-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
 OK   bebas token: /etc/default/grub (cocok: 0)
 OK   bebas token: /etc/kernel/cmdline (cocok: 0)
 OK   bebas token: /proc/cmdline (cocok: 0)

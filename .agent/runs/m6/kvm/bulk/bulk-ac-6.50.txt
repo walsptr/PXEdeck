@@ -5,8 +5,8 @@
 # password acak: 3 ditampilkan, unik=3, panjang=16,16,16; CSV unduhan valid=true; tersisa di UI/API sesudah dialog ditutup=false
 # gelombang (max_nodes=3): pxe-test-m6bulk-node25,pxe-test-m6bulk-node26,pxe-test-m6bulk-node27
 # pxe-test-m6bulk-node25: booting → installing → configuring → done dalam 627 dtk sejak start; job ["done"]
-# pxe-test-m6bulk-node26: booting → installing → configuring → done dalam 618 dtk sejak start; job ["done"]
-# pxe-test-m6bulk-node27: booting → installing → configuring → done dalam 618 dtk sejak start; job ["done"]
+# pxe-test-m6bulk-node26: booting → installing → configuring → done dalam 606 dtk sejak start; job ["done"]
+# pxe-test-m6bulk-node27: booting → installing → configuring → done dalam 621 dtk sejak start; job ["done"]
 # UI tanpa reload: true
 # SSH
 pxe-test-m6bulk-node25: hostname=m6-bulk-01 ip=10.99.0.35/24  | sudo-ok ; password ditolak=true → OK

@@ -1,15 +1,15 @@
-2026-11-06T03:55:28.100Z preview IP [["52:54:00:99:00:25","10.99.0.103","10.99.0.35"],["52:54:00:99:00:26","10.99.0.104","10.99.0.36"],["52:54:00:99:00:27","10.99.0.105","10.99.0.37"]]; preview hostname [["52:54:00:99:00:25","—","m6-bulk-01"],["52:54:00:99:00:26","—","m6-bulk-02"],["52:54:00:99:00:27","—","m6-bulk-03"]]
-2026-11-06T03:55:29.401Z satu aksi: POST bulk=1 install=1; password unik=3; CSV ok=true; password tersisa di UI/API=false
-2026-11-06T03:55:30.360Z gelombang 1/1 start: pxe-test-m6bulk-node25,pxe-test-m6bulk-node26,pxe-test-m6bulk-node27
-2026-11-06T03:55:30.364Z pxe-test-m6bulk-node25: booting (UI, +1 dtk sejak start)
-2026-11-06T03:55:30.368Z pxe-test-m6bulk-node26: booting (UI, +1 dtk sejak start)
-2026-11-06T03:55:30.373Z pxe-test-m6bulk-node27: booting (UI, +1 dtk sejak start)
-2026-11-06T03:56:15.567Z pxe-test-m6bulk-node27: installing (UI, +46 dtk sejak start)
-2026-11-06T03:56:21.600Z pxe-test-m6bulk-node26: installing (UI, +52 dtk sejak start)
-2026-11-06T03:56:24.614Z pxe-test-m6bulk-node25: installing (UI, +55 dtk sejak start)
-2026-11-06T04:02:04.842Z pxe-test-m6bulk-node26: configuring (UI, +395 dtk sejak start)
-2026-11-06T04:02:04.851Z pxe-test-m6bulk-node27: configuring (UI, +395 dtk sejak start)
-2026-11-06T04:02:16.884Z pxe-test-m6bulk-node25: configuring (UI, +407 dtk sejak start)
-2026-11-06T04:05:47.650Z pxe-test-m6bulk-node26: done (UI, +618 dtk sejak start)
-2026-11-06T04:05:47.652Z pxe-test-m6bulk-node27: done (UI, +618 dtk sejak start)
-2026-11-06T04:05:56.666Z pxe-test-m6bulk-node25: done (UI, +627 dtk sejak start)
+2026-11-06T06:51:39.037Z preview IP [["52:54:00:99:00:25","10.99.0.103","10.99.0.35"],["52:54:00:99:00:26","10.99.0.104","10.99.0.36"],["52:54:00:99:00:27","10.99.0.105","10.99.0.37"]]; preview hostname [["52:54:00:99:00:25","—","m6-bulk-01"],["52:54:00:99:00:26","—","m6-bulk-02"],["52:54:00:99:00:27","—","m6-bulk-03"]]
+2026-11-06T06:51:40.276Z satu aksi: POST bulk=1 install=1; password unik=3; CSV ok=true; password tersisa di UI/API=false
+2026-11-06T06:51:40.925Z gelombang 1/1 start: pxe-test-m6bulk-node25,pxe-test-m6bulk-node26,pxe-test-m6bulk-node27
+2026-11-06T06:51:40.929Z pxe-test-m6bulk-node25: booting (UI, +1 dtk sejak start)
+2026-11-06T06:51:40.933Z pxe-test-m6bulk-node26: booting (UI, +1 dtk sejak start)
+2026-11-06T06:51:40.937Z pxe-test-m6bulk-node27: booting (UI, +1 dtk sejak start)
+2026-11-06T06:52:26.160Z pxe-test-m6bulk-node25: installing (UI, +46 dtk sejak start)
+2026-11-06T06:52:26.165Z pxe-test-m6bulk-node26: installing (UI, +46 dtk sejak start)
+2026-11-06T06:52:32.202Z pxe-test-m6bulk-node27: installing (UI, +52 dtk sejak start)
+2026-11-06T06:58:06.684Z pxe-test-m6bulk-node26: configuring (UI, +386 dtk sejak start)
+2026-11-06T06:58:15.742Z pxe-test-m6bulk-node27: configuring (UI, +395 dtk sejak start)
+2026-11-06T06:58:27.780Z pxe-test-m6bulk-node25: configuring (UI, +408 dtk sejak start)
+2026-11-06T07:01:46.421Z pxe-test-m6bulk-node26: done (UI, +606 dtk sejak start)
+2026-11-06T07:02:01.475Z pxe-test-m6bulk-node27: done (UI, +621 dtk sejak start)
+2026-11-06T07:02:07.485Z pxe-test-m6bulk-node25: done (UI, +627 dtk sejak start)

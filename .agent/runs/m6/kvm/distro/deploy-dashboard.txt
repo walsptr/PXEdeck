@@ -1,15 +1,15 @@
-# deploy-dashboard 20261106T040653Z (commit 019502a)
+# deploy-dashboard 20261106T070245Z (commit 18913b5)
 OK   /etc/pxe-dashboard.env 640 root:pxe (admin 2 kunci, nilai tidak dicetak)
 nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
 nginx: configuration file /etc/nginx/nginx.conf test is successful
-# release /opt/pxe-dashboard/releases/20261106T040653Z (v22.23.4)
+# release /opt/pxe-dashboard/releases/20261106T070245Z (v22.23.4)
 # systemctl is-active
 pxe-dashboard  active
 nginx          active
 dnsmasq        active
 # listen :3000 / :80
-LISTEN 0      511                        127.0.0.1:3000  0.0.0.0:* users:(("next-server (v1",pid=1893,fd=21))                                    
-LISTEN 0      511                        10.99.0.2:80    0.0.0.0:* users:(("nginx",pid=1899,fd=6),("nginx",pid=1898,fd=6),("nginx",pid=961,fd=6))
+LISTEN 0      511                        10.99.0.2:80    0.0.0.0:* users:(("nginx",pid=1928,fd=6),("nginx",pid=1927,fd=6),("nginx",pid=955,fd=6))
+LISTEN 0      511                        127.0.0.1:3000  0.0.0.0:* users:(("next-server (v1",pid=1922,fd=21))                                    
 OK   next listen 127.0.0.1:3000
 # install-dashboard exit=0
 # host: GET http://10.99.0.2/login -> 200

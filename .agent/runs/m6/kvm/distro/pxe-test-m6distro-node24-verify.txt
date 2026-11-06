@@ -1,4 +1,4 @@
-# verify-node 2026-11-06T04:26:35Z on m6-node24
+# verify-node 2026-11-06T07:22:48Z on m6-node24
 # uname: 5.14.0-687.10.1.el9_8.0.1.x86_64
 OK   hostname = m6-node24 (aktual: m6-node24)
 OK   NIC dengan MAC 52:54:00:99:00:24 ditemukan (enp1s0)
@@ -16,8 +16,8 @@ OK   unit first-boot & URL callback sudah dihapus
 OK   pxe-callback-done.service tidak aktif lagi
 OK   bebas token: /boot/efi/EFI/rocky/grub.cfg (cocok: 0)
 OK   bebas token: /boot/grub2/grub.cfg (cocok: 0)
-OK   bebas token: /boot/loader/entries/287709c6894d4ccbb483f6b614e5c598-0-rescue.conf (cocok: 0)
-OK   bebas token: /boot/loader/entries/287709c6894d4ccbb483f6b614e5c598-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/d18a1a183b66477096a7a9386ca374be-0-rescue.conf (cocok: 0)
+OK   bebas token: /boot/loader/entries/d18a1a183b66477096a7a9386ca374be-5.14.0-687.10.1.el9_8.0.1.x86_64.conf (cocok: 0)
 OK   bebas token: /etc/default/grub (cocok: 0)
 OK   bebas token: /etc/kernel/cmdline (cocok: 0)
 OK   bebas token: /proc/cmdline (cocok: 0)

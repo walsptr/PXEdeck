@@ -1,9 +1,9 @@
 
 Running 2 tests using 1 worker
 
-  ✓  1 e2e-kvm/m6-distro.spec.ts:116:7 › distro: konfigurasi + Simpan & Install untuk semua node lewat UI (14.9s)
-  ✓  2 e2e-kvm/m6-distro.spec.ts:164:7 › distro: semua node Done ≤ 30 mnt tanpa reload, event berurutan, SSH + DEC-021 + reboot dari disk (19.0m)
+  ✓  1 e2e-kvm/m6-distro.spec.ts:118:7 › distro: konfigurasi + Simpan & Install untuk semua node lewat UI (15.2s)
+  ✓  2 e2e-kvm/m6-distro.spec.ts:166:7 › distro: semua node Done ≤ 30 mnt tanpa reload, event berurutan, SSH + DEC-021 + reboot dari disk (19.3m)
 
-  Slow test file: e2e-kvm/m6-distro.spec.ts (19.2m)
+  Slow test file: e2e-kvm/m6-distro.spec.ts (19.5m)
   Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
-  2 passed (19.3m)
+  2 passed (19.6m)

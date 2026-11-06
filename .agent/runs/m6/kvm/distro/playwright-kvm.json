@@ -129,12 +129,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 14901,
+                  "duration": 15156,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T04:07:21.263Z",
+                  "startTime": "2026-11-06T07:03:17.018Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -144,7 +144,7 @@
           ],
           "id": "df0c5115fc12c65b57ec-75acdd49760a7ed13a33",
           "file": "m6-distro.spec.ts",
-          "line": 116,
+          "line": 118,
           "column": 7
         },
         {
@@ -163,12 +163,12 @@
                   "workerIndex": 0,
                   "parallelIndex": 0,
                   "status": "passed",
-                  "duration": 1139319,
+                  "duration": 1157430,
                   "errors": [],
                   "stdout": [],
                   "stderr": [],
                   "retry": 0,
-                  "startTime": "2026-11-06T04:07:37.228Z",
+                  "startTime": "2026-11-06T07:03:33.263Z",
                   "annotations": [],
                   "attachments": []
                 }
@@ -178,7 +178,7 @@
           ],
           "id": "df0c5115fc12c65b57ec-ded22108cf3fc5768f6e",
           "file": "m6-distro.spec.ts",
-          "line": 164,
+          "line": 166,
           "column": 7
         }
       ]
@@ -186,8 +186,8 @@
   ],
   "errors": [],
   "stats": {
-    "startTime": "2026-11-06T04:07:20.548Z",
-    "duration": 1156110.715,
+    "startTime": "2026-11-06T07:03:16.186Z",
+    "duration": 1174634.3699999999,
     "expected": 2,
     "skipped": 0,
     "unexpected": 0,

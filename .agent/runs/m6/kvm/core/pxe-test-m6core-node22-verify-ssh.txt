@@ -1,5 +1,5 @@
 # verify-node.sh sebelum reboot
-# verify-node 2026-11-06T03:39:40Z on m6-node22
+# verify-node 2026-11-06T06:36:30Z on m6-node22
 # uname: 6.8.0-139-generic
 OK   hostname = m6-node22 (aktual: m6-node22)
 OK   NIC dengan MAC 52:54:00:99:00:22 ditemukan (enp1s0)
@@ -31,7 +31,7 @@ m6admin@10.99.0.32: Permission denied (publickey).
 # ditolak=true
 # reboot: kembali=true
 # verify-node.sh sesudah reboot
-# verify-node 2026-11-06T03:40:04Z on m6-node22
+# verify-node 2026-11-06T06:36:56Z on m6-node22
 # uname: 6.8.0-139-generic
 OK   hostname = m6-node22 (aktual: m6-node22)
 OK   NIC dengan MAC 52:54:00:99:00:22 ditemukan (enp1s0)

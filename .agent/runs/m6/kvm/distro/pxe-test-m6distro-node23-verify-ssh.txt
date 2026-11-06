@@ -1,4 +1,4 @@
-# AC-6.48 pxe-test-m6distro-node23 (debian): booting → installing → configuring → done dalam 599 dtk; UI tanpa reload=true
+# AC-6.48 pxe-test-m6distro-node23 (debian): booting → installing → configuring → done dalam 608 dtk; UI tanpa reload=true
 # event installer berurutan: true 
   installer: preseed mulai
   installer: modul disk virtio dimuat
@@ -8,7 +8,7 @@
   installer: konfigurasi target selesai
   first-boot: OS terpasang boot dari disk: m6-node23 enp1s0=10.99.0.33/24 
 # verify-node.sh sebelum reboot
-# verify-node 2026-11-06T04:19:10Z on m6-node23
+# verify-node 2026-11-06T07:15:28Z on m6-node23
 # uname: 6.1.0-50-amd64
 OK   hostname = m6-node23 (aktual: m6-node23)
 OK   NIC dengan MAC 52:54:00:99:00:23 ditemukan (enp1s0)
@@ -32,7 +32,7 @@ OK   bebas token: /proc/cmdline (cocok: 0)
 OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
 OK   /etc/pxe-callback tidak ada
 OK   root fs dari disk lokal (/dev/mapper/pxe--vg-root), bukan NFS/live
-# uptime: up 1 minute
+# uptime: up 2 minutes
 # verify-node fails=0
 
 # exit=0
@@ -47,10 +47,6 @@ System Locale: LANG=en_US.UTF-8
    X11 Layout: us
 # sudo
 sudo-ok
-# apt trusted=yes (DEC-021 §2)
-trusted_files=0
-# 00AllowUnauthenticated
-allow_unauth=tidak-ada
 # UEFI fallback
 bootx64=ADA
 # cmdline
@@ -64,12 +60,18 @@ vda                  20G disk
   ├─pxe--vg-root   18.1G lvm  ext4        /
   └─pxe--vg-swap_1  980M lvm  swap        [SWAP]
 
+# /etc/apt (DEC-021 §2, wajib ada & bersih; ssh exit=0)
+apt_dir=ADA
+trusted_rc=1
+allow_file=TIDAK
+allow_grep_rc=1
+# /etc/apt masalah: tidak ada
 # reboot: kembali=true
 m6-node23
 BOOT_IMAGE=/vmlinuz-6.1.0-50-amd64 root=/dev/mapper/pxe--vg-root ro quiet
 
 # verify-node.sh sesudah reboot
-# verify-node 2026-11-06T04:22:51Z on m6-node23
+# verify-node 2026-11-06T07:19:07Z on m6-node23
 # uname: 6.1.0-50-amd64
 OK   hostname = m6-node23 (aktual: m6-node23)
 OK   NIC dengan MAC 52:54:00:99:00:23 ditemukan (enp1s0)

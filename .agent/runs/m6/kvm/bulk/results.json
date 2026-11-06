@@ -1,13 +1,13 @@
 {
   "run": "m6bulk",
-  "session": "1793937323988-efdeef62",
-  "generatedAt": "2026-11-06T04:06:03.609Z",
+  "session": "1793947895320-d707192f",
+  "generatedAt": "2026-11-06T07:02:14.775Z",
   "results": [
     {
       "ac": "AC-6.50",
       "status": "PASS",
       "durationS": 638,
-      "note": "gelombang 3; m6-bulk-01 627s, m6-bulk-02 618s, m6-bulk-03 618s; SSH true; 429 node 0",
+      "note": "gelombang 3; m6-bulk-01 627s, m6-bulk-02 606s, m6-bulk-03 621s; SSH true; 429 node 0",
       "evidence": [
         "bulk-ac-6.50.txt",
         "bulk-timeline.txt",
@@ -154,7 +154,7 @@
     "runId": "m6bulk",
     "nodes": "25:uefi 26:uefi 27:uefi",
     "maxNodes": 3,
-    "memAvailableMb": 15671,
+    "memAvailableMb": 14373,
     "wavesMode": true,
     "waves": [
       [
@@ -167,9 +167,10 @@
     "failedStage": "",
     "exit": 0,
     "dryRun": false,
-    "startedAt": "2026-11-06T03:54:22Z",
-    "durationSec": 716
+    "startedAt": "2026-11-06T06:50:35Z",
+    "durationSec": 717
   },
-  "commit": "019502a",
-  "worktree": ".agent/wt-m6-kvm (detached 019502a)"
+  "commit": "18913b5",
+  "worktree": ".agent/wt-m6-kvm (detached 18913b5)",
+  "iteration": 2
 }

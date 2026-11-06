@@ -1,0 +1,1 @@
+bersih: tanpa password node/admin/generator, token /boot/, private key (teks & base64)

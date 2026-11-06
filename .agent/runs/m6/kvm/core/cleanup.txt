@@ -1,7 +1,7 @@
-## before 2026-11-06T03:53:33Z
+## before 2026-11-06T06:50:26Z
  Id   Name              State
 ----------------------------------
- 59   pxe-test-server   running
+ 73   pxe-test-server   running
  -    ubuntu24.04       shut off
 
  Name           State    Autostart   Persistent
@@ -15,7 +15,7 @@ pxe-test-debian-disk-modules
 pxe-test-server-base.qcow2
 pxe-test-server-base.ready
 pxe-test-server.qcow2
-## after 2026-11-06T03:53:36Z
+## after 2026-11-06T06:50:28Z
  Id   Name          State
 ------------------------------
  -    ubuntu24.04   shut off

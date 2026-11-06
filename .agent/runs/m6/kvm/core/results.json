@@ -1,7 +1,7 @@
 {
   "run": "m6core",
-  "session": "1793935030240-9d5ca4af",
-  "generatedAt": "2026-11-06T03:53:30.556Z",
+  "session": "1793945636541-d2ec32b8",
+  "generatedAt": "2026-11-06T06:50:23.270Z",
   "results": [
     {
       "ac": "AC-6.43-host",
@@ -57,8 +57,8 @@
       "ac": "AC-6.45",
       "node": "pxe-test-m6core-node21",
       "status": "PASS",
-      "durationS": 264,
-      "note": "failed/installer-error +264s, error-commands 1, temuan 0",
+      "durationS": 261,
+      "note": "failed/installer-error +261s, error-commands 1, temuan 0",
       "evidence": [
         "pxe-test-m6core-node21-job1-failpath.txt",
         "screenshots/pxe-test-m6core-node21-job1-failed.png"
@@ -68,7 +68,7 @@
       "ac": "AC-6.46-timeout",
       "node": "pxe-test-m6core-node22",
       "status": "PASS",
-      "durationS": 682,
+      "durationS": 677,
       "note": "timeout-installing, installerBoots 1, tanpa reload true",
       "evidence": [
         "pxe-test-m6core-node22-timeline.txt",
@@ -79,8 +79,8 @@
       "ac": "AC-6.46",
       "node": "pxe-test-m6core-node22",
       "status": "PASS",
-      "durationS": 1087,
-      "note": "install ulang booting → installing → configuring → done 379s; verify 0/0; pw ditolak true; kernel 8→8; job [[\"done\",null],[\"failed\",\"timeout-installing\"]]",
+      "durationS": 1093,
+      "note": "install ulang booting → installing → configuring → done 389s; verify 0/0; pw ditolak true; kernel 8→8; job [[\"done\",null],[\"failed\",\"timeout-installing\"]]",
       "evidence": [
         "pxe-test-m6core-node22-verify-ssh.txt",
         "pxe-test-m6core-node22-timeline.txt"
@@ -100,7 +100,7 @@
       "ac": "AC-6.51b",
       "node": "pxe-test-m6core-node22",
       "status": "PASS",
-      "note": "291 404       9 429; node21 booting→installing→configuring→done",
+      "note": "294 404       6 429; node21 booting→installing→configuring→done",
       "evidence": [
         "flood-boot.txt",
         "server-pxe-dashboard-journal.txt"
@@ -110,8 +110,8 @@
       "ac": "AC-6.44",
       "node": "pxe-test-m6core-node21",
       "status": "PASS",
-      "durationS": 573,
-      "note": "booting → installing → configuring → done 573s; verify 0/0; pw ditolak true; kernel 8→8; job [[\"done\",null],[\"failed\",\"installer-error\"]]",
+      "durationS": 570,
+      "note": "booting → installing → configuring → done 570s; verify 0/0; pw ditolak true; kernel 8→8; job [[\"done\",null],[\"failed\",\"installer-error\"]]",
       "evidence": [
         "pxe-test-m6core-node21-verify-ssh.txt",
         "pxe-test-m6core-node21-timeline.txt"
@@ -228,16 +228,17 @@
     "runId": "m6core",
     "nodes": "21:uefi:failpath 22:bios:destroy",
     "maxNodes": 3,
-    "memAvailableMb": 15747,
+    "memAvailableMb": 13941,
     "wavesMode": false,
     "waves": [],
     "bootingTimeoutMin": null,
     "failedStage": "",
     "exit": 0,
     "dryRun": false,
-    "startedAt": "2026-11-06T03:16:21Z",
-    "durationSec": 2242
+    "startedAt": "2026-11-06T06:13:08Z",
+    "durationSec": 2247
   },
-  "commit": "019502a",
-  "worktree": ".agent/wt-m6-kvm (detached 019502a)"
+  "commit": "18913b5",
+  "worktree": ".agent/wt-m6-kvm (detached 18913b5)",
+  "iteration": 2
 }

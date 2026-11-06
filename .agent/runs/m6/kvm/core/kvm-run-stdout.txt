@@ -1,8 +1,8 @@
-2026-11-06T03:16:21Z preflight          ok max_nodes=3 avail_mb=12675 mem_available_mb=15747 waves=—
-[2026-11-06T03:16:21Z] network pxe-test sudah terdefinisi
-[2026-11-06T03:16:21Z] network pxe-test sudah aktif
-[2026-11-06T03:16:21Z] network pxe-test-nat sudah terdefinisi
-[2026-11-06T03:16:21Z] network pxe-test-nat sudah aktif
+2026-11-06T06:13:09Z preflight          ok max_nodes=3 avail_mb=10869 mem_available_mb=13941 waves=—
+[2026-11-06T06:13:09Z] network pxe-test sudah terdefinisi
+[2026-11-06T06:13:09Z] network pxe-test sudah aktif
+[2026-11-06T06:13:09Z] network pxe-test-nat sudah terdefinisi
+[2026-11-06T06:13:09Z] network pxe-test-nat sudah aktif
  Name           State    Autostart   Persistent
 -------------------------------------------------
  default        active   yes         yes
@@ -10,56 +10,56 @@
  pxe-test       active   no          yes
  pxe-test-nat   active   no          yes
 
-2026-11-06T03:16:21Z net-up             ok 
-[2026-11-06T03:16:21Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
-[2026-11-06T03:16:21Z] network pxe-test sudah terdefinisi
-[2026-11-06T03:16:21Z] network pxe-test sudah aktif
-[2026-11-06T03:16:21Z] network pxe-test-nat sudah terdefinisi
-[2026-11-06T03:16:21Z] network pxe-test-nat sudah aktif
-[2026-11-06T03:16:21Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
+2026-11-06T06:13:09Z net-up             ok 
+[2026-11-06T06:13:09Z] base /home/syawal/Project/PXE-BOOT/.agent/vms/pxe-test-server-base.qcow2 sudah di-provision (provisioned 2026-11-05T07:00:22Z in 56s node=node-v22.23.4-linux-x64.tar.xz)
+[2026-11-06T06:13:09Z] network pxe-test sudah terdefinisi
+[2026-11-06T06:13:09Z] network pxe-test sudah aktif
+[2026-11-06T06:13:09Z] network pxe-test-nat sudah terdefinisi
+[2026-11-06T06:13:09Z] network pxe-test-nat sudah aktif
+[2026-11-06T06:13:09Z] virt-install pxe-test-server (RAM 3072 MB, overlay pxe-test-server.qcow2)
 
 Starting install...
 Creating domain...                                          |         00:00     
 Domain creation completed.
-[2026-11-06T03:16:31Z] SSH siap dalam 10s
+[2026-11-06T06:13:18Z] SSH siap dalam 9s
 6.1.0-50-amd64
-[2026-11-06T03:16:33Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/kvm/core/server-listen.txt
-2026-11-06T03:16:33Z server-up          ok 
-2026-11-06T03:16:33Z admin-pass         ok m6core-admin.pass (0600, isi tidak dicetak)
-[2026-11-06T03:16:34Z] build standalone (PXE_STANDALONE=1 npm run build)
-[2026-11-06T03:17:02Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261106T031633Z
-[2026-11-06T03:17:06Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/kvm/core/deploy-dashboard.txt)
-2026-11-06T03:17:06Z deploy             ok admin=pxeadmin booting_timeout_min=default
-2026-11-06T03:17:07Z server-check       ok 
-[2026-11-06T03:17:07Z] create pxe-test-m6core-node21 (uefi, 52:54:00:99:00:21, 2048 MB)
+[2026-11-06T06:13:21Z] verifikasi listen PASS -> /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/kvm/core/server-listen.txt
+2026-11-06T06:13:21Z server-up          ok 
+2026-11-06T06:13:21Z admin-pass         ok m6core-admin.pass (0600, isi tidak dicetak)
+[2026-11-06T06:13:21Z] build standalone (PXE_STANDALONE=1 npm run build)
+[2026-11-06T06:13:49Z] rilis 18M -> 10.99.0.2:/tmp/pxe-test-deploy.20261106T061321Z
+[2026-11-06T06:13:53Z] dashboard aktif di http://10.99.0.2 (bukti /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/kvm/core/deploy-dashboard.txt)
+2026-11-06T06:13:53Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-06T06:13:53Z server-check       ok 
+[2026-11-06T06:13:53Z] create pxe-test-m6core-node21 (uefi, 52:54:00:99:00:21, 2048 MB)
 WARNING  The guest's network configuration may not support PXE
 
 Starting install...
 Creating domain...                                          |         00:00     
 Domain creation completed.
-2026-11-06T03:17:08Z node-create        ok pxe-test-m6core-node21 uefi 52:54:00:99:00:21
-[2026-11-06T03:17:08Z] create pxe-test-m6core-node22 (bios, 52:54:00:99:00:22, 2048 MB)
+2026-11-06T06:13:54Z node-create        ok pxe-test-m6core-node21 uefi 52:54:00:99:00:21
+[2026-11-06T06:13:54Z] create pxe-test-m6core-node22 (bios, 52:54:00:99:00:22, 2048 MB)
 WARNING  The guest's network configuration may not support PXE
 
 Starting install...
 Creating domain...                                          |         00:00     
 Domain creation completed.
-2026-11-06T03:17:09Z node-create        ok pxe-test-m6core-node22 bios 52:54:00:99:00:22
-2026-11-06T03:53:30Z playwright         ok exit=0 (playwright-kvm.log)
-2026-11-06T03:53:31Z verify             ok pxe-test-m6core-node21 (pxe-test-m6core-node21-verify.txt)
-2026-11-06T03:53:31Z verify             ok pxe-test-m6core-node22 (pxe-test-m6core-node22-verify.txt)
-2026-11-06T03:53:31Z evidence           start 
-2026-11-06T03:53:32Z evidence           done 
+2026-11-06T06:13:55Z node-create        ok pxe-test-m6core-node22 bios 52:54:00:99:00:22
+2026-11-06T06:50:23Z playwright         ok exit=0 (playwright-kvm.log)
+2026-11-06T06:50:23Z verify             ok pxe-test-m6core-node21 (pxe-test-m6core-node21-verify.txt)
+2026-11-06T06:50:24Z verify             ok pxe-test-m6core-node22 (pxe-test-m6core-node22-verify.txt)
+2026-11-06T06:50:24Z evidence           start 
+2026-11-06T06:50:25Z evidence           done 
 PASS  CR-4-12-dnsmasq  pxe-test-m6core-node21       TFTP snponly.efi terkirim ke 10.99.0.101 (lease 52:54:00:99:00:21)
 PASS  CR-4-12-nginx    pxe-test-m6core-node21       user-data 200 x2 (min 2)
 PASS  CR-4-12-nginx    pxe-test-m6core-node22       user-data 200 x2 (min 2)
-2026-11-06T03:53:32Z server-logs        ok 
+2026-11-06T06:50:25Z server-logs        ok 
 Domain 'pxe-test-server' is being shutdown
 
 Domain 'pxe-test-server' has been undefined
 
-[2026-11-06T03:53:36Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
-[2026-11-06T03:53:36Z] cleanup run m6core selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/kvm/core/cleanup.txt)
-2026-11-06T03:53:36Z cleanup            done 
-2026-11-06T03:53:36Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+[2026-11-06T06:50:28Z] pxe-test-server dimatikan dan di-undefine (overlay dihapus)
+[2026-11-06T06:50:29Z] cleanup run m6core selesai (lihat /home/syawal/Project/PXE-BOOT/.agent/wt-m6/.agent/runs/m6/kvm/core/cleanup.txt)
+2026-11-06T06:50:29Z cleanup            done 
+2026-11-06T06:50:29Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
 exit=0
