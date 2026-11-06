@@ -1,0 +1,103 @@
+# ss -lunp  (2026-11-06T14:57:38Z, pxe-test-server)
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                                                   
+UNCONN 0      0            0.0.0.0:48362      0.0.0.0:*                                                             
+UNCONN 0      0         10.99.10.2:53         0.0.0.0:*    users:(("dnsmasq",pid=1720,fd=6))                        
+UNCONN 0      0         127.0.0.54:53         0.0.0.0:*    users:(("systemd-resolve",pid=642,fd=16))                
+UNCONN 0      0      127.0.0.53%lo:53         0.0.0.0:*    users:(("systemd-resolve",pid=642,fd=14))                
+UNCONN 0      0      0.0.0.0%pxe10:67         0.0.0.0:*    users:(("dnsmasq",pid=1720,fd=4))                        
+UNCONN 0      0         10.99.10.2:69         0.0.0.0:*    users:(("dnsmasq",pid=1720,fd=8))                        
+UNCONN 0      0            0.0.0.0:111        0.0.0.0:*    users:(("rpcbind",pid=1676,fd=5),("systemd",pid=1,fd=83))
+UNCONN 0      0            0.0.0.0:47272      0.0.0.0:*    users:(("rpc.mountd",pid=1688,fd=4))                     
+UNCONN 0      0          127.0.0.1:652        0.0.0.0:*    users:(("rpc.statd",pid=900,fd=5))                       
+UNCONN 0      0            0.0.0.0:53951      0.0.0.0:*    users:(("rpc.statd",pid=900,fd=8))                       
+UNCONN 0      0               [::]:42184         [::]:*    users:(("rpc.statd",pid=900,fd=10))                      
+UNCONN 0      0               [::]:111           [::]:*    users:(("rpcbind",pid=1676,fd=7),("systemd",pid=1,fd=85))
+UNCONN 0      0               [::]:49392         [::]:*    users:(("rpc.mountd",pid=1688,fd=6))                     
+UNCONN 0      0               [::]:35551         [::]:*                                                             
+
+# ss -lntp
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                                                                         
+LISTEN 0      4096   127.0.0.53%lo:53         0.0.0.0:*    users:(("systemd-resolve",pid=642,fd=15))                                      
+LISTEN 0      4096         0.0.0.0:111        0.0.0.0:*    users:(("rpcbind",pid=1676,fd=4),("systemd",pid=1,fd=82))                      
+LISTEN 0      4096         0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=945,fd=3),("systemd",pid=1,fd=248))                         
+LISTEN 0      511        10.99.0.2:80         0.0.0.0:*    users:(("nginx",pid=1669,fd=6),("nginx",pid=1668,fd=6),("nginx",pid=1667,fd=6))
+LISTEN 0      64           0.0.0.0:45667      0.0.0.0:*                                                                                   
+LISTEN 0      4096      127.0.0.54:53         0.0.0.0:*    users:(("systemd-resolve",pid=642,fd=17))                                      
+LISTEN 0      4096         0.0.0.0:40243      0.0.0.0:*    users:(("rpc.mountd",pid=1688,fd=5))                                           
+LISTEN 0      4096         0.0.0.0:53001      0.0.0.0:*    users:(("rpc.statd",pid=900,fd=9))                                             
+LISTEN 0      64        10.99.10.2:2049       0.0.0.0:*                                                                                   
+LISTEN 0      32        10.99.10.2:53         0.0.0.0:*    users:(("dnsmasq",pid=1720,fd=7))                                              
+LISTEN 0      511       10.99.10.2:80         0.0.0.0:*    users:(("nginx",pid=1669,fd=7),("nginx",pid=1668,fd=7),("nginx",pid=1667,fd=7))
+LISTEN 0      4096            [::]:49551         [::]:*    users:(("rpc.mountd",pid=1688,fd=7))                                           
+LISTEN 0      4096            [::]:111           [::]:*    users:(("rpcbind",pid=1676,fd=6),("systemd",pid=1,fd=84))                      
+LISTEN 0      4096            [::]:22            [::]:*    users:(("sshd",pid=945,fd=4),("systemd",pid=1,fd=250))                         
+LISTEN 0      64              [::]:43893         [::]:*                                                                                   
+LISTEN 0      4096            [::]:57207         [::]:*    users:(("rpc.statd",pid=900,fd=11))                                            
+
+# ip -br addr
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+pxe0             UP             10.99.0.2/24 fe80::5054:ff:fe99:102/64 
+nat0             UP             192.168.199.2/24 fe80::5054:ff:fe99:103/64 
+trunk0           UP             
+mgmt20@trunk0    UP             10.99.20.1/24 
+pxe10@trunk0     UP             10.99.10.2/24 
+
+# ip -d link show (trunk0 pxe10 mgmt20)
+4: trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 68 maxmtu 65535 addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus virtio parentdev virtio2 
+6: pxe10@trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 0 maxmtu 65535 
+    vlan protocol 802.1Q id 10 <REORDER_HDR> addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 
+5: mgmt20@trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 0 maxmtu 65535 
+    vlan protocol 802.1Q id 20 <REORDER_HDR> addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 
+
+# services
+dnsmasq      active
+nginx        active
+nfs-server   active
+nftables     active
+rpcbind      active
+
+# mounts
+/srv/pxe/media/debian-12 /dev/sr1 iso9660 ro,relatime,nojoliet,check=s,map=n,blocksize=2048,iocharset=utf8
+/srv/pxe/media/rocky-9 /dev/sr2 iso9660 ro,relatime,nojoliet,check=s,map=n,blocksize=2048,iocharset=utf8
+/srv/pxe/media/ubuntu-24.04 /dev/sr0 iso9660 ro,relatime,nojoliet,check=s,map=n,blocksize=2048,iocharset=utf8
+
+# exports
+/srv/pxe/media/ubuntu-24.04  10.99.10.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash)
+/srv/pxe/media/ubuntu-24.04  10.99.20.0/24(sync,wdelay,hide,no_subtree_check,fsid=1001,sec=sys,ro,secure,no_root_squash,no_all_squash)
+/srv/pxe/media/rocky-9  10.99.10.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash)
+/srv/pxe/media/rocky-9  10.99.20.0/24(sync,wdelay,hide,no_subtree_check,fsid=1003,sec=sys,ro,secure,root_squash,no_all_squash)
+
+# tftp root
+13f8e6a6b87af04a2f289729122d8b25330328584b613359fc0e2ab2924cf2e0  snponly.efi
+a1a4644405c9dd430ef2832ce0c357cc22dfe3df7af5f099a39e52d326f99924  undionly.kpxe
+
+# nft ruleset
+table inet pxe_guard {
+	chain input {
+		type filter hook input priority filter; policy accept;
+		iifname "nat0" ct state established,related accept
+		iifname "nat0" icmp type echo-request accept
+		iifname "nat0" counter packets 0 bytes 0 drop
+	}
+}
+
+OK   dnsmasq udp 10.99.10.2:53
+OK   dnsmasq udp 0.0.0.0%pxe10:67
+OK   dnsmasq udp 10.99.10.2:69
+OK   nginx tcp 10.99.0.2:80
+OK   nfsd tcp 10.99.10.2:2049
+OK   dnsmasq tcp 10.99.10.2:53
+OK   nginx tcp 10.99.10.2:80
+OK   dnsmasq DHCP listen udp %pxe10:67
+OK   net.ipv4.ip_forward=0
+OK   pxe10 = VLAN 802.1Q id 10 di trunk0
+OK   mgmt20 = VLAN 802.1Q id 20 di trunk0
+OK   pxe10 10.99.10.2/24
+OK   mgmt20 10.99.20.1/24
+OK   trunk0 tanpa IPv4
+OK   nftables: koneksi baru dari nat0 di-drop
+OK   /etc/dnsmasq.d/pxe.conf interface=pxe10
+RESULT: PASS

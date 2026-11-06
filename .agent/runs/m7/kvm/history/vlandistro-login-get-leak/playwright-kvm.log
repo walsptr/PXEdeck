@@ -1,0 +1,38 @@
+
+Running 3 tests using 1 worker
+
+  ✘  1 e2e-kvm/m7-vlan.spec.ts:320:7 › vlandistro: host muncul tanpa reload → Sheet VLAN 20 → Simpan & Install (UI) untuk semua node (1ms)
+  -  2 e2e-kvm/m7-vlan.spec.ts:334:7 › vlandistro: Booting → Installing → Configuring → Done ≤ 30 mnt tanpa reload
+  -  3 e2e-kvm/m7-vlan.spec.ts:364:7 › vlandistro: pcap trunk0, log nginx, relay verify, MTU, reboot dari disk per node
+
+
+  1) e2e-kvm/m7-vlan.spec.ts:320:7 › vlandistro: host muncul tanpa reload → Sheet VLAN 20 → Simpan & Install (UI) untuk semua node 
+
+    Error: expect(page).toHaveURL(expected) failed
+
+    Expected pattern: /\/hosts$/
+    Received string:  "http://10.99.0.2/login?username=pxeadmin&password=<REDACTED-admin-password>"
+    Timeout: 30000ms
+
+    Call log:
+      - Expect "toHaveURL" with timeout 30000ms
+        63 × locator resolved to <html lang="id" class="h-full antialiased">…</html>
+           - unexpected value "http://10.99.0.2/login?username=pxeadmin&password=<REDACTED-admin-password>"
+
+
+      243 |     await page.getByLabel("Password", { exact: true }).fill(pw)
+      244 |     await page.getByTestId("login-submit").click()
+    > 245 |     await expect(page).toHaveURL(/\/hosts$/, { timeout: 30_000 })
+          |                        ^
+      246 |   })
+      247 |
+      248 |   test.afterAll(async () => {
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm/m7-vlan.spec.ts:245:24
+
+    Error Context: ../.agent/runs/m7/kvm/vlandistro/playwright-kvm-artifacts/m7-vlan-vlandistro-host-mu-07f48-Install-UI-untuk-semua-node/error-context.md
+
+    Error Context: ../.agent/runs/m7/kvm/vlandistro/playwright-kvm-artifacts/m7-vlan-vlandistro-host-mu-07f48-Install-UI-untuk-semua-node/error-context.md
+
+  1 failed
+    e2e-kvm/m7-vlan.spec.ts:320:7 › vlandistro: host muncul tanpa reload → Sheet VLAN 20 → Simpan & Install (UI) untuk semua node 
+  2 did not run

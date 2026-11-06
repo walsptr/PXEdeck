@@ -1,0 +1,6 @@
+UI: IP 10.99.20.41 VLAN 20 untuk pxe-test-m7vlancore-node32 → "Bentrok dengan m7-node31", Simpan nonaktif=true, PATCH terkirim=0
+API PATCH IP bentrok node31 (ip=10.99.20.41 vlan=20): 422 {"error":"m7-node32: Bentrok dengan m7-node31","errors":[{"section":"network","hostId":"525400990032","message":"m7-node32: Bentrok dengan m7-node31"}]}
+API PATCH di luar subnet VLAN 20 (ip=10.99.30.5 vlan=20): 422 {"error":"m7-node32: Di luar subnet 10.99.20.0/24 (VLAN 20)","errors":[{"section":"network","hostId":"525400990032","message":"m7-node32: Di luar subnet 10.99.20.0/24 (VLAN 20)"}]}
+API PATCH VLAN 99 tidak terdaftar (ip=10.99.20.50 vlan=99): 422 {"error":"Gateway 10.99.20.1 di luar subnet management 10.99.10.0/24","errors":[{"section":"network","message":"Gateway 10.99.20.1 di luar subnet management 10.99.10.0/24"},{"section":"network","hostId":"525400990032","message":"m7-node32: Di luar subnet 10.99.10.0/24"}]}
+konfigurasi identik sebelum/sesudah: pxe-test-m7vlancore-node31=true pxe-test-m7vlancore-node32=true
+masalah: tidak ada

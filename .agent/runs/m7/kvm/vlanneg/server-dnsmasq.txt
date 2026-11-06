@@ -1,0 +1,9 @@
+Nov  6 14:07:49 dnsmasq[1719]: started, version 2.91 cachesize 150
+Nov  6 14:07:49 dnsmasq[1719]: compile time options: IPv6 GNU-getopt DBus no-UBus i18n IDN2 DHCP DHCPv6 no-Lua TFTP conntrack ipset nftset auth DNSSEC loop-detect inotify dumpfile
+Nov  6 14:07:49 dnsmasq[1719]: warning: ignoring resolv-file flag because no-resolv is set
+Nov  6 14:07:49 dnsmasq[1719]: warning: no upstream servers configured
+Nov  6 14:07:49 dnsmasq-dhcp[1719]: DHCP, IP range 10.99.10.100 -- 10.99.10.200, lease time 1h
+Nov  6 14:07:49 dnsmasq-dhcp[1719]: DHCP, sockets bound exclusively to interface pxe10
+Nov  6 14:07:49 dnsmasq-tftp[1719]: TFTP root is /srv/pxe/tftp  
+Nov  6 14:07:49 dnsmasq[1719]: using only locally-known addresses for pxe.test
+Nov  6 14:07:49 dnsmasq[1719]: read /etc/hosts - 8 names

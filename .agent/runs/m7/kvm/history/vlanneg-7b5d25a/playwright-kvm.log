@@ -1,0 +1,30 @@
+
+Running 1 test using 1 worker
+
+  ✘  1 e2e-kvm/m7-vlanneg.spec.ts:45:7 › vlanneg: keadaan akhir — host negatif tidak ada di dashboard (UI + API), dnsmasq/nginx tanpa jawaban, dnsmasq hanya pxe10, sw-p2 access20 (699ms)
+
+
+  1) e2e-kvm/m7-vlanneg.spec.ts:45:7 › vlanneg: keadaan akhir — host negatif tidak ada di dashboard (UI + API), dnsmasq/nginx tanpa jawaban, dnsmasq hanya pxe10, sw-p2 access20 
+
+    Error: env VM MACS
+
+       at m7-shared.ts:17
+
+      15 | function vmRun(host: "10.99.0.2" | "10.99.0.3", script: string, envs: Record<string, string>, timeoutMs: number): { code: number; out: string } {
+      16 |   const assigns = Object.entries(envs).map(([k, v]) => {
+    > 17 |     if (!/^[A-Z][A-Z0-9_]*$/.test(k) || !/^[A-Za-z0-9.:_/-]*$/.test(v)) throw new Error(`env VM ${k}`)
+         |                                                                               ^
+      18 |     return `${k}=${v}`
+      19 |   })
+      20 |   const r = spawnSync("ssh", ["-i", infraKey(), ...SSH_OPTS, `root@${host}`, `${assigns.join(" ")} bash -s`], {
+        at map (/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm/m7-shared.ts:17:79)
+        at vmRun (/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm/m7-shared.ts:16:40)
+        at serverRun (/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm/m7-shared.ts:31:10)
+        at /home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm/m7-vlanneg.spec.ts:67:26
+
+    Error Context: ../.agent/runs/m7/kvm/vlanneg/playwright-kvm-artifacts/m7-vlanneg-vlanneg-keadaan-96480--hanya-pxe10-sw-p2-access20/error-context.md
+
+    Error Context: ../.agent/runs/m7/kvm/vlanneg/playwright-kvm-artifacts/m7-vlanneg-vlanneg-keadaan-96480--hanya-pxe10-sw-p2-access20/error-context.md
+
+  1 failed
+    e2e-kvm/m7-vlanneg.spec.ts:45:7 › vlanneg: keadaan akhir — host negatif tidak ada di dashboard (UI + API), dnsmasq/nginx tanpa jawaban, dnsmasq hanya pxe10, sw-p2 access20 

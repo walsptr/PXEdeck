@@ -1,0 +1,127 @@
+# AC-7.22 pxe-test-m7vlancore-node32 (ubuntu, bios) VLAN 20 10.99.20.42/24: booting → installing → configuring → done dalam 487 dtk (UI tanpa reload)
+# lease VLAN 10 (currentIp sebelum reboot): 10.99.20.42
+# pcap trunk0 (capture-trunk0-install.txt): DISCOVER node vlan10=9 OFFER server vlan10=9 ACK server vlan10=8 frame non-vlan10=0
+# nginx (token disamarkan): file konfigurasi
+  10.99.10.116 2026-11-06T14:37:43+00:00 GET /boot/52:54:00:99:00:32/***/user-data 200
+# nginx: callback status
+  10.99.20.42 2026-11-06T14:42:41+00:00 POST /boot/52:54:00:99:00:32/***/status 200
+  10.99.20.42 2026-11-06T14:45:09+00:00 POST /boot/52:54:00:99:00:32/***/status 200
+# event installer berurutan: true 
+  installer: autoinstall mulai
+  installer: late-commands mulai
+  installer: konfigurasi target selesai
+  first-boot: OS terpasang boot dari disk: m7-node32 mgmt.20=10.99.20.42/24 
+# dnsmasq: transaksi DHCP sebelum verifikasi
+  Nov  6 14:36:46 1074550031 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00000:UNDI:002001 user=iPXE
+  Nov  6 14:37:42 1294244735 DHCPREQUEST,DHCPNAK vendor=- user=-
+  Nov  6 14:37:09 2166903831 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00000:UNDI:002001 user=iPXE
+  Nov  6 14:37:29 2715579975 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=- user=-
+  Nov  6 14:37:43 2930820693 DHCPREQUEST,DHCPNAK vendor=- user=-
+  Nov  6 14:37:42 348989875 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=- user=-
+  Nov  6 14:37:43 549804328 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=- user=-
+  Nov  6 14:42:49 657262717 DHCPDISCOVER,DHCPOFFER,DHCPREQUEST,DHCPACK vendor=PXEClient:Arch:00000:UNDI:002001 user=iPXE
+# verify-node.sh lewat relay (sebelum reboot)
+# verify-node 2026-11-06T14:54:04Z on m7-node32
+# uname: 6.8.0-139-generic
+OK   hostname = m7-node32 (aktual: m7-node32)
+OK   parent NIC dengan MAC 52:54:00:99:00:32 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (mgmt.20)
+# ip -4 addr (mgmt.20): 10.99.20.42/24
+OK   ip -4 addr mgmt.20 memuat 10.99.20.42/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain mgmt.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   mgmt.20@enp1s0: vlan protocol 802.1Q id 20
+# info dpkg vlan: dpkg-query: no packages found matching vlan
+# info dpkg ifupdown: unknown ok not-installed 
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 127.0.0.53 2 3 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=3 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/ubuntu--vg-ubuntu--lv), bukan NFS/live
+# uptime: up 11 minutes
+# verify-node fails=0
+# exit=0
+# pwcheck (relay)
+# ssh PreferredAuthentications=password (exit 255): Warning: Permanently added '10.99.20.42' (ED25519) to the list of known hosts.
+m7admin@10.99.20.42: Permission denied (publickey).
+# password ditolak=true
+# MTU
+# ip -d link mgmt20
+6: mgmt20@trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 0 maxmtu 65535 
+    vlan protocol 802.1Q id 20 <REORDER_HDR> addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 
+# ping -M do -s 1472 -c 3 10.99.20.42 (dari mgmt20)
+PING 10.99.20.42 (10.99.20.42) from 10.99.20.1 mgmt20: 1472(1500) bytes of data.
+1480 bytes from 10.99.20.42: icmp_seq=1 ttl=64 time=0.599 ms
+1480 bytes from 10.99.20.42: icmp_seq=2 ttl=64 time=1.44 ms
+1480 bytes from 10.99.20.42: icmp_seq=3 ttl=64 time=1.17 ms
+
+--- 10.99.20.42 ping statistics ---
+3 packets transmitted, 3 received, 0% packet loss, time 2005ms
+rtt min/avg/max/mdev = 0.599/1.070/1.441/0.351 ms
+# exit-1472=0
+# ping -M do -s 1473 -c 1 10.99.20.42 (harus ditolak: > MTU 1500, DF)
+PING 10.99.20.42 (10.99.20.42) from 10.99.20.1 mgmt20: 1473(1501) bytes of data.
+
+--- 10.99.20.42 ping statistics ---
+1 packets transmitted, 0 received, +1 errors, 100% packet loss, time 0ms
+
+# exit-1473=1
+ping: local error: message too long, mtu=1500
+# mtu ok=true
+# probe (relay, dari node)
+probe ping 10.99.0.1: unreachable
+probe GET http://10.99.10.2/api/hosts: 403
+probe GET http://10.99.0.2/api/hosts: 403
+# reboot: kembali=true verify2=0 status=done currentIp=10.99.10.116 job 1->1 penanda-installer-serial 4->4 iPXE-script 3->4 serial-boot-lokal=true
+# verify-node.sh lewat relay (sesudah reboot)
+# verify-node 2026-11-06T14:56:33Z on m7-node32
+# uname: 6.8.0-139-generic
+OK   hostname = m7-node32 (aktual: m7-node32)
+OK   parent NIC dengan MAC 52:54:00:99:00:32 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (mgmt.20)
+# ip -4 addr (mgmt.20): 10.99.20.42/24
+OK   ip -4 addr mgmt.20 memuat 10.99.20.42/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain mgmt.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   mgmt.20@enp1s0: vlan protocol 802.1Q id 20
+# info dpkg vlan: dpkg-query: no packages found matching vlan
+# info dpkg ifupdown: unknown ok not-installed 
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 127.0.0.53 2 3 )
+OK   login sebagai m7admin (aktual: m7admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m7admin (aktual: 600 m7admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=3 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/mapper/ubuntu--vg-ubuntu--lv), bukan NFS/live
+# uptime: up 2 minutes
+# verify-node fails=0
+# exit=0
+# DHCP dari OS terpasang setelah Done: tidak ada
+# masalah: tidak ada

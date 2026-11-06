@@ -1,0 +1,24 @@
+# kvm-run m7 scenario=vlandistro run=m7vlandistro 20261106T145724Z nodes=[33:uefi:os=debian 34:uefi:os=rocky] waves=0 keep_server=0 dry=0
+2026-11-06T14:57:24Z preflight          ok max_nodes=2 avail_mb=9783 mem_available_mb=13623 waves=—
+2026-11-06T14:57:24Z net-up             ok 
+2026-11-06T14:57:39Z server-up          ok profil VLAN + server-listen-vlan.txt PASS
+2026-11-06T14:57:39Z admin-pass         ok m7vlandistro-admin.pass (0600, isi tidak dicetak)
+2026-11-06T14:57:59Z deploy             ok admin=pxeadmin booting_timeout_min=default
+2026-11-06T14:58:47Z switch-up          ok switch-check.txt
+2026-11-06T14:58:48Z server-check       ok 
+2026-11-06T14:58:49Z relay-setup        ok /root/pxe-relay (key 0600, isi tidak dicetak)
+2026-11-06T14:58:51Z node-create        ok pxe-test-m7vlandistro-node33 uefi 52:54:00:99:00:33 net=pxe-test-port1
+2026-11-06T14:58:52Z node-create        ok pxe-test-m7vlandistro-node34 uefi 52:54:00:99:00:34 net=pxe-test-port1
+2026-11-06T14:59:25Z playwright         FAIL exit=1 (playwright-kvm.log)
+2026-11-06T14:59:25Z verify             partial Playwright exit=1: hanya node berstatus done (2 host terbaca)
+2026-11-06T14:59:25Z verify             NOT_RUN pxe-test-m7vlandistro-node33 (status host discovered)
+2026-11-06T14:59:25Z verify             NOT_RUN pxe-test-m7vlandistro-node34 (status host discovered)
+2026-11-06T14:59:25Z evidence           start 
+2026-11-06T14:59:27Z evidence           done 
+2026-11-06T14:59:27Z relay-teardown     ok relay-clean: absent
+2026-11-06T14:59:27Z server-logs        FAIL server-log-asserts.txt
+2026-11-06T14:59:32Z cleanup            done 
+2026-11-06T14:59:32Z libvirt            PASS protectedIdentical=true remaining=0 diff=+0 -0
+2026-11-06T14:59:33Z redact             ok 
+2026-11-06T14:59:33Z admin-pass         FAIL password admin muncul di: /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/kvm/vlandistro/playwright-kvm-artifacts/m7-vlan-vlandistro-host-mu-07f48-Install-UI-untuk-semua-node/error-context.md /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/kvm/vlandistro/playwright-kvm.log /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/kvm/vlandistro/playwright-kvm.json /home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/kvm/vlandistro/server-nginx.txt
+2026-11-06T14:59:34Z result             FAIL exit=1 stage=verify

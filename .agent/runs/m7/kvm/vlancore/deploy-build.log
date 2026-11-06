@@ -1,0 +1,85 @@
+
+> dashboard@0.1.0 build
+> next build
+
+▲ Next.js 16.4.5 (Turbopack)
+✓ Running next.config.ts took 24ms
+- Cache Components enabled
+- Partial Prefetching enabled
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 185ms
+  Running TypeScript ...
+  Finished TypeScript in 2.2s ...
+  Collecting page data using 11 workers ...
+(node:572399) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572393) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572392) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572414) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572406) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572434) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572454) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572426) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572440) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572447) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+(node:572391) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+(Use `node-22 --trace-warnings ...` to show where the warning was created)
+  Generating static pages using 11 workers (0/23) ...
+  Generating static pages using 11 workers (5/23) 
+  Generating static pages using 11 workers (11/23) 
+  Generating static pages using 11 workers (17/23) 
+✓ Generating static pages using 11 workers (23/23) in 506ms
+  Finalizing page optimization ...
+
+Route (app)
+┌ ○ /_not-found
+├ ƒ /api/auth/login
+├ ƒ /api/auth/logout
+├ ƒ /api/auth/session
+├ ƒ /api/credentials/import
+├ ƒ /api/hosts
+├ ƒ /api/hosts/[id]
+├ ƒ /api/hosts/[id]/config
+├ ƒ /api/hosts/[id]/install
+├ ƒ /api/hosts/[id]/reboot
+├ ƒ /api/hosts/bulk
+├ ƒ /api/hosts/bulk/install
+├ ƒ /api/jobs
+├ ƒ /api/jobs/[id]
+├ ƒ /api/jobs/[id]/logs
+├ ƒ /api/network
+├ ƒ /api/os-images
+├ ƒ /api/os-images/[id]
+├ ƒ /api/server-status
+├ ƒ /api/settings
+├ ƒ /api/ssh-keys
+├ ƒ /api/ssh-keys/[id]
+├ ƒ /boot/[name]
+├ ƒ /boot/[name]/[token]/[file]
+├ ƒ /boot/[name]/[token]/log
+├ ƒ /boot/[name]/[token]/status
+├ ◐ /design
+├ ◐ /hosts
+├ ◐ /jobs
+├ ◐ /login
+├ ◐ /os-images
+├ ◐ /settings
+└ ◐ /ssh-keys
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)             prerendered as static content
+◐  (Partial Prerender)  prerendered as static HTML with dynamic server-streamed content
+ƒ  (Dynamic)            server-rendered on demand
+

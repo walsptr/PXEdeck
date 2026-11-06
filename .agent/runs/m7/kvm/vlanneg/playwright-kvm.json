@@ -1,0 +1,162 @@
+{
+  "config": {
+    "argv": [
+      "/usr/bin/node-22",
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/node_modules/.bin/playwright",
+      "test",
+      "-c",
+      "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm/playwright.config.ts"
+    ],
+    "configFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm/playwright.config.ts",
+    "rootDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm",
+    "failOnFlakyTests": false,
+    "forbidOnly": true,
+    "fullyParallel": false,
+    "globalSetup": null,
+    "globalTeardown": null,
+    "globalTimeout": 0,
+    "grep": {},
+    "grepInvert": null,
+    "maxFailures": 0,
+    "metadata": {
+      "actualWorkers": 1
+    },
+    "preserveOutput": "always",
+    "projects": [
+      {
+        "outputDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/kvm/vlanneg/playwright-kvm-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "id": "",
+        "name": "",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm",
+        "testIgnore": [],
+        "testMatch": [
+          "/(^|\\/)m7-[^/]*\\.spec\\.ts$/"
+        ],
+        "timeout": 3000000
+      }
+    ],
+    "filteredProjects": [
+      {
+        "grep": {},
+        "grepInvert": null,
+        "outputDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/kvm/vlanneg/playwright-kvm-artifacts",
+        "repeatEach": 1,
+        "retries": 0,
+        "metadata": {
+          "actualWorkers": 1
+        },
+        "name": "",
+        "testDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm",
+        "snapshotDir": "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/dashboard/e2e-kvm",
+        "testIgnore": [],
+        "testMatch": {},
+        "timeout": 3000000,
+        "use": {
+          "userAgent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/156.0.8078.4 Safari/537.36",
+          "viewport": {
+            "width": 1440,
+            "height": 900
+          },
+          "screen": {
+            "width": 1920,
+            "height": 1080
+          },
+          "deviceScaleFactor": 1,
+          "isMobile": false,
+          "hasTouch": false,
+          "defaultBrowserType": "chromium",
+          "baseURL": "http://10.99.0.2",
+          "locale": "id-ID",
+          "trace": "off",
+          "video": "off",
+          "screenshot": "off"
+        },
+        "dependencies": [],
+        "ignoreSnapshots": false,
+        "__projectId": ""
+      }
+    ],
+    "quiet": false,
+    "reporter": [
+      [
+        "list",
+        null
+      ],
+      [
+        "json",
+        {
+          "outputFile": "/home/syawal/Project/PXE-BOOT/.agent/wt-m7/.agent/runs/m7/kvm/vlanneg/playwright-kvm.json"
+        }
+      ]
+    ],
+    "reportSlowTests": {
+      "max": 5,
+      "threshold": 300000
+    },
+    "shard": null,
+    "tags": [],
+    "updateSnapshots": "default",
+    "updateSourceMethod": "patch",
+    "version": "1.64.1",
+    "workers": 1,
+    "webServer": null
+  },
+  "suites": [
+    {
+      "title": "m7-vlanneg.spec.ts",
+      "file": "m7-vlanneg.spec.ts",
+      "column": 0,
+      "line": 0,
+      "specs": [
+        {
+          "title": "vlanneg: keadaan akhir — host negatif tidak ada di dashboard (UI + API), dnsmasq/nginx tanpa jawaban, dnsmasq hanya pxe10, sw-p2 access20",
+          "ok": true,
+          "tags": [],
+          "tests": [
+            {
+              "timeout": 3000000,
+              "annotations": [],
+              "expectedStatus": "passed",
+              "projectId": "",
+              "projectName": "",
+              "results": [
+                {
+                  "workerIndex": 0,
+                  "parallelIndex": 0,
+                  "status": "passed",
+                  "duration": 1016,
+                  "errors": [],
+                  "stdout": [],
+                  "stderr": [],
+                  "retry": 0,
+                  "startTime": "2026-11-06T14:21:23.731Z",
+                  "annotations": [],
+                  "attachments": []
+                }
+              ],
+              "status": "expected"
+            }
+          ],
+          "id": "1893f1802ea533573dd9-065aec08814a48513072",
+          "file": "m7-vlanneg.spec.ts",
+          "line": 45,
+          "column": 7
+        }
+      ]
+    }
+  ],
+  "errors": [],
+  "stats": {
+    "startTime": "2026-11-06T14:21:23.060Z",
+    "duration": 1809.3670000000002,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  }
+}

@@ -1,0 +1,8 @@
+GET /api/hosts (sesi): 0 host: —
+pxe-test-m7vlanneg-node36 52:54:00:99:00:36: di /api/hosts=false di tabel UI=0
+pxe-test-m7vlanneg-node37 52:54:00:99:00:37: di /api/hosts=false di tabel UI=0
+pxe-test-m7vlanneg-node38 52:54:00:99:00:38: di /api/hosts=false di tabel UI=0
+AC-7.26 pxe-test-m7vlanneg-node36 neg=admin pcap pxe0: request=7 reply=0 tag20=0 frame-dari-MAC=7 → sesuai
+AC-7.27 pxe-test-m7vlanneg-node37 neg=access20 pcap trunk0: request=4 reply=0 tag20=4 frame-dari-MAC=4 → sesuai
+AC-7.28 pxe-test-m7vlanneg-node38 neg=tagged10 pcap trunk0: request=0 reply=0 tag20=0 frame-dari-MAC=0 → sesuai
+masalah: tidak ada

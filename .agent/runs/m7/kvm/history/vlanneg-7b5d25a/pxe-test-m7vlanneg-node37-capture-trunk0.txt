@@ -1,0 +1,90 @@
+# capture trunk0 filter: (udp port 67 or udp port 68) or (vlan and (udp port 67 or udp port 68))
+reading from file /root/pxe-cap/trunk0.pcap, link-type EN10MB (Ethernet), snapshot length 262144
+13:58:29.724009 52:54:00:99:00:37 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 450: vlan 20, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 264, offset 0, flags [none], proto UDP (17), length 432)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:37, length 404, xid 0x9a0b6559, secs 4, Flags [none]
+	  Client-Ethernet-Address 52:54:00:99:00:37
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 0
+	    NDI (94), length 3: 1.2.1
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00000:UNDI:002001"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 24: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      NTP (42), Vendor-Option (43), Vendor-Class (60), TFTP (66)
+	      BF (67), Unknown (119), Unknown (128), Unknown (129)
+	      Unknown (130), Unknown (131), Unknown (132), Unknown (133)
+	      Unknown (134), Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 51: 177.5.1.26.244.16.65.235.3.1.0.0.23.1.1.34.1.1.19.1.1.20.1.1.17.1.1.39.1.1.25.1.1.41.1.1.16.1.2.33.1.1.21.1.1.24.1.1.18.1.1
+	    Client-ID (61), length 7: ether 52:54:00:99:00:37
+	    GUID (97), length 17: 0.76.67.133.39.139.56.179.75.132.167.47.246.166.235.172.92
+13:58:33.777256 52:54:00:99:00:37 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 450: vlan 20, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 564, offset 0, flags [none], proto UDP (17), length 432)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:37, length 404, xid 0x9a0b6559, secs 8, Flags [none]
+	  Client-Ethernet-Address 52:54:00:99:00:37
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 0
+	    NDI (94), length 3: 1.2.1
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00000:UNDI:002001"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 24: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      NTP (42), Vendor-Option (43), Vendor-Class (60), TFTP (66)
+	      BF (67), Unknown (119), Unknown (128), Unknown (129)
+	      Unknown (130), Unknown (131), Unknown (132), Unknown (133)
+	      Unknown (134), Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 51: 177.5.1.26.244.16.65.235.3.1.0.0.23.1.1.34.1.1.19.1.1.20.1.1.17.1.1.39.1.1.25.1.1.41.1.1.16.1.2.33.1.1.21.1.1.24.1.1.18.1.1
+	    Client-ID (61), length 7: ether 52:54:00:99:00:37
+	    GUID (97), length 17: 0.76.67.133.39.139.56.179.75.132.167.47.246.166.235.172.92
+13:58:41.851680 52:54:00:99:00:37 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 450: vlan 20, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 854, offset 0, flags [none], proto UDP (17), length 432)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:37, length 404, xid 0x9a0b6559, secs 12, Flags [none]
+	  Client-Ethernet-Address 52:54:00:99:00:37
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 0
+	    NDI (94), length 3: 1.2.1
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00000:UNDI:002001"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 24: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      NTP (42), Vendor-Option (43), Vendor-Class (60), TFTP (66)
+	      BF (67), Unknown (119), Unknown (128), Unknown (129)
+	      Unknown (130), Unknown (131), Unknown (132), Unknown (133)
+	      Unknown (134), Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 51: 177.5.1.26.244.16.65.235.3.1.0.0.23.1.1.34.1.1.19.1.1.20.1.1.17.1.1.39.1.1.25.1.1.41.1.1.16.1.2.33.1.1.21.1.1.24.1.1.18.1.1
+	    Client-ID (61), length 7: ether 52:54:00:99:00:37
+	    GUID (97), length 17: 0.76.67.133.39.139.56.179.75.132.167.47.246.166.235.172.92
+13:58:57.945579 52:54:00:99:00:37 > ff:ff:ff:ff:ff:ff, ethertype 802.1Q (0x8100), length 450: vlan 20, p 0, ethertype IPv4 (0x0800), (tos 0x0, ttl 64, id 1127, offset 0, flags [none], proto UDP (17), length 432)
+    0.0.0.0.68 > 255.255.255.255.67: BOOTP/DHCP, Request from 52:54:00:99:00:37, length 404, xid 0x9a0b6559, secs 16, Flags [none]
+	  Client-Ethernet-Address 52:54:00:99:00:37
+	  Vendor-rfc1048 Extensions
+	    Magic Cookie 0x63825363
+	    DHCP-Message (53), length 1: Discover
+	    MSZ (57), length 2: 1472
+	    ARCH (93), length 2: 0
+	    NDI (94), length 3: 1.2.1
+	    Vendor-Class (60), length 32: "PXEClient:Arch:00000:UNDI:002001"
+	    User-Class (77), length 4: 
+	      instance#1: [ERROR: invalid option]
+	    Parameter-Request (55), length 24: 
+	      Subnet-Mask (1), Default-Gateway (3), Domain-Name-Server (6), LOG (7)
+	      Hostname (12), Domain-Name (15), RP (17), MTU (26)
+	      NTP (42), Vendor-Option (43), Vendor-Class (60), TFTP (66)
+	      BF (67), Unknown (119), Unknown (128), Unknown (129)
+	      Unknown (130), Unknown (131), Unknown (132), Unknown (133)
+	      Unknown (134), Unknown (135), Unknown (175), Unknown (203)
+	    Unknown (175), length 51: 177.5.1.26.244.16.65.235.3.1.0.0.23.1.1.34.1.1.19.1.1.20.1.1.17.1.1.39.1.1.25.1.1.41.1.1.16.1.2.33.1.1.21.1.1.24.1.1.18.1.1
+	    Client-ID (61), length 7: ether 52:54:00:99:00:37
+	    GUID (97), length 17: 0.76.67.133.39.139.56.179.75.132.167.47.246.166.235.172.92

@@ -611,6 +611,455 @@
           "note": "Debian Done 551 dtk; relay verify 0/0 (EXPECT_VLAN=20); password ditolak; MTU DF 1472 OK; reboot dari disk tanpa reinstall; O10 PASS: enp1s0.20 (ifupdown 0.8.41) naik tanpa paket vlan."
         }
       }
+    },
+    "vlanneg": {
+      "status": "PASS",
+      "summarizedAt": "2026-11-06T14:21:36Z",
+      "run": "m7vlanneg",
+      "session": "1793974883057-417a867f",
+      "generatedAt": "2026-11-06T14:21:24.834Z",
+      "results": [
+        {
+          "ac": "AC-7.26-28-final",
+          "status": "PASS",
+          "note": "dashboard tanpa host negatif; dnsmasq/nginx tanpa jawaban; dnsmasq hanya pxe10; sw-p2 access20",
+          "evidence": [
+            "vlanneg-final.txt",
+            "vlanneg-server-final.txt",
+            "vlanneg-switch-final.txt",
+            "screenshots/vlanneg-hosts.png"
+          ]
+        },
+        {
+          "ac": "AC-7.30-scan",
+          "status": "PASS",
+          "note": "0 temuan (scan harness)",
+          "evidence": [
+            "evidence-scan.txt"
+          ]
+        },
+        {
+          "ac": "cleanup",
+          "status": "PASS",
+          "note": "semua resource run dihapus; resource terlindungi identik",
+          "failedStage": "",
+          "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)",
+          "protectedIdentical": true,
+          "runDomainsRemaining": 0,
+          "serverStopped": true,
+          "topology": "vlan",
+          "switchStopped": true,
+          "relayClean": true,
+          "evidence": [
+            "libvirt-before.txt",
+            "libvirt-after.txt",
+            "libvirt-diff.txt",
+            "cleanup.txt",
+            "kvm-run.txt"
+          ]
+        }
+      ],
+      "scenario": "vlanneg",
+      "nodes": [
+        {
+          "name": "pxe-test-m7vlanneg-node36",
+          "fw": "uefi",
+          "mac": "52:54:00:99:00:36"
+        },
+        {
+          "name": "pxe-test-m7vlanneg-node37",
+          "fw": "bios",
+          "mac": "52:54:00:99:00:37"
+        },
+        {
+          "name": "pxe-test-m7vlanneg-node38",
+          "fw": "uefi",
+          "mac": "52:54:00:99:00:38"
+        }
+      ],
+      "harness": {
+        "milestone": "m7",
+        "scenario": "vlanneg",
+        "runId": "m7vlanneg",
+        "nodes": "36:uefi:neg=admin 37:bios:neg=access20 38:uefi:neg=tagged10",
+        "maxNodes": 2,
+        "memAvailableMb": 13334,
+        "wavesMode": false,
+        "waves": [],
+        "bootingTimeoutMin": null,
+        "failedStage": "",
+        "exit": 0,
+        "dryRun": false,
+        "startedAt": "2026-11-06T14:07:34Z",
+        "durationSec": 842
+      },
+      "commit": "d9d5308",
+      "evidenceDir": "vlanneg"
+    },
+    "vlancore": {
+      "status": "PASS",
+      "summarizedAt": "2026-11-06T14:57:02Z",
+      "run": "m7vlancore",
+      "session": "1793975803963-367e1e15",
+      "generatedAt": "2026-11-06T14:56:37.081Z",
+      "results": [
+        {
+          "ac": "AC-7.20",
+          "status": "PASS",
+          "durationS": 0,
+          "note": "topologi & perimeter sesuai \u00a72.1\u20132.3",
+          "evidence": [
+            "ac-7.20-perimeter.txt",
+            "ac-7.20-server-net.txt",
+            "switch-check.txt",
+            "server-listen-vlan.txt",
+            "kvm-run-preflight.txt"
+          ]
+        },
+        {
+          "ac": "AC-7.21",
+          "node": "pxe-test-m7vlancore-node31",
+          "status": "PASS",
+          "durationS": 668,
+          "note": "booting\u2192installing\u2192configuring\u2192done 668s; verify 0/0; MTU ok; job 1",
+          "evidence": [
+            "pxe-test-m7vlancore-node31-relay-verify.txt",
+            "pxe-test-m7vlancore-node31-timeline.txt",
+            "capture-trunk0-install.txt",
+            "screenshots/pxe-test-m7vlancore-node31-sheet-network.png"
+          ]
+        },
+        {
+          "ac": "AC-7.29",
+          "node": "pxe-test-m7vlancore-node31",
+          "status": "PASS",
+          "note": "ip_forward=0; host GET /api/hosts (sesi)=200; probe ping 10.99.0.1: unreachable; probe GET http://10.99.10.2/api/hosts: 403; probe GET http://10.99.0.2/api/hosts: 403",
+          "evidence": [
+            "pxe-test-m7vlancore-node31-relay-verify.txt"
+          ]
+        },
+        {
+          "ac": "AC-7.22",
+          "node": "pxe-test-m7vlancore-node32",
+          "status": "PASS",
+          "durationS": 487,
+          "note": "booting\u2192installing\u2192configuring\u2192done 487s; verify 0/0; MTU ok; job 1",
+          "evidence": [
+            "pxe-test-m7vlancore-node32-relay-verify.txt",
+            "pxe-test-m7vlancore-node32-timeline.txt",
+            "capture-trunk0-install.txt",
+            "screenshots/pxe-test-m7vlancore-node32-sheet-network.png"
+          ]
+        },
+        {
+          "ac": "AC-7.29",
+          "node": "pxe-test-m7vlancore-node32",
+          "status": "PASS",
+          "note": "ip_forward=0; host GET /api/hosts (sesi)=200; probe ping 10.99.0.1: unreachable; probe GET http://10.99.10.2/api/hosts: 403; probe GET http://10.99.0.2/api/hosts: 403",
+          "evidence": [
+            "pxe-test-m7vlancore-node32-relay-verify.txt"
+          ]
+        },
+        {
+          "ac": "AC-7.23",
+          "status": "PASS",
+          "note": "UI error field + 3\u00d7 API 422, konfigurasi tidak berubah",
+          "evidence": [
+            "ac-7.23-validation.txt",
+            "screenshots/ac-7.23-ip-conflict-ui.png"
+          ]
+        },
+        {
+          "ac": "AC-7.30-scan",
+          "status": "PASS",
+          "note": "0 temuan (scan harness)",
+          "evidence": [
+            "evidence-scan.txt"
+          ]
+        },
+        {
+          "ac": "AC-7.29",
+          "node": "pxe-test-m7vlancore-node31",
+          "status": "PASS",
+          "note": "probe dari node lewat relay: probe ping 10.99.0.1: unreachable;probe GET http://10.99.10.2/api/hosts: 403;probe GET http://10.99.0.2/api/hosts: 403;",
+          "evidence": [
+            "pxe-test-m7vlancore-node31-probe.txt"
+          ]
+        },
+        {
+          "ac": "AC-7.29",
+          "node": "pxe-test-m7vlancore-node32",
+          "status": "PASS",
+          "note": "probe dari node lewat relay: probe ping 10.99.0.1: unreachable;probe GET http://10.99.10.2/api/hosts: 403;probe GET http://10.99.0.2/api/hosts: 403;",
+          "evidence": [
+            "pxe-test-m7vlancore-node32-probe.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m7vlancore-node31",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.10.115 (lease 52:54:00:99:00:31)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m7vlancore-node31",
+          "status": "PASS",
+          "note": "user-data 200 x1 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m7vlancore-node32",
+          "status": "PASS",
+          "note": "user-data 200 x1 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m7vlancore-node31",
+          "status": "PASS",
+          "note": "verify-node.sh (EXPECT_VLAN=20) lewat relay exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m7vlancore-node31-verify.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m7vlancore-node32",
+          "status": "PASS",
+          "note": "verify-node.sh (EXPECT_VLAN=20) lewat relay exit=0 + cek login password",
+          "evidence": [
+            "pxe-test-m7vlancore-node32-verify.txt"
+          ]
+        },
+        {
+          "ac": "cleanup",
+          "status": "PASS",
+          "note": "semua resource run dihapus; resource terlindungi identik",
+          "failedStage": "",
+          "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)",
+          "protectedIdentical": true,
+          "runDomainsRemaining": 0,
+          "serverStopped": true,
+          "topology": "vlan",
+          "switchStopped": true,
+          "relayClean": true,
+          "evidence": [
+            "libvirt-before.txt",
+            "libvirt-after.txt",
+            "libvirt-diff.txt",
+            "cleanup.txt",
+            "kvm-run.txt"
+          ]
+        }
+      ],
+      "statusTrail": {
+        "pxe-test-m7vlancore-node31": {
+          "seen": [
+            "booting",
+            "installing",
+            "configuring",
+            "done"
+          ],
+          "last": "done",
+          "doneS": 668
+        },
+        "pxe-test-m7vlancore-node32": {
+          "seen": [
+            "booting",
+            "installing",
+            "configuring",
+            "done"
+          ],
+          "last": "done",
+          "doneS": 487
+        }
+      },
+      "scenario": "vlancore",
+      "vlan": 20,
+      "nodes": [
+        {
+          "name": "pxe-test-m7vlancore-node31",
+          "fw": "uefi",
+          "os": "ubuntu",
+          "ip": "10.99.20.41",
+          "hostname": "m7-node31"
+        },
+        {
+          "name": "pxe-test-m7vlancore-node32",
+          "fw": "bios",
+          "os": "ubuntu",
+          "ip": "10.99.20.42",
+          "hostname": "m7-node32"
+        }
+      ],
+      "harness": {
+        "milestone": "m7",
+        "scenario": "vlancore",
+        "runId": "m7vlancore",
+        "nodes": "31:uefi 32:bios",
+        "maxNodes": 2,
+        "memAvailableMb": 12327,
+        "wavesMode": false,
+        "waves": [],
+        "bootingTimeoutMin": null,
+        "failedStage": "",
+        "exit": 0,
+        "dryRun": false,
+        "startedAt": "2026-11-06T14:35:17Z",
+        "durationSec": 1305
+      },
+      "commit": "d9d5308",
+      "evidenceDir": "vlancore"
+    },
+    "vlandistro": {
+      "status": "FAIL",
+      "summarizedAt": "2026-11-06T14:59:34Z",
+      "run": "m7vlandistro",
+      "session": "1793977133087-e16d18be",
+      "generatedAt": "2026-11-06T14:59:24.259Z",
+      "results": [
+        {
+          "ac": "AC-7.30-scan",
+          "status": "FAIL",
+          "note": "1 temuan (scan harness)",
+          "evidence": [
+            "evidence-scan.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m7vlandistro-node33",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.10.117 (lease 52:54:00:99:00:33)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m7vlandistro-node33",
+          "status": "FAIL",
+          "note": "preseed.cfg 200 x0 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-dnsmasq",
+          "node": "pxe-test-m7vlandistro-node34",
+          "status": "PASS",
+          "note": "TFTP snponly.efi terkirim ke 10.99.10.118 (lease 52:54:00:99:00:34)",
+          "evidence": [
+            "server-dnsmasq.txt"
+          ]
+        },
+        {
+          "ac": "CR-4-12-nginx",
+          "node": "pxe-test-m7vlandistro-node34",
+          "status": "FAIL",
+          "note": "ks.cfg 200 x0 (min 1)",
+          "evidence": [
+            "server-nginx.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m7vlandistro-node33",
+          "status": "NOT_RUN",
+          "note": "tidak diverifikasi: Playwright exit=1, status host discovered (bukan done)",
+          "evidence": [
+            "pxe-test-m7vlandistro-node33-verify.txt"
+          ]
+        },
+        {
+          "ac": "verify-node",
+          "node": "pxe-test-m7vlandistro-node34",
+          "status": "NOT_RUN",
+          "note": "tidak diverifikasi: Playwright exit=1, status host discovered (bukan done)",
+          "evidence": [
+            "pxe-test-m7vlandistro-node34-verify.txt"
+          ]
+        },
+        {
+          "ac": "cleanup",
+          "status": "PASS",
+          "note": "semua resource run dihapus; resource terlindungi identik",
+          "failedStage": "verify",
+          "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)",
+          "protectedIdentical": true,
+          "runDomainsRemaining": 0,
+          "serverStopped": true,
+          "topology": "vlan",
+          "switchStopped": true,
+          "relayClean": true,
+          "evidence": [
+            "libvirt-before.txt",
+            "libvirt-after.txt",
+            "libvirt-diff.txt",
+            "cleanup.txt",
+            "kvm-run.txt"
+          ]
+        }
+      ],
+      "scenario": "vlandistro",
+      "vlan": 20,
+      "nodes": [
+        {
+          "name": "pxe-test-m7vlandistro-node33",
+          "fw": "uefi",
+          "os": "debian",
+          "ip": "10.99.20.43",
+          "hostname": "m7-node33"
+        },
+        {
+          "name": "pxe-test-m7vlandistro-node34",
+          "fw": "uefi",
+          "os": "rocky",
+          "ip": "10.99.20.44",
+          "hostname": "m7-node34"
+        }
+      ],
+      "harness": {
+        "milestone": "m7",
+        "scenario": "vlandistro",
+        "runId": "m7vlandistro",
+        "nodes": "33:uefi:os=debian 34:uefi:os=rocky",
+        "maxNodes": 2,
+        "memAvailableMb": 13623,
+        "wavesMode": false,
+        "waves": [],
+        "bootingTimeoutMin": null,
+        "failedStage": "verify",
+        "exit": 1,
+        "dryRun": false,
+        "startedAt": "2026-11-06T14:57:24Z",
+        "durationSec": 130
+      },
+      "commit": "d9d5308",
+      "evidenceDir": "history/vlandistro-login-get-leak",
+      "note": "BLOCKED: Playwright login mengklik submit sebelum hidrasi React -> form login (tanpa method) terkirim native GET /login?username=..&password=.. (password masuk URL & log akses nginx). Temuan keamanan produk; alur Debian/Rocky tidak berjalan. Password run (sekali pakai, sudah dihapus) disamarkan dari bukti."
     }
-  }
+  },
+  "history": {
+    "vlanneg-7b5d25a": {
+      "status": "FAIL",
+      "note": "harness: validator env m7-shared menolak koma (sebelum asersi); diulang di d9d5308 -> PASS",
+      "evidenceDir": "history/vlanneg-7b5d25a"
+    },
+    "vlancore-preflight-ram": {
+      "status": "FAIL",
+      "note": "preflight: RAM bebas hanya cukup 1 node (sistem user); diulang setelah RAM cukup -> PASS",
+      "evidenceDir": "history/vlancore-preflight-ram"
+    }
+  },
+  "suiteCommit": "d9d5308"
 }

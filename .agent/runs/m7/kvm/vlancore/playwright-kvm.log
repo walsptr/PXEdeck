@@ -1,0 +1,12 @@
+
+Running 5 tests using 1 worker
+
+  ✓  1 e2e-kvm/m7-vlan.spec.ts:261:9 › AC-7.20 perimeter & topologi: switch-check, server-listen-vlan, VLAN server, settings, host tanpa route VLAN (264ms)
+  ✓  2 e2e-kvm/m7-vlan.spec.ts:320:7 › vlancore: host muncul tanpa reload → Sheet VLAN 20 → Simpan & Install (UI) untuk semua node (20.3s)
+  ✓  3 e2e-kvm/m7-vlan.spec.ts:334:7 › vlancore: Booting → Installing → Configuring → Done ≤ 30 mnt tanpa reload (11.2m)
+  ✓  4 e2e-kvm/m7-vlan.spec.ts:364:7 › vlancore: pcap trunk0, log nginx, relay verify, MTU, reboot dari disk per node (8.3m)
+  ✓  5 e2e-kvm/m7-vlan.spec.ts:485:9 › AC-7.23 validasi VLAN di server nyata: IP bentrok (UI+API), di luar subnet VLAN, VLAN tidak terdaftar → 422, konfigurasi tidak berubah (1.5s)
+
+  Slow test file: e2e-kvm/m7-vlan.spec.ts (19.9m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  5 passed (19.9m)

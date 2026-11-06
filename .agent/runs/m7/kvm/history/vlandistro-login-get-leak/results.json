@@ -1,0 +1,19 @@
+{
+  "run": "m7vlandistro",
+  "session": "1793977133087-e16d18be",
+  "generatedAt": "2026-11-06T14:59:24.259Z",
+  "results": [
+    {"ac": "AC-7.30-scan", "status": "FAIL", "note": "1 temuan (scan harness)", "evidence": ["evidence-scan.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m7vlandistro-node33", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.10.117 (lease 52:54:00:99:00:33)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m7vlandistro-node33", "status": "FAIL", "note": "preseed.cfg 200 x0 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "CR-4-12-dnsmasq", "node": "pxe-test-m7vlandistro-node34", "status": "PASS", "note": "TFTP snponly.efi terkirim ke 10.99.10.118 (lease 52:54:00:99:00:34)", "evidence": ["server-dnsmasq.txt"]},
+    {"ac": "CR-4-12-nginx", "node": "pxe-test-m7vlandistro-node34", "status": "FAIL", "note": "ks.cfg 200 x0 (min 1)", "evidence": ["server-nginx.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m7vlandistro-node33", "status": "NOT_RUN", "note": "tidak diverifikasi: Playwright exit=1, status host discovered (bukan done)", "evidence": ["pxe-test-m7vlandistro-node33-verify.txt"]},
+    {"ac": "verify-node", "node": "pxe-test-m7vlandistro-node34", "status": "NOT_RUN", "note": "tidak diverifikasi: Playwright exit=1, status host discovered (bukan done)", "evidence": ["pxe-test-m7vlandistro-node34-verify.txt"]},
+    {"ac": "cleanup", "status": "PASS", "note": "semua resource run dihapus; resource terlindungi identik", "failedStage": "verify", "libvirtDiff": "+0 -0 (lihat libvirt-diff.txt)", "protectedIdentical": true, "runDomainsRemaining": 0, "serverStopped": true, "topology": "vlan", "switchStopped": true, "relayClean": true, "evidence": ["libvirt-before.txt", "libvirt-after.txt", "libvirt-diff.txt", "cleanup.txt", "kvm-run.txt"]}
+  ],
+  "scenario": "vlandistro",
+  "vlan": 20,
+  "nodes": [{"name": "pxe-test-m7vlandistro-node33", "fw": "uefi", "os": "debian", "ip": "10.99.20.43", "hostname": "m7-node33"}, {"name": "pxe-test-m7vlandistro-node34", "fw": "uefi", "os": "rocky", "ip": "10.99.20.44", "hostname": "m7-node34"}],
+  "harness": {"milestone": "m7", "scenario": "vlandistro", "runId": "m7vlandistro", "nodes": "33:uefi:os=debian 34:uefi:os=rocky", "maxNodes": 2, "memAvailableMb": 13623, "wavesMode": false, "waves": [], "bootingTimeoutMin": null, "failedStage": "verify", "exit": 1, "dryRun": false, "startedAt": "2026-11-06T14:57:24Z", "durationSec": 130}
+}

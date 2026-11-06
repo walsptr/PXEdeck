@@ -1,0 +1,27 @@
+c[?7l[2J[0mSeaBIOS (version 1.17.0-10.fc44)
+Machine UUID 2785434c-388b-4bb3-84a7-2ff6a6ebac5c
+
+
+iPXE (https://ipxe.org) 01:00.0 C000 PCI2.10 PnP PMM+7EFCA450+7EF0A450 C000
+Press Ctrl-B to configure iPXE (PCI 01:00.0)...                                                                               
+
+
+Booting from ROM...
+iPXE (PCI 01:00.0) starting execution...ok
+iPXE initialising devices...ok
+
+
+
+[0;1miPXE 1.0.0+ (de8a0821)[0m -- Open Source Network Boot Firmware -- [0;36mhttps://ipxe.org
+[0mFeatures: DNS HTTP HTTPS iSCSI NFS TFTP AoE ELF MBOOT PXE bzImage Menu PXEXT
+
+Press Ctrl-B for the iPXE command line...                                         net0: 52:54:00:99:00:37 using virtio-net on 0000:01:00.0 (Ethernet) [open]
+  [Link:up, TX:0 TXE:0 RX:0 RXE:0]
+Configuring (net0 52:54:00:99:00:37)............................................
+................ No configuration methods succeeded (https://ipxe.org/040ee119)
+No more network devices
+
+Press Ctrl-B for the iPXE command line...                                         Booting from Hard Disk...
+Boot failed: not a bootable disk
+
+No bootable device.

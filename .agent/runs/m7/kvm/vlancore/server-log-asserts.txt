@@ -1,0 +1,3 @@
+PASS  CR-4-12-dnsmasq  pxe-test-m7vlancore-node31   TFTP snponly.efi terkirim ke 10.99.10.115 (lease 52:54:00:99:00:31)
+PASS  CR-4-12-nginx    pxe-test-m7vlancore-node31   user-data 200 x1 (min 1)
+PASS  CR-4-12-nginx    pxe-test-m7vlancore-node32   user-data 200 x1 (min 1)

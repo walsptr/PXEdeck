@@ -1,0 +1,36 @@
+[2J[001;001H[=3h[2J[001;001H[2J[001;001H[8;056;240t[2J[001;001H
+>>Start PXE over IPv4.
+  Station IP address is 10.99.10.117
+
+  Server IP address is 10.99.10.2
+  NBP filename is snponly.efi
+  NBP filesize is 238080 Bytes
+ Downloading NBP file...
+
+  NBP file downloaded successfully.
+BdsDxe: loading Boot0003 "UEFI PXEv4 (MAC:525400990033)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990033,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+BdsDxe: starting Boot0003 "UEFI PXEv4 (MAC:525400990033)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990033,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+iPXE initialising devices...ok
+
+
+
+[1m[37m[40miPXE 1.21.1+git-20220113.fbbdc3926-0ubuntu2[0m[37m[40m -- Open Source Network Boot Firmware -- [0m[36m[40mhttps://ipxe.org[0m[37m[40m
+Features: DNS HTTP HTTPS iSCSI NFS TFTP VLAN AoE EFI Menu
+
+Press Ctrl-B for the iPXE command line...                                         net0: 52:54:00:99:00:33 using SNP on SNP-0000:01:00.0 (Ethernet) [open]
+  [Link:up, TX:0 TXE:1 RX:0 RXE:0]
+  [TXE: 1 x "Network unreachable (https://ipxe.org/28086090)"]
+Configuring (net0 52:54:00:99:00:33)...... ok
+net0: 10.99.10.117/255.255.255.0
+net0: fe80::5054:ff:fe99:33/64
+Next server: 10.99.10.2
+Filename: http://10.99.10.2/boot/52:54:00:99:00:33.ipxe?platform=efi
+http://10.99.10.2/boot/52:54:00:99:00:33.ipxe... ok
+52:54:00:99:00:33.ipxe : 139 bytes [script]
+Tidak ada instalasi aktif: boot dari disk lokal
+Could not boot image: Error 0x00000001 (https://ipxe.org/00000001)
+No more network devices
+
+Press Ctrl-B for the iPXE command line...                                         BdsDxe: failed to start Boot0003 "UEFI PXEv4 (MAC:525400990033)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990033,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0): 0000007F
+
+>>Start PXE over IPv6..

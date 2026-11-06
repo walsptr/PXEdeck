@@ -1,0 +1,44 @@
+1: lo: <LOOPBACK,UP,LOWER_UP> mtu 65536 qdisc noqueue state UNKNOWN mode DEFAULT group default qlen 1000
+    link/loopback 00:00:00:00:00:00 brd 00:00:00:00:00:00 promiscuity 0  allmulti 0 minmtu 0 maxmtu 0 addrgenmode eui64 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 524280 tso_max_segs 65535 gro_max_size 65536 
+2: pxe0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:02 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 68 maxmtu 65535 addrgenmode eui64 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus virtio parentdev virtio0 
+3: nat0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:03 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 68 maxmtu 65535 addrgenmode eui64 numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus virtio parentdev virtio1 
+4: trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc fq_codel state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 68 maxmtu 65535 addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 parentbus virtio parentdev virtio2 
+5: pxe10@trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 0 maxmtu 65535 
+    vlan protocol 802.1Q id 10 <REORDER_HDR> addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 
+6: mgmt20@trunk0: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc noqueue state UP mode DEFAULT group default qlen 1000
+    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0  allmulti 0 minmtu 0 maxmtu 65535 
+    vlan protocol 802.1Q id 20 <REORDER_HDR> addrgenmode none numtxqueues 1 numrxqueues 1 gso_max_size 65536 gso_max_segs 65535 tso_max_size 65536 tso_max_segs 65535 gro_max_size 65536 
+# ip -br addr
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+pxe0             UP             10.99.0.2/24 fe80::5054:ff:fe99:102/64 
+nat0             UP             192.168.199.2/24 fe80::5054:ff:fe99:103/64 
+trunk0           UP             
+pxe10@trunk0     UP             10.99.10.2/24 
+mgmt20@trunk0    UP             10.99.20.1/24 
+# ip route
+default via 192.168.199.1 dev nat0 proto static 
+10.99.0.0/24 dev pxe0 proto kernel scope link src 10.99.0.2 
+10.99.10.0/24 dev pxe10 proto kernel scope link src 10.99.10.2 
+10.99.20.0/24 dev mgmt20 proto kernel scope link src 10.99.20.1 
+192.168.199.0/24 dev nat0 proto kernel scope link src 192.168.199.2 
+# ip_forward=0
+# ss -lunp
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                                                    
+UNCONN 0      0         10.99.10.2:53         0.0.0.0:*    users:(("dnsmasq",pid=1722,fd=6))                         
+UNCONN 0      0         127.0.0.54:53         0.0.0.0:*    users:(("systemd-resolve",pid=597,fd=16))                 
+UNCONN 0      0      127.0.0.53%lo:53         0.0.0.0:*    users:(("systemd-resolve",pid=597,fd=14))                 
+UNCONN 0      0      0.0.0.0%pxe10:67         0.0.0.0:*    users:(("dnsmasq",pid=1722,fd=4))                         
+UNCONN 0      0         10.99.10.2:69         0.0.0.0:*    users:(("dnsmasq",pid=1722,fd=8))                         
+UNCONN 0      0            0.0.0.0:111        0.0.0.0:*    users:(("rpcbind",pid=1676,fd=5),("systemd",pid=1,fd=119))
+UNCONN 0      0            0.0.0.0:41312      0.0.0.0:*    users:(("rpc.mountd",pid=1689,fd=4))                      
+UNCONN 0      0          127.0.0.1:652        0.0.0.0:*    users:(("rpc.statd",pid=900,fd=5))                        
+UNCONN 0      0            0.0.0.0:56908      0.0.0.0:*                                                              
+UNCONN 0      0            0.0.0.0:53142      0.0.0.0:*    users:(("rpc.statd",pid=900,fd=8))                        
+UNCONN 0      0               [::]:51265         [::]:*                                                              
+UNCONN 0      0               [::]:111           [::]:*    users:(("rpcbind",pid=1676,fd=7),("systemd",pid=1,fd=121))
+UNCONN 0      0               [::]:33973         [::]:*    users:(("rpc.statd",pid=900,fd=10))                       
+UNCONN 0      0               [::]:44866         [::]:*    users:(("rpc.mountd",pid=1689,fd=6))                      

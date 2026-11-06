@@ -1,0 +1,2 @@
+relay-key: 600 root:root
+relay-verify-script: present

@@ -1,0 +1,45 @@
+## before 2026-11-06T14:56:51Z
+ Id    Name              State
+-----------------------------------
+ 114   pxe-test-server   running
+ 115   pxe-test-switch   running
+ -     ubuntu24.04       shut off
+
+ Name             State    Autostart   Persistent
+---------------------------------------------------
+ default          active   yes         yes
+ int              active   yes         yes
+ pxe-test         active   no          yes
+ pxe-test-nat     active   no          yes
+ pxe-test-port1   active   no          yes
+ pxe-test-port2   active   no          yes
+ pxe-test-trunk   active   no          yes
+
+pxe-test-debian-disk-modules
+pxe-test-server-base.qcow2
+pxe-test-server-base.ready
+pxe-test-server.qcow2
+pxe-test-switch-base.qcow2
+pxe-test-switch-base.ready
+pxe-test-switch.qcow2
+pxe-test-switch-seed.iso
+## after 2026-11-06T14:56:55Z
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+ Name             State    Autostart   Persistent
+---------------------------------------------------
+ default          active   yes         yes
+ int              active   yes         yes
+ pxe-test         active   no          yes
+ pxe-test-nat     active   no          yes
+ pxe-test-port1   active   no          yes
+ pxe-test-port2   active   no          yes
+ pxe-test-trunk   active   no          yes
+
+pxe-test-debian-disk-modules
+pxe-test-server-base.qcow2
+pxe-test-server-base.ready
+pxe-test-switch-base.qcow2
+pxe-test-switch-base.ready

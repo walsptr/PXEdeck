@@ -1,0 +1,4 @@
+PASS  CR-4-12-dnsmasq  pxe-test-m7vlandistro-node33 TFTP snponly.efi terkirim ke 10.99.10.117 (lease 52:54:00:99:00:33)
+FAIL  CR-4-12-nginx    pxe-test-m7vlandistro-node33 preseed.cfg 200 x0 (min 1)
+PASS  CR-4-12-dnsmasq  pxe-test-m7vlandistro-node34 TFTP snponly.efi terkirim ke 10.99.10.118 (lease 52:54:00:99:00:34)
+FAIL  CR-4-12-nginx    pxe-test-m7vlandistro-node34 ks.cfg 200 x0 (min 1)

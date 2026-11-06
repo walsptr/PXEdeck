@@ -1,0 +1,3 @@
+probe ping 10.99.0.1: unreachable
+probe GET http://10.99.10.2/api/hosts: 403
+probe GET http://10.99.0.2/api/hosts: 403
