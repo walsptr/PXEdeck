@@ -1,0 +1,260 @@
+{
+  "run": "m8",
+  "scenario": "DEC-029 §4 installer KVM",
+  "commit": "3d60aa9af5a7bbcdcb034c763f698836ef520b35",
+  "final": {
+    "up": "PASS",
+    "install-1": "FAIL",
+    "install-2": "PASS",
+    "vlan-relay": "PASS",
+    "vlan-node": "PASS",
+    "relay-teardown": "PASS",
+    "uninstall": "FAIL",
+    "reinstall-after-uninstall": "FAIL",
+    "uninstall-vv": "PASS",
+    "netplan-neg-badparent": "PASS",
+    "purge": "PASS",
+    "purge-packages": "PASS",
+    "cleanup": "PASS",
+    "protected": "PASS"
+  },
+  "steps": [
+    {
+      "at": "2026-11-07T11:40:20Z",
+      "step": "up",
+      "status": "PASS",
+      "note": "VM bersih + NIC trunk0 (pxe-test-trunk -> switch) + mgmt20 10.99.20.1/24; switch-check 6 OK",
+      "evidence": [
+        "install-vm-clean.txt",
+        "trunk-setup.txt",
+        "switch-check.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:42:42Z",
+      "step": "install-1",
+      "status": "FAIL",
+      "note": "exit=1 login=000 settings=000 dnsmasq-socket=0 di-luar-pxe10=0 %pxe10:67=0",
+      "evidence": [
+        "install-1.log",
+        "install-1-ss-lunp.txt",
+        "install-1-host-http.txt",
+        "state-install-1.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:43:29Z",
+      "step": "install-1-review",
+      "status": "INFO",
+      "note": "BUG/temuan: install.sh menulis VLAN ke /etc/netplan/60-pxe-dashboard.yaml; netplan 1.1.2 menolak 'link: trunk0' bila parent didefinisikan di file yang terurut SESUDAH 60-* (di sini 70-m8-test-trunk.yaml), walau preflight (netplan get, gabungan) menemukan parent di ethernets. Validasi temp-root CR-8-5 bekerja: file tidak dipasang, jaringan utuh, rollback unit. Lingkungan uji: file trunk diganti nama 55-m8-test-trunk.yaml lalu install diulang",
+      "evidence": [
+        "install-1.log",
+        "install-1-netplan-order-diagnosis.txt",
+        "install-1-after-fail.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:44:04Z",
+      "step": "install-2",
+      "status": "PASS",
+      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 3 socket udp, semua di pxe10/10.99.10.2 (DHCP %pxe10:67)",
+      "evidence": [
+        "install-2.log",
+        "install-2-ss-lunp.txt",
+        "install-2-host-http.txt",
+        "state-install-2.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:44:19Z",
+      "step": "vlan-relay",
+      "status": "PASS",
+      "note": "relay siap (key node 0600 di /root/pxe-relay, isi tidak dicetak)",
+      "evidence": [
+        "relay-setup.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:02:22Z",
+      "step": "vlan-node",
+      "status": "PASS",
+      "note": "playwright m8-vlan.spec.ts exit=0",
+      "evidence": [
+        "playwright-kvm.log",
+        "playwright-results.json",
+        "pxe-test-m8-node52-timeline.txt",
+        "pxe-test-m8-node52-relay-verify.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:02:47Z",
+      "step": "relay-teardown",
+      "status": "PASS",
+      "note": "relay-clean: absent",
+      "evidence": [
+        "relay-teardown.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:03:10Z",
+      "step": "uninstall",
+      "status": "FAIL",
+      "note": "exit=0 manifest-check=1 open_ports=0 failed_units=0 data_ok=1 etc-diff=0 vs-pre=1",
+      "evidence": [
+        "uninstall.log",
+        "uninstall-manifest-check.txt",
+        "state-uninstall.txt",
+        "uninstall-etc-diff.txt",
+        "uninstall-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:03:57Z",
+      "step": "uninstall-review",
+      "status": "INFO",
+      "note": "BUG uninstall.sh: langkah 2 (baris 86) meng-umount ISO SEBELUM nfs-server dihentikan/ekspor dicabut (langkah 4, baris 148). Setelah node memakai NFS (di sini klien NFS berganti IP di tengah install VLAN), nfsd masih menahan mount -> 'umount: target is busy', hanya PERINGATAN, uninstall exit 0 dengan ISO tetap ter-mount (baris fstab sudah dihapus). Diagnosis: setelah nfs-server berhenti, umount manual langsung berhasil (uninstall-umount-diagnosis.txt; umount manual = tindakan diagnostik test). Di run flat iterasi ini tidak muncul (tergantung status klien NFS)",
+      "evidence": [
+        "uninstall.log",
+        "uninstall-manifest-check.txt",
+        "uninstall-umount-diagnosis.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:03:57Z",
+      "step": "uninstall-vlan-link",
+      "status": "INFO",
+      "note": "temuan minor: setelah uninstall, /etc/netplan/60-pxe-dashboard.yaml dihapus + netplan apply, tetapi link pxe10@trunk0 (tanpa alamat) tetap ada sampai reboot (netplan apply tidak menghapus perangkat virtual yang tidak lagi didefinisikan); mgmt20/trunk0 milik server utuh",
+      "evidence": [
+        "uninstall-net.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:04:27Z",
+      "step": "reinstall-after-uninstall",
+      "status": "FAIL",
+      "note": "BUG (lanjutan uninstall-vlan-link): sesudah uninstall.sh mode VLAN, link pxe10@trunk0 tanpa alamat tertinggal; install.sh ulang dengan argumen VLAN yang SAMA ditolak preflight 'pxe10 sudah ada tanpa alamat 10.99.10.2/24 dan bukan buatan installer' (exit 1) — install ulang setelah uninstall gagal sampai reboot / ip link del manual. (Percobaan netplan-neg pertama dengan --vlan-iface pxe10 juga tertolak oleh hal ini; bukti reinstall-refused-*)",
+      "evidence": [
+        "reinstall-after-uninstall.log",
+        "reinstall-refused-.log",
+        "uninstall-net.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:05:17Z",
+      "step": "vlanparent-accepted",
+      "status": "INFO",
+      "note": "kasus uji salah pilih (bukan bug): --interface mgmt20 (VLAN 20 milik server) + --vlan-iface vpxe10 DITERIMA (DEC-030 CR-8-5: parent boleh dari ethernets/bonds/bridges/vlans; netplan 1.1.2 menerima VLAN di atas VLAN) -> install exit 0, dnsmasq di vpxe10. Percobaan netplan-root sebelumnya gagal hanya karena urutan file. Dicopot dengan uninstall (uninstall-vv), lalu uji netplan tidak valid memakai parent yang didefinisikan di file netplan SESUDAH 60-* (ditolak netplan)",
+      "evidence": [
+        "vlanparent-accepted.log",
+        "vlanparent-accepted-state.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:05:40Z",
+      "step": "uninstall-vv",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data keep OK (pxe.db sebelum: ada); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "uninstall-vv.log",
+        "uninstall-vv-manifest-check.txt",
+        "state-uninstall-vv.txt",
+        "uninstall-vv-etc-diff.txt",
+        "uninstall-vv-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:06:15Z",
+      "step": "netplan-neg-badparent",
+      "status": "PASS",
+      "note": "netplan VLAN tidak valid ditolak exit=1 sebelum dipasang; tanpa 60-pxe-dashboard.yaml; ip addr/route/daftar netplan sama; SSH utuh",
+      "evidence": [
+        "netplan-neg-badparent.log",
+        "netplan-neg-badparent-net-before.txt",
+        "netplan-neg-badparent-net-after.txt",
+        "netplan-neg-badparent-state.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:07:04Z",
+      "step": "purge",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data purge OK (pxe.db sebelum: n/a); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "purge.log",
+        "purge-manifest-check.txt",
+        "state-purge.txt",
+        "purge-etc-diff.txt",
+        "purge-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:07:04Z",
+      "step": "purge-packages",
+      "status": "PASS",
+      "note": "requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global",
+      "evidence": [
+        "purge-packages-review.txt",
+        "purge-apt-history.txt",
+        "purge-apt-autoremove-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:07:20Z",
+      "step": "cleanup",
+      "status": "PASS",
+      "note": "VM pxe-test-*=0 network pxe-test*=0 key=0 disk=0",
+      "evidence": [
+        "cleanup.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:07:32Z",
+      "step": "protected",
+      "status": "PASS",
+      "note": "ubuntu24.04 (shut off) dan network default/int identik (sha256 dumpxml) awal iterasi 2 vs akhir; pxe-test-node01 tidak ada sebelum/sesudah",
+      "evidence": [
+        "protected-before.txt",
+        "protected-after.txt"
+      ]
+    }
+  ],
+  "playwright": [
+    {
+      "ac": "M8-VLAN-login",
+      "status": "PASS",
+      "note": "cidr=10.99.10.0/24",
+      "evidence": [
+        "m8-vlan-login.txt"
+      ]
+    },
+    {
+      "ac": "M8-VLAN-node",
+      "node": "pxe-test-m8-node52",
+      "status": "PASS",
+      "durationS": 698,
+      "note": "lease 10.99.10.148; booting → installing → configuring → done",
+      "evidence": [
+        "pxe-test-m8-node52-timeline.txt",
+        "pxe-test-m8-node52-console.log"
+      ]
+    },
+    {
+      "ac": "M8-VLAN-ssh",
+      "node": "pxe-test-m8-node52",
+      "status": "PASS",
+      "durationS": 371,
+      "evidence": [
+        "pxe-test-m8-node52-relay-verify.txt"
+      ]
+    },
+    {
+      "ac": "M8-VLAN-scan-playwright",
+      "status": "PASS",
+      "note": "0 temuan",
+      "evidence": [
+        "evidence-scan-playwright-vlan.txt"
+      ]
+    }
+  ],
+  "overall": "FAIL"
+}

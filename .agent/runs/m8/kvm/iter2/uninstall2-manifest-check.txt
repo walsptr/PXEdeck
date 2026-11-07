@@ -1,0 +1,51 @@
+OK   pkg dnsmasq status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg nginx status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg nfs-kernel-server status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg ipxe status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg libarchive-tools status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg debian-archive-keyring status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg dnsmasq-base status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg grub-ipxe status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg ipxe-qemu status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg keyutils status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg libnfsidmap1 status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg nfs-common status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg nginx-common status='install ok installed' (tanpa --remove-packages: tetap)
+OK   pkg rpcbind status='install ok installed' (tanpa --remove-packages: tetap)
+OK   svc(ours) dnsmasq.service active=inactive enabled=disabled
+OK   svc(ours) nginx.service active=inactive enabled=disabled
+OK   svc(ours) nfs-server.service active=inactive enabled=disabled
+OK   user pxe dipertahankan
+OK   data /var/lib/pxe-dashboard dipertahankan
+OK   data /var/log/dnsmasq-pxe.log dipertahankan
+OK   data /srv/pxe dipertahankan
+OK   dir /srv/pxe/tftp hilang
+OK   dir /srv/pxe/boot hilang
+OK   data /srv/pxe/media dipertahankan
+OK   data /srv/pxe/media/ubuntu-24.04 dipertahankan
+OK   data /srv/pxe/media/debian-12 dipertahankan
+OK   data /srv/pxe/media/rocky-9 dipertahankan
+OK   data /srv/pxe/media/debian-netboot dipertahankan
+OK   tree /opt/pxe-dashboard hilang
+OK   file /srv/pxe/tftp/snponly.efi hilang
+OK   file /srv/pxe/tftp/undionly.kpxe hilang
+OK   file /etc/dnsmasq.d/pxe-dashboard.conf hilang
+OK   dir /etc/systemd/system/dnsmasq.service.d hilang
+OK   file /etc/systemd/system/dnsmasq.service.d/pxe-dashboard.conf hilang
+OK   file /etc/nginx/sites-available/pxe-dashboard hilang
+OK   link /etc/nginx/sites-enabled/pxe-dashboard hilang
+OK   restore-link /etc/nginx/sites-enabled/default -> /etc/nginx/sites-available/default dipulihkan
+OK   file /etc/pxe-dashboard.env hilang
+OK   file /etc/systemd/system/pxe-dashboard.service hilang
+OK   dir /etc/exports.d hilang
+OK   file /etc/exports.d/pxe-dashboard.exports hilang
+OK   file /etc/nfs.conf.d/pxe-dashboard.conf hilang
+OK   file /etc/logrotate.d/pxe-dashboard hilang
+OK   fstab /srv/pxe/media/ubuntu-24.04 baris hilang
+OK   mount /srv/pxe/media/ubuntu-24.04 tidak ter-mount
+OK   fstab /srv/pxe/media/debian-12 baris hilang
+OK   mount /srv/pxe/media/debian-12 tidak ter-mount
+OK   fstab /srv/pxe/media/rocky-9 baris hilang
+OK   mount /srv/pxe/media/rocky-9 tidak ter-mount
+OK   unit pxe-dashboard.service active=inactive enabled=not-found
+# manifest-check MODE=keep fails=0

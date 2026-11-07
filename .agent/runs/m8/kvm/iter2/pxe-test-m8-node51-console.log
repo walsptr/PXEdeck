@@ -1,0 +1,173 @@
+[2J[001;001H[=3h[2J[001;001H[2J[001;001H[8;056;240t[2J[001;001H
+>>Start PXE over IPv4.
+  Station IP address is 10.99.0.147
+
+  Server IP address is 10.99.0.2
+  NBP filename is snponly.efi
+  NBP filesize is 238080 Bytes
+ Downloading NBP file...
+
+  NBP file downloaded successfully.
+BdsDxe: loading Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+BdsDxe: starting Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+iPXE initialising devices...ok
+
+
+
+[1m[37m[40miPXE 1.21.1+git-20220113.fbbdc3926-0ubuntu2[0m[37m[40m -- Open Source Network Boot Firmware -- [0m[36m[40mhttps://ipxe.org[0m[37m[40m
+Features: DNS HTTP HTTPS iSCSI NFS TFTP VLAN AoE EFI Menu
+
+Press Ctrl-B for the iPXE command line...                                         net0: 52:54:00:99:00:51 using SNP on SNP-0000:01:00.0 (Ethernet) [open]
+  [Link:up, TX:0 TXE:1 RX:0 RXE:0]
+  [TXE: 1 x "Network unreachable (https://ipxe.org/28086090)"]
+Configuring (net0 52:54:00:99:00:51)...... ok
+net0: 10.99.0.147/255.255.255.0 gw 10.99.0.1
+net0: fe80::5054:ff:fe99:51/64
+Next server: 10.99.0.2
+Filename: http://10.99.0.2/boot/52:54:00:99:00:51.ipxe?platform=efi
+http://10.99.0.2/boot/52:54:00:99:00:51.ipxe... ok
+52:54:00:99:00:51.ipxe : 139 bytes [script]
+Tidak ada instalasi aktif: boot dari disk lokal
+Could not boot image: Error 0x00000001 (https://ipxe.org/00000001)
+No more network devices
+
+Press Ctrl-B for the iPXE command line...[2J[001;001H[=3h[2J[001;001H[2J[001;001H[8;056;240t[2J[001;001H
+>>Start PXE over IPv4.
+  Station IP address is 10.99.0.147
+
+  Server IP address is 10.99.0.2
+  NBP filename is snponly.efi
+  NBP filesize is 238080 Bytes
+ Downloading NBP file...
+
+  NBP file downloaded successfully.
+BdsDxe: loading Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+BdsDxe: starting Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+iPXE initialising devices...ok
+
+
+
+[1m[37m[40miPXE 1.21.1+git-20220113.fbbdc3926-0ubuntu2[0m[37m[40m -- Open Source Network Boot Firmware -- [0m[36m[40mhttps://ipxe.org[0m[37m[40m
+Features: DNS HTTP HTTPS iSCSI NFS TFTP VLAN AoE EFI Menu
+
+Press Ctrl-B for the iPXE command line...                                         net0: 52:54:00:99:00:51 using SNP on SNP-0000:01:00.0 (Ethernet) [open]
+  [Link:up, TX:0 TXE:1 RX:0 RXE:0]
+  [TXE: 1 x "Network unreachable (https://ipxe.org/28086090)"]
+Configuring (net0 52:54:00:99:00:51)...... ok
+net0: 10.99.0.147/255.255.255.0 gw 10.99.0.1
+net0: fe80::5054:ff:fe99:51/64
+Next server: 10.99.0.2
+Filename: http://10.99.0.2/boot/52:54:00:99:00:51.ipxe?platform=efi
+http://10.99.0.2/boot/52:54:00:99:00:51.ipxe... ok
+52:54:00:99:00:51.ipxe : 366 bytes [script]
+http://10.99.0.2/media/ubuntu-24.04/casper/vmlinuz... ok
+http://10.99.0.2/media/ubuntu-24.04/casper/initrd... ok
+EFI stub: Loaded initrd from command line option
+[2J[001;001H[=3h[2J[001;001H[2J[001;001H[8;056;240t[2J[001;001H
+>>Start PXE over IPv4.
+  Station IP address is 10.99.0.148
+
+  Server IP address is 10.99.0.2
+  NBP filename is snponly.efi
+  NBP filesize is 238080 Bytes
+ Downloading NBP file...
+
+  NBP file downloaded successfully.
+BdsDxe: loading Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+BdsDxe: starting Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+iPXE initialising devices...ok
+
+
+
+[1m[37m[40miPXE 1.21.1+git-20220113.fbbdc3926-0ubuntu2[0m[37m[40m -- Open Source Network Boot Firmware -- [0m[36m[40mhttps://ipxe.org[0m[37m[40m
+Features: DNS HTTP HTTPS iSCSI NFS TFTP VLAN AoE EFI Menu
+
+Press Ctrl-B for the iPXE command line...                                         net0: 52:54:00:99:00:51 using SNP on SNP-0000:01:00.0 (Ethernet) [open]
+  [Link:up, TX:0 TXE:1 RX:0 RXE:0]
+  [TXE: 1 x "Network unreachable (https://ipxe.org/28086090)"]
+Configuring (net0 52:54:00:99:00:51)...... ok
+net0: 10.99.0.147/255.255.255.0 gw 10.99.0.1
+net0: fe80::5054:ff:fe99:51/64
+Next server: 10.99.0.2
+Filename: http://10.99.0.2/boot/52:54:00:99:00:51.ipxe?platform=efi
+http://10.99.0.2/boot/52:54:00:99:00:51.ipxe... ok
+52:54:00:99:00:51.ipxe : 139 bytes [script]
+Tidak ada instalasi aktif: boot dari disk lokal
+Could not boot image: Error 0x00000001 (https://ipxe.org/00000001)
+No more network devices
+
+Press Ctrl-B for the iPXE command line...                                         BdsDxe: failed to start Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0): 0000007F
+
+>>Start PXE over IPv6..
+  PXE-E16: No valid offer received.
+BdsDxe: failed to load Boot0004 "UEFI PXEv6 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv6(0000:0000:0000:0000:0000:0000:0000:0000,0x0,Static,0000:0000:0000:0000:0000:0000:0000:0000,0x40,0000:0000:0000:0000:0000:0000:0000:0000): Not Found
+
+>>Start HTTP Boot over IPv4.....
+  Error: Could not retrieve NBP file size from HTTP server.
+
+  Error: Server response timeout.
+BdsDxe: failed to load Boot0005 "UEFI HTTPv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)/Uri(): Not Found
+
+>>Start HTTP Boot over IPv6.
+  Error: Could not retrieve NBP file size from HTTP server.
+
+  Error: Unexpected network error.
+BdsDxe: failed to load Boot0006 "UEFI HTTPv6 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv6(0000:0000:0000:0000:0000:0000:0000:0000,0x0,Static,0000:0000:0000:0000:0000:0000:0000:0000,0x40,0000:0000:0000:0000:0000:0000:0000:0000)/Uri(): Not Found
+BdsDxe: loading Boot0008 "Ubuntu" from HD(1,GPT,D15A85F5-11F9-490D-9784-E53A7334F9C9,0x800,0x1DC800)/\EFI\ubuntu\shimx64.efi
+BdsDxe: starting Boot0008 "Ubuntu" from HD(1,GPT,D15A85F5-11F9-490D-9784-E53A7334F9C9,0x800,0x1DC800)/\EFI\ubuntu\shimx64.efi
+error: no suitable video mode found.
+EFI stub: Loaded initrd from LINUX_EFI_INITRD_MEDIA_GUID device path
+[2J[001;001H[=3h[2J[001;001H[2J[001;001H[8;056;240t[2J[001;001H
+>>Start PXE over IPv4.
+  Station IP address is 10.99.0.148
+
+  Server IP address is 10.99.0.2
+  NBP filename is snponly.efi
+  NBP filesize is 238080 Bytes
+ Downloading NBP file...
+
+  NBP file downloaded successfully.
+BdsDxe: loading Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+BdsDxe: starting Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)
+iPXE initialising devices...ok
+
+
+
+[1m[37m[40miPXE 1.21.1+git-20220113.fbbdc3926-0ubuntu2[0m[37m[40m -- Open Source Network Boot Firmware -- [0m[36m[40mhttps://ipxe.org[0m[37m[40m
+Features: DNS HTTP HTTPS iSCSI NFS TFTP VLAN AoE EFI Menu
+
+Press Ctrl-B for the iPXE command line...                                         net0: 52:54:00:99:00:51 using SNP on SNP-0000:01:00.0 (Ethernet) [open]
+  [Link:up, TX:0 TXE:1 RX:0 RXE:0]
+  [TXE: 1 x "Network unreachable (https://ipxe.org/28086090)"]
+Configuring (net0 52:54:00:99:00:51)...... ok
+net0: 10.99.0.147/255.255.255.0 gw 10.99.0.1
+net0: fe80::5054:ff:fe99:51/64
+Next server: 10.99.0.2
+Filename: http://10.99.0.2/boot/52:54:00:99:00:51.ipxe?platform=efi
+http://10.99.0.2/boot/52:54:00:99:00:51.ipxe... ok
+52:54:00:99:00:51.ipxe : 139 bytes [script]
+Tidak ada instalasi aktif: boot dari disk lokal
+Could not boot image: Error 0x00000001 (https://ipxe.org/00000001)
+No more network devices
+
+Press Ctrl-B for the iPXE command line...                                         BdsDxe: failed to start Boot0003 "UEFI PXEv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0): 0000007F
+
+>>Start PXE over IPv6..
+  PXE-E16: No valid offer received.
+BdsDxe: failed to load Boot0004 "UEFI PXEv6 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv6(0000:0000:0000:0000:0000:0000:0000:0000,0x0,Static,0000:0000:0000:0000:0000:0000:0000:0000,0x40,0000:0000:0000:0000:0000:0000:0000:0000): Not Found
+
+>>Start HTTP Boot over IPv4.....
+  Error: Could not retrieve NBP file size from HTTP server.
+
+  Error: Server response timeout.
+BdsDxe: failed to load Boot0005 "UEFI HTTPv4 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv4(0.0.0.0,0x0,DHCP,0.0.0.0,0.0.0.0,0.0.0.0)/Uri(): Not Found
+
+>>Start HTTP Boot over IPv6.
+  Error: Could not retrieve NBP file size from HTTP server.
+
+  Error: Unexpected network error.
+BdsDxe: failed to load Boot0006 "UEFI HTTPv6 (MAC:525400990051)" from PciRoot(0x0)/Pci(0x1,0x0)/Pci(0x0,0x0)/MAC(525400990051,0x1)/IPv6(0000:0000:0000:0000:0000:0000:0000:0000,0x0,Static,0000:0000:0000:0000:0000:0000:0000:0000,0x40,0000:0000:0000:0000:0000:0000:0000:0000)/Uri(): Not Found
+BdsDxe: loading Boot0008 "Ubuntu" from HD(1,GPT,D15A85F5-11F9-490D-9784-E53A7334F9C9,0x800,0x1DC800)/\EFI\ubuntu\shimx64.efi
+BdsDxe: starting Boot0008 "Ubuntu" from HD(1,GPT,D15A85F5-11F9-490D-9784-E53A7334F9C9,0x800,0x1DC800)/\EFI\ubuntu\shimx64.efi
+error: no suitable video mode found.
+EFI stub: Loaded initrd from LINUX_EFI_INITRD_MEDIA_GUID device path

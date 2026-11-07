@@ -1,0 +1,80 @@
+# relay wait-ssh: relay-wait-ssh: OK 10.99.20.62 (0s)
+# verify-node.sh (relay, EXPECT_VLAN=20) sebelum reboot
+# verify-node 2026-11-07T11:56:19Z on m8-node52
+# uname: 6.8.0-139-generic
+OK   hostname = m8-node52 (aktual: m8-node52)
+OK   parent NIC dengan MAC 52:54:00:99:00:52 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (mgmt.20)
+# ip -4 addr (mgmt.20): 10.99.20.62/24
+OK   ip -4 addr mgmt.20 memuat 10.99.20.62/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain mgmt.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   mgmt.20@enp1s0: vlan protocol 802.1Q id 20
+# info dpkg vlan: dpkg-query: no packages found matching vlan
+# info dpkg ifupdown: unknown ok not-installed 
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 127.0.0.53 2 3 )
+OK   login sebagai m8admin (aktual: m8admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m8admin (aktual: 600 m8admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/ubuntu/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=4 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/vda2), bukan NFS/live
+# uptime: up 2 minutes
+# verify-node fails=0
+# exit=0
+# pwcheck
+# ssh PreferredAuthentications=password (exit 255): Warning: Permanently added '10.99.20.62' (ED25519) to the list of known hosts.
+m8admin@10.99.20.62: Permission denied (publickey).
+# password ditolak=true
+# reboot: relay-reboot: dikirim ke 10.99.20.62
+# wait-ssh sesudah reboot: relay-wait-ssh: OK 10.99.20.62 (280s)
+# verify-node.sh sesudah reboot
+# verify-node 2026-11-07T12:02:20Z on m8-node52
+# uname: 6.8.0-139-generic
+OK   hostname = m8-node52 (aktual: m8-node52)
+OK   parent NIC dengan MAC 52:54:00:99:00:52 (bukan VLAN) ditemukan (enp1s0)
+OK   anak VLAN 802.1Q id 20 di enp1s0 ditemukan (mgmt.20)
+# ip -4 addr (mgmt.20): 10.99.20.62/24
+OK   ip -4 addr mgmt.20 memuat 10.99.20.62/24
+OK   parent enp1s0 tanpa IPv4 (native VLAN PXE tidak dipakai OS; aktual: —)
+OK   tidak ada IPv4 di interface lain selain mgmt.20 (—)
+# info ip -d -o link (vlan):
+#   lo:
+#   enp1s0:
+#   mgmt.20@enp1s0: vlan protocol 802.1Q id 20
+# info dpkg vlan: dpkg-query: no packages found matching vlan
+# info dpkg ifupdown: unknown ok not-installed 
+OK   default via 10.99.20.1 (aktual: 10.99.20.1)
+OK   DNS memuat 10.99.10.2 (aktual: 10.99.10.2 127.0.0.53 2 3 )
+OK   login sebagai m8admin (aktual: m8admin)
+OK   sudo -n true sukses (NOPASSWD)
+OK   authorized_keys berisi persis key yang di-inject (1 baris)
+OK   authorized_keys 0600 milik m8admin (aktual: 600 m8admin)
+OK   sshd -T passwordauthentication no (aktual: no)
+OK   unit first-boot & URL callback sudah dihapus
+OK   pxe-callback-done.service tidak aktif lagi
+OK   bebas token: /boot/efi/EFI/ubuntu/grub.cfg (cocok: 0)
+OK   bebas token: /boot/grub/grub.cfg (cocok: 0)
+OK   bebas token: /etc/default/grub (cocok: 0)
+OK   bebas token: /proc/cmdline (cocok: 0)
+# token-scan files=4 matches=0
+OK   token-scan memeriksa >= 1 file (/proc/cmdline dll.)
+OK   /etc/pxe-callback tidak ada
+OK   root fs dari disk lokal (/dev/vda2), bukan NFS/live
+# uptime: up 2 minutes
+# verify-node fails=0
+# exit=0
+# status host: done osInstalled=ubuntu-24.04; jumlah job 1 -> 1

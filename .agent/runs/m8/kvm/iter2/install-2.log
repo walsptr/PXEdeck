@@ -1,0 +1,43 @@
+# ssh root@10.99.0.2 cd /root/pxe-src && ./install.sh --yes --interface pxe0 --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200 --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --admin-overlap-ok --admin-password-file /root/m8-admin.pass --iso-ubuntu /dev/sr0 --iso-debian /dev/sr1 --iso-rocky /dev/sr2 --firewall --debian-netboot /root/debian-netboot 
+[pxe-install] PERINGATAN: allowlist admin tumpang tindih dengan segmen PXE/VLAN (10.99.0.1 ~ 10.99.0.0/24) — diizinkan (--admin-overlap-ok)
+[pxe-install] memeriksa DHCP server lain di pxe0 (DHCPDISCOVER, 6 dtk)
+[pxe-install] tidak ada DHCP server lain di pxe0
+== Rencana instalasi PXE dashboard ==
+  NIC DHCP/TFTP : pxe0
+  Server        : 10.99.0.2/24 (subnet 10.99.0.0/24)
+  DHCP          : 10.99.0.100-10.99.0.200, gateway 10.99.0.1 (opsi router: yes), DNS 10.99.0.2
+  Admin         : pxeadmin, UI dari 10.99.0.1 di http://10.99.0.2/
+  VLAN mgmt     : (tidak ada)
+  Media ISO     : ubuntu=/dev/sr0 debian=/dev/sr1 rocky=/dev/sr2
+  Rilis         : build dari /root/pxe-src/dashboard
+  Firewall      : yes
+[pxe-install] manifest: /var/lib/pxe-dashboard-installer/install-manifest
+[pxe-install] Node 22.23.4 sudah terpasang (/opt/pxe-dashboard/node)
+[pxe-install] password admin tidak berubah — hash yang ada dipertahankan
+[pxe-install] rilis dashboard tidak berubah (src:a0a6e614416ff0481c1859257f4da7bf03525d3b5f5da98d35a0661c143b74e0) — dilewati
+[pxe-install] modul disk Debian 6.1.0-50-amd64 di /srv/pxe/media/debian-netboot/modules
+dnsmasq: syntax check OK.
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+Synchronizing state of dnsmasq.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable dnsmasq
+Synchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
+[pxe-install] pxe-dashboard tidak berubah — tidak di-restart
+[pxe-install] OK   GET http://10.99.0.2/login -> 200
+[pxe-install] OK   GET /api/settings tanpa sesi -> 401
+[pxe-install] OK   dnsmasq udp 10.99.0.2:53
+[pxe-install] OK   dnsmasq udp 0.0.0.0%pxe0:67
+[pxe-install] OK   dnsmasq udp 10.99.0.2:69
+[pxe-install] OK   dnsmasq udp [fe80::5054:ff:fe99:102]%pxe0:53
+[pxe-install] OK   dnsmasq udp [fe80::5054:ff:fe99:102]%pxe0:69
+[pxe-install] OK   DHCP dnsmasq listen udp %pxe0:67
+
+== PXE dashboard siap ==
+  Dashboard : http://10.99.0.2/ (login: pxeadmin)
+  DHCP/TFTP : dnsmasq hanya di pxe0 (10.99.0.2)
+  Manifest  : /var/lib/pxe-dashboard-installer/install-manifest
+  Copot     : sudo ./uninstall.sh   (data dipertahankan; --purge untuk menghapus data)
+  Catatan   : server ini harus single-tenant — user lokal mana pun bisa menjangkau dashboard di
+              127.0.0.1:3000 (melewati allowlist nginx). Jangan beri akun shell ke pihak lain.
+# exit=0 durasi=9 dtk

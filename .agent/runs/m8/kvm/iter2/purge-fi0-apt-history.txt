@@ -1,0 +1,60 @@
+
+Start-Date: 2026-10-17  12:58:20
+Commandline: apt-get install -qqy grub-pc shim-signed
+Install: mokutil:amd64 (0.6.0-2build3, automatic), grub-efi-amd64-signed:amd64 (1.202.5+2.12-1ubuntu7.3, automatic), grub-efi-amd64-bin:amd64 (2.12-1ubuntu7.3, automatic), efibootmgr:amd64 (18-1build2, automatic), shim-signed:amd64 (1.58+15.8-0ubuntu1)
+End-Date: 2026-10-17  12:58:22
+
+Start-Date: 2026-11-07  11:01:38
+Commandline: apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends dnsmasq nginx nfs-kernel-server ipxe libarchive-tools debian-archive-keyring
+Install: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2), nginx:amd64 (1.24.0-2ubuntu7.19), nginx-common:amd64 (1.24.0-2ubuntu7.19, automatic), nfs-common:amd64 (1:2.6.4-3ubuntu5.1, automatic), libarchive-tools:amd64 (3.7.2-2ubuntu0.9), debian-archive-keyring:amd64 (2023.4ubuntu1), nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1), ipxe-qemu:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2, automatic), dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2, automatic), grub-ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2, automatic), keyutils:amd64 (1.6.3-3build1, automatic), rpcbind:amd64 (1.2.6-7ubuntu2, automatic), libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1, automatic), ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  11:01:44
+
+Start-Date: 2026-11-07  11:29:49
+Commandline: apt-get -o DPkg::Lock::Timeout=600 purge -y dnsmasq nginx nfs-kernel-server ipxe libarchive-tools debian-archive-keyring
+Purge: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2), nginx:amd64 (1.24.0-2ubuntu7.19), libarchive-tools:amd64 (3.7.2-2ubuntu0.9), debian-archive-keyring:amd64 (2023.4ubuntu1), nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1), ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  11:29:51
+
+Start-Date: 2026-11-07  11:29:55
+Commandline: apt-get -o DPkg::Lock::Timeout=600 purge -y dnsmasq-base grub-ipxe ipxe-qemu nginx-common
+Purge: nginx-common:amd64 (1.24.0-2ubuntu7.19), ipxe-qemu:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2), dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2), grub-ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  11:29:56
+
+Start-Date: 2026-11-07  11:30:33
+Commandline: apt-get -o DPkg::Lock::Timeout=600 install -y -qq --no-install-recommends dnsmasq
+Install: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2), dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2, automatic)
+End-Date: 2026-11-07  11:30:34
+
+Start-Date: 2026-11-07  11:30:56
+Commandline: apt-get -o DPkg::Lock::Timeout=600 purge -y -qq dnsmasq
+Purge: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2)
+End-Date: 2026-11-07  11:30:57
+
+Start-Date: 2026-11-07  11:30:59
+Commandline: apt-get -o DPkg::Lock::Timeout=600 purge -y -qq dnsmasq-base
+Purge: dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2)
+End-Date: 2026-11-07  11:31:00
+
+Start-Date: 2026-11-07  11:31:14
+Commandline: apt-get -o DPkg::Lock::Timeout=600 install -y -qq --no-install-recommends nfs-kernel-server
+Install: nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1)
+End-Date: 2026-11-07  11:31:16
+
+Start-Date: 2026-11-07  11:31:38
+Commandline: apt-get -o DPkg::Lock::Timeout=600 purge -y -qq nfs-kernel-server
+Purge: nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1)
+End-Date: 2026-11-07  11:31:40
+
+Start-Date: 2026-11-07  11:32:13
+Commandline: apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends dnsmasq nginx nfs-kernel-server ipxe libarchive-tools debian-archive-keyring
+Install: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2), nginx:amd64 (1.24.0-2ubuntu7.19), nginx-common:amd64 (1.24.0-2ubuntu7.19, automatic), libarchive-tools:amd64 (3.7.2-2ubuntu0.9), debian-archive-keyring:amd64 (2023.4ubuntu1), nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1), ipxe-qemu:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2, automatic), dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2, automatic), grub-ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2, automatic), ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  11:32:17
+
+Start-Date: 2026-11-07  11:34:07
+Commandline: apt-get -o DPkg::Lock::Timeout=600 purge -y dnsmasq nginx nfs-kernel-server ipxe libarchive-tools debian-archive-keyring
+Purge: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2), nginx:amd64 (1.24.0-2ubuntu7.19), libarchive-tools:amd64 (3.7.2-2ubuntu0.9), debian-archive-keyring:amd64 (2023.4ubuntu1), nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1), ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  11:34:09
+
+Start-Date: 2026-11-07  11:34:12
+Commandline: apt-get -o DPkg::Lock::Timeout=600 purge -y dnsmasq-base grub-ipxe ipxe-qemu nginx-common
+Purge: nginx-common:amd64 (1.24.0-2ubuntu7.19), ipxe-qemu:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2), dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2), grub-ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  11:34:14

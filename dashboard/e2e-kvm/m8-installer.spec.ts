@@ -26,10 +26,14 @@ import {
   scanEvidence,
   sessionPassword,
   ssh,
+  TOPOLOGY,
   writeResults,
   type KvmNode,
 } from "./kvm-harness"
 
+// Hanya topologi flat (iterasi 2: m8-vlan.spec.ts untuk PXE_KVM_TOPOLOGY=vlan; test didaftarkan bersyarat,
+// bukan di-skip).
+if (TOPOLOGY !== "vlan") {
 test.describe.configure({ mode: "serial" })
 
 const BASE = process.env.PXE_KVM_BASE_URL ?? "http://10.99.0.2"
@@ -239,4 +243,5 @@ for (const node of NODES) {
     expect(jobsAfter).toBe(jobsBefore)
     expect(bootScript).not.toMatch(/\bkernel\b/)
   })
+}
 }

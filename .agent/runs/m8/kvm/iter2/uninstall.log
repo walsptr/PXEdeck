@@ -1,0 +1,55 @@
+# ssh root@10.99.0.2 cd /root/pxe-src && ./uninstall.sh --yes
+== Rencana uninstall PXE dashboard ==
+  Dihentikan + dihapus:
+    dir          /srv/pxe/tftp
+    dir          /srv/pxe/boot
+    tree         /opt/pxe-dashboard
+    file         /srv/pxe/tftp/snponly.efi
+    file         /srv/pxe/tftp/undionly.kpxe
+    file         /etc/dnsmasq.d/pxe-dashboard.conf
+    dir          /etc/systemd/system/dnsmasq.service.d
+    file         /etc/systemd/system/dnsmasq.service.d/pxe-dashboard.conf
+    file         /etc/nginx/sites-available/pxe-dashboard
+    link         /etc/nginx/sites-enabled/pxe-dashboard
+    restore-link /etc/nginx/sites-enabled/default
+    file         /etc/pxe-dashboard.env
+    file         /etc/systemd/system/pxe-dashboard.service
+    dir          /etc/exports.d
+    file         /etc/exports.d/pxe-dashboard.exports
+    file         /etc/nfs.conf.d/pxe-dashboard.conf
+    file         /etc/logrotate.d/pxe-dashboard
+    dir          /etc/pxe-dashboard
+    file         /etc/pxe-dashboard/nftables.nft
+    file         /etc/systemd/system/pxe-dashboard-firewall.service
+    fstab        /srv/pxe/media/ubuntu-24.04
+    mount        /srv/pxe/media/ubuntu-24.04
+    fstab        /srv/pxe/media/debian-12
+    mount        /srv/pxe/media/debian-12
+    fstab        /srv/pxe/media/rocky-9
+    mount        /srv/pxe/media/rocky-9
+    unit         pxe-dashboard-firewall.service
+    unit         pxe-dashboard.service
+  Data DIPERTAHANKAN (pakai --purge untuk menghapus):
+    user         pxe
+    data         /var/lib/pxe-dashboard
+    data         /var/log/dnsmasq-pxe.log
+    data         /srv/pxe
+    data         /srv/pxe/media
+    data         /srv/pxe/media/ubuntu-24.04
+    data         /srv/pxe/media/debian-12
+    data         /srv/pxe/media/rocky-9
+    data         /srv/pxe/media/debian-netboot
+Removed "/etc/systemd/system/multi-user.target.wants/pxe-dashboard-firewall.service".
+Removed "/etc/systemd/system/multi-user.target.wants/pxe-dashboard.service".
+[pxe-install] baris fstab dihapus: /srv/pxe/media/ubuntu-24.04
+[pxe-install] baris fstab dihapus: /srv/pxe/media/debian-12
+[pxe-install] baris fstab dihapus: /srv/pxe/media/rocky-9
+Synchronizing state of dnsmasq.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install disable dnsmasq
+Removed "/etc/systemd/system/multi-user.target.wants/dnsmasq.service".
+Synchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install disable nginx
+Removed "/etc/systemd/system/multi-user.target.wants/nginx.service".
+Removed "/etc/systemd/system/multi-user.target.wants/nfs-server.service".
+[pxe-install] uninstall selesai; data dipertahankan (DB /var/lib/pxe-dashboard, /srv/pxe/media) — --purge untuk menghapus
+# exit=0

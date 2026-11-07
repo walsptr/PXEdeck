@@ -1,0 +1,25 @@
+# ./install.sh --yes --interface trunk0 --address 10.99.10.2/24 --dhcp-range 10.99.10.100-10.99.10.200 --gateway 10.99.10.1 --dns 10.99.10.2 --vlan-id 10 --vlan-iface pxe11 --vlan-networks 20:10.99.20.0/24:10.99.20.1 --admin-allow 10.99.0.1 --admin-listen 10.99.0.2 --admin-password-file /root/m8-admin.pass --iso-ubuntu /dev/sr0 --debian-netboot none --release /root/pxe-release.tar.xz
+== Rencana instalasi PXE dashboard ==
+  NIC DHCP/TFTP : pxe11 (VLAN 10 di trunk0)
+  Server        : 10.99.10.2/24 (subnet 10.99.10.0/24)
+  DHCP          : 10.99.10.100-10.99.10.200, gateway 10.99.10.1 (opsi router: no), DNS 10.99.10.2
+  Admin         : pxeadmin, UI dari 10.99.0.1 di http://10.99.10.2/
+  VLAN mgmt     : 20:10.99.20.0/24:10.99.20.1
+  Media ISO     : ubuntu=/dev/sr0 debian=- rocky=-
+  Rilis         : /root/pxe-release.tar.xz
+  Firewall      : no
+[pxe-install] manifest: /var/lib/pxe-dashboard-installer/install-manifest
+[pxe-install] terpasang /srv/pxe/tftp/snponly.efi (0644 root:root)
+[pxe-install] terpasang /srv/pxe/tftp/undionly.kpxe (0644 root:root)
+[pxe-install] Node 22.23.4 terpasang di /opt/pxe-dashboard/node (sha256 1805bcd35e6815559bd2eb97db438d3fdb0eb3a5e6a977b7c1badca76337e9ce)
+[pxe-install] rilis /opt/pxe-dashboard/releases/20261107T120613Z aktif
+[pxe-install] terpasang /etc/dnsmasq.d/pxe-dashboard.conf (0644 root:root)
+[pxe-install] terpasang /etc/systemd/system/dnsmasq.service.d/pxe-dashboard.conf (0644 root:root)
+[pxe-install] terpasang /etc/nginx/sites-available/pxe-dashboard (0644 root:root)
+[pxe-install] terpasang /etc/pxe-dashboard.env (0640 root:pxe)
+[pxe-install] terpasang /etc/systemd/system/pxe-dashboard.service (0644 root:root)
+[pxe-install] terpasang /etc/exports.d/pxe-dashboard.exports (0644 root:root)
+[pxe-install] terpasang /etc/nfs.conf.d/pxe-dashboard.conf (0644 root:root)
+[pxe-install] terpasang /etc/logrotate.d/pxe-dashboard (0644 root:root)
+[pxe-install] ERROR: netplan VLAN tidak valid (tidak dipasang): /tmp/pxe-install.2dtobR/netplan-root/etc/netplan/60-pxe-dashboard.yaml:7:13: Error in network definition: pxe11: interface 'trunk0' is not defined       link: trunk0             ^ 
+# exit=1

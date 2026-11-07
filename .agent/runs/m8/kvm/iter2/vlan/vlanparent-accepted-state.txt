@@ -1,0 +1,5 @@
+60-pxe-dashboard.yaml: ADA
+dnsmasq active enabled
+nginx active enabled
+nfs-server active enabled
+pxe-dashboard active enabled

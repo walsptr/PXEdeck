@@ -1,0 +1,5 @@
+60-pxe-dashboard.yaml: tidak ada
+dnsmasq inactive disabled
+nginx inactive disabled
+nfs-server inactive disabled
+pxe-dashboard inactive disabled

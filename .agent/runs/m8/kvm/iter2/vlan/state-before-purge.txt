@@ -1,0 +1,173 @@
+## state before-purge 2026-11-07T12:06:37Z pxe-test-install
+# systemctl (is-active / is-enabled)
+dnsmasq          inactive   disabled
+nginx            inactive   disabled
+nfs-server       inactive   disabled
+pxe-dashboard    inactive   disabled
+# pxe-dashboard unit (idempotensi: PID/waktu start sama = tidak di-restart)
+MainPID=0
+Result=success
+NRestarts=0
+LoadState=loaded
+ActiveEnterTimestamp=
+# ss -lunp (udp)
+UNCONN 0.0.0.0:58888 0.0.0.0:* users:(("rpc.statd",pid=27852,fd=8))
+UNCONN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=584,fd=16))
+UNCONN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=584,fd=14))
+UNCONN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=27851,fd=5),("systemd",pid=1,fd=101))
+UNCONN 127.0.0.1:892 0.0.0.0:* users:(("rpc.statd",pid=27852,fd=5))
+UNCONN [::]:111 [::]:* users:(("rpcbind",pid=27851,fd=7),("systemd",pid=1,fd=103))
+UNCONN [::]:49897 [::]:* users:(("rpc.statd",pid=27852,fd=10))
+# ss -ltnp (tcp)
+LISTEN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=584,fd=15))
+LISTEN 0.0.0.0:22 0.0.0.0:* users:(("sshd",pid=1073,fd=3),("systemd",pid=1,fd=153))
+LISTEN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=27851,fd=4),("systemd",pid=1,fd=100))
+LISTEN 0.0.0.0:36407 0.0.0.0:* users:(("rpc.statd",pid=27852,fd=9))
+LISTEN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=584,fd=17))
+LISTEN [::]:43309 [::]:* users:(("rpc.statd",pid=27852,fd=11))
+LISTEN [::]:22 [::]:* users:(("sshd",pid=1073,fd=4),("systemd",pid=1,fd=155))
+LISTEN [::]:111 [::]:* users:(("rpcbind",pid=27851,fd=6),("systemd",pid=1,fd=102))
+# port PXE terbuka (udp 67/69, tcp 80/3000/2049)
+# (akhir daftar port)
+# manifest /var/lib/pxe-dashboard-installer/install-manifest
+mode=600 owner=root:root
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T12:05:30Z)
+data	/var/lib/pxe-dashboard	
+data	/var/log/dnsmasq-pxe.log	
+data	/srv/pxe	
+data	/srv/pxe/media	
+data	/srv/pxe/media/ubuntu-24.04	
+data	/srv/pxe/media/debian-12	
+data	/srv/pxe/media/rocky-9	
+data	/srv/pxe/media/debian-netboot	
+user	pxe	
+pkg	dnsmasq	requested
+pkg	nginx	requested
+pkg	nfs-kernel-server	requested
+pkg	ipxe	requested
+pkg	libarchive-tools	requested
+pkg	dnsmasq-base	dep
+pkg	grub-ipxe	dep
+pkg	ipxe-qemu	dep
+pkg	keyutils	dep
+pkg	libnfsidmap1	dep
+pkg	nfs-common	dep
+pkg	nginx-common	dep
+pkg	rpcbind	dep
+svc	dnsmasq.service	ours
+svc	nginx.service	ours
+svc	nfs-server.service	ours
+dir	/srv/pxe/tftp	
+dir	/srv/pxe/boot	
+tree	/opt/pxe-dashboard	
+file	/srv/pxe/tftp/snponly.efi	
+file	/srv/pxe/tftp/undionly.kpxe	
+file	/etc/dnsmasq.d/pxe-dashboard.conf	
+dir	/etc/systemd/system/dnsmasq.service.d	
+file	/etc/systemd/system/dnsmasq.service.d/pxe-dashboard.conf	
+file	/etc/nginx/sites-available/pxe-dashboard	
+link	/etc/nginx/sites-enabled/pxe-dashboard	
+restore-link	/etc/nginx/sites-enabled/default	/etc/nginx/sites-available/default
+file	/etc/pxe-dashboard.env	
+file	/etc/systemd/system/pxe-dashboard.service	
+dir	/etc/exports.d	
+file	/etc/exports.d/pxe-dashboard.exports	
+file	/etc/nfs.conf.d/pxe-dashboard.conf	
+file	/etc/logrotate.d/pxe-dashboard	
+# /opt/pxe-dashboard
+current -> releases/20261107T120613Z
+release-id: sha256:b67b9b5509dc825bb29b861c46e3177d5b61f6d454bec32d69010fb40fff615a
+release 20261107T120613Z
+node: v22.23.4 sha-marker=1805bcd35e6815559bd2eb97db438d3fdb0eb3a5e6a977b7c1badca76337e9ce
+# /etc/pxe-dashboard.env
+mode=640 owner=root:pxe
+NODE_ENV=production
+PXE_DB_PATH=/var/lib/pxe-dashboard/pxe.db
+PXE_SEED=empty
+PXE_MGMT_CIDR=10.99.10.0/24
+PXE_MGMT_GATEWAY=10.99.10.1
+PXE_MGMT_DNS=10.99.10.2
+PXE_SERVER_IP=10.99.10.2
+PXE_DHCP_RANGE=10.99.10.100-10.99.10.200
+PXE_DHCP_INTERFACE=pxe11
+PXE_BASE_URL=http://10.99.10.2
+PXE_MEDIA_URL=http://10.99.10.2/media
+PXE_MEDIA_ROOT=/srv/pxe/media
+PXE_TFTP_ROOT=/srv/pxe/tftp
+PXE_DNSMASQ_LEASES=/var/lib/misc/dnsmasq.leases
+PXE_DNSMASQ_PIDFILE=/run/dnsmasq/dnsmasq.pid
+PXE_TRUST_PROXY=1
+PXE_ALLOWED_HOSTS=10.99.10.2,10.99.0.2
+PXE_TOKEN_TTL_MIN=360
+PXE_JOB_BOOTING_TIMEOUT_MIN=60
+PXE_JOB_INSTALLING_TIMEOUT_MIN=120
+PXE_JOB_CONFIGURING_TIMEOUT_MIN=60
+PXE_JOB_MAX_INSTALLER_BOOTS=3
+PXE_WATCHDOG_INTERVAL_SEC=30
+PXE_JOB_LOG_MAX_EVENTS=5000
+PXE_JOB_HISTORY_PER_HOST=20
+PXE_INSECURE_NO_LEASE_CHECK=0
+PXE_UNKNOWN_HOST_ACTION=local
+PXE_KERNEL_EXTRA_ARGS=
+PXE_ADMIN_USERNAME=pxeadmin
+PXE_ADMIN_PASSWORD_HASH=<disamarkan>
+PXE_SESSION_IDLE_MIN=120
+PXE_SESSION_MAX_HOURS=12
+PXE_LOGIN_MAX_FAILURES=5
+PXE_LOGIN_WINDOW_MIN=15
+PXE_API_RATE_PER_MIN=600
+PXE_VLAN_NETWORKS=20:10.99.20.0/24:10.99.20.1
+hash-format=scrypt
+env-file-sha256=2c2d4049ec56901e mtime=2026-11-07 12:06:14.896347580 +0000
+hash-sha256-prefix=415a54f93c56
+# dnsmasq conf (interface/bind/range)
+interface=pxe11
+bind-interfaces
+except-interface=lo
+dhcp-range=pxe11,10.99.10.100,10.99.10.200,255.255.255.0,1h
+dhcp-boot=tag:ipxe,http://10.99.10.2/boot/${mac}.ipxe?platform=${platform}
+dhcp-boot=tag:!ipxe,tag:efi64,snponly.efi,,10.99.10.2
+dhcp-boot=tag:!ipxe,tag:!efi64,undionly.kpxe,,10.99.10.2
+# firewall nft
+nft-table pxe_dashboard: tidak ada
+pxe-dashboard-firewall inactive not-found
+# nginx enabled
+lrwxrwxrwx 1 root root 40 Nov  7 12:06 pxe-dashboard -> /etc/nginx/sites-available/pxe-dashboard
+# exportfs -v
+# mount /srv/pxe/media
+(tidak ada)
+# modul disk Debian (debian-netboot/modules)
+(tidak ada)
+# fstab (baris /srv/pxe)
+(tidak ada)
+# user pxe
+pxe:x:997:988::/var/lib/pxe-dashboard:/usr/sbin/nologin
+# data
+ADA   /var/lib/pxe-dashboard 750 pxe:pxe
+ADA   /srv/pxe 755 root:root
+ADA   /srv/pxe/media 755 root:root
+ADA   /srv/pxe/tftp 755 root:root
+ADA   /var/log/dnsmasq-pxe.log 660 dnsmasq:root
+drwxr-x---  2 pxe  pxe    4096 Nov  7 11:44 .
+drwxr-xr-x 47 root root   4096 Nov  7 12:02 ..
+-rw-r--r--  1 pxe  pxe    4096 Nov  7 11:44 pxe.db
+-rw-r--r--  1 pxe  pxe   32768 Nov  7 12:05 pxe.db-shm
+-rw-r--r--  1 pxe  pxe  502672 Nov  7 12:05 pxe.db-wal
+drwxr-xr-x 6 root root 4096 Nov  7 11:42 .
+drwxr-xr-x 5 root root 4096 Nov  7 12:05 ..
+drwxr-xr-x 2 root root 4096 Nov  7 11:42 debian-12
+drwxr-xr-x 2 root root 4096 Nov  7 11:42 debian-netboot
+drwxr-xr-x 2 root root 4096 Nov  7 11:42 rocky-9
+drwxr-xr-x 2 root root 4096 Nov  7 11:42 ubuntu-24.04
+# db
+pxe.db 4096 byte, mtime 2026-11-07 11:44:23.486841785 +0000 sha256=97e8d54f8a725510
+# curl lokal
+/login curl: (7) Failed to connect to 10.99.10.2 port 80 after 1446 ms: Couldn't connect to server
+000
+/api/settings curl: (7) Failed to connect to 10.99.10.2 port 80 after 2240 ms: Couldn't connect to server
+000
+# paket
+dnsmasq            install ok installed
+nginx              install ok installed
+nfs-kernel-server  install ok installed
+ipxe               install ok installed

@@ -1,0 +1,9 @@
+# resource libvirt terlindungi (before) 2026-11-07T11:00:19Z
+vm ubuntu24.04 state=shut off xml-sha256=2cf828b7222f8264be0727580ef2dac749cdd14033e06ef59aa088a6f71d2a70
+vm pxe-test-node01 tidak-ada
+net default Active:         yes Autostart:      yes Bridge:         virbr0  xml-sha256=a1ed3524c410bf7783e11b5d56237f6681d091f99982898e4f9f43dc8d13dbbe
+net int Active:         yes Autostart:      yes Bridge:         virbr1  xml-sha256=0350b85585d61951dda4ccddf43c1ee7c5d4461b0fb97989f4329bcda67d9165
+# semua domain/network
+dom ubuntu24.04
+net default
+net int

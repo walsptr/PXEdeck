@@ -24,6 +24,7 @@ PASSF="$KEYS_DIR/m8-admin.pass"
 NODE=pxe-test-m8-node51
 NODE_MAC=52:54:00:99:00:51
 NODE_IP=10.99.0.61
+if [[ "${M8_TOPOLOGY:-flat}" == vlan ]]; then NODE=pxe-test-m8-node52; NODE_MAC=52:54:00:99:00:52; NODE_IP=10.99.20.62; fi
 NODE_KEY="$KEYS_DIR/m8-node_ed25519"
 # M8_NIC: nama NIC provisioning di VM. Default pxe0 (nama lab dari infra/server/netplan.yaml). Run 1
 # memakai pxe0 dan GAGAL (deploy/render.sh:65 menolak NIC bernama pxe0, lihat results.json); run
@@ -31,9 +32,29 @@ NODE_KEY="$KEYS_DIR/m8-node_ed25519"
 # VM uji, setara server sungguhan dengan NIC bernama lain), tanpa mengubah kode produk.
 M8_NIC="${M8_NIC:-pxe0}"
 [[ "$M8_NIC" =~ ^[a-z][a-z0-9]{1,10}$ ]] || die "M8_NIC tidak valid"
-INSTALL_ARGS=(--yes --interface "$M8_NIC" --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200
-  --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --admin-password-file /root/m8-admin.pass
-  --iso-ubuntu /dev/sr0 --iso-debian /dev/sr1 --iso-rocky /dev/sr2)
+# Lab flat: admin 10.99.0.1 berada DI subnet PXE 10.99.0.0/24 -> wajib --admin-overlap-ok (DEC-030,
+# SR-8-2; penolakan tanpa flag diuji di tahap neg-overlap). M8_FIREWALL=1 -> + --firewall.
+# M8_TOPOLOGY=vlan (iterasi 2, DEC-030 §4): NIC trunk0 (trunk lewat switch lab M7), PXE di VLAN 10
+# (pxe10 10.99.10.2), VLAN management 20; UI admin tetap di 10.99.0.2 (--admin-listen).
+M8_TOPOLOGY="${M8_TOPOLOGY:-flat}"
+if [[ "$M8_TOPOLOGY" == vlan ]]; then
+  INSTALL_ARGS=(--yes --interface trunk0 --address 10.99.10.2/24 --dhcp-range 10.99.10.100-10.99.10.200
+    --gateway 10.99.10.1 --dns 10.99.10.2 --vlan-id 10 --vlan-iface pxe10
+    --vlan-networks "20:10.99.20.0/24:10.99.20.1" --admin-allow 10.99.0.1 --admin-listen 10.99.0.2
+    --admin-password-file /root/m8-admin.pass --iso-ubuntu /dev/sr0 --debian-netboot none)
+else
+  INSTALL_ARGS=(--yes --interface "$M8_NIC" --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200
+    --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --admin-overlap-ok --admin-password-file /root/m8-admin.pass
+    --iso-ubuntu /dev/sr0 --iso-debian /dev/sr1 --iso-rocky /dev/sr2)
+fi
+[[ "${M8_FIREWALL:-0}" == 1 ]] && INSTALL_ARGS+=(--firewall)
+# M8_EXTRA: opsi produk tambahan (mis. "--debian-netboot /root/debian-netboot"), hanya [A-Za-z0-9 ./_-].
+if [[ -n "${M8_EXTRA:-}" ]]; then
+  [[ "$M8_EXTRA" =~ ^[A-Za-z0-9\ ./_-]+$ ]] || die "M8_EXTRA tidak valid"
+  read -ra _ex <<<"$M8_EXTRA"; INSTALL_ARGS+=("${_ex[@]}")
+fi
+PXE_IF="$M8_NIC"; [[ "$M8_TOPOLOGY" == vlan ]] && PXE_IF=pxe10
+SRV_PXE_IP=10.99.0.2; [[ "$M8_TOPOLOGY" == vlan ]] && SRV_PXE_IP=10.99.10.2
 
 step() { # step <id> <PASS|FAIL> <catatan> [bukti...]
   local id="$1" st="$2" n="$3"; shift 3
@@ -44,7 +65,7 @@ vm() { ssh "${SSH_OPTS[@]}" -o IdentitiesOnly=yes "root@$SERVER_IP" "$@"; }
 vm_script() { local s="$1"; shift; vm "$@ bash -s" < "$HERE/$s"; }
 host_code() { curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://$SERVER_IP$1" 2>/dev/null || true; }
 
-state() { vm_script vm-state.sh "LABEL=$1" > "$K/state-$1.txt" 2>&1 || true; }
+state() { vm_script vm-state.sh "LABEL=$1 SRV_IP=$SRV_PXE_IP" > "$K/state-$1.txt" 2>&1 || true; }
 snap() { vm_script vm-snapshot.sh > "$K/etc-$1.tsv"; vm "dpkg-query -W -f='\${Package}\n' | LC_ALL=C sort" > "$K/pkgs-$1.txt"; vm "cut -d: -f1 /etc/passwd | LC_ALL=C sort" > "$K/users-$1.txt"; }
 
 cmd="${1:-}"; shift || true
@@ -101,7 +122,7 @@ case "$cmd" in
     fi
     [[ "${M8_IDEMPOTENT:-0}" == 1 ]] && state "install-$n-before"
     t0=$(date +%s); rc=0
-    vm "cd /root/pxe-src && ${pathpre}./install.sh ${INSTALL_ARGS[*]} ${extra[*]}" >> "$K/install-$n.log" 2>&1 || rc=$?
+    vm "cd /root/pxe-src && ${pathpre}./install.sh $(printf '%q ' "${INSTALL_ARGS[@]}" "${extra[@]}")" >> "$K/install-$n.log" 2>&1 || rc=$?
     echo "# exit=$rc durasi=$(( $(date +%s) - t0 )) dtk" >> "$K/install-$n.log"
     vm "ls -1 /opt/pxe-dashboard/releases | sort" > "$K/install-$n-releases-after.txt" 2>&1 || true
     vm "cat /var/lib/pxe-dashboard-installer/install-manifest" > "$K/install-$n-manifest-after.txt" 2>&1 || true
@@ -115,20 +136,26 @@ case "$cmd" in
     # dnsmasq hanya di $M8_NIC / 10.99.0.2 (kolom alamat lokal = field pertama berbentuk host:port
     # setelah kolom antrean; `ss -lunp` tanpa kolom Netid bila hanya satu protokol).
     lss() { awk '/"dnsmasq"/ { for (i = 1; i <= NF; i++) if ($i ~ /:[0-9]+$/) { print $i; break } }' "$K/install-$n-ss-lunp.txt"; }
-    bad_dns="$( { lss | grep -Ev "^10\.99\.0\.2:[0-9]+$|%$M8_NIC:[0-9]+$" || true; } | wc -l)"
+    bad_dns="$( { lss | grep -Ev "^${SRV_PXE_IP//./\\.}:[0-9]+$|%$PXE_IF:[0-9]+$|^\[fe80::[0-9a-f:]+\]%$PXE_IF:[0-9]+$" || true; } | wc -l)"
     dhcp67="$(lss | wc -l)"
-    nic_67="$( { lss | grep -c "%$M8_NIC:67$" || true; } )"
+    nic_67="$( { lss | grep -c "%$PXE_IF:67$" || true; } )"
     ev="install-$n.log install-$n-ss-lunp.txt install-$n-host-http.txt state-install-$n.txt"
     if ((rc == 0)) && [[ "$login" == 200 && "$sett" == 401 ]] && ((dhcp67 > 0 && bad_dns == 0 && nic_67 >= 1)); then
-      step "install-$n" PASS "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq ${dhcp67} socket udp, semua di $M8_NIC/10.99.0.2 (DHCP %$M8_NIC:67)" "$ev"
+      step "install-$n" PASS "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq ${dhcp67} socket udp, semua di $PXE_IF/$SRV_PXE_IP (DHCP %$PXE_IF:67)" "$ev"
     else
-      step "install-$n" FAIL "exit=$rc login=$login settings=$sett dnsmasq-socket=$dhcp67 di-luar-$M8_NIC=$bad_dns %$M8_NIC:67=$nic_67" "$ev"
+      step "install-$n" FAIL "exit=$rc login=$login settings=$sett dnsmasq-socket=$dhcp67 di-luar-$PXE_IF=$bad_dns %$PXE_IF:67=$nic_67" "$ev"
     fi
     # M8_CHECK_DEBIAN=1: --iso-debian perangkat /dev/sr1 -> modul disk virtio Debian diekstrak.
     if [[ "${M8_CHECK_DEBIAN:-0}" == 1 ]]; then
       kos="$(grep -cE '^ko [^ ]+/virtio_(blk|scsi)\.ko [1-9]' "$K/state-install-$n.txt" || true)"
       if grep -qE '^\[pxe-install\] modul disk Debian [^ ]+ di /srv/pxe/media/debian-netboot/modules' "$K/install-$n.log" && ! grep -q 'modul disk Debian tidak diekstrak' "$K/install-$n.log" && ((kos == 2)); then
         step "install-$n-debian-modules" PASS "--iso-debian /dev/sr1: modul virtio_blk + virtio_scsi diekstrak ke debian-netboot/modules" "install-$n.log state-install-$n.txt"
+        if [[ " ${INSTALL_ARGS[*]} " == *" --debian-netboot "* ]]; then :
+        elif grep -q 'Debian netboot terpasang di /srv/pxe/media/debian-netboot (Release.gpg terverifikasi)' "$K/install-$n.log"; then
+          step "install-$n-debian-netboot-gpg" PASS "DEBIAN_NETBOOT=auto: unduh deb.debian.org, Release.gpg diverifikasi gpgv (debian-archive-keyring) -> SHA256SUMS -> linux/initrd.gz" "install-$n.log"
+        else
+          step "install-$n-debian-netboot-gpg" FAIL "tanpa log 'Release.gpg terverifikasi'" "install-$n.log"
+        fi
       else
         step "install-$n-debian-modules" FAIL "modul Debian tidak lengkap (ko=$kos)" "install-$n.log state-install-$n.txt"
       fi
@@ -208,6 +235,183 @@ case "$cmd" in
       step failinstall FAIL "$(IFS='; '; echo "${pr[*]}")" "failinstall.log state-failinstall-before.txt state-failinstall.txt failinstall-manifest.txt"
     fi
     ;;
+  neg-overlap)
+    # SR-8-2: allowlist admin yang tumpang tindih dengan subnet PXE TANPA --admin-overlap-ok -> exit 2,
+    # tanpa perubahan.
+    [[ -f "$PASSF" ]] || admin_pass_new "$PASSF"
+    vm 'umask 077 && cat > /root/m8-admin.pass && chmod 600 /root/m8-admin.pass' < "$PASSF"
+    args=(); for a in "${INSTALL_ARGS[@]}"; do [[ "$a" == --admin-overlap-ok ]] || args+=("$a"); done
+    printf '# ./install.sh %s\n' "${args[*]}" > "$K/neg-overlap.log"
+    rc=0; vm "cd /root/pxe-src && ./install.sh $(printf '%q ' "${args[@]}")" >> "$K/neg-overlap.log" 2>&1 || rc=$?
+    echo "# exit=$rc" >> "$K/neg-overlap.log"
+    vm 'echo "manifest: $(test -e /var/lib/pxe-dashboard-installer && echo ADA || echo tidak-ada)"; echo "dnsmasq: $(dpkg-query -W -f="\${Status}" dnsmasq 2>/dev/null || echo absent)"' > "$K/neg-overlap-state.txt" 2>&1
+    if ((rc == 2)) && grep -q 'tumpang tindih' "$K/neg-overlap.log" && grep -q '^manifest: tidak-ada' "$K/neg-overlap-state.txt"; then
+      step neg-overlap PASS "--admin-allow 10.99.0.1 (di subnet PXE) tanpa --admin-overlap-ok ditolak exit 2, tanpa manifest/paket" "neg-overlap.log neg-overlap-state.txt"
+    else step neg-overlap FAIL "exit=$rc" "neg-overlap.log neg-overlap-state.txt"; fi
+    ;;
+  fwcheck)
+    # --firewall: tabel nft ada + unit enabled, SSH admin (host 10.99.0.1 -> 22) & UI tetap jalan,
+    # ICMPv6 ND: host ping6 link-local VM lewat virbr-pxe + VM punya neighbor host.
+    lbl="${1:?label}"; pr=()
+    state "fw-$lbl"
+    vm true && ssh_ok=1 || { ssh_ok=0; pr+=("ssh admin gagal"); }
+    code="$(host_code /login)"; [[ "$code" == 200 ]] || pr+=("/login dari host $code")
+    grep -q '^nft-table pxe_dashboard: ADA' "$K/state-fw-$lbl.txt" || pr+=("tabel nft tidak ada")
+    grep -qE '^pxe-dashboard-firewall active enabled' "$K/state-fw-$lbl.txt" || pr+=("unit firewall tidak active/enabled")
+    grep -qE 'nd-(neighbor|router)-(solicit|advert)' "$K/state-fw-$lbl.txt" || pr+=("aturan ICMPv6 ND tidak terlihat")
+    vmll="$(vm "ip -6 -o addr show dev $PXE_IF scope link | awk '{print \$4}' | cut -d/ -f1" | head -1)"
+    # Host bridge virbr-pxe tanpa IPv6 (network pxe-test tanpa <ip family=ipv6>, tanpa link-local) ->
+    # ND dari host tidak bisa diuji; ND dibuktikan dari node (tahap nodedns: ping6 link-local server).
+    if [[ -n "$(ip -6 addr show dev virbr-pxe 2>/dev/null)" ]]; then
+      p6="$(ping -6 -c 3 -W 2 "$vmll%virbr-pxe" 2>&1 || true)"
+      grep -qE '[1-3] received' <<<"$p6" || pr+=("ping6 link-local VM gagal")
+    else p6="n/a: virbr-pxe di host tanpa alamat IPv6 (ND diuji dari node, tahap nodedns)"; fi
+    neigh="$(vm "ip -6 neigh show dev $PXE_IF" 2>&1 || true)"
+    { echo "# fwcheck $lbl $(date -u +%FT%TZ)"; echo "ssh root@10.99.0.2 (admin, tcp/22 di $PXE_IF): $([[ $ssh_ok == 1 ]] && echo OK || echo GAGAL)"
+      echo "GET http://10.99.0.2/login dari host: $code"; echo "# ping -6 $vmll%virbr-pxe (ND)"; echo "$p6"; echo "# ip -6 neigh di VM ($PXE_IF)"; echo "$neigh"; } > "$K/fwcheck-$lbl.txt"
+    if ((${#pr[@]} == 0)); then step "fwcheck-$lbl" PASS "--firewall: tabel nft inet pxe_dashboard ada (aturan ICMPv6 ND), unit active+enabled, SSH admin + /login 200 dari host, ND: lihat nodedns" "fwcheck-$lbl.txt state-fw-$lbl.txt"
+    else step "fwcheck-$lbl" FAIL "$(IFS='; '; echo "${pr[*]}")" "fwcheck-$lbl.txt state-fw-$lbl.txt"; fi
+    ;;
+  nodedns)
+    # CR-8-7: node terpasang me-resolve nama eksternal lewat dnsmasq lokal (forward ke resolver host VM
+    # server). Diharapkan: nama ter-resolve; konektivitas internet node TIDAK ada (gateway 10.99.0.1 =
+    # host, network pxe-test terisolasi; NAT hanya untuk VM server, DEC-009) -> ping 1.1.1.1 gagal.
+    SRV_LL="$(vm "ip -6 -o addr show dev $PXE_IF scope link | awk '{print \$4}' | cut -d/ -f1" | head -1)"
+    o="$(ssh -i "$NODE_KEY" -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -o LogLevel=ERROR -o BatchMode=yes -o IdentitiesOnly=yes "m8admin@$NODE_IP" \
+      'echo "# resolv"; resolvectl dns 2>/dev/null | grep -v "^Global: *$"; echo "# getent hosts deb.debian.org"; getent hosts deb.debian.org; echo "rc=$?"; echo "# getent hosts archive.ubuntu.com"; getent hosts archive.ubuntu.com; echo "rc=$?"; echo "# ping -c1 -W3 1.1.1.1 (diharapkan gagal: tanpa NAT untuk node)"; ping -c1 -W3 1.1.1.1 >/dev/null 2>&1 && echo reachable || echo unreachable; echo "# ICMPv6 ND ke link-local server (firewall: nd-* + echo-request)"; sudo -n ip -6 neigh flush dev enp1s0 >/dev/null 2>&1; ping -6 -c3 -W2 '"$SRV_LL"'%enp1s0 2>&1 | tail -2; ip -6 neigh show '"$SRV_LL"' dev enp1s0' 2>&1)" || true
+    printf '%s\n' "$o" > "$K/nodedns.txt"
+    vm "nft list table inet pxe_dashboard 2>/dev/null | grep -E 'counter|icmpv6' || echo '(tanpa firewall)'" >> "$K/nodedns.txt" 2>&1 || true
+    nd_ok=1; grep -qE ' [1-3] received' "$K/nodedns.txt" || nd_ok=0
+    grep -qE 'lladdr 52:54:00:99:01:02 (REACHABLE|STALE|DELAY|PROBE)' "$K/nodedns.txt" || nd_ok=0
+    if ((nd_ok)); then step nodedns-nd PASS "node -> ping6 link-local server $SRV_LL (lewat firewall bila aktif): ND berhasil (neighbor 52:54:00:99:01:02)" nodedns.txt
+    else step nodedns-nd FAIL "ICMPv6 ND/ping6 node -> server gagal" nodedns.txt; fi
+    if [[ "$(grep -c '^rc=0$' "$K/nodedns.txt")" == 2 ]] && grep -q 'deb.debian.org' <(sed -n '/getent hosts deb/,/rc=/p' "$K/nodedns.txt" | sed 1d); then
+      step nodedns PASS "node $NODE_IP me-resolve deb.debian.org & archive.ubuntu.com lewat dnsmasq (DNS 10.99.0.2 -> resolver host server); ping 1.1.1.1 $(grep -m1 -E "^(reachable|unreachable)$" "$K/nodedns.txt") (sesuai harapan: NAT hanya untuk VM server)" nodedns.txt
+    else step nodedns FAIL "resolusi nama eksternal dari node gagal" nodedns.txt; fi
+    ;;
+  refuse)
+    # CR-8-3/CR-8-4: dnsmasq / nfs-kernel-server milik admin (pra-ada) dengan konfigurasi aktif lain ->
+    # install.sh menolak, TANPA perubahan (/etc sama, manifest sama, konfigurasi & status layanan admin sama).
+    c="${1:?dnsmasq|nfs}"
+    vm "CASE=$c bash -s" < "$HERE/vm-refuse-setup.sh" > "$K/refuse-$c-setup.txt" 2>&1
+    [[ -f "$PASSF" ]] || admin_pass_new "$PASSF"
+    vm 'umask 077 && cat > /root/m8-admin.pass && chmod 600 /root/m8-admin.pass' < "$PASSF"
+    snap "refuse-$c-before"; state "refuse-$c-before"
+    vm "cat /var/lib/pxe-dashboard-installer/install-manifest 2>/dev/null || echo '(tidak ada)'" > "$K/refuse-$c-manifest-before.txt"
+    printf '# ./install.sh %s\n' "${INSTALL_ARGS[*]}" > "$K/refuse-$c.log"
+    rc=0; vm "cd /root/pxe-src && ./install.sh $(printf '%q ' "${INSTALL_ARGS[@]}")" >> "$K/refuse-$c.log" 2>&1 || rc=$?
+    echo "# exit=$rc" >> "$K/refuse-$c.log"
+    snap "refuse-$c-after"; state "refuse-$c-after"
+    vm "cat /var/lib/pxe-dashboard-installer/install-manifest 2>/dev/null || echo '(tidak ada)'" > "$K/refuse-$c-manifest-after.txt"
+    drc=0; diff "$K/etc-refuse-$c-before.tsv" "$K/etc-refuse-$c-after.tsv" > "$K/refuse-$c-etc-diff.txt" || drc=$?
+    pr=()
+    ((rc != 0)) || pr+=("exit 0")
+    case "$c" in
+      dnsmasq) grep -q 'dnsmasq sudah terpasang sebelum installer dengan konfigurasi aktif lain' "$K/refuse-$c.log" || pr+=("pesan penolakan dnsmasq tidak ada") ;;
+      nfs) grep -q 'nfs-kernel-server sudah terpasang sebelum installer dengan ekspor/konfigurasi lain' "$K/refuse-$c.log" || pr+=("pesan penolakan nfs tidak ada") ;;
+    esac
+    ((drc == 0)) || pr+=("/etc berubah")
+    cmp -s "$K/refuse-$c-manifest-before.txt" "$K/refuse-$c-manifest-after.txt" || pr+=("manifest berubah")
+    cmp -s "$K/pkgs-refuse-$c-before.txt" "$K/pkgs-refuse-$c-after.txt" || pr+=("daftar paket berubah")
+    for u in dnsmasq nginx nfs-server; do
+      [[ "$(grep -E "^$u +" "$K/state-refuse-$c-before.txt")" == "$(grep -E "^$u +" "$K/state-refuse-$c-after.txt")" ]] || pr+=("status $u berubah")
+    done
+    if ((${#pr[@]} == 0)); then step "refuse-$c" PASS "$c milik admin dengan konfigurasi aktif lain -> install.sh menolak exit=$rc; /etc, manifest, paket, status layanan tidak berubah" "refuse-$c.log refuse-$c-setup.txt refuse-$c-etc-diff.txt state-refuse-$c-after.txt"
+    else step "refuse-$c" FAIL "$(IFS='; '; echo "${pr[*]}")" "refuse-$c.log refuse-$c-etc-diff.txt"; fi
+    vm "CASE=clean bash -s" < "$HERE/vm-refuse-setup.sh" > "$K/refuse-$c-clean.txt" 2>&1 || true
+    ;;
+  vlan-up)
+    # Mode VLAN (DEC-030 §4): network topologi M7 + switch lab + VM install bersih dengan NIC trunk
+    # tambahan (attach-interface, test-owned; infra/install-vm.sh tidak diubah) + jaringan server
+    # trunk0/mgmt20 (vm-trunk-setup.sh), lalu snapshot /etc pra-install + push repo.
+    "$INFRA_DIR/net-up.sh" --topology vlan > "$K/net-up-vlan.txt" 2>&1
+    "$INFRA_DIR/switch-up.sh"
+    "$INFRA_DIR/install-vm.sh" up
+    assert_name "$NET_TRUNK"
+    virsh_m attach-interface --domain pxe-test-install --type network --source "$NET_TRUNK" --mac "$SERVER_MAC_TRUNK" --model virtio --live --config
+    sleep 5
+    vm 'bash -s' < "$HERE/vm-trunk-setup.sh" > "$K/trunk-setup.txt" 2>&1 || die "trunk setup gagal (trunk-setup.txt)"
+    vm "test ! -e /etc/pxe-dashboard.env && ! command -v dnsmasq && ! getent passwd pxe" >/dev/null \
+      && step up PASS "VM bersih + NIC trunk0 (pxe-test-trunk -> switch) + mgmt20 10.99.20.1/24; switch-check $(grep -c '^OK' "$K/switch-check.txt" 2>/dev/null) OK" "install-vm-clean.txt trunk-setup.txt switch-check.txt" \
+      || step up FAIL "VM tidak bersih" install-vm-clean.txt
+    snap pre
+    "$INFRA_DIR/install-vm.sh" push
+    vm "ls /root/pxe-src | tr '\n' ' '; echo; blkid /dev/sr0" > "$K/push.txt" 2>&1
+    ;;
+  vlan-relay)
+    # Relay M7 (infra/vlan/relay.sh) di VM install (10.99.0.2): key node + verify-node.sh via stdin.
+    [[ -f "$NODE_KEY" ]] || ssh-keygen -q -t ed25519 -N '' -C "pxe-test-m8-node" -f "$NODE_KEY"
+    vm "MODE=setup bash -s" < "$INFRA_DIR/vlan/relay.sh" > "$K/relay-setup.txt" 2>&1
+    vm 'umask 077 && cat > /root/pxe-relay/node_ed25519 && chmod 600 /root/pxe-relay/node_ed25519' < "$NODE_KEY"
+    vm 'umask 077 && cat > /root/pxe-relay/verify-node.sh' < "$DASH_DIR/e2e-kvm/verify-node.sh"
+    vm "MODE=status bash -s" < "$INFRA_DIR/vlan/relay.sh" >> "$K/relay-setup.txt" 2>&1
+    grep -q 'relay-key: 600' "$K/relay-setup.txt" && step vlan-relay PASS "relay siap (key node 0600 di /root/pxe-relay, isi tidak dicetak)" relay-setup.txt || step vlan-relay FAIL "relay" relay-setup.txt
+    ;;
+  vlan-node)
+    [[ -f "$NODE_KEY" ]] || die "jalankan vlan-relay dulu"
+    "$INFRA_DIR/node.sh" create "$NODE" "$NODE_MAC" uefi --net "$NET_PORT1"
+    mkdir -p "$K/screenshots"
+    rc=0
+    (cd "$DASH_DIR" && env PXE_KVM_BASE_URL="http://$SERVER_IP" PXE_KVM_RUN=m8 PXE_KVM_RUNS_DIR="$K" PXE_KVM_SCENARIO="" \
+      PXE_KVM_TOPOLOGY=vlan PXE_KVM_VLAN=20 PXE_KVM_INFRA_KEY="$SSH_KEY" PXE_KVM_RELAY_CMD="$INFRA_DIR/vlan/relay.sh" \
+      PXE_KVM_NODES="$NODE=$NODE_MAC=uefi=$NODE_IP=ubuntu=install=m8-node52" PXE_KVM_NODE_USER=m8admin \
+      PXE_KVM_SSH_KEY="$NODE_KEY" PXE_KVM_SSH_PUBKEY="$NODE_KEY.pub" PXE_KVM_RESET_CMD="$INFRA_DIR/node.sh" \
+      PXE_KVM_POWER_CMD="$INFRA_DIR/node.sh" PXE_KVM_GATEWAY=10.99.20.1 PXE_KVM_DNS=10.99.10.2 PXE_KVM_PREFIX=24 \
+      PXE_KVM_SPEC=m8 PXE_KVM_ADMIN_USER=pxeadmin PXE_KVM_ADMIN_PASS_FILE="$PASSF" \
+      npx playwright test -c e2e-kvm/playwright.config.ts) > "$K/playwright-kvm.log" 2>&1 || rc=$?
+    [[ -f "$K/results.json" ]] && cp "$K/results.json" "$K/playwright-results.json"
+    step vlan-node "$([[ $rc == 0 ]] && echo PASS || echo FAIL)" "playwright m8-vlan.spec.ts exit=$rc" "playwright-kvm.log playwright-results.json $NODE-timeline.txt $NODE-relay-verify.txt"
+    ;;
+  vlan-relay-teardown)
+    vm "MODE=teardown bash -s" < "$INFRA_DIR/vlan/relay.sh" > "$K/relay-teardown.txt" 2>&1 || true
+    grep -qx 'relay-clean: absent' "$K/relay-teardown.txt" && step relay-teardown PASS "relay-clean: absent" relay-teardown.txt || step relay-teardown FAIL "relay tidak bersih" relay-teardown.txt
+    ;;
+  netplan-neg)
+    # CR-8-5: netplan VLAN tidak valid -> install.sh gagal SEBELUM memasang file; tanpa
+    # /etc/netplan/60-pxe-dashboard.yaml, jaringan (alamat semua NIC, SSH) utuh. Argumen: opsi pengganti
+    # (mis. "--vlan-iface mgmt20" = nama bentrok dengan VLAN server id 20 di file lain).
+    lbl="${1:?label}"; shift
+    [[ -f "$PASSF" ]] || admin_pass_new "$PASSF"
+    vm 'umask 077 && cat > /root/m8-admin.pass && chmod 600 /root/m8-admin.pass' < "$PASSF"
+    vm 'ip -br addr | sort; ls -1 /etc/netplan; ip route' > "$K/netplan-neg-$lbl-net-before.txt" 2>&1
+    args=("$@")
+    printf '# ./install.sh %s\n' "${args[*]}" > "$K/netplan-neg-$lbl.log"
+    rc=0; vm "cd /root/pxe-src && ./install.sh $(printf '%q ' "${args[@]}")" >> "$K/netplan-neg-$lbl.log" 2>&1 || rc=$?
+    echo "# exit=$rc" >> "$K/netplan-neg-$lbl.log"
+    vm 'ip -br addr | sort; ls -1 /etc/netplan; ip route' > "$K/netplan-neg-$lbl-net-after.txt" 2>&1
+    vm 'test -e /etc/netplan/60-pxe-dashboard.yaml && echo "60-pxe-dashboard.yaml: ADA" || echo "60-pxe-dashboard.yaml: tidak ada"; for u in dnsmasq nginx nfs-server pxe-dashboard; do echo "$u $(systemctl is-active $u 2>/dev/null) $(systemctl is-enabled $u 2>/dev/null)"; done' > "$K/netplan-neg-$lbl-state.txt" 2>&1
+    pr=()
+    ((rc != 0)) || pr+=("exit 0")
+    grep -q 'netplan VLAN tidak valid (tidak dipasang)' "$K/netplan-neg-$lbl.log" || pr+=("bukan kegagalan validasi netplan")
+    grep -q '60-pxe-dashboard.yaml: tidak ada' "$K/netplan-neg-$lbl-state.txt" || pr+=("file netplan installer tertinggal")
+    cmp -s "$K/netplan-neg-$lbl-net-before.txt" "$K/netplan-neg-$lbl-net-after.txt" || pr+=("jaringan berubah")
+    vm true || pr+=("ssh terputus")
+    if ((${#pr[@]} == 0)); then step "netplan-neg-$lbl" PASS "netplan VLAN tidak valid ditolak exit=$rc sebelum dipasang; tanpa 60-pxe-dashboard.yaml; ip addr/route/daftar netplan sama; SSH utuh" "netplan-neg-$lbl.log netplan-neg-$lbl-net-before.txt netplan-neg-$lbl-net-after.txt netplan-neg-$lbl-state.txt"
+    else step "netplan-neg-$lbl" FAIL "$(IFS='; '; echo "${pr[*]}")" "netplan-neg-$lbl.log netplan-neg-$lbl-net-before.txt netplan-neg-$lbl-net-after.txt netplan-neg-$lbl-state.txt"; fi
+    ;;
+  rmpkg-refuse)
+    # CR-8-6: admin memasang paket yang bergantung pada nginx milik installer (libnginx-mod-stream) ->
+    # `uninstall.sh --purge --remove-packages --yes` wajib menolak (simulasi apt-get -s purge) TANPA
+    # perubahan apa pun; lalu paket admin dicopot lagi.
+    vm 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=600 install -y -qq --no-install-recommends libnginx-mod-stream >/dev/null && dpkg-query -W -f="\${Package} \${Status}\n" libnginx-mod-stream; apt-mark showmanual libnginx-mod-stream' > "$K/rmpkg-refuse-setup.txt" 2>&1
+    snap rmpkg-refuse-before; state rmpkg-refuse-before
+    vm "cat /var/lib/pxe-dashboard-installer/install-manifest" > "$K/rmpkg-refuse-manifest-before.txt" 2>&1 || true
+    printf '# ./uninstall.sh --purge --remove-packages --yes\n' > "$K/rmpkg-refuse.log"
+    rc=0; vm "cd /root/pxe-src && ./uninstall.sh --purge --remove-packages --yes" >> "$K/rmpkg-refuse.log" 2>&1 || rc=$?
+    echo "# exit=$rc" >> "$K/rmpkg-refuse.log"
+    snap rmpkg-refuse-after; state rmpkg-refuse-after
+    vm "cat /var/lib/pxe-dashboard-installer/install-manifest" > "$K/rmpkg-refuse-manifest-after.txt" 2>&1 || true
+    pr=()
+    ((rc != 0)) || pr+=("exit 0")
+    grep -q -- '--remove-packages akan ikut menghapus paket yang tidak dipasang installer: .*libnginx-mod-stream' "$K/rmpkg-refuse.log" || pr+=("pesan penolakan tidak memuat libnginx-mod-stream")
+    diff -q "$K/etc-rmpkg-refuse-before.tsv" "$K/etc-rmpkg-refuse-after.tsv" >/dev/null || pr+=("/etc berubah")
+    cmp -s "$K/pkgs-rmpkg-refuse-before.txt" "$K/pkgs-rmpkg-refuse-after.txt" || pr+=("paket berubah")
+    cmp -s "$K/rmpkg-refuse-manifest-before.txt" "$K/rmpkg-refuse-manifest-after.txt" || pr+=("manifest berubah")
+    diff <(grep -E '^(dnsmasq|nginx|nfs-server|pxe-dashboard|ADA|HILANG) ' "$K/state-rmpkg-refuse-before.txt") <(grep -E '^(dnsmasq|nginx|nfs-server|pxe-dashboard|ADA|HILANG) ' "$K/state-rmpkg-refuse-after.txt") >/dev/null || pr+=("layanan/data berubah")
+    if ((${#pr[@]} == 0)); then step rmpkg-refuse PASS "uninstall --remove-packages ditolak exit=$rc (apt-get -s purge: libnginx-mod-stream milik admin ikut terhapus); /etc, paket, manifest, layanan, data tidak berubah" "rmpkg-refuse.log rmpkg-refuse-setup.txt state-rmpkg-refuse-after.txt"
+    else step rmpkg-refuse FAIL "$(IFS='; '; echo "${pr[*]}")" "rmpkg-refuse.log rmpkg-refuse-setup.txt"; fi
+    vm 'DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=600 purge -y -qq libnginx-mod-stream >/dev/null; dpkg-query -W -f="\${Status}\n" libnginx-mod-stream 2>&1' > "$K/rmpkg-refuse-clean.txt" 2>&1 || true
+    ;;
   umount-media)
     # Diagnostik (temuan deploy/lib.sh:201): lepas mount ISO /srv/pxe/media/* sebelum install.sh diulang
     # agar sisa skenario bisa diuji; install.sh memasang ulang dari fstab. Dicatat sebagai langkah.
@@ -258,6 +462,7 @@ case "$cmd" in
       vm "cp /var/lib/pxe-dashboard-installer/install-manifest /root/m8-manifest-before-$lbl && chmod 600 /root/m8-manifest-before-$lbl"
       vm "cat /root/m8-manifest-before-$lbl" > "$K/$lbl-manifest-before.txt"
       snap "before-$lbl"
+      state "before-$lbl"
       printf '# ssh root@10.99.0.2 cd /root/pxe-src && ./uninstall.sh %s\n' "${args[*]}" > "$K/$lbl.log"
       rc=0; vm "cd /root/pxe-src && ./uninstall.sh ${args[*]}" >> "$K/$lbl.log" 2>&1 || rc=$?
       echo "# exit=$rc" >> "$K/$lbl.log"
@@ -283,17 +488,24 @@ case "$cmd" in
     { echo "# user baru vs pra-install (dari paket / installer)"; LC_ALL=C comm -13 <(LC_ALL=C sort "$K/users-pre.txt") <(LC_ALL=C sort "$K/users-after-$lbl.txt"); echo "# user hilang vs pra-install"; LC_ALL=C comm -23 <(LC_ALL=C sort "$K/users-pre.txt") <(LC_ALL=C sort "$K/users-after-$lbl.txt"); } > "$K/$lbl-users-vs-pre.txt"
     data_ok=1
     if [[ "$mode" == keep ]]; then
-      # M8_EXPECT_DB=0: install segar setelah purge belum pernah membuat pxe.db (dibuat lazy saat
-      # dashboard pertama kali butuh DB) -> yang dinilai hanya direktori data dipertahankan.
+      # CR-8-14: pxe.db wajib tetap ada bila ADA sebelum uninstall (state-before-<lbl>); install segar
+      # yang belum pernah membuat DB (dibuat lazy) hanya dinilai dari direktori data.
       grep -q '^ADA   /var/lib/pxe-dashboard ' "$K/state-$lbl.txt" && grep -q '^ADA   /srv/pxe/media ' "$K/state-$lbl.txt" || data_ok=0
-      if [[ "${M8_EXPECT_DB:-1}" == 1 ]]; then grep -q '^pxe.db ' "$K/state-$lbl.txt" || data_ok=0; fi
+      if grep -q '^pxe.db ' "$K/state-before-$lbl.txt" 2>/dev/null; then
+        db_before="ada"; grep -q '^pxe.db ' "$K/state-$lbl.txt" || data_ok=0
+      else db_before="tidak-ada"; fi
     else
       grep -q '^HILANG /var/lib/pxe-dashboard$' "$K/state-$lbl.txt" && grep -q '^HILANG /srv/pxe$' "$K/state-$lbl.txt" && grep -q '^# user pxe' "$K/state-$lbl.txt" && ! grep -q '^pxe:' "$K/state-$lbl.txt" || data_ok=0
     fi
     # Unit installer/paket tidak boleh tertinggal "failed" (pxe-dashboard SIGTERM -> 143 = sukses).
-    failed_units="$(grep -cE '^(dnsmasq|nginx|nfs-server|pxe-dashboard) +failed' "$K/state-$lbl.txt" || true)"
+    failed_units="$(grep -cE '^(dnsmasq|nginx|nfs-server|pxe-dashboard|pxe-dashboard-firewall) +failed' "$K/state-$lbl.txt" || true)"
+    # Firewall installer (bila ada di manifest) wajib hilang: tabel nft dan unit.
+    if grep -qP '^unit\tpxe-dashboard-firewall\.service' "$K/$lbl-manifest-before.txt"; then
+      if grep -q '^nft-table pxe_dashboard: tidak ada' "$K/state-$lbl.txt"; then step "$lbl-firewall-removed" PASS "tabel nft inet pxe_dashboard + unit firewall dicopot" "state-$lbl.txt"
+      else step "$lbl-firewall-removed" FAIL "tabel nft pxe_dashboard masih ada" "state-$lbl.txt"; fi
+    fi
     if ((rc == 0 && mrc == 0 && drc == 0 && open_ports == 0 && data_ok == 1 && failed_units == 0)); then
-      step "$lbl" PASS "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data $mode OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=$prc, informatif)" "$lbl.log $lbl-manifest-check.txt state-$lbl.txt $lbl-etc-diff.txt $lbl-etc-diff-vs-pre.txt"
+      step "$lbl" PASS "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data $mode OK (pxe.db sebelum: ${db_before:-n/a}); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=$prc, informatif)" "$lbl.log $lbl-manifest-check.txt state-$lbl.txt $lbl-etc-diff.txt $lbl-etc-diff-vs-pre.txt"
     else
       step "$lbl" FAIL "exit=$rc manifest-check=$mrc open_ports=$open_ports failed_units=$failed_units data_ok=$data_ok etc-diff=$drc vs-pre=$prc" "$lbl.log $lbl-manifest-check.txt state-$lbl.txt $lbl-etc-diff.txt $lbl-etc-diff-vs-pre.txt"
     fi
@@ -335,7 +547,13 @@ case "$cmd" in
   cleanup)
     "$INFRA_DIR/node.sh" destroy "$NODE" "$NODE_MAC" || true
     "$INFRA_DIR/install-vm.sh" down || true
-    "$INFRA_DIR/net-down.sh" || true
+    if [[ "$M8_TOPOLOGY" == vlan ]]; then
+      "$INFRA_DIR/switch-down.sh" --purge || true
+      for f in "$SWITCH_BASE" "$SWITCH_READY"; do assert_path_in_vms "$f"; rm -f "$f"; done
+      "$INFRA_DIR/net-down.sh" --topology vlan || true
+    else
+      "$INFRA_DIR/net-down.sh" || true
+    fi
     rm -f "$PASSF" "$NODE_KEY" "$NODE_KEY.pub" "$SSH_KEY" "$SSH_KEY.pub" "$KEYS_DIR/m8-cookies.txt"
     {
       echo "# cleanup $(date -u +%FT%TZ)"

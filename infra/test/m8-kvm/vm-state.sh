@@ -36,6 +36,11 @@ if [[ -f /etc/pxe-dashboard.env ]]; then
 else echo "(tidak ada)"; fi
 echo "# dnsmasq conf (interface/bind/range)"
 grep -hE '^(interface|bind-interfaces|except-interface|dhcp-range|dhcp-boot|port)=?' /etc/dnsmasq.d/pxe-dashboard.conf 2>/dev/null || echo "(tidak ada)"
+echo "# firewall nft"
+if command -v nft >/dev/null 2>&1 && nft list table inet pxe_dashboard >/dev/null 2>&1; then
+  echo "nft-table pxe_dashboard: ADA"; nft list table inet pxe_dashboard | sed 's/^/  /'
+else echo "nft-table pxe_dashboard: tidak ada"; fi
+printf 'pxe-dashboard-firewall %s %s\n' "$(systemctl is-active pxe-dashboard-firewall.service 2>/dev/null)" "$(systemctl is-enabled pxe-dashboard-firewall.service 2>/dev/null)"
 echo "# nginx enabled"; ls -l /etc/nginx/sites-enabled 2>/dev/null | sed 1d
 echo "# exportfs -v"; exportfs -v 2>/dev/null || true
 echo "# mount /srv/pxe/media"; findmnt -rno TARGET,SOURCE,FSTYPE,OPTIONS 2>/dev/null | grep '^/srv/pxe' || echo "(tidak ada)"
@@ -52,5 +57,5 @@ ls -la /srv/pxe/media 2>/dev/null | sed 1d
 echo "# db"
 [[ -f /var/lib/pxe-dashboard/pxe.db ]] && echo "pxe.db $(stat -c '%s byte, mtime %y' /var/lib/pxe-dashboard/pxe.db) sha256=$(sha256sum /var/lib/pxe-dashboard/pxe.db | cut -c1-16)"
 echo "# curl lokal"
-for u in /login /api/settings; do printf '%s %s\n' "$u" "$(curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://10.99.0.2$u" 2>&1)"; done
+for u in /login /api/settings; do printf '%s %s\n' "$u" "$(curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://${SRV_IP:-10.99.0.2}$u" 2>&1)"; done
 echo "# paket"; for p in dnsmasq nginx nfs-kernel-server ipxe; do printf '%-18s %s\n' "$p" "$(dpkg-query -W -f='${Status}' "$p" 2>/dev/null || echo absent)"; done

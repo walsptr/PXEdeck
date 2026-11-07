@@ -1,0 +1,3 @@
+== parent di 70-m8-test-trunk.yaml, vlan di 60-pxe-dashboard.yaml: rc=1 Error in network definition: pxe10: interface 'trunk0' is not defined
+== parent di 55-m8-test-trunk.yaml, vlan di 60-pxe-dashboard.yaml: rc=0 
+netplan 1.1.2-8ubuntu1~24.04.3

@@ -1,0 +1,96 @@
+## state refuse-nfs-after 2026-11-07T11:31:37Z pxe-test-install
+# systemctl (is-active / is-enabled)
+dnsmasq          inactive   not-found
+nginx            inactive   not-found
+nfs-server       active     enabled
+pxe-dashboard    inactive   not-found
+# pxe-dashboard unit (idempotensi: PID/waktu start sama = tidak di-restart)
+MainPID=0
+Result=success
+NRestarts=0
+LoadState=not-found
+ActiveEnterTimestamp=
+# ss -lunp (udp)
+UNCONN 0.0.0.0:55237 0.0.0.0:* users:(("rpc.statd",pid=27761,fd=8))
+UNCONN 0.0.0.0:53271 0.0.0.0:* 
+UNCONN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=583,fd=16))
+UNCONN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=583,fd=14))
+UNCONN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=27752,fd=5),("systemd",pid=1,fd=113))
+UNCONN 0.0.0.0:45744 0.0.0.0:* users:(("rpc.mountd",pid=169691,fd=4))
+UNCONN 127.0.0.1:801 0.0.0.0:* users:(("rpc.statd",pid=27761,fd=5))
+UNCONN 0.0.0.0:45995 0.0.0.0:* users:(("rpc.mountd",pid=169691,fd=8))
+UNCONN 0.0.0.0:44568 0.0.0.0:* users:(("rpc.mountd",pid=169691,fd=12))
+UNCONN [::]:36598 [::]:* users:(("rpc.mountd",pid=169691,fd=10))
+UNCONN [::]:46923 [::]:* users:(("rpc.mountd",pid=169691,fd=6))
+UNCONN [::]:49226 [::]:* users:(("rpc.statd",pid=27761,fd=10))
+UNCONN [::]:111 [::]:* users:(("rpcbind",pid=27752,fd=7),("systemd",pid=1,fd=115))
+UNCONN [::]:47886 [::]:* 
+UNCONN [::]:56279 [::]:* users:(("rpc.mountd",pid=169691,fd=14))
+# ss -ltnp (tcp)
+LISTEN 0.0.0.0:34095 0.0.0.0:* 
+LISTEN 0.0.0.0:57021 0.0.0.0:* users:(("rpc.statd",pid=27761,fd=9))
+LISTEN 0.0.0.0:55229 0.0.0.0:* users:(("rpc.mountd",pid=169691,fd=9))
+LISTEN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=583,fd=17))
+LISTEN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=27752,fd=4),("systemd",pid=1,fd=112))
+LISTEN 0.0.0.0:2049 0.0.0.0:* 
+LISTEN 0.0.0.0:22 0.0.0.0:* users:(("sshd",pid=1076,fd=3),("systemd",pid=1,fd=194))
+LISTEN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=583,fd=15))
+LISTEN 0.0.0.0:49947 0.0.0.0:* users:(("rpc.mountd",pid=169691,fd=5))
+LISTEN 0.0.0.0:43805 0.0.0.0:* users:(("rpc.mountd",pid=169691,fd=13))
+LISTEN [::]:44453 [::]:* users:(("rpc.mountd",pid=169691,fd=11))
+LISTEN [::]:40625 [::]:* 
+LISTEN [::]:51453 [::]:* users:(("rpc.mountd",pid=169691,fd=15))
+LISTEN [::]:111 [::]:* users:(("rpcbind",pid=27752,fd=6),("systemd",pid=1,fd=114))
+LISTEN [::]:34829 [::]:* users:(("rpc.statd",pid=27761,fd=11))
+LISTEN [::]:2049 [::]:* 
+LISTEN [::]:22 [::]:* users:(("sshd",pid=1076,fd=4),("systemd",pid=1,fd=199))
+LISTEN [::]:56239 [::]:* users:(("rpc.mountd",pid=169691,fd=7))
+# port PXE terbuka (udp 67/69, tcp 80/3000/2049)
+OPEN tcp 0.0.0.0:2049 
+OPEN tcp [::]:2049 
+# (akhir daftar port)
+# manifest /var/lib/pxe-dashboard-installer/install-manifest
+mode=600 owner=root:root
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T11:29:57Z)
+pkg	keyutils	dep
+pkg	libnfsidmap1	dep
+pkg	nfs-common	dep
+pkg	rpcbind	dep
+# /opt/pxe-dashboard
+(tidak ada)
+# /etc/pxe-dashboard.env
+(tidak ada)
+# dnsmasq conf (interface/bind/range)
+(tidak ada)
+# firewall nft
+nft-table pxe_dashboard: tidak ada
+pxe-dashboard-firewall inactive not-found
+# nginx enabled
+# exportfs -v
+/srv/admin-share
+		127.0.0.1(sync,wdelay,hide,no_subtree_check,sec=sys,ro,secure,root_squash,no_all_squash)
+# mount /srv/pxe/media
+(tidak ada)
+# modul disk Debian (debian-netboot/modules)
+(tidak ada)
+# fstab (baris /srv/pxe)
+(tidak ada)
+# user pxe
+(tidak ada)
+# data
+HILANG /var/lib/pxe-dashboard
+HILANG /srv/pxe
+HILANG /srv/pxe/media
+HILANG /srv/pxe/tftp
+HILANG /var/log/dnsmasq-pxe.log
+# db
+# curl lokal
+/login curl: (7) Failed to connect to 10.99.0.2 port 80 after 0 ms: Couldn't connect to server
+000
+/api/settings curl: (7) Failed to connect to 10.99.0.2 port 80 after 0 ms: Couldn't connect to server
+000
+# paket
+dnsmasq            absent
+nginx              absent
+nfs-kernel-server  install ok installed
+ipxe               absent

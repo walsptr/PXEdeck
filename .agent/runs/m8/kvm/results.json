@@ -1,58 +1,132 @@
 {
   "run": "m8",
-  "scenario": "DEC-029 §4 installer KVM",
-  "overall": "PASS",
+  "scenario": "DEC-029 §4 + DEC-030 §4 installer KVM",
+  "overall": "FAIL",
   "current": {
-    "evidence": "rerun/",
-    "results": "rerun/results.json",
-    "commit": "16aa054c9f7af31841239e2af9bb34416d233081",
-    "overall": "PASS",
-    "final": {
-      "up": "PASS",
-      "neg-address": "PASS",
-      "install-1": "PASS",
-      "install-1-debian-modules": "PASS",
-      "node": "PASS",
-      "install-2": "PASS",
-      "install-2-idempotent": "PASS",
-      "uninstall": "PASS",
-      "purge": "PASS",
-      "install-3": "PASS",
-      "uninstall2": "PASS",
-      "purge2": "PASS",
-      "purge2-packages": "PASS",
-      "failinstall": "PASS",
-      "purge3": "PASS",
-      "purge3-packages": "PASS",
-      "cleanup": "PASS",
-      "protected": "PASS"
+    "iteration": 2,
+    "commit": "3d60aa9af5a7bbcdcb034c763f698836ef520b35",
+    "overall": "FAIL",
+    "flat": {
+      "results": "iter2/results.json",
+      "overall": "FAIL",
+      "final": {
+        "up": "PASS",
+        "neg-address": "PASS",
+        "neg-overlap": "PASS",
+        "install-1": "FAIL",
+        "install-1-debian-modules": "FAIL",
+        "fwcheck-install-1": "FAIL",
+        "install-1b": "PASS",
+        "install-1b-debian-modules": "PASS",
+        "fwcheck-install-1b": "PASS",
+        "node": "PASS",
+        "nodedns-nd": "PASS",
+        "nodedns": "PASS",
+        "install-2": "PASS",
+        "install-2-idempotent": "PASS",
+        "fwcheck-install-2": "PASS",
+        "uninstall-firewall-removed": "PASS",
+        "uninstall": "PASS",
+        "purge": "PASS",
+        "install-3": "PASS",
+        "uninstall2": "PASS",
+        "purge2": "PASS",
+        "purge2-packages": "PASS",
+        "refuse-dnsmasq": "PASS",
+        "refuse-nfs": "PASS",
+        "failinstall": "PASS",
+        "purge-fi0": "PASS",
+        "purge-fi0-packages": "PASS",
+        "rmpkg-refuse": "PASS",
+        "purge3": "PASS",
+        "purge3-packages": "PASS",
+        "debian-netboot-gpg": "FAIL",
+        "cleanup": "PASS",
+        "protected": "PASS"
+      },
+      "playwright": [
+        {
+          "ac": "M8-KVM-login",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-KVM-node",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-KVM-ssh",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-KVM-scan-playwright",
+          "status": "PASS"
+        }
+      ]
     },
-    "playwright": [
-      {
-        "ac": "M8-KVM-login",
-        "status": "PASS"
+    "vlan": {
+      "results": "iter2/vlan/results.json",
+      "overall": "FAIL",
+      "final": {
+        "up": "PASS",
+        "install-1": "FAIL",
+        "install-2": "PASS",
+        "vlan-relay": "PASS",
+        "vlan-node": "PASS",
+        "relay-teardown": "PASS",
+        "uninstall": "FAIL",
+        "reinstall-after-uninstall": "FAIL",
+        "uninstall-vv": "PASS",
+        "netplan-neg-badparent": "PASS",
+        "purge": "PASS",
+        "purge-packages": "PASS",
+        "cleanup": "PASS",
+        "protected": "PASS"
       },
-      {
-        "ac": "M8-KVM-node",
-        "status": "PASS"
-      },
-      {
-        "ac": "M8-KVM-ssh",
-        "status": "PASS"
-      },
-      {
-        "ac": "M8-KVM-scan-playwright",
-        "status": "PASS"
-      }
-    ],
-    "note": "rerun tanpa workaround diagnostik (M8_NIC=pxe0, tanpa shim ss, tanpa umount-media)"
+      "playwright": [
+        {
+          "ac": "M8-VLAN-login",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-VLAN-node",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-VLAN-ssh",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-VLAN-scan-playwright",
+          "status": "PASS"
+        }
+      ]
+    },
+    "failing": {
+      "flat:install-1": "FAIL",
+      "flat:install-1-debian-modules": "FAIL",
+      "flat:fwcheck-install-1": "FAIL",
+      "flat:debian-netboot-gpg": "FAIL",
+      "vlan:install-1": "FAIL",
+      "vlan:uninstall": "FAIL",
+      "vlan:reinstall-after-uninstall": "FAIL"
+    },
+    "note": "tanpa workaround diagnostik; detail temuan (INFO) di iter2/steps.tsv dan iter2/vlan/steps.tsv"
   },
   "history": [
+    {
+      "run": "rerun",
+      "commit": "16aa054c9f7af31841239e2af9bb34416d233081",
+      "superseded": true,
+      "supersededBy": "iter2 (3d60aa9)",
+      "overall": "PASS",
+      "results": "rerun/results.json",
+      "evidence": "rerun/"
+    },
     {
       "run": "run1",
       "commit": "953a64d",
       "superseded": true,
-      "supersededBy": "rerun (16aa054)",
+      "supersededBy": "iter2 (3d60aa9)",
       "overall": "FAIL",
       "results": "results-run1.json",
       "evidence": "./ (file tingkat atas, attempt1-nic-pxe0/)",

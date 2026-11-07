@@ -1,0 +1,488 @@
+{
+  "run": "m8",
+  "scenario": "DEC-029 §4 installer KVM",
+  "commit": "3d60aa9af5a7bbcdcb034c763f698836ef520b35",
+  "final": {
+    "up": "PASS",
+    "neg-address": "PASS",
+    "neg-overlap": "PASS",
+    "install-1": "FAIL",
+    "install-1-debian-modules": "FAIL",
+    "fwcheck-install-1": "FAIL",
+    "install-1b": "PASS",
+    "install-1b-debian-modules": "PASS",
+    "fwcheck-install-1b": "PASS",
+    "node": "PASS",
+    "nodedns-nd": "PASS",
+    "nodedns": "PASS",
+    "install-2": "PASS",
+    "install-2-idempotent": "PASS",
+    "fwcheck-install-2": "PASS",
+    "uninstall-firewall-removed": "PASS",
+    "uninstall": "PASS",
+    "purge": "PASS",
+    "install-3": "PASS",
+    "uninstall2": "PASS",
+    "purge2": "PASS",
+    "purge2-packages": "PASS",
+    "refuse-dnsmasq": "PASS",
+    "refuse-nfs": "PASS",
+    "failinstall": "PASS",
+    "purge-fi0": "PASS",
+    "purge-fi0-packages": "PASS",
+    "rmpkg-refuse": "PASS",
+    "purge3": "PASS",
+    "purge3-packages": "PASS",
+    "debian-netboot-gpg": "FAIL",
+    "cleanup": "PASS",
+    "protected": "PASS"
+  },
+  "steps": [
+    {
+      "at": "2026-11-07T11:00:39Z",
+      "step": "up",
+      "status": "PASS",
+      "note": "VM bersih (tanpa dnsmasq/env/user pxe)",
+      "evidence": [
+        "install-vm-clean.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:00:49Z",
+      "step": "neg-address",
+      "status": "PASS",
+      "note": "--address 10.99.0.250/24 (tidak ada di NIC) ditolak preflight exit=1; tanpa manifest/paket/env/user",
+      "evidence": [
+        "neg-address.log",
+        "neg-address-state.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:00:50Z",
+      "step": "neg-overlap",
+      "status": "PASS",
+      "note": "--admin-allow 10.99.0.1 (di subnet PXE) tanpa --admin-overlap-ok ditolak exit 2, tanpa manifest/paket",
+      "evidence": [
+        "neg-overlap.log",
+        "neg-overlap-state.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:03:35Z",
+      "step": "install-1",
+      "status": "FAIL",
+      "note": "exit=1 login=000 settings=000 dnsmasq-socket=0 di-luar-pxe0=0 %pxe0:67=0",
+      "evidence": [
+        "install-1.log",
+        "install-1-ss-lunp.txt",
+        "install-1-host-http.txt",
+        "state-install-1.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:03:35Z",
+      "step": "install-1-debian-modules",
+      "status": "FAIL",
+      "note": "modul Debian tidak lengkap (ko=0)",
+      "evidence": [
+        "install-1.log",
+        "state-install-1.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:03:40Z",
+      "step": "fwcheck-install-1",
+      "status": "FAIL",
+      "note": "/login dari host 000;tabel nft tidak ada;unit firewall tidak active/enabled;aturan ICMPv6 ND tidak terlihat;ping6 link-local VM gagal",
+      "evidence": [
+        "fwcheck-install-1.txt",
+        "state-fw-install-1.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:07:54Z",
+      "step": "install-1-review",
+      "status": "INFO",
+      "note": "BUG: install.sh:798-799 menganggap exit gpgv != 0 sebagai tanda tangan tidak valid. Release.gpg bookworm memuat 3 tanda tangan; satu (RSA B8E5F13176D2A7A75220028078DBA3BC47EF2265, kunci arsip yang lebih baru) tidak ada di debian-archive-keyring 2023.4ubuntu1 Ubuntu 24.04 -> gpgv exit 2 walau 2 tanda tangan Good (Automatic Signing Key 12/bookworm + Stable Release Key 12). Install default dengan --iso-debian (DEBIAN_NETBOOT=auto) SELALU gagal. Rollback install gagal terbukti (4 unit disabled, tanpa tabel nft, port tertutup). Lanjut dengan opsi produk --debian-netboot DIR (netboot lokal .agent/media/debian-netboot)",
+      "evidence": [
+        "install-1.log",
+        "install-1-gpgv-diagnosis.txt",
+        "state-install-1.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:08:30Z",
+      "step": "install-1b",
+      "status": "PASS",
+      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 5 socket udp, semua di pxe0/10.99.0.2 (DHCP %pxe0:67)",
+      "evidence": [
+        "install-1b.log",
+        "install-1b-ss-lunp.txt",
+        "install-1b-host-http.txt",
+        "state-install-1b.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:08:30Z",
+      "step": "install-1b-debian-modules",
+      "status": "PASS",
+      "note": "--iso-debian /dev/sr1: modul virtio_blk + virtio_scsi diekstrak ke debian-netboot/modules",
+      "evidence": [
+        "install-1b.log",
+        "state-install-1b.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:08:35Z",
+      "step": "fwcheck-install-1b",
+      "status": "FAIL",
+      "note": "ping6 link-local VM gagal",
+      "evidence": [
+        "fwcheck-install-1b.txt",
+        "state-fw-install-1b.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:09:01Z",
+      "step": "fwcheck-install-1b",
+      "status": "PASS",
+      "note": "--firewall: tabel nft inet pxe_dashboard ada (aturan ICMPv6 ND), unit active+enabled, SSH admin + /login 200 dari host, ND: lihat nodedns",
+      "evidence": [
+        "fwcheck-install-1b.txt",
+        "state-fw-install-1b.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:24:28Z",
+      "step": "node",
+      "status": "PASS",
+      "note": "playwright m8-installer.spec.ts exit=0",
+      "evidence": [
+        "playwright-kvm.log",
+        "playwright-results.json",
+        "pxe-test-m8-node51-timeline.txt",
+        "pxe-test-m8-node51-verify-ssh.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:24:45Z",
+      "step": "nodedns-nd",
+      "status": "PASS",
+      "note": "node -> ping6 link-local server fe80::5054:ff:fe99:102 (lewat firewall bila aktif): ND berhasil (neighbor 52:54:00:99:01:02)",
+      "evidence": [
+        "nodedns.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:24:45Z",
+      "step": "nodedns",
+      "status": "PASS",
+      "note": "node 10.99.0.61 me-resolve deb.debian.org & archive.ubuntu.com lewat dnsmasq (DNS 10.99.0.2 -> resolver host server, CR-8-7); ping 1.1.1.1 unreachable (sesuai harapan: NAT hanya untuk VM server, DEC-009)",
+      "evidence": []
+    },
+    {
+      "at": "2026-11-07T11:25:29Z",
+      "step": "install-2",
+      "status": "PASS",
+      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 5 socket udp, semua di pxe0/10.99.0.2 (DHCP %pxe0:67)",
+      "evidence": [
+        "install-2.log",
+        "install-2-ss-lunp.txt",
+        "install-2-host-http.txt",
+        "state-install-2.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:25:29Z",
+      "step": "install-2-idempotent",
+      "status": "PASS",
+      "note": "ISO ter-mount (3) + diekspor; rilis/manifest/env sama; password sama -> hash dipertahankan; pxe-dashboard tidak di-restart (MainPID & ActiveEnterTimestamp sama)",
+      "evidence": [
+        "install-2.log",
+        "state-install-2-before.txt",
+        "state-install-2.txt",
+        "install-2-releases-before.txt",
+        "install-2-releases-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:25:30Z",
+      "step": "fwcheck-install-2",
+      "status": "PASS",
+      "note": "--firewall: tabel nft inet pxe_dashboard ada (aturan ICMPv6 ND), unit active+enabled, SSH admin + /login 200 dari host, ND: lihat nodedns",
+      "evidence": [
+        "fwcheck-install-2.txt",
+        "state-fw-install-2.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:26:04Z",
+      "step": "uninstall-firewall-removed",
+      "status": "PASS",
+      "note": "tabel nft inet pxe_dashboard + unit firewall dicopot",
+      "evidence": [
+        "state-uninstall.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:26:04Z",
+      "step": "uninstall",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data keep OK (pxe.db sebelum: ada); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "uninstall.log",
+        "uninstall-manifest-check.txt",
+        "state-uninstall.txt",
+        "uninstall-etc-diff.txt",
+        "uninstall-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:26:25Z",
+      "step": "purge",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data purge OK (pxe.db sebelum: n/a); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "purge.log",
+        "purge-manifest-check.txt",
+        "state-purge.txt",
+        "purge-etc-diff.txt",
+        "purge-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:28:52Z",
+      "step": "install-3",
+      "status": "PASS",
+      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 5 socket udp, semua di pxe0/10.99.0.2 (DHCP %pxe0:67)",
+      "evidence": [
+        "install-3.log",
+        "install-3-ss-lunp.txt",
+        "install-3-host-http.txt",
+        "state-install-3.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:29:14Z",
+      "step": "uninstall2",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data keep OK (pxe.db sebelum: tidak-ada); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "uninstall2.log",
+        "uninstall2-manifest-check.txt",
+        "state-uninstall2.txt",
+        "uninstall2-etc-diff.txt",
+        "uninstall2-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:30:08Z",
+      "step": "purge2",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data purge OK (pxe.db sebelum: n/a); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "purge2.log",
+        "purge2-manifest-check.txt",
+        "state-purge2.txt",
+        "purge2-etc-diff.txt",
+        "purge2-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:30:08Z",
+      "step": "purge2-packages",
+      "status": "PASS",
+      "note": "requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global",
+      "evidence": [
+        "purge2-packages-review.txt",
+        "purge2-apt-history.txt",
+        "purge2-apt-autoremove-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:30:55Z",
+      "step": "refuse-dnsmasq",
+      "status": "PASS",
+      "note": "dnsmasq milik admin dengan konfigurasi aktif lain -> install.sh menolak exit=1; /etc, manifest, paket, status layanan tidak berubah",
+      "evidence": [
+        "refuse-dnsmasq.log",
+        "refuse-dnsmasq-setup.txt",
+        "refuse-dnsmasq-etc-diff.txt",
+        "state-refuse-dnsmasq-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:31:37Z",
+      "step": "refuse-nfs",
+      "status": "PASS",
+      "note": "nfs milik admin dengan konfigurasi aktif lain -> install.sh menolak exit=1; /etc, manifest, paket, status layanan tidak berubah",
+      "evidence": [
+        "refuse-nfs.log",
+        "refuse-nfs-setup.txt",
+        "refuse-nfs-etc-diff.txt",
+        "state-refuse-nfs-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:33:25Z",
+      "step": "failinstall",
+      "status": "FAIL",
+      "note": "verify /login tidak gagal seperti diharapkan",
+      "evidence": [
+        "failinstall.log",
+        "state-failinstall-before.txt",
+        "state-failinstall.txt",
+        "failinstall-manifest.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:33:53Z",
+      "step": "failinstall-review",
+      "status": "INFO",
+      "note": "percobaan pertama failinstall dijalankan tanpa M8_EXTRA (--debian-netboot DIR) -> gagal lebih awal oleh bug gpgv yang sama (install.sh:798), bukan oleh rilis rusak; rollback tetap terlihat (dnsmasq/nginx/nfs-server disabled). Bukti diganti nama attempt0-*; state dibersihkan (purge --remove-packages) lalu failinstall diulang dengan --debian-netboot DIR",
+      "evidence": [
+        "attempt0-failinstall.log",
+        "attempt0-state-failinstall.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:34:26Z",
+      "step": "purge-fi0",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data purge OK (pxe.db sebelum: n/a); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "purge-fi0.log",
+        "purge-fi0-manifest-check.txt",
+        "state-purge-fi0.txt",
+        "purge-fi0-etc-diff.txt",
+        "purge-fi0-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:34:26Z",
+      "step": "purge-fi0-packages",
+      "status": "PASS",
+      "note": "requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global",
+      "evidence": [
+        "purge-fi0-packages-review.txt",
+        "purge-fi0-apt-history.txt",
+        "purge-fi0-apt-autoremove-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:37:12Z",
+      "step": "failinstall",
+      "status": "PASS",
+      "note": "rilis rusak -> verify gagal exit=1; rollback: dnsmasq/nginx/nfs-server/pxe-dashboard tidak enabled, dnsmasq mati, udp 67/69 tertutup",
+      "evidence": [
+        "failinstall.log",
+        "state-failinstall-before.txt",
+        "state-failinstall.txt",
+        "failinstall-manifest.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:37:58Z",
+      "step": "rmpkg-refuse",
+      "status": "PASS",
+      "note": "uninstall --remove-packages ditolak exit=1 (apt-get -s purge: libnginx-mod-stream milik admin ikut terhapus); /etc, paket, manifest, layanan, data tidak berubah",
+      "evidence": [
+        "rmpkg-refuse.log",
+        "rmpkg-refuse-setup.txt",
+        "state-rmpkg-refuse-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:38:33Z",
+      "step": "purge3",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data purge OK (pxe.db sebelum: n/a); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "purge3.log",
+        "purge3-manifest-check.txt",
+        "state-purge3.txt",
+        "purge3-etc-diff.txt",
+        "purge3-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:38:33Z",
+      "step": "purge3-packages",
+      "status": "PASS",
+      "note": "requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global",
+      "evidence": [
+        "purge3-packages-review.txt",
+        "purge3-apt-history.txt",
+        "purge3-apt-autoremove-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:38:49Z",
+      "step": "debian-netboot-gpg",
+      "status": "FAIL",
+      "note": "DEBIAN_NETBOOT=auto (deb.debian.org): Release.gpg berisi 3 tanda tangan, 2 Good (12/bookworm Automatic Signing Key, Stable Release Key), 1 'No public key' (RSA B8E5F13176D2A7A75220028078DBA3BC47EF2265, tidak ada di debian-archive-keyring 2023.4ubuntu1) -> gpgv exit 2 -> install.sh:798-799 die. Pesan error memakai tail -n 2 sehingga menampilkan 'Good signature' (menyesatkan)",
+      "evidence": [
+        "install-1.log",
+        "install-1-gpgv-diagnosis.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T11:38:50Z",
+      "step": "cleanup",
+      "status": "PASS",
+      "note": "VM pxe-test-*=0 network pxe-test*=0 key=0 disk=0",
+      "evidence": [
+        "cleanup.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T12:07:32Z",
+      "step": "protected",
+      "status": "PASS",
+      "note": "ubuntu24.04 (shut off) dan network default/int identik (sha256 dumpxml) awal iterasi 2 vs akhir; pxe-test-node01 tidak ada sebelum/sesudah",
+      "evidence": [
+        "protected-before.txt",
+        "vlan/protected-after.txt"
+      ]
+    }
+  ],
+  "playwright": [
+    {
+      "ac": "M8-KVM-login",
+      "status": "PASS",
+      "note": "401/204/200",
+      "evidence": [
+        "m8-login.txt"
+      ]
+    },
+    {
+      "ac": "M8-KVM-node",
+      "node": "pxe-test-m8-node51",
+      "status": "PASS",
+      "durationS": 638,
+      "note": "booting → installing → configuring → done",
+      "evidence": [
+        "pxe-test-m8-node51-timeline.txt",
+        "pxe-test-m8-node51-console.log"
+      ]
+    },
+    {
+      "ac": "M8-KVM-ssh",
+      "node": "pxe-test-m8-node51",
+      "status": "PASS",
+      "durationS": 247,
+      "evidence": [
+        "pxe-test-m8-node51-verify-ssh.txt"
+      ]
+    },
+    {
+      "ac": "M8-KVM-scan-playwright",
+      "status": "PASS",
+      "note": "0 temuan",
+      "evidence": [
+        "evidence-scan-playwright.txt"
+      ]
+    }
+  ],
+  "overall": "FAIL"
+}
