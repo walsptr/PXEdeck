@@ -45,8 +45,10 @@
       "Grep"
     ],
     "deny": [
-      "Bash(git push*)",
-      "Bash(git * push*)",
+      "Bash(git push --force*)",
+      "Bash(git push -f*)",
+      "Bash(git push --mirror*)",
+      "Bash(git push --delete*)",
       "Bash(sudo *)",
       "Bash(su *)",
       "Bash(pkexec *)",

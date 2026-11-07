@@ -51,7 +51,8 @@ melemahkan test = critical.
   DHCP/TFTP di host atau interface fisik. dnsmasq hanya di dalam VM `pxe-test-server`.
 - Hanya disk image VM di `.agent/vms/` yang boleh di-wipe/di-install. Jangan sentuh
   `/dev/sd*`, `/dev/nvme*`.
-- **Tanpa sudo.** Tanpa `git push`/force-push/deploy. Merge hanya ke `main` lokal.
+- **Tanpa sudo.** Tanpa force-push/deploy. `git push` hanya ke remote `origin`
+  (`https://github.com/walsptr/PXEdeck.git`), tanpa force/delete/mirror (izin user 2026-11-07).
 - Tanpa secret sungguhan di repo (pakai `.env.example` + nilai dummy). Tanpa membaca `~/.ssh`.
 - Jangan menghapus file di luar direktori project.
 - Resource libvirt hanya berprefix `pxe-test-`. **Dilindungi (milik user, jangan disentuh):** VM
