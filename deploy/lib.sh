@@ -41,7 +41,10 @@ NGINX_DEFAULT_LINK=/etc/nginx/sites-enabled/default
 NGINX_DEFAULT_SITE=/etc/nginx/sites-available/default
 EXPORTS_FILE=/etc/exports.d/pxe-dashboard.exports
 NFS_CONF=/etc/nfs.conf.d/pxe-dashboard.conf
-NETPLAN_FILE=/etc/netplan/60-pxe-dashboard.yaml
+# 99-: diurutkan SETELAH file netplan admin yang mendefinisikan NIC induk (netplan menolak `link:` ke
+# interface yang didefinisikan di file yang diurutkan lebih belakang). 60- = nama lama (iterasi < 3).
+NETPLAN_FILE=/etc/netplan/99-pxe-dashboard.yaml
+NETPLAN_FILE_OLD=/etc/netplan/60-pxe-dashboard.yaml
 LOGROTATE_FILE=/etc/logrotate.d/pxe-dashboard
 FSTAB=/etc/fstab
 SRV=/srv/pxe
@@ -73,14 +76,14 @@ SCRYPT_RE='^scrypt\$[0-9]{1,7}\$[0-9]{1,2}\$[0-9]{1,2}\$[A-Za-z0-9+/_=-]{16,}\$[
 # manifest wajib cocok dengan salah satu pola ini; satu saja tidak cocok -> uninstall batal.
 # Segmen path: tidak boleh diawali titik (menolak `.`/`..`); bentuk kanonik juga dicek manifest_canonical.
 SEG='[A-Za-z0-9_-][A-Za-z0-9._-]*'
-ALLOWED_PATH_RE='^(/etc/pxe-dashboard\.env|/etc/pxe-dashboard(/'"$SEG"')*|/etc/dnsmasq\.d|/etc/dnsmasq\.d/pxe-dashboard\.conf|/etc/systemd/system/dnsmasq\.service\.d|/etc/systemd/system/dnsmasq\.service\.d/pxe-dashboard\.conf|/etc/systemd/system/pxe-dashboard(-firewall)?\.service|/etc/nginx/sites-(available|enabled)/pxe-dashboard|/etc/nginx/sites-enabled/default|/etc/exports\.d|/etc/exports\.d/pxe-dashboard\.exports|/etc/nfs\.conf\.d|/etc/nfs\.conf\.d/pxe-dashboard\.conf|/etc/netplan/60-pxe-dashboard\.yaml|/etc/logrotate\.d/pxe-dashboard|/opt/pxe-dashboard(/'"$SEG"')*|/srv/pxe(/'"$SEG"')*|/var/lib/pxe-dashboard|/var/log/dnsmasq-pxe\.log)$'
+ALLOWED_PATH_RE='^(/etc/pxe-dashboard\.env|/etc/pxe-dashboard(/'"$SEG"')*|/etc/dnsmasq\.d|/etc/dnsmasq\.d/pxe-dashboard\.conf|/etc/systemd/system/dnsmasq\.service\.d|/etc/systemd/system/dnsmasq\.service\.d/pxe-dashboard\.conf|/etc/systemd/system/pxe-dashboard(-firewall)?\.service|/etc/nginx/sites-(available|enabled)/pxe-dashboard|/etc/nginx/sites-enabled/default|/etc/exports\.d|/etc/exports\.d/pxe-dashboard\.exports|/etc/nfs\.conf\.d|/etc/nfs\.conf\.d/pxe-dashboard\.conf|/etc/netplan/(60|99)-pxe-dashboard\.yaml|/etc/logrotate\.d/pxe-dashboard|/opt/pxe-dashboard(/'"$SEG"')*|/srv/pxe(/'"$SEG"')*|/var/lib/pxe-dashboard|/var/log/dnsmasq-pxe\.log)$'
 # Tree yang boleh dihapus rekursif (rm -rf): hanya aplikasi (tree) dan data (data, --purge).
 TREE_RE='^/opt/pxe-dashboard$'
 DATA_RE='^(/var/lib/pxe-dashboard|/srv/pxe(/'"$SEG"')*|/var/log/dnsmasq-pxe\.log)$'
 MEDIA_MNT_RE='^/srv/pxe/media/[a-z0-9][a-z0-9.-]*$'
 # Root yang boleh dihapus rekursif oleh uninstall (setelah path di-resolve, SR-8-1).
 RM_ROOTS=(/opt/pxe-dashboard /srv/pxe /var/lib/pxe-dashboard /var/log/dnsmasq-pxe.log)
-MANIFEST_TYPES='file|link|dir|tree|data|restore-link|fstab|mount|unit|svc|pkg|user'
+MANIFEST_TYPES='file|link|dir|tree|data|restore-link|fstab|mount|unit|svc|pkg|user|vlanlink'
 
 DRY=0
 log() { printf '[pxe-install] %s\n' "$*" >&2; }
@@ -159,12 +162,14 @@ manifest_valid_line() { # manifest_valid_line <type> <path> <extra>
   local t="$1" path="$2" extra="$3"
   [[ "$t" =~ ^($MANIFEST_TYPES)$ ]] || return 1
   # Semua tipe ber-path: bentuk kanonik dulu (menolak `..`, `//`, `/./`, `/` akhir) sebelum regex.
-  case "$t" in unit|svc|pkg|user) ;; *) manifest_canonical "$path" || return 1 ;; esac
+  case "$t" in unit|svc|pkg|user|vlanlink) ;; *) manifest_canonical "$path" || return 1 ;; esac
   case "$t" in
     unit|svc) [[ "$path" =~ ^(pxe-dashboard|pxe-dashboard-firewall|dnsmasq|nginx|nfs-server)\.service$ ]] ;;
     pkg) [[ "$path" =~ ^[a-z0-9][a-z0-9.+-]+$ && "$extra" =~ ^(requested|dep)$ ]] || return 1
          [[ "$extra" == dep ]] || pkg_is_installer "$path" ;;
     user) [[ "$path" == "$PXE_USER" ]] ;;
+    # Sub-interface VLAN yang dibuat installer (netplan): <iface> <parent>:<vlan-id>.
+    vlanlink) valid_iface "$path" && [[ "$extra" =~ ^([A-Za-z0-9][A-Za-z0-9_.-]{0,14}):([1-9][0-9]{0,3})$ ]] ;;
     fstab) [[ "$path" =~ $MEDIA_MNT_RE && "$extra" =~ ^(/[A-Za-z0-9._/+-]+)\ (/srv/pxe/media/[a-z0-9.-]+)\ iso9660\ [a-z,=0-9.-]+\ 0\ 0$ ]] || return 1
            [[ "${BASH_REMATCH[2]}" == "$path" ]] && valid_iso_path "${BASH_REMATCH[1]}" ;;
     mount) [[ "$path" =~ $MEDIA_MNT_RE ]] ;;

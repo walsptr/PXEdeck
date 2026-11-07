@@ -149,7 +149,9 @@ sudo ./install.sh --config deploy/install.conf.example --dry-run
 - ISO sumber harus berada di luar `/srv/pxe`, `/opt/pxe-dashboard`, `/var/lib/pxe-dashboard` dan tidak
   pernah dihapus. Netboot Debian diverifikasi lewat `Release.gpg` (gpgv + `debian-archive-keyring`)
   → `SHA256SUMS`. Node selain versi yang dipin hanya lewat `PXE_INSTALL_NODE_VERSION`.
-- Topologi VLAN: `--vlan-id 10` membuat sub-interface `pxe10` di atas `--interface` (netplan) dan
+- Topologi VLAN: `--vlan-id 10` membuat sub-interface `pxe10` di atas `--interface` (netplan
+  `/etc/netplan/99-pxe-dashboard.yaml`, divalidasi dulu; NIC induk harus didefinisikan di file netplan
+  yang diurutkan sebelumnya) dan
   dnsmasq hanya listen di sana; `--vlan-networks '20:10.20.20.0/24:10.20.20.1'` mengisi
   `PXE_VLAN_NETWORKS` dan menambah subnet itu ke ekspor NFS.
 - Rilis prebuilt: `deploy/build-release.sh dashboard pxe-dashboard.tar.xz` (di mesin build, tanpa
@@ -174,6 +176,11 @@ sudo ./uninstall.sh --yes              # layanan + konfigurasi + rilis; DB, /srv
 sudo ./uninstall.sh --purge --yes      # juga data (DB, /srv/pxe, log) dan user pxe
 sudo ./uninstall.sh --purge --remove-packages --yes   # juga paket yang dipasang installer
 ```
+
+Uninstall melepas ekspor NFS dan menghentikan nfs-server sebelum melepas mount ISO. Bila umount tetap
+gagal (masih dipakai), uninstall keluar dengan error dan entri mount dipertahankan di manifest; jalankan
+ulang setelah penyebabnya hilang. Sub-interface VLAN buatan installer dihapus (`ip link delete`) bila
+tidak lagi beralamat.
 
 `--remove-packages` lebih dulu mensimulasikan `apt-get -s purge` dan membatalkan uninstall bila paket
 di luar manifest akan ikut terhapus. Setelah itu paket yang diminta installer di-purge, lalu dependensi

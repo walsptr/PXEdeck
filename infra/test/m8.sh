@@ -562,7 +562,7 @@ test_m8_vlan_install_dry_run() {
   _m8_install "${_M8_ARGS[@]}" --vlan-id 10 --vlan-networks '20:10.20.20.0/24:10.20.20.1' --dry-run \
     --admin-password-file "$SB/admin.pass" --release "$SB/release.tar.xz"
   assert_eq "$RC" 0 "$OUT"
-  assert_match "$OUT" '^DRY-RUN: tulis /etc/netplan/60-pxe-dashboard\.yaml \(mode 0600 root:root\)$'
+  assert_match "$OUT" '^DRY-RUN: tulis /etc/netplan/99-pxe-dashboard\.yaml \(mode 0600 root:root\)$'
   assert_match "$OUT" '^DRY-RUN: netplan apply$'
   # pxe10 belum ada -> probe DHCP SETELAH netplan (sebelum dnsmasq start).
   local log; log="$(cat "$FAKE_LOG")"
@@ -946,14 +946,14 @@ test_m8_i2_vlan_netplan_safety() {
   echo "# netplan admin" > "$R/etc/netplan/50-cloud-init.yaml"
   FAKE_NETPLAN_GENERATE_RC=1 _m8_full --vlan-id 10
   assert_ne "$RC" 0; assert_contains "$OUT" "netplan VLAN tidak valid (tidak dipasang)"
-  assert_no_file "$R/etc/netplan/60-pxe-dashboard.yaml"
+  assert_no_file "$R/etc/netplan/99-pxe-dashboard.yaml"
   assert_match "$(cat "$FAKE_LOG")" '^netplan generate --root-dir ' "divalidasi di root sementara"
   assert_no_match "$(cat "$FAKE_LOG")" '^netplan apply' "tidak pernah di-apply"
   # Gagal setelah dipasang (apply gagal) -> file dihapus + netplan apply rollback.
   _m8_fresh; _m8_vlan_env eth1
   FAKE_NETPLAN_APPLY_RC=1 _m8_full --vlan-id 10
-  assert_ne "$RC" 0; assert_no_file "$R/etc/netplan/60-pxe-dashboard.yaml"
-  assert_contains "$OUT" "rollback: /etc/netplan/60-pxe-dashboard.yaml dikembalikan"
+  assert_ne "$RC" 0; assert_no_file "$R/etc/netplan/99-pxe-dashboard.yaml"
+  assert_contains "$OUT" "rollback: /etc/netplan/99-pxe-dashboard.yaml dikembalikan"
   assert_eq "$(grep -c '^netplan apply$' "$FAKE_LOG")" 2 "apply + apply rollback"
 }
 test_m8_i2_vlan_parent_lookup() {
@@ -961,7 +961,7 @@ test_m8_i2_vlan_parent_lookup() {
   printf 'bond0:\n  interfaces: [eth1, eth2]\n' > "$FAKE_STATE/netplan-bonds"
   _m8_full --interface bond0 --vlan-id 10
   assert_eq "$RC" 0 "$OUT"
-  local n; n="$(cat "$R/etc/netplan/60-pxe-dashboard.yaml")"
+  local n; n="$(cat "$R/etc/netplan/99-pxe-dashboard.yaml")"
   assert_not_contains "$n" "ethernets:" "bond0 sudah didefinisikan netplan (bonds)"
   assert_contains "$n" "      link: bond0"
   # Parent ber-titik (VLAN di atas VLAN) dari daftar kunci vlans.
@@ -969,7 +969,7 @@ test_m8_i2_vlan_parent_lookup() {
   printf '"eth0.5":\n  id: 5\n  link: eth0\n' > "$FAKE_STATE/netplan-vlans"
   _m8_full --interface eth0.5 --vlan-id 10
   assert_eq "$RC" 0 "$OUT"
-  assert_not_contains "$(cat "$R/etc/netplan/60-pxe-dashboard.yaml")" "ethernets:"
+  assert_not_contains "$(cat "$R/etc/netplan/99-pxe-dashboard.yaml")" "ethernets:"
   # Bond yang tidak didefinisikan netplan -> tolak (bukan menulis ethernets: bond1).
   _m8_fresh; _m8_vlan_env bond1; mkdir -p "$R/sys/class/net/bond1/bonding"
   _m8_full --interface bond1 --vlan-id 10
@@ -1055,12 +1055,12 @@ test_m8_i2_debian_release_gpg() {
   assert_eq "$RC" 0 "$OUT"
   assert_eq "$(cat "$R/srv/pxe/media/debian-netboot/linux")" "kernel-netboot"
   assert_contains "$OUT" "Release.gpg terverifikasi"
-  assert_match "$(cat "$FAKE_LOG")" "^gpgv --keyring $R/usr/share/keyrings/debian-archive-keyring\.gpg .*/Release\.gpg .*/Release$"
+  assert_match "$(cat "$FAKE_LOG")" "^gpgv --status-fd 1 --keyring $R/usr/share/keyrings/debian-archive-keyring\.gpg .*/Release\.gpg .*/Release$"
   assert_match "$(cat "$FAKE_LOG")" '^apt-get .*install .*gpgv debian-archive-keyring'
   # Tanda tangan tidak valid -> batal, tidak ada kernel terpasang.
   _m8_fresh; _m8_debian_chain
-  FAKE_GPGV_RC=1 _m8_full --iso-debian /srv-debian.iso
-  assert_ne "$RC" 0; assert_contains "$OUT" "tanda tangan Release Debian tidak valid"
+  FAKE_GPGV_RC=1 FAKE_GPGV_STATUS='[GNUPG:] BADSIG 6ED0E7B82643E131 Debian Archive' _m8_full --iso-debian /srv-debian.iso
+  assert_ne "$RC" 0; assert_contains "$OUT" "tanda tangan Release Debian ditolak (status gpgv: BADSIG=1)"
   assert_no_file "$R/srv/pxe/media/debian-netboot/linux"
   # SHA256SUMS diganti (tidak cocok dengan Release bertanda tangan) -> batal.
   _m8_fresh; _m8_debian_chain
@@ -1182,3 +1182,126 @@ t "M8 i2 CR-8-12: drift pemilik file terkelola diperbaiki + restart"            
 t "M8 i2 CR-8-13: build gagal -> direktori build sementara dihapus"             test_m8_i2_build_tmp_cleanup
 t "M8 i2 CR-8-15: NODE_VERSION generik diabaikan"                               test_m8_i2_node_version_env
 t "M8 i2 SR-8-3: syarat single-tenant di README + keluaran installer"           test_m8_i2_single_tenant_doc
+
+# ---------------------------------------------------------------------------------------------
+# Iterasi 3: temuan KVM iterasi 2 (bb6e8eb). Setiap test merah bila perbaikannya di-revert
+# (.agent/runs/m8/mutation-dev-iter3.txt).
+
+# 1. Release bookworm: 3 tanda tangan, satu kunci tidak ada di keyring Ubuntu (gpgv exit 2) -> diterima
+#    bila ada VALIDSIG dan tidak ada BADSIG/EXPSIG/EXPKEYSIG/REVKEYSIG (seperti apt).
+_M8_GPGV_REAL='[GNUPG:] NEWSIG
+[GNUPG:] KEY_CONSIDERED 4CB50190207B4758A3F73A796ED0E7B82643E131 0
+[GNUPG:] GOODSIG 6ED0E7B82643E131 Debian Archive Automatic Signing Key (12/bookworm) <ftpmaster@debian.org>
+[GNUPG:] VALIDSIG 4CB50190207B4758A3F73A796ED0E7B82643E131 2026-07-11 1783765029 0 4 0 1 10 00 4CB50190207B4758A3F73A796ED0E7B82643E131
+[GNUPG:] NEWSIG
+[GNUPG:] ERRSIG 78DBA3BC47EF2265 1 10 00 1783765030 9 B8E5F13176D2A7A75220028078DBA3BC47EF2265
+[GNUPG:] NO_PUBKEY 78DBA3BC47EF2265
+[GNUPG:] NEWSIG
+[GNUPG:] GOODSIG F8D2585B8783D481 Debian Stable Release Key (12/bookworm) <debian-release@lists.debian.org>
+[GNUPG:] VALIDSIG 4D64FEC119C2029067D6E791F8D2585B8783D481 2026-07-11 1783765143 0 4 0 22 10 00 4D64FEC119C2029067D6E791F8D2585B8783D481'
+test_m8_i3_gpgv_partial_keyring() {
+  _m8_setup; _m8_debian_chain
+  FAKE_GPGV_RC=2 FAKE_GPGV_STATUS="$_M8_GPGV_REAL" _m8_full --iso-debian /srv-debian.iso
+  assert_eq "$RC" 0 "VALIDSIG + NO_PUBKEY (exit 2) diterima: $OUT"
+  assert_eq "$(cat "$R/srv/pxe/media/debian-netboot/linux")" "kernel-netboot"
+  assert_contains "$OUT" "tanda tangan sah"; assert_contains "$OUT" "VALIDSIG=2"; assert_contains "$OUT" "NO_PUBKEY=1"
+  assert_match "$(cat "$FAKE_LOG")" '^gpgv --status-fd 1 --keyring '
+  # Satu tanda tangan rusak di antara yang sah -> tolak.
+  local st
+  for st in BADSIG EXPKEYSIG REVKEYSIG EXPSIG; do
+    _m8_fresh; _m8_debian_chain
+    FAKE_GPGV_RC=1 FAKE_GPGV_STATUS="$_M8_GPGV_REAL"$'\n'"[GNUPG:] $st 78DBA3BC47EF2265 x" _m8_full --iso-debian /srv-debian.iso
+    assert_ne "$RC" 0 "$st harus ditolak"; assert_contains "$OUT" "ditolak (status gpgv:"; assert_contains "$OUT" "$st=1"
+    assert_no_file "$R/srv/pxe/media/debian-netboot/linux"
+  done
+  # Tidak ada VALIDSIG sama sekali (semua kunci tidak dikenal) -> tolak dengan ringkasan status.
+  _m8_fresh; _m8_debian_chain
+  FAKE_GPGV_RC=2 FAKE_GPGV_STATUS=$'[GNUPG:] ERRSIG 78DBA3BC47EF2265 1 10 00 1 9 X\n[GNUPG:] NO_PUBKEY 78DBA3BC47EF2265' _m8_full --iso-debian /srv-debian.iso
+  assert_ne "$RC" 0; assert_contains "$OUT" "tidak ada VALIDSIG"; assert_contains "$OUT" "NO_PUBKEY=1"
+}
+
+# 2. Uninstall: ekspor NFS dilepas + nfs-server dihentikan SEBELUM umount; umount gagal = error yang
+#    bisa diulang (entri mount/fstab dipertahankan).
+test_m8_i3_umount_after_nfs_stop() {
+  _m8_setup
+  : > "$R/srv-ubuntu.iso"
+  _m8_full --iso-ubuntu /srv-ubuntu.iso; assert_eq "$RC" 0 "$OUT"
+  local line="/srv-ubuntu.iso /srv/pxe/media/ubuntu-24.04 iso9660 loop,ro,nofail,x-systemd.device-timeout=15s 0 0"
+  export FAKE_MOUNTED="$R/srv/pxe/media/ubuntu-24.04" FAKE_ACTIVE=inactive; : > "$FAKE_STATE/ss"; : > "$FAKE_LOG"
+  FAKE_UMOUNT_RC=32 _m8_uninstall --yes
+  assert_ne "$RC" 0 "umount gagal -> exit != 0"; assert_contains "$OUT" "masih ter-mount"
+  assert_eq "$(grep -cxF "$line" "$R/etc/fstab")" 1 "baris fstab dipertahankan"
+  assert_contains "$(_m8_mf)" $'mount\t/srv/pxe/media/ubuntu-24.04'
+  assert_contains "$(_m8_mf)" $'fstab\t/srv/pxe/media/ubuntu-24.04'
+  # Urutan: ekspor dilepas + nfs-server stop sebelum umount.
+  local stop um ex
+  ex="$(grep -n '^exportfs -ra$' "$FAKE_LOG" | head -1 | cut -d: -f1)"
+  stop="$(grep -n '^systemctl stop nfs-server\.service$' "$FAKE_LOG" | head -1 | cut -d: -f1)"
+  um="$(grep -n '^umount /srv/pxe/media/ubuntu-24\.04$' "$FAKE_LOG" | head -1 | cut -d: -f1)"
+  [[ -n "$ex" && -n "$stop" && -n "$um" ]] && ((ex < um && stop < um)) || _fail "urutan exportfs($ex)/stop nfs($stop) harus sebelum umount($um)"
+  assert_no_file "$R/etc/exports.d/pxe-dashboard.exports"
+  # Ulang setelah penyebab hilang -> tuntas.
+  : > "$FAKE_LOG"; _m8_uninstall --yes
+  assert_eq "$RC" 0 "$OUT"; assert_eq "$(grep -cxF "$line" "$R/etc/fstab")" 0
+  assert_not_contains "$(_m8_mf 2>/dev/null || true)" $'mount\t'
+}
+
+# 3. VLAN: uninstall menghapus link virtual yang dibuat installer; link sisa tercatat dikenali install ulang.
+test_m8_i3_vlan_link_lifecycle() {
+  _m8_setup; _m8_vlan_env eth1
+  _m8_full --vlan-id 10; assert_eq "$RC" 0 "$OUT"
+  assert_contains "$(_m8_mf)" $'vlanlink\tpxe10\teth1:10'
+  # Sesudah netplan apply uninstall: link masih ada, tanpa alamat.
+  mkdir -p "$R/sys/class/net/pxe10"
+  echo '5: pxe10@eth1: <BROADCAST,MULTICAST,UP> mtu 1500 qdisc noqueue state UP\    link/ether 52:54:00:99:01:04 brd ff:ff:ff:ff:ff:ff promiscuity 0 \    vlan protocol 802.1Q id 10 <REORDER_HDR>' > "$FAKE_STATE/ip-link"
+  sed -i '/ pxe10 /d' "$FAKE_STATE/ip-addr"
+  export FAKE_ACTIVE=inactive; : > "$FAKE_STATE/ss"; : > "$FAKE_LOG"
+  _m8_uninstall --yes; assert_eq "$RC" 0 "$OUT"
+  assert_match "$(cat "$FAKE_LOG")" '^ip link delete dev pxe10$'
+  assert_not_contains "$(_m8_mf 2>/dev/null || true)" "vlanlink"
+  # Link yang bukan lagi VLAN tercatat (id lain) atau masih beralamat -> tidak dihapus, entri tetap.
+  _m8_fresh; _m8_vlan_env eth1
+  _m8_full --vlan-id 10; assert_eq "$RC" 0 "$OUT"
+  mkdir -p "$R/sys/class/net/pxe10"
+  echo '5: pxe10@eth1: <UP> mtu 1500 \    vlan protocol 802.1Q id 11 <REORDER_HDR>' > "$FAKE_STATE/ip-link"
+  sed -i '/ pxe10 /d' "$FAKE_STATE/ip-addr"
+  export FAKE_ACTIVE=inactive; : > "$FAKE_STATE/ss"; : > "$FAKE_LOG"
+  _m8_uninstall --yes; assert_eq "$RC" 0 "$OUT"
+  assert_no_match "$(cat "$FAKE_LOG")" '^ip link delete' "id berbeda -> tidak dihapus"
+  assert_contains "$(_m8_mf)" $'vlanlink\tpxe10\teth1:10'
+  # Install ulang argumen sama: link sisa tanpa alamat tercatat -> diterima (bukan "bukan buatan installer").
+  unset FAKE_ACTIVE; _m8_setup; sed -i 's/%eth1:/%pxe10:/' "$FAKE_STATE/ss"
+  assert_no_match "$(cat "$FAKE_STATE/ip-addr")" ' pxe10 ' "link sisa tanpa alamat"
+  : > "$FAKE_LOG"
+  _m8_install "${_M8_ARGS[@]}" --vlan-id 10 --dry-run --admin-password-file "$SB/admin.pass" --release "$SB/release.tar.xz"
+  assert_eq "$RC" 0 "$OUT"
+  assert_not_contains "$OUT" "bukan buatan installer" "link sisa tercatat dikenali"
+}
+
+# 4. netplan: file installer diurutkan SETELAH file admin yang mendefinisikan NIC induk (70-*, 90-*).
+test_m8_i3_netplan_order() {
+  _m8_setup; _m8_vlan_env eth1
+  printf 'network:\n  ethernets:\n    eth1: {}\n' > "$R/etc/netplan/70-trunk.yaml"
+  _m8_full --vlan-id 10; assert_eq "$RC" 0 "$OUT"
+  assert_file "$R/etc/netplan/99-pxe-dashboard.yaml"
+  local last; last="$(cd "$R/etc/netplan" && ls | sort | tail -1)"
+  assert_eq "$last" "99-pxe-dashboard.yaml" "diurutkan terakhir"
+  # File lama 60-pxe-dashboard.yaml milik installer diganti 99- saat install ulang.
+  _m8_fresh; _m8_vlan_env eth1
+  _m8_full --vlan-id 10; assert_eq "$RC" 0 "$OUT"
+  mv "$R/etc/netplan/99-pxe-dashboard.yaml" "$R/etc/netplan/60-pxe-dashboard.yaml"
+  sed -i 's#/etc/netplan/99-pxe-dashboard.yaml#/etc/netplan/60-pxe-dashboard.yaml#' "$(_m8_mfpath)"
+  : > "$FAKE_LOG"; _m8_full --vlan-id 10; assert_eq "$RC" 0 "$OUT"
+  assert_no_file "$R/etc/netplan/60-pxe-dashboard.yaml"; assert_file "$R/etc/netplan/99-pxe-dashboard.yaml"
+  assert_match "$(cat "$FAKE_LOG")" '^netplan apply$'
+  # Validasi gagal karena file admin diurutkan setelah 99- -> pesan menyebut file itu.
+  _m8_fresh; _m8_vlan_env eth1
+  printf 'network:\n  ethernets:\n    eth1: {}\n' > "$R/etc/netplan/99-zz-admin.yaml"
+  FAKE_NETPLAN_GENERATE_RC=1 _m8_full --vlan-id 10
+  assert_ne "$RC" 0; assert_contains "$OUT" "99-zz-admin.yaml"
+}
+
+t "M8 i3 #1: gpgv Release bertanda tangan ganda (kunci hilang) diterima, BADSIG ditolak" test_m8_i3_gpgv_partial_keyring
+t "M8 i3 #2: uninstall lepas ekspor + stop nfs sebelum umount; umount gagal = error"     test_m8_i3_umount_after_nfs_stop
+t "M8 i3 #3: link VLAN dihapus uninstall; link sisa tercatat dikenali install ulang"     test_m8_i3_vlan_link_lifecycle
+t "M8 i3 #4: netplan installer 99- (setelah file admin), migrasi 60-, pesan urutan"      test_m8_i3_netplan_order

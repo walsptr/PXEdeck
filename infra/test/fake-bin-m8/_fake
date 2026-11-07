@@ -18,7 +18,8 @@
 #   netplan       get <kind> -> isi $FAKE_STATE/netplan-<kind> (atau "null"); generate -> ${FAKE_NETPLAN_GENERATE_RC:-0};
 #                 apply -> ${FAKE_NETPLAN_APPLY_RC:-0}
 #   apt-get       -s purge <pkg...> -> "Purg <pkg> [1]" (+ ${FAKE_APT_SIM_EXTRA})
-#   gpgv          -> exit ${FAKE_GPGV_RC:-0}
+#   gpgv          stdout = ${FAKE_GPGV_STATUS} (baris status --status-fd; default satu VALIDSIG), exit ${FAKE_GPGV_RC:-0}
+#   ip            -d -o link show dev X -> baris "X@..." dari $FAKE_STATE/ip-link; link delete -> dicatat
 #   getent        passwd <u> -> sukses bila $FAKE_STATE/user-<u> ada; useradd/userdel membuat/menghapusnya
 #   mountpoint    -q <dir> -> sukses bila <dir> ada di ${FAKE_MOUNTED}
 #   netplan       get ... -> ${FAKE_NETPLAN_GET:-null}
@@ -30,6 +31,12 @@ rcvar="FAKE_$(tr 'a-z-' 'A-Z_' <<<"$name")_RC"
 case "$name" in
   id) [[ "${1:-}" == -u ]] && { echo "${FAKE_UID:-0}"; exit 0; }; echo "uid=${FAKE_UID:-0}"; exit 0 ;;
   ip)
+    if [[ " $* " == *" link "* ]]; then
+      [[ " $* " == *" delete "* ]] && exit "${FAKE_IP_RC:-0}"
+      dev=""; prev=""; for a in "$@"; do [[ "$prev" == dev ]] && dev="$a"; prev="$a"; done
+      [[ -f "$st/ip-link" && -n "$dev" ]] && grep -E "^[0-9]+: $dev[@:]" "$st/ip-link" || true
+      exit 0
+    fi
     dev=""; prev=""
     for a in "$@"; do [[ "$prev" == dev ]] && dev="$a"; prev="$a"; done
     [[ -f "$st/ip-addr" ]] || exit 0
@@ -81,6 +88,6 @@ case "$name" in
       apply) exit "${FAKE_NETPLAN_APPLY_RC:-0}" ;;
     esac
     exit 0 ;;
-  gpgv) exit "${FAKE_GPGV_RC:-0}" ;;
+  gpgv) printf '%b\n' "${FAKE_GPGV_STATUS:-[GNUPG:] VALIDSIG 4CB50190207B4758A3F73A796ED0E7B82643E131 2026-07-11 0 4 0 1 10 00 4CB50190207B4758A3F73A796ED0E7B82643E131}"; exit "${FAKE_GPGV_RC:-0}" ;;
   *) exit "${!rcvar:-0}" ;;
 esac

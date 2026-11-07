@@ -292,7 +292,9 @@ if [[ -z "$VLAN_ID" ]]; then
   iface_has_addr "$NIC" "$SERVER_IP" "$PREFIX" || die "NIC $NIC belum memiliki alamat $SERVER_IP/$PREFIX (atur dulu lewat netplan)"
 else
   if [[ -e "$(p "/sys/class/net/$VLAN_IFACE")" ]]; then
-    manifest_has file "$NETPLAN_FILE" || iface_has_addr "$VLAN_IFACE" "$SERVER_IP" "$PREFIX" \
+    # Sub-interface sisa instalasi sebelumnya (tercatat vlanlink / file netplan installer) diterima.
+    manifest_has vlanlink "$VLAN_IFACE" || manifest_has file "$NETPLAN_FILE" || manifest_has file "$NETPLAN_FILE_OLD" \
+      || iface_has_addr "$VLAN_IFACE" "$SERVER_IP" "$PREFIX" \
       || die "$VLAN_IFACE sudah ada tanpa alamat $SERVER_IP/$PREFIX dan bukan buatan installer"
   else
     IFACE_EXISTS=0
@@ -321,7 +323,7 @@ done
 # File konfigurasi target yang sudah ada tetapi bukan milik installer: tolak sebelum ada perubahan.
 targets=("$ENV_FILE" "$DNSMASQ_CONF" "$DNSMASQ_DROPIN" "$NGINX_SITE" "$NGINX_LINK" "$UNIT_FILE" "$EXPORTS_FILE"
   "$NFS_CONF" "$LOGROTATE_FILE" "$TFTP_DIR/snponly.efi" "$TFTP_DIR/undionly.kpxe")
-[[ -n "$VLAN_ID" ]] && targets+=("$NETPLAN_FILE")
+[[ -n "$VLAN_ID" ]] && targets+=("$NETPLAN_FILE" "$NETPLAN_FILE_OLD")
 [[ "$FIREWALL" == yes ]] && targets+=("$FW_FILE" "$FW_UNIT_FILE")
 for x in "${targets[@]}"; do
   if [[ -e "$(p "$x")" || -L "$(p "$x")" ]] && ! manifest_owns "$x"; then
@@ -465,6 +467,7 @@ cleanup() {
   # Netplan VLAN yang dipasang run yang gagal: kembalikan ke keadaan sebelum run (CR-8-5).
   if ((rc != 0 && NETPLAN_TOUCHED && !DRY)); then
     if [[ -f "$TMP/netplan.prev" ]]; then cp "$TMP/netplan.prev" "$(p "$NETPLAN_FILE")"; else rm -f "$(p "$NETPLAN_FILE")"; fi
+    [[ -f "$TMP/netplan-old.prev" ]] && cp "$TMP/netplan-old.prev" "$(p "$NETPLAN_FILE_OLD")"
     printf '[pxe-install] rollback: %s dikembalikan, netplan apply\n' "$NETPLAN_FILE" >&2
     netplan apply || true
   fi
@@ -722,15 +725,27 @@ if [[ -n "$VLAN_ID" ]]; then
   # pernah dipasang; generator saat boot tidak bisa rusak (CR-8-5).
   nroot="$TMP/netplan-root"; mkdir -p "$nroot/etc/netplan"
   for f in "$(p /etc/netplan)"/*.yaml; do
-    [[ -f "$f" && "$(basename "$f")" != "$(basename "$NETPLAN_FILE")" ]] && cp "$f" "$nroot/etc/netplan/"
+    case "$(basename "$f")" in "$(basename "$NETPLAN_FILE")"|"$(basename "$NETPLAN_FILE_OLD")") continue ;; esac
+    [[ -f "$f" ]] && cp "$f" "$nroot/etc/netplan/"
   done
   cp "$TMP/r/netplan.yaml" "$nroot/etc/netplan/$(basename "$NETPLAN_FILE")"
-  netplan generate --root-dir "$nroot" >"$TMP/netplan-check.log" 2>&1 \
-    || die "netplan VLAN tidak valid (tidak dipasang): $(tail -n 3 "$TMP/netplan-check.log" | tr '\n' ' ')"
+  if ! netplan generate --root-dir "$nroot" >"$TMP/netplan-check.log" 2>&1; then
+    later="$(cd "$nroot/etc/netplan" && ls | sort | awk -v me="$(basename "$NETPLAN_FILE")" '$0 > me' | tr '\n' ' ')"
+    die "netplan VLAN tidak valid (tidak dipasang): $(tail -n 3 "$TMP/netplan-check.log" | tr '\n' ' ')${later:+ — file netplan yang diurutkan setelah $(basename "$NETPLAN_FILE") (NIC induk harus didefinisikan sebelumnya): $later}"
+  fi
   [[ -f "$(p "$NETPLAN_FILE")" ]] && cp "$(p "$NETPLAN_FILE")" "$TMP/netplan.prev"
+  # Nama lama 60-pxe-dashboard.yaml (milik installer) diganti 99-: dibuang sebelum apply.
+  if manifest_owns "$NETPLAN_FILE_OLD" && [[ -f "$(p "$NETPLAN_FILE_OLD")" ]]; then
+    cp "$(p "$NETPLAN_FILE_OLD")" "$TMP/netplan-old.prev"; NETPLAN_TOUCHED=1
+    run rm -f "$(p "$NETPLAN_FILE_OLD")"; CHANGED_OLD=1
+  fi
   CHANGED=0
   put_file "$TMP/r/netplan.yaml" "$NETPLAN_FILE" 0600 root:root
   ((CHANGED)) && NETPLAN_TOUCHED=1
+  ((${CHANGED_OLD:-0})) && CHANGED=1
+  # Link VLAN yang dibuat installer dicatat agar uninstall bisa menghapusnya (netplan apply tidak
+  # menghapus link virtual) dan install ulang mengenalinya.
+  if ((!IFACE_EXISTS)) || manifest_has vlanlink "$VLAN_IFACE"; then manifest_add vlanlink "$VLAN_IFACE" "$NIC:$VLAN_ID"; fi
   if ((CHANGED)) || ((!IFACE_EXISTS)); then
     run netplan generate
     run netplan apply
@@ -795,8 +810,16 @@ if [[ -n "${CFG[ISO_DEBIAN]:-}" && "$DEBIAN_NETBOOT" != none ]]; then
       [[ -f "$(p "$keyring")" ]] || die "$keyring tidak ada (paket debian-archive-keyring)"
       curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/Release" "$dist/Release"
       curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/Release.gpg" "$dist/Release.gpg"
-      gpgv --keyring "$(p "$keyring")" "$TMP/Release.gpg" "$TMP/Release" >"$TMP/gpgv.log" 2>&1 \
-        || die "tanda tangan Release Debian tidak valid (gpgv): $(tail -n 2 "$TMP/gpgv.log" | tr '\n' ' ')"
+      # Release bookworm punya beberapa tanda tangan; keyring Ubuntu bisa tidak memuat salah satu kunci
+      # (NO_PUBKEY, gpgv exit 2). Seperti apt: terima bila >= 1 VALIDSIG dari keyring dan TIDAK ada
+      # BADSIG/EXPSIG/EXPKEYSIG/REVKEYSIG. Exit code gpgv diabaikan; status --status-fd yang dinilai.
+      gpgv --status-fd 1 --keyring "$(p "$keyring")" "$TMP/Release.gpg" "$TMP/Release" >"$TMP/gpgv.status" 2>"$TMP/gpgv.log" || true
+      gsum="$(awk '$1 == "[GNUPG:]" { print $2 }' "$TMP/gpgv.status" | sort | uniq -c | awk '{ printf "%s%s=%s", (NR > 1 ? " " : ""), $2, $1 }')"
+      grep -qE '^\[GNUPG:\] (BADSIG|EXPSIG|EXPKEYSIG|REVKEYSIG) ' "$TMP/gpgv.status" \
+        && die "tanda tangan Release Debian ditolak (status gpgv: ${gsum:-kosong})"
+      grep -qE '^\[GNUPG:\] VALIDSIG ' "$TMP/gpgv.status" \
+        || die "tanda tangan Release Debian tidak terverifikasi: tidak ada VALIDSIG dari $keyring (status gpgv: ${gsum:-kosong})"
+      log "Release Debian: tanda tangan sah ($gsum)"
       want="$(awk '/^SHA256:/ { s = 1; next } /^[^ ]/ { s = 0 } s && $3 == "main/installer-amd64/current/images/SHA256SUMS" { print $1 }' "$TMP/Release")"
       [[ "$want" =~ ^[0-9a-f]{64}$ ]] || die "Release Debian tanpa SHA256 images/SHA256SUMS"
       curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/SHA256SUMS" "$url/SHA256SUMS"

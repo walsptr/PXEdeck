@@ -80,14 +80,37 @@ for i in "${!M_TYPE[@]}"; do
 done
 has svc && { run systemctl stop dnsmasq.service || true; }
 
-# 2. Mount ISO + baris fstab (hanya baris persis yang ditambahkan installer).
+# 2. Ekspor NFS installer dilepas dan nfs-server dihentikan/di-restart SEBELUM umount: nfsd menahan
+#    mount ISO yang pernah dipakai node ("target is busy").
+for i in "${!M_TYPE[@]}"; do
+  if [[ "${M_TYPE[$i]}" == file && "${M_PATH[$i]}" == "$EXPORTS_FILE" ]] && [[ -f "$(p "$EXPORTS_FILE")" ]] && parent_resolved_ok "$EXPORTS_FILE"; then
+    run rm -f "$(p "$EXPORTS_FILE")"
+  fi
+done
+if has mount || has svc; then
+  run exportfs -ra || true
+  case "$(svc_kind nfs-server.service)" in
+    ours|pre-disabled) run systemctl stop nfs-server.service || true ;;
+    pre) run systemctl restart nfs-server.service || warn "nfs-server (milik admin) gagal di-restart" ;;
+  esac
+fi
+
+# 3. Mount ISO + baris fstab (hanya baris persis yang ditambahkan installer). umount gagal = error:
+#    entri mount + fstab dipertahankan di manifest agar uninstall ulang mencoba lagi.
+UMOUNT_FAILED=()
 for i in "${!M_TYPE[@]}"; do
   [[ "${M_TYPE[$i]}" == mount ]] || continue
-  if mountpoint -q "$(p "${M_PATH[$i]}")" 2>/dev/null; then run umount "${M_PATH[$i]}" || warn "gagal umount ${M_PATH[$i]}"; fi
+  if mountpoint -q "$(p "${M_PATH[$i]}")" 2>/dev/null; then
+    if ! run umount "${M_PATH[$i]}"; then
+      warn "gagal umount ${M_PATH[$i]} (masih dipakai?) — baris fstab dan entri manifest dipertahankan"
+      UMOUNT_FAILED+=("${M_PATH[$i]}"); keep "$i"
+    fi
+  fi
 done
 fstab_real="$(p "$FSTAB")"
 for i in "${!M_TYPE[@]}"; do
   [[ "${M_TYPE[$i]}" == fstab ]] || continue
+  if [[ " ${UMOUNT_FAILED[*]} " == *" ${M_PATH[$i]} "* ]]; then keep "$i"; continue; fi
   line="${M_EXTRA[$i]}"
   grep -qxF -- "$line" "$fstab_real" 2>/dev/null || continue
   if ((DRY)); then echo "DRY-RUN: hapus dari $FSTAB: $line"; continue; fi
@@ -98,7 +121,7 @@ for i in "${!M_TYPE[@]}"; do
   log "baris fstab dihapus: ${M_PATH[$i]}"
 done
 
-# 3. File, symlink, tree aplikasi.
+# 4. File, symlink, tree aplikasi.
 NETPLAN_CHANGED=0
 for i in "${!M_TYPE[@]}"; do
   t="${M_TYPE[$i]}"; path="${M_PATH[$i]}"; real="$(p "$path")"
@@ -131,8 +154,22 @@ done
 
 run systemctl daemon-reload
 ((NETPLAN_CHANGED)) && run netplan apply
+# Link VLAN yang dibuat installer: `netplan apply` tidak menghapus link virtual. Dihapus hanya bila masih
+# VLAN 802.1Q dengan id + induk yang tercatat dan tidak lagi beralamat; selain itu entri dipertahankan.
+for i in "${!M_TYPE[@]}"; do
+  [[ "${M_TYPE[$i]}" == vlanlink ]] || continue
+  dev="${M_PATH[$i]}"; par="${M_EXTRA[$i]%:*}"; vid="${M_EXTRA[$i]#*:}"
+  [[ -e "$(p "/sys/class/net/$dev")" ]] || continue
+  l="$(ip -d -o link show dev "$dev" 2>/dev/null || true)"
+  if [[ "$l" == *" $dev@$par:"* && "$l" =~ vlan\ protocol\ 802\.1Q\ id\ $vid([^0-9]|$) ]] \
+     && [[ -z "$(ip -o addr show dev "$dev" 2>/dev/null | awk '$3 == "inet" || $3 == "inet6"')" ]]; then
+    run ip link delete dev "$dev" || { warn "gagal menghapus link $dev"; keep "$i"; }
+  else
+    warn "link $dev bukan lagi VLAN $vid di $par tanpa alamat — tidak dihapus"; keep "$i"
+  fi
+done
 
-# 4. Layanan paket: yang dipasang installer dimatikan; yang sudah ada sebelumnya dimuat ulang tanpa
+# 5. Layanan paket: yang dipasang installer dimatikan; yang sudah ada sebelumnya dimuat ulang tanpa
 #    konfigurasi installer.
 #    `pre-disabled` = sudah ada tetapi disabled sebelum install: enablement asli dipulihkan (CR-8-9).
 case "$(svc_kind dnsmasq.service)" in
@@ -149,7 +186,7 @@ case "$(svc_kind nfs-server.service)" in
   pre) run exportfs -ra || true ;;
 esac
 
-# 5. Direktori kosong buatan installer (terdalam dulu).
+# 6. Direktori kosong buatan installer (terdalam dulu).
 mapfile -t dir_idx < <(for i in "${!M_TYPE[@]}"; do [[ "${M_TYPE[$i]}" == dir ]] && printf '%s\t%s\n' "${#M_PATH[$i]}" "$i"; done | sort -rn | cut -f2)
 for i in "${dir_idx[@]}"; do
   real="$(p "${M_PATH[$i]}")"
@@ -158,7 +195,7 @@ for i in "${dir_idx[@]}"; do
   else warn "${M_PATH[$i]} tidak kosong — dipertahankan"; keep "$i"; fi
 done
 
-# 6. Data + user (hanya --purge). Path yang masih memuat mount aktif tidak dihapus.
+# 7. Data + user (hanya --purge). Path yang masih memuat mount aktif tidak dihapus.
 mounted_under() { awk -v d="$1" '$2 == d || index($2, d "/") == 1 { f = 1 } END { exit !f }' "$(p /proc/mounts)" 2>/dev/null; }
 for i in "${!M_TYPE[@]}"; do
   [[ "${M_TYPE[$i]}" == data ]] || continue
@@ -182,7 +219,7 @@ for i in "${!M_TYPE[@]}"; do
   else keep "$i"; fi
 done
 
-# 7. Paket (hanya --remove-packages, hanya yang dipasang installer). Paket yang diminta installer
+# 8. Paket (hanya --remove-packages, hanya yang dipasang installer). Paket yang diminta installer
 #    di-purge; dependensi yang ikut terpasang (`dep`) hanya di-purge bila apt menganggapnya
 #    autoremovable setelah itu (tidak dibutuhkan paket lain). Tidak ada `apt-get autoremove` global.
 #    Simulasi `apt-get -s purge` sudah memastikan tidak ada paket di luar manifest yang ikut terhapus.
@@ -210,7 +247,7 @@ if ((${#req[@]} + ${#deps[@]})); then
   fi
 fi
 
-# 8. Manifest: simpan entri yang dipertahankan (agar --purge nanti tetap bisa menghapusnya). Direktori
+# 9. Manifest: simpan entri yang dipertahankan (agar --purge nanti tetap bisa menghapusnya). Direktori
 #    yang sudah ikut terhapus bersama data induknya (--purge) tidak disimpan lagi.
 mf="$(p "$MANIFEST")"
 kept=()
@@ -232,7 +269,7 @@ else
   run rm -d "$(p "$INSTALLER_DIR")"
 fi
 
-# 9. Verifikasi: dashboard mati, tidak ada socket dnsmasq/dashboard milik installer.
+# 10. Verifikasi: dashboard mati, tidak ada socket dnsmasq/dashboard milik installer.
 if ((!DRY)); then
   bad=0
   [[ "$(systemctl is-active pxe-dashboard.service 2>/dev/null || true)" == active ]] && { log "FAIL pxe-dashboard masih aktif"; bad=1; }
@@ -245,4 +282,5 @@ if ((!DRY)); then
   fi
   ((bad)) && die "uninstall selesai dengan sisa layanan aktif (lihat FAIL)"
 fi
+((${#UMOUNT_FAILED[@]})) && die "uninstall belum tuntas: ${UMOUNT_FAILED[*]} masih ter-mount (hentikan yang memakainya lalu jalankan uninstall.sh lagi)"
 log "uninstall selesai$( ((DRY)) && echo " (dry-run)")$( ((PURGE)) || echo "; data dipertahankan (DB $STATE_DIR, $MEDIA_DIR) — --purge untuk menghapus")"
