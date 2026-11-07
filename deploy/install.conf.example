@@ -1,0 +1,27 @@
+# deploy/install.conf.example — contoh `install.sh --config` (KEY=VALUE, tidak di-source shell).
+# Kunci = nama opsi huruf besar ('-' -> '_'). Nilai DUMMY; sesuaikan dengan server Anda.
+# Password admin TIDAK boleh di sini: pakai ADMIN_PASSWORD_FILE (file mode 0600) atau prompt.
+INTERFACE=eth1
+ADDRESS=10.10.10.1/24
+DHCP_RANGE=10.10.10.100-10.10.10.200
+GATEWAY=10.10.10.254
+# Memuat alamat server = dnsmasq melayani DNS lokal (+ forward ke DNS lain di daftar).
+DNS=10.10.10.1
+DOMAIN=pxe.lan
+ADMIN_USER=pxeadmin
+ADMIN_ALLOW=192.168.1.0/24
+# ADMIN_LISTEN=192.168.1.10
+# ALLOWED_HOSTS=pxe.example.lan
+# ADMIN_PASSWORD_FILE=/root/pxe-admin.pass
+# --- VLAN (opsional) ---
+# VLAN_ID=10
+# VLAN_IFACE=pxe10
+# VLAN_NETWORKS=20:10.20.20.0/24:10.20.20.1
+# --- media (opsional) ---
+# ISO_UBUNTU=/srv/iso/ubuntu-24.04.5-live-server-amd64.iso
+# ISO_DEBIAN=/srv/iso/debian-12.15.0-amd64-DVD-1.iso
+# ISO_ROCKY=/srv/iso/Rocky-9-latest-x86_64-minimal.iso
+# DEBIAN_NETBOOT=auto
+# --- lain-lain ---
+# RELEASE=/root/pxe-dashboard.tar.xz
+# FIREWALL=no

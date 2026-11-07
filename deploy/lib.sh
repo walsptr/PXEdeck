@@ -1,0 +1,220 @@
+# shellcheck shell=bash
+# deploy/lib.sh — helper bersama install.sh / uninstall.sh (M8, DEC-029). Di-source, bukan dieksekusi.
+#
+# Dijalankan sebagai root di server Ubuntu 24.04 target. Tidak ada `set -x` di mana pun: nilai hash
+# admin tidak boleh tercetak, password tidak pernah lewat argv/log/file.
+#
+# Env khusus test (infra/test/m8.sh), JANGAN diset di production:
+#   PXE_INSTALL_ROOT  prefix filesystem (mis. sandbox test). Semua path target (/etc, /opt, /srv,
+#                     /var, /sys, /usr/lib/ipxe, os-release) dibaca/ditulis di bawah prefix ini.
+#                     Perintah sistem (systemctl, apt-get, ...) tetap dipanggil apa adanya; test
+#                     menyediakan versi palsu di PATH.
+
+DEPLOY_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+REPO_DIR="$(cd "$DEPLOY_DIR/.." && pwd)"
+TPL_DIR="$REPO_DIR/infra/server"
+
+ROOT="${PXE_INSTALL_ROOT:-}"
+if [[ -n "$ROOT" ]]; then
+  [[ "$ROOT" == /* && "$ROOT" != / && "$ROOT" != *..* ]] || { echo "PXE_INSTALL_ROOT harus path absolut selain /" >&2; exit 2; }
+  ROOT="${ROOT%/}"
+fi
+
+# --- path tetap di server target ------------------------------------------------------------
+STATE_DIR=/var/lib/pxe-dashboard                       # DB SQLite (StateDirectory unit, milik pxe)
+INSTALLER_DIR=/var/lib/pxe-dashboard-installer         # root:root 0700, BUKAN di STATE_DIR (milik pxe)
+MANIFEST="$INSTALLER_DIR/install-manifest"
+APP_DIR=/opt/pxe-dashboard
+NODE_DIR="$APP_DIR/node"
+RELEASES_DIR="$APP_DIR/releases"
+ENV_FILE=/etc/pxe-dashboard.env
+CONF_DIR=/etc/pxe-dashboard
+UNIT_FILE=/etc/systemd/system/pxe-dashboard.service
+FW_UNIT_FILE=/etc/systemd/system/pxe-dashboard-firewall.service
+FW_FILE="$CONF_DIR/nftables.nft"
+DNSMASQ_CONF=/etc/dnsmasq.d/pxe-dashboard.conf
+DNSMASQ_DROPIN_DIR=/etc/systemd/system/dnsmasq.service.d
+DNSMASQ_DROPIN="$DNSMASQ_DROPIN_DIR/pxe-dashboard.conf"
+NGINX_SITE=/etc/nginx/sites-available/pxe-dashboard
+NGINX_LINK=/etc/nginx/sites-enabled/pxe-dashboard
+NGINX_DEFAULT_LINK=/etc/nginx/sites-enabled/default
+NGINX_DEFAULT_SITE=/etc/nginx/sites-available/default
+EXPORTS_FILE=/etc/exports.d/pxe-dashboard.exports
+NFS_CONF=/etc/nfs.conf.d/pxe-dashboard.conf
+NETPLAN_FILE=/etc/netplan/60-pxe-dashboard.yaml
+LOGROTATE_FILE=/etc/logrotate.d/pxe-dashboard
+FSTAB=/etc/fstab
+SRV=/srv/pxe
+TFTP_DIR="$SRV/tftp"
+BOOT_DIR="$SRV/boot"
+MEDIA_DIR="$SRV/media"
+DNSMASQ_LOG=/var/log/dnsmasq-pxe.log
+LEASE_FILE=/var/lib/misc/dnsmasq.leases
+IPXE_SRC=/usr/lib/ipxe
+POLICY_RC=/usr/sbin/policy-rc.d
+PXE_USER=pxe
+MEDIA_IDS=(ubuntu-24.04 debian-12 rocky-9 debian-netboot)
+
+# Node 22 LTS resmi (nodejs.org). Versi + SHA256 tarball linux-x64 dipin (sama dengan
+# infra/fetch-node.sh; diasersi infra/test/m8.sh). NODE_VERSION lain -> SHASUMS256.txt diunduh.
+NODE_VERSION_DEFAULT=22.23.4
+NODE_SHA256_DEFAULT=1805bcd35e6815559bd2eb97db438d3fdb0eb3a5e6a977b7c1badca76337e9ce
+
+# Format hash admin (DEC-017 §2), sama dengan infra/lib.sh.
+SCRYPT_RE='^scrypt\$[0-9]{1,7}\$[0-9]{1,2}\$[0-9]{1,2}\$[A-Za-z0-9+/_=-]{16,}\$[A-Za-z0-9+/_=-]{16,}$'
+
+# Path yang BOLEH dihapus uninstall.sh (lapis kedua terhadap manifest rusak/diubah). Semua entri
+# manifest wajib cocok dengan salah satu pola ini; satu saja tidak cocok -> uninstall batal.
+ALLOWED_PATH_RE='^(/etc/pxe-dashboard\.env|/etc/pxe-dashboard(/[A-Za-z0-9._-]+)*|/etc/dnsmasq\.d|/etc/dnsmasq\.d/pxe-dashboard\.conf|/etc/systemd/system/dnsmasq\.service\.d|/etc/systemd/system/dnsmasq\.service\.d/pxe-dashboard\.conf|/etc/systemd/system/pxe-dashboard(-firewall)?\.service|/etc/nginx/sites-(available|enabled)/pxe-dashboard|/etc/nginx/sites-enabled/default|/etc/exports\.d|/etc/exports\.d/pxe-dashboard\.exports|/etc/nfs\.conf\.d|/etc/nfs\.conf\.d/pxe-dashboard\.conf|/etc/netplan/60-pxe-dashboard\.yaml|/etc/logrotate\.d/pxe-dashboard|/opt/pxe-dashboard(/[A-Za-z0-9._-]+)*|/srv/pxe(/[A-Za-z0-9._-]+)*|/var/lib/pxe-dashboard|/var/log/dnsmasq-pxe\.log)$'
+# Tree yang boleh dihapus rekursif (rm -rf): hanya aplikasi (tree) dan data (data, --purge).
+TREE_RE='^/opt/pxe-dashboard$'
+DATA_RE='^(/var/lib/pxe-dashboard|/srv/pxe(/[A-Za-z0-9._-]+)*|/var/log/dnsmasq-pxe\.log)$'
+MANIFEST_TYPES='file|link|dir|tree|data|restore-link|fstab|mount|unit|svc|pkg|user'
+
+DRY=0
+log() { printf '[pxe-install] %s\n' "$*" >&2; }
+warn() { printf '[pxe-install] PERINGATAN: %s\n' "$*" >&2; }
+die() { printf '[pxe-install] ERROR: %s\n' "$*" >&2; exit 1; }
+
+# p <path-target>: path nyata (dengan prefix test bila ada).
+p() { printf '%s%s' "$ROOT" "$1"; }
+
+# run <cmd...>: perintah yang mengubah state; di --dry-run hanya dicetak.
+run() {
+  if ((DRY)); then printf 'DRY-RUN:'; printf ' %q' "$@"; printf '\n'; else "$@"; fi
+}
+
+is_root() { [[ "$(id -u)" == 0 ]]; }
+
+# --- validasi -----------------------------------------------------------------------------------
+valid_ipv4() {
+  local ip="$1" o
+  [[ "$ip" =~ ^[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}$ ]] || return 1
+  IFS=. read -r -a _oct <<<"$ip"
+  for o in "${_oct[@]}"; do
+    [[ "$o" =~ ^(0|[1-9][0-9]{0,2})$ ]] && ((o <= 255)) || return 1
+  done
+}
+ip2int() { local a b c d; IFS=. read -r a b c d <<<"$1"; echo $(((a << 24) | (b << 16) | (c << 8) | d)); }
+int2ip() { local n="$1"; echo "$(((n >> 24) & 255)).$(((n >> 16) & 255)).$(((n >> 8) & 255)).$((n & 255))"; }
+prefix2mask() { local pfx="$1"; int2ip $(((0xFFFFFFFF << (32 - pfx)) & 0xFFFFFFFF)); }
+# net_of <ip> <prefix> -> alamat network
+net_of() { local m=$(((0xFFFFFFFF << (32 - $2)) & 0xFFFFFFFF)); int2ip $(($(ip2int "$1") & m)); }
+# in_net <ip> <net> <prefix>
+in_net() { [[ "$(net_of "$1" "$3")" == "$2" ]]; }
+valid_cidr() { # valid_cidr <a.b.c.d/nn> [min] [max]
+  local c="$1" min="${2:-0}" max="${3:-32}"
+  [[ "$c" == */* ]] || return 1
+  valid_ipv4 "${c%/*}" || return 1
+  [[ "${c#*/}" =~ ^[0-9]{1,2}$ ]] && ((${c#*/} >= min && ${c#*/} <= max))
+}
+valid_iface() { [[ "$1" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]{0,14}$ ]]; }
+valid_domain() { [[ "$1" =~ ^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$ ]]; }
+valid_user() { [[ "$1" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]]; }
+# Path file/device ISO: absolut, tanpa spasi/karakter khusus fstab.
+valid_iso_path() { [[ "$1" =~ ^/[A-Za-z0-9._/+-]+$ && "$1" != *..* ]]; }
+
+# --- manifest -----------------------------------------------------------------------------------
+# Format baris: <type>\t<path>\t<extra>. Ditulis bertahap (setiap entri langsung disimpan) agar
+# install yang gagal di tengah tetap bisa di-uninstall.
+manifest_valid_line() { # manifest_valid_line <type> <path> <extra>
+  local t="$1" path="$2" extra="$3"
+  [[ "$t" =~ ^($MANIFEST_TYPES)$ ]] || return 1
+  case "$t" in
+    unit|svc) [[ "$path" =~ ^(pxe-dashboard|pxe-dashboard-firewall|dnsmasq|nginx|nfs-server)\.service$ ]] ;;
+    pkg) [[ "$path" =~ ^[a-z0-9][a-z0-9.+-]+$ ]] ;;
+    user) [[ "$path" == "$PXE_USER" ]] ;;
+    fstab) [[ "$path" =~ ^/srv/pxe/media/[a-z0-9.-]+$ && "$extra" =~ ^/[A-Za-z0-9._/+-]+\ /srv/pxe/media/[a-z0-9.-]+\ iso9660\ [a-z,=0-9.-]+\ 0\ 0$ ]] ;;
+    mount) [[ "$path" =~ ^/srv/pxe/media/[a-z0-9.-]+$ ]] ;;
+    restore-link) [[ "$path" == "$NGINX_DEFAULT_LINK" && "$extra" == "$NGINX_DEFAULT_SITE" ]] ;;
+    tree) [[ "$path" =~ $TREE_RE ]] ;;
+    data) [[ "$path" =~ $DATA_RE ]] ;;
+    *) [[ "$path" =~ $ALLOWED_PATH_RE && "$path" != *..* ]] ;;
+  esac
+}
+
+manifest_has() { # manifest_has <type> <path>
+  [[ -f "$(p "$MANIFEST")" ]] || return 1
+  awk -F'\t' -v t="$1" -v q="$2" '$1 == t && $2 == q { f = 1 } END { exit !f }' "$(p "$MANIFEST")"
+}
+# Path terdaftar di manifest dengan tipe apa pun yang menandai "milik installer".
+manifest_owns() { manifest_has file "$1" || manifest_has link "$1"; }
+
+manifest_add() { # manifest_add <type> <path> [extra]
+  local t="$1" path="$2" extra="${3:-}"
+  manifest_valid_line "$t" "$path" "$extra" || die "entri manifest tidak valid: $t $path"
+  manifest_has "$t" "$path" && return 0
+  if ((DRY)); then echo "MANIFEST+ $t $path${extra:+ $extra}"; return 0; fi
+  printf '%s\t%s\t%s\n' "$t" "$path" "$extra" >> "$(p "$MANIFEST")"
+}
+
+# manifest_load: isi array M_TYPE/M_PATH/M_EXTRA; batal bila ada baris tidak valid atau file manifest
+# bisa ditulis selain pemiliknya (dibuat root, 0600 di direktori 0700).
+manifest_load() {
+  local f; f="$(p "$MANIFEST")"
+  M_TYPE=(); M_PATH=(); M_EXTRA=()
+  [[ -f "$f" && ! -L "$f" ]] || return 1
+  local mode owner
+  mode="$(stat -c '%a' "$f")"; owner="$(stat -c '%u' "$f")"
+  # $EUID (bukan `id -u`): di test pemilik sandbox = user test; di production = root (0).
+  [[ "$owner" == "$EUID" ]] || die "manifest $MANIFEST bukan milik user ini (uid $owner)"
+  ((8#$mode & 8#022)) && die "manifest $MANIFEST bisa ditulis group/other (mode $mode)"
+  local n=0 t path extra
+  while IFS=$'\t' read -r t path extra || [[ -n "$t" ]]; do
+    n=$((n + 1))
+    [[ -z "$t" || "$t" == \#* ]] && continue
+    manifest_valid_line "$t" "$path" "$extra" || die "manifest baris $n tidak valid ($t $path) — uninstall dibatalkan tanpa perubahan"
+    M_TYPE+=("$t"); M_PATH+=("$path"); M_EXTRA+=("$extra")
+  done < "$f"
+}
+
+# --- file terkelola --------------------------------------------------------------------------------
+# put_file <src> <target> <mode> <owner:group>: pasang file milik installer (atomik). Target yang sudah
+# ada tetapi TIDAK tercatat di manifest tidak pernah ditimpa (installer tidak menyentuh file orang lain).
+# Mengeset CHANGED=1 bila isi/mode berubah.
+put_file() {
+  local src="$1" target="$2" mode="$3" og="$4" real tmp
+  real="$(p "$target")"
+  if [[ -e "$real" || -L "$real" ]] && ! manifest_owns "$target"; then
+    die "$target sudah ada dan bukan milik installer (tidak tercatat di manifest); pindahkan dulu"
+  fi
+  if [[ -f "$real" ]] && cmp -s "$src" "$real" && [[ "$(stat -c '%a' "$real")" == "${mode#0}" ]]; then
+    manifest_add file "$target"; return 0
+  fi
+  CHANGED=1
+  if ((DRY)); then echo "DRY-RUN: tulis $target (mode $mode $og)"; manifest_add file "$target"; return 0; fi
+  mkdir -p "$(dirname "$real")"
+  manifest_add file "$target"
+  tmp="$(mktemp "$(dirname "$real")/.pxe-install.XXXXXX")"
+  cat "$src" > "$tmp"
+  chmod "$mode" "$tmp"
+  chown "$og" "$tmp"
+  mv -f "$tmp" "$real"
+  log "terpasang $target ($mode $og)"
+}
+
+# ensure_dir <path> <mode> <owner:group> <dir|data>: buat direktori bila belum ada lalu catat; direktori
+# yang sudah ada sebelumnya tidak dicatat (uninstall tidak menyentuhnya).
+ensure_dir() {
+  local d="$1" mode="$2" og="$3" kind="$4"
+  if [[ -d "$(p "$d")" ]]; then
+    if manifest_has "$kind" "$d"; then run chmod "$mode" "$(p "$d")"; run chown "$og" "$(p "$d")"; fi
+    return 0
+  fi
+  manifest_add "$kind" "$d"
+  run mkdir -p "$(p "$d")"
+  run chmod "$mode" "$(p "$d")"
+  run chown "$og" "$(p "$d")"
+}
+
+# ensure_link <target-link> <points-to>
+ensure_link() {
+  local l="$1" to="$2" real; real="$(p "$l")"
+  if [[ -e "$real" || -L "$real" ]] && ! manifest_owns "$l"; then
+    die "$l sudah ada dan bukan milik installer"
+  fi
+  [[ -L "$real" && "$(readlink "$real")" == "$to" ]] && { manifest_add link "$l"; return 0; }
+  CHANGED=1
+  manifest_add link "$l"
+  run ln -sfn "$to" "$real"
+}

@@ -1,0 +1,12 @@
+#!/usr/bin/env bash
+# infra/test/fake-bin-m8/python3 — pembungkus test M8: panggilan deploy/dhcp-probe.py TIDAK menyentuh
+# jaringan (dicatat ke $FAKE_LOG, keluaran ${FAKE_DHCP_OUT}, exit ${FAKE_DHCP_RC:-0}). Pemanggilan
+# python3 lain diteruskan ke python3 asli (/usr/bin/python3).
+for a in "$@"; do
+  if [[ "$a" == */dhcp-probe.py && " $* " != *" --selftest "* ]]; then
+    echo "dhcp-probe $*" >> "${FAKE_LOG:?}"
+    [[ -n "${FAKE_DHCP_OUT:-}" ]] && printf '%s\n' "$FAKE_DHCP_OUT"
+    exit "${FAKE_DHCP_RC:-0}"
+  fi
+done
+exec /usr/bin/python3 "$@"

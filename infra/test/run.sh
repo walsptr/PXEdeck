@@ -670,6 +670,8 @@ source "$(dirname "$0")/m7-te.sh"
 source "$(dirname "$0")/m7-dec027.sh"
 # M7 iterasi 2 (DEC-028 §1, GK-7-1): race SIGPIPE overlay admin.env di dry-run.
 source "$(dirname "$0")/m7-gk71.sh"
+# M8 (DEC-029): install.sh / uninstall.sh / install-vm.sh.
+source "$(dirname "$0")/m8.sh"
 rm -rf "$SAFE_BIN"
 rmdir "$SANDBOX_PARENT" 2>/dev/null || true
 echo "hasil: $PASS lulus, $FAIL gagal"

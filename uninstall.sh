@@ -1,0 +1,185 @@
+#!/usr/bin/env bash
+# uninstall.sh — copot PXE server + dashboard yang dipasang install.sh (M8, DEC-029 §3).
+# Hanya menghapus apa yang tercatat di manifest /var/lib/pxe-dashboard-installer/install-manifest;
+# file yang tidak tercatat tidak pernah disentuh. Manifest yang rusak/tidak dikenal -> batal total.
+#
+# Default: hentikan layanan, hapus konfigurasi (dnsmasq/nginx/NFS/systemd/netplan/env), rilis, Node,
+# baris fstab + mount ISO. DATA DIPERTAHANKAN: DB (/var/lib/pxe-dashboard), /srv/pxe/media, ISO.
+#   --purge            ikut hapus data yang dibuat installer (DB, /srv/pxe, log dnsmasq) + user pxe
+#   --remove-packages  apt-get purge paket yang dipasang installer (yang sudah ada sebelumnya tidak)
+#   --dry-run          tampilkan rencana tanpa mengubah apa pun
+#   -y, --yes          non-interaktif (tanpa konfirmasi)
+# File ISO sumber tidak pernah dihapus, termasuk dengan --purge.
+set -euo pipefail
+source "$(dirname "${BASH_SOURCE[0]}")/deploy/lib.sh"
+
+PURGE=0; RMPKG=0; YES=0
+for a in "$@"; do
+  case "$a" in
+    --purge) PURGE=1 ;;
+    --remove-packages) RMPKG=1 ;;
+    --dry-run) DRY=1 ;;
+    -y|--yes) YES=1 ;;
+    -h|--help) sed -n '2,13p' "$0" | sed 's/^# \{0,1\}//'; exit 0 ;;
+    *) printf '[pxe-install] ERROR: argumen tidak dikenal: %s (lihat --help)\n' "$a" >&2; exit 2 ;;
+  esac
+done
+
+is_root || die "harus dijalankan sebagai root (sudo ./uninstall.sh)"
+if ! manifest_load; then
+  log "manifest $MANIFEST tidak ada — tidak ada yang dipasang install.sh, tidak ada yang dihapus"
+  exit 0
+fi
+
+has() { local t; for t in "${M_TYPE[@]}"; do [[ "$t" == "$1" ]] && return 0; done; return 1; }
+svc_kind() { local i; for i in "${!M_TYPE[@]}"; do [[ "${M_TYPE[$i]}" == svc && "${M_PATH[$i]}" == "$1" ]] && { echo "${M_EXTRA[$i]}"; return 0; }; done; echo none; }
+list() { local i; for i in "${!M_TYPE[@]}"; do [[ " $* " == *" ${M_TYPE[$i]} "* ]] && printf '    %-12s %s\n' "${M_TYPE[$i]}" "${M_PATH[$i]}"; done; return 0; }
+
+{
+  echo "== Rencana uninstall PXE dashboard$( ((DRY)) && echo " (DRY-RUN: tidak ada yang diubah)") =="
+  echo "  Dihentikan + dihapus:"; list unit file link tree fstab mount restore-link dir
+  if ((PURGE)); then echo "  Data dihapus (--purge):"; list data user
+  else echo "  Data DIPERTAHANKAN (pakai --purge untuk menghapus):"; list data user; fi
+  if ((RMPKG)); then echo "  Paket di-purge (--remove-packages):"; list pkg; fi
+} >&2
+if ((!DRY && !YES)); then
+  if [[ -t 0 ]]; then
+    read -r -p "Lanjutkan uninstall? [y/N] " ans || true
+    [[ "$ans" =~ ^[yY]$ ]] || die "dibatalkan"
+  else
+    die "mode non-interaktif butuh --yes (atau --dry-run)"
+  fi
+fi
+
+declare -a KEEP_IDX=()
+keep() { KEEP_IDX+=("$1"); }
+
+# 1. Layanan milik installer berhenti dulu; dnsmasq selalu dihentikan (konfigurasi DHCP-nya dicopot).
+for i in "${!M_TYPE[@]}"; do
+  [[ "${M_TYPE[$i]}" == unit ]] && { run systemctl disable --now "${M_PATH[$i]}" || warn "gagal menghentikan ${M_PATH[$i]}"; }
+done
+has svc && { run systemctl stop dnsmasq.service || true; }
+
+# 2. Mount ISO + baris fstab (hanya baris persis yang ditambahkan installer).
+for i in "${!M_TYPE[@]}"; do
+  [[ "${M_TYPE[$i]}" == mount ]] || continue
+  if mountpoint -q "$(p "${M_PATH[$i]}")" 2>/dev/null; then run umount "${M_PATH[$i]}" || warn "gagal umount ${M_PATH[$i]}"; fi
+done
+fstab_real="$(p "$FSTAB")"
+for i in "${!M_TYPE[@]}"; do
+  [[ "${M_TYPE[$i]}" == fstab ]] || continue
+  line="${M_EXTRA[$i]}"
+  grep -qxF -- "$line" "$fstab_real" 2>/dev/null || continue
+  if ((DRY)); then echo "DRY-RUN: hapus dari $FSTAB: $line"; continue; fi
+  tmp="$(mktemp "$(dirname "$fstab_real")/.fstab.pxe.XXXXXX")"
+  awk -v l="$line" '$0 != l' "$fstab_real" > "$tmp"
+  chmod --reference="$fstab_real" "$tmp"
+  mv -f "$tmp" "$fstab_real"
+  log "baris fstab dihapus: ${M_PATH[$i]}"
+done
+
+# 3. File, symlink, tree aplikasi.
+NETPLAN_CHANGED=0
+for i in "${!M_TYPE[@]}"; do
+  t="${M_TYPE[$i]}"; path="${M_PATH[$i]}"; real="$(p "$path")"
+  case "$t" in
+    file)
+      if [[ -L "$real" || -f "$real" ]]; then
+        run rm -f "$real"; [[ "$path" == /etc/netplan/* ]] && NETPLAN_CHANGED=1
+      elif [[ -e "$real" ]]; then warn "$path bukan file biasa — dilewati"; fi ;;
+    link) [[ -L "$real" ]] && run rm -f "$real" ;;
+    tree) [[ -e "$real" || -L "$real" ]] && run rm -rf --one-file-system "$real" ;;
+  esac
+done
+for i in "${!M_TYPE[@]}"; do
+  [[ "${M_TYPE[$i]}" == restore-link ]] || continue
+  if [[ ! -e "$(p "${M_PATH[$i]}")" && ! -L "$(p "${M_PATH[$i]}")" && -e "$(p "${M_EXTRA[$i]}")" ]]; then
+    run ln -s "${M_EXTRA[$i]}" "$(p "${M_PATH[$i]}")"
+  fi
+done
+
+run systemctl daemon-reload
+((NETPLAN_CHANGED)) && run netplan apply
+
+# 4. Layanan paket: yang dipasang installer dimatikan; yang sudah ada sebelumnya dimuat ulang tanpa
+#    konfigurasi installer.
+case "$(svc_kind dnsmasq.service)" in
+  ours) run systemctl disable dnsmasq.service || true ;;
+  pre) run systemctl restart dnsmasq.service || warn "dnsmasq (sudah ada sebelum install) gagal start ulang" ;;
+esac
+case "$(svc_kind nginx.service)" in
+  ours) run systemctl disable --now nginx.service || true ;;
+  pre) run systemctl reload-or-restart nginx.service || warn "nginx gagal dimuat ulang" ;;
+esac
+case "$(svc_kind nfs-server.service)" in
+  ours) run exportfs -ra || true; run systemctl disable --now nfs-server.service || true ;;
+  pre) run exportfs -ra || true ;;
+esac
+
+# 5. Direktori kosong buatan installer (terdalam dulu).
+mapfile -t dir_idx < <(for i in "${!M_TYPE[@]}"; do [[ "${M_TYPE[$i]}" == dir ]] && printf '%s\t%s\n' "${#M_PATH[$i]}" "$i"; done | sort -rn | cut -f2)
+for i in "${dir_idx[@]}"; do
+  real="$(p "${M_PATH[$i]}")"
+  [[ -d "$real" && ! -L "$real" ]] || continue
+  if [[ -z "$(ls -A "$real")" ]]; then run rm -d "$real"
+  else warn "${M_PATH[$i]} tidak kosong — dipertahankan"; keep "$i"; fi
+done
+
+# 6. Data + user (hanya --purge). Path yang masih memuat mount aktif tidak dihapus.
+mounted_under() { awk -v d="$1" '$2 == d || index($2, d "/") == 1 { f = 1 } END { exit !f }' "$(p /proc/mounts)" 2>/dev/null; }
+for i in "${!M_TYPE[@]}"; do
+  [[ "${M_TYPE[$i]}" == data ]] || continue
+  if ((!PURGE)); then keep "$i"; continue; fi
+  real="$(p "${M_PATH[$i]}")"
+  [[ -e "$real" || -L "$real" ]] || continue
+  if mounted_under "${M_PATH[$i]}"; then warn "${M_PATH[$i]} masih memuat mount aktif — tidak dihapus"; keep "$i"; continue; fi
+  run rm -rf --one-file-system "$real"
+done
+for i in "${!M_TYPE[@]}"; do
+  [[ "${M_TYPE[$i]}" == user ]] || continue
+  if ((PURGE)); then
+    if getent passwd "${M_PATH[$i]}" >/dev/null 2>&1; then run userdel "${M_PATH[$i]}" || { warn "userdel ${M_PATH[$i]} gagal"; keep "$i"; }; fi
+  else keep "$i"; fi
+done
+
+# 7. Paket (hanya --remove-packages, hanya yang dipasang installer).
+pkgs=()
+for i in "${!M_TYPE[@]}"; do [[ "${M_TYPE[$i]}" == pkg ]] && pkgs+=("${M_PATH[$i]}"); done
+if ((${#pkgs[@]})); then
+  if ((RMPKG)); then run env DEBIAN_FRONTEND=noninteractive apt-get purge -y "${pkgs[@]}" || warn "apt-get purge gagal"
+  else for i in "${!M_TYPE[@]}"; do [[ "${M_TYPE[$i]}" == pkg ]] && keep "$i"; done; fi
+fi
+
+# 8. Manifest: simpan entri yang dipertahankan (agar --purge nanti tetap bisa menghapusnya). Direktori
+#    yang sudah ikut terhapus bersama data induknya (--purge) tidak disimpan lagi.
+mf="$(p "$MANIFEST")"
+kept=()
+for i in "${KEEP_IDX[@]}"; do
+  if [[ "${M_TYPE[$i]}" =~ ^(dir|data)$ ]] && ((!DRY)) && [[ ! -e "$(p "${M_PATH[$i]}")" ]]; then continue; fi
+  kept+=("$i")
+done
+KEEP_IDX=("${kept[@]}")
+if ((${#KEEP_IDX[@]})); then
+  if ((DRY)); then echo "DRY-RUN: manifest disisakan ${#KEEP_IDX[@]} entri (data/user/paket yang dipertahankan)"
+  else
+    tmp="$(mktemp "$mf.XXXXXX")"
+    { echo "# manifest install.sh PXE dashboard (sisa setelah uninstall $(date -u +%FT%TZ))"
+      for i in "${KEEP_IDX[@]}"; do printf '%s\t%s\t%s\n' "${M_TYPE[$i]}" "${M_PATH[$i]}" "${M_EXTRA[$i]}"; done; } > "$tmp"
+    chmod 0600 "$tmp"; mv -f "$tmp" "$mf"
+  fi
+else
+  run rm -f "$mf"
+  run rm -d "$(p "$INSTALLER_DIR")"
+fi
+
+# 9. Verifikasi: dashboard mati, tidak ada socket dnsmasq/dashboard milik installer.
+if ((!DRY)); then
+  bad=0
+  [[ "$(systemctl is-active pxe-dashboard.service 2>/dev/null || true)" == active ]] && { log "FAIL pxe-dashboard masih aktif"; bad=1; }
+  while read -r netid state rq sq local peer proc; do
+    [[ "$local" == 127.0.0.1:3000 ]] && { log "FAIL masih ada listener $local $proc"; bad=1; }
+    [[ "$(svc_kind dnsmasq.service)" == ours && "$proc" == *'"dnsmasq"'* ]] && { log "FAIL dnsmasq masih listen $local"; bad=1; }
+  done < <(ss -lntupH 2>/dev/null || true)
+  ((bad)) && die "uninstall selesai dengan sisa layanan aktif (lihat FAIL)"
+fi
+log "uninstall selesai$( ((DRY)) && echo " (dry-run)")$( ((PURGE)) || echo "; data dipertahankan (DB $STATE_DIR, $MEDIA_DIR) — --purge untuk menghapus")"
