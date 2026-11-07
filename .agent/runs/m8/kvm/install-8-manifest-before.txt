@@ -1,0 +1,6 @@
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T09:03:28Z)
+pkg	dnsmasq	
+pkg	nginx	
+pkg	nfs-kernel-server	
+pkg	ipxe	
+pkg	libarchive-tools	

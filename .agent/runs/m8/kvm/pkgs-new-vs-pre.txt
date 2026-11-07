@@ -1,0 +1,8 @@
+dnsmasq-base
+grub-ipxe
+ipxe-qemu
+keyutils
+libnfsidmap1
+nfs-common
+nginx-common
+rpcbind

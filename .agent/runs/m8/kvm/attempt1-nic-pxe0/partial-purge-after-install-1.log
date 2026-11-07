@@ -1,0 +1,27 @@
+# uninstall.sh --purge --yes setelah install-1 GAGAL (manifest parsial)
+== Rencana uninstall PXE dashboard ==
+  Dihentikan + dihapus:
+    dir          /srv/pxe/tftp
+    dir          /srv/pxe/boot
+    tree         /opt/pxe-dashboard
+    file         /srv/pxe/tftp/snponly.efi
+    file         /srv/pxe/tftp/undionly.kpxe
+  Data dihapus (--purge):
+    user         pxe
+    data         /var/lib/pxe-dashboard
+    data         /var/log/dnsmasq-pxe.log
+    data         /srv/pxe
+    data         /srv/pxe/media
+    data         /srv/pxe/media/ubuntu-24.04
+    data         /srv/pxe/media/debian-12
+    data         /srv/pxe/media/rocky-9
+    data         /srv/pxe/media/debian-netboot
+Synchronizing state of dnsmasq.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install disable dnsmasq
+Removed "/etc/systemd/system/multi-user.target.wants/dnsmasq.service".
+Synchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install disable nginx
+Removed "/etc/systemd/system/multi-user.target.wants/nginx.service".
+Removed "/etc/systemd/system/multi-user.target.wants/nfs-server.service".
+[pxe-install] uninstall selesai
+# exit=0

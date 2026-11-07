@@ -1,0 +1,45 @@
+# etc-diff purge2: sebelum vs sesudah: etc-before-purge2.tsv (1754 entri) -> etc-after-purge2.tsv (1720 entri)
+# ringkasan: UNEXPLAINED=32, account-db=8, enable-link=2
+UNEXPLAINED  HAPUS                  /etc/default/dnsmasq
+UNEXPLAINED  HAPUS                  /etc/default/nfs-kernel-server
+UNEXPLAINED  HAPUS                  /etc/dnsmasq.conf
+UNEXPLAINED  HAPUS                  /etc/dnsmasq.d
+UNEXPLAINED  HAPUS                  /etc/dnsmasq.d/README
+UNEXPLAINED  HAPUS                  /etc/exports
+account-db   UBAH(content)          /etc/group
+account-db   UBAH(content)          /etc/group-
+account-db   UBAH(content)          /etc/gshadow
+account-db   UBAH(content)          /etc/gshadow-
+UNEXPLAINED  HAPUS                  /etc/init.d/dnsmasq
+UNEXPLAINED  HAPUS                  /etc/init.d/nfs-kernel-server
+UNEXPLAINED  HAPUS                  /etc/insserv.conf.d/dnsmasq
+account-db   UBAH(content)          /etc/passwd
+account-db   UBAH(content)          /etc/passwd-
+UNEXPLAINED  HAPUS                  /etc/rc0.d/K01dnsmasq
+UNEXPLAINED  HAPUS                  /etc/rc0.d/K01nfs-kernel-server
+UNEXPLAINED  HAPUS                  /etc/rc1.d/K01dnsmasq
+UNEXPLAINED  HAPUS                  /etc/rc1.d/K01nfs-kernel-server
+UNEXPLAINED  HAPUS                  /etc/rc2.d/S01dnsmasq
+UNEXPLAINED  HAPUS                  /etc/rc2.d/S01nfs-kernel-server
+UNEXPLAINED  HAPUS                  /etc/rc3.d/S01dnsmasq
+UNEXPLAINED  HAPUS                  /etc/rc3.d/S01nfs-kernel-server
+UNEXPLAINED  HAPUS                  /etc/rc4.d/S01dnsmasq
+UNEXPLAINED  HAPUS                  /etc/rc4.d/S01nfs-kernel-server
+UNEXPLAINED  HAPUS                  /etc/rc5.d/S01dnsmasq
+UNEXPLAINED  HAPUS                  /etc/rc5.d/S01nfs-kernel-server
+UNEXPLAINED  HAPUS                  /etc/rc6.d/K01dnsmasq
+UNEXPLAINED  HAPUS                  /etc/rc6.d/K01nfs-kernel-server
+UNEXPLAINED  HAPUS                  /etc/resolvconf
+UNEXPLAINED  HAPUS                  /etc/resolvconf/update.d
+UNEXPLAINED  HAPUS                  /etc/resolvconf/update.d/dnsmasq
+account-db   UBAH(content)          /etc/shadow
+account-db   UBAH(content)          /etc/shadow-
+UNEXPLAINED  HAPUS                  /etc/systemd/system/multi-user.target.wants/dnsmasq.service
+enable-link  HAPUS                  /etc/systemd/system/multi-user.target.wants/nfs-server.service
+UNEXPLAINED  HAPUS                  /etc/systemd/system/nfs-client.target.wants
+enable-link  HAPUS                  /etc/systemd/system/nfs-client.target.wants/nfs-blkmap.service
+UNEXPLAINED  HAPUS                  /etc/systemd/system/nfs-mountd.service.requires
+UNEXPLAINED  HAPUS                  /etc/systemd/system/nfs-mountd.service.requires/fsidd.service
+UNEXPLAINED  HAPUS                  /etc/systemd/system/nfs-server.service.requires
+UNEXPLAINED  HAPUS                  /etc/systemd/system/nfs-server.service.requires/fsidd.service
+# UNEXPLAINED=32

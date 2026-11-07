@@ -1,0 +1,17 @@
+# etc-diff uninstall2: sebelum vs sesudah: etc-before-uninstall2.tsv (1765 entri) -> etc-after-uninstall2.tsv (1754 entri)
+# ringkasan: enable-link=1, fstab=1, manifest=11, restore-link=1
+manifest     HAPUS                  /etc/dnsmasq.d/pxe-dashboard.conf
+manifest     HAPUS                  /etc/exports.d
+manifest     HAPUS                  /etc/exports.d/pxe-dashboard.exports
+fstab        UBAH(content)          /etc/fstab
+manifest     HAPUS                  /etc/logrotate.d/pxe-dashboard
+manifest     HAPUS                  /etc/nfs.conf.d/pxe-dashboard.conf
+manifest     HAPUS                  /etc/nginx/sites-available/pxe-dashboard
+restore-link TAMBAH                 /etc/nginx/sites-enabled/default
+manifest     HAPUS                  /etc/nginx/sites-enabled/pxe-dashboard
+manifest     HAPUS                  /etc/pxe-dashboard.env
+manifest     HAPUS                  /etc/systemd/system/dnsmasq.service.d
+manifest     HAPUS                  /etc/systemd/system/dnsmasq.service.d/pxe-dashboard.conf
+enable-link  HAPUS                  /etc/systemd/system/multi-user.target.wants/pxe-dashboard.service
+manifest     HAPUS                  /etc/systemd/system/pxe-dashboard.service
+# UNEXPLAINED=0

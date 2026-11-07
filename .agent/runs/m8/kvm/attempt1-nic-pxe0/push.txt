@@ -1,0 +1,7 @@
+CLAUDE.md README.md configs dashboard deploy docs infra install.sh scripts uninstall.sh 
+brw-rw---- 1 root cdrom 11, 0 Nov  7 08:23 /dev/sr0
+brw-rw---- 1 root cdrom 11, 1 Nov  7 08:23 /dev/sr1
+brw-rw---- 1 root cdrom 11, 2 Nov  7 08:23 /dev/sr2
+/dev/sr0: BLOCK_SIZE="2048" UUID="2026-09-09-09-12-22-00" LABEL="Ubuntu-Server 24.04.5 LTS amd64" TYPE="iso9660" PTTYPE="PMBR"
+/dev/sr1: BLOCK_SIZE="2048" UUID="2026-07-11-15-29-41-00" LABEL="Debian 12.15.0 amd64 1" TYPE="iso9660" PTUUID="4650eb05" PTTYPE="dos"
+/dev/sr2: BLOCK_SIZE="2048" UUID="2026-05-25-22-21-39-00" LABEL="Rocky-9-8-x86_64-dvd" TYPE="iso9660" PTUUID="e36866c9" PTTYPE="dos"

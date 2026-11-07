@@ -1,0 +1,3 @@
+umount /srv/pxe/media/ubuntu-24.04
+# sisa mount:
+(tidak ada mount /srv/pxe)

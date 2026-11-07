@@ -1,0 +1,18 @@
+State  Recv-Q Send-Q                  Local Address:Port  Peer Address:PortProcess                                                                            
+LISTEN 0      64                            0.0.0.0:33413      0.0.0.0:*                                                                                      
+LISTEN 0      4096                          0.0.0.0:53743      0.0.0.0:*    users:(("rpc.statd",pid=14625,fd=9))                                              
+LISTEN 0      4096                          0.0.0.0:22         0.0.0.0:*    users:(("sshd",pid=1108,fd=3),("systemd",pid=1,fd=160))                           
+LISTEN 0      4096                          0.0.0.0:111        0.0.0.0:*    users:(("rpcbind",pid=14624,fd=4),("systemd",pid=1,fd=133))                       
+LISTEN 0      4096                          0.0.0.0:20048      0.0.0.0:*    users:(("rpc.mountd",pid=14643,fd=5))                                             
+LISTEN 0      64                          10.99.0.2:2049       0.0.0.0:*                                                                                      
+LISTEN 0      32                          10.99.0.2:53         0.0.0.0:*    users:(("dnsmasq",pid=37352,fd=7))                                                
+LISTEN 0      511                         10.99.0.2:80         0.0.0.0:*    users:(("nginx",pid=14671,fd=6),("nginx",pid=14670,fd=6),("nginx",pid=14669,fd=6))
+LISTEN 0      4096                       127.0.0.54:53         0.0.0.0:*    users:(("systemd-resolve",pid=578,fd=17))                                         
+LISTEN 0      511                         127.0.0.1:3000       0.0.0.0:*    users:(("next-server (v1",pid=70877,fd=21))                                       
+LISTEN 0      4096                    127.0.0.53%lo:53         0.0.0.0:*    users:(("systemd-resolve",pid=578,fd=15))                                         
+LISTEN 0      4096                             [::]:22            [::]:*    users:(("sshd",pid=1108,fd=4),("systemd",pid=1,fd=161))                           
+LISTEN 0      4096                             [::]:111           [::]:*    users:(("rpcbind",pid=14624,fd=6),("systemd",pid=1,fd=135))                       
+LISTEN 0      4096                             [::]:20048         [::]:*    users:(("rpc.mountd",pid=14643,fd=7))                                             
+LISTEN 0      4096                             [::]:58693         [::]:*    users:(("rpc.statd",pid=14625,fd=11))                                             
+LISTEN 0      32     [fe80::5054:ff:fe99:102]%prov0:53            [::]:*    users:(("dnsmasq",pid=37352,fd=10))                                               
+LISTEN 0      64                               [::]:42225         [::]:*                                                                                      

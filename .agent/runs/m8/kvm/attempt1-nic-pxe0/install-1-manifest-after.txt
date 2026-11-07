@@ -1,0 +1,23 @@
+# manifest install.sh PXE dashboard — jangan diedit (uninstall.sh)
+pkg	dnsmasq	
+pkg	nginx	
+pkg	nfs-kernel-server	
+pkg	ipxe	
+pkg	libarchive-tools	
+svc	dnsmasq.service	ours
+svc	nginx.service	ours
+svc	nfs-server.service	ours
+user	pxe	
+data	/var/lib/pxe-dashboard	
+data	/var/log/dnsmasq-pxe.log	
+data	/srv/pxe	
+dir	/srv/pxe/tftp	
+dir	/srv/pxe/boot	
+data	/srv/pxe/media	
+data	/srv/pxe/media/ubuntu-24.04	
+data	/srv/pxe/media/debian-12	
+data	/srv/pxe/media/rocky-9	
+data	/srv/pxe/media/debian-netboot	
+tree	/opt/pxe-dashboard	
+file	/srv/pxe/tftp/snponly.efi	
+file	/srv/pxe/tftp/undionly.kpxe	

@@ -1,0 +1,12 @@
+# ss -lunpH (hanya -u): kolom pertama = State, TANPA Netid (6 kolom)
+UNCONN 0      0         127.0.0.54:53    0.0.0.0:* users:(("systemd-resolve",pid=578,fd=16))                 
+UNCONN 0      0      127.0.0.53%lo:53    0.0.0.0:* users:(("systemd-resolve",pid=578,fd=14))                 
+UNCONN 0      0            0.0.0.0:111   0.0.0.0:* users:(("rpcbind",pid=14624,fd=5),("systemd",pid=1,fd=77))
+# ss -lntupH (-t -u): dengan Netid (7 kolom)
+udp UNCONN 0      0         127.0.0.54:53    0.0.0.0:* users:(("systemd-resolve",pid=578,fd=16))                                         
+udp UNCONN 0      0      127.0.0.53%lo:53    0.0.0.0:* users:(("systemd-resolve",pid=578,fd=14))                                         
+udp UNCONN 0      0            0.0.0.0:111   0.0.0.0:* users:(("rpcbind",pid=14624,fd=5),("systemd",pid=1,fd=77))                        
+# parse seperti install.sh verify(): read -r netid state rq sq local peer proc < <(ss -lunpH)
+local=[0.0.0.0:*] proc=[]
+local=[0.0.0.0:*] proc=[]
+local=[0.0.0.0:*] proc=[]

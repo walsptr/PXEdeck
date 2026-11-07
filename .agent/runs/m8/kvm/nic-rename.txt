@@ -1,0 +1,5 @@
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+prov0            UP             10.99.0.2/24 fe80::5054:ff:fe99:102/64 
+nat0             UP             192.168.199.2/24 fe80::5054:ff:fe99:103/64 
+/etc/netplan/50-cloud-init.yaml:13:      set-name: "nat0"
+/etc/netplan/50-cloud-init.yaml:22:      set-name: "prov0"

@@ -1,0 +1,7 @@
+# shim /root/m8-shim/ss:
+#!/bin/sh
+case "$*" in
+  -lunpH) exec /usr/bin/ss -lntupH | grep '^udp' ;;
+  -ltnpH) exec /usr/bin/ss -lntupH | grep '^tcp' ;;
+  *) exec /usr/bin/ss "$@" ;;
+esac

@@ -1,0 +1,26 @@
+Nov 07 09:01:17 pxe-test-install node[70877]: ▲ Next.js 16.4.5
+Nov 07 09:01:17 pxe-test-install node[70877]: - Local:         http://127.0.0.1:3000
+Nov 07 09:01:17 pxe-test-install node[70877]: - Network:       http://127.0.0.1:3000
+Nov 07 09:01:17 pxe-test-install node[70877]: ✓ Ready in 0ms
+Nov 07 09:01:17 pxe-test-install node[70877]: ✓ Running next.config took 0.8ms
+Nov 07 09:01:17 pxe-test-install node[70877]: (node:70877) ExperimentalWarning: SQLite is an experimental feature and might change at any time
+Nov 07 09:01:17 pxe-test-install node[70877]: (Use `node --trace-warnings ...` to show where the warning was created)
+Nov 07 09:01:57 pxe-test-install systemd[1]: Stopping pxe-dashboard.service - PXE dashboard (Next.js standalone)...
+Nov 07 09:01:57 pxe-test-install systemd[1]: pxe-dashboard.service: Main process exited, code=exited, status=143/n/a
+Nov 07 09:01:57 pxe-test-install systemd[1]: pxe-dashboard.service: Failed with result 'exit-code'.
+Nov 07 09:01:57 pxe-test-install systemd[1]: Stopped pxe-dashboard.service - PXE dashboard (Next.js standalone).
+Nov 07 09:01:57 pxe-test-install systemd[1]: pxe-dashboard.service: Consumed 1.036s CPU time, 100.9M memory peak, 0B memory swap peak.
+× pxe-dashboard.service
+     Loaded: not-found (Reason: Unit pxe-dashboard.service not found.)
+     Active: failed (Result: exit-code) since Sat 2026-11-07 09:01:57 UTC; 1min 12s ago
+   Duration: 39.804s
+   Main PID: 70877 (code=exited, status=143)
+        CPU: 1.036s
+
+Nov 07 09:01:17 pxe-test-install node[70877]: - Network:       http://127.0.0.1:3000
+total 576
+drwxr-x---  2 pxe  pxe    4096 Nov  7 08:42 .
+drwxr-xr-x 47 root root   4096 Nov  7 09:01 ..
+-rw-r--r--  1 pxe  pxe    4096 Nov  7 08:42 pxe.db
+-rw-r--r--  1 pxe  pxe   32768 Nov  7 09:01 pxe.db-shm
+-rw-r--r--  1 pxe  pxe  543872 Nov  7 09:01 pxe.db-wal

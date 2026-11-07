@@ -1,0 +1,16 @@
+# ssh root@10.99.0.2 cd /root/pxe-src && ./install.sh --yes --interface prov0 --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200 --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --admin-password-file /root/m8-admin.pass --iso-ubuntu /dev/sr0 --iso-debian /dev/sr1 --iso-rocky /dev/sr2 
+# M8_SS_SHIM=1: install.sh dijalankan dengan PATH=/root/m8-shim:$PATH (shim ss diagnostik, lihat vm-ss-shim.sh)
+[pxe-install] memeriksa DHCP server lain di prov0 (DHCPDISCOVER, 6 dtk)
+[pxe-install] tidak ada DHCP server lain di prov0
+== Rencana instalasi PXE dashboard ==
+  NIC DHCP/TFTP : prov0
+  Server        : 10.99.0.2/24 (subnet 10.99.0.0/24)
+  DHCP          : 10.99.0.100-10.99.0.200, gateway 10.99.0.1 (opsi router: yes), DNS 10.99.0.2
+  Admin         : pxeadmin, UI dari 10.99.0.1 di http://10.99.0.2/
+  VLAN mgmt     : (tidak ada)
+  Media ISO     : ubuntu=/dev/sr0 debian=/dev/sr1 rocky=/dev/sr2
+  Rilis         : build dari /root/pxe-src/dashboard
+  Firewall      : no
+[pxe-install] manifest: /var/lib/pxe-dashboard-installer/install-manifest
+chmod: changing permissions of '/srv/pxe/media/ubuntu-24.04': Read-only file system
+# exit=1 durasi=6 dtk
