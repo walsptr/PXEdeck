@@ -100,6 +100,63 @@ run() {
 
 is_root() { [[ "$(id -u)" == 0 ]]; }
 
+# --- unduhan HTTPS (nodejs.org, deb.debian.org) -----------------------------------------------
+# Semua unduhan internet installer WAJIB lewat fetch_https (diasersi infra/test/m8.sh): koneksi
+# macet tidak boleh menggantung instalasi (gate m8 iter3: install KVM menggantung >17 menit).
+#   --connect-timeout 20 s; batalkan bila < 1 KB/s selama 60 s (bukan --max-time tetap, agar tarball
+#   besar di link lambat tetap jalan); --max-time per percobaan sebagai batas atas (besar:
+#   PXE_INSTALL_DOWNLOAD_TIMEOUT, default 1800 s; kecil: PXE_INSTALL_DOWNLOAD_TIMEOUT_SMALL, default
+#   120 s); --retry 3 (jeda 5 s, termasuk koneksi ditolak), tanpa percobaan baru setelah batas atas.
+DL_CONNECT_TIMEOUT=20
+DL_SPEED_LIMIT=1024
+DL_SPEED_TIME=60
+DL_RETRY=3
+DL_RETRY_DELAY=5
+DL_TIMEOUT_LARGE=1800
+DL_TIMEOUT_SMALL=120
+
+# download_limits_init: baca + validasi env batas waktu unduhan (detik, 30..86400). Gagal -> return 1
+# dengan pesan di DL_ERR.
+download_limits_init() {
+  local v n
+  for n in PXE_INSTALL_DOWNLOAD_TIMEOUT PXE_INSTALL_DOWNLOAD_TIMEOUT_SMALL; do
+    v="${!n:-}"
+    [[ -z "$v" ]] && continue
+    if [[ ! "$v" =~ ^[1-9][0-9]{1,4}$ ]] || ((v < 30 || v > 86400)); then
+      DL_ERR="$n '$v' harus bilangan detik 30..86400"; return 1
+    fi
+    if [[ "$n" == PXE_INSTALL_DOWNLOAD_TIMEOUT ]]; then DL_TIMEOUT_LARGE="$v"; else DL_TIMEOUT_SMALL="$v"; fi
+  done
+  return 0
+}
+
+# fetch_https <url> <out> [small|large]: unduh <url> (https saja, TLS >= 1.2) ke <out> dengan batas
+# waktu/retry di atas. Gagal -> <out> dihapus, die dengan URL + exit code curl (trap rollback install.sh
+# membersihkan sisanya). Di --dry-run hanya dicetak (lewat run).
+fetch_https() {
+  local url="$1" out="$2" kind="${3:-small}" max rc=0 why
+  [[ "$url" == https://* ]] || die "fetch_https: hanya URL https:// ($url)"
+  case "$kind" in
+    large) max="$DL_TIMEOUT_LARGE" ;;
+    small) max="$DL_TIMEOUT_SMALL" ;;
+    *) die "fetch_https: jenis '$kind' tidak dikenal" ;;
+  esac
+  run curl -fsSL --proto '=https' --tlsv1.2 -o "$out" \
+    --connect-timeout "$DL_CONNECT_TIMEOUT" --speed-limit "$DL_SPEED_LIMIT" --speed-time "$DL_SPEED_TIME" \
+    --max-time "$max" --retry "$DL_RETRY" --retry-delay "$DL_RETRY_DELAY" --retry-connrefused \
+    --retry-max-time "$max" "$url" || rc=$?
+  ((rc == 0)) && return 0
+  rm -f -- "$out"
+  case "$rc" in
+    28) why="batas waktu habis: koneksi ${DL_CONNECT_TIMEOUT}s, < ${DL_SPEED_LIMIT} B/s selama ${DL_SPEED_TIME}s, atau total ${max}s" ;;
+    6|7) why="host tidak terjangkau" ;;
+    22) why="HTTP error" ;;
+    35|60) why="TLS gagal" ;;
+    *) why="curl gagal" ;;
+  esac
+  die "unduhan gagal ($why, curl exit $rc, retry maks $DL_RETRY): $url"
+}
+
 # ss_sockets: socket listen tcp+udp sebagai baris "<netid> <local> <process...>". Tahan terhadap dua
 # format `ss -H`: 7 kolom (Netid State Recv-Q Send-Q Local Peer Process, bila >1 protokol) dan 6 kolom
 # tanpa Netid (satu protokol: -u atau -t saja). Netid yang hilang diturunkan dari State

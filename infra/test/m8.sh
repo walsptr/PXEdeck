@@ -1305,3 +1305,112 @@ t "M8 i3 #1: gpgv Release bertanda tangan ganda (kunci hilang) diterima, BADSIG 
 t "M8 i3 #2: uninstall lepas ekspor + stop nfs sebelum umount; umount gagal = error"     test_m8_i3_umount_after_nfs_stop
 t "M8 i3 #3: link VLAN dihapus uninstall; link sisa tercatat dikenali install ulang"     test_m8_i3_vlan_link_lifecycle
 t "M8 i3 #4: netplan installer 99- (setelah file admin), migrasi 60-, pesan urutan"      test_m8_i3_netplan_order
+
+# ---------------------------------------------------------------------------------------------
+# Carry-over gate m8 iter3 (failinstall-hang-diagnosis.txt): unduhan tanpa batas waktu menggantung
+# install >17 menit. Semua unduhan HTTPS lewat fetch_https (deploy/lib.sh) dengan timeout + retry.
+# Mutasi: .agent/runs/m8/mutation-dev-curl.txt.
+_M8_DL_FLAGS_RE='^curl -fsSL --proto =https --tlsv1\.2 -o [^ ]+ --connect-timeout 20 --speed-limit 1024 --speed-time 60 --max-time ([0-9]+) --retry 3 --retry-delay 5 --retry-connrefused --retry-max-time ([0-9]+) https://[^ ]+$'
+# _m8_dl_check <small> <large>: setiap curl https di FAKE_LOG memakai semua flag fetch_https, batas
+# atas sesuai jenis file; 7 unduhan (SHASUMS + tarball Node, Release{,.gpg}, SHA256SUMS, linux, initrd).
+_m8_dl_check() {
+  local small="$1" large="$2" l n=0 want
+  while IFS= read -r l; do
+    n=$((n + 1))
+    [[ "$l" =~ $_M8_DL_FLAGS_RE ]] || { _fail "unduhan tanpa flag timeout/retry fetch_https: $l"; continue; }
+    case "$l" in *.tar.xz|*/initrd.gz|*/linux) want="$large" ;; *) want="$small" ;; esac
+    assert_eq "${BASH_REMATCH[1]}" "$want" "--max-time: $l"
+    assert_eq "${BASH_REMATCH[2]}" "$want" "--retry-max-time: $l"
+  done < <(grep -E '^curl .*https://' "$FAKE_LOG" || true)
+  assert_eq "$n" 7 "jumlah unduhan https"
+  # Tidak ada curl (termasuk cek lokal http) tanpa --max-time.
+  assert_no_match "$(grep '^curl ' "$FAKE_LOG" | grep -v -- '--max-time ' || true)" '^curl ' "curl tanpa --max-time"
+}
+
+test_m8_curl_downloads_use_helper() {
+  # Statis: satu-satunya curl ke internet ada di fetch_https; curl lain hanya cek lokal ber---max-time.
+  local f l bad=""
+  for f in "$REPO_UNDER_TEST/install.sh" "$REPO_UNDER_TEST/uninstall.sh" "$REPO_UNDER_TEST"/deploy/*.sh; do
+    while IFS= read -r l; do
+      case "$l" in
+        *'run curl -fsSL --proto '"'"'=https'"'"' --tlsv1.2 -o "$out" \'*) [[ "$f" == */deploy/lib.sh ]] || bad+=$'\n'"$f: $l" ;;
+        *'curl -sS --max-time 5 -o /dev/null'*'"http://$SERVER_IP/'*) ;;
+        *) bad+=$'\n'"$f: $l" ;;
+      esac
+    done < <(grep -E '(^|[;&|(`]|run)[[:space:]]*curl[[:space:]]+-' "$f" | grep -vE '^[[:space:]]*#' || true)
+  done
+  assert_eq "$bad" "" "curl di luar fetch_https"
+  assert_eq "$(grep -cE '^[[:space:]]*(\[\[ .* \]\] \|\| )?fetch_https "\$' "$REPO_UNDER_TEST/install.sh")" 6 "pemanggilan fetch_https di install.sh"
+  # Dinamis: install penuh (Node non-default + netboot Debian) -> 7 unduhan, semua dengan flag lengkap.
+  _m8_setup; _m8_debian_chain
+  _m8_full --iso-debian /srv-debian.iso
+  assert_eq "$RC" 0 "$OUT"
+  _m8_dl_check 120 1800
+  # --dry-run: rencana memuat perintah lengkap, tanpa unduhan.
+  _m8_fresh
+  _m8_install "${_M8_ARGS[@]}" --dry-run --admin-password-file "$SB/admin.pass" --release "$SB/release.tar.xz"
+  assert_eq "$RC" 0 "$OUT"
+  assert_match "$(sed 's/\\//g' <<<"$OUT")" '^DRY-RUN: curl -fsSL --proto =https --tlsv1\.2 -o [^ ]+ --connect-timeout 20 --speed-limit 1024 --speed-time 60 --max-time 1800 --retry 3 --retry-delay 5 --retry-connrefused --retry-max-time 1800 https://nodejs\.org/dist/v22\.99\.0/node-v22\.99\.0-linux-x64\.tar\.xz$'
+  assert_eq "$(_m8_mutations)" "" "dry-run tanpa unduhan"
+}
+
+test_m8_curl_timeout_env_override() {
+  _m8_setup; _m8_debian_chain
+  PXE_INSTALL_DOWNLOAD_TIMEOUT=900 PXE_INSTALL_DOWNLOAD_TIMEOUT_SMALL=45 _m8_full --iso-debian /srv-debian.iso
+  assert_eq "$RC" 0 "$OUT"
+  _m8_dl_check 45 900
+  local h; h="$(cd "$REPO_UNDER_TEST" && bash ./install.sh --help)"
+  assert_contains "$h" "PXE_INSTALL_DOWNLOAD_TIMEOUT=DETIK"; assert_contains "$h" "PXE_INSTALL_DOWNLOAD_TIMEOUT_SMALL=DETIK"
+  # Nilai tidak sah -> exit 2 sebelum perubahan apa pun.
+  local v
+  for v in abc 0 29 -5 86401 1e3 '60 ' 0060; do
+    _m8_fresh
+    PXE_INSTALL_DOWNLOAD_TIMEOUT="$v" _m8_full
+    assert_eq "$RC" 2 "PXE_INSTALL_DOWNLOAD_TIMEOUT='$v' ditolak"
+    assert_contains "$OUT" "PXE_INSTALL_DOWNLOAD_TIMEOUT '$v' harus bilangan detik 30..86400"
+    assert_eq "$(_m8_mutations)" "" "tanpa mutasi ($v)"
+  done
+  _m8_fresh
+  PXE_INSTALL_DOWNLOAD_TIMEOUT_SMALL=x _m8_full
+  assert_eq "$RC" 2; assert_contains "$OUT" "PXE_INSTALL_DOWNLOAD_TIMEOUT_SMALL 'x' harus"
+}
+
+test_m8_curl_timeout_fails_clean() {
+  local tmpd="$SB/tmpdir"
+  # Tarball Node: curl exit 28 -> error menyebut URL, exit 1, rollback enablement, dnsmasq tidak start.
+  _m8_setup; mkdir -p "$tmpd"
+  TMPDIR="$tmpd" FAKE_CURL_FAIL_URL='*/node-v22.99.0-linux-x64.tar.xz' _m8_full
+  assert_eq "$RC" 1 "$OUT"
+  assert_contains "$OUT" "[pxe-install] ERROR: unduhan gagal (batas waktu habis"
+  assert_contains "$OUT" "curl exit 28, retry maks 3): https://nodejs.org/dist/v22.99.0/node-v22.99.0-linux-x64.tar.xz"
+  assert_contains "$OUT" "[pxe-install] rollback: menonaktifkan"
+  local l; l="$(grep '^systemctl disable --now' "$FAKE_LOG" || true)"
+  assert_contains "$l" "dnsmasq.service"; assert_contains "$l" "nginx.service"; assert_contains "$l" "nfs-server.service"
+  assert_no_match "$(cat "$FAKE_LOG")" '^systemctl (restart|start) dnsmasq' "dnsmasq tidak start"
+  assert_no_file "$R/opt/pxe-dashboard/node/bin/node"
+  assert_eq "$(ls -A "$tmpd")" "" "TMP installer dibersihkan"
+  assert_eq "$(grep -c 'node-v22.99.0-linux-x64.tar.xz$' "$FAKE_LOG")" 1 "tidak ada unduhan lanjutan setelah gagal"
+  _m8_no_secret
+  # initrd netboot Debian (setelah Node): exit 28 -> batal sebelum layanan, kernel tidak terpasang.
+  _m8_fresh; _m8_debian_chain
+  TMPDIR="$tmpd" FAKE_CURL_FAIL_URL='*/initrd.gz' _m8_full --iso-debian /srv-debian.iso
+  assert_eq "$RC" 1 "$OUT"
+  assert_contains "$OUT" "): https://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images/netboot/debian-installer/amd64/initrd.gz"
+  assert_contains "$OUT" "[pxe-install] rollback: menonaktifkan"
+  assert_no_file "$R/srv/pxe/media/debian-netboot/linux"; assert_no_file "$R/srv/pxe/media/debian-netboot/initrd.gz"
+  assert_no_match "$(cat "$FAKE_LOG")" '^systemctl (restart|start) dnsmasq' "dnsmasq tidak start"
+  assert_eq "$(ls -A "$tmpd")" "" "TMP installer dibersihkan"
+  # Kode lain (DNS gagal, 6) -> pesan sesuai; Release kecil.
+  _m8_fresh; _m8_debian_chain
+  FAKE_CURL_FAIL_URL='*/bookworm/Release' FAKE_CURL_FAIL_RC=6 _m8_full --iso-debian /srv-debian.iso
+  assert_eq "$RC" 1 "$OUT"
+  assert_contains "$OUT" "unduhan gagal (host tidak terjangkau, curl exit 6, retry maks 3): https://deb.debian.org/debian/dists/bookworm/Release"
+  # Install ulang setelah jaringan pulih -> sukses (rollback tidak meninggalkan sisa yang memblokir).
+  : > "$FAKE_LOG"; _m8_full --iso-debian /srv-debian.iso
+  assert_eq "$RC" 0 "$OUT"
+  assert_eq "$(cat "$R/srv/pxe/media/debian-netboot/linux")" "kernel-netboot"
+}
+
+t "M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag"   test_m8_curl_downloads_use_helper
+t "M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi"            test_m8_curl_timeout_env_override
+t "M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih"        test_m8_curl_timeout_fails_clean

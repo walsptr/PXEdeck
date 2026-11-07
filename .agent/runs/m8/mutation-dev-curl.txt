@@ -1,0 +1,81 @@
+# Mutasi fetch_https (carry-over gate m8 iter3: curl tanpa timeout). Branch fix/installer-curl-timeout, 2026-11-07T22:20:16+07:00
+# Setiap mutasi diterapkan ke install.sh/deploy/lib.sh, hanya test 'M8 curl:' dijalankan (harness infra/test, fake curl), lalu file dipulihkan.
+# KILLED = minimal satu test merah. 15 mutasi.
+
+== M1 tarball Node lewat curl langsung (bypass fetch_https) (install.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  FAIL M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 0 lulus, 3 gagal
+== M2 initrd/linux Debian lewat curl langsung (install.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  FAIL M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 0 lulus, 3 gagal
+== M3 SHASUMS256.txt lewat curl langsung (install.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 1 lulus, 2 gagal
+== M4 tanpa --connect-timeout (deploy/lib.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 1 lulus, 2 gagal
+== M5 tanpa --speed-limit/--speed-time (deploy/lib.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 1 lulus, 2 gagal
+== M6 tanpa --retry-connrefused (deploy/lib.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 1 lulus, 2 gagal
+== M7 --retry 0 (deploy/lib.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  FAIL M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 0 lulus, 3 gagal
+== M8 tanpa --max-time (deploy/lib.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 1 lulus, 2 gagal
+== M9 env PXE_INSTALL_DOWNLOAD_TIMEOUT diabaikan (deploy/lib.sh) -> KILLED (merah)
+  ok   M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 2 lulus, 1 gagal
+== M10 validasi env dihapus (deploy/lib.sh) -> KILLED (merah)
+  ok   M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 2 lulus, 1 gagal
+== M11 download_limits_init tidak dipanggil (install.sh) -> KILLED (merah)
+  ok   M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 2 lulus, 1 gagal
+== M12 file besar memakai batas kecil (deploy/lib.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 1 lulus, 2 gagal
+== M13 kegagalan curl diabaikan (tanpa die) (deploy/lib.sh) -> KILLED (merah)
+  ok   M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  ok   M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  FAIL M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 2 lulus, 1 gagal
+== M14 pesan error tanpa URL (deploy/lib.sh) -> KILLED (merah)
+  ok   M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  ok   M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  FAIL M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 2 lulus, 1 gagal
+== M15 tanpa --proto =https (deploy/lib.sh) -> KILLED (merah)
+  FAIL M8 curl: semua unduhan lewat fetch_https (timeout/retry), dry-run memuat flag
+  FAIL M8 curl: PXE_INSTALL_DOWNLOAD_TIMEOUT{,_SMALL} override + validasi
+  ok   M8 curl: curl exit 28/6 -> error ber-URL, exit 1, rollback, TMP bersih
+hasil: 1 lulus, 2 gagal
+== tanpa mutasi (dipulihkan) -> hijau
+hasil: 3 lulus, 0 gagal
