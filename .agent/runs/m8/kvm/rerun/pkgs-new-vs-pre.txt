@@ -1,0 +1,4 @@
+keyutils
+libnfsidmap1
+nfs-common
+rpcbind

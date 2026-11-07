@@ -1,0 +1,35 @@
+# etc-diff purge3: pra-install vs sesudah: etc-pre.tsv (1656 entri) -> etc-after-purge3.tsv (1685 entri)
+# ringkasan: UNEXPLAINED=10, account-db=6, enable-link=5, pkg-new=11
+pkg-new      TAMBAH                 /etc/default/nfs-common
+pkg-new      TAMBAH                 /etc/default/rpcbind
+account-db   TAMBAH                 /etc/group-
+account-db   TAMBAH                 /etc/gshadow-
+UNEXPLAINED  TAMBAH                 /etc/idmapd.conf
+pkg-new      TAMBAH                 /etc/init.d/nfs-common
+pkg-new      TAMBAH                 /etc/init.d/rpcbind
+pkg-new      TAMBAH                 /etc/insserv.conf.d
+pkg-new      TAMBAH                 /etc/insserv.conf.d/rpcbind
+pkg-new      TAMBAH                 /etc/keyutils
+UNEXPLAINED  UBAH(content)          /etc/ld.so.cache
+UNEXPLAINED  TAMBAH                 /etc/nfs.conf
+pkg-new      TAMBAH                 /etc/nfs.conf.d
+account-db   UBAH(content)          /etc/passwd
+account-db   TAMBAH                 /etc/passwd-
+UNEXPLAINED  TAMBAH                 /etc/rc0.d/K01nfs-common
+UNEXPLAINED  TAMBAH                 /etc/rc0.d/K01rpcbind
+UNEXPLAINED  TAMBAH                 /etc/rc1.d/K01nfs-common
+UNEXPLAINED  TAMBAH                 /etc/rc6.d/K01nfs-common
+UNEXPLAINED  TAMBAH                 /etc/rc6.d/K01rpcbind
+UNEXPLAINED  TAMBAH                 /etc/rcS.d/S01nfs-common
+UNEXPLAINED  TAMBAH                 /etc/rcS.d/S01rpcbind
+pkg-new      TAMBAH                 /etc/request-key.conf
+pkg-new      TAMBAH                 /etc/request-key.d
+pkg-new      TAMBAH                 /etc/request-key.d/id_resolver.conf
+account-db   UBAH(content)          /etc/shadow
+account-db   TAMBAH                 /etc/shadow-
+enable-link  TAMBAH                 /etc/systemd/system/multi-user.target.wants/nfs-client.target
+enable-link  TAMBAH                 /etc/systemd/system/multi-user.target.wants/rpcbind.service
+enable-link  TAMBAH                 /etc/systemd/system/remote-fs.target.wants
+enable-link  TAMBAH                 /etc/systemd/system/remote-fs.target.wants/nfs-client.target
+enable-link  TAMBAH                 /etc/systemd/system/sockets.target.wants/rpcbind.socket
+# UNEXPLAINED=10

@@ -1,0 +1,5 @@
+# data dashboard (after-node) 2026-11-07T13:25:56Z: login admin -> 204
+host {'mac': '52:54:00:99:00:51', 'status': 'done', 'osInstalled': 'ubuntu-24.04', 'osAssigned': None, 'hostname': 'm8-node51', 'mgmtIp': '10.99.0.61', 'firmware': 'uefi', 'vendor': 'QEMU/KVM'}
+jobs 1
+job job-f908cf13-bcb6-4942-8c7c-6d74ba637e10 done None
+hosts 1

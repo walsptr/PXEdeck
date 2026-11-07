@@ -1,0 +1,11 @@
+lo               UNKNOWN        00:00:00:00:00:00 <LOOPBACK,UP,LOWER_UP> 
+pxe0             UP             52:54:00:99:01:02 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+nat0             UP             52:54:00:99:01:03 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+trunk0           UP             52:54:00:99:01:04 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+mgmt20@trunk0    UP             52:54:00:99:01:04 <BROADCAST,MULTICAST,UP,LOWER_UP> 
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+pxe0             UP             10.99.0.2/24 fe80::5054:ff:fe99:102/64 
+nat0             UP             192.168.199.2/24 fe80::5054:ff:fe99:103/64 
+trunk0           UP             
+mgmt20@trunk0    UP             10.99.20.1/24 
+trunk-setup OK

@@ -1,0 +1,8 @@
+# rpc.mountd: permintaan mount dari node (bukti NFS dipakai sebelum uninstall)
+2026-11-07T13:11:15+00:00 pxe-test-install rpc.mountd[15339]: authenticated mount request from 10.99.0.148:821 for /srv/pxe/media/ubuntu-24.04 (/srv/pxe/media/ubuntu-24.04)
+# /proc/net/rpc/nfsd (counter rpc/io)
+io 7104539645 0
+rpc 70213 0 0 0 0
+proc3 22 1 2461 0 5407 1521 3 60563 0 0 0 0 0 0 0 0 0 0 251 2 2 0 0
+proc4 2 0 0
+proc4ops 76 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0

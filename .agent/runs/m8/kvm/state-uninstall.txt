@@ -1,0 +1,86 @@
+## state uninstall 2026-11-07T09:01:59Z pxe-test-install
+# systemctl (is-active / is-enabled)
+dnsmasq          inactive   disabled
+nginx            inactive   disabled
+nfs-server       inactive   disabled
+pxe-dashboard    failed     not-found
+# ss -lunp (udp)
+UNCONN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=16))
+UNCONN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=14))
+UNCONN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=14624,fd=5),("systemd",pid=1,fd=143))
+UNCONN 0.0.0.0:39695 0.0.0.0:* users:(("rpc.statd",pid=14625,fd=8))
+UNCONN 127.0.0.1:809 0.0.0.0:* users:(("rpc.statd",pid=14625,fd=5))
+UNCONN [::]:111 [::]:* users:(("rpcbind",pid=14624,fd=7),("systemd",pid=1,fd=147))
+UNCONN [::]:35345 [::]:* users:(("rpc.statd",pid=14625,fd=10))
+# ss -ltnp (tcp)
+LISTEN 0.0.0.0:53743 0.0.0.0:* users:(("rpc.statd",pid=14625,fd=9))
+LISTEN 0.0.0.0:22 0.0.0.0:* users:(("sshd",pid=1108,fd=3),("systemd",pid=1,fd=164))
+LISTEN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=14624,fd=4),("systemd",pid=1,fd=142))
+LISTEN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=17))
+LISTEN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=15))
+LISTEN [::]:22 [::]:* users:(("sshd",pid=1108,fd=4),("systemd",pid=1,fd=165))
+LISTEN [::]:111 [::]:* users:(("rpcbind",pid=14624,fd=6),("systemd",pid=1,fd=144))
+LISTEN [::]:58693 [::]:* users:(("rpc.statd",pid=14625,fd=11))
+# port PXE terbuka (udp 67/69, tcp 80/3000/2049)
+# (akhir daftar port)
+# manifest /var/lib/pxe-dashboard-installer/install-manifest
+mode=600 owner=root:root
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T09:01:59Z)
+data	/var/lib/pxe-dashboard	
+data	/var/log/dnsmasq-pxe.log	
+data	/srv/pxe	
+data	/srv/pxe/media	
+data	/srv/pxe/media/ubuntu-24.04	
+data	/srv/pxe/media/debian-12	
+data	/srv/pxe/media/rocky-9	
+data	/srv/pxe/media/debian-netboot	
+user	pxe	
+pkg	dnsmasq	
+pkg	nginx	
+pkg	nfs-kernel-server	
+pkg	ipxe	
+pkg	libarchive-tools	
+# /opt/pxe-dashboard
+(tidak ada)
+# /etc/pxe-dashboard.env
+(tidak ada)
+# dnsmasq conf (interface/bind/range)
+(tidak ada)
+# nginx enabled
+lrwxrwxrwx 1 root root 34 Nov  7 09:01 default -> /etc/nginx/sites-available/default
+# exportfs -v
+# mount /srv/pxe/media
+(tidak ada)
+# fstab (baris /srv/pxe)
+(tidak ada)
+# user pxe
+pxe:x:997:988::/var/lib/pxe-dashboard:/usr/sbin/nologin
+# data
+ADA   /var/lib/pxe-dashboard 750 pxe:pxe
+ADA   /srv/pxe 755 root:root
+ADA   /srv/pxe/media 755 root:root
+HILANG /srv/pxe/tftp
+ADA   /var/log/dnsmasq-pxe.log 660 dnsmasq:root
+drwxr-x---  2 pxe  pxe    4096 Nov  7 08:42 .
+drwxr-xr-x 47 root root   4096 Nov  7 09:01 ..
+-rw-r--r--  1 pxe  pxe    4096 Nov  7 08:42 pxe.db
+-rw-r--r--  1 pxe  pxe   32768 Nov  7 09:01 pxe.db-shm
+-rw-r--r--  1 pxe  pxe  543872 Nov  7 09:01 pxe.db-wal
+drwxr-xr-x 6 root root 4096 Nov  7 08:40 .
+drwxr-xr-x 3 root root 4096 Nov  7 09:01 ..
+drwxr-xr-x 2 root root 4096 Nov  7 08:40 debian-12
+drwxr-xr-x 2 root root 4096 Nov  7 08:42 debian-netboot
+drwxr-xr-x 2 root root 4096 Nov  7 08:40 rocky-9
+drwxr-xr-x 2 root root 4096 Nov  7 08:40 ubuntu-24.04
+# db
+pxe.db 4096 byte, mtime 2026-11-07 08:42:47.408634111 +0000 sha256=97e8d54f8a725510
+# curl lokal
+/login curl: (7) Failed to connect to 10.99.0.2 port 80 after 0 ms: Couldn't connect to server
+000
+/api/settings curl: (7) Failed to connect to 10.99.0.2 port 80 after 0 ms: Couldn't connect to server
+000
+# paket
+dnsmasq            install ok installed
+nginx              install ok installed
+nfs-kernel-server  install ok installed
+ipxe               install ok installed

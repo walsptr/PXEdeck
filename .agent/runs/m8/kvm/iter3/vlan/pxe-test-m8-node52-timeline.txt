@@ -1,0 +1,7 @@
+2026-11-07T13:56:11.181Z discovered firmware=uefi currentIp=10.99.10.148
+2026-11-07T13:56:11.226Z konfigurasi ip=10.99.20.62/24 vlan=20 gw=10.99.20.1 dns=10.99.10.2
+2026-11-07T13:56:11.323Z install job=job-2f689086-9411-4d47-9323-ea1d99e18f50; node.sh reset
+2026-11-07T13:56:41.374Z status installing (+47 dtk)
+2026-11-07T14:03:22.153Z status configuring (+448 dtk)
+2026-11-07T14:09:02.711Z status done (+789 dtk)
+2026-11-07T14:09:02.717Z akhir booting>installing>configuring>done host.status=done mgmtIp=10.99.20.62

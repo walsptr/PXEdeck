@@ -1,0 +1,5 @@
+GET /api/settings tanpa sesi: 401
+POST /api/auth/login (pxeadmin, password dari file 0600 install.sh): 204
+cookie pxe_session di jar: true (nilai tidak dicatat)
+GET /api/settings dengan sesi: 200
+settings memuat 10.99.0.0/24: true; gateway 10.99.0.1: true; DNS 10.99.0.2: true

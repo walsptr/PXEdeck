@@ -1,0 +1,5 @@
+# ./install.sh --yes --interface pxe0 --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200 --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --admin-overlap-ok --admin-password-file /root/m8-admin.pass --iso-ubuntu /dev/sr0 --iso-debian /dev/sr1 --iso-rocky /dev/sr2
+[pxe-install] PERINGATAN: allowlist admin tumpang tindih dengan segmen PXE/VLAN (10.99.0.1 ~ 10.99.0.0/24) — diizinkan (--admin-overlap-ok)
+[pxe-install] ERROR: nfs-kernel-server sudah terpasang sebelum installer dengan ekspor/konfigurasi lain; [nfsd] host= installer akan memutus kliennya. Pakai server lain atau pindahkan ekspor itu:
+/etc/exports: /srv/admin-share 127.0.0.1(ro,no_subtree_check)
+# exit=1

@@ -1,0 +1,5 @@
+# exportfs -v (sesudah uninstall)
+# /proc/fs/nfsd/clients
+# umount manual sesudah nfs-server dihentikan uninstall
+umount-ok
+(tidak ada mount /srv/pxe)

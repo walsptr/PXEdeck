@@ -1,0 +1,53 @@
+{
+  "run": "m8",
+  "session": "1794059753425-f3aaadf3",
+  "generatedAt": "2026-11-07T14:15:10.718Z",
+  "results": [
+    {
+      "ac": "M8-VLAN-login",
+      "status": "PASS",
+      "note": "cidr=10.99.10.0/24",
+      "evidence": [
+        "m8-vlan-login.txt"
+      ]
+    },
+    {
+      "ac": "M8-VLAN-node",
+      "node": "pxe-test-m8-node52",
+      "status": "PASS",
+      "durationS": 789,
+      "note": "lease 10.99.10.148; booting → installing → configuring → done",
+      "evidence": [
+        "pxe-test-m8-node52-timeline.txt",
+        "pxe-test-m8-node52-console.log"
+      ]
+    },
+    {
+      "ac": "M8-VLAN-ssh",
+      "node": "pxe-test-m8-node52",
+      "status": "PASS",
+      "durationS": 368,
+      "evidence": [
+        "pxe-test-m8-node52-relay-verify.txt"
+      ]
+    },
+    {
+      "ac": "M8-VLAN-scan-playwright",
+      "status": "PASS",
+      "note": "0 temuan",
+      "evidence": [
+        "evidence-scan-playwright-vlan.txt"
+      ]
+    }
+  ],
+  "topology": "vlan",
+  "vlan": 20,
+  "nodes": [
+    {
+      "name": "pxe-test-m8-node52",
+      "fw": "uefi",
+      "ip": "10.99.20.62",
+      "hostname": "m8-node52"
+    }
+  ]
+}

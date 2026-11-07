@@ -1,0 +1,9 @@
+#!/usr/bin/env bash
+# infra/test/fake-bin-m8/stat — test M8: `stat -c %U:%G <path>` dijawab dari pemilik yang dicatat
+# fake chown ($FAKE_STATE/owners, entri terakhir menang; default root:root karena sandbox tidak bisa
+# chown sungguhan). Format lain diteruskan ke stat asli.
+if [[ "${1:-}" == -c && "${2:-}" == '%U:%G' && $# -eq 3 ]]; then
+  o="$(awk -F'\t' -v p="$3" '$1 == p { o = $2 } END { print o }' "${FAKE_STATE:?}/owners" 2>/dev/null)"
+  echo "${o:-root:root}"; exit 0
+fi
+exec /usr/bin/stat "$@"

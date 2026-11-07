@@ -1,0 +1,12 @@
+               total        used        free      shared  buff/cache   available
+Mem:           23719        4471       12027         434        8075       19248
+Swap:           8191        1488        6703
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+ Name      State    Autostart   Persistent
+--------------------------------------------
+ default   active   yes         yes
+ int       active   yes         yes
+

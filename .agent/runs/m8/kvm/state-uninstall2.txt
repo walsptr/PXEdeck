@@ -1,0 +1,98 @@
+## state uninstall2 2026-11-07T09:04:48Z pxe-test-install
+# systemctl (is-active / is-enabled)
+dnsmasq          failed     enabled
+nginx            active     enabled
+nfs-server       active     enabled
+pxe-dashboard    failed     not-found
+# ss -lunp (udp)
+UNCONN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=16))
+UNCONN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=14))
+UNCONN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=14624,fd=5),("systemd",pid=1,fd=113))
+UNCONN 0.0.0.0:39695 0.0.0.0:* users:(("rpc.statd",pid=14625,fd=8))
+UNCONN 127.0.0.1:809 0.0.0.0:* users:(("rpc.statd",pid=14625,fd=5))
+UNCONN 0.0.0.0:54743 0.0.0.0:* 
+UNCONN 0.0.0.0:20048 0.0.0.0:* users:(("rpc.mountd",pid=124362,fd=4))
+UNCONN [::]:111 [::]:* users:(("rpcbind",pid=14624,fd=7),("systemd",pid=1,fd=116))
+UNCONN [::]:35345 [::]:* users:(("rpc.statd",pid=14625,fd=10))
+UNCONN [::]:49815 [::]:* 
+UNCONN [::]:20048 [::]:* users:(("rpc.mountd",pid=124362,fd=6))
+# ss -ltnp (tcp)
+LISTEN 0.0.0.0:53743 0.0.0.0:* users:(("rpc.statd",pid=14625,fd=9))
+LISTEN 0.0.0.0:22 0.0.0.0:* users:(("sshd",pid=1108,fd=3),("systemd",pid=1,fd=133))
+LISTEN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=14624,fd=4),("systemd",pid=1,fd=112))
+LISTEN 0.0.0.0:20048 0.0.0.0:* users:(("rpc.mountd",pid=124362,fd=5))
+LISTEN 10.99.0.2:2049 0.0.0.0:* 
+LISTEN 10.99.0.2:80 0.0.0.0:* users:(("nginx",pid=124390,fd=6),("nginx",pid=124389,fd=6),("nginx",pid=124388,fd=6))
+LISTEN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=17))
+LISTEN 0.0.0.0:34261 0.0.0.0:* 
+LISTEN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=15))
+LISTEN [::]:22 [::]:* users:(("sshd",pid=1108,fd=4),("systemd",pid=1,fd=134))
+LISTEN [::]:111 [::]:* users:(("rpcbind",pid=14624,fd=6),("systemd",pid=1,fd=114))
+LISTEN [::]:80 [::]:* users:(("nginx",pid=124388,fd=13))
+LISTEN [::]:41163 [::]:* 
+LISTEN [::]:20048 [::]:* users:(("rpc.mountd",pid=124362,fd=7))
+LISTEN [::]:58693 [::]:* users:(("rpc.statd",pid=14625,fd=11))
+# port PXE terbuka (udp 67/69, tcp 80/3000/2049)
+OPEN tcp 10.99.0.2:2049 
+OPEN tcp 10.99.0.2:80 users:(("nginx",pid=124390,fd=6),("nginx",pid=124389,fd=6),("nginx",pid=124388,fd=6))
+OPEN tcp [::]:80 users:(("nginx",pid=124388,fd=13))
+# (akhir daftar port)
+# manifest /var/lib/pxe-dashboard-installer/install-manifest
+mode=600 owner=root:root
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T09:04:48Z)
+data	/var/lib/pxe-dashboard	
+data	/var/log/dnsmasq-pxe.log	
+data	/srv/pxe	
+data	/srv/pxe/media	
+data	/srv/pxe/media/ubuntu-24.04	
+data	/srv/pxe/media/debian-12	
+data	/srv/pxe/media/rocky-9	
+data	/srv/pxe/media/debian-netboot	
+user	pxe	
+pkg	dnsmasq	
+pkg	nginx	
+pkg	nfs-kernel-server	
+pkg	ipxe	
+pkg	libarchive-tools	
+# /opt/pxe-dashboard
+(tidak ada)
+# /etc/pxe-dashboard.env
+(tidak ada)
+# dnsmasq conf (interface/bind/range)
+(tidak ada)
+# nginx enabled
+lrwxrwxrwx 1 root root 34 Nov  7 09:04 default -> /etc/nginx/sites-available/default
+# exportfs -v
+# mount /srv/pxe/media
+(tidak ada)
+# fstab (baris /srv/pxe)
+(tidak ada)
+# user pxe
+pxe:x:997:988::/var/lib/pxe-dashboard:/usr/sbin/nologin
+# data
+ADA   /var/lib/pxe-dashboard 750 pxe:pxe
+ADA   /srv/pxe 755 root:root
+ADA   /srv/pxe/media 755 root:root
+HILANG /srv/pxe/tftp
+ADA   /var/log/dnsmasq-pxe.log 660 dnsmasq:root
+drwxr-x---  2 pxe  pxe    4096 Nov  7 09:04 .
+drwxr-xr-x 47 root root   4096 Nov  7 09:04 ..
+-rw-r--r--  1 pxe  pxe    4096 Nov  7 09:04 pxe.db
+-rw-r--r--  1 pxe  pxe   32768 Nov  7 09:04 pxe.db-shm
+-rw-r--r--  1 pxe  pxe  189552 Nov  7 09:04 pxe.db-wal
+drwxr-xr-x 6 root root 4096 Nov  7 09:03 .
+drwxr-xr-x 3 root root 4096 Nov  7 09:04 ..
+drwxr-xr-x 2 root root 4096 Nov  7 09:03 debian-12
+drwxr-xr-x 2 root root 4096 Nov  7 09:04 debian-netboot
+drwxr-xr-x 2 root root 4096 Nov  7 09:03 rocky-9
+drwxr-xr-x 2 root root 4096 Nov  7 09:03 ubuntu-24.04
+# db
+pxe.db 4096 byte, mtime 2026-11-07 09:04:46.790828428 +0000 sha256=97e8d54f8a725510
+# curl lokal
+/login 502
+/api/settings 502
+# paket
+dnsmasq            install ok installed
+nginx              install ok installed
+nfs-kernel-server  install ok installed
+ipxe               install ok installed

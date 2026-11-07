@@ -1,0 +1,33 @@
+# tinjauan paket purge (uninstall.sh --purge --remove-packages)
+# paket dihapus (sebelum - sesudah):
+  dnsmasq
+  dnsmasq-base
+  grub-ipxe
+  ipxe
+  ipxe-qemu
+  libarchive-tools
+  nfs-kernel-server
+  nginx
+  nginx-common
+# paket pra-install yang hilang: (tidak ada)
+# entri pkg manifest sebelum:
+  requested dnsmasq -> dipurge 
+  requested nginx -> dipurge 
+  requested nfs-kernel-server -> dipurge 
+  requested ipxe -> dipurge 
+  requested libarchive-tools -> dipurge 
+  dep dnsmasq-base -> dipurge 
+  dep grub-ipxe -> dipurge 
+  dep ipxe-qemu -> dipurge 
+  dep keyutils -> masih-terpasang tetap-di-manifest
+  dep libnfsidmap1 -> masih-terpasang tetap-di-manifest
+  dep nfs-common -> masih-terpasang tetap-di-manifest
+  dep nginx-common -> dipurge 
+  dep rpcbind -> masih-terpasang tetap-di-manifest
+# sisa paket vs pra-install:
+  keyutils
+  libnfsidmap1
+  nfs-common
+  rpcbind
+# apt-get -s autoremove sesudah:
+  (tidak ada paket autoremovable)

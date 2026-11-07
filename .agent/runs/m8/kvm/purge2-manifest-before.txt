@@ -1,0 +1,15 @@
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T09:04:48Z)
+data	/var/lib/pxe-dashboard	
+data	/var/log/dnsmasq-pxe.log	
+data	/srv/pxe	
+data	/srv/pxe/media	
+data	/srv/pxe/media/ubuntu-24.04	
+data	/srv/pxe/media/debian-12	
+data	/srv/pxe/media/rocky-9	
+data	/srv/pxe/media/debian-netboot	
+user	pxe	
+pkg	dnsmasq	
+pkg	nginx	
+pkg	nfs-kernel-server	
+pkg	ipxe	
+pkg	libarchive-tools	

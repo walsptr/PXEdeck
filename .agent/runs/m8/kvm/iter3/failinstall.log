@@ -1,0 +1,160 @@
+# ./install.sh --yes --interface pxe0 --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200 --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --admin-overlap-ok --admin-password-file /root/m8-admin.pass --iso-ubuntu /dev/sr0 --iso-debian /dev/sr1 --iso-rocky /dev/sr2 --release /root/pxe-release.tar.xz (rilis rusak)
+[pxe-install] PERINGATAN: allowlist admin tumpang tindih dengan segmen PXE/VLAN (10.99.0.1 ~ 10.99.0.0/24) — diizinkan (--admin-overlap-ok)
+[pxe-install] memeriksa DHCP server lain di pxe0 (DHCPDISCOVER, 6 dtk)
+[pxe-install] tidak ada DHCP server lain di pxe0
+== Rencana instalasi PXE dashboard ==
+  NIC DHCP/TFTP : pxe0
+  Server        : 10.99.0.2/24 (subnet 10.99.0.0/24)
+  DHCP          : 10.99.0.100-10.99.0.200, gateway 10.99.0.1 (opsi router: yes), DNS 10.99.0.2
+  Admin         : pxeadmin, UI dari 10.99.0.1 di http://10.99.0.2/
+  VLAN mgmt     : (tidak ada)
+  Media ISO     : ubuntu=/dev/sr0 debian=/dev/sr1 rocky=/dev/sr2
+  Rilis         : /root/pxe-release.tar.xz
+  Firewall      : no
+[pxe-install] manifest: /var/lib/pxe-dashboard-installer/install-manifest
+[pxe-install] memasang paket: dnsmasq nginx nfs-kernel-server ipxe libarchive-tools debian-archive-keyring
+Hit:1 http://archive.ubuntu.com/ubuntu noble InRelease
+Hit:2 http://security.ubuntu.com/ubuntu noble-security InRelease
+Hit:3 http://archive.ubuntu.com/ubuntu noble-updates InRelease
+Hit:4 http://archive.ubuntu.com/ubuntu noble-backports InRelease
+Reading package lists...
+Reading package lists...
+Building dependency tree...
+Reading state information...
+The following additional packages will be installed:
+  dnsmasq-base grub-ipxe ipxe-qemu nginx-common
+Suggested packages:
+  fcgiwrap nginx-doc ssl-cert
+Recommended packages:
+  dns-root-data
+The following NEW packages will be installed:
+  debian-archive-keyring dnsmasq dnsmasq-base grub-ipxe ipxe ipxe-qemu
+  libarchive-tools nfs-kernel-server nginx nginx-common
+Preconfiguring packages ...
+0 upgraded, 10 newly installed, 0 to remove and 34 not upgraded.
+Need to get 0 B/5538 kB of archives.
+After this operation, 14.0 MB of additional disk space will be used.
+Selecting previously unselected package dnsmasq-base.
+(Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 75204 files and directories currently installed.)
+Preparing to unpack .../0-dnsmasq-base_2.91-0ubuntu0.24.04.2_amd64.deb ...
+Unpacking dnsmasq-base (2.91-0ubuntu0.24.04.2) ...
+Selecting previously unselected package dnsmasq.
+Preparing to unpack .../1-dnsmasq_2.91-0ubuntu0.24.04.2_all.deb ...
+Unpacking dnsmasq (2.91-0ubuntu0.24.04.2) ...
+Selecting previously unselected package debian-archive-keyring.
+Preparing to unpack .../2-debian-archive-keyring_2023.4ubuntu1_all.deb ...
+Unpacking debian-archive-keyring (2023.4ubuntu1) ...
+Selecting previously unselected package grub-ipxe.
+Preparing to unpack .../3-grub-ipxe_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb ...
+Unpacking grub-ipxe (1.21.1+git-20220113.fbbdc3926-0ubuntu2) ...
+Selecting previously unselected package ipxe-qemu.
+Preparing to unpack .../4-ipxe-qemu_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb ...
+Unpacking ipxe-qemu (1.21.1+git-20220113.fbbdc3926-0ubuntu2) ...
+Selecting previously unselected package ipxe.
+Preparing to unpack .../5-ipxe_1.21.1+git-20220113.fbbdc3926-0ubuntu2_all.deb ...
+Unpacking ipxe (1.21.1+git-20220113.fbbdc3926-0ubuntu2) ...
+Selecting previously unselected package libarchive-tools.
+Preparing to unpack .../6-libarchive-tools_3.7.2-2ubuntu0.9_amd64.deb ...
+Unpacking libarchive-tools (3.7.2-2ubuntu0.9) ...
+Selecting previously unselected package nfs-kernel-server.
+Preparing to unpack .../7-nfs-kernel-server_1%3a2.6.4-3ubuntu5.1_amd64.deb ...
+Unpacking nfs-kernel-server (1:2.6.4-3ubuntu5.1) ...
+Selecting previously unselected package nginx-common.
+Preparing to unpack .../8-nginx-common_1.24.0-2ubuntu7.19_all.deb ...
+Unpacking nginx-common (1.24.0-2ubuntu7.19) ...
+Selecting previously unselected package nginx.
+Preparing to unpack .../9-nginx_1.24.0-2ubuntu7.19_amd64.deb ...
+Unpacking nginx (1.24.0-2ubuntu7.19) ...
+Setting up libarchive-tools (3.7.2-2ubuntu0.9) ...
+Setting up nfs-kernel-server (1:2.6.4-3ubuntu5.1) ...
+Created symlink /etc/systemd/system/nfs-mountd.service.requires/fsidd.service → /usr/lib/systemd/system/fsidd.service.
+Created symlink /etc/systemd/system/nfs-server.service.requires/fsidd.service → /usr/lib/systemd/system/fsidd.service.
+Created symlink /etc/systemd/system/nfs-client.target.wants/nfs-blkmap.service → /usr/lib/systemd/system/nfs-blkmap.service.
+Created symlink /etc/systemd/system/multi-user.target.wants/nfs-server.service → /usr/lib/systemd/system/nfs-server.service.
+/usr/sbin/policy-rc.d returned 101, not running 'start fsidd.service nfs-blkmap.service nfs-mountd.service nfs-server.service nfsdcld.service'
+
+Creating config file /etc/exports with new version
+
+Creating config file /etc/default/nfs-kernel-server with new version
+invoke-rc.d: policy-rc.d denied execution of start.
+Setting up debian-archive-keyring (2023.4ubuntu1) ...
+Setting up nginx-common (1.24.0-2ubuntu7.19) ...
+Created symlink /etc/systemd/system/multi-user.target.wants/nginx.service → /usr/lib/systemd/system/nginx.service.
+/usr/sbin/policy-rc.d returned 101, not running 'start nginx.service'
+Setting up dnsmasq-base (2.91-0ubuntu0.24.04.2) ...
+Setting up dnsmasq (2.91-0ubuntu0.24.04.2) ...
+invoke-rc.d: policy-rc.d denied execution of start.
+Created symlink /etc/systemd/system/multi-user.target.wants/dnsmasq.service → /usr/lib/systemd/system/dnsmasq.service.
+/usr/sbin/policy-rc.d returned 101, not running 'start dnsmasq.service'
+Setting up ipxe-qemu (1.21.1+git-20220113.fbbdc3926-0ubuntu2) ...
+Setting up grub-ipxe (1.21.1+git-20220113.fbbdc3926-0ubuntu2) ...
+Sourcing file `/etc/default/grub'
+Sourcing file `/etc/default/grub.d/50-cloudimg-settings.cfg'
+Generating grub configuration file ...
+Found linux image: /boot/vmlinuz-6.8.0-147-generic
+Found initrd image: /boot/initrd.img-6.8.0-147-generic
+Found iPXE image: /boot/ipxe.lkrn
+Warning: os-prober will not be executed to detect other bootable partitions.
+Systems on them will not be added to the GRUB boot configuration.
+Check GRUB_DISABLE_OS_PROBER documentation entry.
+Adding boot menu entry for UEFI Firmware Settings ...
+done
+Setting up ipxe (1.21.1+git-20220113.fbbdc3926-0ubuntu2) ...
+Setting up nginx (1.24.0-2ubuntu7.19) ...
+invoke-rc.d: policy-rc.d denied execution of start.
+Processing triggers for man-db (2.12.0-4build2) ...
+Processing triggers for dbus (1.14.10-4ubuntu4.1) ...
+Processing triggers for ufw (0.36.2-6) ...
+
+Running kernel seems to be up-to-date.
+
+No services need to be restarted.
+
+No containers need to be restarted.
+
+No user sessions are running outdated binaries.
+
+No VM guests are running outdated hypervisor (qemu) binaries on this host.
+[pxe-install] terpasang /srv/pxe/tftp/snponly.efi (0644 root:root)
+[pxe-install] terpasang /srv/pxe/tftp/undionly.kpxe (0644 root:root)
+[pxe-install] Node 22.23.4 terpasang di /opt/pxe-dashboard/node (sha256 1805bcd35e6815559bd2eb97db438d3fdb0eb3a5e6a977b7c1badca76337e9ce)
+[pxe-install] rilis /opt/pxe-dashboard/releases/20261107T134927Z aktif
+[pxe-install] terpasang /etc/dnsmasq.d/pxe-dashboard.conf (0644 root:root)
+[pxe-install] terpasang /etc/systemd/system/dnsmasq.service.d/pxe-dashboard.conf (0644 root:root)
+[pxe-install] terpasang /etc/nginx/sites-available/pxe-dashboard (0644 root:root)
+[pxe-install] terpasang /etc/pxe-dashboard.env (0640 root:pxe)
+[pxe-install] terpasang /etc/systemd/system/pxe-dashboard.service (0644 root:root)
+[pxe-install] terpasang /etc/exports.d/pxe-dashboard.exports (0644 root:root)
+[pxe-install] terpasang /etc/nfs.conf.d/pxe-dashboard.conf (0644 root:root)
+[pxe-install] terpasang /etc/logrotate.d/pxe-dashboard (0644 root:root)
+[pxe-install] Release Debian: tanda tangan sah (ERRSIG=1 GOODSIG=2 KEY_CONSIDERED=2 NEWSIG=3 NO_PUBKEY=1 SIG_ID=2 VALIDSIG=2)
+[pxe-install] Debian netboot terpasang di /srv/pxe/media/debian-netboot (Release.gpg terverifikasi)
+[pxe-install] modul disk Debian 6.1.0-50-amd64 di /srv/pxe/media/debian-netboot/modules
+dnsmasq: syntax check OK.
+nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+nginx: configuration file /etc/nginx/nginx.conf test is successful
+Synchronizing state of dnsmasq.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable dnsmasq
+Synchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
+Created symlink /etc/systemd/system/multi-user.target.wants/pxe-dashboard.service → /etc/systemd/system/pxe-dashboard.service.
+[pxe-install] FAIL GET http://10.99.0.2/login -> 502 (harus 200)
+[pxe-install] FAIL GET /api/settings tanpa sesi -> 502 (harus 401)
+[pxe-install] OK   dnsmasq udp 10.99.0.2:53
+[pxe-install] OK   dnsmasq udp 0.0.0.0%pxe0:67
+[pxe-install] OK   dnsmasq udp 10.99.0.2:69
+[pxe-install] OK   dnsmasq udp [fe80::5054:ff:fe99:102]%pxe0:53
+[pxe-install] OK   dnsmasq udp [fe80::5054:ff:fe99:102]%pxe0:69
+[pxe-install] OK   DHCP dnsmasq listen udp %pxe0:67
+[pxe-install] ERROR: verifikasi gagal (lihat FAIL di atas; journalctl -u pxe-dashboard -u dnsmasq)
+[pxe-install] GAGAL (exit 1) — menghentikan dnsmasq agar tidak ada DHCP dari instalasi setengah jadi
+[pxe-install] rollback: menonaktifkan dnsmasq.service nginx.service nfs-server.service pxe-dashboard.service
+Synchronizing state of dnsmasq.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install disable dnsmasq
+Synchronizing state of nginx.service with SysV service script with /usr/lib/systemd/systemd-sysv-install.
+Executing: /usr/lib/systemd/systemd-sysv-install disable nginx
+Removed "/etc/systemd/system/multi-user.target.wants/nginx.service".
+Removed "/etc/systemd/system/multi-user.target.wants/nfs-server.service".
+Removed "/etc/systemd/system/multi-user.target.wants/dnsmasq.service".
+Removed "/etc/systemd/system/multi-user.target.wants/pxe-dashboard.service".
+# exit=1

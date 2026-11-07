@@ -1,0 +1,15 @@
+# M8 mutation testing iterasi 3 (temuan KVM iterasi 2, bb6e8eb; backend-dev) — 2026-11-07T12:56:39Z
+# Metode: tiap perbaikan di-revert satu per satu, test regresinya (infra/test/m8.sh) dijalankan sendiri, file dipulihkan.
+# Hasil: 11/11 KILLED.
+
+#1a gpgv: exit code menentukan (revert ke perilaku lama) [install.sh] -> test_m8_i3_gpgv_partial_keyring: KILLED (hasil: 0 lulus, 1 gagal)
+#1b gpgv: BADSIG/EXPKEYSIG/REVKEYSIG tidak dicek [install.sh] -> test_m8_i3_gpgv_partial_keyring: KILLED (hasil: 0 lulus, 1 gagal)
+#1c gpgv: VALIDSIG tidak diwajibkan [install.sh] -> test_m8_i3_gpgv_partial_keyring: KILLED (hasil: 0 lulus, 1 gagal)
+#2a umount sebelum ekspor/nfs dihentikan [uninstall.sh] -> test_m8_i3_umount_after_nfs_stop: KILLED (hasil: 0 lulus, 1 gagal)
+#2b umount gagal hanya peringatan [uninstall.sh] -> test_m8_i3_umount_after_nfs_stop: KILLED (hasil: 0 lulus, 1 gagal)
+#3a link VLAN tidak dihapus uninstall [uninstall.sh] -> test_m8_i3_vlan_link_lifecycle: KILLED (hasil: 0 lulus, 1 gagal)
+#3b link VLAN sisa tidak dikenali preflight [install.sh] -> test_m8_i3_vlan_link_lifecycle: KILLED (hasil: 0 lulus, 1 gagal)
+#3c link dihapus tanpa cek id/alamat [uninstall.sh] -> test_m8_i3_vlan_link_lifecycle: KILLED (hasil: 0 lulus, 1 gagal)
+#4a nama netplan kembali 60- [deploy/lib.sh] -> test_m8_i3_netplan_order: KILLED (hasil: 0 lulus, 1 gagal)
+#4b file lama 60- tidak dimigrasi [install.sh] -> test_m8_i3_netplan_order: KILLED (hasil: 0 lulus, 1 gagal)
+#4c pesan urutan tanpa nama file [install.sh] -> test_m8_i3_netplan_order: KILLED (hasil: 0 lulus, 1 gagal)

@@ -1,0 +1,5 @@
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T13:43:28Z)
+pkg	keyutils	dep
+pkg	libnfsidmap1	dep
+pkg	nfs-common	dep
+pkg	rpcbind	dep

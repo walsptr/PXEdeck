@@ -107,37 +107,91 @@ npm run build          # production build; PXE_STANDALONE=1 untuk output standal
 
 ## Deploy ke PXE server
 
-Contoh konfigurasi server lengkap ada di [`infra/server/`](infra/server/):
+`install.sh` memasang semuanya di server **Ubuntu 24.04** (dijalankan sebagai root dari checkout
+repo): paket apt (dnsmasq, nginx, nfs-kernel-server, ipxe), Node 22 dari nodejs.org (SHA256
+diverifikasi), user `pxe`, `/srv/pxe/{tftp,boot,media}`, biner iPXE, build dashboard standalone ke
+`/opt/pxe-dashboard/releases/<ts>` + `current`, `/etc/pxe-dashboard.env` (0640 root:pxe), unit
+systemd, site nginx, dnsmasq yang **hanya** terikat ke NIC terpilih (`interface=` +
+`bind-interfaces`), ekspor NFS read-only, dan mount ISO (opsional).
 
-| File | Isi |
-|---|---|
-| `dnsmasq.conf` | DHCP/TFTP, wajib `interface=<NIC provisioning>` + `bind-interfaces`; boot iPXE → `http://<server>/boot/${mac}.ipxe` |
-| `nginx-pxe.conf` | Proxy ke dashboard, `X-Real-IP`, allowlist admin untuk UI/`/api`, `/boot` dan `/media` terbuka untuk klien PXE, rate limit, log tanpa query string |
-| `pxe-dashboard.service` | Unit systemd (Next standalone, `127.0.0.1:3000`, user `pxe`, `EnvironmentFile=/etc/pxe-dashboard.env`) |
-| `dashboard.env` | Contoh env server (hash admin berupa placeholder; jangan commit hash asli) |
-| `install-dashboard.sh` | Pasang rilis ke `/opt/pxe-dashboard/releases/<ts>` + symlink `current` |
-| `exports`, `nfs.conf`, `nftables.conf`, `netplan.yaml` | NFS read-only untuk root installer, firewall, dan jaringan |
-| `vlan/` | Profil topologi VLAN (sub-interface ber-tag, dnsmasq hanya di VLAN PXE) |
+```bash
+# Interaktif (prompt untuk nilai yang belum diisi, password admin tanpa echo)
+sudo ./install.sh
 
-Langkah umum:
+# Non-interaktif
+sudo ./install.sh --yes \
+  --interface eth1 --address 10.10.10.1/24 --dhcp-range 10.10.10.100-10.10.10.200 \
+  --gateway 10.10.10.254 --dns 10.10.10.1 --admin-allow 192.168.1.0/24 \
+  --admin-password-file /root/pxe-admin.pass \
+  --iso-ubuntu /srv/iso/ubuntu-24.04.5-live-server-amd64.iso
 
-1. Siapkan server Ubuntu 24.04 dengan dnsmasq, nginx, dan nfs-kernel-server. Mount ISO OS ke
-   `/srv/pxe/media/<id>` dan siapkan biner iPXE di `/srv/pxe/tftp` (lihat `infra/tftp/prepare.sh`).
-2. Build dashboard: `cd dashboard && PXE_STANDALONE=1 npm run build`. Salin `.next/standalone`,
-   `.next/static`, dan `public` ke server.
-3. Tulis `/etc/pxe-dashboard.env` (mode 0640, root:pxe). Isi minimal:
-   - `PXE_ADMIN_USERNAME` dan `PXE_ADMIN_PASSWORD_HASH`
-   - `PXE_MGMT_CIDR`, `PXE_MGMT_GATEWAY`, `PXE_MGMT_DNS`, `PXE_SERVER_IP`, `PXE_DHCP_RANGE`
-   - `PXE_BASE_URL`, `PXE_MEDIA_URL`
-   - `PXE_DNSMASQ_LEASES` (wajib bila `PXE_TRUST_PROXY=1`)
-   - opsional `PXE_VLAN_NETWORKS`
-4. Aktifkan `pxe-dashboard.service` dan nginx, lalu verifikasi:
-   - `ss -lunp`: dnsmasq hanya listen di NIC provisioning.
-   - `/login` mengembalikan 200.
-   - `/api/settings` tanpa sesi mengembalikan 401.
+# Lihat rencana tanpa mengubah apa pun / render konfigurasi saja (tanpa root)
+sudo ./install.sh --config deploy/install.conf.example --dry-run
+./install.sh --config deploy/install.conf.example --render /tmp/pxe-render
+```
 
-Untuk lab KVM, `infra/deploy-dashboard.sh` mengotomatiskan semua langkah ini (build → scp →
-install → verifikasi).
+- **Server PXE harus single-tenant.** Dashboard listen di `127.0.0.1:3000` di belakang nginx; user
+  lokal mana pun di server bisa menjangkaunya langsung (melewati allowlist dan rate limit nginx).
+  Jangan beri akun shell ke pihak lain. Unix socket dicatat sebagai pekerjaan lanjutan.
+- Semua opsi bisa juga lewat `--config FILE` (`KEY=VALUE`, contoh di
+  [`deploy/install.conf.example`](deploy/install.conf.example)) atau env `PXE_INSTALL_<KEY>`;
+  prioritas config < env < opsi. Lihat `./install.sh --help`.
+- Password admin hanya dari prompt, `--admin-password-file` (mode 0600), atau
+  `--admin-password-stdin`. Password tidak pernah masuk argv, log, atau file; yang disimpan hanya hash
+  scrypt di `/etc/pxe-dashboard.env`.
+- `--admin-allow` tidak boleh tumpang tindih dengan subnet PXE/VLAN (klien PXE tidak tepercaya) atau
+  `/0` kecuali dengan `--admin-overlap-ok`.
+- DNS: bila `--dns` memuat alamat server, dnsmasq melayani nama lokal dan meneruskan nama lain ke
+  resolver host (`/run/systemd/resolve/resolv.conf`), atau ke `--dns-upstream IP[,IP]`;
+  `--dns-upstream none` = hanya nama lokal (segmen terisolasi).
+- dnsmasq/nfs-kernel-server yang sudah terpasang sebelum installer dengan konfigurasi lain yang aktif
+  ditolak (opsi global PXE akan mengubah layanannya). Pakai server khusus PXE.
+- ISO sumber harus berada di luar `/srv/pxe`, `/opt/pxe-dashboard`, `/var/lib/pxe-dashboard` dan tidak
+  pernah dihapus. Netboot Debian diverifikasi lewat `Release.gpg` (gpgv + `debian-archive-keyring`)
+  → `SHA256SUMS`. Node selain versi yang dipin hanya lewat `PXE_INSTALL_NODE_VERSION`.
+- Topologi VLAN: `--vlan-id 10` membuat sub-interface `pxe10` di atas `--interface` (netplan
+  `/etc/netplan/99-pxe-dashboard.yaml`, divalidasi dulu; NIC induk harus didefinisikan di file netplan
+  yang diurutkan sebelumnya) dan
+  dnsmasq hanya listen di sana; `--vlan-networks '20:10.20.20.0/24:10.20.20.1'` mengisi
+  `PXE_VLAN_NETWORKS` dan menambah subnet itu ke ekspor NFS.
+- Rilis prebuilt: `deploy/build-release.sh dashboard pxe-dashboard.tar.xz` (di mesin build, tanpa
+  root), lalu `install.sh --release pxe-dashboard.tar.xz`. Tanpa `--release`, dashboard di-build di
+  server sebagai user `pxe`.
+- Preflight menolak berjalan bila bukan root, OS bukan Ubuntu 24.04, NIC tidak ada atau belum
+  beralamat, port 67/69/80/3000 dipakai proses lain, atau ada DHCP server lain di segmen (probe
+  DHCPDISCOVER; lewati hanya dengan `--force-dhcp`).
+- Akhir instalasi memverifikasi `ss -lunp` (dnsmasq hanya di NIC itu), `/login` 200, dan
+  `/api/settings` tanpa sesi 401. Bila gagal, dnsmasq dihentikan dan exit ≠ 0.
+- Dijalankan ulang = upgrade (rilis baru bila sumber/tarball berubah) atau no-op, termasuk saat ISO
+  ter-mount dan diekspor. Kunci env di luar jaringan/admin (timeout job, sesi) yang diubah admin
+  dipertahankan; password admin yang sama tidak di-hash ulang. Install yang gagal menghentikan
+  dnsmasq dan menonaktifkan lagi unit yang di-enable oleh run itu.
+
+Semua file, direktori, unit, mount, dan paket yang dibuat dicatat di
+`/var/lib/pxe-dashboard-installer/install-manifest`. `uninstall.sh` hanya menghapus isi manifest:
+
+```bash
+sudo ./uninstall.sh --dry-run          # rencana
+sudo ./uninstall.sh --yes              # layanan + konfigurasi + rilis; DB, /srv/pxe/media, ISO tetap
+sudo ./uninstall.sh --purge --yes      # juga data (DB, /srv/pxe, log) dan user pxe
+sudo ./uninstall.sh --purge --remove-packages --yes   # juga paket yang dipasang installer
+```
+
+Uninstall melepas ekspor NFS dan menghentikan nfs-server sebelum melepas mount ISO. Bila umount tetap
+gagal (masih dipakai), uninstall keluar dengan error dan entri mount dipertahankan di manifest; jalankan
+ulang setelah penyebabnya hilang. Sub-interface VLAN buatan installer dihapus (`ip link delete`) bila
+tidak lagi beralamat.
+
+`--remove-packages` lebih dulu mensimulasikan `apt-get -s purge` dan membatalkan uninstall bila paket
+di luar manifest akan ikut terhapus. Setelah itu paket yang diminta installer di-purge, lalu dependensi
+yang ikut terpasang hanya bila apt menganggapnya autoremovable (tidak dipakai paket lain). Tidak ada `apt-get autoremove` untuk
+seluruh sistem; paket yang sudah ada sebelum install tidak disentuh.
+
+Template konfigurasi ada di [`infra/server/`](infra/server/) (`dnsmasq.conf`, `nginx-pxe.conf`,
+`pxe-dashboard.service`, `dashboard.env`, `exports`, `nfs.conf`); `install.sh` merendernya dengan
+nilai server Anda. Firewall nftables untuk NIC PXE bersifat opt-in (`--firewall`). Untuk lab KVM,
+`infra/deploy-dashboard.sh` tetap dipakai, dan `infra/install-vm.sh` membuat VM Ubuntu bersih
+`pxe-test-install` untuk menguji `install.sh`.
 
 > ⚠️ Konfigurasi dengan status Install akan **menghapus disk** target. Jalankan hanya di segmen
 > provisioning yang terisolasi, tanpa DHCP server lain.

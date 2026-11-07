@@ -1,0 +1,10 @@
+# fwcheck install-1 2026-11-07T11:03:40Z
+ssh root@10.99.0.2 (admin, tcp/22 di pxe0): OK
+GET http://10.99.0.2/login dari host: 000
+# ping -6 fe80::5054:ff:fe99:102%virbr-pxe (ND)
+PING fe80::5054:ff:fe99:102%virbr-pxe (fe80::5054:ff:fe99:102%virbr-pxe) 56 data bytes
+
+--- fe80::5054:ff:fe99:102%virbr-pxe ping statistics ---
+3 packets transmitted, 0 received, 100% packet loss, time 2062ms
+# ip -6 neigh di VM (pxe0)
+

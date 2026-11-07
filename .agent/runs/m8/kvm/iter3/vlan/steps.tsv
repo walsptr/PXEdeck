@@ -1,0 +1,13 @@
+2026-11-07T13:54:09Z	up	PASS	VM bersih + NIC trunk0 (pxe-test-trunk -> switch) + mgmt20 10.99.20.1/24; switch-check 6 OK	install-vm-clean.txt trunk-setup.txt switch-check.txt
+2026-11-07T13:55:29Z	install-1	PASS	exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 3 socket udp, semua di pxe10/10.99.10.2 (DHCP %pxe10:67)	install-1.log install-1-ss-lunp.txt install-1-host-http.txt state-install-1.txt
+2026-11-07T13:55:51Z	vlan-relay	PASS	relay siap (key node 0600 di /root/pxe-relay, isi tidak dicetak)	relay-setup.txt
+2026-11-07T14:15:10Z	vlan-node	PASS	playwright m8-vlan.spec.ts exit=0	playwright-kvm.log playwright-results.json pxe-test-m8-node52-timeline.txt pxe-test-m8-node52-relay-verify.txt
+2026-11-07T14:39:08Z	relay-teardown	PASS	relay-clean: absent	relay-teardown.txt
+2026-11-07T14:39:41Z	uninstall	PASS	exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data keep OK (pxe.db sebelum: ada); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)	uninstall.log uninstall-manifest-check.txt state-uninstall.txt uninstall-etc-diff.txt uninstall-etc-diff-vs-pre.txt
+2026-11-07T14:40:55Z	install-2	PASS	exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 3 socket udp, semua di pxe10/10.99.10.2 (DHCP %pxe10:67)	install-2.log install-2-ss-lunp.txt install-2-host-http.txt state-install-2.txt
+2026-11-07T14:41:37Z	purge	PASS	exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data purge OK (pxe.db sebelum: n/a); /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)	purge.log purge-manifest-check.txt state-purge.txt purge-etc-diff.txt purge-etc-diff-vs-pre.txt
+2026-11-07T14:41:37Z	purge-packages	PASS	requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global	purge-packages-review.txt purge-apt-history.txt purge-apt-autoremove-after.txt
+2026-11-07T14:41:53Z	ordering-70	PASS	NIC induk trunk0 didefinisikan admin di 70-m8-test-trunk.yaml (terurut sesudah nama lama 60-): install-1 PASS, netplan installer 99-pxe-dashboard.yaml	install-1.log install-1-net.txt trunk-setup.txt
+2026-11-07T14:41:53Z	reinstall-after-uninstall	PASS	sesudah uninstall (link pxe10 dihapus, ISO di-unmount walau node52 memakai NFS dari 10.99.10.149), install ulang dengan argumen sama (install-2) exit 0, pxe10 10.99.10.2 kembali	uninstall-net.txt install-2.log install-2-net.txt
+2026-11-07T14:41:58Z	cleanup	PASS	VM pxe-test-*=0 network pxe-test*=0 key=0 disk=0	cleanup.txt
+2026-11-07T14:41:58Z	protected	PASS	ubuntu24.04 (shut off) + network default/int identik (sha256 dumpxml) awal iterasi 3 vs akhir; pxe-test-node01 tidak ada	protected-before.txt vlan/protected-after.txt

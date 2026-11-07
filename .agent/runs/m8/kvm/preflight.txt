@@ -1,0 +1,21 @@
+# preflight m8 2026-11-07T08:23:17Z
+crw-rw-rw- 1 root kvm 10, 232 Nov  7 15:18 /dev/kvm
+24
+virsh: /usr/bin/virsh
+virt-install: /usr/bin/virt-install
+qemu-img: /usr/bin/qemu-img
+ssh: /usr/bin/ssh
+socat: /usr/bin/socat
+cloud-localds: /usr/bin/cloud-localds
+curl: /usr/bin/curl
+-rw-r--r--. 1 root root 1966080 Jul  8 07:00 /usr/share/edk2/ovmf/OVMF_CODE.fd
+-rw-r--r--. 1 root root  131072 Jul  8 07:00 /usr/share/edk2/ovmf/OVMF_VARS.fd
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+
+               total        used        free      shared  buff/cache   available
+Mem:           23719       11256        1836         990       12034       12463
+Swap:           8191           0        8191
+12
+VM paralel = clamp((12463 - 4096)/2048,1,3)

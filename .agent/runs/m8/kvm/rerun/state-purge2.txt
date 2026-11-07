@@ -1,0 +1,71 @@
+## state purge2 2026-11-07T10:09:22Z pxe-test-install
+# systemctl (is-active / is-enabled)
+dnsmasq          inactive   not-found
+nginx            inactive   not-found
+nfs-server       inactive   not-found
+pxe-dashboard    inactive   not-found
+# pxe-dashboard unit (idempotensi: PID/waktu start sama = tidak di-restart)
+MainPID=0
+Result=success
+NRestarts=0
+LoadState=not-found
+ActiveEnterTimestamp=
+# ss -lunp (udp)
+UNCONN 127.0.0.1:619 0.0.0.0:* users:(("rpc.statd",pid=15283,fd=5))
+UNCONN 0.0.0.0:50415 0.0.0.0:* users:(("rpc.statd",pid=15283,fd=8))
+UNCONN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=588,fd=16))
+UNCONN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=588,fd=14))
+UNCONN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=15277,fd=5),("systemd",pid=1,fd=112))
+UNCONN [::]:37589 [::]:* users:(("rpc.statd",pid=15283,fd=10))
+UNCONN [::]:111 [::]:* users:(("rpcbind",pid=15277,fd=7),("systemd",pid=1,fd=114))
+# ss -ltnp (tcp)
+LISTEN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=588,fd=15))
+LISTEN 0.0.0.0:49805 0.0.0.0:* users:(("rpc.statd",pid=15283,fd=9))
+LISTEN 0.0.0.0:22 0.0.0.0:* users:(("sshd",pid=1107,fd=3),("systemd",pid=1,fd=121))
+LISTEN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=15277,fd=4),("systemd",pid=1,fd=111))
+LISTEN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=588,fd=17))
+LISTEN [::]:38797 [::]:* users:(("rpc.statd",pid=15283,fd=11))
+LISTEN [::]:22 [::]:* users:(("sshd",pid=1107,fd=4),("systemd",pid=1,fd=122))
+LISTEN [::]:111 [::]:* users:(("rpcbind",pid=15277,fd=6),("systemd",pid=1,fd=113))
+# port PXE terbuka (udp 67/69, tcp 80/3000/2049)
+# (akhir daftar port)
+# manifest /var/lib/pxe-dashboard-installer/install-manifest
+mode=600 owner=root:root
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T10:09:21Z)
+pkg	keyutils	dep
+pkg	libnfsidmap1	dep
+pkg	nfs-common	dep
+pkg	rpcbind	dep
+# /opt/pxe-dashboard
+(tidak ada)
+# /etc/pxe-dashboard.env
+(tidak ada)
+# dnsmasq conf (interface/bind/range)
+(tidak ada)
+# nginx enabled
+# exportfs -v
+# mount /srv/pxe/media
+(tidak ada)
+# modul disk Debian (debian-netboot/modules)
+(tidak ada)
+# fstab (baris /srv/pxe)
+(tidak ada)
+# user pxe
+(tidak ada)
+# data
+HILANG /var/lib/pxe-dashboard
+HILANG /srv/pxe
+HILANG /srv/pxe/media
+HILANG /srv/pxe/tftp
+HILANG /var/log/dnsmasq-pxe.log
+# db
+# curl lokal
+/login curl: (7) Failed to connect to 10.99.0.2 port 80 after 0 ms: Couldn't connect to server
+000
+/api/settings curl: (7) Failed to connect to 10.99.0.2 port 80 after 0 ms: Couldn't connect to server
+000
+# paket
+dnsmasq            absent
+nginx              absent
+nfs-kernel-server  unknown ok not-installed
+ipxe               absent

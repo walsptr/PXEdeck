@@ -1,0 +1,5 @@
+total 47888
+-rw-r--r-- 1 1000 1000 40810276 Nov  5 06:22 initrd.gz
+-rw-r--r-- 1 1000 1000  8222656 Nov  5 06:22 linux
+cb24a28a5ba13dfb22e6e75bdd8ab997dbdee6e3ec6c1102f6c7f93044bd817d  /root/debian-netboot/initrd.gz
+d8808aa4ca188560da1e6d749dcb930c87a5fd8b11ebff1f3fa6d728af35203d  /root/debian-netboot/linux

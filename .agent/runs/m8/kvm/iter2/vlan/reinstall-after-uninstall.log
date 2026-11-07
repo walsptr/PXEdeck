@@ -1,0 +1,2 @@
+[pxe-install] ERROR: pxe10 sudah ada tanpa alamat 10.99.10.2/24 dan bukan buatan installer
+# exit=1

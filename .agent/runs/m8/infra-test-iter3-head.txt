@@ -1,0 +1,172 @@
+infra/test/run.sh — 2026-11-07T14:55:44Z
+  ok   bash -n semua script infra
+  ok   set -euo pipefail di setiap script
+  ok   PATH test hanya berisi virsh/ssh palsu, tanpa sudo
+  ok   XML pxe-test tanpa forward/dhcp, dns off; pxe-test-nat NAT
+  ok   net-up dry-run: rencana define/start, tanpa mutasi
+  ok   net-up dua kali idempoten (virsh palsu ber-state)
+  ok   assert_name / assert_path_in_vms / assert_mac
+  ok   node.sh menolak nama terlindungi tanpa perintah virsh
+  ok   operasi disk VM selalu didahului assert_path_in_vms
+  ok   node.sh create dry-run UEFI/BIOS sesuai spesifikasi
+  ok   node.sh create/reset/destroy (palsu) idempoten
+  ok   node.sh create tanpa tahap install virt-install (B-3)
+  ok   node.sh reset: VM tetap running (on_reboot=restart, B-3)
+  ok   node.sh create gagal bila XML live on_reboot=destroy (B-3)
+  ok   cleanup.sh hanya resource run + snapshot
+  ok   cleanup.sh --server
+  ok   cleanup.sh dry-run tanpa mutasi
+  ok   cleanup.sh menolak nama terlindungi (exit≠0, tanpa virsh)
+  ok   cleanup.sh opsi tak dikenal
+  ok   server-down dry-run & palsu
+  ok   net-down hanya pxe-test*
+  ok   kvm-run.sh m4 dry-run end-to-end (semua nama pxe-test-)
+  ok   kvm-run.sh argumen invalid ditolak tanpa mutasi
+  ok   kvm-run.sh node sisa run → batal tanpa menyentuh
+  ok   deploy-dashboard dry-run + dashboard.env tanpa secret
+  ok   dnsmasq.conf terikat pxe0 (bind-interfaces)
+  ok   tanpa sudo, ssh hanya dengan key, tanpa ~/.ssh
+  ok   verify-node.sh: symlink, gagal cepat tanpa env, cek AC-4.31
+  ok   redact-evidence: token path/token=/$6$ disamarkan, exit 0
+  ok   redact-evidence: blob base64 berisi token/$6$/key disamarkan (B-5)
+  ok   redact-evidence: header private key → exit 1 tanpa isi
+  ok   redact-evidence: argumen salah → exit 2
+  ok   kvm-run.sh finish() memanggil redact-evidence (gagal = FAIL)
+  ok   M5 node.sh poweroff=destroy saja, start=listener append + start (AC-5.33)
+  ok   M5 node.sh poweroff/start dry-run (AC-5.33)
+  ok   M5 node.sh poweroff/start menolak nama terlindungi (AC-5.33)
+  ok   M5 cleanup.sh run id server*/nat* ditolak tanpa virsh/rm (AC-5.34)
+  ok   M5 cleanup.sh m5 tidak menyentuh disk server (AC-5.34)
+  ok   M5 redact: PNG bersih utuh, teks disamarkan (AC-5.35)
+  ok   M5 redact: biner bersecret tidak diubah, exit 1 (AC-5.35)
+  ok   M5 assert-server-logs PASS → results.json (AC-5.36)
+  ok   M5 assert-server-logs FAIL → exit≠0 (AC-5.36)
+  ok   M5 kvm-run dry-run: poweroff/start hanya node destroy (AC-5.36)
+  ok   M5 kvm-run finish: asersi log + ekspor job sebelum redaksi
+  ok   M5 nginx-pxe.conf allowlist admin + SSE (AC-5.37)
+  ok   M5 deploy PXE_ADMIN_ALLOW divalidasi (AC-5.37)
+  ok   M5 bash -n semua script infra + e2e-kvm (AC-5.37)
+  ok   M6 kvm-run: entri cleanup di results.json pada gagal tiap tahap + sukses (AC-6.40)
+  ok   M6 kvm-run: resource terlindungi berubah -> cleanup FAIL (AC-6.40)
+  ok   M6 kvm-run --waves max_nodes 1/2/3, tanpa --waves ditolak (AC-6.41)
+  ok   M6 kvm-run --scenario core/distro/bulk + spec :failpath/:os= (AC-6.41)
+  ok   M6 virsh_m menolak nama terlindungi sebelum virsh
+  ok   M6 deploy admin: password/hash hanya via stdin, tanpa bocor (AC-6.42)
+  ok   M6 deploy admin dry-run: password 0600 24 karakter (AC-6.42)
+  ok   M6 kvm-run: password admin dihapus + discan di bukti (AC-6.42)
+  ok   M6 verify-node: target bebas token, hanya jumlah (AC-6.42)
+  ok   M6 results-json.py: escape benar, rusak dipindah (CR-5-10)
+  ok   M6 assert-server-logs: JSON terpisah + file per OS (CR-5-10)
+  ok   M6 nginx limit_req login + /boot/, allowlist tetap (O5)
+  ok   M6 redact-evidence: hash scrypt teks & base64 (AC-6.52)
+  ok   M6 install-dashboard overlay: statis
+  ok   M6 install-dashboard overlay: merge env di sandbox
+  ok   M6 BUG-M6-1 server-check Rocky memakai repo Minimal/
+  ok   M6 BUG-M6-2 gagal sebelum node -> CR-4-12 NOT_RUN, bukan FAIL
+  ok   M6 verifikasi parsial setelah Playwright gagal (node done saja)
+  ok   M6 NFS ekspor ro + hanya 10.99.0.0/24, rocky-9 diekspor (DEC-020)
+  ok   M6 NFS validator menolak ekspor rw/wildcard/path lain (kontrol)
+  ok   M6 server-up menyalin exports sebelum exportfs -ra
+  ok   M6 BUG-M6-8 modul disk Debian: salin dari initrd DVD (kver sama)
+  ok   M6 BUG-M6-8 modul disk Debian: kver beda/modul hilang/argumen → gagal
+  ok   M6 BUG-M6-8 server-up menyalin modul disk Debian ke media server
+  ok   M6 BUG-M6-10 Playwright lulus, 2 node -> keduanya diverifikasi, PASS
+  ok   M6 BUG-M6-10 Playwright lulus, --waves 3 node -> semua diverifikasi
+  ok   M6 BUG-M6-10 Playwright gagal -> verifikasi parsial + catatan, FAIL
+  ok   M6 BUG-M6-10 verify node1 gagal -> node2 tetap diverifikasi, FAIL
+  ok   M6 BUG-M6-10 tanpa $( ((…)) && …) di kvm-run.sh (statis)
+  ok   M7 XML network trunk/port1/port2 tanpa ip/forward/dhcp (AC-7.14)
+  ok   M7 net-up/net-down --topology vlan, idempoten, flat tetap (AC-7.14)
+  ok   M7 net-up menolak XML berisi ip/forward/dhcp/nama salah (AC-7.14)
+  ok   M7 switch-up dry-run: overlay/seed, 4 NIC, RAM<=1024, tanpa NAT (AC-7.15)
+  ok   M7 pxe-switch.sh apply/apply-port: perintah tabel §2.2 (AC-7.15)
+  ok   M7 pxe-switch.sh verify PASS/FAIL (AC-7.15)
+  ok   M7 profil server VLAN statis: dnsmasq/nginx/NFS/sysctl (AC-7.16)
+  ok   M7 verify-listen-vlan.sh: PASS / FAIL + stop dnsmasq (AC-7.16)
+  ok   M7 verify-listen-vlan.sh wajib DHCP dnsmasq udp %pxe10:67 (DEC-026 §3)
+  ok   M7 server-up --topology vlan dry-run (NIC trunk, urutan profil) (AC-7.16)
+  ok   M7 deploy-dashboard --topology vlan: env + asersi vlanNetworks (AC-7.16)
+  ok   M7 cleanup.sh --switch, run id switch* ditolak, node.sh --net (AC-7.19)
+  ok   M7 relay.sh: mode/NODE_IP ditolak, key 0600 tidak dicetak (AC-7.17)
+  ok   M7 host tidak pernah menyasar 10.99.10.*/10.99.20.* (AC-7.17)
+  ok   M7 verify-node.sh EXPECT_VLAN OK/FAIL (AC-7.18)
+  ok   M7 kvm-run skenario VLAN: run id, node, IP, network, neg (AC-7.19)
+  ok   M7 kvm-run max_nodes kurangi RAM server+switch (AC-7.19)
+  ok   M7 kvm-run gagal tiap tahap VLAN: cleanup, relay teardown, switch (AC-7.19)
+  ok   M7 server-base: provisioning ulang (nfs-server non-fatal, seed dihapus, tcpdump)
+  ok   M7te assert_name menolak nama terlindungi/tanpa prefix (AC-7.14)
+  ok   M7te net-up/net-down vlan (palsu): lima network hilang, default/int utuh (AC-7.14)
+  ok   M7te nginx VLAN: ACL hanya / + SSE, /boot & /media terbuka; nfsd 10.99.10.2 + OPTIONS rpcbind (AC-7.16)
+  ok   M7te verify-listen-vlan: kasus FAIL tambahan + stop dnsmasq (AC-7.16)
+  ok   M7te relay key via stdin 0600, urutan setup→key→status→teardown (AC-7.17)
+  ok   M7te statis: script server/switch & Playwright tidak menyasar VLAN (AC-7.17)
+  ok   M7te verify-node tanpa EXPECT_VLAN = jalur M6 (AC-7.18)
+  ok   M7te verify-node EXPECT_VLAN invalid → 99; nama anak bebas; prefix/IP lain FAIL (AC-7.18)
+  ok   M7te kvm-run gagal di SETIAP tahap → entri cleanup (vlancore+vlanneg) (AC-7.19)
+  ok   M7te cleanup.sh --switch dry-run: rencana destroy/undefine + disk (AC-7.19)
+  ok   M7te skenario flat core/distro/bulk tanpa artefak VLAN (AC-7.19)
+  ok   M7te README §Topologi VLAN + .env.example (AC-7.31)
+  ok   M7te diff M7 tanpa hash/private key nyata (AC-7.31)
+  ok   M7te redact-evidence: password=/username= di URL (nginx access+error) → exit 1 (DEC-027 §4)
+  ok   M7te redact-evidence: hanya placeholder utuh dikecualikan + bentuk %3F/%26/%3D & JSON-escaped (DEC-028 §2)
+  ok   DEC-027 nginx: query /login & non-/boot tidak tercatat (flat+VLAN)
+  ok   DEC-027 nginx: token /boot tetap disamarkan, query .ipxe tetap
+  ok   DEC-027 nginx: log_format hanya $pxe_log_uri, map flat == VLAN
+  ok   DEC-027 nginx: konsumen log (assert-server-logs/kvm-run/e2e) tetap cocok
+  ok   GK-7-1 deploy dry-run penulis lambat flat+vlan → exit 0, tanpa pipe (DEC-028 §1)
+  ok   GK-7-1 deploy non-dry: env admin lewat stdin ssh (umask 077), penulis lambat
+  ok   M8 install/uninstall: sintaks, set -euo pipefail, tanpa set -x, probe selftest, Node dipin
+  ok   M8 install: argumen invalid/password di argv ditolak (exit 2) tanpa mutasi
+  ok   M8 install: --config < env < flag; password di config/env ditolak
+  ok   M8 render: dnsmasq interface= NIC + bind-interfaces, tanpa sisa lab, DNS
+  ok   M8 render: VLAN (sub-interface, netplan, PXE_VLAN_NETWORKS, ekspor ro)
+  ok   M8 render: nginx listen/allowlist + log map tanpa query (DEC-027)
+  ok   M8 render: env tanpa rahasia, trust proxy + lease, nilai produksi
+  ok   M8 preflight: non-root/OS salah/NIC hilang/port/DHCP asing ditolak
+  ok   M8 install --dry-run: rencana lengkap tanpa perubahan apa pun
+  ok   M8 install penuh (sandbox): env 0640 root:pxe tanpa plaintext, manifest
+  ok   M8 install ulang: idempoten (no-op), tweak env dipertahankan, upgrade rilis
+  ok   M8 verifikasi gagal -> dnsmasq dihentikan, exit != 0
+  ok   M8 install: file/dir asing tidak pernah ditimpa
+  ok   M8 install: SHA256 Node tidak cocok -> batal
+  ok   M8 uninstall: hanya isi manifest, data tetap; --purge hapus data + user
+  ok   M8 uninstall: paket/layanan yang sudah ada sebelum install dipertahankan
+  ok   M8 uninstall: manifest rusak/asing/group-writable & non-root ditolak
+  ok   M8 install VLAN dry-run: netplan + probe DHCP di sub-interface
+  ok   M8 install-vm.sh: VM bersih pxe-test-install (dry-run), down, tolak bentrok
+  ok   M8 README §Deploy + contoh config install.sh/uninstall.sh
+  ok   M8 fix1: --interface pxe0 / --domain pxe.test sah (cek sisa lab per baris)
+  ok   M8 fix2: ss 6 kolom (tanpa Netid) & 7 kolom nyata diparse benar
+  ok   M8 fix3: install ulang dengan ISO ter-mount ro tidak chmod/chown mountpoint
+  ok   M8 fix4: paket tercatat tetap milik installer setelah --purge
+  ok   M8 fix-a: ISO Debian perangkat blok -> modul dari mountpoint
+  ok   M8 fix-b: password sama -> hash lama dipertahankan, tanpa restart
+  ok   M8 fix-b: admin-verify.mjs paritas dengan admin-hash.mjs (node asli)
+  ok   M8 fix-c: unit SuccessExitStatus=143 (template + render)
+  ok   M8 fix-d: --remove-packages purge diminta + dep autoremovable saja
+  ok   M8 fix-e: install gagal -> enablement unit run ini di-rollback
+  ok   M8 i2 SR-8-1: path manifest non-kanonik (semua tipe) ditolak
+  ok   M8 i2 SR-8-1: induk symlink tidak diikuti rm
+  ok   M8 i2 CR-8-1/2: verify per PID dnsmasq.service + alamat v4/v6 NIC
+  ok   M8 i2 CR-8-3/4: dnsmasq/nfs admin dengan konfigurasi lain -> tolak
+  ok   M8 i2 CR-8-5: netplan VLAN divalidasi sementara + rollback
+  ok   M8 i2 CR-8-5: parent di bonds/vlans, nama ber-titik, bond tak terdefinisi
+  ok   M8 i2 CR-8-6: simulasi apt purge, paket di luar manifest -> batal
+  ok   M8 i2 CR-8-7: DNS upstream default resolver host / eksplisit / none
+  ok   M8 i2 SR-8-2: allowlist admin tumpang tindih PXE/VLAN atau /0 butuh flag
+  ok   M8 i2 SR-8-4/5: pkg requested allowlist, ISO sumber di luar /srv/pxe
+  ok   M8 i2 SR-8-6: netboot Debian lewat Release.gpg -> SHA256SUMS
+  ok   M8 i2 SR-8-7: file password harus milik root
+  ok   M8 i2 SR-8-8: policy-rc.d sisa installer dibersihkan, milik admin tidak
+  ok   M8 i2 CR-8-8/9: nginx admin: site default tetap, enablement dipulihkan
+  ok   M8 i2 CR-8-11: firewall (ICMPv6 ND, nft -c, peringatan FIREWALL=no)
+  ok   M8 i2 CR-8-12: drift pemilik file terkelola diperbaiki + restart
+  ok   M8 i2 CR-8-13: build gagal -> direktori build sementara dihapus
+  ok   M8 i2 CR-8-15: NODE_VERSION generik diabaikan
+  ok   M8 i2 SR-8-3: syarat single-tenant di README + keluaran installer
+  ok   M8 i3 #1: gpgv Release bertanda tangan ganda (kunci hilang) diterima, BADSIG ditolak
+  ok   M8 i3 #2: uninstall lepas ekspor + stop nfs sebelum umount; umount gagal = error
+  ok   M8 i3 #3: link VLAN dihapus uninstall; link sisa tercatat dikenali install ulang
+  ok   M8 i3 #4: netplan installer 99- (setelah file admin), migrasi 60-, pesan urutan
+hasil: 169 lulus, 0 gagal
+EXIT=0

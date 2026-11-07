@@ -1,0 +1,3 @@
+# ./uninstall.sh --purge --remove-packages --yes
+[pxe-install] ERROR: --remove-packages akan ikut menghapus paket yang tidak dipasang installer: libnginx-mod-stream — uninstall dibatalkan tanpa perubahan (jalankan tanpa --remove-packages)
+# exit=1

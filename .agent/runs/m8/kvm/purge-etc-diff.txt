@@ -1,0 +1,11 @@
+# etc-diff purge: sebelum vs sesudah: etc-before-purge.tsv (1751 entri) -> etc-after-purge.tsv (1751 entri)
+# ringkasan: account-db=8
+account-db   UBAH(content)          /etc/group
+account-db   UBAH(content)          /etc/group-
+account-db   UBAH(content)          /etc/gshadow
+account-db   UBAH(content)          /etc/gshadow-
+account-db   UBAH(content)          /etc/passwd
+account-db   UBAH(content)          /etc/passwd-
+account-db   UBAH(content)          /etc/shadow
+account-db   UBAH(content)          /etc/shadow-
+# UNEXPLAINED=0

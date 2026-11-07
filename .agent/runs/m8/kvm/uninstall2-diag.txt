@@ -1,0 +1,10 @@
+Nov 07 09:04:48 pxe-test-install systemd-helper[145301]: dnsmasq: failed to create listening socket for port 53: Address already in use
+Nov 07 09:04:48 pxe-test-install dnsmasq[145301]: failed to create listening socket for port 53: Address already in use
+Nov 07 09:04:48 pxe-test-install dnsmasq[145301]: FAILED to start up
+Nov 07 09:04:48 pxe-test-install systemd[1]: dnsmasq.service: Control process exited, code=exited, status=2/INVALIDARGUMENT
+Nov 07 09:04:48 pxe-test-install systemd[1]: dnsmasq.service: Failed with result 'exit-code'.
+Nov 07 09:04:48 pxe-test-install systemd[1]: Failed to start dnsmasq.service - dnsmasq - A lightweight DHCP and caching DNS server.
+total 0
+lrwxrwxrwx 1 root root 34 Nov  7 09:04 default -> /etc/nginx/sites-available/default
+LISTEN 0      511        10.99.0.2:80         0.0.0.0:*    users:(("nginx",pid=124390,fd=6),("nginx",pid=124389,fd=6),("nginx",pid=124388,fd=6))
+tcp 2049

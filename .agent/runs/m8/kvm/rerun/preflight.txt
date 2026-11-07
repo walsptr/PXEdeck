@@ -1,0 +1,6 @@
+               total        used        free      shared  buff/cache   available
+Mem:           23719        8485       10816         849        5698       15234
+ Id   Name          State
+------------------------------
+ -    ubuntu24.04   shut off
+

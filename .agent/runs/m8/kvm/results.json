@@ -1,0 +1,142 @@
+{
+  "run": "m8",
+  "scenario": "DEC-029 §4 + DEC-030 §4 installer KVM",
+  "overall": "PASS",
+  "current": {
+    "iteration": 3,
+    "commit": "06517b921f9172ffcebc713431d2835b8eec3318",
+    "overall": "PASS",
+    "flat": {
+      "results": "iter3/results.json",
+      "overall": "PASS",
+      "final": {
+        "up": "PASS",
+        "install-1": "PASS",
+        "install-1-debian-modules": "PASS",
+        "install-1-debian-netboot-gpg": "PASS",
+        "fwcheck-install-1": "PASS",
+        "node": "PASS",
+        "nodedns-nd": "PASS",
+        "nodedns": "PASS",
+        "install-2": "PASS",
+        "install-2-idempotent": "PASS",
+        "fwcheck-install-2": "PASS",
+        "uninstall-firewall-removed": "PASS",
+        "uninstall": "PASS",
+        "purge": "PASS",
+        "purge2": "PASS",
+        "purge2-packages": "PASS",
+        "purge3": "PASS",
+        "purge3-packages": "PASS",
+        "failinstall": "PASS",
+        "purge4": "PASS",
+        "purge4-packages": "PASS",
+        "cleanup": "PASS",
+        "protected": "PASS"
+      },
+      "playwright": [
+        {
+          "ac": "M8-KVM-login",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-KVM-node",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-KVM-ssh",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-KVM-scan-playwright",
+          "status": "PASS"
+        }
+      ]
+    },
+    "vlan": {
+      "results": "iter3/vlan/results.json",
+      "overall": "PASS",
+      "final": {
+        "up": "PASS",
+        "install-1": "PASS",
+        "vlan-relay": "PASS",
+        "vlan-node": "PASS",
+        "relay-teardown": "PASS",
+        "uninstall": "PASS",
+        "install-2": "PASS",
+        "purge": "PASS",
+        "purge-packages": "PASS",
+        "ordering-70": "PASS",
+        "reinstall-after-uninstall": "PASS",
+        "cleanup": "PASS",
+        "protected": "PASS"
+      },
+      "playwright": [
+        {
+          "ac": "M8-VLAN-login",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-VLAN-node",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-VLAN-ssh",
+          "status": "PASS"
+        },
+        {
+          "ac": "M8-VLAN-scan-playwright",
+          "status": "PASS"
+        }
+      ],
+      "countedInOverall": false,
+      "status": "skip (keputusan user, diterima Orchestrator) TIBA SETELAH skenario VLAN iter3 selesai + cleanup; hasil VLAN di atas tetap dicatat apa adanya sebagai informasi, tidak dihitung ke overall"
+    },
+    "findings": [
+      "minor: install.sh curl (Debian netboot Release/SHA256SUMS/linux/initrd, juga Node/SHASUMS) tanpa --connect-timeout/--max-time; koneksi macet ke deb.debian.org membuat install menggantung >17 menit (iter3/attempt0-failinstall.log, failinstall-hang-diagnosis.txt)"
+    ],
+    "note": "tanpa workaround diagnostik; DEBIAN_NETBOOT=auto default; VLAN parent di 70-*.yaml; overall = run flat (keputusan user: bagian VLAN di-skip)"
+  },
+  "history": [
+    {
+      "run": "iter2",
+      "commit": "3d60aa9af5a7bbcdcb034c763f698836ef520b35",
+      "superseded": true,
+      "supersededBy": "iter3 (06517b9)",
+      "overall": "FAIL",
+      "results": [
+        "iter2/results.json",
+        "iter2/vlan/results.json"
+      ],
+      "failing": {
+        "flat:install-1": "FAIL",
+        "flat:install-1-debian-modules": "FAIL",
+        "flat:fwcheck-install-1": "FAIL",
+        "flat:debian-netboot-gpg": "FAIL",
+        "vlan:install-1": "FAIL",
+        "vlan:uninstall": "FAIL",
+        "vlan:reinstall-after-uninstall": "FAIL"
+      },
+      "evidence": "iter2/"
+    },
+    {
+      "run": "rerun",
+      "commit": "16aa054c9f7af31841239e2af9bb34416d233081",
+      "superseded": true,
+      "supersededBy": "iter3 (06517b9)",
+      "overall": "PASS",
+      "results": "rerun/results.json",
+      "evidence": "rerun/"
+    },
+    {
+      "run": "run1",
+      "commit": "953a64d",
+      "superseded": true,
+      "supersededBy": "iter3 (06517b9)",
+      "overall": "FAIL",
+      "results": "results-run1.json",
+      "evidence": "./ (file tingkat atas, attempt1-nic-pxe0/)",
+      "note": "run pertama menemukan bug install.sh/uninstall.sh (render NIC pxe0, parse ss, chmod ISO ter-mount, svc 'pre' setelah purge, dll.) — diperbaiki di 16aa054"
+    }
+  ]
+}

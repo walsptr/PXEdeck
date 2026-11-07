@@ -1,0 +1,3 @@
+# dari host 10.99.0.1 (admin allowlist)
+GET http://10.99.0.2/login -> 200
+GET http://10.99.0.2/api/settings (tanpa sesi) -> 401

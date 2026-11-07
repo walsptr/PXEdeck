@@ -1,0 +1,389 @@
+{
+  "run": "m8",
+  "scenario": "DEC-029 §4 installer KVM",
+  "commit": "16aa054c9f7af31841239e2af9bb34416d233081",
+  "final": {
+    "up": "PASS",
+    "neg-address": "PASS",
+    "install-1": "PASS",
+    "install-1-debian-modules": "PASS",
+    "node": "PASS",
+    "install-2": "PASS",
+    "install-2-idempotent": "PASS",
+    "uninstall": "PASS",
+    "purge": "PASS",
+    "install-3": "PASS",
+    "uninstall2": "PASS",
+    "purge2": "PASS",
+    "purge2-packages": "PASS",
+    "failinstall": "PASS",
+    "purge3": "PASS",
+    "purge3-packages": "PASS",
+    "cleanup": "PASS",
+    "protected": "PASS"
+  },
+  "steps": [
+    {
+      "at": "2026-11-07T09:45:27Z",
+      "step": "up",
+      "status": "PASS",
+      "note": "VM bersih (tanpa dnsmasq/env/user pxe)",
+      "evidence": [
+        "install-vm-clean.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T09:45:37Z",
+      "step": "neg-address",
+      "status": "PASS",
+      "note": "--address 10.99.0.250/24 (tidak ada di NIC) ditolak preflight exit=1; tanpa manifest/paket/env/user",
+      "evidence": [
+        "neg-address.log",
+        "neg-address-state.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T09:50:49Z",
+      "step": "install-1",
+      "status": "PASS",
+      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 5 socket udp, semua di pxe0/10.99.0.2 (DHCP %pxe0:67)",
+      "evidence": [
+        "install-1.log",
+        "install-1-ss-lunp.txt",
+        "install-1-host-http.txt",
+        "state-install-1.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T09:50:49Z",
+      "step": "install-1-debian-modules",
+      "status": "PASS",
+      "note": "--iso-debian /dev/sr1: modul virtio_blk + virtio_scsi diekstrak ke debian-netboot/modules",
+      "evidence": [
+        "install-1.log",
+        "state-install-1.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:04:30Z",
+      "step": "node",
+      "status": "PASS",
+      "note": "playwright m8-installer.spec.ts exit=0",
+      "evidence": [
+        "playwright-kvm.log",
+        "playwright-results.json",
+        "pxe-test-m8-node51-timeline.txt",
+        "pxe-test-m8-node51-verify-ssh.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:05:11Z",
+      "step": "install-2",
+      "status": "PASS",
+      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 5 socket udp, semua di pxe0/10.99.0.2 (DHCP %pxe0:67)",
+      "evidence": [
+        "install-2.log",
+        "install-2-ss-lunp.txt",
+        "install-2-host-http.txt",
+        "state-install-2.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:05:11Z",
+      "step": "install-2-idempotent",
+      "status": "PASS",
+      "note": "ISO ter-mount (3) + diekspor; rilis/manifest/env sama; password sama -> hash dipertahankan; pxe-dashboard tidak di-restart (MainPID & ActiveEnterTimestamp sama)",
+      "evidence": [
+        "install-2.log",
+        "state-install-2-before.txt",
+        "state-install-2.txt",
+        "install-2-releases-before.txt",
+        "install-2-releases-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:06:15Z",
+      "step": "uninstall",
+      "status": "FAIL",
+      "note": "exit=0 manifest-check=0 open_ports=0 failed_units=0 data_ok=1 etc-diff=1 vs-pre=1",
+      "evidence": [
+        "uninstall.log",
+        "uninstall-manifest-check.txt",
+        "state-uninstall.txt",
+        "uninstall-etc-diff.txt",
+        "uninstall-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:06:44Z",
+      "step": "uninstall-review",
+      "status": "INFO",
+      "note": "uninstall pertama gagal hanya karena /etc/fwupd/fwupd.conf mode 644->640: fwupd-refresh.timer menjalankan fwupd pada 10:06:05 (daemon fwupd 2.0 mengeset 0640 sendiri), bersamaan dengan uninstall (10:06:02). Bukan installer; etc-diff.py mengklasifikasikannya 'external' (hanya mode file itu) lalu bukti dianalisis ulang",
+      "evidence": [
+        "uninstall-fwupd-diag.txt",
+        "uninstall-etc-diff.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:06:44Z",
+      "step": "uninstall",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data keep OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "uninstall.log",
+        "uninstall-manifest-check.txt",
+        "state-uninstall.txt",
+        "uninstall-etc-diff.txt",
+        "uninstall-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:07:17Z",
+      "step": "purge",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data purge OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "purge.log",
+        "purge-manifest-check.txt",
+        "state-purge.txt",
+        "purge-etc-diff.txt",
+        "purge-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:08:07Z",
+      "step": "install-3",
+      "status": "PASS",
+      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 5 socket udp, semua di pxe0/10.99.0.2 (DHCP %pxe0:67)",
+      "evidence": [
+        "install-3.log",
+        "install-3-ss-lunp.txt",
+        "install-3-host-http.txt",
+        "state-install-3.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:08:29Z",
+      "step": "uninstall2",
+      "status": "FAIL",
+      "note": "exit=0 manifest-check=0 open_ports=0 failed_units=0 data_ok=0 etc-diff=0 vs-pre=1",
+      "evidence": [
+        "uninstall2.log",
+        "uninstall2-manifest-check.txt",
+        "state-uninstall2.txt",
+        "uninstall2-etc-diff.txt",
+        "uninstall2-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:08:50Z",
+      "step": "uninstall2-review",
+      "status": "INFO",
+      "note": "uninstall2 dinilai FAIL hanya karena kriteria harness 'pxe.db ada': install segar (install-3, setelah purge) belum pernah membuat pxe.db (state-install-3.txt tanpa baris pxe.db; DB dibuat lazy). Direktori data /var/lib/pxe-dashboard dan /srv/pxe/media dipertahankan -> dianalisis ulang dengan M8_EXPECT_DB=0",
+      "evidence": [
+        "state-install-3.txt",
+        "state-uninstall2.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:08:50Z",
+      "step": "uninstall2",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data keep OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "uninstall2.log",
+        "uninstall2-manifest-check.txt",
+        "state-uninstall2.txt",
+        "uninstall2-etc-diff.txt",
+        "uninstall2-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:09:32Z",
+      "step": "purge2",
+      "status": "FAIL",
+      "note": "exit=0 manifest-check=0 open_ports=0 failed_units=0 data_ok=1 etc-diff=1 vs-pre=1",
+      "evidence": [
+        "purge2.log",
+        "purge2-manifest-check.txt",
+        "state-purge2.txt",
+        "purge2-etc-diff.txt",
+        "purge2-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:09:32Z",
+      "step": "purge2-packages",
+      "status": "PASS",
+      "note": "requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global",
+      "evidence": [
+        "purge2-packages-review.txt",
+        "purge2-apt-history.txt",
+        "purge2-apt-autoremove-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:09:51Z",
+      "step": "purge2-review",
+      "status": "INFO",
+      "note": "purge2 FAIL awal hanya karena /etc/nginx/sites-enabled/default (symlink dibuat postinst nginx-common, tidak ada di dpkg .list) dihapus apt-get purge nginx-common; ditambahkan ke peta POSTINST etc-diff.py lalu dianalisis ulang. Sisa dep keyutils/libnfsidmap1/nfs-common/rpcbind tidak autoremovable (apt-get -s autoremove kosong) sehingga dipertahankan + tetap di manifest, sesuai desain",
+      "evidence": [
+        "purge2-etc-diff.txt",
+        "purge2-packages-review.txt",
+        "purge2-apt-autoremove-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:09:51Z",
+      "step": "purge2",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data purge OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "purge2.log",
+        "purge2-manifest-check.txt",
+        "state-purge2.txt",
+        "purge2-etc-diff.txt",
+        "purge2-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:09:51Z",
+      "step": "purge2-packages",
+      "status": "PASS",
+      "note": "requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global",
+      "evidence": [
+        "purge2-packages-review.txt",
+        "purge2-apt-history.txt",
+        "purge2-apt-autoremove-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:14:25Z",
+      "step": "failinstall",
+      "status": "PASS",
+      "note": "rilis rusak -> verify gagal exit=1; rollback: dnsmasq/nginx/nfs-server/pxe-dashboard tidak enabled, dnsmasq mati, udp 67/69 tertutup",
+      "evidence": [
+        "failinstall.log",
+        "state-failinstall-before.txt",
+        "state-failinstall.txt",
+        "failinstall-manifest.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:15:10Z",
+      "step": "purge3",
+      "status": "FAIL",
+      "note": "exit=0 manifest-check=1 open_ports=0 failed_units=0 data_ok=1 etc-diff=0 vs-pre=1",
+      "evidence": [
+        "purge3.log",
+        "purge3-manifest-check.txt",
+        "state-purge3.txt",
+        "purge3-etc-diff.txt",
+        "purge3-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:15:10Z",
+      "step": "purge3-packages",
+      "status": "PASS",
+      "note": "requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global",
+      "evidence": [
+        "purge3-packages-review.txt",
+        "purge3-apt-history.txt",
+        "purge3-apt-autoremove-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:15:49Z",
+      "step": "purge3-review",
+      "status": "INFO",
+      "note": "purge3 FAIL awal: vm-manifest-check menuntut symlink sites-enabled/default dipulihkan, padahal --remove-packages mem-purge nginx-common (site default ikut hilang; uninstall.sh memulihkan link di langkah 3 lalu apt purge menghapusnya). Pemeriksaan harness dikoreksi (OK bila nginx-common tidak terpasang dan target tidak ada), manifest-check dijalankan ulang terhadap salinan manifest yang sama",
+      "evidence": [
+        "purge3-manifest-check.txt",
+        "purge3.log"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:15:49Z",
+      "step": "purge3",
+      "status": "PASS",
+      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data purge OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1, informatif)",
+      "evidence": [
+        "purge3.log",
+        "purge3-manifest-check.txt",
+        "state-purge3.txt",
+        "purge3-etc-diff.txt",
+        "purge3-etc-diff-vs-pre.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:15:49Z",
+      "step": "purge3-packages",
+      "status": "PASS",
+      "note": "requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global",
+      "evidence": [
+        "purge3-packages-review.txt",
+        "purge3-apt-history.txt",
+        "purge3-apt-autoremove-after.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:16:06Z",
+      "step": "cleanup",
+      "status": "PASS",
+      "note": "VM pxe-test-*=0 network pxe-test*=0 key=0 disk=0",
+      "evidence": [
+        "cleanup.txt"
+      ]
+    },
+    {
+      "at": "2026-11-07T10:16:06Z",
+      "step": "protected",
+      "status": "PASS",
+      "note": "ubuntu24.04 (shut off) dan network default/int identik sebelum/sesudah (sha256 dumpxml); pxe-test-node01 tidak ada sebelum maupun sesudah",
+      "evidence": [
+        "protected-before.txt",
+        "protected-after.txt"
+      ]
+    }
+  ],
+  "playwright": [
+    {
+      "ac": "M8-KVM-login",
+      "status": "PASS",
+      "note": "401/204/200",
+      "evidence": [
+        "m8-login.txt"
+      ]
+    },
+    {
+      "ac": "M8-KVM-node",
+      "node": "pxe-test-m8-node51",
+      "status": "PASS",
+      "durationS": 578,
+      "note": "booting → installing → configuring → done",
+      "evidence": [
+        "pxe-test-m8-node51-timeline.txt",
+        "pxe-test-m8-node51-console.log"
+      ]
+    },
+    {
+      "ac": "M8-KVM-ssh",
+      "node": "pxe-test-m8-node51",
+      "status": "PASS",
+      "durationS": 214,
+      "evidence": [
+        "pxe-test-m8-node51-verify-ssh.txt"
+      ]
+    },
+    {
+      "ac": "M8-KVM-scan-playwright",
+      "status": "PASS",
+      "note": "0 temuan",
+      "evidence": [
+        "evidence-scan-playwright.txt"
+      ]
+    }
+  ],
+  "overall": "PASS"
+}

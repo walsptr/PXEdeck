@@ -1,0 +1,51 @@
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T13:43:28Z)
+pkg	keyutils	dep
+pkg	libnfsidmap1	dep
+pkg	nfs-common	dep
+pkg	rpcbind	dep
+pkg	dnsmasq	requested
+pkg	nginx	requested
+pkg	nfs-kernel-server	requested
+pkg	ipxe	requested
+pkg	libarchive-tools	requested
+pkg	debian-archive-keyring	requested
+pkg	dnsmasq-base	dep
+pkg	grub-ipxe	dep
+pkg	ipxe-qemu	dep
+pkg	nginx-common	dep
+svc	dnsmasq.service	ours
+svc	nginx.service	ours
+svc	nfs-server.service	ours
+user	pxe	
+data	/var/lib/pxe-dashboard	
+data	/var/log/dnsmasq-pxe.log	
+data	/srv/pxe	
+dir	/srv/pxe/tftp	
+dir	/srv/pxe/boot	
+data	/srv/pxe/media	
+data	/srv/pxe/media/ubuntu-24.04	
+data	/srv/pxe/media/debian-12	
+data	/srv/pxe/media/rocky-9	
+data	/srv/pxe/media/debian-netboot	
+tree	/opt/pxe-dashboard	
+file	/srv/pxe/tftp/snponly.efi	
+file	/srv/pxe/tftp/undionly.kpxe	
+file	/etc/dnsmasq.d/pxe-dashboard.conf	
+dir	/etc/systemd/system/dnsmasq.service.d	
+file	/etc/systemd/system/dnsmasq.service.d/pxe-dashboard.conf	
+file	/etc/nginx/sites-available/pxe-dashboard	
+link	/etc/nginx/sites-enabled/pxe-dashboard	
+restore-link	/etc/nginx/sites-enabled/default	/etc/nginx/sites-available/default
+file	/etc/pxe-dashboard.env	
+file	/etc/systemd/system/pxe-dashboard.service	
+dir	/etc/exports.d	
+file	/etc/exports.d/pxe-dashboard.exports	
+file	/etc/nfs.conf.d/pxe-dashboard.conf	
+file	/etc/logrotate.d/pxe-dashboard	
+fstab	/srv/pxe/media/ubuntu-24.04	/dev/sr0 /srv/pxe/media/ubuntu-24.04 iso9660 ro,nofail,x-systemd.device-timeout=15s 0 0
+mount	/srv/pxe/media/ubuntu-24.04	
+fstab	/srv/pxe/media/debian-12	/dev/sr1 /srv/pxe/media/debian-12 iso9660 ro,nofail,x-systemd.device-timeout=15s 0 0
+mount	/srv/pxe/media/debian-12	
+fstab	/srv/pxe/media/rocky-9	/dev/sr2 /srv/pxe/media/rocky-9 iso9660 ro,nofail,x-systemd.device-timeout=15s 0 0
+mount	/srv/pxe/media/rocky-9	
+unit	pxe-dashboard.service	

@@ -1,0 +1,9 @@
+dnsmasq
+dnsmasq-base
+grub-ipxe
+ipxe
+ipxe-qemu
+libarchive-tools
+nfs-kernel-server
+nginx
+nginx-common

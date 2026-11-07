@@ -1,0 +1,13 @@
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+mgmt20@trunk0    UP             10.99.20.1/24 
+nat0             UP             192.168.199.2/24 fe80::5054:ff:fe99:103/64 
+pxe0             UP             10.99.0.2/24 fe80::5054:ff:fe99:102/64 
+pxe10@trunk0     UP             
+trunk0           UP             
+vpxe10@mgmt20    UP             
+50-cloud-init.yaml
+70-m8-test-trunk.yaml
+default via 192.168.199.1 dev nat0 proto static 
+10.99.0.0/24 dev pxe0 proto kernel scope link src 10.99.0.2 
+10.99.20.0/24 dev mgmt20 proto kernel scope link src 10.99.20.1 
+192.168.199.0/24 dev nat0 proto kernel scope link src 192.168.199.2 

@@ -1,0 +1,5 @@
+# data dashboard (after-install-5) 2026-11-07T09:00:12Z: login admin -> 204
+host {'mac': '52:54:00:99:00:51', 'status': 'done', 'osInstalled': 'ubuntu-24.04', 'osAssigned': None, 'hostname': 'm8-node51', 'mgmtIp': '10.99.0.61', 'firmware': 'uefi', 'vendor': 'QEMU/KVM'}
+jobs 1
+job job-1f3b3a53-0404-4027-902d-556d9b5792b7 done None
+hosts 1

@@ -16,6 +16,8 @@ Environment=PORT=3000
 ExecStart=/opt/node/bin/node server.js
 Restart=on-failure
 RestartSec=2
+# Node keluar 143 (128+SIGTERM) saat `systemctl stop`: berhenti normal, bukan "failed".
+SuccessExitStatus=143
 # /var/lib/pxe-dashboard (DB SQLite) milik user pxe.
 StateDirectory=pxe-dashboard
 StateDirectoryMode=0750

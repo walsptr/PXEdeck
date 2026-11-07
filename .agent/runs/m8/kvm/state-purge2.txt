@@ -1,0 +1,59 @@
+## state purge2 2026-11-07T09:05:37Z pxe-test-install
+# systemctl (is-active / is-enabled)
+dnsmasq          failed     not-found
+nginx            inactive   enabled
+nfs-server       inactive   not-found
+pxe-dashboard    failed     not-found
+# ss -lunp (udp)
+UNCONN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=16))
+UNCONN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=14))
+UNCONN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=14624,fd=5),("systemd",pid=1,fd=139))
+UNCONN 0.0.0.0:39695 0.0.0.0:* users:(("rpc.statd",pid=14625,fd=8))
+UNCONN 127.0.0.1:809 0.0.0.0:* users:(("rpc.statd",pid=14625,fd=5))
+UNCONN [::]:111 [::]:* users:(("rpcbind",pid=14624,fd=7),("systemd",pid=1,fd=141))
+UNCONN [::]:35345 [::]:* users:(("rpc.statd",pid=14625,fd=10))
+# ss -ltnp (tcp)
+LISTEN 0.0.0.0:53743 0.0.0.0:* users:(("rpc.statd",pid=14625,fd=9))
+LISTEN 0.0.0.0:22 0.0.0.0:* users:(("sshd",pid=1108,fd=3),("systemd",pid=1,fd=161))
+LISTEN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=14624,fd=4),("systemd",pid=1,fd=138))
+LISTEN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=17))
+LISTEN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=578,fd=15))
+LISTEN [::]:22 [::]:* users:(("sshd",pid=1108,fd=4),("systemd",pid=1,fd=162))
+LISTEN [::]:111 [::]:* users:(("rpcbind",pid=14624,fd=6),("systemd",pid=1,fd=140))
+LISTEN [::]:58693 [::]:* users:(("rpc.statd",pid=14625,fd=11))
+# port PXE terbuka (udp 67/69, tcp 80/3000/2049)
+# (akhir daftar port)
+# manifest /var/lib/pxe-dashboard-installer/install-manifest
+(tidak ada)
+# /opt/pxe-dashboard
+(tidak ada)
+# /etc/pxe-dashboard.env
+(tidak ada)
+# dnsmasq conf (interface/bind/range)
+(tidak ada)
+# nginx enabled
+lrwxrwxrwx 1 root root 34 Nov  7 09:04 default -> /etc/nginx/sites-available/default
+# exportfs -v
+# mount /srv/pxe/media
+(tidak ada)
+# fstab (baris /srv/pxe)
+(tidak ada)
+# user pxe
+(tidak ada)
+# data
+HILANG /var/lib/pxe-dashboard
+HILANG /srv/pxe
+HILANG /srv/pxe/media
+HILANG /srv/pxe/tftp
+HILANG /var/log/dnsmasq-pxe.log
+# db
+# curl lokal
+/login curl: (7) Failed to connect to 10.99.0.2 port 80 after 0 ms: Couldn't connect to server
+000
+/api/settings curl: (7) Failed to connect to 10.99.0.2 port 80 after 0 ms: Couldn't connect to server
+000
+# paket
+dnsmasq            unknown ok not-installed
+nginx              unknown ok not-installed
+nfs-kernel-server  unknown ok not-installed
+ipxe               absent

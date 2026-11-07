@@ -1,0 +1,4 @@
+umount: /srv/pxe/media/ubuntu-24.04: target is busy.
+umount /srv/pxe/media/debian-12
+umount /srv/pxe/media/rocky-9
+/srv/pxe/media/ubuntu-24.04

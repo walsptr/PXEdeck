@@ -1,0 +1,14 @@
+50-cloud-init.yaml
+70-m8-test-trunk.yaml
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+mgmt20@trunk0    UP             10.99.20.1/24 
+nat0             UP             192.168.199.2/24 fe80::5054:ff:fe99:103/64 
+pxe0             UP             10.99.0.2/24 fe80::5054:ff:fe99:102/64 
+trunk0           UP             
+dnsmasq inactive disabled
+nginx inactive disabled
+nfs-server inactive disabled
+pxe-dashboard inactive disabled
+generate-ok
+50-cloud-init.yaml
+55-m8-test-trunk.yaml

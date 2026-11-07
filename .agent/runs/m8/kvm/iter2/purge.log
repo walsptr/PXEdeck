@@ -1,0 +1,15 @@
+# ssh root@10.99.0.2 cd /root/pxe-src && ./uninstall.sh --purge --yes
+== Rencana uninstall PXE dashboard ==
+  Dihentikan + dihapus:
+  Data dihapus (--purge):
+    data         /var/lib/pxe-dashboard
+    data         /var/log/dnsmasq-pxe.log
+    data         /srv/pxe
+    data         /srv/pxe/media
+    data         /srv/pxe/media/ubuntu-24.04
+    data         /srv/pxe/media/debian-12
+    data         /srv/pxe/media/rocky-9
+    data         /srv/pxe/media/debian-netboot
+    user         pxe
+[pxe-install] uninstall selesai
+# exit=0

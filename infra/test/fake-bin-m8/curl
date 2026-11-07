@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+# infra/test/fake-bin-m8/curl — pembungkus test M8 di atas fake-bin/curl (tanpa jaringan): bila ada
+# `-o <file>` dan $FAKE_STATE/curl-files/<basename URL> tersedia, file itu disalin ke <file>
+# ("unduhan" palsu nodejs.org/deb.debian.org). Pencatatan + model HTTP tetap oleh fake-bin/curl.
+out=""; prev=""
+for a in "$@"; do [[ "$prev" == -o ]] && out="$a"; prev="$a"; done
+url="${*: -1}"
+src="${FAKE_STATE:?}/curl-files/${url##*/}"
+if [[ -n "$out" && "$out" != /dev/null && -f "$src" ]]; then cp "$src" "$out"; fi
+exec "$(dirname "$0")/../fake-bin/curl" "$@"

@@ -1,0 +1,26 @@
+# M8 mutation testing (backend-dev) — 2026-11-07T08:12:38Z, commit dasar ff548c3 + perubahan M8
+# Metode: tiap mutasi diterapkan ke file sumber, subset test infra/test/m8.sh (20 test) dijalankan, file dipulihkan.
+# Hasil: 21/21 KILLED (M18 awal salah sasaran: patch sed merusak render sehingga 15 test gagal; diulang sebagai M18b yang tepat sasaran).
+
+M1 dnsmasq tanpa bind-interfaces (+cek pasca-render dihapus) [deploy/render.sh]: KILLED (hasil: 18 lulus, 2 gagal) FAIL M8 render: dnsmasq interface= NIC + bind-interfaces, tanpa sisa lab, DNS; FAIL M8 install penuh (sandbox): env 0640 root:pxe tanpa plaintext, manifest
+M2 dnsmasq interface= NIC induk, bukan sub-interface VLAN [deploy/render.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 render: VLAN (sub-interface, netplan, PXE_VLAN_NETWORKS, ekspor ro)
+M3 env mode 0644 [install.sh]: KILLED (hasil: 18 lulus, 2 gagal) FAIL M8 install --dry-run: rencana lengkap tanpa perubahan apa pun; FAIL M8 install penuh (sandbox): env 0640 root:pxe tanpa plaintext, manifest
+M4 password ke admin-hash lewat argv [install.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 install penuh (sandbox): env 0640 root:pxe tanpa plaintext, manifest
+M5 uninstall tanpa validasi baris manifest [deploy/lib.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 uninstall: manifest rusak/asing/group-writable & non-root ditolak
+M6 uninstall menghapus data tanpa --purge [uninstall.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 uninstall: hanya isi manifest, data tetap; --purge hapus data + user
+M7 uninstall tidak memulihkan site default nginx [uninstall.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 uninstall: hanya isi manifest, data tetap; --purge hapus data + user
+M8 DHCP asing hanya peringatan [install.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 preflight: non-root/OS salah/NIC hilang/port/DHCP asing ditolak
+M9 tanpa cek root [install.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 preflight: non-root/OS salah/NIC hilang/port/DHCP asing ditolak
+M10 OS apa pun diterima [install.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 preflight: non-root/OS salah/NIC hilang/port/DHCP asing ditolak
+M11 gagal tidak menghentikan dnsmasq [install.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 verifikasi gagal -> dnsmasq dihentikan, exit != 0
+M12 allowlist admin nginx dilewati [deploy/render.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 render: nginx listen/allowlist + log map tanpa query (DEC-027)
+M13 preflight file asing dilewati [install.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 install: file/dir asing tidak pernah ditimpa
+M14 fstab: semua baris dihapus [uninstall.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 uninstall: hanya isi manifest, data tetap; --purge hapus data + user
+M15 dry-run tetap mengeksekusi [deploy/lib.sh]: KILLED (hasil: 16 lulus, 4 gagal) FAIL M8 preflight: non-root/OS salah/NIC hilang/port/DHCP asing ditolak; FAIL M8 install --dry-run: rencana lengkap tanpa perubahan apa pun; FAIL M8 uninstall: hanya isi manifest, data tetap; --purge hapus data + user
+M16 cek port bentrok dimatikan [install.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 preflight: non-root/OS salah/NIC hilang/port/DHCP asing ditolak
+M17 SHA256 Node tidak diverifikasi [install.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 install: SHA256 Node tidak cocok -> batal
+M18 log map nginx: query tidak disamarkan [deploy/render.sh]: KILLED (hasil: 5 lulus, 15 gagal) FAIL M8 install: --config < env < flag; password di config/env ditolak; FAIL M8 render: dnsmasq interface= NIC + bind-interfaces, tanpa sisa lab, DNS; FAIL M8 render: VLAN (sub-interface, netplan, PXE_VLAN_NETWORKS, ekspor ro)
+M19 uninstall hapus file tak tercatat (dir rm -rf) [uninstall.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 uninstall: hanya isi manifest, data tetap; --purge hapus data + user
+M20 rerun selalu restart dashboard [install.sh]: KILLED (hasil: 19 lulus, 1 gagal) FAIL M8 install ulang: idempoten (no-op), tweak env dipertahankan, upgrade rilis
+
+M18b log map nginx: rule "$pxe_path?***" diganti $request_uri (query /login tercatat) [deploy/render.sh]: KILLED (test_m8_render_nginx_logmap gagal: /login?password=x tidak lagi /login?***)

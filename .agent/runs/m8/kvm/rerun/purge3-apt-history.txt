@@ -1,0 +1,35 @@
+
+Start-Date: 2026-10-17  12:58:20
+Commandline: apt-get install -qqy grub-pc shim-signed
+Install: mokutil:amd64 (0.6.0-2build3, automatic), grub-efi-amd64-signed:amd64 (1.202.5+2.12-1ubuntu7.3, automatic), grub-efi-amd64-bin:amd64 (2.12-1ubuntu7.3, automatic), efibootmgr:amd64 (18-1build2, automatic), shim-signed:amd64 (1.58+15.8-0ubuntu1)
+End-Date: 2026-10-17  12:58:22
+
+Start-Date: 2026-11-07  09:46:11
+Commandline: apt-get install -y --no-install-recommends dnsmasq nginx nfs-kernel-server ipxe libarchive-tools
+Install: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2), nginx:amd64 (1.24.0-2ubuntu7.19), nginx-common:amd64 (1.24.0-2ubuntu7.19, automatic), nfs-common:amd64 (1:2.6.4-3ubuntu5.1, automatic), libarchive-tools:amd64 (3.7.2-2ubuntu0.9), nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1), ipxe-qemu:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2, automatic), dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2, automatic), grub-ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2, automatic), keyutils:amd64 (1.6.3-3build1, automatic), rpcbind:amd64 (1.2.6-7ubuntu2, automatic), libnfsidmap1:amd64 (1:2.6.4-3ubuntu5.1, automatic), ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  09:46:18
+
+Start-Date: 2026-11-07  10:09:14
+Commandline: apt-get purge -y dnsmasq nginx nfs-kernel-server ipxe libarchive-tools
+Purge: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2), nginx:amd64 (1.24.0-2ubuntu7.19), libarchive-tools:amd64 (3.7.2-2ubuntu0.9), nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1), ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  10:09:16
+
+Start-Date: 2026-11-07  10:09:19
+Commandline: apt-get purge -y dnsmasq-base grub-ipxe ipxe-qemu nginx-common
+Purge: nginx-common:amd64 (1.24.0-2ubuntu7.19), ipxe-qemu:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2), dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2), grub-ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  10:09:21
+
+Start-Date: 2026-11-07  10:10:13
+Commandline: apt-get install -y --no-install-recommends dnsmasq nginx nfs-kernel-server ipxe libarchive-tools
+Install: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2), nginx:amd64 (1.24.0-2ubuntu7.19), nginx-common:amd64 (1.24.0-2ubuntu7.19, automatic), libarchive-tools:amd64 (3.7.2-2ubuntu0.9), nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1), ipxe-qemu:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2, automatic), dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2, automatic), grub-ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2, automatic), ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  10:10:17
+
+Start-Date: 2026-11-07  10:14:52
+Commandline: apt-get purge -y dnsmasq nginx nfs-kernel-server ipxe libarchive-tools
+Purge: dnsmasq:amd64 (2.91-0ubuntu0.24.04.2), nginx:amd64 (1.24.0-2ubuntu7.19), libarchive-tools:amd64 (3.7.2-2ubuntu0.9), nfs-kernel-server:amd64 (1:2.6.4-3ubuntu5.1), ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  10:14:54
+
+Start-Date: 2026-11-07  10:14:57
+Commandline: apt-get purge -y dnsmasq-base grub-ipxe ipxe-qemu nginx-common
+Purge: nginx-common:amd64 (1.24.0-2ubuntu7.19), ipxe-qemu:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2), dnsmasq-base:amd64 (2.91-0ubuntu0.24.04.2), grub-ipxe:amd64 (1.21.1+git-20220113.fbbdc3926-0ubuntu2)
+End-Date: 2026-11-07  10:14:59

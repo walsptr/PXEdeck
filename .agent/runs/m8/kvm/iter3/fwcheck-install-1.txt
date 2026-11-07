@@ -1,0 +1,7 @@
+# fwcheck install-1 2026-11-07T13:10:10Z
+ssh root@10.99.0.2 (admin, tcp/22 di pxe0): OK
+GET http://10.99.0.2/login dari host: 200
+# ping -6 fe80::5054:ff:fe99:102%virbr-pxe (ND)
+n/a: virbr-pxe di host tanpa alamat IPv6 (ND diuji dari node, tahap nodedns)
+# ip -6 neigh di VM (pxe0)
+

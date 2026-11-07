@@ -1,0 +1,16 @@
+# cleanup 2026-11-07T09:13:02Z
+# domain:
+ubuntu24.04
+# network:
+default
+int
+# .agent/vms:
+total 0
+drwxr-xr-x 1 syawal syawal  0 Nov  7 16:13 .
+drwxr-xr-x 1 syawal syawal 82 Nov  7 14:03 ..
+# .agent/keys:
+total 0
+drwxr-xr-x 1 syawal syawal  0 Nov  7 16:13 .
+drwxr-xr-x 1 syawal syawal 82 Nov  7 14:03 ..
+# socat capture:
+(tidak ada)
