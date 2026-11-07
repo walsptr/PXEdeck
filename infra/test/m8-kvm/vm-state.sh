@@ -8,6 +8,8 @@ echo "# systemctl (is-active / is-enabled)"
 for s in dnsmasq nginx nfs-server pxe-dashboard; do
   printf '%-16s %-10s %s\n' "$s" "$(systemctl is-active "$s.service" 2>/dev/null)" "$(systemctl is-enabled "$s.service" 2>/dev/null)"
 done
+echo "# pxe-dashboard unit (idempotensi: PID/waktu start sama = tidak di-restart)"
+systemctl show -p MainPID -p ActiveEnterTimestamp -p NRestarts -p Result -p LoadState pxe-dashboard.service 2>/dev/null
 echo "# ss -lunp (udp)"; ss -lunpH 2>/dev/null | awk '{print $1, $4, $5, $6}'
 echo "# ss -ltnp (tcp)"; ss -ltnpH 2>/dev/null | awk '{print $1, $4, $5, $6}'
 echo "# port PXE terbuka (udp 67/69, tcp 80/3000/2049)"
@@ -29,6 +31,7 @@ if [[ -f /etc/pxe-dashboard.env ]]; then
   stat -c 'mode=%a owner=%U:%G' /etc/pxe-dashboard.env
   sed -E 's/^(PXE_ADMIN_PASSWORD_HASH=).*/\1<disamarkan>/' /etc/pxe-dashboard.env | grep -E '^[A-Z]'
   if grep -qE "^PXE_ADMIN_PASSWORD_HASH='scrypt\\$" /etc/pxe-dashboard.env; then echo "hash-format=scrypt"; else echo "hash-format=TIDAK-scrypt"; fi
+  echo "env-file-sha256=$(sha256sum /etc/pxe-dashboard.env | cut -c1-16) mtime=$(stat -c %y /etc/pxe-dashboard.env)"
   echo "hash-sha256-prefix=$(sed -n 's/^PXE_ADMIN_PASSWORD_HASH=//p' /etc/pxe-dashboard.env | sha256sum | cut -c1-12)"
 else echo "(tidak ada)"; fi
 echo "# dnsmasq conf (interface/bind/range)"
@@ -36,6 +39,8 @@ grep -hE '^(interface|bind-interfaces|except-interface|dhcp-range|dhcp-boot|port
 echo "# nginx enabled"; ls -l /etc/nginx/sites-enabled 2>/dev/null | sed 1d
 echo "# exportfs -v"; exportfs -v 2>/dev/null || true
 echo "# mount /srv/pxe/media"; findmnt -rno TARGET,SOURCE,FSTYPE,OPTIONS 2>/dev/null | grep '^/srv/pxe' || echo "(tidak ada)"
+echo "# modul disk Debian (debian-netboot/modules)"
+if [[ -d /srv/pxe/media/debian-netboot/modules ]]; then find /srv/pxe/media/debian-netboot/modules -name '*.ko' -printf 'ko %P %s\n'; else echo "(tidak ada)"; fi
 echo "# fstab (baris /srv/pxe)"; grep '/srv/pxe' /etc/fstab || echo "(tidak ada)"
 echo "# user pxe"; getent passwd pxe || echo "(tidak ada)"
 echo "# data"

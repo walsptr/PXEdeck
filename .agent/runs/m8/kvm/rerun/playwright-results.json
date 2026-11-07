@@ -1,0 +1,52 @@
+{
+  "run": "m8",
+  "session": "1794045076620-b97780e4",
+  "generatedAt": "2026-11-07T10:04:30.551Z",
+  "results": [
+    {
+      "ac": "M8-KVM-login",
+      "status": "PASS",
+      "note": "401/204/200",
+      "evidence": [
+        "m8-login.txt"
+      ]
+    },
+    {
+      "ac": "M8-KVM-node",
+      "node": "pxe-test-m8-node51",
+      "status": "PASS",
+      "durationS": 578,
+      "note": "booting → installing → configuring → done",
+      "evidence": [
+        "pxe-test-m8-node51-timeline.txt",
+        "pxe-test-m8-node51-console.log"
+      ]
+    },
+    {
+      "ac": "M8-KVM-ssh",
+      "node": "pxe-test-m8-node51",
+      "status": "PASS",
+      "durationS": 214,
+      "evidence": [
+        "pxe-test-m8-node51-verify-ssh.txt"
+      ]
+    },
+    {
+      "ac": "M8-KVM-scan-playwright",
+      "status": "PASS",
+      "note": "0 temuan",
+      "evidence": [
+        "evidence-scan-playwright.txt"
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "name": "pxe-test-m8-node51",
+      "fw": "uefi",
+      "os": "ubuntu",
+      "ip": "10.99.0.61",
+      "hostname": "m8-node51"
+    }
+  ]
+}

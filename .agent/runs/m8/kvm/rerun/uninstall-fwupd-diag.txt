@@ -1,0 +1,11 @@
+# fwupd: start/aktivasi (journal) vs uninstall
+2026-11-07T10:06:05+00:00 pxe-test-install fwupd[48346]: 10:06:05.210 FuEngine             failed to add device /sys/devices/pci0000:00/0000:00:1f.2/ata3/host2/target2:0:0/2:0:0:0/block/sr2: failed to subclass open: failed to open /dev/sr2: Operation not permitted
+2026-11-07T10:06:05+00:00 pxe-test-install fwupd[48346]: 10:06:05.214 FuMain               fwupd 2.0.20 ready for requests (locale C.UTF-8)
+2026-11-07T10:06:05+00:00 pxe-test-install systemd[1]: Started fwupd.service - Firmware update daemon.
+2026-11-07T10:06:05+00:00 pxe-test-install fwupdmgr[48243]: Updating lvfs
+2026-11-07T10:06:07+00:00 pxe-test-install fwupdmgr[48243]: Successfully downloaded new metadata:
+2026-11-07T10:06:07+00:00 pxe-test-install fwupdmgr[48243]:  • No devices are updatable
+2026-11-07T10:06:07+00:00 pxe-test-install systemd[1]: fwupd-refresh.service: Deactivated successfully.
+2026-11-07T10:06:07+00:00 pxe-test-install systemd[1]: Finished fwupd-refresh.service - Refresh fwupd metadata and update motd.
+640 2026-02-26 11:36:18.000000000 +0000 /etc/fwupd/fwupd.conf
+2026-11-07T10:06:02+00:00 pxe-test-install systemd[1]: Stopping pxe-dashboard.service - PXE dashboard (Next.js standalone)...

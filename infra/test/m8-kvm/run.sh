@@ -99,6 +99,7 @@ case "$cmd" in
       pathpre="PATH=/root/m8-shim:\$PATH "
       echo "# M8_SS_SHIM=1: install.sh dijalankan dengan PATH=/root/m8-shim:\$PATH (shim ss diagnostik, lihat vm-ss-shim.sh)" >> "$K/install-$n.log"
     fi
+    [[ "${M8_IDEMPOTENT:-0}" == 1 ]] && state "install-$n-before"
     t0=$(date +%s); rc=0
     vm "cd /root/pxe-src && ${pathpre}./install.sh ${INSTALL_ARGS[*]} ${extra[*]}" >> "$K/install-$n.log" 2>&1 || rc=$?
     echo "# exit=$rc durasi=$(( $(date +%s) - t0 )) dtk" >> "$K/install-$n.log"
@@ -117,10 +118,94 @@ case "$cmd" in
     bad_dns="$( { lss | grep -Ev "^10\.99\.0\.2:[0-9]+$|%$M8_NIC:[0-9]+$" || true; } | wc -l)"
     dhcp67="$(lss | wc -l)"
     nic_67="$( { lss | grep -c "%$M8_NIC:67$" || true; } )"
+    ev="install-$n.log install-$n-ss-lunp.txt install-$n-host-http.txt state-install-$n.txt"
     if ((rc == 0)) && [[ "$login" == 200 && "$sett" == 401 ]] && ((dhcp67 > 0 && bad_dns == 0 && nic_67 >= 1)); then
-      step "install-$n" PASS "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq ${dhcp67} socket udp, semua di $M8_NIC/10.99.0.2 (DHCP %$M8_NIC:67)" "install-$n.log install-$n-ss-lunp.txt install-$n-host-http.txt state-install-$n.txt"
+      step "install-$n" PASS "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq ${dhcp67} socket udp, semua di $M8_NIC/10.99.0.2 (DHCP %$M8_NIC:67)" "$ev"
     else
-      step "install-$n" FAIL "exit=$rc login=$login settings=$sett dnsmasq-socket=$dhcp67 di-luar-$M8_NIC=$bad_dns %$M8_NIC:67=$nic_67" "install-$n.log install-$n-ss-lunp.txt install-$n-host-http.txt state-install-$n.txt"
+      step "install-$n" FAIL "exit=$rc login=$login settings=$sett dnsmasq-socket=$dhcp67 di-luar-$M8_NIC=$bad_dns %$M8_NIC:67=$nic_67" "$ev"
+    fi
+    # M8_CHECK_DEBIAN=1: --iso-debian perangkat /dev/sr1 -> modul disk virtio Debian diekstrak.
+    if [[ "${M8_CHECK_DEBIAN:-0}" == 1 ]]; then
+      kos="$(grep -cE '^ko [^ ]+/virtio_(blk|scsi)\.ko [1-9]' "$K/state-install-$n.txt" || true)"
+      if grep -qE '^\[pxe-install\] modul disk Debian [^ ]+ di /srv/pxe/media/debian-netboot/modules' "$K/install-$n.log" && ! grep -q 'modul disk Debian tidak diekstrak' "$K/install-$n.log" && ((kos == 2)); then
+        step "install-$n-debian-modules" PASS "--iso-debian /dev/sr1: modul virtio_blk + virtio_scsi diekstrak ke debian-netboot/modules" "install-$n.log state-install-$n.txt"
+      else
+        step "install-$n-debian-modules" FAIL "modul Debian tidak lengkap (ko=$kos)" "install-$n.log state-install-$n.txt"
+      fi
+    fi
+    # M8_IDEMPOTENT=1: run ulang args sama, ISO ter-mount + diekspor NFS -> tanpa rilis baru, env tidak
+    # ditulis ulang, dashboard tidak di-restart (MainPID/ActiveEnterTimestamp sama), manifest sama.
+    if [[ "${M8_IDEMPOTENT:-0}" == 1 ]]; then
+      b="$K/state-install-$n-before.txt"; a="$K/state-install-$n.txt"; probs=()
+      mounts_b="$(grep -c '^/srv/pxe/media/[a-z0-9.-]* /dev/sr[0-2] iso9660' "$b" || true)"
+      exp_b="$(awk '/^# exportfs -v/ { f = 1; next } /^# / { f = 0 } f' "$b" | grep -cE '^/srv/pxe/media/(ubuntu-24\.04|rocky-9)' || true)"
+      ((mounts_b == 3)) || probs+=("ISO ter-mount sebelum=$mounts_b (harus 3)")
+      ((exp_b >= 2)) || probs+=("ekspor NFS media sebelum=$exp_b")
+      ((rc == 0)) || probs+=("exit=$rc")
+      cmp -s "$K/install-$n-releases-before.txt" "$K/install-$n-releases-after.txt" || probs+=("daftar rilis berubah")
+      cmp -s "$K/install-$n-manifest-before.txt" "$K/install-$n-manifest-after.txt" || probs+=("manifest berubah")
+      grep -q 'rilis dashboard tidak berubah' "$K/install-$n.log" || probs+=("tanpa log 'rilis tidak berubah'")
+      grep -q 'password admin tidak berubah' "$K/install-$n.log" || probs+=("tanpa log 'password admin tidak berubah'")
+      grep -q 'pxe-dashboard tidak berubah — tidak di-restart' "$K/install-$n.log" || probs+=("tanpa log 'tidak di-restart'")
+      ! grep -q 'terpasang /etc/pxe-dashboard.env' "$K/install-$n.log" || probs+=("env ditulis ulang")
+      for key in '^MainPID=' '^ActiveEnterTimestamp=' '^env-file-sha256=' '^current -> ' '^release-id: '; do
+        [[ "$(grep -m1 "$key" "$b")" == "$(grep -m1 "$key" "$a")" ]] || probs+=("berubah: $(grep -m1 "$key" "$b" | cut -c1-60) -> $(grep -m1 "$key" "$a" | cut -c1-60)")
+      done
+      if ((${#probs[@]} == 0)); then
+        step "install-$n-idempotent" PASS "ISO ter-mount (3) + diekspor; rilis/manifest/env sama; password sama -> hash dipertahankan; pxe-dashboard tidak di-restart (MainPID & ActiveEnterTimestamp sama)" "install-$n.log state-install-$n-before.txt state-install-$n.txt install-$n-releases-before.txt install-$n-releases-after.txt"
+      else
+        step "install-$n-idempotent" FAIL "$(IFS='; '; echo "${probs[*]}")" "install-$n.log state-install-$n-before.txt state-install-$n.txt"
+      fi
+    fi
+    ;;
+  neg-address)
+    # Install gagal di preflight (alamat tidak terpasang di NIC) -> exit != 0, TANPA perubahan apa pun
+    # (manifest tidak dibuat, paket tidak dipasang).
+    [[ -f "$PASSF" ]] || admin_pass_new "$PASSF"
+    vm 'umask 077 && cat > /root/m8-admin.pass && chmod 600 /root/m8-admin.pass' < "$PASSF"
+    args=("${INSTALL_ARGS[@]}"); args[4]=10.99.0.250/24; args[6]=10.99.0.100-10.99.0.200
+    printf '# ./install.sh %s\n' "${args[*]}" > "$K/neg-address.log"
+    rc=0; vm "cd /root/pxe-src && ./install.sh ${args[*]}" >> "$K/neg-address.log" 2>&1 || rc=$?
+    echo "# exit=$rc" >> "$K/neg-address.log"
+    vm 'echo "manifest: $(test -e /var/lib/pxe-dashboard-installer && echo ADA || echo tidak-ada)"; for p in dnsmasq nginx nfs-kernel-server; do echo "$p: $(dpkg-query -W -f="\${Status}" $p 2>/dev/null || echo absent)"; done; echo "env: $(test -e /etc/pxe-dashboard.env && echo ADA || echo tidak-ada)"; echo "user pxe: $(getent passwd pxe >/dev/null && echo ADA || echo tidak-ada)"' > "$K/neg-address-state.txt" 2>&1
+    if ((rc != 0)) && grep -q 'belum memiliki alamat 10.99.0.250/24' "$K/neg-address.log" && grep -q '^manifest: tidak-ada' "$K/neg-address-state.txt" && ! grep -q 'install ok installed' "$K/neg-address-state.txt" && grep -q '^env: tidak-ada' "$K/neg-address-state.txt"; then
+      step neg-address PASS "--address 10.99.0.250/24 (tidak ada di NIC) ditolak preflight exit=$rc; tanpa manifest/paket/env/user" "neg-address.log neg-address-state.txt"
+    else
+      step neg-address FAIL "exit=$rc atau ada perubahan" "neg-address.log neg-address-state.txt"
+    fi
+    ;;
+  failinstall)
+    # Install gagal SETELAH paket dipasang + unit di-enable (rilis rusak: server.js langsung exit 1 ->
+    # /login bukan 200 -> verify gagal) -> rollback: dnsmasq dihentikan, unit yang di-enable run itu
+    # dinonaktifkan lagi. Dijalankan pada state segar (paket installer sudah di-purge).
+    bad="$(mktemp -d "${TMPDIR:-/tmp}/m8-badrel.XXXXXX")"
+    mkdir -p "$bad/app/.next/static"
+    printf '// rilis rusak sengaja (uji M8 rollback)\nprocess.exit(1)\n' > "$bad/app/server.js"
+    tar -C "$bad/app" -cJf "$bad/bad-release.tar.xz" .
+    state failinstall-before
+    "$INFRA_DIR/install-vm.sh" push "$bad/bad-release.tar.xz"
+    rm -rf "$bad"
+    [[ -f "$PASSF" ]] || admin_pass_new "$PASSF"
+    vm 'umask 077 && cat > /root/m8-admin.pass && chmod 600 /root/m8-admin.pass' < "$PASSF"
+    printf '# ./install.sh %s --release /root/pxe-release.tar.xz (rilis rusak)\n' "${INSTALL_ARGS[*]}" > "$K/failinstall.log"
+    rc=0; vm "cd /root/pxe-src && ./install.sh ${INSTALL_ARGS[*]} --release /root/pxe-release.tar.xz" >> "$K/failinstall.log" 2>&1 || rc=$?
+    echo "# exit=$rc" >> "$K/failinstall.log"
+    state failinstall
+    vm "cat /var/lib/pxe-dashboard-installer/install-manifest 2>/dev/null || echo '(tidak ada)'" > "$K/failinstall-manifest.txt" 2>&1 || true
+    pr=()
+    ((rc != 0)) || pr+=("exit 0 (harus gagal)")
+    grep -q 'FAIL GET http://10.99.0.2/login' "$K/failinstall.log" || pr+=("verify /login tidak gagal seperti diharapkan")
+    grep -q 'rollback: menonaktifkan' "$K/failinstall.log" || pr+=("tanpa log rollback")
+    for u in dnsmasq nginx nfs-server pxe-dashboard; do
+      line="$(grep -E "^$u +" "$K/state-failinstall.txt" | head -1)"
+      [[ "$line" == *" enabled"* ]] && pr+=("$u masih enabled")
+      [[ "$u" == dnsmasq && "$line" == *" active "* ]] && pr+=("dnsmasq masih aktif")
+    done
+    grep -qE '^OPEN udp .*:(67|69) ' "$K/state-failinstall.txt" && pr+=("DHCP/TFTP masih listen")
+    if ((${#pr[@]} == 0)); then
+      step failinstall PASS "rilis rusak -> verify gagal exit=$rc; rollback: dnsmasq/nginx/nfs-server/pxe-dashboard tidak enabled, dnsmasq mati, udp 67/69 tertutup" "failinstall.log state-failinstall-before.txt state-failinstall.txt failinstall-manifest.txt"
+    else
+      step failinstall FAIL "$(IFS='; '; echo "${pr[*]}")" "failinstall.log state-failinstall-before.txt state-failinstall.txt failinstall-manifest.txt"
     fi
     ;;
   umount-media)
@@ -180,25 +265,71 @@ case "$cmd" in
       snap "after-$lbl"
       mrc=0; vm "MODE=$mode MF=/root/m8-manifest-before-$lbl bash -s" < "$HERE/vm-manifest-check.sh" > "$K/$lbl-manifest-check.txt" 2>&1 || mrc=$?
       { echo "# dari host"; echo "GET http://10.99.0.2/login -> $(host_code /login)"; } > "$K/$lbl-host-http.txt"
+      vm "cat /var/lib/pxe-dashboard-installer/install-manifest 2>/dev/null || echo '(manifest tidak ada)'" > "$K/$lbl-manifest-after.txt" 2>&1 || true
+      if [[ "${M8_REMOVE_PKGS:-0}" == 1 ]]; then
+        vm "tail -n 60 /var/log/apt/history.log" > "$K/$lbl-apt-history.txt" 2>&1 || true
+        vm "apt-get -s autoremove 2>/dev/null | grep -E '^Remv ' || echo '(tidak ada paket autoremovable)'" > "$K/$lbl-apt-autoremove-after.txt" 2>&1 || true
+      fi
     else
       rc="$(sed -n 's/^# exit=//p' "$K/$lbl.log")"
       mrc="$(sed -n 's/^# manifest-check MODE=[a-z]* fails=//p' "$K/$lbl-manifest-check.txt")"
     fi
     open_ports="$(awk '/^OPEN /' "$K/state-$lbl.txt" | wc -l)"
     LC_ALL=C comm -13 <(LC_ALL=C sort "$K/pkgs-pre.txt") <(LC_ALL=C sort "$K/pkgs-after-$lbl.txt") > "$K/pkgs-new-vs-pre.txt"
-    drc=0; python3 -I "$HERE/etc-diff.py" "$K/etc-before-$lbl.tsv" "$K/etc-after-$lbl.tsv" --manifest "$K/$lbl-manifest-before.txt" --label "$lbl: sebelum vs sesudah" > "$K/$lbl-etc-diff.txt" || drc=$?
+    LC_ALL=C comm -23 <(LC_ALL=C sort "$K/pkgs-before-$lbl.txt") <(LC_ALL=C sort "$K/pkgs-after-$lbl.txt") > "$K/$lbl-pkgs-removed.txt"
+    rmopt=(); [[ -s "$K/$lbl-pkgs-removed.txt" ]] && rmopt=(--removed-pkgs "$K/$lbl-pkgs-removed.txt")
+    drc=0; python3 -I "$HERE/etc-diff.py" "$K/etc-before-$lbl.tsv" "$K/etc-after-$lbl.tsv" --manifest "$K/$lbl-manifest-before.txt" "${rmopt[@]}" --label "$lbl: sebelum vs sesudah" > "$K/$lbl-etc-diff.txt" || drc=$?
     prc=0; python3 -I "$HERE/etc-diff.py" "$K/etc-pre.tsv" "$K/etc-after-$lbl.tsv" --manifest "$K/$lbl-manifest-before.txt" --new-pkgs "$K/pkgs-new-vs-pre.txt" --label "$lbl: pra-install vs sesudah" > "$K/$lbl-etc-diff-vs-pre.txt" || prc=$?
     { echo "# user baru vs pra-install (dari paket / installer)"; LC_ALL=C comm -13 <(LC_ALL=C sort "$K/users-pre.txt") <(LC_ALL=C sort "$K/users-after-$lbl.txt"); echo "# user hilang vs pra-install"; LC_ALL=C comm -23 <(LC_ALL=C sort "$K/users-pre.txt") <(LC_ALL=C sort "$K/users-after-$lbl.txt"); } > "$K/$lbl-users-vs-pre.txt"
     data_ok=1
     if [[ "$mode" == keep ]]; then
-      grep -q '^ADA   /var/lib/pxe-dashboard ' "$K/state-$lbl.txt" && grep -q '^ADA   /srv/pxe/media ' "$K/state-$lbl.txt" && grep -q '^pxe.db ' "$K/state-$lbl.txt" || data_ok=0
+      # M8_EXPECT_DB=0: install segar setelah purge belum pernah membuat pxe.db (dibuat lazy saat
+      # dashboard pertama kali butuh DB) -> yang dinilai hanya direktori data dipertahankan.
+      grep -q '^ADA   /var/lib/pxe-dashboard ' "$K/state-$lbl.txt" && grep -q '^ADA   /srv/pxe/media ' "$K/state-$lbl.txt" || data_ok=0
+      if [[ "${M8_EXPECT_DB:-1}" == 1 ]]; then grep -q '^pxe.db ' "$K/state-$lbl.txt" || data_ok=0; fi
     else
       grep -q '^HILANG /var/lib/pxe-dashboard$' "$K/state-$lbl.txt" && grep -q '^HILANG /srv/pxe$' "$K/state-$lbl.txt" && grep -q '^# user pxe' "$K/state-$lbl.txt" && ! grep -q '^pxe:' "$K/state-$lbl.txt" || data_ok=0
     fi
-    if ((rc == 0 && mrc == 0 && drc == 0 && open_ports == 0 && data_ok == 1)); then
-      step "$lbl" PASS "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; data $mode OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=$prc)" "$lbl.log $lbl-manifest-check.txt state-$lbl.txt $lbl-etc-diff.txt $lbl-etc-diff-vs-pre.txt"
+    # Unit installer/paket tidak boleh tertinggal "failed" (pxe-dashboard SIGTERM -> 143 = sukses).
+    failed_units="$(grep -cE '^(dnsmasq|nginx|nfs-server|pxe-dashboard) +failed' "$K/state-$lbl.txt" || true)"
+    if ((rc == 0 && mrc == 0 && drc == 0 && open_ports == 0 && data_ok == 1 && failed_units == 0)); then
+      step "$lbl" PASS "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; tanpa unit failed; data $mode OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=$prc, informatif)" "$lbl.log $lbl-manifest-check.txt state-$lbl.txt $lbl-etc-diff.txt $lbl-etc-diff-vs-pre.txt"
     else
-      step "$lbl" FAIL "exit=$rc manifest-check=$mrc open_ports=$open_ports data_ok=$data_ok etc-diff=$drc vs-pre=$prc" "$lbl.log $lbl-manifest-check.txt state-$lbl.txt $lbl-etc-diff.txt $lbl-etc-diff-vs-pre.txt"
+      step "$lbl" FAIL "exit=$rc manifest-check=$mrc open_ports=$open_ports failed_units=$failed_units data_ok=$data_ok etc-diff=$drc vs-pre=$prc" "$lbl.log $lbl-manifest-check.txt state-$lbl.txt $lbl-etc-diff.txt $lbl-etc-diff-vs-pre.txt"
+    fi
+    # M8_REMOVE_PKGS=1: tinjauan apt — paket 'requested' ter-purge; 'dep' ter-purge atau masih dibutuhkan
+    # (tetap di manifest); paket pra-install tidak ada yang hilang; tidak ada dep kita yang tersisa
+    # autoremovable; sisa paket vs pra-install dijelaskan.
+    if [[ "${M8_REMOVE_PKGS:-0}" == 1 && "$cmd" == purge ]]; then
+      pr=(); mb="$K/$lbl-manifest-before.txt"; ma="$K/$lbl-manifest-after.txt"; after="$K/pkgs-after-$lbl.txt"
+      lost="$(LC_ALL=C comm -23 <(LC_ALL=C sort "$K/pkgs-pre.txt") <(LC_ALL=C sort "$after") | tr '\n' ' ')"
+      [[ -z "${lost// }" ]] || pr+=("paket pra-install hilang: $lost")
+      {
+        echo "# tinjauan paket $lbl (uninstall.sh --purge --remove-packages)"
+        echo "# paket dihapus (sebelum - sesudah):"; sed 's/^/  /' "$K/$lbl-pkgs-removed.txt"
+        echo "# paket pra-install yang hilang: ${lost:-(tidak ada)}"
+        echo "# entri pkg manifest sebelum:"
+        awk -F'\t' '$1 == "pkg"' "$mb" | while IFS=$'\t' read -r t pk ex; do
+          if grep -qxF "$pk" "$K/$lbl-pkgs-removed.txt"; then st=dipurge; elif grep -qxF "$pk" "$after"; then st=masih-terpasang; else st=tidak-terpasang-sebelumnya; fi
+          kept="$(awk -F'\t' -v q="$pk" '$1 == "pkg" && $2 == q { print "tetap-di-manifest" }' "$ma")"
+          echo "  ${ex:-requested} $pk -> $st ${kept}"
+        done
+        echo "# sisa paket vs pra-install:"; LC_ALL=C comm -13 <(LC_ALL=C sort "$K/pkgs-pre.txt") <(LC_ALL=C sort "$after") | sed 's/^/  /'
+        echo "# apt-get -s autoremove sesudah:"; sed 's/^/  /' "$K/$lbl-apt-autoremove-after.txt"
+      } > "$K/$lbl-packages-review.txt"
+      while IFS=$'\t' read -r t pk ex; do
+        [[ "$t" == pkg ]] || continue
+        if [[ "$ex" == dep ]]; then
+          if grep -qxF "$pk" "$after" && ! grep -qP "^pkg\t$pk\tdep" "$ma" 2>/dev/null; then pr+=("dep $pk masih terpasang tapi hilang dari manifest"); fi
+          grep -qE "^Remv $pk[ :]" "$K/$lbl-apt-autoremove-after.txt" && pr+=("dep $pk masih autoremovable")
+        else
+          grep -qxF "$pk" "$after" && pr+=("requested $pk masih terpasang")
+        fi
+      done < "$mb"
+      leftover="$(LC_ALL=C comm -13 <(LC_ALL=C sort "$K/pkgs-pre.txt") <(LC_ALL=C sort "$after"))"
+      for pk in $leftover; do awk -F'\t' -v q="$pk" '$1 == "pkg" && $2 == q { f = 1 } END { exit !f }' "$mb" || pr+=("sisa $pk tidak tercatat di manifest"); done
+      if ((${#pr[@]} == 0)); then step "$lbl-packages" PASS "requested ter-purge; dep ter-purge atau masih dibutuhkan (tetap di manifest); paket pra-install utuh; tanpa autoremove global" "$lbl-packages-review.txt $lbl-apt-history.txt $lbl-apt-autoremove-after.txt"
+      else step "$lbl-packages" FAIL "$(IFS='; '; echo "${pr[*]}")" "$lbl-packages-review.txt $lbl-apt-history.txt $lbl-apt-autoremove-after.txt"; fi
     fi
     ;;
   cleanup)
@@ -232,8 +363,18 @@ pw = []
 p = os.path.join(k, "playwright-results.json")
 if os.path.exists(p):
     pw = json.load(open(p, encoding="utf-8")).get("results", [])
-out = {"run": "m8", "scenario": "DEC-029 §4 installer KVM", "steps": steps, "playwright": pw,
-       "overall": "PASS" if steps and all(s["status"] == "PASS" for s in steps) and all(r["status"] == "PASS" for r in pw) else "FAIL"}
+# Status akhir per langkah = entri non-INFO TERAKHIR untuk id itu (analisis ulang setelah tinjauan
+# INFO menggantikan entri sebelumnya; seluruh riwayat tetap di "steps").
+final = {}
+for st in steps:
+    if st["status"] != "INFO":
+        final[st["step"]] = st["status"]
+commit = ""
+cp = os.path.join(k, "commit.txt")
+if os.path.exists(cp):
+    commit = open(cp, encoding="utf-8").read().strip()
+out = {"run": "m8", "scenario": "DEC-029 §4 installer KVM", "commit": commit, "final": final, "steps": steps, "playwright": pw,
+       "overall": "PASS" if final and all(v == "PASS" for v in final.values()) and pw and all(r["status"] == "PASS" for r in pw) else "FAIL"}
 json.dump(out, open(os.path.join(k, "results.json"), "w", encoding="utf-8"), indent=2, ensure_ascii=False)
 print(out["overall"])
 PY

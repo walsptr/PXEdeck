@@ -48,7 +48,10 @@ while IFS=$'\t' read -r t p x; do
         if getent passwd "$p" >/dev/null; then bad "user $p masih ada setelah --purge"; else ok "user $p dihapus (--purge)"; fi
       fi ;;
     restore-link)
-      if [[ -L "$p" && "$(readlink "$p")" == "$x" ]]; then ok "restore-link $p -> $x dipulihkan"; else bad "restore-link $p tidak dipulihkan"; fi ;;
+      if [[ -L "$p" && "$(readlink "$p")" == "$x" ]]; then ok "restore-link $p -> $x dipulihkan"
+      elif [[ ! -e "$x" ]] && ! dpkg-query -W -f='${db:Status-Abbrev}' nginx-common 2>/dev/null | grep -q '^ii'; then
+        ok "restore-link $p: nginx-common sudah di-purge (--remove-packages) sehingga site default ikut hilang"
+      else bad "restore-link $p tidak dipulihkan"; fi ;;
     pkg)
       s="$(dpkg-query -W -f='${Status}' "$p" 2>/dev/null)"
       ok "pkg $p status='$s' (tanpa --remove-packages: tetap)" ;;

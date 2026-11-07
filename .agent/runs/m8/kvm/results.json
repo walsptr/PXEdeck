@@ -1,287 +1,62 @@
 {
   "run": "m8",
   "scenario": "DEC-029 §4 installer KVM",
-  "steps": [
-    {
-      "at": "2026-11-07T08:23:43Z",
-      "step": "up",
-      "status": "PASS",
-      "note": "VM bersih (tanpa dnsmasq/env/user pxe)",
-      "evidence": [
-        "attempt1-nic-pxe0/install-vm-clean.txt"
-      ]
+  "overall": "PASS",
+  "current": {
+    "evidence": "rerun/",
+    "results": "rerun/results.json",
+    "commit": "16aa054c9f7af31841239e2af9bb34416d233081",
+    "overall": "PASS",
+    "final": {
+      "up": "PASS",
+      "neg-address": "PASS",
+      "install-1": "PASS",
+      "install-1-debian-modules": "PASS",
+      "node": "PASS",
+      "install-2": "PASS",
+      "install-2-idempotent": "PASS",
+      "uninstall": "PASS",
+      "purge": "PASS",
+      "install-3": "PASS",
+      "uninstall2": "PASS",
+      "purge2": "PASS",
+      "purge2-packages": "PASS",
+      "failinstall": "PASS",
+      "purge3": "PASS",
+      "purge3-packages": "PASS",
+      "cleanup": "PASS",
+      "protected": "PASS"
     },
+    "playwright": [
+      {
+        "ac": "M8-KVM-login",
+        "status": "PASS"
+      },
+      {
+        "ac": "M8-KVM-node",
+        "status": "PASS"
+      },
+      {
+        "ac": "M8-KVM-ssh",
+        "status": "PASS"
+      },
+      {
+        "ac": "M8-KVM-scan-playwright",
+        "status": "PASS"
+      }
+    ],
+    "note": "rerun tanpa workaround diagnostik (M8_NIC=pxe0, tanpa shim ss, tanpa umount-media)"
+  },
+  "history": [
     {
-      "at": "2026-11-07T08:26:20Z",
-      "step": "install-1",
-      "status": "FAIL",
-      "note": "install.sh --interface pxe0 exit=1 setelah build+rilis: 'render dnsmasq: sisa nilai lab (pxe0/nat0/pxe.test)' (deploy/render.sh:65) — guard pasca-render menolak NIC bernama pxe0; layanan tidak start; /login 000 dari host",
-      "evidence": [
-        "attempt1-nic-pxe0/install-1.log",
-        "attempt1-nic-pxe0/state-install-1.txt",
-        "attempt1-nic-pxe0/install-1-host-http.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T08:26:56Z",
-      "step": "partial-purge",
-      "status": "PASS",
-      "note": "uninstall.sh --purge --yes pada install parsial (gagal) exit 0: layanan disabled, /opt/pxe-dashboard, /srv/pxe, /var/lib/pxe-dashboard, user pxe hilang; manifest tersisa hanya entri pkg",
-      "evidence": [
-        "attempt1-nic-pxe0/partial-purge-after-install-1.log",
-        "attempt1-nic-pxe0/state-partial-purge.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T08:39:32Z",
-      "step": "up",
-      "status": "PASS",
-      "note": "VM bersih (tanpa dnsmasq/env/user pxe)",
-      "evidence": [
-        "install-vm-clean.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T08:42:18Z",
-      "step": "install-2",
-      "status": "FAIL",
-      "note": "install.sh --interface prov0 (build di VM 148 dtk) exit=1: /login 200 + /api/settings 401 OK, tetapi verify() 'FAIL dnsmasq tidak listen DHCP udp %prov0:67' lalu dnsmasq dihentikan. Akar: install.sh:690-701 membaca `ss -lunpH`/`ss -ltnpH` dengan 7 field (netid state rq sq local peer proc) padahal ss satu-protokol mencetak 6 kolom tanpa Netid -> proc selalu kosong -> install.sh SELALU gagal di Ubuntu 24.04",
-      "evidence": [
-        "install-2.log",
-        "install-2-ss-lunp.txt",
-        "install-2-verify-diagnosis.txt",
-        "state-install-2.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T08:44:35Z",
-      "step": "install-3",
-      "status": "FAIL",
-      "note": "install.sh diulang (args sama, shim ss) exit=1 dalam 7 dtk: \"chmod: changing permissions of '/srv/pxe/media/ubuntu-24.04': Read-only file system\". Akar: deploy/lib.sh:201 ensure_dir menjalankan chmod/chown pada direktori 'data' yang sudah di manifest, dipanggil install.sh:431 untuk /srv/pxe/media/<id> yang SUDAH ter-mount ISO iso9660 (ro) dari run sebelumnya -> install.sh tidak idempoten selama ISO ter-mount (DEC-029 §2 'aman diulang')",
-      "evidence": [
-        "install-3.log",
-        "state-install-3.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T08:45:23Z",
-      "step": "umount-media-before-install-4",
-      "status": "PASS",
-      "note": "diagnostik: mount ISO dilepas sebelum install.sh diulang (bukan bagian produk)",
-      "evidence": [
-        "umount-media-before-install-4.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T08:45:43Z",
-      "step": "install-4",
-      "status": "PASS",
-      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 5 socket udp, semua di prov0/10.99.0.2 (DHCP %prov0:67)",
-      "evidence": [
-        "install-4.log",
-        "install-4-ss-lunp.txt",
-        "install-4-host-http.txt",
-        "state-install-4.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T08:59:33Z",
-      "step": "node",
-      "status": "PASS",
-      "note": "playwright m8-installer.spec.ts exit=0",
-      "evidence": [
-        "playwright-kvm.log",
-        "playwright-results.json",
-        "pxe-test-m8-node51-timeline.txt",
-        "pxe-test-m8-node51-verify-ssh.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:00:12Z",
-      "step": "install-5",
-      "status": "FAIL",
-      "note": "exit=1 login=200 settings=401 dnsmasq-socket=5 di-luar-prov0=0 %prov0:67=1",
-      "evidence": [
-        "install-5.log",
-        "install-5-ss-lunp.txt",
-        "install-5-host-http.txt",
-        "state-install-5.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:00:21Z",
-      "step": "umount-media-before-install-6",
-      "status": "FAIL",
-      "note": "diagnostik: umount /srv/pxe/media/ubuntu-24.04 \"target is busy\" (diekspor NFS, ditahan nfsd) — harness lama salah mencatat PASS, dikoreksi manual; install-6 gagal karena temuan lib.sh:201 yang sama",
-      "evidence": [
-        "umount-media-before-install-6.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:00:40Z",
-      "step": "install-6",
-      "status": "FAIL",
-      "note": "exit=1 login=200 settings=401 dnsmasq-socket=5 di-luar-prov0=0 %prov0:67=1",
-      "evidence": [
-        "install-6.log",
-        "install-6-ss-lunp.txt",
-        "install-6-host-http.txt",
-        "state-install-6.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:01:08Z",
-      "step": "umount-media-before-install-7",
-      "status": "PASS",
-      "note": "diagnostik: exportfs -ua + mount ISO dilepas sebelum install.sh diulang (bukan bagian produk)",
-      "evidence": [
-        "umount-media-before-install-7.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:01:29Z",
-      "step": "install-7",
-      "status": "PASS",
-      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 5 socket udp, semua di prov0/10.99.0.2 (DHCP %prov0:67)",
-      "evidence": [
-        "install-7.log",
-        "install-7-ss-lunp.txt",
-        "install-7-host-http.txt",
-        "state-install-7.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:03:00Z",
-      "step": "uninstall",
-      "status": "PASS",
-      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; data keep OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1)",
-      "evidence": [
-        "uninstall.log",
-        "uninstall-manifest-check.txt",
-        "state-uninstall.txt",
-        "uninstall-etc-diff.txt",
-        "uninstall-etc-diff-vs-pre.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:03:38Z",
-      "step": "purge",
-      "status": "PASS",
-      "note": "exit 0; manifest-check 0 FAIL; port 67/69/80/3000/2049 tertutup; data purge OK; /etc sebelum→sesudah tanpa UNEXPLAINED (vs pra-install rc=1)",
-      "evidence": [
-        "purge.log",
-        "purge-manifest-check.txt",
-        "state-purge.txt",
-        "purge-etc-diff.txt",
-        "purge-etc-diff-vs-pre.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:04:28Z",
-      "step": "install-8",
-      "status": "PASS",
-      "note": "exit 0; /login 200; /api/settings 401 (dari host); dnsmasq 5 socket udp, semua di prov0/10.99.0.2 (DHCP %prov0:67)",
-      "evidence": [
-        "install-8.log",
-        "install-8-ss-lunp.txt",
-        "install-8-host-http.txt",
-        "state-install-8.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:04:58Z",
-      "step": "uninstall2",
-      "status": "FAIL",
-      "note": "exit=0 manifest-check=0 open_ports=3 data_ok=1 etc-diff=0 vs-pre=1",
-      "evidence": [
-        "uninstall2.log",
-        "uninstall2-manifest-check.txt",
-        "state-uninstall2.txt",
-        "uninstall2-etc-diff.txt",
-        "uninstall2-etc-diff-vs-pre.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:05:47Z",
-      "step": "purge2",
-      "status": "FAIL",
-      "note": "exit=0 manifest-check=0 open_ports=0 data_ok=1 etc-diff=1 vs-pre=1",
-      "evidence": [
-        "purge2.log",
-        "purge2-manifest-check.txt",
-        "state-purge2.txt",
-        "purge2-etc-diff.txt",
-        "purge2-etc-diff-vs-pre.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:06:20Z",
-      "step": "purge2-review",
-      "status": "INFO",
-      "note": "Tinjauan manual purge2 (--purge --remove-packages): 32 UNEXPLAINED di purge2-etc-diff.txt seluruhnya file paket dnsmasq/nfs-kernel-server yang dihapus apt-get purge (conffile/rc-link/init.d/resolvconf hook) — efek sah --remove-packages, bukan file di luar manifest; sisa dependensi tidak di-autoremove (dnsmasq-base nginx-common nfs-common rpcbind keyutils libnfsidmap1 grub-ipxe ipxe-qemu), nginx.service (nginx-common) tetap enabled karena svc tercatat 'pre' (temuan install.sh:396-400)",
-      "evidence": [
-        "purge2-etc-diff.txt",
-        "state-purge2.txt",
-        "purge2.log"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:13:02Z",
-      "step": "cleanup",
-      "status": "PASS",
-      "note": "VM pxe-test-*=0 network pxe-test*=0 key=0 disk=0",
-      "evidence": [
-        "cleanup.txt"
-      ]
-    },
-    {
-      "at": "2026-11-07T09:13:10Z",
-      "step": "protected",
-      "status": "PASS",
-      "note": "ubuntu24.04 (shut off, sha256 dumpxml sama), network default/int (sha256 net-dumpxml sama) identik sebelum/sesudah; pxe-test-node01 tidak ada sebelum maupun sesudah",
-      "evidence": [
-        "protected-before.txt",
-        "protected-after.txt"
-      ]
+      "run": "run1",
+      "commit": "953a64d",
+      "superseded": true,
+      "supersededBy": "rerun (16aa054)",
+      "overall": "FAIL",
+      "results": "results-run1.json",
+      "evidence": "./ (file tingkat atas, attempt1-nic-pxe0/)",
+      "note": "run pertama menemukan bug install.sh/uninstall.sh (render NIC pxe0, parse ss, chmod ISO ter-mount, svc 'pre' setelah purge, dll.) — diperbaiki di 16aa054"
     }
-  ],
-  "playwright": [
-    {
-      "ac": "M8-KVM-login",
-      "status": "PASS",
-      "note": "401/204/200",
-      "evidence": [
-        "m8-login.txt"
-      ]
-    },
-    {
-      "ac": "M8-KVM-node",
-      "node": "pxe-test-m8-node51",
-      "status": "PASS",
-      "durationS": 588,
-      "note": "booting → installing → configuring → done",
-      "evidence": [
-        "pxe-test-m8-node51-timeline.txt",
-        "pxe-test-m8-node51-console.log"
-      ]
-    },
-    {
-      "ac": "M8-KVM-ssh",
-      "node": "pxe-test-m8-node51",
-      "status": "PASS",
-      "durationS": 220,
-      "evidence": [
-        "pxe-test-m8-node51-verify-ssh.txt"
-      ]
-    },
-    {
-      "ac": "M8-KVM-scan-playwright",
-      "status": "PASS",
-      "note": "0 temuan",
-      "evidence": [
-        "evidence-scan-playwright.txt"
-      ]
-    }
-  ],
-  "overall": "FAIL"
+  ]
 }

@@ -1,0 +1,6 @@
+manifest: tidak-ada
+dnsmasq: absent
+nginx: absent
+nfs-kernel-server: unknown ok not-installed
+env: tidak-ada
+user pxe: tidak-ada

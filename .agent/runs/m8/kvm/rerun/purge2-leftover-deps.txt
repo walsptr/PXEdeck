@@ -1,0 +1,11 @@
+## nfs-common: auto
+  libtirpc3t64
+## rpcbind: auto
+  nfs-common
+  nfs-common
+## keyutils: auto
+  nfs-common
+  nfs-common
+## libnfsidmap1: auto
+  nfs-common
+  nfs-common

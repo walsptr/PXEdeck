@@ -9,14 +9,28 @@ Setiap path yang berbeda (tambah/hapus/ubah isi, mode, owner, target) diklasifik
   fstab         /etc/fstab (manifest memuat entri fstab)
   restore-link  symlink default nginx yang dicatat restore-link
   enable-link   symlink enablement systemd untuk unit/svc di manifest (*.wants/<unit>)
+  pkg-removed   dimiliki/dibuat paket yang di-purge --remove-packages (dpkg .list snapshot A, atau
+                rc-link/init.d/default/resolvconf/systemd unit bernama paket itu, hanya HAPUS)
   pkg-new       dimiliki paket yang tidak terpasang sebelum install (--new-pkgs = daftar paket baru)
   account-db    /etc/passwd|group|shadow|gshadow(-) (perubahan user diperiksa terpisah)
+  external      /etc/fwupd/fwupd.conf hanya berubah mode (dilakukan daemon fwupd sendiri, bukan installer)
   UNEXPLAINED   selain di atas -> dihitung sebagai temuan
 Keluaran teks; exit 0 bila UNEXPLAINED kosong, 1 bila tidak.
 """
 import argparse
 import re
 import sys
+
+
+# File /etc yang dibuat maintainer script (ucf), tidak tercatat di dpkg .list -> paket pembuatnya.
+POSTINST = {
+    "/etc/exports": "nfs-kernel-server",
+    "/etc/default/nfs-kernel-server": "nfs-kernel-server",
+    "/etc/idmapd.conf": "nfs-common",
+    "/etc/nfs.conf": "nfs-common",
+    "/etc/default/nfs-common": "nfs-common",
+    "/etc/nginx/sites-enabled/default": "nginx-common",
+}
 
 
 def load(path):
@@ -36,6 +50,7 @@ def main():
     ap.add_argument("b")
     ap.add_argument("--manifest", required=True)
     ap.add_argument("--new-pkgs")
+    ap.add_argument("--removed-pkgs", help="paket yang di-purge (terpasang di snapshot A, tidak di B)")
     ap.add_argument("--label", default="")
     args = ap.parse_args()
     a, b = load(args.a), load(args.b)
@@ -66,6 +81,13 @@ def main():
         with open(args.new_pkgs, encoding="utf-8") as f:
             new_pkgs = {l.strip() for l in f if l.strip()}
 
+    removed_pkgs = set()
+    if args.removed_pkgs:
+        with open(args.removed_pkgs, encoding="utf-8") as f:
+            removed_pkgs = {l.strip() for l in f if l.strip()}
+    # Nama layanan/skrip dari paket yang di-purge (rc-link, init.d, resolvconf hook, *.requires).
+    removed_names = set(removed_pkgs) | ({"nfs-server", "nfs-mountd", "nfs-client", "fsidd"} if "nfs-kernel-server" in removed_pkgs else set())
+
     def classify(path):
         if path in mpaths or any(path == t or path.startswith(t + "/") for t in mtrees):
             return "manifest"
@@ -84,6 +106,17 @@ def main():
         if path.startswith("/etc/systemd/system/") and path.endswith(".wants") and new_pkgs:
             return "enable-link"
         own = (b.get(path) or a.get(path) or [None] * 5)[4]
+        if own and own != "-" and own in removed_pkgs:
+            return "pkg-removed"
+        if removed_pkgs and path not in b and POSTINST.get(path) in removed_pkgs:
+            return "pkg-removed"
+        if removed_pkgs and path not in b:
+            m2 = re.match(r"^/etc/(?:rc[0-6S]\.d/[SK][0-9]{2}|init\.d/|insserv\.conf\.d/|resolvconf/update\.d/|default/)([A-Za-z0-9_.-]+)$", path)
+            if m2 and m2.group(1) in removed_names:
+                return "pkg-removed"
+            m3 = re.match(r"^/etc/systemd/system/(?:[A-Za-z0-9_.@-]+\.(?:wants|requires)/)?([A-Za-z0-9_-]+)\.(?:service|target)(?:\.(?:wants|requires))?$", path)
+            if m3 and m3.group(1) in removed_names:
+                return "pkg-removed"
         if own and own != "-" and own in new_pkgs:
             return "pkg-new"
         if base in ("passwd", "group", "shadow", "gshadow", "passwd-", "group-", "shadow-", "gshadow-", "subuid", "subgid", "subuid-", "subgid-") and path.count("/") == 2:
@@ -104,7 +137,12 @@ def main():
             if diffs == ["pkg"]:
                 continue
             kind = "UBAH(" + ",".join(diffs) + ")"
-        changes.append((classify(path), kind, path))
+        cls = classify(path)
+        # fwupd (fwupd-refresh.timer) mengubah mode konfigurasinya sendiri ke 0640 saat daemon start;
+        # bukti journal di rerun/uninstall-fwupd-diag.txt. Hanya perubahan MODE file ini yang dikecualikan.
+        if cls == "UNEXPLAINED" and path == "/etc/fwupd/fwupd.conf" and kind == "UBAH(mode)":
+            cls = "external"
+        changes.append((cls, kind, path))
     unexplained = [c for c in changes if c[0] == "UNEXPLAINED"]
     print(f"# etc-diff {args.label}: {args.a.rsplit('/', 1)[-1]} ({len(a)} entri) -> {args.b.rsplit('/', 1)[-1]} ({len(b)} entri)")
     counts = {}
