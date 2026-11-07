@@ -35,3 +35,6 @@ test-results/
 
 # sandbox test infra (M4-T12)
 .agent/tmp/
+
+# screenshot bukti test (repo publik; tetap dibuat lokal oleh E2E/KVM/design review)
+.agent/runs/**/*.png
