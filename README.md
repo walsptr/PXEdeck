@@ -149,6 +149,13 @@ sudo ./install.sh --config deploy/install.conf.example --dry-run
 - ISO sumber harus berada di luar `/srv/pxe`, `/opt/pxe-dashboard`, `/var/lib/pxe-dashboard` dan tidak
   pernah dihapus. Netboot Debian diverifikasi lewat `Release.gpg` (gpgv + `debian-archive-keyring`)
   → `SHA256SUMS`. Node selain versi yang dipin hanya lewat `PXE_INSTALL_NODE_VERSION`.
+- Unduhan internet (Node dari nodejs.org, netboot Debian dari deb.debian.org) hanya HTTPS/TLS ≥ 1.2,
+  dengan batas waktu agar koneksi macet tidak menggantung instalasi: koneksi maks 20 dtk, dibatalkan
+  bila < 1 KB/s selama 60 dtk, retry 3× (jeda 5 dtk), dan batas atas per percobaan
+  `PXE_INSTALL_DOWNLOAD_TIMEOUT` (file besar: tarball Node, initrd; default 1800 dtk) /
+  `PXE_INSTALL_DOWNLOAD_TIMEOUT_SMALL` (Release, SHA256SUMS, dll.; default 120 dtk), nilai 30..86400.
+  Unduhan gagal → pesan error dengan URL-nya, exit ≠ 0, dan rollback seperti install gagal lainnya.
+  Server tanpa internet: `--node-tarball FILE` dan `--debian-netboot DIR|none`.
 - Topologi VLAN: `--vlan-id 10` membuat sub-interface `pxe10` di atas `--interface` (netplan
   `/etc/netplan/99-pxe-dashboard.yaml`, divalidasi dulu; NIC induk harus didefinisikan di file netplan
   yang diurutkan sebelumnya) dan

@@ -1,0 +1,45 @@
+== smoke fetch_https 2026-11-07T22:24:08+07:00 host=Linux 7.1.5-200.fc44.x86_64
+curl 8.18.0 (x86_64-redhat-linux-gnu) libcurl/8.18.0 OpenSSL/3.5.7 zlib/1.3.1.zlib-ng brotli/1.2.0 libidn2/2.3.8 libpsl/0.21.5 libssh/0.12.1/openssl/zlib nghttp2/1.68.0 ngtcp2/1.22.1 nghttp3/1.17.0 mit-krb5/1.22.2 OpenLDAP/2.6.13
+flag: connect=20 speed<1024 B/s x 60s retry=3 delay=5 max(small)=120 max(large)=1800
+
+== 1. Debian bookworm Release (small)
+CMD: fetch_https https://deb.debian.org/debian/dists/bookworm/Release <scratch>/smoke-dl/Release
+CMD: local url=https://deb.debian.org/debian/dists/bookworm/Release out=<scratch>/smoke-dl/Release kind=small max rc=0 why
+CMD: [[ https://deb.debian.org/debian/dists/bookworm/Release == https://* ]]
+CMD: case "$kind" in
+CMD: max=120
+CMD: run curl -fsSL --proto =https --tlsv1.2 -o <scratch>/smoke-dl/Release --connect-timeout 20 --speed-limit 1024 --speed-time 60 --max-time 120 --retry 3 --retry-delay 5 --retry-connrefused --retry-max-time 120 https://deb.debian.org/debian/dists/bookworm/Release
+CMD: (( DRY ))
+CMD: curl -fsSL --proto =https --tlsv1.2 -o <scratch>/smoke-dl/Release --connect-timeout 20 --speed-limit 1024 --speed-time 60 --max-time 120 --retry 3 --retry-delay 5 --retry-connrefused --retry-max-time 120 https://deb.debian.org/debian/dists/bookworm/Release
+CMD: (( rc == 0 ))
+CMD: return 0
+rc=0 durasi=0s ukuran=149266 sha256=abcf5882746e0f68171f41adbb4ac01b74b49d62d203379befb9265804311a4f
+Origin: Debian
+Label: Debian
+Suite: oldstable
+Version: 12.15
+Codename: bookworm
+Changelogs: https://metadata.ftp-master.debian.org/changelogs/@CHANGEPATH@_changelog
+baris installer SHA256SUMS: 2
+
+== 2. nodejs.org SHASUMS256.txt v22.23.4 (small)
+rc=0 durasi=0s ukuran=3981
+SHASUMS256: node-v22.23.4-linux-x64.tar.xz 1805bcd35e6815559bd2eb97db438d3fdb0eb3a5e6a977b7c1badca76337e9ce
+cocok dengan NODE_SHA256_DEFAULT yang dipin: YA
+
+== 3. negatif: http:// ditolak sebelum curl
+[pxe-install] ERROR: fetch_https: hanya URL https:// (http://deb.debian.org/debian/dists/bookworm/Release)
+rc=1
+
+== 4. negatif: host 10.99.0.250 tidak ada (network pxe-test sudah dihapus) -> timeout bersih
+curl: (7) Failed to connect to 10.99.0.250 port 443 after 76 ms: Could not connect to server
+curl: (7) Failed to connect to 10.99.0.250 port 443 after 188 ms: Could not connect to server
+curl: (7) Failed to connect to 10.99.0.250 port 443 after 69 ms: Could not connect to server
+curl: (7) Failed to connect to 10.99.0.250 port 443 after 94 ms: Could not connect to server
+[pxe-install] ERROR: unduhan gagal (host tidak terjangkau, curl exit 7, retry maks 3): https://10.99.0.250/none
+rc=1 durasi=16s file-sisa=tidak
+
+== 5. negatif: 404 (HTTP error, tanpa retry)
+curl: (22) The requested URL returned error: 404
+[pxe-install] ERROR: unduhan gagal (HTTP error, curl exit 22, retry maks 3): https://deb.debian.org/debian/dists/bookworm/tidak-ada-pxe-smoke
+rc=1

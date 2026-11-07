@@ -57,6 +57,9 @@ Opsional:
   --non-interactive        jangan pernah bertanya (nilai wajib harus lengkap)
 Env: PXE_INSTALL_<KUNCI> (mis. PXE_INSTALL_INTERFACE). Prioritas: config < env < opsi.
      PXE_INSTALL_NODE_VERSION=22.x.y: Node selain versi yang dipin (SHA256 dari SHASUMS256.txt, TLS saja).
+     PXE_INSTALL_DOWNLOAD_TIMEOUT=DETIK: batas atas per percobaan unduhan besar (tarball Node, initrd
+       Debian; default 1800). PXE_INSTALL_DOWNLOAD_TIMEOUT_SMALL=DETIK: file kecil (default 120).
+       Nilai 30..86400. Unduhan juga batal bila koneksi > 20 dtk atau < 1 KB/s selama 60 dtk; retry 3x.
 Server PXE harus single-tenant: user lokal bisa menjangkau dashboard di 127.0.0.1:3000.
 EOF
 }
@@ -269,6 +272,7 @@ for k in ISO_UBUNTU ISO_DEBIAN ISO_ROCKY; do
 done
 DEBIAN_NETBOOT="${CFG[DEBIAN_NETBOOT]}"
 [[ "$DEBIAN_NETBOOT" =~ ^(auto|none)$ || "$DEBIAN_NETBOOT" == /* ]] || usage_err "--debian-netboot harus auto|none|<dir absolut>"
+download_limits_init || usage_err "$DL_ERR"
 RELEASE="${CFG[RELEASE]:-}"; NODE_TARBALL="${CFG[NODE_TARBALL]:-}"; PW_FILE="${CFG[ADMIN_PASSWORD_FILE]:-}"
 NETPLAN_PARENT=0
 
@@ -588,7 +592,7 @@ node_base="https://nodejs.org/dist/v$NODE_VERSION"
 if [[ "$NODE_VERSION" == "$NODE_VERSION_DEFAULT" ]]; then node_sha="$NODE_SHA256_DEFAULT"
 elif ((DRY)); then node_sha="(dari $node_base/SHASUMS256.txt)"
 else
-  curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/SHASUMS256.txt" "$node_base/SHASUMS256.txt"
+  fetch_https "$node_base/SHASUMS256.txt" "$TMP/SHASUMS256.txt"
   node_sha="$(awk -v f="$node_tgz_name" '$2 == f { print $1 }' "$TMP/SHASUMS256.txt")"
   [[ "$node_sha" =~ ^[0-9a-f]{64}$ ]] || die "$node_tgz_name tidak ada di SHASUMS256.txt"
 fi
@@ -597,7 +601,7 @@ if [[ -x "$(p "$NODE_DIR")/bin/node" && -f "$node_marker" && "$(cat "$node_marke
   log "Node $NODE_VERSION sudah terpasang ($NODE_DIR)"
 else
   tgz="${NODE_TARBALL:-$TMP/$node_tgz_name}"
-  [[ -n "$NODE_TARBALL" ]] || run curl -fsSL --proto '=https' --tlsv1.2 -o "$tgz" "$node_base/$node_tgz_name"
+  [[ -n "$NODE_TARBALL" ]] || fetch_https "$node_base/$node_tgz_name" "$tgz" large
   if ((DRY)); then echo "DRY-RUN: verifikasi sha256 $node_tgz_name == $node_sha; ekstrak ke $NODE_DIR"
   else
     got="$(sha256sum "$tgz" | cut -d' ' -f1)"
@@ -808,8 +812,8 @@ if [[ -n "${CFG[ISO_DEBIAN]:-}" && "$DEBIAN_NETBOOT" != none ]]; then
     elif ((DRY)); then echo "DRY-RUN: unduh $dist/Release{,.gpg} (gpgv $keyring) -> $url/SHA256SUMS -> netboot/debian-installer/amd64/{linux,initrd.gz} -> $nb"
     else
       [[ -f "$(p "$keyring")" ]] || die "$keyring tidak ada (paket debian-archive-keyring)"
-      curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/Release" "$dist/Release"
-      curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/Release.gpg" "$dist/Release.gpg"
+      fetch_https "$dist/Release" "$TMP/Release"
+      fetch_https "$dist/Release.gpg" "$TMP/Release.gpg"
       # Release bookworm punya beberapa tanda tangan; keyring Ubuntu bisa tidak memuat salah satu kunci
       # (NO_PUBKEY, gpgv exit 2). Seperti apt: terima bila >= 1 VALIDSIG dari keyring dan TIDAK ada
       # BADSIG/EXPSIG/EXPKEYSIG/REVKEYSIG. Exit code gpgv diabaikan; status --status-fd yang dinilai.
@@ -822,10 +826,10 @@ if [[ -n "${CFG[ISO_DEBIAN]:-}" && "$DEBIAN_NETBOOT" != none ]]; then
       log "Release Debian: tanda tangan sah ($gsum)"
       want="$(awk '/^SHA256:/ { s = 1; next } /^[^ ]/ { s = 0 } s && $3 == "main/installer-amd64/current/images/SHA256SUMS" { print $1 }' "$TMP/Release")"
       [[ "$want" =~ ^[0-9a-f]{64}$ ]] || die "Release Debian tanpa SHA256 images/SHA256SUMS"
-      curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/SHA256SUMS" "$url/SHA256SUMS"
+      fetch_https "$url/SHA256SUMS" "$TMP/SHA256SUMS"
       [[ "$(sha256sum "$TMP/SHA256SUMS" | cut -d' ' -f1)" == "$want" ]] || die "SHA256SUMS netboot Debian tidak cocok dengan Release bertanda tangan"
       for f in linux initrd.gz; do
-        curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/$f" "$url/netboot/debian-installer/amd64/$f"
+        fetch_https "$url/netboot/debian-installer/amd64/$f" "$TMP/$f" large
         want="$(awk -v f="./netboot/debian-installer/amd64/$f" '$2 == f { print $1 }' "$TMP/SHA256SUMS")"
         [[ -n "$want" && "$(sha256sum "$TMP/$f" | cut -d' ' -f1)" == "$want" ]] || die "SHA256 Debian netboot $f tidak cocok"
       done
