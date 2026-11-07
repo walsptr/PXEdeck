@@ -23,10 +23,16 @@ Jaringan (wajib):
   --address IP/PREFIX      alamat server di segmen PXE, mis. 10.10.10.1/24
   --dhcp-range A-B         range DHCP dinamis, mis. 10.10.10.100-10.10.10.200
   --gateway IP             gateway subnet PXE (PXE_MGMT_GATEWAY)
-  --dns IP[,IP]            DNS untuk node; memuat alamat server = dnsmasq melayani DNS lokal
-  --admin-allow CIDR[,..]  IP/CIDR yang boleh membuka UI + /api (allowlist nginx)
+  --dns IP[,IP]            DNS untuk node; memuat alamat server = dnsmasq melayani DNS lokal dan
+                           meneruskan nama lain ke resolver host (lihat --dns-upstream)
+  --admin-allow CIDR[,..]  IP/CIDR yang boleh membuka UI + /api (allowlist nginx). Tumpang tindih
+                           dengan subnet PXE/VLAN atau /0 butuh --admin-overlap-ok
 Opsional:
   --domain NAME            domain DHCP/DNS lokal (default pxe.lan)
+  --dns-upstream IP[,IP]|none  DNS upstream dnsmasq lokal (default: resolver host
+                           /run/systemd/resolve/resolv.conf; none = hanya nama lokal)
+  --admin-overlap-ok       izinkan allowlist admin yang tumpang tindih dengan subnet PXE (klien PXE
+                           bisa membuka halaman login)
   --no-dhcp-router         jangan kirim opsi router lewat DHCP (default: kirim; VLAN: tidak)
   --admin-user NAME        username admin dashboard (default pxeadmin)
   --admin-password-file F  file berisi password admin (mode 0600/0400, baris pertama)
@@ -50,15 +56,17 @@ Opsional:
   -y, --yes                non-interaktif, setujui konfirmasi
   --non-interactive        jangan pernah bertanya (nilai wajib harus lengkap)
 Env: PXE_INSTALL_<KUNCI> (mis. PXE_INSTALL_INTERFACE). Prioritas: config < env < opsi.
+     PXE_INSTALL_NODE_VERSION=22.x.y: Node selain versi yang dipin (SHA256 dari SHASUMS256.txt, TLS saja).
+Server PXE harus single-tenant: user lokal bisa menjangkau dashboard di 127.0.0.1:3000.
 EOF
 }
 usage_err() { printf '[pxe-install] ERROR: %s (lihat --help)\n' "$*" >&2; exit 2; }
 
 KEYS=(INTERFACE ADDRESS DHCP_RANGE GATEWAY DNS DOMAIN DHCP_ROUTER ADMIN_USER ADMIN_ALLOW ADMIN_LISTEN
   ALLOWED_HOSTS VLAN_ID VLAN_IFACE VLAN_NETWORKS ISO_UBUNTU ISO_DEBIAN ISO_ROCKY DEBIAN_NETBOOT RELEASE
-  NODE_TARBALL FIREWALL ADMIN_PASSWORD_FILE)
+  NODE_TARBALL FIREWALL ADMIN_PASSWORD_FILE DNS_UPSTREAM ADMIN_OVERLAP)
 REQUIRED=(INTERFACE ADDRESS DHCP_RANGE GATEWAY DNS ADMIN_ALLOW)
-declare -A CFG=([DOMAIN]=pxe.lan [DHCP_ROUTER]=auto [ADMIN_USER]=pxeadmin [DEBIAN_NETBOOT]=auto [FIREWALL]=no)
+declare -A CFG=([DOMAIN]=pxe.lan [DHCP_ROUTER]=auto [ADMIN_USER]=pxeadmin [DEBIAN_NETBOOT]=auto [FIREWALL]=no [ADMIN_OVERLAP]=no)
 declare -A FLAGV=()
 is_key() { local k; for k in "${KEYS[@]}"; do [[ "$k" == "$1" ]] && return 0; done; return 1; }
 
@@ -75,6 +83,7 @@ while (($#)); do
     --rebuild) REBUILD=1 ;;
     --firewall) FLAGV[FIREWALL]=yes ;;
     --no-dhcp-router) FLAGV[DHCP_ROUTER]=no ;;
+    --admin-overlap-ok) FLAGV[ADMIN_OVERLAP]=yes ;;
     --admin-password|--admin-password=*) usage_err "password tidak boleh lewat argumen; pakai prompt, --admin-password-file, atau --admin-password-stdin" ;;
     --config|--render|--[a-z]*)
       name="${a#--}"; val=""; has_val=0
@@ -130,7 +139,9 @@ if ((INTERACTIVE)); then
     ask DHCP_RANGE "Range DHCP" "$([[ "${CFG[ADDRESS]#*/}" == 24 ]] && echo "$_base.100-$_base.200")"
     ask GATEWAY "Gateway"
     ask DNS "DNS node" "$_ip"
-    ask ADMIN_ALLOW "IP/CIDR admin yang boleh membuka dashboard" "$(net_of "$_ip" "${CFG[ADDRESS]#*/}")/${CFG[ADDRESS]#*/}"
+    # Default = alamat klien SSH (bukan subnet PXE: klien PXE tidak tepercaya, SR-8-2).
+    _ssh_ip="${SSH_CLIENT%% *}"; valid_ipv4 "${_ssh_ip:-x}" || _ssh_ip=""
+    ask ADMIN_ALLOW "IP/CIDR admin yang boleh membuka dashboard" "$_ssh_ip"
   fi
   ask ADMIN_USER "Username admin" pxeadmin
   [[ -n "${CFG[VLAN_ID]:-}" ]] && ask VLAN_NETWORKS "PXE_VLAN_NETWORKS (kosong = tidak ada)"
@@ -171,10 +182,24 @@ for x in "${DNS_LIST[@]}"; do
   [[ "$x" == "$SERVER_IP" ]] && DNS_LOCAL=1
 done
 DNS="$(IFS=,; echo "${DNS_LIST[*]}")"
+# Upstream dnsmasq lokal (CR-8-7): eksplisit > entri DNS lain di --dns > resolver host. `none` = isolasi.
+UPSTREAM_SERVERS=(); RESOLV_FILE=/run/systemd/resolve/resolv.conf
+case "${CFG[DNS_UPSTREAM]:-}" in
+  none) UPSTREAM_MODE=none ;;
+  "") for x in "${DNS_LIST[@]}"; do [[ "$x" == "$SERVER_IP" ]] || UPSTREAM_SERVERS+=("$x"); done
+      if ((${#UPSTREAM_SERVERS[@]})); then UPSTREAM_MODE=servers; else UPSTREAM_MODE=resolv; fi ;;
+  *) split_csv "${CFG[DNS_UPSTREAM]}"
+     for x in "${_csv[@]}"; do
+       valid_ipv4 "$x" && [[ "$x" != "$SERVER_IP" ]] || usage_err "--dns-upstream: '$x' bukan IPv4 upstream"
+       UPSTREAM_SERVERS+=("$x")
+     done
+     UPSTREAM_MODE=servers ;;
+esac
 DOMAIN="${CFG[DOMAIN]}"; valid_domain "$DOMAIN" || usage_err "--domain '$DOMAIN' tidak valid"
 ADMIN_USER="${CFG[ADMIN_USER]}"; valid_user "$ADMIN_USER" || usage_err "--admin-user '$ADMIN_USER' tidak valid (^[a-z_][a-z0-9_-]{0,31}$)"
 split_csv "${CFG[ADMIN_ALLOW]}"; ADMIN_ALLOW_LIST=("${_csv[@]}")
 for x in "${ADMIN_ALLOW_LIST[@]}"; do valid_ipv4 "$x" || valid_cidr "$x" 0 32 || usage_err "--admin-allow: '$x' bukan IPv4/CIDR"; done
+[[ "${CFG[ADMIN_OVERLAP]}" =~ ^(yes|no)$ ]] || usage_err "ADMIN_OVERLAP harus yes|no"
 LISTEN_IPS=("$SERVER_IP")
 if [[ -n "${CFG[ADMIN_LISTEN]:-}" ]]; then
   split_csv "${CFG[ADMIN_LISTEN]}"
@@ -211,13 +236,36 @@ if [[ -n "$VLAN_NETWORKS" ]]; then
     NFS_CIDRS+=("$c")
   done
 fi
+# Allowlist admin tidak boleh diam-diam mencakup segmen PXE/VLAN (klien tak tepercaya) atau /0 (SR-8-2).
+cidr_overlap() { # cidr_overlap <a/pa> <b/pb>
+  local pa="${1#*/}" pb="${2#*/}" m
+  m=$((pa < pb ? pa : pb))
+  [[ "$(net_of "${1%/*}" "$m")" == "$(net_of "${2%/*}" "$m")" ]]
+}
+OVERLAPS=()
+for x in "${ADMIN_ALLOW_LIST[@]}"; do
+  c="$x"; [[ "$c" == */* ]] || c="$c/32"
+  if [[ "${c#*/}" == 0 ]]; then OVERLAPS+=("$x (semua alamat)"); continue; fi
+  for n in "${NFS_CIDRS[@]}"; do cidr_overlap "$c" "$n" && { OVERLAPS+=("$x ~ $n"); break; }; done
+done
+if ((${#OVERLAPS[@]})) && [[ "${CFG[ADMIN_OVERLAP]}" != yes ]]; then
+  if ((INTERACTIVE)); then
+    warn "allowlist admin tumpang tindih dengan segmen PXE/VLAN: ${OVERLAPS[*]} — klien PXE bisa membuka halaman login"
+    read -r -p "Tetap izinkan? ketik 'ya': " ans || true
+    [[ "$ans" == ya ]] || usage_err "allowlist admin dibatalkan"
+  else
+    usage_err "--admin-allow tumpang tindih dengan segmen PXE/VLAN (${OVERLAPS[*]}); klien PXE tidak tepercaya. Pakai --admin-overlap-ok bila disengaja"
+  fi
+elif ((${#OVERLAPS[@]})); then
+  warn "allowlist admin tumpang tindih dengan segmen PXE/VLAN (${OVERLAPS[*]}) — diizinkan (--admin-overlap-ok)"
+fi
 DHCP_ROUTER="${CFG[DHCP_ROUTER]}"
 [[ "$DHCP_ROUTER" == auto ]] && { [[ -n "$VLAN_ID" ]] && DHCP_ROUTER=no || DHCP_ROUTER=yes; }
 [[ "$DHCP_ROUTER" =~ ^(yes|no)$ ]] || usage_err "DHCP_ROUTER harus yes|no"
 FIREWALL="${CFG[FIREWALL]}"; [[ "$FIREWALL" =~ ^(yes|no)$ ]] || usage_err "FIREWALL harus yes|no"
 iso_for() { case "$1" in ubuntu-24.04) echo "${CFG[ISO_UBUNTU]:-}" ;; debian-12) echo "${CFG[ISO_DEBIAN]:-}" ;; rocky-9) echo "${CFG[ISO_ROCKY]:-}" ;; esac; }
 for k in ISO_UBUNTU ISO_DEBIAN ISO_ROCKY; do
-  [[ -z "${CFG[$k]:-}" ]] || valid_iso_path "${CFG[$k]}" || usage_err "--$(tr 'A-Z_' 'a-z-' <<<"$k") '${CFG[$k]}' harus path absolut tanpa spasi"
+  [[ -z "${CFG[$k]:-}" ]] || valid_iso_path "${CFG[$k]}" || usage_err "--$(tr 'A-Z_' 'a-z-' <<<"$k") '${CFG[$k]}' harus path absolut kanonik tanpa spasi, di luar /srv/pxe, /opt/pxe-dashboard, /var/lib/pxe-dashboard"
 done
 DEBIAN_NETBOOT="${CFG[DEBIAN_NETBOOT]}"
 [[ "$DEBIAN_NETBOOT" =~ ^(auto|none)$ || "$DEBIAN_NETBOOT" == /* ]] || usage_err "--debian-netboot harus auto|none|<dir absolut>"
@@ -249,7 +297,17 @@ else
   else
     IFACE_EXISTS=0
   fi
-  [[ "$(netplan get "ethernets.$NIC" 2>/dev/null || echo null)" == null ]] && NETPLAN_PARENT=1
+  # Parent dicari sebagai KUNCI di ethernets/bonds/bridges/vlans (bukan `netplan get ethernets.<nic>`,
+  # yang salah mem-parse nama ber-titik seperti eth0.5), CR-8-5.
+  parent_kind=""
+  for kind in ethernets bonds bridges vlans; do
+    if netplan get "$kind" 2>/dev/null | sed -n -E 's/^"?([^" :][^":]*)"?:.*$/\1/p' | grep -qxF -- "$NIC"; then parent_kind="$kind"; break; fi
+  done
+  if [[ -z "$parent_kind" ]]; then
+    [[ -e "$(p "/sys/class/net/$NIC/bonding")" || -e "$(p "/sys/class/net/$NIC/bridge")" ]] \
+      && die "$NIC adalah bond/bridge yang tidak didefinisikan netplan; definisikan dulu di netplan"
+    NETPLAN_PARENT=1
+  fi
 fi
 for x in "${LISTEN_IPS[@]:1}"; do
   ip -4 -o addr show 2>/dev/null | grep -q " $x/" || die "--admin-listen $x tidak terpasang di interface mana pun"
@@ -270,6 +328,34 @@ for x in "${targets[@]}"; do
     die "$x sudah ada dan bukan milik installer (tidak tercatat di manifest); pindahkan dulu"
   fi
 done
+# dnsmasq / nfs-server yang SUDAH ADA sebelum installer dengan konfigurasi aktif lain: opsi global installer
+# (no-resolv, dhcp-authoritative, port=0, [nfsd] host=, [mountd] port=) akan mengubah layanan admin.
+# Default: tolak (CR-8-3/CR-8-4). Paket milik installer (tercatat `pkg` di manifest) tidak dihitung.
+pkg_installed() { [[ "$(dpkg-query -W -f='${Status}' "$1" 2>/dev/null || true)" == "install ok installed" ]]; }
+pkg_pre() { pkg_installed "$1" && ! manifest_has pkg "$1"; }
+active_lines() { # active_lines <file|dir>...: baris non-komentar/non-kosong dari file konfigurasi
+  local f
+  for f in "$@"; do
+    [[ -f "$f" ]] || continue
+    grep -vE '^[[:space:]]*(#|$)' "$f" 2>/dev/null | sed "s|^|${f#"$ROOT"}: |" || true
+  done
+}
+if pkg_pre dnsmasq; then
+  other=()
+  for f in "$(p /etc/dnsmasq.conf)" "$(p /etc/dnsmasq.d)"/*; do
+    case "$(basename "$f")" in pxe-dashboard.conf|README|*.dpkg-*|*~|'*') continue ;; esac
+    other+=("$f")
+  done
+  cfg="$(active_lines "${other[@]}")"
+  [[ -z "$cfg" ]] || die "dnsmasq sudah terpasang sebelum installer dengan konfigurasi aktif lain; opsi global PXE akan mengubah DNS/DHCP-nya. Pindahkan konfigurasi itu atau pakai server lain:"$'\n'"$(head -5 <<<"$cfg")"
+fi
+if pkg_pre nfs-kernel-server; then
+  other=("$(p /etc/exports)")
+  for f in "$(p /etc/exports.d)"/*.exports; do [[ "$(basename "$f")" == pxe-dashboard.exports ]] || other+=("$f"); done
+  for f in "$(p /etc/nfs.conf.d)"/*.conf; do [[ "$(basename "$f")" == pxe-dashboard.conf ]] || other+=("$f"); done
+  cfg="$(active_lines "${other[@]}")"
+  [[ -z "$cfg" ]] || die "nfs-kernel-server sudah terpasang sebelum installer dengan ekspor/konfigurasi lain; [nfsd] host= installer akan memutus kliennya. Pakai server lain atau pindahkan ekspor itu:"$'\n'"$(head -5 <<<"$cfg")"
+fi
 if [[ -d "$(p "$APP_DIR")" ]] && ! manifest_has tree "$APP_DIR"; then
   die "$APP_DIR sudah ada tetapi bukan buatan installer ini (tidak ada di manifest); pindahkan dulu"
 fi
@@ -342,9 +428,15 @@ if [[ -f "$(p "$ENV_FILE")" ]]; then
 fi
 pw_ok() { local n=${#1}; ((n >= 12 && n <= 256)) && [[ "$1" != *$'\n'* ]]; }
 if ((PW_STDIN)); then
-  IFS= read -r ADMIN_PW || [[ -n "$ADMIN_PW" ]] || die "password admin dari stdin kosong"
+  # Terminal: tanpa echo (SR-8-7).
+  if [[ -t 0 ]]; then IFS= read -r -s ADMIN_PW || true; echo >&2
+  else IFS= read -r ADMIN_PW || [[ -n "$ADMIN_PW" ]] || die "password admin dari stdin kosong"; fi
+  [[ -n "$ADMIN_PW" ]] || die "password admin dari stdin kosong"
 elif [[ -n "$PW_FILE" ]]; then
   [[ -f "$PW_FILE" && ! -L "$PW_FILE" ]] || die "--admin-password-file $PW_FILE tidak ada"
+  # Pemilik harus user yang menjalankan installer (root di production; $EUID agar sandbox test bisa
+  # memakai file sendiri), SR-8-7. Dicek sebelum mode.
+  [[ "$(stat -c '%u' "$PW_FILE")" == "$EUID" ]] || die "--admin-password-file $PW_FILE harus milik root (uid $EUID)"
   ((8#$(stat -c '%a' "$PW_FILE") & 8#077)) && die "--admin-password-file $PW_FILE harus mode 0600/0400"
   IFS= read -r ADMIN_PW < "$PW_FILE" || [[ -n "$ADMIN_PW" ]] || die "--admin-password-file kosong"
 elif ((INTERACTIVE)); then
@@ -365,11 +457,20 @@ elif [[ -z "$OLD_HASH" ]]; then die "password admin belum ada: pakai prompt, --a
 fi
 
 # --- pembersihan ---------------------------------------------------------------------------------
-TMP=""; POLICY_CREATED=0; DNSMASQ_STARTED=0; RUN_ENABLED=()
+TMP=""; POLICY_CREATED=0; DNSMASQ_STARTED=0; RUN_ENABLED=(); BDIR=""; NETPLAN_TOUCHED=0
+POLICY_MARKER='# sementara oleh install.sh PXE dashboard'
 cleanup() {
   local rc=$?
   ADMIN_PW=""
+  # Netplan VLAN yang dipasang run yang gagal: kembalikan ke keadaan sebelum run (CR-8-5).
+  if ((rc != 0 && NETPLAN_TOUCHED && !DRY)); then
+    if [[ -f "$TMP/netplan.prev" ]]; then cp "$TMP/netplan.prev" "$(p "$NETPLAN_FILE")"; else rm -f "$(p "$NETPLAN_FILE")"; fi
+    printf '[pxe-install] rollback: %s dikembalikan, netplan apply\n' "$NETPLAN_FILE" >&2
+    netplan apply || true
+  fi
   [[ -n "$TMP" && -d "$TMP" ]] && rm -rf "$TMP"
+  # Direktori build sementara (sumber + node_modules) tidak boleh tertinggal (CR-8-13).
+  [[ -n "$BDIR" && -d "$BDIR" ]] && rm -rf "$BDIR"
   ((POLICY_CREATED)) && rm -f "$(p "$POLICY_RC")"
   if ((rc != 0 && DNSMASQ_STARTED && !DRY)); then
     printf '[pxe-install] GAGAL (exit %s) — menghentikan dnsmasq agar tidak ada DHCP dari instalasi setengah jadi\n' "$rc" >&2
@@ -394,9 +495,16 @@ fi
 log "manifest: $MANIFEST"
 
 # --- 2. paket apt -----------------------------------------------------------------------------
+# policy-rc.d sisa run installer yang terputus (SIGKILL/listrik) diberi marker -> dibersihkan (SR-8-8).
+if [[ -f "$(p "$POLICY_RC")" ]] && grep -qxF -- "$POLICY_MARKER" "$(p "$POLICY_RC")"; then
+  warn "$POLICY_RC sisa run installer sebelumnya — dihapus"
+  run rm -f "$(p "$POLICY_RC")"
+fi
+APT_LOCK=(-o DPkg::Lock::Timeout=600)
 PKGS=(dnsmasq nginx nfs-kernel-server ipxe curl ca-certificates xz-utils libarchive-tools python3 iproute2)
 [[ "$FIREWALL" == yes ]] && PKGS+=(nftables)
-pkg_installed() { [[ "$(dpkg-query -W -f='${Status}' "$1" 2>/dev/null || true)" == "install ok installed" ]]; }
+[[ -n "${CFG[ISO_DEBIAN]:-}" && "$DEBIAN_NETBOOT" == auto ]] && PKGS+=(gpgv debian-archive-keyring)
+for x in "${PKGS[@]}"; do pkg_is_installer "$x" || die "paket $x tidak ada di INSTALLER_PKGS (deploy/lib.sh)"; done
 # installed_list: semua paket terpasang (untuk mencatat dependensi yang ikut dipasang installer).
 installed_list() { { dpkg-query -W -f='${db:Status-Abbrev} ${Package}\n' 2>/dev/null || true; } | awk '$1 ~ /^ii/ { print $2 }' | sort -u; }
 declare -A PKG_OURS=()
@@ -413,17 +521,17 @@ if ((${#missing_pkgs[@]})); then
   # konfigurasi terikat NIC terpasang dan diverifikasi.
   if [[ ! -e "$(p "$POLICY_RC")" ]]; then
     if ((DRY)); then echo "DRY-RUN: tulis $POLICY_RC (exit 101, sementara)"
-    else printf '#!/bin/sh\n# sementara oleh install.sh PXE dashboard\nexit 101\n' > "$(p "$POLICY_RC")"; chmod 0755 "$(p "$POLICY_RC")"; POLICY_CREATED=1; fi
+    else printf '#!/bin/sh\n%s\nexit 101\n' "$POLICY_MARKER" > "$(p "$POLICY_RC")"; chmod 0755 "$(p "$POLICY_RC")"; POLICY_CREATED=1; fi
   else
     warn "$POLICY_RC sudah ada (bukan milik installer); layanan paket baru mungkin langsung start"
   fi
   pkgs_before="$(installed_list)"
-  run apt-get update
+  run apt-get "${APT_LOCK[@]}" update
   # Layanan paket baru di-enable postinst: catat untuk rollback bila install gagal.
   for x in dnsmasq nginx nfs-kernel-server; do
     [[ " ${missing_pkgs[*]} " == *" $x "* ]] && RUN_ENABLED+=("$([[ "$x" == nfs-kernel-server ]] && echo nfs-server || echo "$x").service")
   done
-  run env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${missing_pkgs[@]}"
+  run env DEBIAN_FRONTEND=noninteractive apt-get "${APT_LOCK[@]}" install -y --no-install-recommends "${missing_pkgs[@]}"
   for x in "${missing_pkgs[@]}"; do manifest_add pkg "$x" requested; done
   if ((!DRY)); then
     # Dependensi yang ikut terpasang dicatat `dep`: uninstall --remove-packages hanya mem-purge yang
@@ -435,8 +543,11 @@ if ((${#missing_pkgs[@]})); then
   fi
   if ((POLICY_CREATED)); then rm -f "$(p "$POLICY_RC")"; POLICY_CREATED=0; fi
 fi
+enabled() { [[ "$(systemctl is-enabled "$1" 2>/dev/null || true)" == enabled ]]; }
 for x in dnsmasq:dnsmasq nginx:nginx nfs-server:nfs-kernel-server; do
   u="${x%%:*}.service"; k="${PKG_OURS[${x#*:}]}"
+  # Layanan admin yang disabled sebelum install: dipulihkan ke disabled saat uninstall (CR-8-9).
+  [[ "$k" == pre ]] && ! enabled "$u" && k=pre-disabled
   # Entri lama 'pre' yang keliru (paket sebenarnya milik installer) dikoreksi.
   if [[ "$k" == ours ]] && manifest_has svc "$u" && ! manifest_has_extra svc "$u" ours; then manifest_del svc "$u"; fi
   manifest_add svc "$u" "$k"
@@ -465,8 +576,10 @@ for f in snponly.efi undionly.kpxe; do
 done
 
 # --- 5. Node 22 (nodejs.org, SHA256) ----------------------------------------------------------
-NODE_VERSION="${NODE_VERSION:-$NODE_VERSION_DEFAULT}"
-[[ "$NODE_VERSION" =~ ^22\.[0-9]+\.[0-9]+$ ]] || die "NODE_VERSION '$NODE_VERSION' harus 22.x.y"
+# Hanya PXE_INSTALL_NODE_VERSION (bukan NODE_VERSION generik dari nvm/CI), CR-8-15.
+NODE_VERSION="${PXE_INSTALL_NODE_VERSION:-$NODE_VERSION_DEFAULT}"
+[[ "$NODE_VERSION" =~ ^22\.[0-9]+\.[0-9]+$ ]] || die "PXE_INSTALL_NODE_VERSION '$NODE_VERSION' harus 22.x.y"
+[[ "$NODE_VERSION" == "$NODE_VERSION_DEFAULT" ]] || warn "Node $NODE_VERSION bukan versi yang dipin ($NODE_VERSION_DEFAULT): SHA256 diambil dari SHASUMS256.txt (hanya TLS)"
 node_tgz_name="node-v$NODE_VERSION-linux-x64.tar.xz"
 node_base="https://nodejs.org/dist/v$NODE_VERSION"
 if [[ "$NODE_VERSION" == "$NODE_VERSION_DEFAULT" ]]; then node_sha="$NODE_SHA256_DEFAULT"
@@ -527,7 +640,7 @@ else
   tarball="$RELEASE"
   if [[ -z "$tarball" ]]; then
     if ((DRY)); then bdir="/var/tmp/pxe-dashboard-build.XXXXXX"
-    else bdir="$(mktemp -d "$(p /var/tmp)/pxe-dashboard-build.XXXXXX")"; fi
+    else bdir="$(mktemp -d "$(p /var/tmp)/pxe-dashboard-build.XXXXXX")"; BDIR="$bdir"; fi
     log "build dashboard standalone sebagai user $PXE_USER (npm ci + next build) di $bdir"
     run mkdir -p "$bdir/src" "$bdir/home"
     if ((DRY)); then echo "DRY-RUN: salin $REPO_DIR/dashboard -> $bdir/src (tanpa node_modules/.next/data/.env*)"
@@ -580,7 +693,9 @@ DNSMASQ_CHANGED=$CHANGED
 CHANGED=0
 put_file "$TMP/r/nginx-site.conf" "$NGINX_SITE" 0644 root:root
 ensure_link "$NGINX_LINK" "$NGINX_SITE"
-if [[ -L "$(p "$NGINX_DEFAULT_LINK")" ]]; then
+# Hanya bila nginx milik installer: nginx admin tetap dengan site default-nya (CR-8-8); site installer
+# `listen <IP>:80 default_server` sudah menang untuk IP PXE.
+if [[ "${PKG_OURS[nginx]}" == ours && -L "$(p "$NGINX_DEFAULT_LINK")" ]]; then
   # Site default nginx listen 0.0.0.0:80; dipulihkan uninstall.sh.
   manifest_add restore-link "$NGINX_DEFAULT_LINK" "$NGINX_DEFAULT_SITE"
   run rm -f "$(p "$NGINX_DEFAULT_LINK")"
@@ -603,8 +718,19 @@ NFS_CHANGED=$CHANGED
 put_file "$TMP/r/logrotate" "$LOGROTATE_FILE" 0644 root:root
 
 if [[ -n "$VLAN_ID" ]]; then
+  # Validasi dulu di root sementara (salinan /etc/netplan + file baru): konfigurasi yang tidak valid tidak
+  # pernah dipasang; generator saat boot tidak bisa rusak (CR-8-5).
+  nroot="$TMP/netplan-root"; mkdir -p "$nroot/etc/netplan"
+  for f in "$(p /etc/netplan)"/*.yaml; do
+    [[ -f "$f" && "$(basename "$f")" != "$(basename "$NETPLAN_FILE")" ]] && cp "$f" "$nroot/etc/netplan/"
+  done
+  cp "$TMP/r/netplan.yaml" "$nroot/etc/netplan/$(basename "$NETPLAN_FILE")"
+  netplan generate --root-dir "$nroot" >"$TMP/netplan-check.log" 2>&1 \
+    || die "netplan VLAN tidak valid (tidak dipasang): $(tail -n 3 "$TMP/netplan-check.log" | tr '\n' ' ')"
+  [[ -f "$(p "$NETPLAN_FILE")" ]] && cp "$(p "$NETPLAN_FILE")" "$TMP/netplan.prev"
   CHANGED=0
   put_file "$TMP/r/netplan.yaml" "$NETPLAN_FILE" 0600 root:root
+  ((CHANGED)) && NETPLAN_TOUCHED=1
   if ((CHANGED)) || ((!IFACE_EXISTS)); then
     run netplan generate
     run netplan apply
@@ -618,6 +744,10 @@ if [[ -n "$VLAN_ID" ]]; then
 elif manifest_has file "$NETPLAN_FILE"; then
   warn "$NETPLAN_FILE (VLAN) dari instalasi sebelumnya masih ada; jalankan uninstall.sh untuk mencopotnya"
 fi
+# Install ulang tanpa --firewall: firewall lama tetap aktif (tidak dicopot diam-diam) -> peringatan (CR-8-11).
+if [[ "$FIREWALL" != yes ]] && manifest_has file "$FW_FILE"; then
+  warn "firewall pxe_dashboard dari instalasi sebelumnya masih aktif (FIREWALL=no tidak mencopotnya); jalankan uninstall.sh untuk mencopotnya"
+fi
 
 FW_CHANGED=0
 if [[ "$FIREWALL" == yes ]]; then
@@ -626,6 +756,7 @@ if [[ "$FIREWALL" == yes ]]; then
   put_file "$TMP/r/nftables.nft" "$FW_FILE" 0644 root:root
   put_file "$TMP/r/pxe-dashboard-firewall.service" "$FW_UNIT_FILE" 0644 root:root
   FW_CHANGED=$CHANGED
+  run nft -c -f "$(p "$FW_FILE")" || die "aturan nftables $FW_FILE tidak valid (nft -c)"
 fi
 
 # --- 9. media ISO (fstab + mount) ---------------------------------------------------------------
@@ -653,18 +784,30 @@ done
 if [[ -n "${CFG[ISO_DEBIAN]:-}" && "$DEBIAN_NETBOOT" != none ]]; then
   nb="$MEDIA_DIR/debian-netboot"
   if [[ "$DEBIAN_NETBOOT" == auto ]]; then
-    url="https://deb.debian.org/debian/dists/bookworm/main/installer-amd64/current/images"
+    # Rantai kepercayaan (SR-8-6/CR-8-16): Release.gpg --gpgv(debian-archive-keyring)--> Release
+    # --SHA256--> images/SHA256SUMS --SHA256--> linux, initrd.gz.
+    dist="https://deb.debian.org/debian/dists/bookworm"
+    url="$dist/main/installer-amd64/current/images"
+    keyring="/usr/share/keyrings/debian-archive-keyring.gpg"
     if [[ -f "$(p "$nb")/linux" && -f "$(p "$nb")/initrd.gz" ]]; then log "Debian netboot sudah ada di $nb"
-    elif ((DRY)); then echo "DRY-RUN: unduh $url/netboot/debian-installer/amd64/{linux,initrd.gz} + SHA256SUMS -> $nb"
+    elif ((DRY)); then echo "DRY-RUN: unduh $dist/Release{,.gpg} (gpgv $keyring) -> $url/SHA256SUMS -> netboot/debian-installer/amd64/{linux,initrd.gz} -> $nb"
     else
+      [[ -f "$(p "$keyring")" ]] || die "$keyring tidak ada (paket debian-archive-keyring)"
+      curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/Release" "$dist/Release"
+      curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/Release.gpg" "$dist/Release.gpg"
+      gpgv --keyring "$(p "$keyring")" "$TMP/Release.gpg" "$TMP/Release" >"$TMP/gpgv.log" 2>&1 \
+        || die "tanda tangan Release Debian tidak valid (gpgv): $(tail -n 2 "$TMP/gpgv.log" | tr '\n' ' ')"
+      want="$(awk '/^SHA256:/ { s = 1; next } /^[^ ]/ { s = 0 } s && $3 == "main/installer-amd64/current/images/SHA256SUMS" { print $1 }' "$TMP/Release")"
+      [[ "$want" =~ ^[0-9a-f]{64}$ ]] || die "Release Debian tanpa SHA256 images/SHA256SUMS"
       curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/SHA256SUMS" "$url/SHA256SUMS"
+      [[ "$(sha256sum "$TMP/SHA256SUMS" | cut -d' ' -f1)" == "$want" ]] || die "SHA256SUMS netboot Debian tidak cocok dengan Release bertanda tangan"
       for f in linux initrd.gz; do
         curl -fsSL --proto '=https' --tlsv1.2 -o "$TMP/$f" "$url/netboot/debian-installer/amd64/$f"
         want="$(awk -v f="./netboot/debian-installer/amd64/$f" '$2 == f { print $1 }' "$TMP/SHA256SUMS")"
         [[ -n "$want" && "$(sha256sum "$TMP/$f" | cut -d' ' -f1)" == "$want" ]] || die "SHA256 Debian netboot $f tidak cocok"
-        install -m 0644 "$TMP/$f" "$(p "$nb")/$f"
       done
-      log "Debian netboot terpasang di $nb"
+      for f in linux initrd.gz; do install -m 0644 "$TMP/$f" "$(p "$nb")/$f"; done
+      log "Debian netboot terpasang di $nb (Release.gpg terverifikasi)"
     fi
   else
     for f in linux initrd.gz; do run install -m 0644 "$DEBIAN_NETBOOT/$f" "$(p "$nb")/$f"; done
@@ -684,7 +827,6 @@ fi
 run dnsmasq --test
 run nginx -t
 run systemctl daemon-reload
-enabled() { [[ "$(systemctl is-enabled "$1" 2>/dev/null || true)" == enabled ]]; }
 for u in pxe-dashboard.service dnsmasq.service nginx.service nfs-server.service; do
   enabled "$u" || [[ " ${RUN_ENABLED[*]} " == *" $u "* ]] || RUN_ENABLED+=("$u")
 done
@@ -719,14 +861,25 @@ verify() {
   noauth="$(curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://$SERVER_IP/api/settings" 2>/dev/null)" || noauth=000
   if [[ "$noauth" == 401 ]]; then log "OK   GET /api/settings tanpa sesi -> 401"
   else log "FAIL GET /api/settings tanpa sesi -> $noauth (harus 401)"; bad=1; fi
+  # Hanya socket milik dnsmasq.service kita (MainPID) yang dinilai: dnsmasq lain (libvirt virbr0, LXD,
+  # NetworkManager) diabaikan (CR-8-1). Alamat sah = device %IFACE atau alamat apa pun (v4/v6) yang
+  # terpasang di IFACE (CR-8-2).
+  local pid="" a ifaddrs addr base dev
   for _ in 1 2 3 4 5; do
-    ss_sockets | grep -q '^udp .*"dnsmasq"' && break
+    pid="$(systemctl show -p MainPID --value dnsmasq.service 2>/dev/null || true)"
+    [[ "$pid" =~ ^[1-9][0-9]*$ ]] && ss_sockets | grep -q "^udp .*pid=$pid," && break
     sleep 1
   done
+  [[ "$pid" =~ ^[1-9][0-9]*$ ]] || { log "FAIL dnsmasq.service tidak berjalan (MainPID '$pid')"; bad=1; pid=none; }
+  ifaddrs=" "
+  while read -r a; do ifaddrs+="${a%/*} "; done < <(ip -o addr show dev "$IFACE" 2>/dev/null | awk '{ for (i = 1; i < NF; i++) if ($i == "inet" || $i == "inet6") print $(i + 1) }')
   while read -r netid local proc; do
-    [[ "$netid" == udp && "$proc" == *'"dnsmasq"'* ]] || continue
-    if [[ "$local" == "$SERVER_IP:"* || "$local" == *"%$IFACE:"* ]]; then log "OK   dnsmasq udp $local"
-    else log "FAIL dnsmasq udp $local (harus $SERVER_IP / %$IFACE)"; bad=1; fi
+    [[ "$netid" == udp && "$proc" == *"pid=$pid,"* ]] || continue
+    addr="${local%:*}"; dev=""
+    [[ "$addr" == *%* ]] && { dev="${addr#*%}"; dev="${dev%]}"; }
+    base="${addr%%%*}"; base="${base#[}"; base="${base%]}"
+    if [[ "$dev" == "$IFACE" || "$ifaddrs" == *" $base "* ]]; then log "OK   dnsmasq udp $local"
+    else log "FAIL dnsmasq udp $local (bukan alamat/perangkat $IFACE)"; bad=1; fi
     [[ "$local" == *"%$IFACE:67" ]] && dhcp=1
   done < <(ss_sockets)
   if ((dhcp)); then log "OK   DHCP dnsmasq listen udp %$IFACE:67"
@@ -753,4 +906,6 @@ cat >&2 <<EOF
   DHCP/TFTP : dnsmasq hanya di $IFACE ($SERVER_IP)
   Manifest  : $MANIFEST
   Copot     : sudo ./uninstall.sh   (data dipertahankan; --purge untuk menghapus data)
+  Catatan   : server ini harus single-tenant — user lokal mana pun bisa menjangkau dashboard di
+              127.0.0.1:3000 (melewati allowlist nginx). Jangan beri akun shell ke pihak lain.
 EOF

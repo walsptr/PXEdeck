@@ -7,8 +7,11 @@ DHCP_RANGE=10.10.10.100-10.10.10.200
 GATEWAY=10.10.10.254
 # Memuat alamat server = dnsmasq melayani DNS lokal (+ forward ke DNS lain di daftar).
 DNS=10.10.10.1
+# Upstream dnsmasq lokal: kosong = resolver host (/run/systemd/resolve/resolv.conf); none = nama lokal saja.
+# DNS_UPSTREAM=9.9.9.9,1.1.1.1
 DOMAIN=pxe.lan
 ADMIN_USER=pxeadmin
+# Jangan mencakup subnet PXE/VLAN (klien PXE tidak tepercaya); bila disengaja: ADMIN_OVERLAP=yes.
 ADMIN_ALLOW=192.168.1.0/24
 # ADMIN_LISTEN=192.168.1.10
 # ALLOWED_HOSTS=pxe.example.lan
@@ -18,6 +21,7 @@ ADMIN_ALLOW=192.168.1.0/24
 # VLAN_IFACE=pxe10
 # VLAN_NETWORKS=20:10.20.20.0/24:10.20.20.1
 # --- media (opsional) ---
+# ISO sumber harus di luar /srv/pxe (tidak pernah dihapus uninstall).
 # ISO_UBUNTU=/srv/iso/ubuntu-24.04.5-live-server-amd64.iso
 # ISO_DEBIAN=/srv/iso/debian-12.15.0-amd64-DVD-1.iso
 # ISO_ROCKY=/srv/iso/Rocky-9-latest-x86_64-minimal.iso

@@ -12,7 +12,13 @@
 #                 -> "install ok installed"; -W -f='${db:Status-Abbrev} ${Package}\n' -> daftar "ii <pkg>"
 #   apt-get       install <pkg...> -> tambah ke state (+ ${FAKE_APT_DEPS}); purge <pkg...> -> hapus;
 #                 -s autoremove -> "Remv <pkg> [1]" untuk ${FAKE_AUTOREMOVE}
-#   chown         gagal "Read-only file system" bila path ada di ${FAKE_RO}
+#   chown         gagal "Read-only file system" bila path ada di ${FAKE_RO}; selain itu pemilik dicatat di
+#                 $FAKE_STATE/owners (dibaca fake-bin-m8/stat untuk %U:%G)
+#   systemctl     show -p MainPID --value dnsmasq.service -> ${FAKE_DNSMASQ_PID:-10}
+#   netplan       get <kind> -> isi $FAKE_STATE/netplan-<kind> (atau "null"); generate -> ${FAKE_NETPLAN_GENERATE_RC:-0};
+#                 apply -> ${FAKE_NETPLAN_APPLY_RC:-0}
+#   apt-get       -s purge <pkg...> -> "Purg <pkg> [1]" (+ ${FAKE_APT_SIM_EXTRA})
+#   gpgv          -> exit ${FAKE_GPGV_RC:-0}
 #   getent        passwd <u> -> sukses bila $FAKE_STATE/user-<u> ada; useradd/userdel membuat/menghapusnya
 #   mountpoint    -q <dir> -> sukses bila <dir> ada di ${FAKE_MOUNTED}
 #   netplan       get ... -> ${FAKE_NETPLAN_GET:-null}
@@ -35,6 +41,7 @@ case "$name" in
       if [[ -f "$st/active-$2" ]]; then cat "$st/active-$2"; else echo "${FAKE_ACTIVE:-active}"; fi
       exit 0
     fi
+    if [[ "${1:-}" == show && " $* " == *" MainPID "* ]]; then echo "${FAKE_DNSMASQ_PID:-10}"; exit 0; fi
     if [[ "${1:-}" == is-enabled ]]; then
       if [[ -f "$st/enabled-$2" ]]; then cat "$st/enabled-$2"; else echo "${FAKE_ENABLED:-disabled}"; fi
       exit 0
@@ -49,16 +56,31 @@ case "$name" in
   apt-get)
     [[ -f "$st/dpkg" ]] || { for x in ${FAKE_DPKG_INSTALLED:-}; do echo "$x"; done > "$st/dpkg"; }
     if [[ " $* " == *" -s autoremove "* ]]; then for x in ${FAKE_AUTOREMOVE:-}; do echo "Remv $x [1.0]"; done; exit 0; fi
+    op=""; skip=0; sim=0
+    for a in "$@"; do
+      ((skip)) && { skip=0; continue; }
+      case "$a" in -o) skip=1 ;; -s) sim=1 ;; install|purge|update) op="$a" ;; -*) ;; *) [[ -n "$op" ]] && pk+=("$a") ;; esac
+    done
+    if ((sim)) && [[ "$op" == purge ]]; then for x in "${pk[@]}" ${FAKE_APT_SIM_EXTRA:-}; do echo "Purg $x [1.0]"; done; exit 0; fi
     rc="${!rcvar:-0}"; ((rc == 0)) || exit "$rc"
-    op=""; for a in "$@"; do case "$a" in install|purge) op="$a" ;; -*) ;; *) [[ -n "$op" ]] && pk+=("$a") ;; esac; done
     if [[ "$op" == install ]]; then for x in "${pk[@]}" ${FAKE_APT_DEPS:-}; do grep -qxF -- "$x" "$st/dpkg" || echo "$x" >> "$st/dpkg"; done
     elif [[ "$op" == purge ]]; then for x in "${pk[@]}"; do grep -vxF -- "$x" "$st/dpkg" > "$st/dpkg.n" || true; mv "$st/dpkg.n" "$st/dpkg"; done; fi
     exit 0 ;;
-  chown) for a in "$@"; do [[ -n "${FAKE_RO:-}" && " $FAKE_RO " == *" $a "* ]] && { echo "chown: changing ownership of '$a': Read-only file system" >&2; exit 1; }; done; exit 0 ;;
+  chown)
+    for a in "$@"; do [[ -n "${FAKE_RO:-}" && " $FAKE_RO " == *" $a "* ]] && { echo "chown: changing ownership of '$a': Read-only file system" >&2; exit 1; }; done
+    og=""; for a in "$@"; do [[ "$a" == -* ]] && continue; if [[ -z "$og" ]]; then og="$a"; else printf '%s\t%s\n' "$a" "$og" >> "$st/owners"; fi; done
+    exit 0 ;;
   getent) [[ -f "$st/user-${3:-${2:-}}" ]] && { echo "${3:-$2}:x:999:999::/var/lib/pxe-dashboard:/usr/sbin/nologin"; exit 0; }; exit 2 ;;
   useradd) touch "$st/user-${*: -1}"; exit "${!rcvar:-0}" ;;
   userdel) rm -f "$st/user-${*: -1}"; exit "${!rcvar:-0}" ;;
   mountpoint) [[ " ${FAKE_MOUNTED:-} " == *" ${*: -1} "* ]]; exit $? ;;
-  netplan) [[ "${1:-}" == get ]] && { echo "${FAKE_NETPLAN_GET:-null}"; exit 0; }; exit "${!rcvar:-0}" ;;
+  netplan)
+    case "${1:-}" in
+      get) if [[ -f "$st/netplan-${2:-}" ]]; then cat "$st/netplan-$2"; else echo null; fi; exit 0 ;;
+      generate) exit "${FAKE_NETPLAN_GENERATE_RC:-0}" ;;
+      apply) exit "${FAKE_NETPLAN_APPLY_RC:-0}" ;;
+    esac
+    exit 0 ;;
+  gpgv) exit "${FAKE_GPGV_RC:-0}" ;;
   *) exit "${!rcvar:-0}" ;;
 esac

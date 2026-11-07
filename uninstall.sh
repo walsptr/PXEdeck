@@ -35,6 +35,26 @@ has() { local t; for t in "${M_TYPE[@]}"; do [[ "$t" == "$1" ]] && return 0; don
 svc_kind() { local i; for i in "${!M_TYPE[@]}"; do [[ "${M_TYPE[$i]}" == svc && "${M_PATH[$i]}" == "$1" ]] && { echo "${M_EXTRA[$i]}"; return 0; }; done; echo none; }
 list() { local i; for i in "${!M_TYPE[@]}"; do [[ " $* " == *" ${M_TYPE[$i]} "* ]] && printf '    %-12s %s\n' "${M_TYPE[$i]}" "${M_PATH[$i]}"; done; return 0; }
 
+APT_LOCK=(-o DPkg::Lock::Timeout=600)
+req=(); deps=(); MPKGS=" "
+for i in "${!M_TYPE[@]}"; do
+  [[ "${M_TYPE[$i]}" == pkg ]] || continue
+  MPKGS+="${M_PATH[$i]} "
+  if [[ "${M_EXTRA[$i]}" == dep ]]; then deps+=("${M_PATH[$i]}"); else req+=("${M_PATH[$i]}"); fi
+done
+# apt_collateral <pkg...>: simulasi `apt-get -s purge`; cetak paket yang akan ikut dihapus tetapi TIDAK
+# tercatat di manifest (CR-8-6). Kosong = aman.
+apt_collateral() {
+  local out x
+  out="$(apt-get "${APT_LOCK[@]}" -s purge "$@" 2>/dev/null)" || { echo "(simulasi apt-get gagal)"; return 0; }
+  while read -r x; do [[ -n "$x" && "$MPKGS" != *" $x "* ]] && echo "$x"; done < <(awk '/^(Purg|Remv) / { sub(/:.*/, "", $2); print $2 }' <<<"$out")
+  return 0
+}
+if ((RMPKG && ${#req[@]})); then
+  extra="$(apt_collateral "${req[@]}")"
+  [[ -z "$extra" ]] || die "--remove-packages akan ikut menghapus paket yang tidak dipasang installer: $(tr '\n' ' ' <<<"$extra")— uninstall dibatalkan tanpa perubahan (jalankan tanpa --remove-packages)"
+fi
+
 {
   echo "== Rencana uninstall PXE dashboard$( ((DRY)) && echo " (DRY-RUN: tidak ada yang diubah)") =="
   echo "  Dihentikan + dihapus:"; list unit file link tree fstab mount restore-link dir
@@ -83,12 +103,23 @@ NETPLAN_CHANGED=0
 for i in "${!M_TYPE[@]}"; do
   t="${M_TYPE[$i]}"; path="${M_PATH[$i]}"; real="$(p "$path")"
   case "$t" in
+    file|link|tree)
+      # Induk yang di-resolve harus kanonik (tidak lewat symlink ke tempat lain), SR-8-1.
+      if [[ -e "$real" || -L "$real" ]] && ! parent_resolved_ok "$path"; then
+        warn "$path: direktori induk lewat symlink — tidak dihapus"; keep "$i"; continue
+      fi ;;
+  esac
+  case "$t" in
     file)
       if [[ -L "$real" || -f "$real" ]]; then
         run rm -f "$real"; [[ "$path" == /etc/netplan/* ]] && NETPLAN_CHANGED=1
       elif [[ -e "$real" ]]; then warn "$path bukan file biasa — dilewati"; fi ;;
     link) [[ -L "$real" ]] && run rm -f "$real" ;;
-    tree) [[ -e "$real" || -L "$real" ]] && run rm -rf --one-file-system "$real" ;;
+    tree)
+      if [[ -e "$real" || -L "$real" ]]; then
+        safe_rm_tree "$path" || { warn "$path di luar root yang boleh dihapus — dilewati"; keep "$i"; continue; }
+        run rm -rf --one-file-system "$real"
+      fi ;;
   esac
 done
 for i in "${!M_TYPE[@]}"; do
@@ -103,16 +134,18 @@ run systemctl daemon-reload
 
 # 4. Layanan paket: yang dipasang installer dimatikan; yang sudah ada sebelumnya dimuat ulang tanpa
 #    konfigurasi installer.
+#    `pre-disabled` = sudah ada tetapi disabled sebelum install: enablement asli dipulihkan (CR-8-9).
 case "$(svc_kind dnsmasq.service)" in
   ours) run systemctl disable dnsmasq.service || true ;;
   pre) run systemctl restart dnsmasq.service || warn "dnsmasq (sudah ada sebelum install) gagal start ulang" ;;
+  pre-disabled) run systemctl disable dnsmasq.service || true ;;
 esac
 case "$(svc_kind nginx.service)" in
-  ours) run systemctl disable --now nginx.service || true ;;
+  ours|pre-disabled) run systemctl disable --now nginx.service || true ;;
   pre) run systemctl reload-or-restart nginx.service || warn "nginx gagal dimuat ulang" ;;
 esac
 case "$(svc_kind nfs-server.service)" in
-  ours) run exportfs -ra || true; run systemctl disable --now nfs-server.service || true ;;
+  ours|pre-disabled) run exportfs -ra || true; run systemctl disable --now nfs-server.service || true ;;
   pre) run exportfs -ra || true ;;
 esac
 
@@ -133,6 +166,13 @@ for i in "${!M_TYPE[@]}"; do
   real="$(p "${M_PATH[$i]}")"
   [[ -e "$real" || -L "$real" ]] || continue
   if mounted_under "${M_PATH[$i]}"; then warn "${M_PATH[$i]} masih memuat mount aktif — tidak dihapus"; keep "$i"; continue; fi
+  safe_rm_tree "${M_PATH[$i]}" || { warn "${M_PATH[$i]}: induk lewat symlink / di luar root — tidak dihapus"; keep "$i"; continue; }
+  # ISO sumber (kolom 1 entri fstab) tidak pernah ikut terhapus (SR-8-5; validasi sudah menolaknya).
+  for j in "${!M_TYPE[@]}"; do
+    [[ "${M_TYPE[$j]}" == fstab ]] || continue
+    src="${M_EXTRA[$j]%% *}"
+    [[ "$src" == "${M_PATH[$i]}" || "$src" == "${M_PATH[$i]}/"* ]] && { warn "${M_PATH[$i]} memuat ISO sumber $src — tidak dihapus"; keep "$i"; continue 2; }
+  done
   run rm -rf --one-file-system "$real"
 done
 for i in "${!M_TYPE[@]}"; do
@@ -145,22 +185,21 @@ done
 # 7. Paket (hanya --remove-packages, hanya yang dipasang installer). Paket yang diminta installer
 #    di-purge; dependensi yang ikut terpasang (`dep`) hanya di-purge bila apt menganggapnya
 #    autoremovable setelah itu (tidak dibutuhkan paket lain). Tidak ada `apt-get autoremove` global.
-req=(); deps=()
-for i in "${!M_TYPE[@]}"; do
-  [[ "${M_TYPE[$i]}" == pkg ]] || continue
-  if [[ "${M_EXTRA[$i]}" == dep ]]; then deps+=("${M_PATH[$i]}"); else req+=("${M_PATH[$i]}"); fi
-done
+#    Simulasi `apt-get -s purge` sudah memastikan tidak ada paket di luar manifest yang ikut terhapus.
 if ((${#req[@]} + ${#deps[@]})); then
   if ((RMPKG)); then
-    ((${#req[@]})) && { run env DEBIAN_FRONTEND=noninteractive apt-get purge -y "${req[@]}" || warn "apt-get purge gagal"; }
+    ((${#req[@]})) && { run env DEBIAN_FRONTEND=noninteractive apt-get "${APT_LOCK[@]}" purge -y "${req[@]}" || warn "apt-get purge gagal"; }
     rm_deps=()
     if ((${#deps[@]})); then
       if ((DRY)); then rm_deps=("${deps[@]}"); echo "DRY-RUN: (dependensi hanya di-purge bila autoremovable)"
       else
-        cand="$(apt-get -s autoremove 2>/dev/null | awk '/^Remv / { print $2 }' || true)"
+        cand="$(apt-get "${APT_LOCK[@]}" -s autoremove 2>/dev/null | awk '/^Remv / { print $2 }' || true)"
         for x in "${deps[@]}"; do grep -qxF -- "$x" <<<"$cand" && rm_deps+=("$x"); done
+        if ((${#rm_deps[@]})) && [[ -n "$(apt_collateral "${rm_deps[@]}")" ]]; then
+          warn "purge dependensi akan ikut menghapus paket di luar manifest — dependensi dibiarkan"; rm_deps=()
+        fi
       fi
-      ((${#rm_deps[@]})) && { run env DEBIAN_FRONTEND=noninteractive apt-get purge -y "${rm_deps[@]}" || warn "apt-get purge dependensi gagal"; }
+      ((${#rm_deps[@]})) && { run env DEBIAN_FRONTEND=noninteractive apt-get "${APT_LOCK[@]}" purge -y "${rm_deps[@]}" || warn "apt-get purge dependensi gagal"; }
     fi
     # Dependensi yang masih dibutuhkan paket lain tetap tercatat (tidak disentuh).
     for i in "${!M_TYPE[@]}"; do
@@ -199,8 +238,11 @@ if ((!DRY)); then
   [[ "$(systemctl is-active pxe-dashboard.service 2>/dev/null || true)" == active ]] && { log "FAIL pxe-dashboard masih aktif"; bad=1; }
   while read -r netid local proc; do
     [[ "$local" == 127.0.0.1:3000 ]] && { log "FAIL masih ada listener $local $proc"; bad=1; }
-    [[ "$(svc_kind dnsmasq.service)" == ours && "$proc" == *'"dnsmasq"'* ]] && { log "FAIL dnsmasq masih listen $local"; bad=1; }
   done < <(ss_sockets)
+  # Hanya dnsmasq.service milik installer yang dinilai (dnsmasq lain, mis. libvirt/LXD, diabaikan; CR-8-1).
+  if [[ "$(svc_kind dnsmasq.service)" =~ ^(ours|pre-disabled)$ && "$(systemctl is-active dnsmasq.service 2>/dev/null || true)" == active ]]; then
+    log "FAIL dnsmasq.service masih aktif"; bad=1
+  fi
   ((bad)) && die "uninstall selesai dengan sisa layanan aktif (lihat FAIL)"
 fi
 log "uninstall selesai$( ((DRY)) && echo " (dry-run)")$( ((PURGE)) || echo "; data dipertahankan (DB $STATE_DIR, $MEDIA_DIR) — --purge untuk menghapus")"

@@ -49,7 +49,7 @@ EOF
   chmod +x "$SB/nodesrc/node-v22.99.0-linux-x64/bin/node"
   tar -C "$SB/nodesrc" -cJf "$FAKE_STATE/curl-files/node-v22.99.0-linux-x64.tar.xz" node-v22.99.0-linux-x64
   (cd "$FAKE_STATE/curl-files" && sha256sum node-v22.99.0-linux-x64.tar.xz > SHASUMS256.txt)
-  export NODE_VERSION=22.99.0 FAKE_CURL_HTTP=1
+  export PXE_INSTALL_NODE_VERSION=22.99.0 FAKE_CURL_HTTP=1
   unset FAKE_UID FAKE_DHCP_RC FAKE_DHCP_OUT
 }
 # _m8_fresh: root sandbox + state paket/user palsu baru (server "bersih" kedua dalam satu test).
@@ -68,7 +68,7 @@ _m8_render() { # _m8_render <dir> [opsi...]
 _m8_tree() { (cd "$R" && find . -printf '%p %m %y\n' | sort); }
 # Pemanggilan palsu yang mengubah sistem (dry-run / penolakan tidak boleh memuatnya).
 _m8_mutations() {
-  grep -E '^(apt-get|useradd|userdel|chown|mount |umount |runuser|exportfs|netplan (apply|generate)|nft |systemctl (enable|disable|start|stop|restart|reload|daemon-reload)|curl .* -o |node )' "$FAKE_LOG" || true
+  grep -E '^(apt-get|useradd|userdel|chown|mount |umount |runuser|exportfs|netplan apply|netplan generate$|nft |systemctl (enable|disable|start|stop|restart|reload|daemon-reload)|curl .* -o |node )' "$FAKE_LOG" || true
 }
 _m8_no_secret() { # tidak ada password plaintext di output, log palsu, atau file mana pun di root
   assert_not_contains "$OUT" "$_M8_PW" "output"
@@ -297,8 +297,8 @@ test_m8_dry_run_no_changes() {
   assert_eq "$RC" 0 "$OUT"
   assert_eq "$(_m8_tree)" "$before" "dry-run tidak mengubah file"
   assert_eq "$(_m8_mutations)" "" "dry-run tanpa mutasi"
-  assert_match "$OUT" '^DRY-RUN: apt-get update$'
-  assert_match "$OUT" '^DRY-RUN: env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends dnsmasq nginx nfs-kernel-server ipxe .*nftables$'
+  assert_match "$OUT" '^DRY-RUN: apt-get -o DPkg::Lock::Timeout=600 update$'
+  assert_match "$OUT" '^DRY-RUN: env DEBIAN_FRONTEND=noninteractive apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends dnsmasq nginx nfs-kernel-server ipxe .*nftables$'
   assert_match "$OUT" '^DRY-RUN: useradd --system --user-group --home-dir /var/lib/pxe-dashboard --no-create-home --shell /usr/sbin/nologin pxe$'
   assert_match "$OUT" '^DRY-RUN: curl -fsSL --proto =https --tlsv1\.2 -o .* https://nodejs\.org/dist/v22\.99\.0/node-v22\.99\.0-linux-x64\.tar\.xz$'
   assert_match "$OUT" '^DRY-RUN: tulis /etc/pxe-dashboard\.env \(mode 0640 root:pxe\)$'
@@ -321,7 +321,7 @@ test_m8_full_install_env_manifest() {
   local env="$R/etc/pxe-dashboard.env" mf
   assert_file "$env"
   assert_eq "$(stat -c '%a' "$env")" 640 "mode env"
-  assert_match "$(cat "$FAKE_LOG")" "^chown root:pxe $R/etc/\.pxe-install\." "env root:pxe"
+  assert_match "$(cat "$FAKE_LOG")" "^chown root:pxe $R/etc/pxe-dashboard\.env$" "env root:pxe"
   assert_match "$(cat "$env")" "^PXE_ADMIN_PASSWORD_HASH='scrypt\\\$15\\\$8\\\$1\\\$" "hash scrypt di env"
   assert_eq "$(grep -c '^PXE_ADMIN_PASSWORD_HASH=' "$env")" 1
   assert_not_contains "$(cat "$env")" "@PXE_ADMIN_PASSWORD_HASH@"
@@ -342,7 +342,7 @@ test_m8_full_install_env_manifest() {
   assert_match "$(readlink "$R/opt/pxe-dashboard/current")" '^releases/[0-9]{8}T[0-9]{6}Z$'
   assert_file "$R/opt/pxe-dashboard/current/server.js"
   assert_no_file "$R/usr/sbin/policy-rc.d"
-  assert_match "$(cat "$FAKE_LOG")" '^apt-get install -y --no-install-recommends dnsmasq nginx nfs-kernel-server ipxe'
+  assert_match "$(cat "$FAKE_LOG")" '^apt-get -o DPkg::Lock::Timeout=600 install -y --no-install-recommends dnsmasq nginx nfs-kernel-server ipxe'
   assert_match "$(cat "$FAKE_LOG")" '^systemctl restart dnsmasq\.service$'
   assert_match "$(cat "$FAKE_LOG")" '^systemctl restart pxe-dashboard\.service$'
   assert_no_match "$(cat "$FAKE_LOG")" '^systemctl stop dnsmasq' "sukses -> dnsmasq tidak dihentikan"
@@ -447,7 +447,7 @@ test_m8_node_sha_mismatch() {
   assert_no_file "$R/opt/pxe-dashboard/node/bin/node"
   assert_no_match "$(cat "$FAKE_LOG")" '^systemctl (restart|start) dnsmasq' "dnsmasq tidak start"
   # Versi bukan 22.x ditolak.
-  NODE_VERSION=20.1.0 _m8_full; assert_ne "$RC" 0; assert_contains "$OUT" "harus 22.x.y"
+  PXE_INSTALL_NODE_VERSION=20.1.0 _m8_full; assert_ne "$RC" 0; assert_contains "$OUT" "harus 22.x.y"
 }
 
 test_m8_uninstall_keep_then_purge() {
@@ -507,7 +507,7 @@ test_m8_uninstall_keep_then_purge() {
   assert_no_file "$R/srv/pxe"; assert_no_file "$R/var/lib/pxe-dashboard"
   assert_file "$R/srv-ubuntu.iso"
   assert_match "$(cat "$FAKE_LOG")" '^userdel pxe$'
-  assert_match "$(cat "$FAKE_LOG")" '^apt-get purge -y dnsmasq nginx nfs-kernel-server ipxe '
+  assert_match "$(cat "$FAKE_LOG")" '^apt-get -o DPkg::Lock::Timeout=600 purge -y dnsmasq nginx nfs-kernel-server ipxe '
   assert_eq "$(cat "$R/etc/dnsmasq.d/other.conf")" "# admin" "purge pun tidak menyentuh file tak tercatat"
   # Hanya direktori buatan installer yang masih berisi file tak tercatat yang tersisa di manifest.
   assert_eq "$(grep -v '^#' "$R/var/lib/pxe-dashboard-installer/install-manifest")" $'dir\t/etc/dnsmasq.d\t' "sisa manifest"
@@ -521,6 +521,7 @@ test_m8_uninstall_keep_then_purge() {
 
 test_m8_uninstall_preexisting_packages_kept() {
   _m8_setup
+  export FAKE_ENABLED=enabled   # layanan admin sudah enabled sebelum install -> svc 'pre'
   export FAKE_DPKG_INSTALLED="dnsmasq nginx nfs-kernel-server ipxe curl ca-certificates xz-utils libarchive-tools python3 iproute2"
   _m8_full; assert_eq "$RC" 0 "$OUT"
   assert_contains "$(_m8_mf)" $'svc\tnginx.service\tpre'
@@ -640,14 +641,14 @@ t "M8 README §Deploy + contoh config install.sh/uninstall.sh"                  
 test_m8_fix_nic_pxe0_allowed() {
   _m8_setup
   _m8_render "$SB/r" --interface pxe0 --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200 \
-    --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --domain pxe.test
+    --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --admin-overlap-ok --domain pxe.test
   assert_eq "$RC" 0 "$OUT"
   local c; c="$(cat "$SB/r/dnsmasq.conf")"
   assert_match "$c" '^interface=pxe0$'; assert_match "$c" '^dhcp-range=pxe0,10\.99\.0\.100,'
   assert_match "$c" '^domain=pxe\.test$'; assert_no_match "$c" '^except-interface=nat0$'
   # NIC nat0 pun sah; baris lab except-interface=nat0 tetap dibuang.
   _m8_render "$SB/r2" --interface nat0 --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200 \
-    --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1
+    --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --admin-overlap-ok
   assert_eq "$RC" 0 "$OUT"; assert_eq "$(grep -v '^#' "$SB/r2/dnsmasq.conf" | grep -c 'nat0')" 2 "interface= + dhcp-range saja"
 }
 
@@ -674,7 +675,7 @@ tcp   LISTEN 0      511        10.10.10.1:80        0.0.0.0:*    users:(("nginx"
 tcp   LISTEN 0      511         127.0.0.1:3000      0.0.0.0:*    users:(("next-server (v1",pid=30,fd=20))
 SS
   : > "$FAKE_LOG"
-  _m8_install "${_M8_ARGS[@]}" --release "$SB/release.tar.xz" --yes
+  FAKE_DNSMASQ_PID=1460 _m8_install "${_M8_ARGS[@]}" --release "$SB/release.tar.xz" --yes
   assert_eq "$RC" 0 "7 kolom nyata: $OUT"
   # Bentrok port juga terdeteksi dari format 6 kolom.
   _m8_ss6
@@ -806,8 +807,8 @@ test_m8_fix_remove_packages_deps() {
   assert_contains "$m" $'pkg\tnginx\trequested'; assert_not_contains "$m" $'pkg\topenssh-server'
   export FAKE_ACTIVE=inactive FAKE_AUTOREMOVE="nginx-common libfoo"; : > "$FAKE_STATE/ss"; : > "$FAKE_LOG"
   _m8_uninstall --yes --remove-packages; assert_eq "$RC" 0 "$OUT"
-  assert_match "$(cat "$FAKE_LOG")" '^apt-get purge -y dnsmasq nginx nfs-kernel-server ipxe '
-  assert_match "$(cat "$FAKE_LOG")" '^apt-get purge -y nginx-common$' "dep autoremovable di-purge"
+  assert_match "$(cat "$FAKE_LOG")" '^apt-get -o DPkg::Lock::Timeout=600 purge -y dnsmasq nginx nfs-kernel-server ipxe '
+  assert_match "$(cat "$FAKE_LOG")" '^apt-get -o DPkg::Lock::Timeout=600 purge -y nginx-common$' "dep autoremovable di-purge"
   assert_no_match "$(cat "$FAKE_LOG")" '^apt-get purge.*(rpcbind|libfoo|openssh-server)' "dep yang masih dipakai / paket asing tidak disentuh"
   assert_no_match "$(cat "$FAKE_LOG")" '^apt-get (-y )?autoremove' "tanpa autoremove global"
   assert_contains "$(_m8_mf)" $'pkg\trpcbind\tdep' "dep tersisa tetap tercatat"
@@ -842,3 +843,342 @@ t "M8 fix-b: admin-verify.mjs paritas dengan admin-hash.mjs (node asli)"        
 t "M8 fix-c: unit SuccessExitStatus=143 (template + render)"                      test_m8_fix_unit_success_exit
 t "M8 fix-d: --remove-packages purge diminta + dep autoremovable saja"            test_m8_fix_remove_packages_deps
 t "M8 fix-e: install gagal -> enablement unit run ini di-rollback"                test_m8_fix_failed_install_rollback_enable
+
+# ---------------------------------------------------------------------------------------------
+# Iterasi 2 (DEC-030): review code/security iterasi 1. Setiap test merah bila perbaikannya di-revert
+# (.agent/runs/m8/mutation-dev-iter2.txt).
+_M8_PRE_PKGS="dnsmasq nginx nfs-kernel-server ipxe curl ca-certificates xz-utils libarchive-tools python3 iproute2"
+_m8_mfpath() { echo "$R/var/lib/pxe-dashboard-installer/install-manifest"; }
+
+# SR-8-1: path non-kanonik di SEMUA tipe manifest ditolak tanpa perubahan apa pun.
+test_m8_i2_manifest_canonical() {
+  _m8_setup
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  local mf before bad; mf="$(_m8_mfpath)"; cp "$mf" "$SB/mf.ok"
+  before="$(_m8_tree)"; : > "$FAKE_LOG"
+  for bad in $'data\t/srv/pxe/../../etc' $'data\t/srv/pxe/media/../../../home' $'mount\t/srv/pxe/media/..' \
+    $'fstab\t/srv/pxe/media/..\t/x.iso /srv/pxe/media/.. iso9660 loop,ro 0 0' $'file\t/srv/pxe/tftp/../../../etc/shadow' \
+    $'dir\t/srv/pxe//tftp' $'data\t/srv/pxe/' $'data\t/srv/pxe/./media' $'tree\t/opt/pxe-dashboard/..' \
+    $'data\t/srv/pxe/.hidden/../..' $'link\t/etc/nginx/sites-enabled/pxe-dashboard/'; do
+    cp "$SB/mf.ok" "$mf"; printf '%s\n' "$bad" >> "$mf"
+    _m8_uninstall --purge --yes
+    assert_ne "$RC" 0 "harus ditolak: $bad"; assert_contains "$OUT" "tidak valid"
+  done
+  cp "$SB/mf.ok" "$mf"
+  assert_eq "$(_m8_tree)" "$before" "penolakan tanpa perubahan"; assert_eq "$(_m8_mutations)" ""
+}
+
+# SR-8-1: direktori induk yang (diganti) symlink ke luar tidak pernah diikuti rm.
+test_m8_i2_parent_symlink_not_followed() {
+  _m8_setup
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  mkdir -p "$SB/victim"; echo korban > "$SB/victim/snponly.efi"
+  rm -f -- "${R:?}/srv/pxe/tftp/snponly.efi" "${R:?}/srv/pxe/tftp/undionly.kpxe"; rm -d -- "${R:?}/srv/pxe/tftp"
+  ln -s "$SB/victim" "$R/srv/pxe/tftp"
+  export FAKE_ACTIVE=inactive; : > "$FAKE_STATE/ss"
+  _m8_uninstall --yes
+  assert_eq "$(cat "$SB/victim/snponly.efi")" korban "file di balik symlink induk tidak dihapus"
+  assert_contains "$OUT" "direktori induk lewat symlink"
+  _m8_uninstall --purge --yes
+  assert_eq "$(cat "$SB/victim/snponly.efi")" korban "purge pun tidak mengikuti symlink"
+}
+
+# CR-8-1/CR-8-2: verify hanya socket dnsmasq.service kita (PID) dan alamat apa pun di NIC (v4/v6).
+test_m8_i2_verify_pid_and_iface_addrs() {
+  _m8_setup
+  printf '2: eth1    inet6 2001:db8::2/64 scope global\n2: eth1    inet6 fe80::5054:ff:fe99:102/64 scope link\n' >> "$FAKE_STATE/ip-addr"
+  cat >> "$FAKE_STATE/ss" <<'SS'
+udp UNCONN 0 0 192.168.122.1:53 0.0.0.0:* users:(("dnsmasq",pid=99,fd=5))
+udp UNCONN 0 0 0.0.0.0%virbr0:67 0.0.0.0:* users:(("dnsmasq",pid=99,fd=3))
+udp UNCONN 0 0 [2001:db8::2]:53 [::]:* users:(("dnsmasq",pid=10,fd=10))
+udp UNCONN 0 0 [fe80::5054:ff:fe99:102]%eth1:69 [::]:* users:(("dnsmasq",pid=10,fd=11))
+SS
+  _m8_full
+  assert_eq "$RC" 0 "libvirt dnsmasq + IPv6 global: $OUT"
+  assert_contains "$OUT" "OK   dnsmasq udp [2001:db8::2]:53"
+  assert_not_contains "$OUT" "192.168.122.1" "socket dnsmasq lain tidak dinilai"
+  # Socket dnsmasq KITA di alamat yang bukan milik NIC -> FAIL.
+  echo 'udp UNCONN 0 0 192.168.1.10:53 0.0.0.0:* users:(("dnsmasq",pid=10,fd=12))' >> "$FAKE_STATE/ss"
+  : > "$FAKE_LOG"; _m8_full
+  assert_ne "$RC" 0; assert_contains "$OUT" "FAIL dnsmasq udp 192.168.1.10:53"
+  # dnsmasq.service tidak berjalan (MainPID 0) -> FAIL.
+  sed -i '/192.168.1.10:53/d' "$FAKE_STATE/ss"
+  : > "$FAKE_LOG"; FAKE_DNSMASQ_PID=0 _m8_full
+  assert_ne "$RC" 0; assert_contains "$OUT" "dnsmasq.service tidak berjalan"
+  # Uninstall: dnsmasq libvirt masih listen, dnsmasq.service kita mati -> sukses.
+  export FAKE_ACTIVE=inactive
+  sed -i '/pid=99,/!d' "$FAKE_STATE/ss"
+  assert_eq "$(wc -l < "$FAKE_STATE/ss")" 2 "hanya socket dnsmasq libvirt tersisa"
+  _m8_uninstall --yes; assert_eq "$RC" 0 "$OUT"
+}
+
+# CR-8-3/CR-8-4: dnsmasq / nfs-server milik admin dengan konfigurasi aktif lain -> install menolak.
+test_m8_i2_refuse_preexisting_services() {
+  _m8_setup
+  export FAKE_DPKG_INSTALLED="$_M8_PRE_PKGS" FAKE_ENABLED=enabled
+  mkdir -p "$R/etc/dnsmasq.d"; printf '# komentar saja\n\n' > "$R/etc/dnsmasq.conf"
+  printf 'interface=eth0\ndhcp-range=192.168.1.50,192.168.1.99\n' > "$R/etc/dnsmasq.d/admin.conf"
+  local before; before="$(_m8_tree)"
+  _m8_full
+  assert_ne "$RC" 0; assert_contains "$OUT" "dnsmasq sudah terpasang sebelum installer dengan konfigurasi aktif lain"
+  assert_contains "$OUT" "/etc/dnsmasq.d/admin.conf: interface=eth0"
+  assert_eq "$(_m8_mutations)" "" "ditolak sebelum perubahan"; assert_eq "$(_m8_tree)" "$before"
+  # Hanya komentar -> diterima.
+  printf '# interface=eth0\n' > "$R/etc/dnsmasq.d/admin.conf"
+  printf '/srv/share 192.168.1.0/24(rw)\n' > "$R/etc/exports"
+  : > "$FAKE_LOG"; _m8_full
+  assert_ne "$RC" 0; assert_contains "$OUT" "nfs-kernel-server sudah terpasang sebelum installer dengan ekspor"
+  assert_eq "$(_m8_mutations)" ""
+  printf '# kosong\n' > "$R/etc/exports"
+  : > "$FAKE_LOG"; _m8_full
+  assert_eq "$RC" 0 "dnsmasq/nfs pra-ada tanpa konfigurasi lain: $OUT"
+  assert_contains "$(_m8_mf)" $'svc\tdnsmasq.service\tpre'
+}
+
+# CR-8-5: VLAN — validasi di root sementara, rollback bila gagal, parent di bonds/vlans, nama ber-titik.
+_m8_vlan_env() { # NIC induk $1, sub-interface pxe10 beralamat setelah netplan apply
+  mkdir -p "$R/sys/class/net/$1" "$R/etc/netplan"
+  echo "4: pxe10    inet 10.10.10.1/24 brd 10.10.10.255 scope global pxe10" >> "$FAKE_STATE/ip-addr"
+  sed -i 's/%eth1:/%pxe10:/' "$FAKE_STATE/ss"
+}
+test_m8_i2_vlan_netplan_safety() {
+  _m8_setup; _m8_vlan_env eth1
+  echo "# netplan admin" > "$R/etc/netplan/50-cloud-init.yaml"
+  FAKE_NETPLAN_GENERATE_RC=1 _m8_full --vlan-id 10
+  assert_ne "$RC" 0; assert_contains "$OUT" "netplan VLAN tidak valid (tidak dipasang)"
+  assert_no_file "$R/etc/netplan/60-pxe-dashboard.yaml"
+  assert_match "$(cat "$FAKE_LOG")" '^netplan generate --root-dir ' "divalidasi di root sementara"
+  assert_no_match "$(cat "$FAKE_LOG")" '^netplan apply' "tidak pernah di-apply"
+  # Gagal setelah dipasang (apply gagal) -> file dihapus + netplan apply rollback.
+  _m8_fresh; _m8_vlan_env eth1
+  FAKE_NETPLAN_APPLY_RC=1 _m8_full --vlan-id 10
+  assert_ne "$RC" 0; assert_no_file "$R/etc/netplan/60-pxe-dashboard.yaml"
+  assert_contains "$OUT" "rollback: /etc/netplan/60-pxe-dashboard.yaml dikembalikan"
+  assert_eq "$(grep -c '^netplan apply$' "$FAKE_LOG")" 2 "apply + apply rollback"
+}
+test_m8_i2_vlan_parent_lookup() {
+  _m8_setup; _m8_vlan_env bond0
+  printf 'bond0:\n  interfaces: [eth1, eth2]\n' > "$FAKE_STATE/netplan-bonds"
+  _m8_full --interface bond0 --vlan-id 10
+  assert_eq "$RC" 0 "$OUT"
+  local n; n="$(cat "$R/etc/netplan/60-pxe-dashboard.yaml")"
+  assert_not_contains "$n" "ethernets:" "bond0 sudah didefinisikan netplan (bonds)"
+  assert_contains "$n" "      link: bond0"
+  # Parent ber-titik (VLAN di atas VLAN) dari daftar kunci vlans.
+  _m8_fresh; _m8_vlan_env eth0.5
+  printf '"eth0.5":\n  id: 5\n  link: eth0\n' > "$FAKE_STATE/netplan-vlans"
+  _m8_full --interface eth0.5 --vlan-id 10
+  assert_eq "$RC" 0 "$OUT"
+  assert_not_contains "$(cat "$R/etc/netplan/60-pxe-dashboard.yaml")" "ethernets:"
+  # Bond yang tidak didefinisikan netplan -> tolak (bukan menulis ethernets: bond1).
+  _m8_fresh; _m8_vlan_env bond1; mkdir -p "$R/sys/class/net/bond1/bonding"
+  _m8_full --interface bond1 --vlan-id 10
+  assert_ne "$RC" 0; assert_contains "$OUT" "bond/bridge yang tidak didefinisikan netplan"
+}
+
+# CR-8-6: --remove-packages yang akan ikut menghapus paket di luar manifest -> uninstall batal total.
+test_m8_i2_apt_purge_collateral() {
+  _m8_setup
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  local before; before="$(_m8_tree)"; : > "$FAKE_LOG"
+  FAKE_APT_SIM_EXTRA="libnginx-mod-http-geoip2" _m8_uninstall --yes --remove-packages
+  assert_ne "$RC" 0; assert_contains "$OUT" "libnginx-mod-http-geoip2"
+  assert_eq "$(_m8_tree)" "$before" "tanpa perubahan"
+  assert_no_match "$(cat "$FAKE_LOG")" '^(systemctl (stop|disable)|apt-get .*purge -y)' "tanpa mutasi"
+  assert_match "$(cat "$FAKE_LOG")" '^apt-get -o DPkg::Lock::Timeout=600 -s purge dnsmasq '
+}
+
+# CR-8-7: DNS lokal tanpa upstream eksplisit -> resolver host (nama eksternal bisa di-resolve).
+test_m8_i2_dns_upstream() {
+  _m8_setup
+  _m8_render "$SB/r" "${_M8_ARGS[@]}"
+  local c; c="$(cat "$SB/r/dnsmasq.conf")"
+  assert_no_match "$c" '^no-resolv$' "default: tidak no-resolv"
+  assert_match "$c" '^resolv-file=/run/systemd/resolve/resolv\.conf$'
+  _m8_render "$SB/r2" "${_M8_ARGS[@]}" --dns-upstream 9.9.9.9,1.1.1.1
+  c="$(cat "$SB/r2/dnsmasq.conf")"
+  assert_match "$c" '^no-resolv$'; assert_match "$c" '^server=9\.9\.9\.9$'; assert_match "$c" '^server=1\.1\.1\.1$'
+  assert_no_match "$c" '^resolv-file='
+  _m8_render "$SB/r3" "${_M8_ARGS[@]}" --dns-upstream none
+  c="$(cat "$SB/r3/dnsmasq.conf")"
+  assert_match "$c" '^no-resolv$'; assert_no_match "$c" '^(server|resolv-file)='
+  _m8_render "$SB/r4" "${_M8_ARGS[@]}" --dns-upstream 10.10.10.1; assert_eq "$RC" 2 "upstream = server sendiri"
+}
+
+# SR-8-2: allowlist admin tumpang tindih segmen PXE/VLAN atau /0 butuh --admin-overlap-ok.
+test_m8_i2_admin_allow_overlap() {
+  _m8_setup
+  local a
+  for a in 10.10.10.0/24 10.10.10.50 10.0.0.0/8 0.0.0.0/0; do
+    _m8_render "$SB/r" "${_M8_ARGS[@]}" --admin-allow "$a"
+    assert_eq "$RC" 2 "harus ditolak: $a"; assert_contains "$OUT" "--admin-overlap-ok"
+  done
+  _m8_render "$SB/r" "${_M8_ARGS[@]}" --vlan-id 10 --vlan-networks '20:10.20.20.0/24:10.20.20.1' --admin-allow 10.20.20.9
+  assert_eq "$RC" 2 "VLAN management juga"
+  _m8_render "$SB/r" "${_M8_ARGS[@]}" --admin-allow 10.10.10.50 --admin-overlap-ok
+  assert_eq "$RC" 0 "$OUT"; assert_contains "$OUT" "PERINGATAN: allowlist admin tumpang tindih"
+}
+
+# SR-8-4 / SR-8-5: pkg requested hanya paket installer; ISO sumber di luar direktori yang dihapus.
+test_m8_i2_pkg_allowlist_and_iso_paths() {
+  _m8_setup
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  local mf bad; mf="$(_m8_mfpath)"; cp "$mf" "$SB/mf.ok"
+  for bad in $'pkg\topenssh-server\trequested' $'pkg\tnginx' $'pkg\tnginx\tother' \
+    $'fstab\t/srv/pxe/media/ubuntu-24.04\t/srv/pxe/iso/u.iso /srv/pxe/media/ubuntu-24.04 iso9660 loop,ro,nofail 0 0' \
+    $'fstab\t/srv/pxe/media/rocky-9\t/x.iso /srv/pxe/media/ubuntu-24.04 iso9660 loop,ro 0 0'; do
+    cp "$SB/mf.ok" "$mf"; printf '%s\n' "$bad" >> "$mf"
+    : > "$FAKE_LOG"; _m8_uninstall --yes --remove-packages
+    assert_ne "$RC" 0 "harus ditolak: $bad"; assert_eq "$(_m8_mutations)" ""
+  done
+  cp "$SB/mf.ok" "$mf"
+  for bad in /srv/pxe/iso/u.iso /srv/pxe /opt/pxe-dashboard/u.iso /var/lib/pxe-dashboard/u.iso /iso/./u.iso; do
+    _m8_render "$SB/r" "${_M8_ARGS[@]}" --iso-ubuntu "$bad"; assert_eq "$RC" 2 "ISO ditolak: $bad"
+  done
+}
+
+# SR-8-6 / CR-8-16: netboot Debian lewat Release.gpg (gpgv) -> Release -> SHA256SUMS -> file.
+_m8_debian_chain() { # siapkan "mirror" palsu yang konsisten
+  local cf="$FAKE_STATE/curl-files" sums
+  echo "kernel-netboot" > "$cf/linux"; echo "initrd-netboot" > "$cf/initrd.gz"
+  { echo "$(sha256sum < "$cf/linux" | cut -d' ' -f1)  ./netboot/debian-installer/amd64/linux"
+    echo "$(sha256sum < "$cf/initrd.gz" | cut -d' ' -f1)  ./netboot/debian-installer/amd64/initrd.gz"; } > "$cf/SHA256SUMS"
+  sums="$(sha256sum < "$cf/SHA256SUMS" | cut -d' ' -f1)"
+  printf 'Origin: Debian\nSuite: stable\nMD5Sum:\n 00 1 main/installer-amd64/current/images/SHA256SUMS\nSHA256:\n %s 123 main/installer-amd64/current/images/SHA256SUMS\n 0000 1 main/binary-amd64/Release\n' "$sums" > "$cf/Release"
+  echo "sig" > "$cf/Release.gpg"
+  mkdir -p "$R/usr/share/keyrings"; echo key > "$R/usr/share/keyrings/debian-archive-keyring.gpg"
+  : > "$R/srv-debian.iso"
+}
+test_m8_i2_debian_release_gpg() {
+  _m8_setup; _m8_debian_chain
+  _m8_full --iso-debian /srv-debian.iso
+  assert_eq "$RC" 0 "$OUT"
+  assert_eq "$(cat "$R/srv/pxe/media/debian-netboot/linux")" "kernel-netboot"
+  assert_contains "$OUT" "Release.gpg terverifikasi"
+  assert_match "$(cat "$FAKE_LOG")" "^gpgv --keyring $R/usr/share/keyrings/debian-archive-keyring\.gpg .*/Release\.gpg .*/Release$"
+  assert_match "$(cat "$FAKE_LOG")" '^apt-get .*install .*gpgv debian-archive-keyring'
+  # Tanda tangan tidak valid -> batal, tidak ada kernel terpasang.
+  _m8_fresh; _m8_debian_chain
+  FAKE_GPGV_RC=1 _m8_full --iso-debian /srv-debian.iso
+  assert_ne "$RC" 0; assert_contains "$OUT" "tanda tangan Release Debian tidak valid"
+  assert_no_file "$R/srv/pxe/media/debian-netboot/linux"
+  # SHA256SUMS diganti (tidak cocok dengan Release bertanda tangan) -> batal.
+  _m8_fresh; _m8_debian_chain
+  echo "0000  ./netboot/debian-installer/amd64/linux" >> "$FAKE_STATE/curl-files/SHA256SUMS"
+  _m8_full --iso-debian /srv-debian.iso
+  assert_ne "$RC" 0; assert_contains "$OUT" "SHA256SUMS netboot Debian tidak cocok dengan Release"
+  assert_no_file "$R/srv/pxe/media/debian-netboot/linux"
+}
+
+# SR-8-7: file password harus milik root (uid installer), dicek sebelum mode.
+test_m8_i2_password_file_owner() {
+  _m8_setup
+  [[ "$(stat -c %u /etc/passwd)" != "$EUID" ]] || _fail "prasyarat: /etc/passwd bukan milik user test"
+  _m8_install "${_M8_ARGS[@]}" --release "$SB/release.tar.xz" --admin-password-file /etc/passwd --yes
+  assert_ne "$RC" 0; assert_contains "$OUT" "harus milik root"
+  assert_eq "$(_m8_mutations)" ""
+}
+
+# SR-8-8: policy-rc.d sisa installer (marker) dibersihkan; milik admin dibiarkan.
+test_m8_i2_stale_policy_rc() {
+  _m8_setup
+  printf '#!/bin/sh\n# sementara oleh install.sh PXE dashboard\nexit 101\n' > "$R/usr/sbin/policy-rc.d"
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  assert_no_file "$R/usr/sbin/policy-rc.d"; assert_contains "$OUT" "sisa run installer sebelumnya"
+  _m8_fresh
+  printf '#!/bin/sh\n# milik admin\nexit 101\n' > "$R/usr/sbin/policy-rc.d"
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  assert_eq "$(sed -n 2p "$R/usr/sbin/policy-rc.d")" "# milik admin"
+}
+
+# CR-8-8 / CR-8-9: nginx milik admin — site default dibiarkan; enablement asli dipulihkan.
+test_m8_i2_preexisting_nginx_default_and_enable() {
+  _m8_setup
+  export FAKE_DPKG_INSTALLED="$_M8_PRE_PKGS" FAKE_ENABLED=disabled
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  assert_eq "$(readlink "$R/etc/nginx/sites-enabled/default")" /etc/nginx/sites-available/default "site default admin tetap"
+  assert_not_contains "$(_m8_mf)" "restore-link"
+  assert_contains "$(_m8_mf)" $'svc\tnginx.service\tpre-disabled'
+  export FAKE_ACTIVE=inactive; : > "$FAKE_STATE/ss"; : > "$FAKE_LOG"
+  _m8_uninstall --yes; assert_eq "$RC" 0 "$OUT"
+  assert_match "$(cat "$FAKE_LOG")" '^systemctl disable --now nginx\.service$' "kembali disabled"
+  assert_match "$(cat "$FAKE_LOG")" '^systemctl disable dnsmasq\.service$'
+}
+
+# CR-8-11: isi aturan firewall (ICMPv6 ND), validasi nft -c, peringatan bila dimatikan saat install ulang.
+test_m8_i2_firewall() {
+  _m8_setup
+  _m8_render "$SB/r" "${_M8_ARGS[@]}" --firewall
+  local f; f="$(cat "$SB/r/nftables.nft")"
+  assert_match "$f" '^table inet pxe_dashboard$'; assert_match "$f" '^delete table inet pxe_dashboard$'
+  assert_match "$f" 'iifname "eth1" ct state established,related accept'
+  assert_match "$f" 'iifname "eth1" icmpv6 type \{ nd-neighbor-solicit, nd-neighbor-advert, nd-router-advert, nd-router-solicit, echo-request \} accept'
+  assert_match "$f" 'iifname "eth1" udp dport \{ 67, 69 \} accept'
+  assert_match "$f" 'iifname "eth1" tcp dport \{ 22, 80, 111, 2049, 20048 \} accept'
+  assert_match "$f" 'iifname "eth1" counter drop$'
+  assert_no_match "$f" 'flush ruleset' "tidak mem-flush aturan lain"
+  _m8_full --firewall; assert_eq "$RC" 0 "$OUT"
+  assert_match "$(cat "$FAKE_LOG")" "^nft -c -f $R/etc/pxe-dashboard/nftables\.nft$"
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  assert_contains "$OUT" "firewall pxe_dashboard dari instalasi sebelumnya masih aktif"
+}
+
+# CR-8-12: pemilik file terkelola bergeser -> diperbaiki + dashboard di-restart.
+test_m8_i2_owner_drift() {
+  _m8_setup
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  printf '%s\t%s\n' "$R/etc/pxe-dashboard.env" "root:root" >> "$FAKE_STATE/owners"
+  : > "$FAKE_LOG"; _m8_full; assert_eq "$RC" 0 "$OUT"
+  assert_match "$(cat "$FAKE_LOG")" "^chown root:pxe $R/etc/pxe-dashboard\.env$"
+  assert_match "$(cat "$FAKE_LOG")" '^systemctl restart pxe-dashboard\.service$'
+  : > "$FAKE_LOG"; _m8_full; assert_eq "$RC" 0 "$OUT"
+  assert_no_match "$(cat "$FAKE_LOG")" '^systemctl restart pxe-dashboard' "tanpa drift -> tanpa restart"
+}
+
+# CR-8-13: build gagal -> direktori build sementara dihapus.
+test_m8_i2_build_tmp_cleanup() {
+  _m8_setup
+  _m8_install "${_M8_ARGS[@]}" --admin-password-file "$SB/admin.pass" --yes
+  assert_ne "$RC" 0 "runuser palsu tidak membuat tarball -> gagal"
+  assert_match "$(cat "$FAKE_LOG")" '^runuser -u pxe -- env -i '
+  assert_eq "$(find "$R/var/tmp" -maxdepth 1 -name 'pxe-dashboard-build.*' | wc -l)" 0 "build tmp dibersihkan"
+}
+
+# CR-8-15: NODE_VERSION generik (nvm/CI) diabaikan; hanya PXE_INSTALL_NODE_VERSION.
+test_m8_i2_node_version_env() {
+  _m8_setup
+  unset PXE_INSTALL_NODE_VERSION
+  NODE_VERSION=22.99.0 _m8_install "${_M8_ARGS[@]}" --dry-run --admin-password-file "$SB/admin.pass" --release "$SB/release.tar.xz"
+  assert_eq "$RC" 0 "$OUT"
+  assert_match "$OUT" 'https://nodejs\.org/dist/v22\.23\.4/node-v22\.23\.4-linux-x64\.tar\.xz$'
+  assert_not_contains "$OUT" "22.99.0"
+}
+
+# SR-8-3: syarat single-tenant didokumentasikan (README + keluaran installer).
+test_m8_i2_single_tenant_doc() {
+  _m8_setup
+  assert_contains "$(awk '/^## Deploy/,/^## Topologi VLAN/' "$REPO_UNDER_TEST/README.md")" "single-tenant"
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  assert_contains "$OUT" "single-tenant"
+  _m8_install --help; assert_contains "$OUT" "single-tenant"
+}
+
+t "M8 i2 SR-8-1: path manifest non-kanonik (semua tipe) ditolak"               test_m8_i2_manifest_canonical
+t "M8 i2 SR-8-1: induk symlink tidak diikuti rm"                               test_m8_i2_parent_symlink_not_followed
+t "M8 i2 CR-8-1/2: verify per PID dnsmasq.service + alamat v4/v6 NIC"           test_m8_i2_verify_pid_and_iface_addrs
+t "M8 i2 CR-8-3/4: dnsmasq/nfs admin dengan konfigurasi lain -> tolak"          test_m8_i2_refuse_preexisting_services
+t "M8 i2 CR-8-5: netplan VLAN divalidasi sementara + rollback"                 test_m8_i2_vlan_netplan_safety
+t "M8 i2 CR-8-5: parent di bonds/vlans, nama ber-titik, bond tak terdefinisi"   test_m8_i2_vlan_parent_lookup
+t "M8 i2 CR-8-6: simulasi apt purge, paket di luar manifest -> batal"           test_m8_i2_apt_purge_collateral
+t "M8 i2 CR-8-7: DNS upstream default resolver host / eksplisit / none"         test_m8_i2_dns_upstream
+t "M8 i2 SR-8-2: allowlist admin tumpang tindih PXE/VLAN atau /0 butuh flag"    test_m8_i2_admin_allow_overlap
+t "M8 i2 SR-8-4/5: pkg requested allowlist, ISO sumber di luar /srv/pxe"        test_m8_i2_pkg_allowlist_and_iso_paths
+t "M8 i2 SR-8-6: netboot Debian lewat Release.gpg -> SHA256SUMS"                test_m8_i2_debian_release_gpg
+t "M8 i2 SR-8-7: file password harus milik root"                               test_m8_i2_password_file_owner
+t "M8 i2 SR-8-8: policy-rc.d sisa installer dibersihkan, milik admin tidak"     test_m8_i2_stale_policy_rc
+t "M8 i2 CR-8-8/9: nginx admin: site default tetap, enablement dipulihkan"      test_m8_i2_preexisting_nginx_default_and_enable
+t "M8 i2 CR-8-11: firewall (ICMPv6 ND, nft -c, peringatan FIREWALL=no)"         test_m8_i2_firewall
+t "M8 i2 CR-8-12: drift pemilik file terkelola diperbaiki + restart"            test_m8_i2_owner_drift
+t "M8 i2 CR-8-13: build gagal -> direktori build sementara dihapus"             test_m8_i2_build_tmp_cleanup
+t "M8 i2 CR-8-15: NODE_VERSION generik diabaikan"                               test_m8_i2_node_version_env
+t "M8 i2 SR-8-3: syarat single-tenant di README + keluaran installer"           test_m8_i2_single_tenant_doc

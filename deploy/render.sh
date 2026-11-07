@@ -8,7 +8,8 @@
 #   RANGE_START, RANGE_END, GATEWAY, DNS (dipisah koma), DOMAIN, DHCP_ROUTER (yes|no),
 #   DNS_LOCAL (1 = dnsmasq melayani DNS), LISTEN_IPS[] (nginx), ADMIN_ALLOW_LIST[], ALLOWED_HOSTS,
 #   VLAN_ID, VLAN_IFACE, VLAN_NETWORKS, NFS_CIDRS[], FIREWALL (yes|no), NETPLAN_PARENT (1 = parent
-#   NIC perlu didefinisikan di netplan installer), NODE_DIR.
+#   NIC perlu didefinisikan di netplan installer), NODE_DIR, UPSTREAM_MODE (servers|resolv|none),
+#   UPSTREAM_SERVERS[], RESOLV_FILE.
 
 # _expect <file> <regex> <count>: template wajib memuat baris yang cocok tepat <count> kali.
 _expect() {
@@ -50,14 +51,20 @@ render_dnsmasq() { # render_dnsmasq <out>
       -e "/^dhcp-boot=/s|10\.99\.0\.2|$SERVER_IP|g" \
       -e '/^# HANYA di NIC pxe0/d'
     if ((DNS_LOCAL)); then
-      # DNS lokal (domain $DOMAIN) + forward ke server DNS lain di daftar (bila ada).
-      for d in ${DNS//,/ }; do [[ "$d" == "$SERVER_IP" ]] || echo "server=$d"; done
+      # DNS lokal (domain $DOMAIN); nama lain diteruskan ke upstream (CR-8-7): server= eksplisit,
+      # resolver host (resolv-file, tanpa no-resolv), atau tidak sama sekali (none = isolasi).
+      case "$UPSTREAM_MODE" in
+        servers) for d in "${UPSTREAM_SERVERS[@]}"; do echo "server=$d"; done ;;
+        resolv) echo "resolv-file=$RESOLV_FILE" ;;
+        none) echo "# --dns-upstream none: hanya nama lokal $DOMAIN yang bisa di-resolve node" ;;
+      esac
     else
       # Server ini bukan DNS klien (PXE_MGMT_DNS tidak memuatnya): DNS dnsmasq dimatikan total.
       echo "port=0"
     fi
   } > "$out.tmp"
-  if ((!DNS_LOCAL)); then sed -i -E '/^(no-resolv|local=\/.*\/|log-queries)$/d' "$out.tmp"; fi
+  if ((!DNS_LOCAL)); then sed -i -E '/^(no-resolv|local=\/.*\/|log-queries)$/d' "$out.tmp"
+  elif [[ "$UPSTREAM_MODE" == resolv ]]; then sed -i '/^no-resolv$/d' "$out.tmp"; fi
   mv "$out.tmp" "$out"
   # Pasca-render: terikat ke NIC yang dipilih, tanpa sisa nilai lab.
   [[ "$(grep -c '^interface=' "$out")" == 1 ]] && grep -qx "interface=$IFACE" "$out" && grep -qx 'bind-interfaces' "$out" \
@@ -226,6 +233,7 @@ table inet pxe_dashboard {
     type filter hook input priority filter; policy accept;
     iifname "$IFACE" ct state established,related accept
     iifname "$IFACE" icmp type echo-request accept
+    iifname "$IFACE" icmpv6 type { nd-neighbor-solicit, nd-neighbor-advert, nd-router-advert, nd-router-solicit, echo-request } accept
     iifname "$IFACE" udp dport { 67, 69 } accept
 $dns
     iifname "$IFACE" tcp dport { 22, 80, 111, 2049, 20048 } accept

@@ -130,12 +130,25 @@ sudo ./install.sh --config deploy/install.conf.example --dry-run
 ./install.sh --config deploy/install.conf.example --render /tmp/pxe-render
 ```
 
+- **Server PXE harus single-tenant.** Dashboard listen di `127.0.0.1:3000` di belakang nginx; user
+  lokal mana pun di server bisa menjangkaunya langsung (melewati allowlist dan rate limit nginx).
+  Jangan beri akun shell ke pihak lain. Unix socket dicatat sebagai pekerjaan lanjutan.
 - Semua opsi bisa juga lewat `--config FILE` (`KEY=VALUE`, contoh di
   [`deploy/install.conf.example`](deploy/install.conf.example)) atau env `PXE_INSTALL_<KEY>`;
   prioritas config < env < opsi. Lihat `./install.sh --help`.
 - Password admin hanya dari prompt, `--admin-password-file` (mode 0600), atau
   `--admin-password-stdin`. Password tidak pernah masuk argv, log, atau file; yang disimpan hanya hash
   scrypt di `/etc/pxe-dashboard.env`.
+- `--admin-allow` tidak boleh tumpang tindih dengan subnet PXE/VLAN (klien PXE tidak tepercaya) atau
+  `/0` kecuali dengan `--admin-overlap-ok`.
+- DNS: bila `--dns` memuat alamat server, dnsmasq melayani nama lokal dan meneruskan nama lain ke
+  resolver host (`/run/systemd/resolve/resolv.conf`), atau ke `--dns-upstream IP[,IP]`;
+  `--dns-upstream none` = hanya nama lokal (segmen terisolasi).
+- dnsmasq/nfs-kernel-server yang sudah terpasang sebelum installer dengan konfigurasi lain yang aktif
+  ditolak (opsi global PXE akan mengubah layanannya). Pakai server khusus PXE.
+- ISO sumber harus berada di luar `/srv/pxe`, `/opt/pxe-dashboard`, `/var/lib/pxe-dashboard` dan tidak
+  pernah dihapus. Netboot Debian diverifikasi lewat `Release.gpg` (gpgv + `debian-archive-keyring`)
+  → `SHA256SUMS`. Node selain versi yang dipin hanya lewat `PXE_INSTALL_NODE_VERSION`.
 - Topologi VLAN: `--vlan-id 10` membuat sub-interface `pxe10` di atas `--interface` (netplan) dan
   dnsmasq hanya listen di sana; `--vlan-networks '20:10.20.20.0/24:10.20.20.1'` mengisi
   `PXE_VLAN_NETWORKS` dan menambah subnet itu ke ekspor NFS.
@@ -162,8 +175,9 @@ sudo ./uninstall.sh --purge --yes      # juga data (DB, /srv/pxe, log) dan user 
 sudo ./uninstall.sh --purge --remove-packages --yes   # juga paket yang dipasang installer
 ```
 
-`--remove-packages` mem-purge paket yang diminta installer, lalu dependensi yang ikut terpasang hanya
-bila apt menganggapnya autoremovable (tidak dipakai paket lain). Tidak ada `apt-get autoremove` untuk
+`--remove-packages` lebih dulu mensimulasikan `apt-get -s purge` dan membatalkan uninstall bila paket
+di luar manifest akan ikut terhapus. Setelah itu paket yang diminta installer di-purge, lalu dependensi
+yang ikut terpasang hanya bila apt menganggapnya autoremovable (tidak dipakai paket lain). Tidak ada `apt-get autoremove` untuk
 seluruh sistem; paket yang sudah ada sebelum install tidak disentuh.
 
 Template konfigurasi ada di [`infra/server/`](infra/server/) (`dnsmasq.conf`, `nginx-pxe.conf`,

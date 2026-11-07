@@ -55,8 +55,14 @@ POLICY_RC=/usr/sbin/policy-rc.d
 PXE_USER=pxe
 MEDIA_IDS=(ubuntu-24.04 debian-12 rocky-9 debian-netboot)
 
+# Paket yang boleh dipasang (dan dicatat `pkg ... requested`) oleh installer. Entri `requested` di
+# manifest dengan nama lain ditolak (SR-8-4); dependensi (`dep`) tetap di balik simulasi apt.
+INSTALLER_PKGS=(dnsmasq nginx nfs-kernel-server ipxe curl ca-certificates xz-utils libarchive-tools python3
+  iproute2 nftables gpgv debian-archive-keyring)
+
 # Node 22 LTS resmi (nodejs.org). Versi + SHA256 tarball linux-x64 dipin (sama dengan
-# infra/fetch-node.sh; diasersi infra/test/m8.sh). NODE_VERSION lain -> SHASUMS256.txt diunduh.
+# infra/fetch-node.sh; diasersi infra/test/m8.sh). PXE_INSTALL_NODE_VERSION lain -> SHASUMS256.txt
+# diunduh (integritas hanya TLS; diperingatkan).
 NODE_VERSION_DEFAULT=22.23.4
 NODE_SHA256_DEFAULT=1805bcd35e6815559bd2eb97db438d3fdb0eb3a5e6a977b7c1badca76337e9ce
 
@@ -65,10 +71,15 @@ SCRYPT_RE='^scrypt\$[0-9]{1,7}\$[0-9]{1,2}\$[0-9]{1,2}\$[A-Za-z0-9+/_=-]{16,}\$[
 
 # Path yang BOLEH dihapus uninstall.sh (lapis kedua terhadap manifest rusak/diubah). Semua entri
 # manifest wajib cocok dengan salah satu pola ini; satu saja tidak cocok -> uninstall batal.
-ALLOWED_PATH_RE='^(/etc/pxe-dashboard\.env|/etc/pxe-dashboard(/[A-Za-z0-9._-]+)*|/etc/dnsmasq\.d|/etc/dnsmasq\.d/pxe-dashboard\.conf|/etc/systemd/system/dnsmasq\.service\.d|/etc/systemd/system/dnsmasq\.service\.d/pxe-dashboard\.conf|/etc/systemd/system/pxe-dashboard(-firewall)?\.service|/etc/nginx/sites-(available|enabled)/pxe-dashboard|/etc/nginx/sites-enabled/default|/etc/exports\.d|/etc/exports\.d/pxe-dashboard\.exports|/etc/nfs\.conf\.d|/etc/nfs\.conf\.d/pxe-dashboard\.conf|/etc/netplan/60-pxe-dashboard\.yaml|/etc/logrotate\.d/pxe-dashboard|/opt/pxe-dashboard(/[A-Za-z0-9._-]+)*|/srv/pxe(/[A-Za-z0-9._-]+)*|/var/lib/pxe-dashboard|/var/log/dnsmasq-pxe\.log)$'
+# Segmen path: tidak boleh diawali titik (menolak `.`/`..`); bentuk kanonik juga dicek manifest_canonical.
+SEG='[A-Za-z0-9_-][A-Za-z0-9._-]*'
+ALLOWED_PATH_RE='^(/etc/pxe-dashboard\.env|/etc/pxe-dashboard(/'"$SEG"')*|/etc/dnsmasq\.d|/etc/dnsmasq\.d/pxe-dashboard\.conf|/etc/systemd/system/dnsmasq\.service\.d|/etc/systemd/system/dnsmasq\.service\.d/pxe-dashboard\.conf|/etc/systemd/system/pxe-dashboard(-firewall)?\.service|/etc/nginx/sites-(available|enabled)/pxe-dashboard|/etc/nginx/sites-enabled/default|/etc/exports\.d|/etc/exports\.d/pxe-dashboard\.exports|/etc/nfs\.conf\.d|/etc/nfs\.conf\.d/pxe-dashboard\.conf|/etc/netplan/60-pxe-dashboard\.yaml|/etc/logrotate\.d/pxe-dashboard|/opt/pxe-dashboard(/'"$SEG"')*|/srv/pxe(/'"$SEG"')*|/var/lib/pxe-dashboard|/var/log/dnsmasq-pxe\.log)$'
 # Tree yang boleh dihapus rekursif (rm -rf): hanya aplikasi (tree) dan data (data, --purge).
 TREE_RE='^/opt/pxe-dashboard$'
-DATA_RE='^(/var/lib/pxe-dashboard|/srv/pxe(/[A-Za-z0-9._-]+)*|/var/log/dnsmasq-pxe\.log)$'
+DATA_RE='^(/var/lib/pxe-dashboard|/srv/pxe(/'"$SEG"')*|/var/log/dnsmasq-pxe\.log)$'
+MEDIA_MNT_RE='^/srv/pxe/media/[a-z0-9][a-z0-9.-]*$'
+# Root yang boleh dihapus rekursif oleh uninstall (setelah path di-resolve, SR-8-1).
+RM_ROOTS=(/opt/pxe-dashboard /srv/pxe /var/lib/pxe-dashboard /var/log/dnsmasq-pxe.log)
 MANIFEST_TYPES='file|link|dir|tree|data|restore-link|fstab|mount|unit|svc|pkg|user'
 
 DRY=0
@@ -125,7 +136,21 @@ valid_iface() { [[ "$1" =~ ^[A-Za-z0-9][A-Za-z0-9_.-]{0,14}$ ]]; }
 valid_domain() { [[ "$1" =~ ^[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?(\.[a-z0-9]([a-z0-9-]{0,61}[a-z0-9])?)*$ ]]; }
 valid_user() { [[ "$1" =~ ^[a-z_][a-z0-9_-]{0,31}$ ]]; }
 # Path file/device ISO: absolut, tanpa spasi/karakter khusus fstab.
-valid_iso_path() { [[ "$1" =~ ^/[A-Za-z0-9._/+-]+$ && "$1" != *..* ]]; }
+# Path file/device ISO: absolut kanonik, tanpa spasi/karakter khusus fstab, dan TIDAK di bawah direktori
+# yang bisa dihapus installer/uninstall (/srv/pxe, /opt/pxe-dashboard, /var/lib/pxe-dashboard): ISO
+# sumber tidak pernah ikut terhapus `--purge` (SR-8-5).
+valid_iso_path() {
+  [[ "$1" =~ ^/[A-Za-z0-9._/+-]+$ ]] && manifest_canonical "$1" || return 1
+  case "$1" in /srv/pxe|/srv/pxe/*|/opt/pxe-dashboard|/opt/pxe-dashboard/*|/var/lib/pxe-dashboard|/var/lib/pxe-dashboard/*) return 1 ;; esac
+}
+# manifest_canonical <path>: absolut, tanpa `//`, tanpa segmen `.`/`..`, tanpa `/` di akhir (SR-8-1).
+manifest_canonical() {
+  local x="$1" seg
+  [[ "$x" == /* && "$x" != */ && "$x" != *//* ]] || return 1
+  IFS=/ read -r -a _segs <<<"${x#/}"
+  for seg in "${_segs[@]}"; do [[ -n "$seg" && "$seg" != . && "$seg" != .. ]] || return 1; done
+}
+pkg_is_installer() { local x; for x in "${INSTALLER_PKGS[@]}"; do [[ "$x" == "$1" ]] && return 0; done; return 1; }
 
 # --- manifest -----------------------------------------------------------------------------------
 # Format baris: <type>\t<path>\t<extra>. Ditulis bertahap (setiap entri langsung disimpan) agar
@@ -133,12 +158,16 @@ valid_iso_path() { [[ "$1" =~ ^/[A-Za-z0-9._/+-]+$ && "$1" != *..* ]]; }
 manifest_valid_line() { # manifest_valid_line <type> <path> <extra>
   local t="$1" path="$2" extra="$3"
   [[ "$t" =~ ^($MANIFEST_TYPES)$ ]] || return 1
+  # Semua tipe ber-path: bentuk kanonik dulu (menolak `..`, `//`, `/./`, `/` akhir) sebelum regex.
+  case "$t" in unit|svc|pkg|user) ;; *) manifest_canonical "$path" || return 1 ;; esac
   case "$t" in
     unit|svc) [[ "$path" =~ ^(pxe-dashboard|pxe-dashboard-firewall|dnsmasq|nginx|nfs-server)\.service$ ]] ;;
-    pkg) [[ "$path" =~ ^[a-z0-9][a-z0-9.+-]+$ ]] ;;
+    pkg) [[ "$path" =~ ^[a-z0-9][a-z0-9.+-]+$ && "$extra" =~ ^(requested|dep)$ ]] || return 1
+         [[ "$extra" == dep ]] || pkg_is_installer "$path" ;;
     user) [[ "$path" == "$PXE_USER" ]] ;;
-    fstab) [[ "$path" =~ ^/srv/pxe/media/[a-z0-9.-]+$ && "$extra" =~ ^/[A-Za-z0-9._/+-]+\ /srv/pxe/media/[a-z0-9.-]+\ iso9660\ [a-z,=0-9.-]+\ 0\ 0$ ]] ;;
-    mount) [[ "$path" =~ ^/srv/pxe/media/[a-z0-9.-]+$ ]] ;;
+    fstab) [[ "$path" =~ $MEDIA_MNT_RE && "$extra" =~ ^(/[A-Za-z0-9._/+-]+)\ (/srv/pxe/media/[a-z0-9.-]+)\ iso9660\ [a-z,=0-9.-]+\ 0\ 0$ ]] || return 1
+           [[ "${BASH_REMATCH[2]}" == "$path" ]] && valid_iso_path "${BASH_REMATCH[1]}" ;;
+    mount) [[ "$path" =~ $MEDIA_MNT_RE ]] ;;
     restore-link) [[ "$path" == "$NGINX_DEFAULT_LINK" && "$extra" == "$NGINX_DEFAULT_SITE" ]] ;;
     tree) [[ "$path" =~ $TREE_RE ]] ;;
     data) [[ "$path" =~ $DATA_RE ]] ;;
@@ -190,6 +219,25 @@ manifest_load() {
   done < "$f"
 }
 
+# parent_resolved_ok <path-target>: direktori induk path, sesudah symlink di-resolve, HARUS sama dengan
+# bentuk kanoniknya (tidak ada induk yang symlink ke tempat lain). Dipakai uninstall sebelum setiap rm
+# (SR-8-1, lapis ketiga setelah validasi manifest).
+parent_resolved_ok() {
+  local path="$1" rr parent want
+  manifest_canonical "$path" || return 1
+  rr="$(realpath -m -- "${ROOT:-/}")"; [[ "$rr" == / ]] && rr=""
+  parent="$(realpath -m -- "$(dirname -- "$(p "$path")")")"
+  want="$rr$(dirname -- "$path")"
+  [[ "$parent" == "${want%/}" || ( "$want" == / && "$parent" == / ) ]]
+}
+# safe_rm_tree <path-target>: boleh `rm -rf` hanya bila induk ter-resolve kanonik DAN path di RM_ROOTS.
+safe_rm_tree() {
+  local r
+  parent_resolved_ok "$1" || return 1
+  for r in "${RM_ROOTS[@]}"; do [[ "$1" == "$r" || "$1" == "$r/"* ]] && return 0; done
+  return 1
+}
+
 # --- file terkelola --------------------------------------------------------------------------------
 # put_file <src> <target> <mode> <owner:group>: pasang file milik installer (atomik). Target yang sudah
 # ada tetapi TIDAK tercatat di manifest tidak pernah ditimpa (installer tidak menyentuh file orang lain).
@@ -201,7 +249,12 @@ put_file() {
     die "$target sudah ada dan bukan milik installer (tidak tercatat di manifest); pindahkan dulu"
   fi
   if [[ -f "$real" ]] && cmp -s "$src" "$real" && [[ "$(stat -c '%a' "$real")" == "${mode#0}" ]]; then
-    manifest_add file "$target"; return 0
+    manifest_add file "$target"
+    # Isi + mode sama, pemilik bergeser (CR-8-12): perbaiki pemilik dan anggap berubah (restart).
+    if [[ "$(stat -c '%U:%G' "$real")" != "$og" ]]; then
+      CHANGED=1; run chown "$og" "$real"; log "pemilik $target diperbaiki -> $og"
+    fi
+    return 0
   fi
   CHANGED=1
   if ((DRY)); then echo "DRY-RUN: tulis $target (mode $mode $og)"; manifest_add file "$target"; return 0; fi
@@ -210,8 +263,8 @@ put_file() {
   tmp="$(mktemp "$(dirname "$real")/.pxe-install.XXXXXX")"
   cat "$src" > "$tmp"
   chmod "$mode" "$tmp"
-  chown "$og" "$tmp"
   mv -f "$tmp" "$real"
+  chown "$og" "$real"
   log "terpasang $target ($mode $og)"
 }
 
