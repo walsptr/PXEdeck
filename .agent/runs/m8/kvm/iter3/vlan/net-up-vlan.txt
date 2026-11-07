@@ -1,0 +1,30 @@
+Network pxe-test defined from /home/syawal/Project/PXE-BOOT/.agent/wt-m8/infra/net/pxe-test.xml
+
+Network pxe-test started
+
+Network pxe-test-nat defined from /home/syawal/Project/PXE-BOOT/.agent/wt-m8/infra/net/pxe-test-nat.xml
+
+Network pxe-test-nat started
+
+Network pxe-test-trunk defined from /home/syawal/Project/PXE-BOOT/.agent/wt-m8/infra/net/pxe-test-trunk.xml
+
+Network pxe-test-trunk started
+
+Network pxe-test-port1 defined from /home/syawal/Project/PXE-BOOT/.agent/wt-m8/infra/net/pxe-test-port1.xml
+
+Network pxe-test-port1 started
+
+Network pxe-test-port2 defined from /home/syawal/Project/PXE-BOOT/.agent/wt-m8/infra/net/pxe-test-port2.xml
+
+Network pxe-test-port2 started
+
+ Name             State    Autostart   Persistent
+---------------------------------------------------
+ default          active   yes         yes
+ int              active   yes         yes
+ pxe-test         active   no          yes
+ pxe-test-nat     active   no          yes
+ pxe-test-port1   active   no          yes
+ pxe-test-port2   active   no          yes
+ pxe-test-trunk   active   no          yes
+

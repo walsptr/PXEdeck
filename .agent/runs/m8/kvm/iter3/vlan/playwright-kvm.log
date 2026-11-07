@@ -1,0 +1,10 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 e2e-kvm/m8-vlan.spec.ts:79:7 › M8-VLAN-login: dashboard install.sh mode VLAN — 401 tanpa sesi, login 204, settings VLAN (133ms)
+  ✓  2 e2e-kvm/m8-vlan.spec.ts:92:9 › M8-VLAN-node pxe-test-m8-node52: PXE VLAN 10 → IP statis VLAN 20 → Done ≤ 30 menit (13.1m)
+  ✓  3 e2e-kvm/m8-vlan.spec.ts:144:9 › M8-VLAN-ssh pxe-test-m8-node52: relay — verify EXPECT_VLAN=20, password ditolak, reboot dari disk (6.1m)
+
+  Slow test file: e2e-kvm/m8-vlan.spec.ts (19.3m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  3 passed (19.3m)

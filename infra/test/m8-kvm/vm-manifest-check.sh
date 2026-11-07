@@ -52,6 +52,8 @@ while IFS=$'\t' read -r t p x; do
       elif [[ ! -e "$x" ]] && ! dpkg-query -W -f='${db:Status-Abbrev}' nginx-common 2>/dev/null | grep -q '^ii'; then
         ok "restore-link $p: nginx-common sudah di-purge (--remove-packages) sehingga site default ikut hilang"
       else bad "restore-link $p tidak dipulihkan"; fi ;;
+    vlanlink)
+      if [[ -e "/sys/class/net/$p" ]]; then bad "vlanlink $p ($x) masih ada"; else ok "vlanlink $p ($x) dihapus"; fi ;;
     pkg)
       s="$(dpkg-query -W -f='${Status}' "$p" 2>/dev/null)"
       ok "pkg $p status='$s' (tanpa --remove-packages: tetap)" ;;

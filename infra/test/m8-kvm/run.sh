@@ -368,7 +368,7 @@ case "$cmd" in
     ;;
   netplan-neg)
     # CR-8-5: netplan VLAN tidak valid -> install.sh gagal SEBELUM memasang file; tanpa
-    # /etc/netplan/60-pxe-dashboard.yaml, jaringan (alamat semua NIC, SSH) utuh. Argumen: opsi pengganti
+    # /etc/netplan/99-pxe-dashboard.yaml, jaringan (alamat semua NIC, SSH) utuh. Argumen: opsi pengganti
     # (mis. "--vlan-iface mgmt20" = nama bentrok dengan VLAN server id 20 di file lain).
     lbl="${1:?label}"; shift
     [[ -f "$PASSF" ]] || admin_pass_new "$PASSF"
@@ -379,14 +379,14 @@ case "$cmd" in
     rc=0; vm "cd /root/pxe-src && ./install.sh $(printf '%q ' "${args[@]}")" >> "$K/netplan-neg-$lbl.log" 2>&1 || rc=$?
     echo "# exit=$rc" >> "$K/netplan-neg-$lbl.log"
     vm 'ip -br addr | sort; ls -1 /etc/netplan; ip route' > "$K/netplan-neg-$lbl-net-after.txt" 2>&1
-    vm 'test -e /etc/netplan/60-pxe-dashboard.yaml && echo "60-pxe-dashboard.yaml: ADA" || echo "60-pxe-dashboard.yaml: tidak ada"; for u in dnsmasq nginx nfs-server pxe-dashboard; do echo "$u $(systemctl is-active $u 2>/dev/null) $(systemctl is-enabled $u 2>/dev/null)"; done' > "$K/netplan-neg-$lbl-state.txt" 2>&1
+    vm 'test -e /etc/netplan/99-pxe-dashboard.yaml && echo "99-pxe-dashboard.yaml: ADA" || echo "99-pxe-dashboard.yaml: tidak ada"; for u in dnsmasq nginx nfs-server pxe-dashboard; do echo "$u $(systemctl is-active $u 2>/dev/null) $(systemctl is-enabled $u 2>/dev/null)"; done' > "$K/netplan-neg-$lbl-state.txt" 2>&1
     pr=()
     ((rc != 0)) || pr+=("exit 0")
     grep -q 'netplan VLAN tidak valid (tidak dipasang)' "$K/netplan-neg-$lbl.log" || pr+=("bukan kegagalan validasi netplan")
-    grep -q '60-pxe-dashboard.yaml: tidak ada' "$K/netplan-neg-$lbl-state.txt" || pr+=("file netplan installer tertinggal")
+    grep -q '99-pxe-dashboard.yaml: tidak ada' "$K/netplan-neg-$lbl-state.txt" || pr+=("file netplan installer tertinggal")
     cmp -s "$K/netplan-neg-$lbl-net-before.txt" "$K/netplan-neg-$lbl-net-after.txt" || pr+=("jaringan berubah")
     vm true || pr+=("ssh terputus")
-    if ((${#pr[@]} == 0)); then step "netplan-neg-$lbl" PASS "netplan VLAN tidak valid ditolak exit=$rc sebelum dipasang; tanpa 60-pxe-dashboard.yaml; ip addr/route/daftar netplan sama; SSH utuh" "netplan-neg-$lbl.log netplan-neg-$lbl-net-before.txt netplan-neg-$lbl-net-after.txt netplan-neg-$lbl-state.txt"
+    if ((${#pr[@]} == 0)); then step "netplan-neg-$lbl" PASS "netplan VLAN tidak valid ditolak exit=$rc sebelum dipasang; tanpa 99-pxe-dashboard.yaml; ip addr/route/daftar netplan sama; SSH utuh" "netplan-neg-$lbl.log netplan-neg-$lbl-net-before.txt netplan-neg-$lbl-net-after.txt netplan-neg-$lbl-state.txt"
     else step "netplan-neg-$lbl" FAIL "$(IFS='; '; echo "${pr[*]}")" "netplan-neg-$lbl.log netplan-neg-$lbl-net-before.txt netplan-neg-$lbl-net-after.txt netplan-neg-$lbl-state.txt"; fi
     ;;
   rmpkg-refuse)

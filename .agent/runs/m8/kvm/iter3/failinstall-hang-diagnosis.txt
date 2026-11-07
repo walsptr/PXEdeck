@@ -1,0 +1,15 @@
+# proses install/curl/mount tersisa
+ 102549       19:39 bash ./install.sh --yes --interface pxe0 --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200 --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --admin-overlap-ok --admin-password-file /root/m8-admin.pass --iso-ubuntu /dev/sr0 --iso-debian /dev/sr1 --iso-rocky /dev/sr2 --release /root/pxe-release.tar.xz
+ 105359       17:20 curl -fsSL --proto =https --tlsv1.2 -o /tmp/pxe-install.aqKkvA/Release https://deb.debian.org/debian/dists/bookworm/Release
+# findmnt /srv/pxe
+(tidak ada)
+# journal 13:30-13:45 (mount/sr/curl/kernel)
+2026-11-07T13:43:17+00:00 pxe-test-install systemd[1]: srv-pxe-media-ubuntu\x2d24.04.mount: Deactivated successfully.
+2026-11-07T13:43:17+00:00 pxe-test-install systemd[1]: srv-pxe-media-debian\x2d12.mount: Deactivated successfully.
+2026-11-07T13:43:17+00:00 pxe-test-install systemd[1]: srv-pxe-media-rocky\x2d9.mount: Deactivated successfully.
+# manifest
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T13:43:28Z)
+pkg	keyutils	dep
+pkg	libnfsidmap1	dep
+pkg	nfs-common	dep
+pkg	rpcbind	dep

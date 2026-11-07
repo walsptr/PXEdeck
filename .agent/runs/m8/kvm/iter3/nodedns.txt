@@ -1,0 +1,29 @@
+# resolv
+Link 2 (enp1s0): 10.99.0.2
+# getent hosts deb.debian.org
+2a04:4e42:200::644 debian.map.fastlydns.net deb.debian.org
+2a04:4e42:400::644 debian.map.fastlydns.net deb.debian.org
+2a04:4e42:600::644 debian.map.fastlydns.net deb.debian.org
+2a04:4e42::644  debian.map.fastlydns.net deb.debian.org
+rc=0
+# getent hosts archive.ubuntu.com
+2620:2d:4002:1::101 archive.ubuntu.com
+2620:2d:4000:1::103 archive.ubuntu.com
+2a06:bc80:0:1000::16 archive.ubuntu.com
+2a06:bc80:10:1000::398 archive.ubuntu.com
+2620:2d:4002:1::103 archive.ubuntu.com
+2a06:bc80:10:1000::3fd archive.ubuntu.com
+2620:2d:4000:1::102 archive.ubuntu.com
+2620:2d:4000:1::101 archive.ubuntu.com
+2a06:bc80:0:1000::18 archive.ubuntu.com
+2620:2d:4002:1::102 archive.ubuntu.com
+2a06:bc80:0:1000::17 archive.ubuntu.com
+rc=0
+# ping -c1 -W3 1.1.1.1 (diharapkan gagal: tanpa NAT untuk node)
+unreachable
+# ICMPv6 ND ke link-local server (firewall: nd-* + echo-request)
+3 packets transmitted, 3 received, 0% packet loss, time 2049ms
+rtt min/avg/max/mdev = 0.549/0.646/0.713/0.070 ms
+fe80::5054:ff:fe99:102 lladdr 52:54:00:99:01:02 REACHABLE 
+		iifname "pxe0" icmpv6 type { echo-request, nd-router-solicit, nd-router-advert, nd-neighbor-solicit, nd-neighbor-advert } accept
+		iifname "pxe0" counter packets 30 bytes 10792 drop

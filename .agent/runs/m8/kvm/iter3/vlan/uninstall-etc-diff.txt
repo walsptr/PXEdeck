@@ -1,0 +1,37 @@
+# etc-diff uninstall: sebelum vs sesudah: etc-before-uninstall.tsv (1766 entri) -> etc-after-uninstall.tsv (1751 entri)
+# ringkasan: enable-link=20, fstab=1, manifest=12, restore-link=1
+manifest     HAPUS                  /etc/dnsmasq.d/pxe-dashboard.conf
+manifest     HAPUS                  /etc/exports.d
+manifest     HAPUS                  /etc/exports.d/pxe-dashboard.exports
+fstab        UBAH(content)          /etc/fstab
+manifest     HAPUS                  /etc/logrotate.d/pxe-dashboard
+manifest     HAPUS                  /etc/netplan/99-pxe-dashboard.yaml
+manifest     HAPUS                  /etc/nfs.conf.d/pxe-dashboard.conf
+manifest     HAPUS                  /etc/nginx/sites-available/pxe-dashboard
+restore-link TAMBAH                 /etc/nginx/sites-enabled/default
+manifest     HAPUS                  /etc/nginx/sites-enabled/pxe-dashboard
+manifest     HAPUS                  /etc/pxe-dashboard.env
+enable-link  TAMBAH                 /etc/rc2.d/K01dnsmasq
+enable-link  TAMBAH                 /etc/rc2.d/K01nginx
+enable-link  HAPUS                  /etc/rc2.d/S01dnsmasq
+enable-link  HAPUS                  /etc/rc2.d/S01nginx
+enable-link  TAMBAH                 /etc/rc3.d/K01dnsmasq
+enable-link  TAMBAH                 /etc/rc3.d/K01nginx
+enable-link  HAPUS                  /etc/rc3.d/S01dnsmasq
+enable-link  HAPUS                  /etc/rc3.d/S01nginx
+enable-link  TAMBAH                 /etc/rc4.d/K01dnsmasq
+enable-link  TAMBAH                 /etc/rc4.d/K01nginx
+enable-link  HAPUS                  /etc/rc4.d/S01dnsmasq
+enable-link  HAPUS                  /etc/rc4.d/S01nginx
+enable-link  TAMBAH                 /etc/rc5.d/K01dnsmasq
+enable-link  TAMBAH                 /etc/rc5.d/K01nginx
+enable-link  HAPUS                  /etc/rc5.d/S01dnsmasq
+enable-link  HAPUS                  /etc/rc5.d/S01nginx
+manifest     HAPUS                  /etc/systemd/system/dnsmasq.service.d
+manifest     HAPUS                  /etc/systemd/system/dnsmasq.service.d/pxe-dashboard.conf
+enable-link  HAPUS                  /etc/systemd/system/multi-user.target.wants/dnsmasq.service
+enable-link  HAPUS                  /etc/systemd/system/multi-user.target.wants/nfs-server.service
+enable-link  HAPUS                  /etc/systemd/system/multi-user.target.wants/nginx.service
+enable-link  HAPUS                  /etc/systemd/system/multi-user.target.wants/pxe-dashboard.service
+manifest     HAPUS                  /etc/systemd/system/pxe-dashboard.service
+# UNEXPLAINED=0

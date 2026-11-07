@@ -1,0 +1,22 @@
+# pxe-test-install 2026-11-07T13:03:36Z
+Ubuntu 24.04.5 LTS
+lo               UNKNOWN        127.0.0.1/8 ::1/128 
+pxe0             UP             10.99.0.2/24 fe80::5054:ff:fe99:102/64 
+nat0             UP             192.168.199.2/24 fe80::5054:ff:fe99:103/64 
+NAME     SIZE TYPE RO
+sr0      3.8G rom   1
+sr1      3.7G rom   1
+sr2      2.6G rom   1
+vda       30G disk  0
+├─vda1    29G part  0
+├─vda14    4M part  0
+├─vda15  106M part  0
+└─vda16  913M part  0
+vdb      368K disk  1
+# paket PXE (harus belum terpasang)
+dnsmasq            absent
+nginx              absent
+nfs-kernel-server  unknown ok not-installed
+ipxe               absent
+# node: absent
+user pxe: absent

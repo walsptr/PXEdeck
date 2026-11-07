@@ -1,0 +1,107 @@
+## state uninstall 2026-11-07T14:39:21Z pxe-test-install
+# systemctl (is-active / is-enabled)
+dnsmasq          inactive   disabled
+nginx            inactive   disabled
+nfs-server       inactive   disabled
+pxe-dashboard    inactive   not-found
+# pxe-dashboard unit (idempotensi: PID/waktu start sama = tidak di-restart)
+MainPID=0
+Result=success
+NRestarts=0
+LoadState=not-found
+ActiveEnterTimestamp=
+# ss -lunp (udp)
+UNCONN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=590,fd=16))
+UNCONN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=590,fd=14))
+UNCONN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=15431,fd=5),("systemd",pid=1,fd=194))
+UNCONN 127.0.0.1:768 0.0.0.0:* users:(("rpc.statd",pid=15432,fd=5))
+UNCONN 0.0.0.0:36193 0.0.0.0:* users:(("rpc.statd",pid=15432,fd=8))
+UNCONN [::]:111 [::]:* users:(("rpcbind",pid=15431,fd=7),("systemd",pid=1,fd=196))
+UNCONN [::]:41622 [::]:* users:(("rpc.statd",pid=15432,fd=10))
+# ss -ltnp (tcp)
+LISTEN 0.0.0.0:34757 0.0.0.0:* users:(("rpc.statd",pid=15432,fd=9))
+LISTEN 127.0.0.53%lo:53 0.0.0.0:* users:(("systemd-resolve",pid=590,fd=15))
+LISTEN 0.0.0.0:111 0.0.0.0:* users:(("rpcbind",pid=15431,fd=4),("systemd",pid=1,fd=188))
+LISTEN 0.0.0.0:22 0.0.0.0:* users:(("sshd",pid=1104,fd=3),("systemd",pid=1,fd=125))
+LISTEN 127.0.0.54:53 0.0.0.0:* users:(("systemd-resolve",pid=590,fd=17))
+LISTEN [::]:111 [::]:* users:(("rpcbind",pid=15431,fd=6),("systemd",pid=1,fd=195))
+LISTEN [::]:22 [::]:* users:(("sshd",pid=1104,fd=4),("systemd",pid=1,fd=126))
+LISTEN [::]:37675 [::]:* users:(("rpc.statd",pid=15432,fd=11))
+# port PXE terbuka (udp 67/69, tcp 80/3000/2049)
+# (akhir daftar port)
+# manifest /var/lib/pxe-dashboard-installer/install-manifest
+mode=600 owner=root:root
+# manifest install.sh PXE dashboard (sisa setelah uninstall 2026-11-07T14:39:21Z)
+data	/var/lib/pxe-dashboard	
+data	/var/log/dnsmasq-pxe.log	
+data	/srv/pxe	
+data	/srv/pxe/media	
+data	/srv/pxe/media/ubuntu-24.04	
+data	/srv/pxe/media/debian-12	
+data	/srv/pxe/media/rocky-9	
+data	/srv/pxe/media/debian-netboot	
+user	pxe	
+pkg	dnsmasq	requested
+pkg	nginx	requested
+pkg	nfs-kernel-server	requested
+pkg	ipxe	requested
+pkg	libarchive-tools	requested
+pkg	dnsmasq-base	dep
+pkg	grub-ipxe	dep
+pkg	ipxe-qemu	dep
+pkg	keyutils	dep
+pkg	libnfsidmap1	dep
+pkg	nfs-common	dep
+pkg	nginx-common	dep
+pkg	rpcbind	dep
+# /opt/pxe-dashboard
+(tidak ada)
+# /etc/pxe-dashboard.env
+(tidak ada)
+# dnsmasq conf (interface/bind/range)
+(tidak ada)
+# firewall nft
+nft-table pxe_dashboard: tidak ada
+pxe-dashboard-firewall inactive not-found
+# nginx enabled
+lrwxrwxrwx 1 root root 34 Nov  7 14:39 default -> /etc/nginx/sites-available/default
+# exportfs -v
+# klien NFS yang pernah dikenal nfsd (/proc/fs/nfsd/clients)
+nfsd-clients=0
+# mount /srv/pxe/media
+(tidak ada)
+# modul disk Debian (debian-netboot/modules)
+(tidak ada)
+# fstab (baris /srv/pxe)
+(tidak ada)
+# user pxe
+pxe:x:997:988::/var/lib/pxe-dashboard:/usr/sbin/nologin
+# data
+ADA   /var/lib/pxe-dashboard 750 pxe:pxe
+ADA   /srv/pxe 755 root:root
+ADA   /srv/pxe/media 755 root:root
+HILANG /srv/pxe/tftp
+ADA   /var/log/dnsmasq-pxe.log 660 dnsmasq:root
+drwxr-x---  2 pxe  pxe    4096 Nov  7 13:55 .
+drwxr-xr-x 47 root root   4096 Nov  7 14:23 ..
+-rw-r--r--  1 pxe  pxe    4096 Nov  7 13:55 pxe.db
+-rw-r--r--  1 pxe  pxe   32768 Nov  7 14:15 pxe.db-shm
+-rw-r--r--  1 pxe  pxe  498552 Nov  7 14:15 pxe.db-wal
+drwxr-xr-x 6 root root 4096 Nov  7 13:54 .
+drwxr-xr-x 3 root root 4096 Nov  7 14:39 ..
+drwxr-xr-x 2 root root 4096 Nov  7 13:54 debian-12
+drwxr-xr-x 2 root root 4096 Nov  7 13:54 debian-netboot
+drwxr-xr-x 2 root root 4096 Nov  7 13:54 rocky-9
+drwxr-xr-x 2 root root 4096 Nov  7 13:54 ubuntu-24.04
+# db
+pxe.db 4096 byte, mtime 2026-11-07 13:55:47.805287570 +0000 sha256=97e8d54f8a725510
+# curl lokal
+/login curl: (28) Connection timed out after 5002 milliseconds
+000
+/api/settings curl: (28) Connection timed out after 5002 milliseconds
+000
+# paket
+dnsmasq            install ok installed
+nginx              install ok installed
+nfs-kernel-server  install ok installed
+ipxe               install ok installed

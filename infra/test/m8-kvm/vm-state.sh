@@ -43,6 +43,9 @@ else echo "nft-table pxe_dashboard: tidak ada"; fi
 printf 'pxe-dashboard-firewall %s %s\n' "$(systemctl is-active pxe-dashboard-firewall.service 2>/dev/null)" "$(systemctl is-enabled pxe-dashboard-firewall.service 2>/dev/null)"
 echo "# nginx enabled"; ls -l /etc/nginx/sites-enabled 2>/dev/null | sed 1d
 echo "# exportfs -v"; exportfs -v 2>/dev/null || true
+echo "# klien NFS yang pernah dikenal nfsd (/proc/fs/nfsd/clients)"
+for c in /proc/fs/nfsd/clients/*/info; do [[ -f "$c" ]] && grep -E '^(address|name|minor version):' "$c" | tr '\n' ' ' && echo; done 2>/dev/null
+echo "nfsd-clients=$(ls /proc/fs/nfsd/clients 2>/dev/null | wc -l)"
 echo "# mount /srv/pxe/media"; findmnt -rno TARGET,SOURCE,FSTYPE,OPTIONS 2>/dev/null | grep '^/srv/pxe' || echo "(tidak ada)"
 echo "# modul disk Debian (debian-netboot/modules)"
 if [[ -d /srv/pxe/media/debian-netboot/modules ]]; then find /srv/pxe/media/debian-netboot/modules -name '*.ko' -printf 'ko %P %s\n'; else echo "(tidak ada)"; fi

@@ -1,0 +1,10 @@
+
+Running 3 tests using 1 worker
+
+  ✓  1 e2e-kvm/m8-installer.spec.ts:88:5 › M8-KVM-login: dashboard hasil install.sh — tanpa sesi 401, login admin 204, settings sesuai install.sh (659ms)
+  ✓  2 e2e-kvm/m8-installer.spec.ts:124:7 › M8-KVM-node pxe-test-m8-node51: PXE boot → muncul di dashboard → install Ubuntu 24.04 → Done ≤ 30 menit (10.8m)
+  ✓  3 e2e-kvm/m8-installer.spec.ts:190:7 › M8-KVM-ssh pxe-test-m8-node51: SSH key yang di-inject, password ditolak, reboot dari disk (4.1m)
+
+  Slow test file: e2e-kvm/m8-installer.spec.ts (14.9m)
+  Consider running tests from slow files in parallel. See: https://playwright.dev/docs/test-parallel
+  3 passed (14.9m)

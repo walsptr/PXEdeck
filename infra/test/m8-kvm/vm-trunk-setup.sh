@@ -6,9 +6,9 @@
 #   mgmt20  VLAN 20 10.99.20.1/24 (VLAN management node; gateway node + jalur relay SSH, seperti M7)
 # VLAN PXE 10 (pxe10 10.99.10.2) TIDAK dibuat di sini: itu tugas install.sh --vlan-id 10.
 set -euo pipefail
-# 55-*: harus terurut SEBELUM 60-pxe-dashboard.yaml installer (netplan menolak link ke parent yang
-# didefinisikan di file sesudahnya; temuan iterasi 2, lihat install-1-netplan-order-diagnosis.txt).
-f=/etc/netplan/55-m8-test-trunk.yaml
+# 70-*: terurut SESUDAH nama netplan installer lama (60-) dan sebelum yang baru (99-): membuktikan
+# perbaikan urutan file (temuan iterasi 2, iter2/vlan/install-1-netplan-order-diagnosis.txt).
+f=/etc/netplan/70-m8-test-trunk.yaml
 cat > "$f" <<'YAML'
 # Uji M8 VLAN (test-engineer): trunk ke switch lab + VLAN management 20. Bukan file installer.
 network:

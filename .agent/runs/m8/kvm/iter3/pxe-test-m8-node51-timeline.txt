@@ -1,0 +1,8 @@
+2026-11-07T13:10:53.884Z discovered vendor=QEMU/KVM firmware=uefi (+17 dtk)
+2026-11-07T13:10:53.927Z konfigurasi tersimpan os=ubuntu-24.04 ip=10.99.0.61/24 gw=10.99.0.1 dns=10.99.0.2 hostname=m8-node51 user=m8admin
+2026-11-07T13:10:53.954Z install job=job-f908cf13-bcb6-4942-8c7c-6d74ba637e10 status=booting
+2026-11-07T13:10:54.027Z node.sh reset
+2026-11-07T13:11:24.093Z status installing (+47 dtk, installerBoots=1)
+2026-11-07T13:17:44.937Z status configuring (+428 dtk, installerBoots=1)
+2026-11-07T13:21:25.259Z status done (+648 dtk, installerBoots=1)
+2026-11-07T13:21:25.265Z akhir status=done urutan=booting>installing>configuring>done stages=booting@install,booting@boot-script,installing@config-fetch,configuring@callback,done@callback host.status=done osInstalled=ubuntu-24.04 mgmtIp=10.99.0.61 hostname=m8-node51

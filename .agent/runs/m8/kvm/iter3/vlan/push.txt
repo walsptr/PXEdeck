@@ -1,0 +1,2 @@
+CLAUDE.md README.md configs dashboard deploy docs infra install.sh scripts uninstall.sh 
+/dev/sr0: BLOCK_SIZE="2048" UUID="2026-09-09-09-12-22-00" LABEL="Ubuntu-Server 24.04.5 LTS amd64" TYPE="iso9660" PTTYPE="PMBR"
