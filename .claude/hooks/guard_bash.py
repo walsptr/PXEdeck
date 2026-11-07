@@ -4,7 +4,8 @@
 Membaca JSON hook dari stdin. Exit 2 + pesan di stderr = perintah ditolak.
 Aturan:
   - tanpa sudo / su / pkexec / doas
-  - tanpa git push (termasuk --force)
+  - git push hanya ke remote origin = github.com/walsptr/PXEdeck (izin user 2026-11-07),
+    tanpa force/delete/mirror
   - tanpa akses block device host (/dev/sd*, /dev/nvme*, /dev/vd* host, /dev/mapper)
   - tanpa membaca ~/.ssh atau file secret di luar project
   - tanpa rm -rf ke / atau path di luar project
@@ -117,7 +118,7 @@ def check(cmd: str) -> None:
             deny("sudo/eskalasi hak akses dilarang untuk semua agent")
 
         if prog == "git" and "push" in args:
-            deny("git push dilarang; merge hanya ke main lokal")
+            check_git_push(args)
 
         if prog == "rm" and any(a.startswith("-") and ("r" in a or "R" in a) for a in args):
             targets = [a for a in args if not a.startswith("-")]
@@ -192,6 +193,38 @@ def check_virt(prog: str, args) -> None:
             deny(f"virsh {sub} tanpa target eksplisit")
         if not targets[0].startswith("pxe-test-") and not (sub.startswith("vol-") and "pxe-test-" in " ".join(targets)):
             deny(f"virsh {sub} hanya boleh untuk resource berprefix pxe-test-: {targets[0]}")
+
+
+PUSH_REMOTE = "origin"
+PUSH_URL = "https://github.com/walsptr/PXEdeck.git"
+
+
+def check_git_push(args) -> None:
+    """Izin user (2026-11-07): push hanya ke origin = PUSH_URL, tanpa force/delete/mirror."""
+    i = args.index("push")
+    if any(a in ("-C", "-c") or a.startswith("--git-dir") or a.startswith("--work-tree") for a in args[:i]):
+        deny("git push: opsi -C/-c/--git-dir/--work-tree tidak diizinkan")
+    rest = args[i + 1:]
+    bad_flags = ("-f", "--force", "--force-with-lease", "--force-if-includes", "--mirror",
+                 "--delete", "-d", "--prune", "--all", "--no-verify")
+    for a in rest:
+        if a in bad_flags or a.startswith("--force") or a.startswith("--repo") or (
+                a.startswith("-") and not a.startswith("--") and "f" in a[1:]):
+            deny(f"git push: opsi '{a}' dilarang (tanpa force/delete/mirror)")
+    pos = [a for a in rest if not a.startswith("-")]
+    if not pos or pos[0] != PUSH_REMOTE:
+        deny(f"git push hanya ke remote '{PUSH_REMOTE}' yang disebut eksplisit")
+    for ref in pos[1:]:
+        if ref.startswith("+") or ref.startswith(":") or ":" in ref and ref.split(":", 1)[0] == "":
+            deny(f"git push: refspec '{ref}' dilarang (force/delete)")
+    try:
+        import subprocess
+        url = subprocess.run(["git", "remote", "get-url", "--push", PUSH_REMOTE],
+                             capture_output=True, text=True, timeout=5).stdout.strip()
+    except Exception:
+        url = ""
+    if url != PUSH_URL:
+        deny(f"git push: URL remote '{PUSH_REMOTE}' harus {PUSH_URL} (sekarang '{url}')")
 
 
 def check_ssh(prog: str, args) -> None:
