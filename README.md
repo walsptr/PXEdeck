@@ -1,348 +1,207 @@
-# PXE Boot Lab — Ubuntu 24.04.5 Autoinstall
+# PXEdeck: PXE Boot Dashboard
 
-Lab PXE server untuk instalasi Ubuntu Server 24.04.5 LTS otomatis (*zero-touch*) ke node baremetal,
-menggunakan **dnsmasq** (DHCP/TFTP/DNS), **NFS** (root live installer), **Apache** (autoinstall) dan
-**Subiquity autoinstall** (cloud-init NoCloud).
+PXEdeck adalah dashboard web untuk provisioning mesin baremetal atau VM lewat PXE. Mesin yang
+melakukan PXE boot otomatis muncul di dashboard. Admin mengatur OS, kredensial, jaringan, hostname
+dan SSH key, lalu klik **Simpan & Install**. Dashboard menyajikan script iPXE dan konfigurasi installer
+per MAC, memantau proses instalasi sampai selesai, lalu mesin reboot dari disk dan bisa langsung di-SSH
+dengan key yang di-inject.
 
-Status: **sudah di-deploy dan diuji end-to-end** pada 2026-11-04 (UEFI, node uji 4 GB RAM / 20 GB disk,
-±5–9 menit dari power-on sampai node siap SSH, tanpa intervensi).
-
-Peran dalam alur OpenStack (kolla-ansible): PXE hanya menyiapkan **OS dasar + IP management statis per node
-(berdasarkan MAC) + SSH key + sudo**. Hostname final, NIC lain, bond/VLAN, dan prasyarat lain dikerjakan oleh
-automation pre-req, lalu kolla-ansible.
+Seluruh alur ini sudah dibuktikan di VM KVM sungguhan:
+- Ubuntu 24.04 (UEFI dan BIOS)
+- Debian 12 (UEFI)
+- Rocky Linux 9 (UEFI)
+- Topologi flat maupun **VLAN PXE terpisah**: trunk dengan VLAN PXE native dan VLAN management ber-tag
 
 ---
 
-## 1. Topologi
+## Fitur
+
+- **Discovery host otomatis.** Host diambil dari lease dnsmasq dan request iPXE. Tabel Hosts
+  menampilkan MAC, IP, vendor, status, dan last seen, dengan pencarian, filter, dan bulk action.
+- **Konfigurasi per host atau bulk** lewat Sheet dengan lima tab:
+  - **OS:** memilih image dan disk target.
+  - **Credentials:** password yang sama, acak per host (hanya ditampilkan sekali), atau import CSV.
+  - **Network:** DHCP, atau IP statis dengan prefix, gateway, DNS, dan VLAN. Tersedia range IP dengan
+    preview dan deteksi bentrok.
+  - **Hostname:** template dengan preview.
+  - **SSH key:** dari library, atau paste/unggah.
+- **Generator installer:**
+  - Ubuntu autoinstall (cloud-init)
+  - Debian preseed
+  - Rocky kickstart
+  - Windows unattend (generator saja, belum dilayani)
+- **Token per job.** Hash token disimpan di DB, request dengan token salah mendapat 404 seragam, dan
+  konfigurasi per MAC hanya bisa diambil dari IP lease host tersebut.
+- **Siklus hidup job:** Booting → Installing → Configuring → Done/Failed.
+  - Watchdog timeout per tahap.
+  - Batas berapa kali installer disajikan; mesin yang reboot di tengah instalasi boot dari disk, tidak
+    menginstal ulang.
+  - Log installer tampil live (SSE), dengan redaksi secret di sisi server.
+- **Halaman lain:** Provisioning Jobs, OS Images, SSH Keys, Settings, dan status DHCP/TFTP/HTTP.
+- **VLAN management.** Env `PXE_VLAN_NETWORKS` mendaftarkan subnet per VLAN, lalu IP statis divalidasi
+  terhadap subnet VLAN tersebut. Tab Network otomatis mengisi prefix dan gateway.
+- **Keamanan:**
+  - Login admin tunggal (hash scrypt dari env), sesi di SQLite, cookie `HttpOnly` dan `SameSite=Strict`.
+  - Rate limit untuk login, API, dan SSE.
+  - Server menolak start bila konfigurasi production tidak aman.
+  - Access log nginx tanpa query string.
+
+## Arsitektur
 
 ```
-                       Internet
-                          │
-              ┌───────────┴────────────┐
-              │  libvirt "default" NAT │ 192.168.122.0/24
-              └───────────┬────────────┘
-                          │ enp1s0 192.168.122.180  (management / uplink)
-              ┌───────────┴────────────┐
-              │   PXE server           │  foreman.local — Ubuntu 24.04.5
-              │   dnsmasq · NFS ·      │
-              │   apache2 · nftables   │
-              └───────────┬────────────┘
-                          │ enp7s0 10.10.10.1/24    (provisioning, DHCP di sini)
-              ┌───────────┴────────────┐
-              │ libvirt "int" (virbr1) │  terisolasi, tanpa DHCP libvirt
-              └───────────┬────────────┘
-                 ┌────────┴────────┐
-              node-1   node-2 ...     baremetal / VM — PXE boot (UEFI atau BIOS)
+ Node (PXE/UEFI/BIOS)
+   │ DHCP + TFTP (dnsmasq) ──► snponly.efi / undionly.kpxe ──► iPXE
+   │ HTTP  GET /boot/<mac>.ipxe ───────────────┐
+   │ HTTP  GET /boot/<mac>/<token>/user-data   │
+   │ HTTP  POST /boot/<mac>/<token>/status|log │
+   │ NFS / HTTP media (ISO di /srv/pxe/media)  │
+   ▼                                           ▼
+ ┌──────────────────────────── PXE server ────────────────────────────┐
+ │ dnsmasq (DHCP/TFTP, bind ke NIC provisioning)                      │
+ │ nginx :80 ──► Next.js dashboard 127.0.0.1:3000 (systemd, user pxe) │
+ │               SQLite /var/lib/pxe-dashboard                        │
+ │ nfs-kernel-server (root live installer, read-only)                 │
+ └────────────────────────────────────────────────────────────────────┘
+        ▲
+        └── Admin (browser) → UI + /api (login wajib, allowlist admin)
 ```
 
-| Item | Nilai |
-|---|---|
-| PXE server (SSH) | `ubuntu@192.168.122.180` |
-| Interface provisioning | `enp7s0` — `10.10.10.1/24` |
-| DHCP range | `10.10.10.100` – `10.10.10.200` (lease 12 jam) |
-| Gateway / DNS untuk node | `10.10.10.1` (NAT keluar via `enp1s0`, DNS forward ke `192.168.122.1`, `1.1.1.1`) |
-| Domain | `pxe.lab` |
-| ISO | `ubuntu-24.04.5-live-server-amd64.iso` (SHA256 `97f3d7ff…f85a7`, terverifikasi) |
+- iPXE di node meminta `/boot/<mac>.ipxe`.
+  - Host tanpa job mendapat **boot dari disk lokal**.
+  - Host dengan job Install mendapat kernel/initrd installer beserta URL konfigurasi ber-token.
+- Installer melapor status dan mengirim log ke `/boot/<mac>/<token>/…`. Job jadi Done setelah callback
+  firstboot dari OS yang sudah terpasang.
 
-## 2. Alur Boot
+## Stack
 
-```
-Node power-on (PXE)
- │ 1. DHCP DISCOVER ──────────────► dnsmasq: IP + bootfile sesuai arsitektur (option 93)
- │                                   • UEFI x86_64 → bootx64.efi (shim, Secure Boot OK)
- │                                   • BIOS        → pxelinux.0
- │ 2. TFTP: shim → grubx64.efi → grub/grub.cfg   (BIOS: pxelinux.cfg/default)
- │ 3. TFTP: ubuntu-24.04/vmlinuz + initrd
- │ 4. Kernel: ip=dhcp netboot=nfs nfsroot=10.10.10.1:/srv/pxe/nfs/ubuntu-24.04
- │            → root live installer di-mount via NFS (ISO TIDAK disalin ke RAM)
- │ 5. cloud-init: ds=nocloud-net;s=http://10.10.10.1/pxe/autoinstall/nodes/<mac>/
- │            → GET user-data per node (MAC belum terdaftar → fallback user-data default/DHCP)
- │ 6. Subiquity autoinstall: partisi LVM, install, paket, update security (via NAT)
- │ 7. late-commands: sudoers, BootOrder UEFI (Ubuntu paling atas), guard reboot
- ▼ 8. Reboot → boot dari disk dengan IP management statis → siap di-remote automation
-```
+- **Dashboard:** Next.js 16, React 19, shadcn/ui (Radix), TanStack Table dan Query, Tailwind 4,
+  SQLite (`node:sqlite`), zod.
+- **Test:** Vitest (unit dan integration), Playwright + axe (E2E), harness KVM/libvirt (`infra/`).
+- **Server:** Ubuntu 24.04, dnsmasq, nginx, NFS, Node 22.
 
-Menu boot (timeout 10 detik, default = autoinstall):
-
-1. **Ubuntu 24.04.5 - Autoinstall (MENGHAPUS DISK!)**
-2. Ubuntu 24.04.5 - Install manual (interaktif)
-3. Boot dari disk lokal
-
-## 3. Struktur Project
-
-```
-PXE-BOOT/
-├── README.md
-├── scripts/
-│   ├── setup-pxe-server.sh          # provisioning server end-to-end (idempotent)
-│   └── pxe-nodes                    # → /usr/local/sbin/pxe-nodes (inventaris MAC → IP management)
-└── configs/
-    ├── netplan/60-pxe.yaml          # → /etc/netplan/60-pxe.yaml
-    ├── dnsmasq/pxe.conf             # → /etc/dnsmasq.d/pxe.conf
-    ├── nfs/exports                  # → /etc/exports.d/pxe.exports
-    ├── apache/pxe.conf              # → /etc/apache2/conf-available/pxe.conf
-    ├── nftables/nftables.conf       # → /etc/nftables.conf (NAT)
-    ├── nodes/nodes.csv.example      # → /srv/pxe/nodes.csv (hanya jika belum ada)
-    ├── tftp/grub/grub.cfg           # → /srv/pxe/tftp/grub/grub.cfg (UEFI)
-    ├── tftp/pxelinux.cfg/default    # → /srv/pxe/tftp/pxelinux.cfg/default (BIOS)
-    └── autoinstall/
-        ├── user-data                # → /srv/pxe/http/autoinstall/user-data
-        ├── meta-data                # (kosong, wajib ada untuk NoCloud)
-        └── vendor-data              # (kosong, mencegah retry 404)
-```
-
-Layout di server:
-
-```
-/srv/pxe/
-├── nodes.csv                  # inventaris node: mac,ip,hostname  (sumber kebenaran)
-├── dhcp-hosts                 # di-generate: reservasi DHCP (dnsmasq dhcp-hostsfile)
-├── iso/ubuntu-24.04.5-live-server-amd64.iso
-├── nfs/ubuntu-24.04/          # loop mount ISO (fstab, read-only) — diekspor via NFS
-├── http/                      # http://10.10.10.1/pxe/
-│   ├── iso/  → symlink ke ISO (untuk opsi url=, lihat §8)
-│   └── autoinstall/
-│       ├── {user-data,meta-data,vendor-data}     # default (MAC belum terdaftar, DHCP)
-│       └── nodes/<mac>/{user-data,meta-data,vendor-data}   # di-generate per node
-└── tftp/
-    ├── bootx64.efi            # shimx64.efi.signed.latest (shim-signed)
-    ├── grubx64.efi            # grubnetx64.efi.signed (grub-efi-amd64-signed)
-    ├── grub/grub.cfg
-    ├── pxelinux.0, ldlinux.c32, libcom32.c32, libutil.c32, menu.c32
-    ├── pxelinux.cfg/default
-    ├── pxelinux.cfg/01-<mac-dash>      # di-generate per node (BIOS)
-    └── ubuntu-24.04/{vmlinuz,initrd}   # diekstrak dari casper/ di ISO
-```
-
-## 4. Komponen & Port
-
-| Layanan | Paket | Listen | Fungsi |
-|---|---|---|---|
-| DHCP | dnsmasq | `enp7s0:67/udp` | IP + bootfile untuk node |
-| TFTP | dnsmasq | `10.10.10.1:69/udp` | bootloader, kernel, initrd |
-| DNS | dnsmasq | `10.10.10.1:53` | forwarder untuk node (tidak bentrok dengan systemd-resolved di 127.0.0.53) |
-| NFS | nfs-kernel-server | `2049/tcp` | root live installer (isi ISO), ekspor `ro` hanya ke `10.10.10.0/24` |
-| HTTP | apache2 | `*:80` | `/pxe/autoinstall/` (+ fallback `mod_rewrite` untuk MAC tak terdaftar), `/pxe/iso/` |
-| NAT | nftables | — | `10.10.10.0/24` → masquerade via `enp1s0`, `net.ipv4.ip_forward=1` |
-
-dnsmasq memakai `interface=enp7s0` + `bind-dynamic`, jadi **DHCP hanya dilayani di enp7s0**
-dan tetap aman bila enp7s0 belum punya IP saat boot.
-
-## 5. Instalasi / Deploy Ulang
-
-Dari mesin lokal (root project ini):
+## Menjalankan untuk development
 
 ```bash
-rsync -a --delete configs scripts ubuntu@192.168.122.180:~/pxe-lab/
-HASH="$(openssl passwd -6)"            # password user 'ubuntu' node (tidak disimpan di repo)
-KEY="$(cat ~/.ssh/id_ed25519.pub)"     # public key admin
-ssh ubuntu@192.168.122.180 "cd ~/pxe-lab && sudo PXE_PASSWORD_HASH='$HASH' PXE_ADMIN_SSH_KEY='$KEY' bash scripts/setup-pxe-server.sh"
+cd dashboard
+npm ci
+cp .env.example .env.local          # sesuaikan subnet, URL, dsb.
+printf '%s' 'password-admin-anda' | npm run --silent admin:hash
+# isi PXE_ADMIN_USERNAME dan PXE_ADMIN_PASSWORD_HASH di .env.local
+# (di .env.local tulis setiap '$' pada hash sebagai '\$')
+PXE_SEED=demo npm run dev           # http://localhost:3000
 ```
 
-`configs/autoinstall/user-data` adalah **template**: placeholder `@PXE_PASSWORD_HASH@` dan
-`@PXE_ADMIN_SSH_KEY@` diisi dari env saat langkah 7 (script gagal bila env kosong/tidak valid).
+Tanpa `PXE_DNSMASQ_LEASES`, dashboard berjalan dalam mode dev: verifikasi lease nonaktif dan status
+DHCP/TFTP tampil "unknown". Semua variabel lingkungan beserta penjelasannya ada di
+[`dashboard/.env.example`](dashboard/.env.example).
 
-Script melakukan 9 langkah (aman dijalankan berulang):
-
-1. Netplan `enp7s0` → `10.10.10.1/24` (+ DNS uplink `enp1s0`)
-2. Install paket: `nfs-kernel-server dnsmasq apache2 pxelinux syslinux-common shim-signed grub-efi-amd64-signed nftables`
-3. Buat direktori `/srv/pxe/...`
-4. Download ISO (jika belum ada) + verifikasi SHA256
-5. Loop-mount ISO via fstab, ekspor NFS, salin `vmlinuz`/`initrd`
-6. Pasang bootloader BIOS (pxelinux) & UEFI (shim + grub) beserta menu
-7. Publikasikan autoinstall via Apache (`a2enconf pxe`)
-8. dnsmasq, IP forwarding, NAT nftables
-9. Pasang `pxe-nodes`, buat `/srv/pxe/nodes.csv` jika belum ada, lalu `pxe-nodes apply`
-
-> `nodes.csv` di server **tidak** ditimpa oleh script, jadi inventaris aman saat deploy ulang.
-> Setelah mengubah `configs/autoinstall/user-data` (template dasar), jalankan `sudo pxe-nodes apply`
-> agar `user-data` per node ikut di-generate ulang. Script sudah melakukannya di langkah 9.
-
-Mengubah template autoinstall cukup dengan menjalankan ulang script di atas (idempoten; langkah 7
-me-render template dengan env yang sama, langkah 9 menjalankan `pxe-nodes apply`). Jangan menyalin
-template mentah ke `/srv/pxe/http/autoinstall/` — placeholder-nya belum terisi.
-
-## 6. IP Management per Node (`pxe-nodes`)
-
-Setiap node didaftarkan berdasarkan **MAC NIC PXE/management**. Node yang terdaftar mendapat:
-
-- **Reservasi DHCP** (`dhcp-host=<mac>,id:*,<ip>,<hostname>`), sehingga IP sudah sama sejak tahap PXE/installer.
-  `id:*` membuat dnsmasq mengabaikan client-id, karena firmware, installer dan OS memakai client-id berbeda.
-- **IP statis di OS terinstall**: `user-data` per MAC hanya mengonfigurasi NIC yang MAC-nya cocok
-  (`match: macaddress`), dengan gateway `10.10.10.1` dan DNS `10.10.10.1`.
-  **NIC lain dibiarkan tanpa konfigurasi**, siap untuk automation pre-req / kolla-ansible
-  (mis. `neutron_external_interface` yang memang tidak boleh punya IP).
-- **Hostname sementara** (opsional, default `node-10-10-10-X`). Hostname final diatur oleh automation Anda.
-
-### Alur kerja
+Perintah lain:
 
 ```bash
-# 1) Nyalakan node baru (PXE). MAC-nya akan terlihat di lease DHCP:
-sudo pxe-nodes discover
-MAC                 IP SAAT INI     HOSTNAME DHCP    TERAKHIR TERLIHAT   STATUS
-52:54:00:10:10:11   10.10.10.193    ubuntu-node      2026-11-04 04:35    BELUM TERDAFTAR
-
-# 2) Tentukan IP management (+ hostname opsional)
-sudo pxe-nodes add 52:54:00:10:10:11 10.10.10.11 node01
-
-# 3) Cek / ubah / hapus
-sudo pxe-nodes list
-sudo pxe-nodes add 52:54:00:10:10:11 10.10.10.12      # ubah IP (re-add menimpa entri)
-sudo pxe-nodes remove 52:54:00:10:10:11
-
-# 4) Install / re-install node: PXE boot → otomatis memakai IP yang ditentukan
+npm run typecheck      # next typegen + tsc
+npm run lint
+npm run test           # vitest + coverage
+npm run test:e2e       # Playwright (menjalankan server sendiri)
+npm run build          # production build; PXE_STANDALONE=1 untuk output standalone
 ```
 
-Banyak node sekaligus: edit `/srv/pxe/nodes.csv`, lalu jalankan `sudo pxe-nodes apply`:
+## Deploy ke PXE server
 
-```csv
-mac,ip,hostname
-52:54:00:10:10:11,10.10.10.11,node01
-52:54:00:10:10:12,10.10.10.12,
+Contoh konfigurasi server lengkap ada di [`infra/server/`](infra/server/):
+
+| File | Isi |
+|---|---|
+| `dnsmasq.conf` | DHCP/TFTP, wajib `interface=<NIC provisioning>` + `bind-interfaces`; boot iPXE → `http://<server>/boot/${mac}.ipxe` |
+| `nginx-pxe.conf` | Proxy ke dashboard, `X-Real-IP`, allowlist admin untuk UI/`/api`, `/boot` dan `/media` terbuka untuk klien PXE, rate limit, log tanpa query string |
+| `pxe-dashboard.service` | Unit systemd (Next standalone, `127.0.0.1:3000`, user `pxe`, `EnvironmentFile=/etc/pxe-dashboard.env`) |
+| `dashboard.env` | Contoh env server (hash admin berupa placeholder; jangan commit hash asli) |
+| `install-dashboard.sh` | Pasang rilis ke `/opt/pxe-dashboard/releases/<ts>` + symlink `current` |
+| `exports`, `nfs.conf`, `nftables.conf`, `netplan.yaml` | NFS read-only untuk root installer, firewall, dan jaringan |
+| `vlan/` | Profil topologi VLAN (sub-interface ber-tag, dnsmasq hanya di VLAN PXE) |
+
+Langkah umum:
+
+1. Siapkan server Ubuntu 24.04 dengan dnsmasq, nginx, dan nfs-kernel-server. Mount ISO OS ke
+   `/srv/pxe/media/<id>` dan siapkan biner iPXE di `/srv/pxe/tftp` (lihat `infra/tftp/prepare.sh`).
+2. Build dashboard: `cd dashboard && PXE_STANDALONE=1 npm run build`. Salin `.next/standalone`,
+   `.next/static`, dan `public` ke server.
+3. Tulis `/etc/pxe-dashboard.env` (mode 0640, root:pxe). Isi minimal:
+   - `PXE_ADMIN_USERNAME` dan `PXE_ADMIN_PASSWORD_HASH`
+   - `PXE_MGMT_CIDR`, `PXE_MGMT_GATEWAY`, `PXE_MGMT_DNS`, `PXE_SERVER_IP`, `PXE_DHCP_RANGE`
+   - `PXE_BASE_URL`, `PXE_MEDIA_URL`
+   - `PXE_DNSMASQ_LEASES` (wajib bila `PXE_TRUST_PROXY=1`)
+   - opsional `PXE_VLAN_NETWORKS`
+4. Aktifkan `pxe-dashboard.service` dan nginx, lalu verifikasi:
+   - `ss -lunp`: dnsmasq hanya listen di NIC provisioning.
+   - `/login` mengembalikan 200.
+   - `/api/settings` tanpa sesi mengembalikan 401.
+
+Untuk lab KVM, `infra/deploy-dashboard.sh` mengotomatiskan semua langkah ini (build → scp →
+install → verifikasi).
+
+> ⚠️ Konfigurasi dengan status Install akan **menghapus disk** target. Jalankan hanya di segmen
+> provisioning yang terisolasi, tanpa DHCP server lain.
+
+## Topologi VLAN
+
+PXEdeck mendukung topologi production berikut:
+- Port node berupa trunk: VLAN PXE native (untagged) dan VLAN management ber-tag.
+- Server PXE terhubung lewat sub-interface ber-tag.
+- Firmware node tidak perlu mendukung tag VLAN.
+
+Contoh env:
+
+```env
+PXE_MGMT_CIDR=10.99.10.0/24            # subnet VLAN PXE (DHCP)
+PXE_SERVER_IP=10.99.10.2
+PXE_VLAN_NETWORKS=20:10.99.20.0/24:10.99.20.1
 ```
 
-Validasi yang dilakukan `pxe-nodes`:
-- IP harus di `10.10.10.0/24`, bukan `.1`, dan **di luar range DHCP dinamis `.100`–`.200`**.
-  Gunakan `.2`–`.99` atau `.201`–`.254`.
-- MAC, IP dan hostname tidak boleh duplikat.
+Syarat yang terbukti di pengujian:
+- Bila VLAN PXE tidak punya router, VLAN management harus bisa menjangkau `PXE_SERVER_IP` lewat HTTP
+  (untuk callback). Ubuntu juga butuh NFS, karena installer Ubuntu pindah ke VLAN management di tengah
+  instalasi.
+- `PXE_MGMT_DNS` (entri pertama) harus bisa dijangkau dari VLAN PXE. Debian 12 menerimanya lewat
+  `netcfg/get_nameservers` karena udhcpc d-i tidak menulis DNS bila DHCP tidak memberi router.
+- Di server PXE, layanan RPC NFS (rpcbind/mountd/statd) listen di wildcard. Untuk production,
+  gunakan filter nftables per interface VLAN. Rekomendasinya ada di
+  [`infra/README.md`](infra/README.md) §Topologi VLAN.
 
-Cara pemilihan per node:
-- **UEFI**: `grub.cfg` memakai `s=http://10.10.10.1/pxe/autoinstall/nodes/${net_default_mac}/`.
-- **BIOS**: pxelinux otomatis memuat `pxelinux.cfg/01-<mac>` yang di-generate.
-- **MAC belum terdaftar**: Apache (`mod_rewrite`) menyajikan `user-data` default (DHCP, hostname `ubuntu-node`).
-  Node seperti ini **tetap ter-install**, jadi daftarkan MAC sebelum install bila IP harus pasti.
+## Pengujian
 
-Setelah install, cloud-init otomatis nonaktif (`/etc/cloud/cloud-init.disabled`), sehingga netplan
-`/etc/netplan/50-cloud-init.yaml` (interface id `mgmt`) tidak akan ditimpa ulang. Automation pre-req
-boleh mengganti atau menambah file netplan sendiri.
-
-Parameter jaringan (`MGMT_NET`, `GATEWAY`, `DNS`, `DYN_RANGE`) ada di bagian atas `scripts/pxe-nodes`.
-
-## 7. Konfigurasi Autoinstall (`configs/autoinstall/user-data`)
-
-Ini adalah **template dasar**. `pxe-nodes` menyalinnya per node dan hanya mengganti `identity.hostname`
-dan `network`.
-
-| Item | Nilai default |
+| Lapisan | Isi |
 |---|---|
-| Locale / keyboard / timezone | `en_US.UTF-8` / `us` / `Asia/Jakarta` |
-| Hostname | `ubuntu-node` (default) / dari inventaris (per node) |
-| User / password | `ubuntu` / hash SHA-512 dari env `PXE_PASSWORD_HASH` saat deploy (`openssl passwd -6`); template memuat placeholder `@PXE_PASSWORD_HASH@` |
-| SSH | OpenSSH terpasang, login password diizinkan, authorized key admin dari env `PXE_ADMIN_SSH_KEY` saat deploy (placeholder `@PXE_ADMIN_SSH_KEY@`) |
-| Sudo | `ubuntu` NOPASSWD (`/etc/sudoers.d/90-ubuntu`) |
-| Network | default: DHCP pada `en*`; per node: statis hanya pada NIC management (match MAC) |
-| Storage | layout `lvm`, `sizing-policy: all` (disk terbesar, **seluruh disk dihapus**) |
-| Paket tambahan | `curl vim net-tools`, `updates: security` |
-| Setelah selesai | `shutdown: reboot` |
+| Unit/integration | ±2150 test Vitest; coverage kode baru ≥ 80% (aktual ~99%) |
+| E2E | ±200 test Playwright + audit axe di 4 lebar layar |
+| Infra | Test shell dry-run untuk semua script `infra/` (`infra/test/run.sh`) |
+| KVM | `infra/kvm-run.sh`: VM node nyata PXE boot → dashboard (Playwright) → Done → verifikasi SSH, reboot dari disk, uji negatif (IP bentrok, CSV invalid, destroy di tengah install, token/MAC/IP salah, isolasi VLAN) |
 
-late-commands:
+Lab KVM berjalan tanpa sudo di jaringan libvirt terisolasi `pxe-test-*`. Detailnya ada di
+[`infra/README.md`](infra/README.md).
 
-1. **Sudoers** untuk user `ubuntu`.
-2. **BootOrder UEFI**: entry `Ubuntu` dipindah ke urutan pertama via `efibootmgr`, supaya node tidak
-   PXE-install ulang terus-menerus setelah reboot.
-3. **Guard reboot netboot NFS**: unit `pxe-force-reboot` (`systemd-run`, `DefaultDependencies=no`).
-   Unit ini menunggu sampai sistem berstatus `stopping`, lalu 45 detik kemudian menjalankan `sync`
-   dan reboot via sysrq. Penjelasannya ada di §10.
+## Struktur repo
 
-## 8. Menambah Node Baremetal
-
-1. Hubungkan NIC node ke segmen yang sama dengan `enp7s0` (jangan ada DHCP server lain di segmen itu).
-2. BIOS/UEFI node:
-   - Aktifkan **Network/PXE boot (IPv4)**. UEFI dan Secure Boot didukung (shim bertanda tangan Microsoft).
-   - Urutan boot yang disarankan: **Disk → Network**. Disk kosong otomatis jatuh ke PXE, dan disk yang
-     sudah terinstall boot normal. Untuk UEFI, late-command juga menaruh Ubuntu di urutan pertama.
-3. RAM minimal **4 GB** (sudah diuji). Disk minimal ~10 GB (diuji dengan 20 GB, terpakai 6,3 GB).
-4. Daftarkan MAC NIC management dengan IP-nya (§6): `sudo pxe-nodes add <mac> <ip>`.
-   MAC bisa dilihat di BIOS/BMC (iDRAC/iLO), atau dengan menyalakan node sekali lalu `sudo pxe-nodes discover`.
-5. Power-on dan pantau dari server:
-   ```bash
-   sudo tail -f /var/log/dnsmasq-pxe.log          # DHCP + TFTP
-   sudo tail -f /var/log/apache2/access.log       # fetch user-data
-   ```
-6. SSH ke node lewat PXE server sebagai jump host (atau langsung dari host automation di segmen management):
-   ```bash
-   ssh -J ubuntu@192.168.122.180 ubuntu@10.10.10.11
-   ```
-
-> ⚠️ Default menu adalah **autoinstall yang menghapus disk**. Mesin apa pun di segmen `enp7s0` yang boot
-> dari jaringan akan di-install ulang setelah 10 detik.
-
-## 9. Hasil Pengujian
-
-VM uji `pxe-test-node01` di host KVM (network `int`, MAC `52:54:00:10:10:11`, UEFI/OVMF, 2 vCPU, 4 GB RAM, disk 20 GB).
-
-**Uji 1: MAC belum terdaftar (user-data default, DHCP)**
-
-| Tahap | Hasil |
-|---|---|
-| DHCP (tag `efi-x86_64`) → TFTP `bootx64.efi` → `grubx64.efi` → `grub.cfg` → kernel/initrd | ✅ |
-| Live root via NFS, fetch `user-data` (`Cloud-Init/26.1`) | ✅ |
-| Subiquity `Install: SUCCESS`, auto-reboot tanpa intervensi | ✅ (±535 detik) |
-| Boot dari disk: `ubuntu-node`, Ubuntu 24.04.5 LTS, kernel 6.8.0-147 | ✅ |
-| LVM `/` 17 GB, `/boot` dan `/boot/efi` terpisah, fsck `clean` | ✅ |
-| SSH key + sudo NOPASSWD + internet via NAT | ✅ |
-| `BootCurrent: 0007` (Ubuntu) di urutan pertama BootOrder | ✅ |
-
-**Uji 2: node terdaftar `pxe-nodes add 52:54:00:10:10:11 10.10.10.11 node01`**
-
-| Tahap | Hasil |
-|---|---|
-| DHCP saat PXE/installer/OS selalu `10.10.10.11 node01` (reservasi) | ✅ |
-| Fetch `/pxe/autoinstall/nodes/52:54:00:10:10:11/user-data` | ✅ |
-| OS: hostname `node01`, `enp1s0 10.10.10.11/24` statis, default via `10.10.10.1`, DNS `10.10.10.1` | ✅ |
-| netplan hanya berisi interface `mgmt` (match MAC), cloud-init `disabled` | ✅ |
-| Power-on sampai SSH siap | ✅ ±5 menit |
-| Validasi: IP di range dinamis / IP duplikat ditolak | ✅ |
-| MAC tak terdaftar → fallback `user-data` default (HTTP 200) | ✅ |
-
-Jalur BIOS/legacy (pxelinux) sudah dikonfigurasi dan dnsmasq menyajikannya untuk client-arch 0,
-tetapi **belum diuji** dengan node BIOS.
-
-Hapus VM uji (dijalankan di host KVM):
-
-```bash
-virsh -c qemu:///system destroy pxe-test-node01
-virsh -c qemu:///system undefine pxe-test-node01 --nvram --remove-all-storage
+```
+dashboard/          Next.js app: UI, API, endpoint /boot (iPXE, config per-MAC, callback)
+  src/lib/server/   settings, auth, generator installer, job lifecycle, redaksi log
+  e2e/, e2e-kvm/    Playwright (mock) dan suite KVM
+infra/              Lab KVM: network/VM pxe-test-*, PXE server VM, switch VLAN, deploy, test shell
+  server/           Konfigurasi PXE server (dnsmasq, nginx, systemd, NFS, profil VLAN)
+docs/
+  SPEC.md           Spesifikasi produk
+  design/           Plan per milestone
+  agent-workflow/   Decision (DEC), approval (APR), dan report per milestone
+  legacy-pxe-lab.md Dokumentasi lab PXE awal (dnsmasq + GRUB/pxelinux + Apache)
+configs/, scripts/  Lab PXE awal sebelum dashboard (lihat docs/legacy-pxe-lab.md)
 ```
 
-## 10. Troubleshooting (masalah yang ditemukan saat pengujian)
+## Status
 
-### `wget: short write: No space left on device` → `Unable to find a live file system on the network`
-Penyebab: dengan opsi kernel `url=http://.../ubuntu-24.04.5-live-server-amd64.iso`, initramfs mengunduh
-**seluruh ISO (4,08 GB) ke tmpfs di RAM**, dan tmpfs itu hanya sekitar 50% RAM. Ini bukan masalah disk node.
-Dengan `url=`, node butuh lebih dari 10 GB RAM.
-**Solusi yang diterapkan:** boot memakai `netboot=nfs nfsroot=10.10.10.1:/srv/pxe/nfs/ubuntu-24.04`,
-sehingga isi ISO dibaca langsung lewat NFS. Hasilnya, node 4 GB RAM berhasil.
-
-### `[FAILED] Failed unmounting cdrom.mount - /cdrom` lalu node macet saat reboot
-Penyebab: pada netboot NFS, `/cdrom` (root live) masih di-mount NFS ketika jaringan sudah dimatikan
-saat shutdown, sehingga proses unmount menunggu tanpa batas. Instalasi sendiri **sudah selesai** di titik ini.
-Opsi `nfsopts=soft,...` sudah dicoba dan **tidak** membantu.
-**Solusi yang diterapkan:** late-command guard `pxe-force-reboot`. 45 detik setelah shutdown dimulai, guard
-menjalankan `sync` lalu reboot paksa (sysrq). Pesan `[FAILED]` masih tampil, tetapi itu normal; node lanjut reboot sendiri.
-
-### Lainnya
-
-| Gejala | Cek |
-|---|---|
-| Node tidak dapat IP yang ditentukan | `sudo pxe-nodes list`, `cat /srv/pxe/dhcp-hosts`; pastikan MAC = NIC yang dipakai PXE; cek `sudo pxe-nodes discover` |
-| Node tidak dapat IP | `sudo ss -lnup \| grep :67`, pastikan tidak ada DHCP lain di segmen, dan cek `journalctl -u dnsmasq` |
-| `revocations.efi not found` / `grub/x86_64-efi/*.lst not found` di log | Normal, karena shim/grub mencoba file opsional |
-| Node PXE-install berulang | Atur urutan boot Disk → Network; cek `efibootmgr` di node |
-| Autoinstall berhenti meminta konfirmasi | Pastikan parameter `autoinstall` ada di cmdline dan `user-data` valid (`curl http://10.10.10.1/pxe/autoinstall/user-data`) |
-| Log installer di node | `/var/log/installer/` (`subiquity-server-debug.log`, `curtin-install.log`) |
-
-## 11. Catatan Kondisi Server
-
-- VM ini sebelumnya berisi sisa instalasi Foreman yang sudah di-purge. **Apache** sempat berjalan tanpa
-  `/etc/apache2` (pasti gagal bila di-restart). Konfigurasinya saya pulihkan dengan
-  `apt install --reinstall -o Dpkg::Options::=--force-confmiss apache2`, lalu modul default, `000-default`,
-  dan `pxe.conf` diaktifkan.
-- Layanan sisa lainnya (`puppetserver`/OpenVox, `postgresql`, `redis`) **tidak disentuh** dan masih berjalan.
-- DNS uplink sebelumnya kosong (`releases.ubuntu.com` tidak bisa di-resolve). Nameserver ditambahkan
-  di `/etc/netplan/60-pxe.yaml`.
-- `netplan apply` sempat gagal sesaat di `netplan-ovs-cleanup.service` (berhasil saat diulang). Karena itu
-  script hanya menjalankan `netplan apply` bila file netplan berubah.
-- `ufw` tidak aktif. Ruleset nftables hanya berisi tabel `ip pxe_nat`.
-- Kredensial default `ubuntu/ubuntu` dan login password SSH hanya untuk lab. Matikan `allow-pw`
-  dan ganti hash password sebelum dipakai di luar lab.
+Milestone M1–M7 selesai, dengan tag `m1-approved` … `m7-approved`. Ringkasan, deviasi SPEC, dan
+pekerjaan lanjutan ada di
+[`docs/agent-workflow/reports/REPORT-final.md`](docs/agent-workflow/reports/REPORT-final.md).
+Deviasi dan keterbatasan saat ini:
+- Status Offline otomatis belum ada.
+- Registrasi OS image hanya dari path lokal, belum dari URL.
+- Instalasi Windows belum dilayani.
+- Tab Credentials masih punya catatan aksesibilitas.
