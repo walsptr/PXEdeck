@@ -275,8 +275,8 @@ if [[ -d "$(p "$APP_DIR")" ]] && ! manifest_has tree "$APP_DIR"; then
 fi
 
 check_ports() {
-  local netid state rq sq local peer proc port addr base dev bad=""
-  while read -r netid state rq sq local peer proc; do
+  local netid local proc port addr base dev bad=""
+  while read -r netid local proc; do
     [[ -z "${local:-}" ]] && continue
     port="${local##*:}"; addr="${local%:*}"; base="${addr%%\%*}"; dev=""
     [[ "$addr" == *%* ]] && dev="${addr#*%}"
@@ -295,7 +295,7 @@ check_ports() {
       2049) [[ -z "${proc:-}" ]] && continue ;;
     esac
     bad+=$'\n'"  $netid $local ${proc:-}"
-  done < <(ss -lntupH 2>/dev/null || true)
+  done < <(ss_sockets)
   [[ -z "$bad" ]] || die "port bentrok dengan proses lain:$bad"
 }
 check_ports
@@ -365,7 +365,7 @@ elif [[ -z "$OLD_HASH" ]]; then die "password admin belum ada: pakai prompt, --a
 fi
 
 # --- pembersihan ---------------------------------------------------------------------------------
-TMP=""; POLICY_CREATED=0; DNSMASQ_STARTED=0
+TMP=""; POLICY_CREATED=0; DNSMASQ_STARTED=0; RUN_ENABLED=()
 cleanup() {
   local rc=$?
   ADMIN_PW=""
@@ -374,6 +374,11 @@ cleanup() {
   if ((rc != 0 && DNSMASQ_STARTED && !DRY)); then
     printf '[pxe-install] GAGAL (exit %s) — menghentikan dnsmasq agar tidak ada DHCP dari instalasi setengah jadi\n' "$rc" >&2
     systemctl stop dnsmasq.service || true
+  fi
+  if ((rc != 0 && !DRY && ${#RUN_ENABLED[@]})); then
+    # Rollback enablement: unit yang di-enable oleh run yang gagal ini tidak boleh tertinggal enabled.
+    printf '[pxe-install] rollback: menonaktifkan %s\n' "${RUN_ENABLED[*]}" >&2
+    systemctl disable --now "${RUN_ENABLED[@]}" || true
   fi
   exit "$rc"
 }
@@ -392,11 +397,15 @@ log "manifest: $MANIFEST"
 PKGS=(dnsmasq nginx nfs-kernel-server ipxe curl ca-certificates xz-utils libarchive-tools python3 iproute2)
 [[ "$FIREWALL" == yes ]] && PKGS+=(nftables)
 pkg_installed() { [[ "$(dpkg-query -W -f='${Status}' "$1" 2>/dev/null || true)" == "install ok installed" ]]; }
+# installed_list: semua paket terpasang (untuk mencatat dependensi yang ikut dipasang installer).
+installed_list() { { dpkg-query -W -f='${db:Status-Abbrev} ${Package}\n' 2>/dev/null || true; } | awk '$1 ~ /^ii/ { print $2 }' | sort -u; }
 declare -A PKG_OURS=()
 missing_pkgs=()
 for x in "${PKGS[@]}"; do pkg_installed "$x" || missing_pkgs+=("$x"); done
+# Paket milik installer = belum terpasang sekarang ATAU tercatat `pkg` di manifest dari instalasi
+# sebelumnya (mis. setelah `uninstall.sh --purge` tanpa --remove-packages, paket masih terpasang).
 for x in dnsmasq nginx nfs-kernel-server; do
-  [[ " ${missing_pkgs[*]} " == *" $x "* ]] && PKG_OURS[$x]=ours || PKG_OURS[$x]=pre
+  if [[ " ${missing_pkgs[*]} " == *" $x "* ]] || manifest_has pkg "$x"; then PKG_OURS[$x]=ours; else PKG_OURS[$x]=pre; fi
 done
 if ((${#missing_pkgs[@]})); then
   log "memasang paket: ${missing_pkgs[*]}"
@@ -408,14 +417,30 @@ if ((${#missing_pkgs[@]})); then
   else
     warn "$POLICY_RC sudah ada (bukan milik installer); layanan paket baru mungkin langsung start"
   fi
+  pkgs_before="$(installed_list)"
   run apt-get update
+  # Layanan paket baru di-enable postinst: catat untuk rollback bila install gagal.
+  for x in dnsmasq nginx nfs-kernel-server; do
+    [[ " ${missing_pkgs[*]} " == *" $x "* ]] && RUN_ENABLED+=("$([[ "$x" == nfs-kernel-server ]] && echo nfs-server || echo "$x").service")
+  done
   run env DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends "${missing_pkgs[@]}"
-  for x in "${missing_pkgs[@]}"; do manifest_add pkg "$x"; done
+  for x in "${missing_pkgs[@]}"; do manifest_add pkg "$x" requested; done
+  if ((!DRY)); then
+    # Dependensi yang ikut terpasang dicatat `dep`: uninstall --remove-packages hanya mem-purge yang
+    # menjadi autoremovable (tidak dibutuhkan paket lain).
+    while IFS= read -r x; do
+      [[ -n "$x" && " ${missing_pkgs[*]} " != *" $x "* ]] || continue
+      grep -qxF -- "$x" <<<"$pkgs_before" || manifest_add pkg "$x" dep
+    done < <(installed_list)
+  fi
   if ((POLICY_CREATED)); then rm -f "$(p "$POLICY_RC")"; POLICY_CREATED=0; fi
 fi
-manifest_add svc dnsmasq.service "${PKG_OURS[dnsmasq]}"
-manifest_add svc nginx.service "${PKG_OURS[nginx]}"
-manifest_add svc nfs-server.service "${PKG_OURS[nfs-kernel-server]}"
+for x in dnsmasq:dnsmasq nginx:nginx nfs-server:nfs-kernel-server; do
+  u="${x%%:*}.service"; k="${PKG_OURS[${x#*:}]}"
+  # Entri lama 'pre' yang keliru (paket sebenarnya milik installer) dikoreksi.
+  if [[ "$k" == ours ]] && manifest_has svc "$u" && ! manifest_has_extra svc "$u" ours; then manifest_del svc "$u"; fi
+  manifest_add svc "$u" "$k"
+done
 
 # --- 3. user + direktori -----------------------------------------------------------------------
 if ! getent passwd "$PXE_USER" >/dev/null 2>&1; then
@@ -473,6 +498,9 @@ fi
 HASH="$OLD_HASH"
 if [[ -n "$ADMIN_PW" ]]; then
   if ((DRY)); then echo "DRY-RUN: hash password admin (stdin) dengan $NODE_DIR/bin/node dashboard/scripts/admin-hash.mjs"; HASH="@PXE_ADMIN_PASSWORD_HASH@"
+  elif [[ -n "$OLD_HASH" ]] && printf '%s\n%s' "$OLD_HASH" "$ADMIN_PW" | "$(p "$NODE_DIR")/bin/node" "$DEPLOY_DIR/admin-verify.mjs" >/dev/null 2>&1; then
+    # Password sama dengan hash yang ada: pertahankan hash (tanpa salt baru -> env tidak berubah).
+    log "password admin tidak berubah — hash yang ada dipertahankan"
   else
     HASH="$(printf '%s' "$ADMIN_PW" | "$(p "$NODE_DIR")/bin/node" "$REPO_DIR/dashboard/scripts/admin-hash.mjs" 2>/dev/null)" \
       || die "admin-hash gagal (keluaran tidak dicetak)"
@@ -641,8 +669,11 @@ if [[ -n "${CFG[ISO_DEBIAN]:-}" && "$DEBIAN_NETBOOT" != none ]]; then
   else
     for f in linux initrd.gz; do run install -m 0644 "$DEBIAN_NETBOOT/$f" "$(p "$nb")/$f"; done
   fi
-  if ((DRY)); then echo "DRY-RUN: $TPL_DIR/debian-disk-modules.sh ${CFG[ISO_DEBIAN]} $nb/initrd.gz $nb/modules"
-  elif ! kver="$(bash "$TPL_DIR/debian-disk-modules.sh" "$(p "${CFG[ISO_DEBIAN]}")" "$(p "$nb")/initrd.gz" "$(p "$nb")/modules" 2>&1)"; then
+  # Sumber DVD: mountpoint ISO (berlaku juga untuk perangkat /dev/srN) bila ter-mount, selain itu file ISO.
+  dvd_src="$(p "${CFG[ISO_DEBIAN]}")"
+  [[ -f "$(p "$MEDIA_DIR/debian-12")/install.amd/initrd.gz" ]] && dvd_src="$(p "$MEDIA_DIR/debian-12")"
+  if ((DRY)); then echo "DRY-RUN: $TPL_DIR/debian-disk-modules.sh ${dvd_src#"$ROOT"} $nb/initrd.gz $nb/modules"
+  elif ! kver="$(bash "$TPL_DIR/debian-disk-modules.sh" "$dvd_src" "$(p "$nb")/initrd.gz" "$(p "$nb")/modules" 2>&1)"; then
     warn "modul disk Debian tidak diekstrak ($kver); install Debian ke disk virtio mungkin gagal"
   else
     log "modul disk Debian $kver di $nb/modules"
@@ -653,6 +684,11 @@ fi
 run dnsmasq --test
 run nginx -t
 run systemctl daemon-reload
+enabled() { [[ "$(systemctl is-enabled "$1" 2>/dev/null || true)" == enabled ]]; }
+for u in pxe-dashboard.service dnsmasq.service nginx.service nfs-server.service; do
+  enabled "$u" || [[ " ${RUN_ENABLED[*]} " == *" $u "* ]] || RUN_ENABLED+=("$u")
+done
+[[ "$FIREWALL" == yes ]] && ! enabled pxe-dashboard-firewall.service && RUN_ENABLED+=(pxe-dashboard-firewall.service)
 if [[ "$FIREWALL" == yes ]]; then
   manifest_add unit pxe-dashboard-firewall.service
   run systemctl enable pxe-dashboard-firewall.service
@@ -672,7 +708,7 @@ else log "pxe-dashboard tidak berubah — tidak di-restart"; fi
 
 # --- 11. verifikasi ------------------------------------------------------------------------------
 verify() {
-  local code=000 noauth bad=0 netid state rq sq local peer proc dhcp=0
+  local code=000 noauth bad=0 netid local proc dhcp=0
   for _ in $(seq 1 90); do
     code="$(curl -sS --max-time 5 -o /dev/null -w '%{http_code}' "http://$SERVER_IP/login" 2>/dev/null)" || code=000
     [[ "$code" == 200 ]] && break
@@ -684,21 +720,21 @@ verify() {
   if [[ "$noauth" == 401 ]]; then log "OK   GET /api/settings tanpa sesi -> 401"
   else log "FAIL GET /api/settings tanpa sesi -> $noauth (harus 401)"; bad=1; fi
   for _ in 1 2 3 4 5; do
-    ss -lunpH 2>/dev/null | grep -q '"dnsmasq"' && break
+    ss_sockets | grep -q '^udp .*"dnsmasq"' && break
     sleep 1
   done
-  while read -r netid state rq sq local peer proc; do
-    [[ "$proc" == *'"dnsmasq"'* ]] || continue
+  while read -r netid local proc; do
+    [[ "$netid" == udp && "$proc" == *'"dnsmasq"'* ]] || continue
     if [[ "$local" == "$SERVER_IP:"* || "$local" == *"%$IFACE:"* ]]; then log "OK   dnsmasq udp $local"
     else log "FAIL dnsmasq udp $local (harus $SERVER_IP / %$IFACE)"; bad=1; fi
     [[ "$local" == *"%$IFACE:67" ]] && dhcp=1
-  done < <(ss -lunpH 2>/dev/null || true)
+  done < <(ss_sockets)
   if ((dhcp)); then log "OK   DHCP dnsmasq listen udp %$IFACE:67"
   else log "FAIL dnsmasq tidak listen DHCP udp %$IFACE:67 (ss -lunp)"; bad=1; fi
-  while read -r netid state rq sq local peer proc; do
-    [[ "$local" == *:3000 ]] || continue
+  while read -r netid local proc; do
+    [[ "$netid" == tcp && "$local" == *:3000 ]] || continue
     [[ "$local" == 127.0.0.1:3000 ]] || { log "FAIL dashboard listen $local (harus 127.0.0.1:3000)"; bad=1; }
-  done < <(ss -ltnpH 2>/dev/null || true)
+  done < <(ss_sockets)
   return "$bad"
 }
 if ((DRY)); then

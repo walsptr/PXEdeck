@@ -62,7 +62,16 @@ render_dnsmasq() { # render_dnsmasq <out>
   # Pasca-render: terikat ke NIC yang dipilih, tanpa sisa nilai lab.
   [[ "$(grep -c '^interface=' "$out")" == 1 ]] && grep -qx "interface=$IFACE" "$out" && grep -qx 'bind-interfaces' "$out" \
     || die "render dnsmasq: interface=/bind-interfaces tidak valid"
-  ! grep -qE 'pxe0|nat0|pxe\.test' "$out" || die "render dnsmasq: sisa nilai lab (pxe0/nat0/pxe.test)"
+  # Sisa baris lab: diperiksa per baris yang seharusnya diganti (bukan nama NIC/domain yang dipilih
+  # admin — `--interface pxe0` atau `--domain pxe.test` sah).
+  ! grep -qx 'except-interface=nat0' "$out" || die "render dnsmasq: sisa baris lab except-interface=nat0"
+  [[ "$(grep -c '^domain=' "$out")" == 1 ]] && grep -qx "domain=$DOMAIN" "$out" || die "render dnsmasq: domain= tidak valid"
+  ! grep -qE '^local=' "$out" || grep -qx "local=/$DOMAIN/" "$out" || die "render dnsmasq: local= tidak valid"
+  [[ "$(grep -c '^dhcp-range=' "$out")" == 1 ]] && grep -qx "dhcp-range=$IFACE,$RANGE_START,$RANGE_END,$NETMASK,1h" "$out" \
+    || die "render dnsmasq: dhcp-range tidak valid"
+  [[ "$(grep -c "^dhcp-boot=.*[/,]$SERVER_IP\(/\|\$\)" "$out")" == 3 ]] || die "render dnsmasq: dhcp-boot tidak menunjuk $SERVER_IP"
+  grep -qE '^dhcp-option=(3|option:router,'"$GATEWAY"')$' "$out" || die "render dnsmasq: opsi router tidak valid"
+  grep -qx "dhcp-option=option:dns-server,$DNS" "$out" || die "render dnsmasq: opsi DNS tidak valid"
 }
 
 render_dnsmasq_dropin() { # render_dnsmasq_dropin <out>: tunggu NIC punya alamat (bind-interfaces)

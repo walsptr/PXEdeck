@@ -147,8 +147,10 @@ sudo ./install.sh --config deploy/install.conf.example --dry-run
   DHCPDISCOVER; lewati hanya dengan `--force-dhcp`).
 - Akhir instalasi memverifikasi `ss -lunp` (dnsmasq hanya di NIC itu), `/login` 200, dan
   `/api/settings` tanpa sesi 401. Bila gagal, dnsmasq dihentikan dan exit ≠ 0.
-- Dijalankan ulang = upgrade (rilis baru bila sumber/tarball berubah) atau no-op. Kunci env di luar
-  jaringan/admin (timeout job, sesi) yang diubah admin dipertahankan.
+- Dijalankan ulang = upgrade (rilis baru bila sumber/tarball berubah) atau no-op, termasuk saat ISO
+  ter-mount dan diekspor. Kunci env di luar jaringan/admin (timeout job, sesi) yang diubah admin
+  dipertahankan; password admin yang sama tidak di-hash ulang. Install yang gagal menghentikan
+  dnsmasq dan menonaktifkan lagi unit yang di-enable oleh run itu.
 
 Semua file, direktori, unit, mount, dan paket yang dibuat dicatat di
 `/var/lib/pxe-dashboard-installer/install-manifest`. `uninstall.sh` hanya menghapus isi manifest:
@@ -159,6 +161,10 @@ sudo ./uninstall.sh --yes              # layanan + konfigurasi + rilis; DB, /srv
 sudo ./uninstall.sh --purge --yes      # juga data (DB, /srv/pxe, log) dan user pxe
 sudo ./uninstall.sh --purge --remove-packages --yes   # juga paket yang dipasang installer
 ```
+
+`--remove-packages` mem-purge paket yang diminta installer, lalu dependensi yang ikut terpasang hanya
+bila apt menganggapnya autoremovable (tidak dipakai paket lain). Tidak ada `apt-get autoremove` untuk
+seluruh sistem; paket yang sudah ada sebelum install tidak disentuh.
 
 Template konfigurasi ada di [`infra/server/`](infra/server/) (`dnsmasq.conf`, `nginx-pxe.conf`,
 `pxe-dashboard.service`, `dashboard.env`, `exports`, `nfs.conf`); `install.sh` merendernya dengan

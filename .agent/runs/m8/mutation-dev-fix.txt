@@ -1,0 +1,15 @@
+# M8 mutation testing perbaikan temuan KVM iterasi 1 (backend-dev) — 2026-11-07T09:36:52Z, dasar ead719f
+# Metode: tiap perbaikan di-revert satu per satu, test regresinya (infra/test/m8.sh) dijalankan sendiri, file dipulihkan.
+# Hasil: 11/11 KILLED.
+
+F1 revert: cek sisa lab per kata (pxe0|nat0|pxe.test) [deploy/render.sh] -> test_m8_fix_nic_pxe0_allowed: KILLED (hasil: 0 lulus, 1 gagal)
+F2 revert: ss diparse 7 kolom tetap (tanpa deteksi Netid) [deploy/lib.sh] -> test_m8_fix_ss_formats: KILLED (hasil: 0 lulus, 1 gagal)
+F3 revert: chmod/chown mountpoint data saat install ulang [deploy/lib.sh] -> test_m8_fix_rerun_with_mounted_media: KILLED (hasil: 0 lulus, 1 gagal)
+F4 revert: abaikan entri pkg manifest saat klasifikasi paket [install.sh] -> test_m8_fix_pkg_ownership_after_purge: KILLED (hasil: 0 lulus, 1 gagal)
+Fa revert: modul Debian dari path ISO/perangkat, bukan mountpoint [install.sh] -> test_m8_fix_debian_modules_device: KILLED (hasil: 0 lulus, 1 gagal)
+Fa2 revert: debian-disk-modules.sh hanya menerima file (-f) [infra/server/debian-disk-modules.sh] -> test_m8_fix_debian_modules_device: KILLED (hasil: 0 lulus, 1 gagal)
+Fb revert: selalu hash ulang password (salt baru) [install.sh] -> test_m8_fix_same_password_keeps_hash: KILLED (hasil: 0 lulus, 1 gagal)
+Fc revert: tanpa SuccessExitStatus=143 [infra/server/pxe-dashboard.service] -> test_m8_fix_unit_success_exit: KILLED (hasil: 0 lulus, 1 gagal)
+Fd revert: dependensi tidak dicatat [install.sh] -> test_m8_fix_remove_packages_deps: KILLED (hasil: 0 lulus, 1 gagal)
+Fd2 revert: semua dep di-purge tanpa cek autoremovable [uninstall.sh] -> test_m8_fix_remove_packages_deps: KILLED (hasil: 0 lulus, 1 gagal)
+Fe revert: tanpa rollback enablement saat gagal [install.sh] -> test_m8_fix_failed_install_rollback_enable: KILLED (hasil: 0 lulus, 1 gagal)

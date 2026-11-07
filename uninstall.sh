@@ -142,12 +142,33 @@ for i in "${!M_TYPE[@]}"; do
   else keep "$i"; fi
 done
 
-# 7. Paket (hanya --remove-packages, hanya yang dipasang installer).
-pkgs=()
-for i in "${!M_TYPE[@]}"; do [[ "${M_TYPE[$i]}" == pkg ]] && pkgs+=("${M_PATH[$i]}"); done
-if ((${#pkgs[@]})); then
-  if ((RMPKG)); then run env DEBIAN_FRONTEND=noninteractive apt-get purge -y "${pkgs[@]}" || warn "apt-get purge gagal"
-  else for i in "${!M_TYPE[@]}"; do [[ "${M_TYPE[$i]}" == pkg ]] && keep "$i"; done; fi
+# 7. Paket (hanya --remove-packages, hanya yang dipasang installer). Paket yang diminta installer
+#    di-purge; dependensi yang ikut terpasang (`dep`) hanya di-purge bila apt menganggapnya
+#    autoremovable setelah itu (tidak dibutuhkan paket lain). Tidak ada `apt-get autoremove` global.
+req=(); deps=()
+for i in "${!M_TYPE[@]}"; do
+  [[ "${M_TYPE[$i]}" == pkg ]] || continue
+  if [[ "${M_EXTRA[$i]}" == dep ]]; then deps+=("${M_PATH[$i]}"); else req+=("${M_PATH[$i]}"); fi
+done
+if ((${#req[@]} + ${#deps[@]})); then
+  if ((RMPKG)); then
+    ((${#req[@]})) && { run env DEBIAN_FRONTEND=noninteractive apt-get purge -y "${req[@]}" || warn "apt-get purge gagal"; }
+    rm_deps=()
+    if ((${#deps[@]})); then
+      if ((DRY)); then rm_deps=("${deps[@]}"); echo "DRY-RUN: (dependensi hanya di-purge bila autoremovable)"
+      else
+        cand="$(apt-get -s autoremove 2>/dev/null | awk '/^Remv / { print $2 }' || true)"
+        for x in "${deps[@]}"; do grep -qxF -- "$x" <<<"$cand" && rm_deps+=("$x"); done
+      fi
+      ((${#rm_deps[@]})) && { run env DEBIAN_FRONTEND=noninteractive apt-get purge -y "${rm_deps[@]}" || warn "apt-get purge dependensi gagal"; }
+    fi
+    # Dependensi yang masih dibutuhkan paket lain tetap tercatat (tidak disentuh).
+    for i in "${!M_TYPE[@]}"; do
+      [[ "${M_TYPE[$i]}" == pkg && "${M_EXTRA[$i]}" == dep && " ${rm_deps[*]} " != *" ${M_PATH[$i]} "* ]] && keep "$i"
+    done
+  else
+    for i in "${!M_TYPE[@]}"; do [[ "${M_TYPE[$i]}" == pkg ]] && keep "$i"; done
+  fi
 fi
 
 # 8. Manifest: simpan entri yang dipertahankan (agar --purge nanti tetap bisa menghapusnya). Direktori
@@ -176,10 +197,10 @@ fi
 if ((!DRY)); then
   bad=0
   [[ "$(systemctl is-active pxe-dashboard.service 2>/dev/null || true)" == active ]] && { log "FAIL pxe-dashboard masih aktif"; bad=1; }
-  while read -r netid state rq sq local peer proc; do
+  while read -r netid local proc; do
     [[ "$local" == 127.0.0.1:3000 ]] && { log "FAIL masih ada listener $local $proc"; bad=1; }
     [[ "$(svc_kind dnsmasq.service)" == ours && "$proc" == *'"dnsmasq"'* ]] && { log "FAIL dnsmasq masih listen $local"; bad=1; }
-  done < <(ss -lntupH 2>/dev/null || true)
+  done < <(ss_sockets)
   ((bad)) && die "uninstall selesai dengan sisa layanan aktif (lihat FAIL)"
 fi
 log "uninstall selesai$( ((DRY)) && echo " (dry-run)")$( ((PURGE)) || echo "; data dipertahankan (DB $STATE_DIR, $MEDIA_DIR) — --purge untuk menghapus")"

@@ -40,8 +40,10 @@ EOF
   cat > "$SB/nodesrc/node-v22.99.0-linux-x64/bin/node" <<EOF
 #!/usr/bin/env bash
 # node palsu (test M8): admin-hash membaca password dari stdin -> simpan untuk asersi, cetak hash dummy.
-cat > "\$FAKE_STATE/node.stdin"
+# admin-verify: stdin disimpan, exit \${FAKE_VERIFY_RC:-1} (default: password tidak cocok).
 echo "node \$*" >> "\$FAKE_LOG"
+if [[ "\$*" == *admin-verify.mjs* ]]; then cat > "\$FAKE_STATE/node-verify.stdin"; exit "\${FAKE_VERIFY_RC:-1}"; fi
+cat > "\$FAKE_STATE/node.stdin"
 printf '%s\n' '$_M8_HASH'
 EOF
   chmod +x "$SB/nodesrc/node-v22.99.0-linux-x64/bin/node"
@@ -49,6 +51,12 @@ EOF
   (cd "$FAKE_STATE/curl-files" && sha256sum node-v22.99.0-linux-x64.tar.xz > SHASUMS256.txt)
   export NODE_VERSION=22.99.0 FAKE_CURL_HTTP=1
   unset FAKE_UID FAKE_DHCP_RC FAKE_DHCP_OUT
+}
+# _m8_fresh: root sandbox + state paket/user palsu baru (server "bersih" kedua dalam satu test).
+_m8_fresh() {
+  rm -rf -- "${SB:?}/root" "${FAKE_STATE:?}/dpkg" "${FAKE_STATE:?}/user-pxe"
+  : > "$FAKE_LOG"
+  _m8_setup
 }
 _m8_install() { set +e; OUT="$(cd "$REPO_UNDER_TEST" && bash ./install.sh "$@" </dev/null 2>&1)"; RC=$?; set -e; }
 _m8_uninstall() { set +e; OUT="$(cd "$REPO_UNDER_TEST" && bash ./uninstall.sh "$@" </dev/null 2>&1)"; RC=$?; set -e; }
@@ -412,10 +420,7 @@ test_m8_verify_failure_stops_dnsmasq() {
   assert_ne "$RC" 0; assert_contains "$OUT" "FAIL dnsmasq udp 0.0.0.0%eth0:67"
   assert_match "$(cat "$FAKE_LOG")" '^systemctl stop dnsmasq\.service$'
   # /api/settings tanpa sesi bukan 401 -> gagal.
-  _m8_setup; rm -rf "$R/var/lib/pxe-dashboard-installer" "$R/opt" "$R/etc/pxe-dashboard.env" "$R/etc/dnsmasq.d" \
-    "$R/etc/nginx/sites-available/pxe-dashboard" "$R/etc/nginx/sites-enabled/pxe-dashboard" "$R/etc/systemd" "$R/etc/exports.d" "$R/etc/nfs.conf.d" "$R/etc/logrotate.d" "$R/srv"
-  ln -sfn /etc/nginx/sites-available/default "$R/etc/nginx/sites-enabled/default"
-  : > "$FAKE_LOG"
+  _m8_fresh
   FAKE_CURL_HTTP=0 _m8_full
   assert_ne "$RC" 0; assert_contains "$OUT" "FAIL GET http://10.10.10.1/login"
 }
@@ -427,7 +432,7 @@ test_m8_foreign_file_not_overwritten() {
   assert_ne "$RC" 0; assert_contains "$OUT" "bukan milik installer"
   assert_eq "$(cat "$R/etc/dnsmasq.d/pxe-dashboard.conf")" "# milik admin" "file asing utuh"
   assert_eq "$(_m8_mutations)" "" "ditolak di preflight, sebelum perubahan apa pun"
-  cat "$R/var/lib/pxe-dashboard-installer/install-manifest" >&2 || true; echo "$OUT" | tail -5 >&2; assert_no_file "$R/var/lib/pxe-dashboard-installer"
+  assert_no_file "$R/var/lib/pxe-dashboard-installer"
   # /opt/pxe-dashboard asing (tidak di manifest) -> ditolak di preflight.
   _m8_setup; rm -f "$R/etc/dnsmasq.d/pxe-dashboard.conf"; mkdir -p "$R/opt/pxe-dashboard"; : > "$FAKE_LOG"
   _m8_full; assert_ne "$RC" 0; assert_contains "$OUT" "/opt/pxe-dashboard sudah ada"
@@ -626,3 +631,214 @@ t "M8 uninstall: manifest rusak/asing/group-writable & non-root ditolak"        
 t "M8 install VLAN dry-run: netplan + probe DHCP di sub-interface"              test_m8_vlan_install_dry_run
 t "M8 install-vm.sh: VM bersih pxe-test-install (dry-run), down, tolak bentrok" test_m8_install_vm_dry_run
 t "M8 README §Deploy + contoh config install.sh/uninstall.sh"                   test_m8_readme_documents_installer
+
+# ---------------------------------------------------------------------------------------------
+# Perbaikan temuan KVM M8 (iterasi 1). Setiap test merah bila perbaikannya di-revert
+# (.agent/runs/m8/mutation-dev-fix.txt).
+
+# Temuan 1: NIC bernama pxe0 / domain pxe.test sah (cek sisa lab per baris, bukan per kata).
+test_m8_fix_nic_pxe0_allowed() {
+  _m8_setup
+  _m8_render "$SB/r" --interface pxe0 --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200 \
+    --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1 --domain pxe.test
+  assert_eq "$RC" 0 "$OUT"
+  local c; c="$(cat "$SB/r/dnsmasq.conf")"
+  assert_match "$c" '^interface=pxe0$'; assert_match "$c" '^dhcp-range=pxe0,10\.99\.0\.100,'
+  assert_match "$c" '^domain=pxe\.test$'; assert_no_match "$c" '^except-interface=nat0$'
+  # NIC nat0 pun sah; baris lab except-interface=nat0 tetap dibuang.
+  _m8_render "$SB/r2" --interface nat0 --address 10.99.0.2/24 --dhcp-range 10.99.0.100-10.99.0.200 \
+    --gateway 10.99.0.1 --dns 10.99.0.2 --admin-allow 10.99.0.1
+  assert_eq "$RC" 0 "$OUT"; assert_eq "$(grep -v '^#' "$SB/r2/dnsmasq.conf" | grep -c 'nat0')" 2 "interface= + dhcp-range saja"
+}
+
+# Temuan 2: ss satu-protokol mencetak 6 kolom (tanpa Netid); parser menerima kedua format.
+_m8_ss6() { # ubah fixture ss 7 kolom -> 6 kolom (format `ss -lunpH` / `ss -ltnpH`)
+  sed -E 's/^(tcp|udp) +//' "$FAKE_STATE/ss" > "$SB/ss6" && cp "$SB/ss6" "$FAKE_STATE/ss"
+}
+test_m8_fix_ss_formats() {
+  _m8_setup
+  _m8_ss6
+  assert_match "$(head -1 "$FAKE_STATE/ss")" '^UNCONN 0 0 ' "fixture 6 kolom"
+  _m8_full
+  assert_eq "$RC" 0 "6 kolom: $OUT"
+  assert_contains "$OUT" "OK   DHCP dnsmasq listen udp %eth1:67"
+  assert_contains "$OUT" "OK   dnsmasq udp 10.10.10.1:53"
+  assert_no_match "$(cat "$FAKE_LOG")" '^systemctl stop dnsmasq'
+  # Format nyata Ubuntu 24.04 (spasi lebar, beberapa proses, proses berspasi) — 7 kolom.
+  cat > "$FAKE_STATE/ss" <<'SS'
+udp   UNCONN 0      0          10.10.10.1:53        0.0.0.0:*    users:(("dnsmasq",pid=1460,fd=6))
+udp   UNCONN 0      0      0.0.0.0%eth1:67        0.0.0.0:*    users:(("dnsmasq",pid=1460,fd=4))
+udp   UNCONN 0      0         127.0.0.54:53        0.0.0.0:*    users:(("systemd-resolve",pid=578,fd=16))
+udp   UNCONN 0      0            0.0.0.0:111       0.0.0.0:*    users:(("rpcbind",pid=14624,fd=5),("systemd",pid=1,fd=77))
+tcp   LISTEN 0      511        10.10.10.1:80        0.0.0.0:*    users:(("nginx",pid=124390,fd=6),("nginx",pid=124389,fd=6))
+tcp   LISTEN 0      511         127.0.0.1:3000      0.0.0.0:*    users:(("next-server (v1",pid=30,fd=20))
+SS
+  : > "$FAKE_LOG"
+  _m8_install "${_M8_ARGS[@]}" --release "$SB/release.tar.xz" --yes
+  assert_eq "$RC" 0 "7 kolom nyata: $OUT"
+  # Bentrok port juga terdeteksi dari format 6 kolom.
+  _m8_ss6
+  echo 'LISTEN 0 511 0.0.0.0:80 0.0.0.0:* users:(("apache2",pid=7,fd=4))' >> "$FAKE_STATE/ss"
+  _m8_install "${_M8_ARGS[@]}" --release "$SB/release.tar.xz" --yes
+  assert_ne "$RC" 0; assert_contains "$OUT" "port bentrok"; assert_contains "$OUT" "apache2"
+}
+
+# Temuan 3: install ulang dengan ISO ter-mount (ro, diekspor) tidak chmod/chown mountpoint.
+test_m8_fix_rerun_with_mounted_media() {
+  _m8_setup
+  : > "$R/srv-ubuntu.iso"
+  _m8_full --iso-ubuntu /srv-ubuntu.iso; assert_eq "$RC" 0 "$OUT"
+  export FAKE_MOUNTED="$R/srv/pxe/media/ubuntu-24.04" FAKE_RO="$R/srv/pxe/media/ubuntu-24.04"
+  : > "$FAKE_LOG"
+  _m8_full --iso-ubuntu /srv-ubuntu.iso
+  assert_eq "$RC" 0 "rerun dengan ISO ter-mount: $OUT"
+  assert_no_match "$(cat "$FAKE_LOG")" "^chown .* $R/srv/pxe/media/ubuntu-24\.04$" "mountpoint tidak di-chown"
+  assert_no_match "$(cat "$FAKE_LOG")" '^mount ' "sudah ter-mount -> tidak mount ulang"
+  assert_match "$(cat "$FAKE_LOG")" "^chown root:root $R/srv/pxe/media/rocky-9$" "direktori biasa tetap dirapikan"
+}
+
+# Temuan 4: setelah --purge tanpa --remove-packages, paket tercatat tetap milik installer.
+test_m8_fix_pkg_ownership_after_purge() {
+  _m8_setup
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  export FAKE_ACTIVE=inactive; : > "$FAKE_STATE/ss"
+  _m8_uninstall --purge --yes; assert_eq "$RC" 0 "$OUT"
+  assert_contains "$(_m8_mf)" $'pkg\tnginx\trequested'
+  unset FAKE_ACTIVE; _m8_setup
+  : > "$FAKE_LOG"
+  _m8_full; assert_eq "$RC" 0 "install ulang: $OUT"
+  assert_no_match "$(cat "$FAKE_LOG")" '^apt-get install' "paket masih terpasang"
+  local m; m="$(_m8_mf)"
+  assert_contains "$m" $'svc\tnginx.service\tours'; assert_contains "$m" $'svc\tdnsmasq.service\tours'
+  assert_contains "$m" $'svc\tnfs-server.service\tours'
+  export FAKE_ACTIVE=inactive; : > "$FAKE_STATE/ss"; : > "$FAKE_LOG"
+  _m8_uninstall --yes; assert_eq "$RC" 0 "$OUT"
+  assert_match "$(cat "$FAKE_LOG")" '^systemctl disable --now nginx\.service$'
+  assert_match "$(cat "$FAKE_LOG")" '^systemctl disable dnsmasq\.service$'
+  assert_match "$(cat "$FAKE_LOG")" '^systemctl disable --now nfs-server\.service$'
+  # Entri svc 'pre' lama yang keliru (pkg tercatat) dikoreksi saat install ulang.
+  unset FAKE_ACTIVE; _m8_setup
+  printf 'svc\tnginx.service\tpre\n' >> "$R/var/lib/pxe-dashboard-installer/install-manifest"
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  assert_contains "$(_m8_mf)" $'svc\tnginx.service\tours'; assert_not_contains "$(_m8_mf)" $'svc\tnginx.service\tpre'
+}
+
+# Kecil (a): ISO Debian sebagai perangkat blok -> modul diekstrak dari mountpoint.
+_m8_initrd() { # _m8_initrd <out.gz> <kver> <rel...>
+  local out="$1" kver="$2" root p; shift 2
+  root="$(mktemp -d "$SB/initrd.XXXXXX")"
+  for p in "$@"; do mkdir -p "$root/lib/modules/$kver/$(dirname "$p")"; printf 'ko %s\n' "$p" > "$root/lib/modules/$kver/$p"; done
+  (cd "$root" && bsdtar --format newc -cf - .) | gzip -c > "$out"
+}
+test_m8_fix_debian_modules_device() {
+  _m8_setup
+  local k=6.1.0-50-amd64 h="$INFRA_DIR_UNDER_TEST/server/debian-disk-modules.sh" out rc=0
+  mkdir -p "$SB/dvd/install.amd" "$SB/nb"
+  _m8_initrd "$SB/dvd/install.amd/initrd.gz" "$k" kernel/drivers/block/virtio_blk.ko kernel/drivers/scsi/virtio_scsi.ko
+  _m8_initrd "$SB/nb/initrd.gz" "$k" kernel/drivers/net/virtio_net.ko
+  echo kernel > "$SB/nb/linux"
+  # Script: direktori ISO ter-mount diterima.
+  out="$("$h" "$SB/dvd" "$SB/nb/initrd.gz" "$SB/mods" 2>&1)" || rc=$?
+  assert_eq "$rc" 0 "$out"; assert_eq "$out" "$k"
+  assert_file "$SB/mods/$k/virtio_blk.ko"
+  # install.sh: --iso-debian /dev/sr1 (perangkat, ter-mount di /srv/pxe/media/debian-12).
+  mkdir -p "$R/dev" "$R/srv/pxe/media/debian-12/install.amd"; : > "$R/dev/sr1"
+  cp "$SB/dvd/install.amd/initrd.gz" "$R/srv/pxe/media/debian-12/install.amd/initrd.gz"
+  export FAKE_MOUNTED="$R/srv/pxe/media/debian-12"
+  _m8_full --iso-debian /dev/sr1 --debian-netboot "$SB/nb"
+  assert_eq "$RC" 0 "$OUT"
+  assert_eq "$(cat "$R/srv/pxe/media/debian-netboot/modules/$k/virtio_blk.ko")" "ko kernel/drivers/block/virtio_blk.ko"
+  assert_contains "$OUT" "modul disk Debian $k"
+  assert_match "$(grep -F '/dev/sr1 ' "$R/etc/fstab")" '^/dev/sr1 /srv/pxe/media/debian-12 iso9660 ro,nofail' "perangkat tanpa loop"
+}
+
+# Kecil (b): install ulang dengan password yang sama -> hash lama dipertahankan, tanpa restart.
+test_m8_fix_same_password_keeps_hash() {
+  _m8_setup
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  local env1; env1="$(cat "$R/etc/pxe-dashboard.env")"
+  : > "$FAKE_LOG"; rm -f "$FAKE_STATE/node.stdin"
+  FAKE_VERIFY_RC=0 _m8_full
+  assert_eq "$RC" 0 "$OUT"
+  assert_contains "$OUT" "hash yang ada dipertahankan"
+  assert_eq "$(cat "$R/etc/pxe-dashboard.env")" "$env1" "env tidak ditulis ulang"
+  assert_no_match "$(cat "$FAKE_LOG")" '^node .*admin-hash\.mjs' "tidak di-hash ulang"
+  assert_no_match "$(cat "$FAKE_LOG")" '^systemctl restart pxe-dashboard' "tanpa restart"
+  # Verifikasi lewat stdin (hash lama + password), bukan argv.
+  assert_eq "$(head -1 "$FAKE_STATE/node-verify.stdin")" "$_M8_HASH"
+  assert_eq "$(tail -n +2 "$FAKE_STATE/node-verify.stdin")" "$_M8_PW"
+  assert_match "$(grep '^node ' "$FAKE_LOG")" '^node .*/deploy/admin-verify\.mjs$'
+  _m8_no_secret
+  # Password berbeda -> hash baru.
+  : > "$FAKE_LOG"
+  FAKE_VERIFY_RC=1 _m8_full; assert_eq "$RC" 0 "$OUT"
+  assert_match "$(cat "$FAKE_LOG")" '^node .*admin-hash\.mjs$'
+}
+
+# Paritas admin-verify.mjs dengan admin-hash.mjs (node asli, tanpa jaringan).
+test_m8_fix_admin_verify_parity() {
+  local node h rc
+  node="$(PATH=/usr/bin:/bin:/usr/local/bin command -v node)" || _fail "node tidak ada (dibutuhkan dashboard)"
+  h="$(printf '%s' "$_M8_PW" | "$node" "$REPO_UNDER_TEST/dashboard/scripts/admin-hash.mjs")"
+  assert_match "$h" '^scrypt\$15\$8\$1\$'
+  rc=0; printf '%s\n%s' "$h" "$_M8_PW" | "$node" "$REPO_UNDER_TEST/deploy/admin-verify.mjs" || rc=$?; assert_eq "$rc" 0 "cocok"
+  rc=0; printf '%s\n%s\n' "$h" "$_M8_PW" | "$node" "$REPO_UNDER_TEST/deploy/admin-verify.mjs" || rc=$?; assert_eq "$rc" 0 "akhiran baris dibuang"
+  rc=0; printf '%s\n%s' "$h" "${_M8_PW}x" | "$node" "$REPO_UNDER_TEST/deploy/admin-verify.mjs" || rc=$?; assert_eq "$rc" 1 "tidak cocok"
+  rc=0; printf 'scrypt$99$8$1$x$y\n%s' "$_M8_PW" | "$node" "$REPO_UNDER_TEST/deploy/admin-verify.mjs" || rc=$?; assert_eq "$rc" 2 "format"
+  rc=0; printf '%s' "$h" | "$node" "$REPO_UNDER_TEST/deploy/admin-verify.mjs" || rc=$?; assert_eq "$rc" 2 "tanpa password"
+}
+
+# Kecil (c): unit berhenti normal saat stop (exit 143).
+test_m8_fix_unit_success_exit() {
+  _m8_setup
+  _m8_render "$SB/r" "${_M8_ARGS[@]}"
+  assert_match "$(cat "$SB/r/pxe-dashboard.service")" '^SuccessExitStatus=143$'
+  assert_match "$(cat "$INFRA_DIR_UNDER_TEST/server/pxe-dashboard.service")" '^SuccessExitStatus=143$' "template lab"
+}
+
+# Kecil (d): --remove-packages mem-purge paket yang diminta + dependensi yang autoremovable saja.
+test_m8_fix_remove_packages_deps() {
+  _m8_setup
+  export FAKE_DPKG_INSTALLED="openssh-server" FAKE_APT_DEPS="nginx-common rpcbind"
+  _m8_full; assert_eq "$RC" 0 "$OUT"
+  local m; m="$(_m8_mf)"
+  assert_contains "$m" $'pkg\tnginx-common\tdep'; assert_contains "$m" $'pkg\trpcbind\tdep'
+  assert_contains "$m" $'pkg\tnginx\trequested'; assert_not_contains "$m" $'pkg\topenssh-server'
+  export FAKE_ACTIVE=inactive FAKE_AUTOREMOVE="nginx-common libfoo"; : > "$FAKE_STATE/ss"; : > "$FAKE_LOG"
+  _m8_uninstall --yes --remove-packages; assert_eq "$RC" 0 "$OUT"
+  assert_match "$(cat "$FAKE_LOG")" '^apt-get purge -y dnsmasq nginx nfs-kernel-server ipxe '
+  assert_match "$(cat "$FAKE_LOG")" '^apt-get purge -y nginx-common$' "dep autoremovable di-purge"
+  assert_no_match "$(cat "$FAKE_LOG")" '^apt-get purge.*(rpcbind|libfoo|openssh-server)' "dep yang masih dipakai / paket asing tidak disentuh"
+  assert_no_match "$(cat "$FAKE_LOG")" '^apt-get (-y )?autoremove' "tanpa autoremove global"
+  assert_contains "$(_m8_mf)" $'pkg\trpcbind\tdep' "dep tersisa tetap tercatat"
+  assert_match "$(cat "$FAKE_LOG")" '^systemctl disable --now nginx\.service$'
+}
+
+# Kecil (e): install gagal -> unit yang di-enable run ini dinonaktifkan lagi.
+test_m8_fix_failed_install_rollback_enable() {
+  _m8_setup
+  grep -v '%eth1:67' "$FAKE_STATE/ss" > "$SB/ss" && cp "$SB/ss" "$FAKE_STATE/ss"
+  _m8_full
+  assert_ne "$RC" 0
+  local l; l="$(grep '^systemctl disable --now' "$FAKE_LOG" || true)"
+  assert_contains "$l" "dnsmasq.service"; assert_contains "$l" "nginx.service"
+  assert_contains "$l" "nfs-server.service"; assert_contains "$l" "pxe-dashboard.service"
+  # Server kedua: unit sudah enabled + paket sudah ada sebelum run -> tidak disentuh saat gagal.
+  export FAKE_ENABLED=enabled FAKE_DPKG_INSTALLED="dnsmasq nginx nfs-kernel-server ipxe curl ca-certificates xz-utils libarchive-tools python3 iproute2"
+  _m8_fresh
+  grep -v '%eth1:67' "$FAKE_STATE/ss" > "$SB/ss" && cp "$SB/ss" "$FAKE_STATE/ss"
+  _m8_full
+  assert_ne "$RC" 0
+  assert_no_match "$(cat "$FAKE_LOG")" '^systemctl disable' "unit milik admin tetap enabled"
+}
+
+t "M8 fix1: --interface pxe0 / --domain pxe.test sah (cek sisa lab per baris)"   test_m8_fix_nic_pxe0_allowed
+t "M8 fix2: ss 6 kolom (tanpa Netid) & 7 kolom nyata diparse benar"              test_m8_fix_ss_formats
+t "M8 fix3: install ulang dengan ISO ter-mount ro tidak chmod/chown mountpoint"  test_m8_fix_rerun_with_mounted_media
+t "M8 fix4: paket tercatat tetap milik installer setelah --purge"                 test_m8_fix_pkg_ownership_after_purge
+t "M8 fix-a: ISO Debian perangkat blok -> modul dari mountpoint"                  test_m8_fix_debian_modules_device
+t "M8 fix-b: password sama -> hash lama dipertahankan, tanpa restart"             test_m8_fix_same_password_keeps_hash
+t "M8 fix-b: admin-verify.mjs paritas dengan admin-hash.mjs (node asli)"          test_m8_fix_admin_verify_parity
+t "M8 fix-c: unit SuccessExitStatus=143 (template + render)"                      test_m8_fix_unit_success_exit
+t "M8 fix-d: --remove-packages purge diminta + dep autoremovable saja"            test_m8_fix_remove_packages_deps
+t "M8 fix-e: install gagal -> enablement unit run ini di-rollback"                test_m8_fix_failed_install_rollback_enable

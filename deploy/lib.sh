@@ -86,6 +86,19 @@ run() {
 
 is_root() { [[ "$(id -u)" == 0 ]]; }
 
+# ss_sockets: socket listen tcp+udp sebagai baris "<netid> <local> <process...>". Tahan terhadap dua
+# format `ss -H`: 7 kolom (Netid State Recv-Q Send-Q Local Peer Process, bila >1 protokol) dan 6 kolom
+# tanpa Netid (satu protokol: -u atau -t saja). Netid yang hilang diturunkan dari State
+# (UNCONN = udp, LISTEN = tcp). Kolom proses bisa memuat spasi ("next-server (v16)") -> digabung.
+ss_sockets() {
+  { ss -H -lntup 2>/dev/null || true; } | awk '
+    NF == 0 { next }
+    { if ($1 ~ /^(tcp|udp|raw|sctp|u_str|u_dgr|u_seq)$/) { n = $1; l = $5; s = 7 }
+      else { n = ($1 == "UNCONN") ? "udp" : (($1 == "LISTEN") ? "tcp" : "?"); l = $4; s = 6 }
+      pr = ""; for (i = s; i <= NF; i++) pr = pr (pr == "" ? "" : " ") $i
+      print n, l, pr }'
+}
+
 # --- validasi -----------------------------------------------------------------------------------
 valid_ipv4() {
   local ip="$1" o
@@ -136,6 +149,15 @@ manifest_valid_line() { # manifest_valid_line <type> <path> <extra>
 manifest_has() { # manifest_has <type> <path>
   [[ -f "$(p "$MANIFEST")" ]] || return 1
   awk -F'\t' -v t="$1" -v q="$2" '$1 == t && $2 == q { f = 1 } END { exit !f }' "$(p "$MANIFEST")"
+}
+manifest_has_extra() { # manifest_has_extra <type> <path> <extra>
+  [[ -f "$(p "$MANIFEST")" ]] || return 1
+  awk -F'\t' -v t="$1" -v q="$2" -v e="$3" '$1 == t && $2 == q && $3 == e { f = 1 } END { exit !f }' "$(p "$MANIFEST")"
+}
+manifest_del() { # manifest_del <type> <path>: hapus entri (untuk koreksi sebelum manifest_add)
+  local f; f="$(p "$MANIFEST")"
+  if ((DRY)); then echo "MANIFEST- $1 $2"; return 0; fi
+  awk -F'\t' -v t="$1" -v q="$2" '!($1 == t && $2 == q)' "$f" > "$f.tmp" && chmod 0600 "$f.tmp" && mv -f "$f.tmp" "$f"
 }
 # Path terdaftar di manifest dengan tipe apa pun yang menandai "milik installer".
 manifest_owns() { manifest_has file "$1" || manifest_has link "$1"; }
@@ -198,7 +220,11 @@ put_file() {
 ensure_dir() {
   local d="$1" mode="$2" og="$3" kind="$4"
   if [[ -d "$(p "$d")" ]]; then
-    if manifest_has "$kind" "$d"; then run chmod "$mode" "$(p "$d")"; run chown "$og" "$(p "$d")"; fi
+    # Mountpoint (mis. /srv/pxe/media/<id> berisi ISO iso9660 read-only, diekspor NFS) tidak pernah
+    # di-chmod/chown ulang: mode/pemilik milik filesystem yang ter-mount, dan operasi itu gagal (EROFS).
+    if manifest_has "$kind" "$d" && ! mountpoint -q "$(p "$d")" 2>/dev/null; then
+      run chmod "$mode" "$(p "$d")"; run chown "$og" "$(p "$d")"
+    fi
     return 0
   fi
   manifest_add "$kind" "$d"

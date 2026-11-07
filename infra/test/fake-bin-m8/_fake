@@ -6,12 +6,17 @@
 #   id            -u -> ${FAKE_UID:-0}
 #   ip            -4 -o addr show [dev X] -> isi $FAKE_STATE/ip-addr (baris "N: dev inet a.b.c.d/nn ...")
 #   ss            -> isi $FAKE_STATE/ss (format ss -H: Netid State Recv-Q Send-Q Local Peer Process)
-#   systemctl     is-active X -> $FAKE_STATE/active-X atau ${FAKE_ACTIVE:-active}; lainnya exit 0
-#   dpkg-query    -W ... <pkg> -> "install ok installed" bila <pkg> ada di ${FAKE_DPKG_INSTALLED}
+#   systemctl     is-active X -> $FAKE_STATE/active-X atau ${FAKE_ACTIVE:-active};
+#                 is-enabled X -> $FAKE_STATE/enabled-X atau ${FAKE_ENABLED:-disabled}; lainnya exit 0
+#   dpkg-query    state $FAKE_STATE/dpkg (awal dari ${FAKE_DPKG_INSTALLED}): -W -f='${Status}' <pkg>
+#                 -> "install ok installed"; -W -f='${db:Status-Abbrev} ${Package}\n' -> daftar "ii <pkg>"
+#   apt-get       install <pkg...> -> tambah ke state (+ ${FAKE_APT_DEPS}); purge <pkg...> -> hapus;
+#                 -s autoremove -> "Remv <pkg> [1]" untuk ${FAKE_AUTOREMOVE}
+#   chown         gagal "Read-only file system" bila path ada di ${FAKE_RO}
 #   getent        passwd <u> -> sukses bila $FAKE_STATE/user-<u> ada; useradd/userdel membuat/menghapusnya
 #   mountpoint    -q <dir> -> sukses bila <dir> ada di ${FAKE_MOUNTED}
 #   netplan       get ... -> ${FAKE_NETPLAN_GET:-null}
-#   nginx/dnsmasq/exportfs/mount/umount/apt-get/chown/runuser/nft -> exit ${FAKE_<NAMA>_RC:-0}
+#   nginx/dnsmasq/exportfs/mount/umount/runuser/nft -> exit ${FAKE_<NAMA>_RC:-0}
 name="$(basename "$0")"
 echo "$name $*" >> "${FAKE_LOG:?}"
 st="${FAKE_STATE:?}"
@@ -30,11 +35,26 @@ case "$name" in
       if [[ -f "$st/active-$2" ]]; then cat "$st/active-$2"; else echo "${FAKE_ACTIVE:-active}"; fi
       exit 0
     fi
+    if [[ "${1:-}" == is-enabled ]]; then
+      if [[ -f "$st/enabled-$2" ]]; then cat "$st/enabled-$2"; else echo "${FAKE_ENABLED:-disabled}"; fi
+      exit 0
+    fi
     exit "${!rcvar:-0}" ;;
   dpkg-query)
-    pkg="${*: -1}"
-    [[ " ${FAKE_DPKG_INSTALLED:-} " == *" $pkg "* ]] && { printf 'install ok installed'; exit 0; }
+    [[ -f "$st/dpkg" ]] || { for x in ${FAKE_DPKG_INSTALLED:-}; do echo "$x"; done > "$st/dpkg"; }
+    last="${*: -1}"
+    if [[ "$last" == -f=* ]]; then while IFS= read -r x; do [[ -n "$x" ]] && echo "ii  $x"; done < "$st/dpkg"; exit 0; fi
+    grep -qxF -- "$last" "$st/dpkg" && { printf 'install ok installed'; exit 0; }
     exit 1 ;;
+  apt-get)
+    [[ -f "$st/dpkg" ]] || { for x in ${FAKE_DPKG_INSTALLED:-}; do echo "$x"; done > "$st/dpkg"; }
+    if [[ " $* " == *" -s autoremove "* ]]; then for x in ${FAKE_AUTOREMOVE:-}; do echo "Remv $x [1.0]"; done; exit 0; fi
+    rc="${!rcvar:-0}"; ((rc == 0)) || exit "$rc"
+    op=""; for a in "$@"; do case "$a" in install|purge) op="$a" ;; -*) ;; *) [[ -n "$op" ]] && pk+=("$a") ;; esac; done
+    if [[ "$op" == install ]]; then for x in "${pk[@]}" ${FAKE_APT_DEPS:-}; do grep -qxF -- "$x" "$st/dpkg" || echo "$x" >> "$st/dpkg"; done
+    elif [[ "$op" == purge ]]; then for x in "${pk[@]}"; do grep -vxF -- "$x" "$st/dpkg" > "$st/dpkg.n" || true; mv "$st/dpkg.n" "$st/dpkg"; done; fi
+    exit 0 ;;
+  chown) for a in "$@"; do [[ -n "${FAKE_RO:-}" && " $FAKE_RO " == *" $a "* ]] && { echo "chown: changing ownership of '$a': Read-only file system" >&2; exit 1; }; done; exit 0 ;;
   getent) [[ -f "$st/user-${3:-${2:-}}" ]] && { echo "${3:-$2}:x:999:999::/var/lib/pxe-dashboard:/usr/sbin/nologin"; exit 0; }; exit 2 ;;
   useradd) touch "$st/user-${*: -1}"; exit "${!rcvar:-0}" ;;
   userdel) rm -f "$st/user-${*: -1}"; exit "${!rcvar:-0}" ;;
